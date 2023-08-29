@@ -1,0 +1,23 @@
+Package: LightLogR
+Title: Work With Data from Wearable Light Loggers and Optical Radiation Dosimeters
+Version: 0.0.0.9000
+Authors@R: c(
+    person("Johannes", "Zauner", 
+      email = "johannes.zauner@tum.de", role = c("aut", "cre"),
+      comment = c(ORCID = "0000-0003-2171-4566")),
+    person("Manuel", Spitschan", 
+      email = "manuel.spitschan@tum.de", role = "aut",
+      comment = c(ORCID = "0000-0002-8572-9268")),
+    person("EURAMET", role = "fnd"),
+    person("TSCN-Lab", comment = c(URL = "www.tscnlab.org"), role = "crh"))
+Description: LightLogR is a package under development as part of the MeLiDos 
+    project aimed at developing a standard workflow for wearable light logger 
+    data and optical radiation dosimeters. MeLiDos is a joint, EURAMET-funded 
+    project involving sixteen partners across Europe. Its primary contributions 
+    towards fostering FAIR data include the development of a common file format, 
+    robust metadata descriptors, and an accompanying open-source software 
+    ecosystem.
+License: GPL (>= 3)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
