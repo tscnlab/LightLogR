@@ -4,6 +4,8 @@
 # LightLogR <img src="man/figures/logo.png" align="right" height="139" />
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/tscnlab/LightLogR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/tscnlab/LightLogR/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 Personalized light exposure data is progressively gaining importance in
@@ -47,6 +49,10 @@ Neuroscience*](https://www.tscnlab.org) lab, a joint group from the
 [Technical University of Munich](https://www.tum.de/en/) and the [Max
 Planck Institute for Biological
 Cybernetics](https://www.mpg.de/152075/biological-cybernetics).
+
+**Please note that LightLogR is work in progress! If you are interested
+in the project and want to know more, please give us a
+[message](mailto:johannes.zauner@tum.de).**
 
 ## Installation
 

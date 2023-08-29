@@ -40,6 +40,8 @@ Personalized light exposure data is progressively gaining importance in various 
 
 **LightLogR** is developed by the [*Translational Sensory & Circadian Neuroscience*](https://www.tscnlab.org) lab, a joint group from the [Technical University of Munich](https://www.tum.de/en/) and the [Max Planck Institute for Biological Cybernetics](https://www.mpg.de/152075/biological-cybernetics).
 
+**Please note that LightLogR is work in progress! If you are interested in the project and want to know more, please give us a [message](mailto:johannes.zauner@tum.de).**
+
 ## Installation
 
 You can install the development version of LightLogR from [GitHub](https://github.com/) with:
