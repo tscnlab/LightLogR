@@ -1,9 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-> **Please note that LightLogR is work in progress! If you are
-> interested in the project and want to know more, please give us a
-> [message](mailto:johannes.zauner@tum.de).**
+##### Please note that LightLogR is work in progress! If you are interested in the project and want to know more, please give us a [message](mailto:johannes.zauner@tum.de).
 
 # LightLogR <img src="man/figures/logo.png" align="right" height="139"/>
 
