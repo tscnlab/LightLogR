@@ -20,7 +20,7 @@ expertise necessary to handle such data and also compromises the
 FAIRness (Findability, Accessibility, Interoperability, Reusability) of
 the results, especially in meta-analyses.
 
-##### Please note that LightLogR is work in progress! If you are interested in the project and want to know more, please give us a [message](mailto:johannes.zauner@tum.de).
+##### Please note that LightLogR is work in progress! If you are interested in the project and want to know more, please give us a [message](mailto:johannes.zauner@tum.de)
 
 **LightLogR** is a package under development as part of the
 [*MeLiDos*](https://www.melidos.eu) project to address these issues.
