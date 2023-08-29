@@ -9,7 +9,7 @@ Authors@R: c(
       email = "manuel.spitschan@tum.de", role = "aut",
       comment = c(ORCID = "0000-0002-8572-9268")),
     person("EURAMET", role = "fnd"),
-    person("TSCN-Lab", comment = c(URL = "www.tscnlab.org"), role = "cpuh"))
+    person("TSCN-Lab", comment = c(URL = "www.tscnlab.org"), role = "cph"))
 Description: LightLogR is a package under development as part of the MeLiDos 
     project aimed at developing a standard workflow for wearable light logger 
     data and optical radiation dosimeters. MeLiDos is a joint, EURAMET-funded 
@@ -21,5 +21,6 @@ License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
-URL: https://github.com/tscnlab/LightLogR
+URL: https://github.com/tscnlab/LightLogR,
+    https://tscnlab.github.io/LightLogR/
 BugReports: https://github.com/tscnlab/LightLogR/issues
