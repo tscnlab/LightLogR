@@ -25,4 +25,16 @@ URL: https://github.com/tscnlab/LightLogR,
     https://tscnlab.github.io/LightLogR/
 BugReports: https://github.com/tscnlab/LightLogR/issues
 Imports: 
-    magrittr
+    cowplot,
+    dplyr,
+    ggplot2,
+    ggtext,
+    hms,
+    lubridate,
+    magrittr,
+    purrr,
+    readr,
+    rlang,
+    scales,
+    tibble,
+    utils
