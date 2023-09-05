@@ -50,5 +50,5 @@ import.info <- function(tmp, device) {
     "Timespan: " , diff(c(min.time, max.time)) %>% format(digits = 2), "\n",
     "Observation intervals: \n",
     sep = "")
-  capture.output(interval.time)[c(-1,-3)] %>% cat(sep = "\n")
+  utils::capture.output(interval.time)[c(-1,-3)] %>% cat(sep = "\n")
 }

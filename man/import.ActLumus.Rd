@@ -24,6 +24,8 @@ a \code{character}.}
 you read in data from multiple files}
 
 \item{n_max}{maximum number of lines to read. Default is \code{Inf}.}
+
+\item{tz}{Timezone of the data. \code{"UTC"} is the default. Expects a \code{character}.}
 }
 \value{
 Tibble/Dataframe with a POSIXct column for the datetime

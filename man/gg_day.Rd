@@ -76,14 +76,19 @@ styling or guides.
 \examples{
 filepath <- system.file("extdata/sample_data_LYS.csv", package = "LightLogR")
 sampledata <- import.LYS(filepath, file.id = TRUE)
-gg_day(sampledata, x.axis = Datetime, y.axis = mEDI, y.axis.label = "mEDI (lx)", title = "Nonvisual Stimulus for 2 Days")
+gg_day(
+  sampledata, 
+  x.axis = Datetime, 
+  y.axis = mEDI, 
+  y.axis.label = "mEDI (lx)", 
+  title = "Nonvisual Stimulus for 2 Days")
 
 #use `key`for separation of different sets
 plot <- gg_day(
 sample.data.environment,
 scales = "fixed",
 x.axis = Datetime,
-y.axis = mEDI,
+y.axis = `MELANOPIC EDI`,
 y.axis.label = "mEDI (lx)",
 key = Source)
 plot

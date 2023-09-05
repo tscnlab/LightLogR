@@ -12,6 +12,7 @@
 #' @param file.id Should the filename be stored as part of the data? Useful if
 #'   you read in data from multiple files
 #' @param n_max maximum number of lines to read. Default is `Inf`.
+#' @param tz Timezone of the data. `"UTC"` is the default. Expects a `character`.
 #'
 #' @return Tibble/Dataframe with a POSIXct column for the datetime
 #' @export
@@ -28,7 +29,7 @@ import.LYS <- function(filename,
                       tz = "UTC") {
   
   #special handling for LYS files
-  import.exp <- expr(
+  import.expr <- rlang::expr(
     {tmp <- readr::read_csv(paste0(path, filename),
                             n_max = n_max,
                             col_types = c("cfddddddddddd"),
@@ -44,7 +45,7 @@ import.LYS <- function(filename,
   #generic import function
   import.LL(filename = filename,
             device = "LYS",
-            import.exp = eval(import.exp),
+            import.expr = eval(import.expr),
             file.id = file.id,
             n_max = n_max,
             tz = tz)
@@ -65,6 +66,7 @@ import.LYS <- function(filename,
 #' @param file.id Should the filename be stored as part of the data? Useful if
 #'   you read in data from multiple files
 #' @param n_max maximum number of lines to read. Default is `Inf`.
+#' @param tz Timezone of the data. `"UTC"` is the default. Expects a `character`.
 #'
 #' @return Tibble/Dataframe with a POSIXct column for the datetime
 #' @export
@@ -82,7 +84,7 @@ import.ActLumus <-
            tz = "UTC") {
   
   #special handling for ActLumus files
-  import.exp <- expr(
+  import.expr <- rlang::expr(
     {tmp <- readr::read_delim(paste0(path, filename),
                             skip = 32,
                             delim = ";",
@@ -100,7 +102,7 @@ import.ActLumus <-
   #generic import function
   import.LL(filename = filename,
             device = "ActLumus",
-            import.exp = eval(import.exp),
+            import.expr = eval(import.expr),
             file.id = file.id,
             n_max = n_max,
             tz = tz)
