@@ -6,42 +6,88 @@
 \usage{
 gg_day(
   dataset,
+  start.date = NULL,
+  end.date = NULL,
   x.axis = Time,
-  y.axis = mEDI,
+  y.axis,
+  key = NULL,
+  scales = "free_y",
+  y.axis.breaks = 10^(0:5),
+  y.scale.log10 = TRUE,
   x.axis.label = "Time of Day",
   y.axis.label = "Lightlevel",
+  format.day = "\%d/\%m",
   title = NULL,
   subtitle = NULL
 )
 }
 \arguments{
-\item{dataset}{light logger dataset. Expects a \emph{dataframe}.}
+\item{dataset}{light logger dataset. Expects a \code{dataframe}.}
 
-\item{x.axis}{column name that contains the timedate. Expects a \emph{symbol}.}
+\item{start.date}{Choose an optional start date within your \code{dataset}.
+Expects a \code{date}, which can also be a \code{character} that is interpretable as
+a date, e.g., \code{"2023-06-03"}. Defaults to \code{NULL}, which means that the plot
+starts with the earliest date within the \code{dataset}.}
 
-\item{y.axis}{column name that contains the lightlevel. Expects a \emph{symbol}.}
+\item{end.date}{Choose an optional end date within your \code{dataset}. see
+\code{start.date} for additional details.}
 
-\item{x.axis.label}{label for the x-axis. Expects a \emph{character}.}
+\item{x.axis}{column name that contains the timedate. Expects a \code{symbol}.
+Needs to be part of the \code{dataset}.}
 
-\item{y.axis.label}{label for the y-axis. Expects a \emph{character}.}
+\item{y.axis}{column name that contains the lightlevel. Expects a \code{symbol}.
+Needs to be part of the \code{dataset}.}
 
-\item{title}{Plot title. Expects a \emph{character}.}
+\item{key}{optional column name that defines separate sets. Expects a
+\code{symbol}. Needs to be part of the \code{dataset}. By default, the
+\link[ggplot2:scale_viridis]{ggplot2::scale_color_viridis_d} is used. This can be overwritten outside
+the function (see examples).}
 
-\item{subtitle}{Plot subtitle. Expects a \emph{character}.}
+\item{scales}{For \link[ggplot2:facet_wrap]{ggplot2::facet_wrap}, should scales be "fixed", "free" or
+free in one dimension ("free_y" is the default). Expects a \code{character}.}
+
+\item{y.axis.breaks}{Where should breaks occur on the y.axis? Expects a
+\verb{numeric vector} with all the breaks. If you want to activate the default
+behaviour of \code{ggplot2}, you need to put in \code{ggplot2::waiver()}.}
+
+\item{y.scale.log10}{Should \code{y} be scaled on a log10 basis? Expects a
+\code{logical}.}
+
+\item{x.axis.label}{label for the x-axis. Expects a \code{character}.}
+
+\item{y.axis.label}{label for the y-axis. Expects a \code{character}.}
+
+\item{format.day}{Label for each day. Default is \verb{\%d/\%m}, which shows the day
+and month. Expects a \code{character}. For an overview of sensible options look
+at \link{strptime}}
+
+\item{title}{Plot title. Expects a \code{character}.}
+
+\item{subtitle}{Plot subtitle. Expects a \code{character}.}
 }
 \value{
 A ggplot object
 }
 \description{
-\code{gg_day} will create a simple ggplot for every data in a dataset. The result can further be manipulated like any ggplot.
+\code{gg_day} will create a simple ggplot for every data in a dataset. The result
+can further be manipulated like any ggplot. This will be sensible to refine
+styling or guides.
 }
 \examples{
 filepath <- system.file("extdata/sample_data_LYS.csv", package = "LightLogR")
-sampledata <- importLYS(filepath, file.id = TRUE)
-gg_day(
-sampledata, 
-x.axis = Datetime, 
+sampledata <- import.LYS(filepath, file.id = TRUE)
+gg_day(sampledata, x.axis = Datetime, y.axis = mEDI, y.axis.label = "mEDI (lx)", title = "Nonvisual Stimulus for 2 Days")
+
+#use `key`for separation of different sets
+plot <- gg_day(
+sample.data.environment,
+scales = "fixed",
+x.axis = Datetime,
+y.axis = mEDI,
 y.axis.label = "mEDI (lx)",
-title = "Nonvisual Stimulus for 2 Days"
-)
+key = Source)
+plot
+
+#you can easily overwrite the color scale afterwards
+plot + ggplot2::scale_color_discrete()
 }

@@ -29,6 +29,7 @@ Imports:
     dplyr,
     ggplot2,
     ggtext,
+    gt,
     hms,
     lubridate,
     magrittr,
@@ -38,3 +39,6 @@ Imports:
     scales,
     tibble,
     utils
+Depends: 
+    R (>= 2.10)
+LazyData: true
