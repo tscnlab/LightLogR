@@ -16,13 +16,13 @@
     <loc>https://tscnlab.github.io/LightLogR/reference/LightLogR-package.html</loc>
   </url>
   <url>
+    <loc>https://tscnlab.github.io/LightLogR/reference/cut_Datetime.html</loc>
+  </url>
+  <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/gg_day.html</loc>
   </url>
   <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/import.ActLumus.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/import.LYS.html</loc>
+    <loc>https://tscnlab.github.io/LightLogR/reference/import.Dataset.html</loc>
   </url>
   <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/index.html</loc>
@@ -32,5 +32,8 @@
   </url>
   <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/sample.data.environment.html</loc>
+  </url>
+  <url>
+    <loc>https://tscnlab.github.io/LightLogR/reference/supported.devices.html</loc>
   </url>
 </urlset>
