@@ -8,12 +8,15 @@ gg_day(
   dataset,
   start.date = NULL,
   end.date = NULL,
-  x.axis = Time,
+  x.axis = Datetime,
   y.axis,
-  key = NULL,
+  col = NULL,
+  group = NULL,
+  geom = "point",
   scales = "free_y",
   y.axis.breaks = 10^(0:5),
   y.scale.log10 = TRUE,
+  y.scale.sc = FALSE,
   x.axis.label = "Time of Day",
   y.axis.label = "Lightlevel",
   format.day = "\%d/\%m",
@@ -22,44 +25,56 @@ gg_day(
 )
 }
 \arguments{
-\item{dataset}{light logger dataset. Expects a \code{dataframe}.}
+\item{dataset}{A light logger dataset. Expects a \code{dataframe}. If not imported
+by \link{LightLogR}, take care to choose a sensible variable for the \code{x.axis.}.}
 
-\item{start.date}{Choose an optional start date within your \code{dataset}.
-Expects a \code{date}, which can also be a \code{character} that is interpretable as
-a date, e.g., \code{"2023-06-03"}. Defaults to \code{NULL}, which means that the plot
-starts with the earliest date within the \code{dataset}.}
+\item{start.date, end.date}{Choose an optional start or end date within your
+\code{dataset}. Expects a \code{date}, which can also be a \code{character} that is
+interpretable as a date, e.g., \code{"2023-06-03"}. Can also be a Datetime if
+you want to cut off intraday values, e.g., \code{"2023-06-03 12:00:00"}.
+Defaults to \code{NULL}, which means that the plot starts/ends with the
+earliest/latest date within the \code{dataset}.}
 
-\item{end.date}{Choose an optional end date within your \code{dataset}. see
-\code{start.date} for additional details.}
+\item{x.axis, y.axis}{column name that contains the datetime (x, defaults to
+\code{"Datetime"} which is automatically correct for data imported with
+\link{LightLogR}) and the dependent variable (y). Expects a \code{symbol}. Needs to
+be part of the \code{dataset}.}
 
-\item{x.axis}{column name that contains the timedate. Expects a \code{symbol}.
-Needs to be part of the \code{dataset}.}
+\item{col}{optional column name that defines separate sets and colors them.
+Expects anything that works with the layer data \code{\link[ggplot2:aes]{ggplot2::aes()}}. By
+default, the \code{\link[ggplot2:scale_viridis]{ggplot2::scale_color_viridis_d()}} is used for coloring. This
+can be overwritten outside the function (see examples).}
 
-\item{y.axis}{column name that contains the lightlevel. Expects a \code{symbol}.
-Needs to be part of the \code{dataset}.}
+\item{group}{Optional column name that defines separate sets. Useful for
+certain geoms like \code{boxplot}.Expects anything that works with the layer
+data \code{\link[ggplot2:aes]{ggplot2::aes()}}}
 
-\item{key}{optional column name that defines separate sets. Expects a
-\code{symbol}. Needs to be part of the \code{dataset}. By default, the
-\link[ggplot2:scale_viridis]{ggplot2::scale_color_viridis_d} is used. This can be overwritten outside
-the function (see examples).}
+\item{geom}{What geom should be used for visualization? Expects a \code{character}
+\itemize{
+\item \code{"point"} for \code{\link[ggplot2:geom_point]{ggplot2::geom_point()}} (the default)
+\item \code{"line"}  for \code{\link[ggplot2:geom_path]{ggplot2::geom_line()}}
+\item as the value is just input into the \code{geom_} function from \link{ggplot2}, other variants might work as well, but are not tested.
+}}
 
-\item{scales}{For \link[ggplot2:facet_wrap]{ggplot2::facet_wrap}, should scales be "fixed", "free" or
-free in one dimension ("free_y" is the default). Expects a \code{character}.}
+\item{scales}{For \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}}, should scales be "fixed", "free"
+or free in one dimension ("free_y" is the default). Expects a \code{character}.}
 
 \item{y.axis.breaks}{Where should breaks occur on the y.axis? Expects a
 \verb{numeric vector} with all the breaks. If you want to activate the default
-behaviour of \code{ggplot2}, you need to put in \code{ggplot2::waiver()}.}
+behaviour of \link{ggplot2}, you need to put in \code{\link[ggplot2:waiver]{ggplot2::waiver()}}.}
 
 \item{y.scale.log10}{Should \code{y} be scaled on a log10 basis? Expects a
 \code{logical}.}
 
-\item{x.axis.label}{label for the x-axis. Expects a \code{character}.}
+\item{y.scale.sc}{\code{logical} for whether scientific notation shall be used.
+Defaults to \code{FALSE}.}
 
-\item{y.axis.label}{label for the y-axis. Expects a \code{character}.}
+\item{x.axis.label, y.axis.label}{labels for the x- and y-axis. Expects a
+\code{character}.}
 
 \item{format.day}{Label for each day. Default is \verb{\%d/\%m}, which shows the day
 and month. Expects a \code{character}. For an overview of sensible options look
-at \link{strptime}}
+at \code{\link[base:strptime]{base::strptime()}}}
 
 \item{title}{Plot title. Expects a \code{character}.}
 
@@ -73,26 +88,29 @@ A ggplot object
 can further be manipulated like any ggplot. This will be sensible to refine
 styling or guides.
 }
+\details{
+Besides plotting, the function creates two new variables from the given
+\code{Datetime}:
+\itemize{
+\item \code{Day.data} is a factor that is used for facetting with \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}}. Make sure to use this variable, if you change the facetting manually.
+\item \code{Time.data} is an \code{hms} created with \code{\link[hms:hms]{hms::as_hms()}} that is used for the x.axis
+}
+}
 \examples{
-filepath <- system.file("extdata/sample_data_LYS.csv", package = "LightLogR")
-sampledata <- import.LYS(filepath, file.id = TRUE)
-gg_day(
-  sampledata, 
-  x.axis = Datetime, 
-  y.axis = mEDI, 
-  y.axis.label = "mEDI (lx)", 
-  title = "Nonvisual Stimulus for 2 Days")
-
-#use `key`for separation of different sets
+#use `col`for separation of different sets
 plot <- gg_day(
 sample.data.environment,
 scales = "fixed",
+end.date = "2023-08-16",
 x.axis = Datetime,
 y.axis = `MELANOPIC EDI`,
 y.axis.label = "mEDI (lx)",
-key = Source)
+col = Source)
 plot
 
 #you can easily overwrite the color scale afterwards
 plot + ggplot2::scale_color_discrete()
+
+#or change the facetting
+plot + ggplot2::facet_wrap(~Day.data + Source)
 }

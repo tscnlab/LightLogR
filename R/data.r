@@ -19,3 +19,13 @@
 #' }
 #' @source <https://www.tscnlab.org>
 "sample.data.environment"
+
+
+#' A vector of all supported devices for import functions
+#'
+#' @format `supported.devices` A character vector, listing all supported devices
+#' \describe{
+#'   \item{suppored.devices}{strings}
+#'   ...
+#' }
+"supported.devices"

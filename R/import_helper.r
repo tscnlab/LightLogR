@@ -10,7 +10,7 @@ import.LL <- function(filename,
   
   #initial checks
   stopifnot(
-    is.character(filename),
+    "filename needs to be a character (vector)" = is.character(filename),
     is.character(device),
     is.character(tz),
     is.logical(file.id),

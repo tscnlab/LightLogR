@@ -27,16 +27,18 @@ BugReports: https://github.com/tscnlab/LightLogR/issues
 Imports: 
     cowplot,
     dplyr,
+    flextable,
     ggplot2,
-    ggtext,
-    gt,
     hms,
     lubridate,
     magrittr,
+    pkgload,
     purrr,
     readr,
     rlang,
+    rsconnect,
     scales,
+    shiny,
     tibble,
     utils
 Depends: 
