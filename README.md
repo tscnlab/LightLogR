@@ -111,14 +111,17 @@ dataset %>% gg_day(y.axis = mEDI, y.axis.label = "mEDI (lx)")
 ```
 
 <img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
-There is a wide range of options to the `gg_day` function to customize
-the output. Have a look at the reference page for `gg_day` to see all
-options. You can also override most of the defaults for different
-`color` or `facetting` options.
+
+There is a wide range of options to the `gg_day()` function to customize
+the output. Have a look at the reference page (`?gg_day`) to see all
+options. You can also override most of the defaults, e.g., for different
+`color`, `facetting`, `theme` options.
 
 ``` r
-dataset %>% gg_day(y.axis = mEDI, col = mEDI >= 250, scales = "fixed") + 
-  scale_color_discrete(type = c("orange", "skyblue"))
+dataset %>% 
+  gg_day(y.axis = mEDI, col = mEDI >= 250, scales = "fixed", size = 0.5) + 
+  scale_color_discrete(type = c("orange", "skyblue")) + 
+  theme(panel.grid.major.y = element_line("grey95"))
 #> Scale for colour is already present.
 #> Adding another scale for colour, which will replace the existing scale.
 #> Warning: Transformation introduced infinite values in continuous y-axis
