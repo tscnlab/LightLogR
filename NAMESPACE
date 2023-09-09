@@ -2,6 +2,7 @@
 
 export("%>%")
 export(cut_Datetime)
+export(filter_Datetime)
 export(gg_day)
 export(import.ActLumus)
 export(import.Dataset)

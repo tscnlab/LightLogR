@@ -10,12 +10,11 @@
 #' dataset allows for some interesting calculations based on *available*
 #' daylight at a given point in time.
 #'
-#' @format ## `sample.data.environment` A tibble with 69,120 rows and 3 columns:
+#' @format `sample.data.environment` A tibble with 69,120 rows and 3 columns:
 #' \describe{
 #'   \item{Datetime}{POSIXct Datetime}
 #'   \item{MELANOPIC EDI}{melanopic EDI measurement data. Unit is lux.}
 #'   \item{Source}{A `character` vector indicating whether the data is from the `Participant` or from the `Environment`.}
-#'   ...
 #' }
 #' @source <https://www.tscnlab.org>
 "sample.data.environment"
@@ -26,6 +25,5 @@
 #' @format `supported.devices` A character vector, listing all supported devices
 #' \describe{
 #'   \item{suppored.devices}{strings}
-#'   ...
 #' }
 "supported.devices"

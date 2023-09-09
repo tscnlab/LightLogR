@@ -25,8 +25,8 @@
 #' @param subtitle Plot subtitle. Expects a `character`.
 #' @param start.date,end.date Choose an optional start or end date within your
 #'   `dataset`. Expects a `date`, which can also be a `character` that is
-#'   interpretable as a date, e.g., `"2023-06-03"`. Can also be a Datetime if
-#'   you want to cut off intraday values, e.g., `"2023-06-03 12:00:00"`.
+#'   interpretable as a date, e.g., `"2023-06-03"`. If you need a Datetime or
+#'   want to cut specific times of each day, use the [filter_Datetime] function.
 #'   Defaults to `NULL`, which means that the plot starts/ends with the
 #'   earliest/latest date within the `dataset`.
 #' @param scales For [ggplot2::facet_wrap()], should scales be "fixed", "free"
@@ -49,6 +49,8 @@
 #' @param group Optional column name that defines separate sets. Useful for
 #'   certain geoms like `boxplot`.Expects anything that works with the layer
 #'   data [ggplot2::aes()]
+#' @param ... Other options that get passed to the main geom function. Can be
+#'   used to adjust to adjust size or linetype.
 #'
 #' @return A ggplot object
 #' @export
@@ -67,7 +69,7 @@
 #'
 #' #you can easily overwrite the color scale afterwards
 #' plot + ggplot2::scale_color_discrete()
-#' 
+#'
 #' #or change the facetting
 #' plot + ggplot2::facet_wrap(~Day.data + Source)
 
@@ -87,7 +89,8 @@ gg_day <- function(dataset,
                    y.axis.label = "Lightlevel",
                    format.day = "%d/%m",
                    title = NULL,
-                   subtitle = NULL) {
+                   subtitle = NULL,
+                   ...) {
   
 # Initial Checks ----------------------------------------------------------
 
@@ -117,7 +120,7 @@ gg_day <- function(dataset,
 
   if(!is.null(start.date)) {
     dataset <-
-      dataset %>% dplyr::filter(!!x >= start.date)
+      dataset %>% dplyr::filter(!!x >= as.Date(start.date))
   }
   if(!is.null(end.date)) {
     dataset <-
@@ -143,11 +146,10 @@ gg_day <- function(dataset,
     #basic setup
     ggplot2::ggplot(ggplot2::aes(x=Time.data, y = !!y)) +
     eval(geom_function_expr)(
-    # ggplot2::geom_line(
       ggplot2::aes(
         group = {{ group }},
         col = {{ col }},
-      ), na.rm = FALSE) +
+      ), na.rm = FALSE, ...) +
     #indication of explicit missing values
     ggplot2::geom_vline(
       data = 
@@ -156,14 +158,14 @@ gg_day <- function(dataset,
       ggplot2::aes(xintercept = Time.data), 
       alpha = 0.2, lwd = 0.05
     )+
-    #facetting
+    # Facetting ------------------------------------------------------------
     ggplot2::facet_wrap(
       ~Day.data, 
       ncol=1, 
       scales = scales, 
       strip.position = "left") +
-    #scales
-    ggplot2::scale_color_viridis_d() + 
+    # Scales --------------------------------------------------------------
+    ggplot2::scale_color_viridis_d(direction = -1) + 
     ggplot2::scale_x_time(breaks = hms::hms(hours = seq(0, 24, by = 3)), 
                           labels = scales::label_time(format = "%H:%M")) + 
     {if(y.scale.log10){
@@ -177,7 +179,7 @@ gg_day <- function(dataset,
         labels = function(x) format(x, scientific = y.scale.sc)
         )
     }+
-    #styling
+    # Styling --------------------------------------------------------------
     ggplot2::labs(
       y= y.axis.label, 
       x= x.axis.label, 
@@ -194,7 +196,7 @@ gg_day <- function(dataset,
       strip.placement = "outside"
     )
   
-  #return the plot
+  # Return --------------------------------------------------------------
   Plot
 }
 

@@ -7,14 +7,16 @@ import.LL <- function(filename,
                      tz = "UTC") {
   
   import.expr <- rlang::enquo(import.expr)
+  tz <- tz
   
   #initial checks
   stopifnot(
     "filename needs to be a character (vector)" = is.character(filename),
-    is.character(device),
-    is.character(tz),
-    is.logical(file.id),
-    is.numeric(n_max)
+    "device needs to be a character" = is.character(device),
+    "tz needs to be a character" = is.character(tz),
+    "tz needs to be a valid time zone, see `OlsonNames()`" = tz %in% OlsonNames(),
+    "file.id needs to be a logical" = is.logical(file.id),
+    "n_max needs to be a positive numeric" = is.numeric(n_max)
   )
   #import the file
   tmp <- rlang::eval_tidy(import.expr)
@@ -22,7 +24,7 @@ import.LL <- function(filename,
   #validate the file
   
   #give info about the file
-  import.info(tmp, device)
+  import.info(tmp, device, tz)
   
   #return the file
   tmp
@@ -30,7 +32,7 @@ import.LL <- function(filename,
 
 
 #This internal helper function prints basic information about a dataset and is used for import function
-import.info <- function(tmp, device) {
+import.info <- function(tmp, device, tz) {
   #give info about the file
   
   min.time <- min(tmp$Datetime)
@@ -42,9 +44,16 @@ import.info <- function(tmp, device) {
       ) %>% 
     dplyr::count(interval.time) %>% 
     dplyr::mutate(pct = (n/sum(n)) %>% scales::percent())
-  
-  cat(
-    "Successfully read in ", nrow(tmp), " observations from ", device, "-file", "\n",
+
+    cat(
+    "Successfully read in ", nrow(tmp), " observations from ", device, "-file", 
+    "\n",
+    "Timezone set is ", tz, ".\n", 
+    if(lubridate::tz(tmp$Datetime) != Sys.timezone()) {
+      paste0(
+        "The system timezone is ",
+        Sys.timezone(),
+        ". Please correct if necessary!\n")},
     "Start: ", format(tmp$Datetime[1]), "\n",
     "End: ", format(max(tmp$Datetime)), "\n",
     "Timespan: " , diff(c(min.time, max.time)) %>% format(digits = 2), "\n",
@@ -52,3 +61,4 @@ import.info <- function(tmp, device) {
     sep = "")
   utils::capture.output(interval.time)[c(-1,-3)] %>% cat(sep = "\n")
 }
+

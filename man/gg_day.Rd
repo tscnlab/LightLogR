@@ -21,7 +21,8 @@ gg_day(
   y.axis.label = "Lightlevel",
   format.day = "\%d/\%m",
   title = NULL,
-  subtitle = NULL
+  subtitle = NULL,
+  ...
 )
 }
 \arguments{
@@ -30,8 +31,8 @@ by \link{LightLogR}, take care to choose a sensible variable for the \code{x.axi
 
 \item{start.date, end.date}{Choose an optional start or end date within your
 \code{dataset}. Expects a \code{date}, which can also be a \code{character} that is
-interpretable as a date, e.g., \code{"2023-06-03"}. Can also be a Datetime if
-you want to cut off intraday values, e.g., \code{"2023-06-03 12:00:00"}.
+interpretable as a date, e.g., \code{"2023-06-03"}. If you need a Datetime or
+want to cut specific times of each day, use the \link{filter_Datetime} function.
 Defaults to \code{NULL}, which means that the plot starts/ends with the
 earliest/latest date within the \code{dataset}.}
 
@@ -79,6 +80,9 @@ at \code{\link[base:strptime]{base::strptime()}}}
 \item{title}{Plot title. Expects a \code{character}.}
 
 \item{subtitle}{Plot subtitle. Expects a \code{character}.}
+
+\item{...}{Other options that get passed to the main geom function. Can be
+used to adjust to adjust size or linetype.}
 }
 \value{
 A ggplot object

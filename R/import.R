@@ -15,7 +15,7 @@
 #'   you read in data from multiple files
 #' @param n_max maximum number of lines to read. Default is `Inf`.
 #' @param tz Timezone of the data. `"UTC"` is the default. Expects a
-#'   `character`.
+#'   `character`. You can look up the supported timezones with [OlsonNames()].
 #' @param ... Parameters that get handed down to the specific import functions
 #' @param device From what device do you want to import? For every supported
 #'   device, there is a sample data file that you can use to test the function (see
@@ -55,7 +55,8 @@
 #' dataset %>% 
 #' dplyr::select(Datetime, TEMPERATURE, LIGHT, `MELANOPIC EDI`) %>% 
 #' dplyr::slice(1500:1505) %>%  
-#' flextable::flextable()
+#' flextable::flextable() %>% 
+#' flextable::autofit()
 #' ```
 
 import.Dataset <- function(device, ...) {

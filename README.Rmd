@@ -59,7 +59,7 @@ Here is a quick starter on how do use **LightLogR**.
 ```{r, message = FALSE}
 library(LightLogR)
 #these packages are just needed for the examples as shown.
-library(gt)
+library(flextable)
 library(dplyr)
 library(ggplot2)
 ```
@@ -68,38 +68,39 @@ library(ggplot2)
 ### Import
 You can import a light logger dataset with ease. The import functions give quick, helpful feedback about the dataset.
 
-```{r}
+```{r, out.width="50%", fig.align='center'}
 filename <- system.file("extdata/sample_data_LYS.csv", package = "LightLogR")
-dataset <- import.LYS(filename)
+dataset <- import.LYS(filename, tz = "Europe/Berlin")
 
-dataset %>% select(Datetime, lux, kelvin, mEDI) %>%  slice(7500:7505) %>% gt()
+dataset %>% select(Datetime, lux, kelvin, mEDI) %>%  slice(8000:8005) %>% 
+  flextable() %>% autofit()
 ```
 
 ### Visualize
 Once imported, **LightLogR** allows you conveniently visualize the data.
 
 ```{r, fig.retina=2}
-dataset %>% gg_day(y.axis = mEDI)
+dataset %>% gg_day(y.axis = mEDI, y.axis.label = "mEDI (lx)")
 ```
-There is a wide range of options to the `gg_day` function to customize the output
+There is a wide range of options to the `gg_day` function to customize the output. Have a look at the reference page for `gg_day` to see all options. You can also override most of the defaults for different `color` or `facetting` options.
 ```{r, fig.retina=2}
-dataset %>% gg_day(y.axis = mEDI, col = mEDI >= 250, scales = "fixed")
-dataset %>% 
-  gg_day(y.axis = mEDI, scales = "fixed", geom = "line", format.day = "%d/%m/%Y")
+dataset %>% gg_day(y.axis = mEDI, col = mEDI >= 250, scales = "fixed") + 
+  scale_color_discrete(type = c("orange", "skyblue"))
 ```
-### Reference data
-The built-in dataset `sample.data.environment` shows a combined dataset of light logger data and simultaneous reference data - in this case unobstructed outdoor light measurements. The data can, again, be easily visualized with `gg_day`. The `col` parameter used on the `Source` column of the dataset allows for a color separation between types of data.
+
+### More than one dataset
+The built-in dataset `sample.data.environment` shows a combined dataset of light logger data and a second set of data - in this case unobstructed outdoor light measurements. Combined datasets can be easily visualized with `gg_day`. The `col` parameter used on the `Source` column of the dataset allows for a color separation.
 
 ```{r, fig.height= 6, fig.retina=2}
 sample.data.environment %>% 
   gg_day(
-    end.date = "2023-08-18",
+    start.date = "2023-08-18",
     y.axis = `MELANOPIC EDI`,
     col = Source,
     scales = "fixed",
     geom = "line")
 ```
-With the `cut_Datetime` function, the data can further be broken up into arbitrary time intervals. This can be used to easily compare different datasets. Just put the function in between the dataset. This makes a new variable available for plotting: `Datetime.rounded`. Just make sure, that the `geom` parameter is set to *boxplot* and the `group` parameter uses both the info from the rounded time interval (`Datetime.rounded`) and the different datasets (`Source`). The `interaction` function can easily combine them. The default interval from `cut_Datetime` is 3 hours.
+With the `cut_Datetime` function, the data can further be broken up into arbitrary time intervals. This can be used to easily compare different datasets. Just put the function in between the dataset and `gg_day`. This makes a new variable available for plotting: `Datetime.rounded`. Just make sure, that the `geom` parameter is set to *boxplot* and the `group` parameter uses both the info from the rounded time interval (`Datetime.rounded`) and the different datasets (`Source`). The `interaction` function can easily combine them. The default interval from `cut_Datetime` is 3 hours.
 ```{r, fig.retina=2}
 sample.data.environment %>% 
   cut_Datetime() %>% 
@@ -110,7 +111,6 @@ sample.data.environment %>%
     scales = "fixed",
     geom = "boxplot",
     group = interaction(Source, Datetime.rounded)) + 
-  theme(legend.position = "bottom") + 
-  coord_cartesian(xlim = c(0, 24*60*60))
+  theme(legend.position = "bottom")
 ```
 

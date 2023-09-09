@@ -8,7 +8,6 @@
 \code{supported.devices} A character vector, listing all supported devices
 \describe{
 \item{suppored.devices}{strings}
-...
 }
 }
 \usage{
