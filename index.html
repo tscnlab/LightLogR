@@ -45,7 +45,7 @@
     
     <a class="navbar-brand me-2" href="index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,6 +56,9 @@
       <ul class="navbar-nav me-auto">
 <li class="nav-item">
   <a class="nav-link" href="reference/index.html">Reference</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="news/index.html">Changelog</a>
 </li>
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
@@ -116,7 +119,7 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tscnlab/LightLogR" class="external-link">LightLogR</a></span><span class="op">)</span></span>
 <span><span class="co">#these packages are just needed for the examples as shown.</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://gt.rstudio.com/" class="external-link">gt</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ardata-fr.github.io/flextable-book/" class="external-link">flextable</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
@@ -125,8 +128,9 @@
 <p>You can import a light logger dataset with ease. The import functions give quick, helpful feedback about the dataset.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">filename</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/sample_data_LYS.csv"</span>, package <span class="op">=</span> <span class="st">"LightLogR"</span><span class="op">)</span></span>
-<span><span class="va">dataset</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/import.Dataset.html">import.LYS</a></span><span class="op">(</span><span class="va">filename</span><span class="op">)</span></span>
+<span><span class="va">dataset</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/import.Dataset.html">import.LYS</a></span><span class="op">(</span><span class="va">filename</span>, tz <span class="op">=</span> <span class="st">"Europe/Berlin"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Successfully read in 11422 observations from LYS-file</span></span>
+<span><span class="co">#&gt; Timezone set is Europe/Berlin.</span></span>
 <span><span class="co">#&gt; Start: 2023-06-21 00:00:12</span></span>
 <span><span class="co">#&gt; End: 2023-06-22 23:59:48</span></span>
 <span><span class="co">#&gt; Timespan: 2 days</span></span>
@@ -137,528 +141,41 @@
 <span><span class="co">#&gt; 3 17 secs          23 0.201% </span></span>
 <span><span class="co">#&gt; 4 18 secs          16 0.140%</span></span>
 <span></span>
-<span><span class="va">dataset</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">Datetime</span>, <span class="va">lux</span>, <span class="va">kelvin</span>, <span class="va">mEDI</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="fl">7500</span><span class="op">:</span><span class="fl">7505</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div id="biukclkxjs" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#biukclkxjs table {
-  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-&#10;#biukclkxjs thead, #biukclkxjs tbody, #biukclkxjs tfoot, #biukclkxjs tr, #biukclkxjs td, #biukclkxjs th {
-  border-style: none;
-}
-&#10;#biukclkxjs p {
-  margin: 0;
-  padding: 0;
-}
-&#10;#biukclkxjs .gt_table {
-  display: table;
-  border-collapse: collapse;
-  line-height: normal;
-  margin-left: auto;
-  margin-right: auto;
-  color: #333333;
-  font-size: 16px;
-  font-weight: normal;
-  font-style: normal;
-  background-color: #FFFFFF;
-  width: auto;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #A8A8A8;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #A8A8A8;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-}
-&#10;#biukclkxjs .gt_caption {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-&#10;#biukclkxjs .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-&#10;#biukclkxjs .gt_subtitle {
-  color: #333333;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 3px;
-  padding-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-&#10;#biukclkxjs .gt_heading {
-  background-color: #FFFFFF;
-  text-align: center;
-  border-bottom-color: #FFFFFF;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-&#10;#biukclkxjs .gt_bottom_border {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-&#10;#biukclkxjs .gt_col_headings {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-&#10;#biukclkxjs .gt_col_heading {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  padding-left: 5px;
-  padding-right: 5px;
-  overflow-x: hidden;
-}
-&#10;#biukclkxjs .gt_column_spanner_outer {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-&#10;#biukclkxjs .gt_column_spanner_outer:first-child {
-  padding-left: 0;
-}
-&#10;#biukclkxjs .gt_column_spanner_outer:last-child {
-  padding-right: 0;
-}
-&#10;#biukclkxjs .gt_column_spanner {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  overflow-x: hidden;
-  display: inline-block;
-  width: 100%;
-}
-&#10;#biukclkxjs .gt_spanner_row {
-  border-bottom-style: hidden;
-}
-&#10;#biukclkxjs .gt_group_heading {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  text-align: left;
-}
-&#10;#biukclkxjs .gt_empty_group_heading {
-  padding: 0.5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: middle;
-}
-&#10;#biukclkxjs .gt_from_md > :first-child {
-  margin-top: 0;
-}
-&#10;#biukclkxjs .gt_from_md > :last-child {
-  margin-bottom: 0;
-}
-&#10;#biukclkxjs .gt_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  margin: 10px;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  overflow-x: hidden;
-}
-&#10;#biukclkxjs .gt_stub {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-&#10;#biukclkxjs .gt_stub_row_group {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-  vertical-align: top;
-}
-&#10;#biukclkxjs .gt_row_group_first td {
-  border-top-width: 2px;
-}
-&#10;#biukclkxjs .gt_row_group_first th {
-  border-top-width: 2px;
-}
-&#10;#biukclkxjs .gt_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-&#10;#biukclkxjs .gt_first_summary_row {
-  border-top-style: solid;
-  border-top-color: #D3D3D3;
-}
-&#10;#biukclkxjs .gt_first_summary_row.thick {
-  border-top-width: 2px;
-}
-&#10;#biukclkxjs .gt_last_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-&#10;#biukclkxjs .gt_grand_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-&#10;#biukclkxjs .gt_first_grand_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: double;
-  border-top-width: 6px;
-  border-top-color: #D3D3D3;
-}
-&#10;#biukclkxjs .gt_last_grand_summary_row_top {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: double;
-  border-bottom-width: 6px;
-  border-bottom-color: #D3D3D3;
-}
-&#10;#biukclkxjs .gt_striped {
-  background-color: rgba(128, 128, 128, 0.05);
-}
-&#10;#biukclkxjs .gt_table_body {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-&#10;#biukclkxjs .gt_footnotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-&#10;#biukclkxjs .gt_footnote {
-  margin: 0px;
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-&#10;#biukclkxjs .gt_sourcenotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-&#10;#biukclkxjs .gt_sourcenote {
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-&#10;#biukclkxjs .gt_left {
-  text-align: left;
-}
-&#10;#biukclkxjs .gt_center {
-  text-align: center;
-}
-&#10;#biukclkxjs .gt_right {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-&#10;#biukclkxjs .gt_font_normal {
-  font-weight: normal;
-}
-&#10;#biukclkxjs .gt_font_bold {
-  font-weight: bold;
-}
-&#10;#biukclkxjs .gt_font_italic {
-  font-style: italic;
-}
-&#10;#biukclkxjs .gt_super {
-  font-size: 65%;
-}
-&#10;#biukclkxjs .gt_footnote_marks {
-  font-size: 75%;
-  vertical-align: 0.4em;
-  position: initial;
-}
-&#10;#biukclkxjs .gt_asterisk {
-  font-size: 100%;
-  vertical-align: 0;
-}
-&#10;#biukclkxjs .gt_indent_1 {
-  text-indent: 5px;
-}
-&#10;#biukclkxjs .gt_indent_2 {
-  text-indent: 10px;
-}
-&#10;#biukclkxjs .gt_indent_3 {
-  text-indent: 15px;
-}
-&#10;#biukclkxjs .gt_indent_4 {
-  text-indent: 20px;
-}
-&#10;#biukclkxjs .gt_indent_5 {
-  text-indent: 25px;
-}
-</style>
-<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-<thead><tr class="gt_col_headings">
-<th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Datetime">
-Datetime
-</th>
-<th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="lux">
-lux
-</th>
-<th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="kelvin">
-kelvin
-</th>
-<th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="mEDI">
-mEDI
-</th>
-</tr></thead>
-<tbody class="gt_table_body">
-<tr>
-<td headers="Datetime" class="gt_row gt_right">
-2023-06-22 07:30:44
-</td>
-<td headers="lux" class="gt_row gt_right">
-4
-</td>
-<td headers="kelvin" class="gt_row gt_right">
-2661
-</td>
-<td headers="mEDI" class="gt_row gt_right">
-1
-</td>
-</tr>
-<tr>
-<td headers="Datetime" class="gt_row gt_right">
-2023-06-22 07:30:59
-</td>
-<td headers="lux" class="gt_row gt_right">
-6
-</td>
-<td headers="kelvin" class="gt_row gt_right">
-3024
-</td>
-<td headers="mEDI" class="gt_row gt_right">
-7
-</td>
-</tr>
-<tr>
-<td headers="Datetime" class="gt_row gt_right">
-2023-06-22 07:31:14
-</td>
-<td headers="lux" class="gt_row gt_right">
-6
-</td>
-<td headers="kelvin" class="gt_row gt_right">
-3024
-</td>
-<td headers="mEDI" class="gt_row gt_right">
-7
-</td>
-</tr>
-<tr>
-<td headers="Datetime" class="gt_row gt_right">
-2023-06-22 07:31:30
-</td>
-<td headers="lux" class="gt_row gt_right">
-4
-</td>
-<td headers="kelvin" class="gt_row gt_right">
-2480
-</td>
-<td headers="mEDI" class="gt_row gt_right">
-4
-</td>
-</tr>
-<tr>
-<td headers="Datetime" class="gt_row gt_right">
-2023-06-22 07:31:45
-</td>
-<td headers="lux" class="gt_row gt_right">
-8
-</td>
-<td headers="kelvin" class="gt_row gt_right">
-2820
-</td>
-<td headers="mEDI" class="gt_row gt_right">
-10
-</td>
-</tr>
-<tr>
-<td headers="Datetime" class="gt_row gt_right">
-2023-06-22 07:32:00
-</td>
-<td headers="lux" class="gt_row gt_right">
-9
-</td>
-<td headers="kelvin" class="gt_row gt_right">
-2915
-</td>
-<td headers="mEDI" class="gt_row gt_right">
-11
-</td>
-</tr>
-</tbody>
-</table>
-</div>
+<span><span class="va">dataset</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">Datetime</span>, <span class="va">lux</span>, <span class="va">kelvin</span>, <span class="va">mEDI</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="fl">8000</span><span class="op">:</span><span class="fl">8005</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://davidgohel.github.io/flextable/reference/flextable.html" class="external-link">flextable</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://davidgohel.github.io/flextable/reference/autofit.html" class="external-link">autofit</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-3-1.png" width="50%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="visualize">Visualize<a class="anchor" aria-label="anchor" href="#visualize"></a>
 </h3>
 <p>Once imported, <strong>LightLogR</strong> allows you conveniently visualize the data.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dataset</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="reference/gg_day.html">gg_day</a></span><span class="op">(</span>y.axis <span class="op">=</span> <span class="va">mEDI</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">dataset</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="reference/gg_day.html">gg_day</a></span><span class="op">(</span>y.axis <span class="op">=</span> <span class="va">mEDI</span>, y.axis.label <span class="op">=</span> <span class="st">"mEDI (lx)"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning: Transformation introduced infinite values in continuous y-axis</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-4-1.png" width="100%"> There is a wide range of options to the <code>gg_day</code> function to customize the output</p>
+<p><img src="reference/figures/README-unnamed-chunk-4-1.png" width="100%"> There is a wide range of options to the <code>gg_day</code> function to customize the output. Have a look at the reference page for <code>gg_day</code> to see all options. You can also override most of the defaults for different <code>color</code> or <code>facetting</code> options.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dataset</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="reference/gg_day.html">gg_day</a></span><span class="op">(</span>y.axis <span class="op">=</span> <span class="va">mEDI</span>, col <span class="op">=</span> <span class="va">mEDI</span> <span class="op">&gt;=</span> <span class="fl">250</span>, scales <span class="op">=</span> <span class="st">"fixed"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">dataset</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="reference/gg_day.html">gg_day</a></span><span class="op">(</span>y.axis <span class="op">=</span> <span class="va">mEDI</span>, col <span class="op">=</span> <span class="va">mEDI</span> <span class="op">&gt;=</span> <span class="fl">250</span>, scales <span class="op">=</span> <span class="st">"fixed"</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_colour_discrete.html" class="external-link">scale_color_discrete</a></span><span class="op">(</span>type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"orange"</span>, <span class="st">"skyblue"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Scale for colour is already present.</span></span>
+<span><span class="co">#&gt; Adding another scale for colour, which will replace the existing scale.</span></span>
 <span><span class="co">#&gt; Warning: Transformation introduced infinite values in continuous y-axis</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-5-1.png" width="100%"></p>
+</div>
+<div class="section level3">
+<h3 id="more-than-one-dataset">More than one dataset<a class="anchor" aria-label="anchor" href="#more-than-one-dataset"></a>
+</h3>
+<p>The built-in dataset <code>sample.data.environment</code> shows a combined dataset of light logger data and a second set of data - in this case unobstructed outdoor light measurements. Combined datasets can be easily visualized with <code>gg_day</code>. The <code>col</code> parameter used on the <code>Source</code> column of the dataset allows for a color separation.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dataset</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="reference/gg_day.html">gg_day</a></span><span class="op">(</span>y.axis <span class="op">=</span> <span class="va">mEDI</span>, scales <span class="op">=</span> <span class="st">"fixed"</span>, geom <span class="op">=</span> <span class="st">"line"</span>, format.day <span class="op">=</span> <span class="st">"%d/%m/%Y"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: Transformation introduced infinite values in continuous y-axis</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-5-2.png" width="100%"> ### Reference data The built-in dataset <code>sample.data.environment</code> shows a combined dataset of light logger data and simultaneous reference data - in this case unobstructed outdoor light measurements. The data can, again, be easily visualized with <code>gg_day</code>. The <code>col</code> parameter used on the <code>Source</code> column of the dataset allows for a color separation between types of data.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sample.data.environment</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="reference/gg_day.html">gg_day</a></span><span class="op">(</span></span>
-<span>    end.date <span class="op">=</span> <span class="st">"2023-08-18"</span>,</span>
+<span>    start.date <span class="op">=</span> <span class="st">"2023-08-18"</span>,</span>
 <span>    y.axis <span class="op">=</span> <span class="va">`MELANOPIC EDI`</span>,</span>
 <span>    col <span class="op">=</span> <span class="va">Source</span>,</span>
 <span>    scales <span class="op">=</span> <span class="st">"fixed"</span>,</span>
 <span>    geom <span class="op">=</span> <span class="st">"line"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning: Transformation introduced infinite values in continuous y-axis</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-6-1.png" width="100%"> With the <code>cut_Datetime</code> function, the data can further be broken up into arbitrary time intervals. This can be used to easily compare different datasets. Just put the function in between the dataset. This makes a new variable available for plotting: <code>Datetime.rounded</code>. Just make sure, that the <code>geom</code> parameter is set to <em>boxplot</em> and the <code>group</code> parameter uses both the info from the rounded time interval (<code>Datetime.rounded</code>) and the different datasets (<code>Source</code>). The <code>interaction</code> function can easily combine them. The default interval from <code>cut_Datetime</code> is 3 hours.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<p><img src="reference/figures/README-unnamed-chunk-6-1.png" width="100%"> With the <code>cut_Datetime</code> function, the data can further be broken up into arbitrary time intervals. This can be used to easily compare different datasets. Just put the function in between the dataset and <code>gg_day</code>. This makes a new variable available for plotting: <code>Datetime.rounded</code>. Just make sure, that the <code>geom</code> parameter is set to <em>boxplot</em> and the <code>group</code> parameter uses both the info from the rounded time interval (<code>Datetime.rounded</code>) and the different datasets (<code>Source</code>). The <code>interaction</code> function can easily combine them. The default interval from <code>cut_Datetime</code> is 3 hours.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sample.data.environment</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="reference/cut_Datetime.html">cut_Datetime</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="reference/gg_day.html">gg_day</a></span><span class="op">(</span></span>
@@ -668,8 +185,7 @@ mEDI
 <span>    scales <span class="op">=</span> <span class="st">"fixed"</span>,</span>
 <span>    geom <span class="op">=</span> <span class="st">"boxplot"</span>,</span>
 <span>    group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/interaction.html" class="external-link">interaction</a></span><span class="op">(</span><span class="va">Source</span>, <span class="va">Datetime.rounded</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" class="external-link">coord_cartesian</a></span><span class="op">(</span>xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">24</span><span class="op">*</span><span class="fl">60</span><span class="op">*</span><span class="fl">60</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning: Transformation introduced infinite values in continuous y-axis</span></span>
 <span><span class="co">#&gt; Warning: Removed 3429 rows containing non-finite values (`stat_boxplot()`).</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-7-1.png" width="100%"></p>

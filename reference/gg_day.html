@@ -14,7 +14,7 @@ styling or guides."><meta property="og:image" content="https://tscnlab.github.io
     
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,6 +24,9 @@ styling or guides."><meta property="og:image" content="https://tscnlab.github.io
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
@@ -71,7 +74,8 @@ styling or guides.</p>
 <span>  y.axis.label <span class="op">=</span> <span class="st">"Lightlevel"</span>,</span>
 <span>  format.day <span class="op">=</span> <span class="st">"%d/%m"</span>,</span>
 <span>  title <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  subtitle <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  subtitle <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -85,8 +89,8 @@ by <a href="LightLogR-package.html">LightLogR</a>, take care to choose a sensibl
 <dt>start.date, end.date</dt>
 <dd><p>Choose an optional start or end date within your
 <code>dataset</code>. Expects a <code>date</code>, which can also be a <code>character</code> that is
-interpretable as a date, e.g., <code>"2023-06-03"</code>. Can also be a Datetime if
-you want to cut off intraday values, e.g., <code>"2023-06-03 12:00:00"</code>.
+interpretable as a date, e.g., <code>"2023-06-03"</code>. If you need a Datetime or
+want to cut specific times of each day, use the <a href="filter_Datetime.html">filter_Datetime</a> function.
 Defaults to <code>NULL</code>, which means that the plot starts/ends with the
 earliest/latest date within the <code>dataset</code>.</p></dd>
 
@@ -156,6 +160,11 @@ at <code><a href="https://rdrr.io/r/base/strptime.html" class="external-link">ba
 
 <dt>subtitle</dt>
 <dd><p>Plot subtitle. Expects a <code>character</code>.</p></dd>
+
+
+<dt>...</dt>
+<dd><p>Other options that get passed to the main geom function. Can be
+used to adjust to adjust size or linetype.</p></dd>
 
 </dl></div>
     <div class="section level2">
