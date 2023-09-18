@@ -19,10 +19,16 @@
     <loc>https://tscnlab.github.io/LightLogR/reference/LightLogR-package.html</loc>
   </url>
   <url>
+    <loc>https://tscnlab.github.io/LightLogR/reference/create_Time.data.html</loc>
+  </url>
+  <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/cut_Datetime.html</loc>
   </url>
   <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/filter_Datetime.html</loc>
+  </url>
+  <url>
+    <loc>https://tscnlab.github.io/LightLogR/reference/filter_Time.html</loc>
   </url>
   <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/gg_day.html</loc>
