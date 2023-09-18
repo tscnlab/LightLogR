@@ -1,26 +1,32 @@
 
 #' Create Datetime bins for visualization and calculation
-#' 
-#' `cut_Datetime` is a wrapper around [lubridate::round_date()] (and friends) combined with [dplyr::mutate()], to create a new column in a light logger dataset with a specified binsize. This can be `"3 hours"`, `"15 secs"`, or `"0.5 days"`. It is a useful step between a dataset and a visualization or summary step.
+#'
+#' `cut_Datetime` is a wrapper around [lubridate::round_date()] (and friends)
+#' combined with [dplyr::mutate()], to create a new column in a light logger
+#' dataset with a specified binsize. This can be `"3 hours"`, `"15 secs"`, or
+#' `"0.5 days"`. It is a useful step between a dataset and a visualization or
+#' summary step.
 #'
 #' @param dataset A light logger dataset. Expects a `dataframe`. If not imported
-#'   by [LightLogR], take care to choose a sensible variable for the `Datetime.colname`.
+#'   by [LightLogR], take care to choose a sensible variable for the
+#'   `Datetime.colname`.
 #' @param unit Unit of binning. See [lubridate::round_date()] for examples.
-#' @param type One of `"round"`(the default), `"ceiling"` or `"floor"`. Setting chooses the relevant function from [lubridate].
+#' @param type One of `"round"`(the default), `"ceiling"` or `"floor"`. Setting
+#'   chooses the relevant function from [lubridate].
 #' @param Datetime.colname column name that contains the datetime. Defaults to
 #'   `"Datetime"` which is automatically correct for data imported with
-#'   [LightLogR]). Expects a `symbol`. Needs to
-#'   be part of the `dataset`.
+#'   [LightLogR]. Expects a `symbol`. Needs to be part of the `dataset`.
 #' @param New.colname Column name for the added column in the dataset.
 #' @param ... Parameter handed over to [lubridate::round_date()] and siblings
 #'
-#' @return a `data.frame` object identical to `dataset` but with the added column of binned datetimes.
+#' @return a `data.frame` object identical to `dataset` but with the added
+#'   column of binned datetimes.
 #' @export
-#'
+#' @importFrom rlang :=
 #' @examples
 #' #compare Datetime and Datetime.rounded
-#' sample.data.environment %>% 
-#'   cut_Datetime() %>% 
+#' sample.data.environment %>%
+#'   cut_Datetime() %>%
 #'   dplyr::slice_sample(n = 5)
 
 

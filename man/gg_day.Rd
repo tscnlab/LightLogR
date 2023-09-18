@@ -14,6 +14,7 @@ gg_day(
   group = NULL,
   geom = "point",
   scales = "free_y",
+  x.axis.breaks = hms::hms(hours = seq(0, 24, by = 3)),
   y.axis.breaks = 10^(0:5),
   y.scale.log10 = TRUE,
   y.scale.sc = FALSE,
@@ -22,6 +23,7 @@ gg_day(
   format.day = "\%d/\%m",
   title = NULL,
   subtitle = NULL,
+  interactive = FALSE,
   ...
 )
 }
@@ -42,9 +44,9 @@ earliest/latest date within the \code{dataset}.}
 be part of the \code{dataset}.}
 
 \item{col}{optional column name that defines separate sets and colors them.
-Expects anything that works with the layer data \code{\link[ggplot2:aes]{ggplot2::aes()}}. By
-default, the \code{\link[ggplot2:scale_viridis]{ggplot2::scale_color_viridis_d()}} is used for coloring. This
-can be overwritten outside the function (see examples).}
+Expects anything that works with the layer data \code{\link[ggplot2:aes]{ggplot2::aes()}}. The
+default color palette can be overwritten outside the function (see
+examples).}
 
 \item{group}{Optional column name that defines separate sets. Useful for
 certain geoms like \code{boxplot}.Expects anything that works with the layer
@@ -60,9 +62,10 @@ data \code{\link[ggplot2:aes]{ggplot2::aes()}}}
 \item{scales}{For \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}}, should scales be "fixed", "free"
 or free in one dimension ("free_y" is the default). Expects a \code{character}.}
 
-\item{y.axis.breaks}{Where should breaks occur on the y.axis? Expects a
-\verb{numeric vector} with all the breaks. If you want to activate the default
-behaviour of \link{ggplot2}, you need to put in \code{\link[ggplot2:waiver]{ggplot2::waiver()}}.}
+\item{x.axis.breaks, y.axis.breaks}{Where should breaks occur on the x and
+y.axis? Expects a \verb{numeric vector} with all the breaks. If you want to
+activate the default behaviour of \link{ggplot2}, you need to put in
+\code{\link[ggplot2:waiver]{ggplot2::waiver()}}.}
 
 \item{y.scale.log10}{Should \code{y} be scaled on a log10 basis? Expects a
 \code{logical}.}
@@ -81,6 +84,9 @@ at \code{\link[base:strptime]{base::strptime()}}}
 
 \item{subtitle}{Plot subtitle. Expects a \code{character}.}
 
+\item{interactive}{Should the plot be interactive? Expects a \code{logical}.
+Defaults to \code{FALSE}.}
+
 \item{...}{Other options that get passed to the main geom function. Can be
 used to adjust to adjust size or linetype.}
 }
@@ -96,7 +102,7 @@ styling or guides.
 Besides plotting, the function creates two new variables from the given
 \code{Datetime}:
 \itemize{
-\item \code{Day.data} is a factor that is used for facetting with \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}}. Make sure to use this variable, if you change the facetting manually.
+\item \code{Day.data} is a factor that is used for facetting with \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}}. Make sure to use this variable, if you change the faceting manually. Also, the function checks, whether this variable already exists. If it does, it will only convert it to a factor and do the faceting on that variable.
 \item \code{Time.data} is an \code{hms} created with \code{\link[hms:hms]{hms::as_hms()}} that is used for the x.axis
 }
 }

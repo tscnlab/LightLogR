@@ -120,8 +120,7 @@ options. You can also override most of the defaults, e.g., for different
 ``` r
 dataset %>% 
   gg_day(y.axis = mEDI, col = mEDI >= 250, scales = "fixed", size = 0.5) + 
-  scale_color_discrete(type = c("orange", "skyblue")) + 
-  theme(panel.grid.major.y = element_line("grey95"))
+  scale_color_discrete(type = c("orange", "skyblue"))
 #> Scale for colour is already present.
 #> Adding another scale for colour, which will replace the existing scale.
 #> Warning: Transformation introduced infinite values in continuous y-axis
@@ -145,6 +144,7 @@ sample.data.environment %>%
     col = Source,
     scales = "fixed",
     geom = "line")
+#> Only Dates will be used from start.date and end.date input. If you also want to set Datetimes or Times, consider using the `filter_Datetime()` function instead.
 #> Warning: Transformation introduced infinite values in continuous y-axis
 ```
 
@@ -170,6 +170,7 @@ sample.data.environment %>%
     geom = "boxplot",
     group = interaction(Source, Datetime.rounded)) + 
   theme(legend.position = "bottom")
+#> Only Dates will be used from start.date and end.date input. If you also want to set Datetimes or Times, consider using the `filter_Datetime()` function instead.
 #> Warning: Transformation introduced infinite values in continuous y-axis
 #> Warning: Removed 3429 rows containing non-finite values (`stat_boxplot()`).
 ```

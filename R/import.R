@@ -23,7 +23,7 @@
 #'   the `device.ext` spec to access the sample file):
 #' * `"ActLumus"` (ActLumus.txt)
 #' * `"LYS"` (LYS.csv)
-#'
+#' @importFrom rlang :=
 #' @return Tibble/Dataframe with a POSIXct column for the datetime
 #' @export
 #' @section Examples:

@@ -2,13 +2,106 @@
 % Please edit documentation in R/filter_Datetime.R
 \name{filter_Datetime}
 \alias{filter_Datetime}
-\title{Filter Dates, Times, or Datetimes in a dataset.}
+\alias{filter_Date}
+\title{Filter Datetimes in a dataset.}
 \usage{
-filter_Datetime()
+filter_Datetime(
+  dataset,
+  Datetime.colname = Datetime,
+  start = NULL,
+  end = NULL,
+  length = NULL,
+  full.day = FALSE,
+  tz = NULL
+)
+
+filter_Date(..., start = NULL, end = NULL)
+}
+\arguments{
+\item{dataset}{A light logger dataset. Expects a \code{dataframe}. If not imported
+by \link{LightLogR}, take care to choose a sensible variable for the
+\code{Datetime.colname}.}
+
+\item{Datetime.colname}{column name that contains the datetime. Defaults to
+\code{"Datetime"} which is automatically correct for data imported with
+\link{LightLogR}. Expects a \code{symbol}. Needs to be part of the \code{dataset}.}
+
+\item{start, end}{For \code{\link[=filter_Datetime]{filter_Datetime()}} a \code{POSIXct} or \code{character} scalar in
+the form of \code{"yyyy-mm-dd hh-mm-ss"} giving the respective start and end
+time positions for the filtered dataframe. If you only want to provide
+\code{dates} in the form of \code{"yyyy-mm-dd"}, use the wrapper function
+\code{\link[=filter_Date]{filter_Date()}}.
+\itemize{
+\item If one or both of start/end are not provided, the times will be taken from the respective extreme values of the \code{dataset}.
+\item If \code{length} is provided and one of start/end is not, the other will be calculated based on the given value.
+\item If \code{length} is provided and both of start/end are NULL, the time from the
+respective start is taken.
+}}
+
+\item{length}{Either a Period or Duration from \link{lubridate}. E.g., \code{days(2) + hours(12)} will give a period of 2.5 days, whereas \code{ddays(2) + dhours(12)}
+will give a duration. For the difference between periods and durations look
+at the documentation from \link{lubridate}. Basically, periods model clocktimes,
+whereas durations model physical processes. This matters on several
+occasions, like leap years, or daylight savings.}
+
+\item{full.day}{A \code{logical} indicating wether the \code{start} param should be
+rounded to a full day, when only the \code{length} argument is provided (Default
+is FALSE). This is useful, e.g., when the first observation in the dataset
+is slightly after midnight. If TRUE, it will count the length from midnight
+on to avoid empty days in plotting with \code{\link[=gg_day]{gg_day()}}.}
+
+\item{tz}{Timezone of the start/end times. If \code{NULL} (the default), it will
+take the timezone from the \code{Datetime.colname} column.}
+
+\item{...}{Parameter handed over to \code{\link[lubridate:round_date]{lubridate::round_date()}} and siblings}
 }
 \value{
-a \code{data.frame} object identical to \code{dataset} but with only the specified Dates/Times.
+a \code{data.frame} object identical to \code{dataset} but with only the
+specified Dates/Times.
 }
 \description{
-Filter Dates, Times, or Datetimes in a dataset.
+Filtering a dataset based on Dates or Datetimes may often be necessary prior
+to calcuation or visualization. The functions allow for a filtering based on
+simple \code{strings} or \code{Datetime} scalars, or by specifying a length. They also
+support prior \link{dplyr} grouping, which is useful, e.g., when you only want
+to filter the first two days of measurement data for every participant,
+regardless of the actual date. If you want to filter based on times of the
+day, look to \code{\link[=filter_Time]{filter_Time()}}.
 }
+\examples{
+ 
+library(lubridate)
+library(dplyr)
+#baseline
+range.unfiltered <- sample.data.environment$Datetime \%>\% range()
+range.unfiltered
+
+#setting the start of a dataset
+sample.data.environment \%>\% 
+filter_Datetime(start = "2023-08-18 12:00:00") \%>\% 
+pull(Datetime) \%>\% 
+range()
+
+#setting the end of a dataset
+sample.data.environment \%>\%
+filter_Datetime(end = "2023-08-18 12:00:00") \%>\% pull(Datetime) \%>\% range()
+
+#setting a period of a dataset
+sample.data.environment \%>\%
+filter_Datetime(end = "2023-08-18 12:00:00", length = days(2)) \%>\%
+pull(Datetime) \%>\% range()
+
+#setting only the period of a dataset
+sample.data.environment \%>\%
+filter_Datetime(length = days(2)) \%>\%
+pull(Datetime) \%>\% range()
+sample.data.environment \%>\% filter_Date(end = "2023-08-17")
+}
+\seealso{
+Other filter: 
+\code{\link{filter_Time}()}
+
+Other filter: 
+\code{\link{filter_Time}()}
+}
+\concept{filter}

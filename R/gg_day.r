@@ -7,7 +7,7 @@
 #'
 #' Besides plotting, the function creates two new variables from the given
 #' `Datetime`:
-#' * `Day.data` is a factor that is used for facetting with [ggplot2::facet_wrap()]. Make sure to use this variable, if you change the facetting manually.
+#' * `Day.data` is a factor that is used for facetting with [ggplot2::facet_wrap()]. Make sure to use this variable, if you change the faceting manually. Also, the function checks, whether this variable already exists. If it does, it will only convert it to a factor and do the faceting on that variable.
 #' * `Time.data` is an `hms` created with [hms::as_hms()] that is used for the x.axis
 #'
 #' @param dataset A light logger dataset. Expects a `dataframe`. If not imported
@@ -34,12 +34,13 @@
 #' @param y.scale.log10 Should `y` be scaled on a log10 basis? Expects a
 #'   `logical`.
 #' @param col optional column name that defines separate sets and colors them.
-#'   Expects anything that works with the layer data [ggplot2::aes()]. By
-#'   default, the [ggplot2::scale_color_viridis_d()] is used for coloring. This
-#'   can be overwritten outside the function (see examples).
-#' @param y.axis.breaks Where should breaks occur on the y.axis? Expects a
-#'   `numeric vector` with all the breaks. If you want to activate the default
-#'   behaviour of [ggplot2], you need to put in [ggplot2::waiver()].
+#'   Expects anything that works with the layer data [ggplot2::aes()]. The
+#'   default color palette can be overwritten outside the function (see
+#'   examples).
+#' @param x.axis.breaks,y.axis.breaks Where should breaks occur on the x and
+#'   y.axis? Expects a `numeric vector` with all the breaks. If you want to
+#'   activate the default behaviour of [ggplot2], you need to put in
+#'   [ggplot2::waiver()].
 #' @param y.scale.sc `logical` for whether scientific notation shall be used.
 #'   Defaults to `FALSE`.
 #' @param geom What geom should be used for visualization? Expects a `character`
@@ -51,6 +52,8 @@
 #'   data [ggplot2::aes()]
 #' @param ... Other options that get passed to the main geom function. Can be
 #'   used to adjust to adjust size or linetype.
+#' @param interactive Should the plot be interactive? Expects a `logical`.
+#'   Defaults to `FALSE`.
 #'
 #' @return A ggplot object
 #' @export
@@ -82,6 +85,7 @@ gg_day <- function(dataset,
                    group = NULL,
                    geom = "point",
                    scales = "free_y",
+                   x.axis.breaks = hms::hms(hours = seq(0, 24, by = 3)),
                    y.axis.breaks = 10^(0:5),
                    y.scale.log10 = TRUE,
                    y.scale.sc = FALSE,
@@ -90,6 +94,7 @@ gg_day <- function(dataset,
                    format.day = "%d/%m",
                    title = NULL,
                    subtitle = NULL,
+                   interactive = FALSE,
                    ...) {
   
 # Initial Checks ----------------------------------------------------------
@@ -112,12 +117,14 @@ gg_day <- function(dataset,
     "The X axis label must be a string" = is.character(x.axis.label),
     "The Y axis label must be a string" = is.character(y.axis.label),
     "y.scale.log10 must be a logical, i.e., TRUE or FALSE" = 
-      is.logical(y.scale.log10)
+      is.logical(y.scale.log10),
+    "interactive must be a logical" = is.logical(interactive)
     # paste("Unsupported geom:", geom)
     )
 
 # Data Preparation --------------------------------------------------------
 
+  #filter by start and end date
   if(!is.null(start.date)) {
     dataset <-
       dataset %>% dplyr::filter(!!x >= as.Date(start.date))
@@ -126,14 +133,26 @@ gg_day <- function(dataset,
     dataset <-
       dataset %>% dplyr::filter(!!x <= as.Date(end.date) + lubridate::days())
   }
+  if(!is.null(start.date) | !is.null(end.date)) {
+    message("Only Dates will be used from start.date and end.date input. If you also want to set Datetimes or Times, consider using the `filter_Datetime()` function instead.")
+  }
+  
+  #create or choose the facet variable
+  if(!"Day.data" %in% names(dataset)) {
+    dataset <-
+      dataset %>%
+      dplyr::mutate(
+        Day.data =
+          !!x %>% format(format = format.day))
+  }
+  
+  dataset <- dataset %>% create_Time.data(Datetime.colname = !!x)
+  
   dataset <-
     dataset %>%
     dplyr::mutate(
-      Day.data =
-        !!x %>% format(format = format.day),     
       # factoring is necessary for the correct order of days in the plot:
-      Day.data = factor(Day.data, levels = unique(Day.data)), 
-      Time.data = !!x %>% hms::as_hms()
+      Day.data = factor(Day.data, levels = unique(Day.data))
     )  
   
   #give the user the chance to use whatever geom they want
@@ -150,14 +169,6 @@ gg_day <- function(dataset,
         group = {{ group }},
         col = {{ col }},
       ), na.rm = FALSE, ...) +
-    #indication of explicit missing values
-    ggplot2::geom_vline(
-      data = 
-        dataset %>% 
-        dplyr::filter(is.na(!!y)), 
-      ggplot2::aes(xintercept = Time.data), 
-      alpha = 0.2, lwd = 0.05
-    )+
     # Facetting ------------------------------------------------------------
     ggplot2::facet_wrap(
       ~Day.data, 
@@ -165,8 +176,8 @@ gg_day <- function(dataset,
       scales = scales, 
       strip.position = "left") +
     # Scales --------------------------------------------------------------
-    ggplot2::scale_color_viridis_d(direction = -1) + 
-    ggplot2::scale_x_time(breaks = hms::hms(hours = seq(0, 24, by = 3)), 
+    ggsci::scale_color_jco()+
+    ggplot2::scale_x_time(breaks = x.axis.breaks, 
                           labels = scales::label_time(format = "%H:%M")) + 
     {if(y.scale.log10){
       ggplot2::scale_y_log10(
@@ -189,14 +200,18 @@ gg_day <- function(dataset,
     cowplot::theme_cowplot()+
     ggplot2::theme(
       plot.title.position = "plot",
+      panel.grid.major.y = ggplot2::element_line("grey95"),
       panel.grid.major.x = 
         ggplot2::element_line(colour = "grey", linewidth = 0.25),
-      strip.background = ggplot2::element_blank(),
+      # strip.background = ggplot2::element_blank(),
       strip.text.y = ggplot2::element_text(face = "bold",),
       strip.placement = "outside"
     )
   
   # Return --------------------------------------------------------------
-  Plot
+  if(interactive) {
+    Plot %>% plotly::ggplotly()
+  }
+  else Plot
 }
 

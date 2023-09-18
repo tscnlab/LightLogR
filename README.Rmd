@@ -88,8 +88,7 @@ There is a wide range of options to the `gg_day()` function to customize the out
 ```{r, fig.retina=2}
 dataset %>% 
   gg_day(y.axis = mEDI, col = mEDI >= 250, scales = "fixed", size = 0.5) + 
-  scale_color_discrete(type = c("orange", "skyblue")) + 
-  theme(panel.grid.major.y = element_line("grey95"))
+  scale_color_discrete(type = c("orange", "skyblue"))
 ```
 
 ### More than one dataset
