@@ -27,7 +27,7 @@ chooses the relevant function from \link{lubridate}.}
 \code{"Datetime"} which is automatically correct for data imported with
 \link{LightLogR}. Expects a \code{symbol}. Needs to be part of the \code{dataset}.}
 
-\item{New.colname}{Column name for the added column in the dataset.}
+\item{New.colname}{Column name for the added column in the \code{dataset}.}
 
 \item{...}{Parameter handed over to \code{\link[lubridate:round_date]{lubridate::round_date()}} and siblings}
 }

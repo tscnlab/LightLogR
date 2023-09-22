@@ -4,7 +4,12 @@
 \alias{create_Time.data}
 \title{Create a Time-of-Day column in the dataset}
 \usage{
-create_Time.data(dataset, Datetime.colname = Datetime, Time.data = Time.data)
+create_Time.data(
+  dataset,
+  Datetime.colname = Datetime,
+  Time.data = Time.data,
+  output.dataset = TRUE
+)
 }
 \arguments{
 \item{dataset}{A light logger dataset. Expects a \code{dataframe}. If not imported
@@ -17,10 +22,13 @@ by \link{LightLogR}, take care to choose a sensible variable for the
 
 \item{Time.data}{Name of the newly created column. Expects a \code{symbol}. The
 default(\code{Time.data}) works well with other functions in \link{LightLogR}.}
+
+\item{output.dataset}{should the output be a \code{data.frame} (Default \code{TRUE}) or
+a vector with \code{hms} (\code{FALSE}) times? Expects a \code{logical} scalar.}
 }
 \value{
 a \code{data.frame} object identical to \code{dataset} but with the added
-column of Time-of-Day data.
+column of Time-of-Day data, or a \code{vector} with the Time-of-Day-data
 }
 \description{
 Create a Time-of-Day column in the dataset

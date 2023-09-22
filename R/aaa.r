@@ -1,4 +1,4 @@
-Time <- mEDI <- Time.data <- Datetime <- timestamp <- tz <- Day.data <- `DATE/TIME` <- n <- Datetime.rounded <-  NULL
+Time <- mEDI <- Time.data <- Datetime <- timestamp <- tz <- Day.data <- `DATE/TIME` <- n <- Datetime.rounded <- id <- sleep.colname.string <- file.name <- Interval <- original.datapoints.fleeting <-   NULL
 
 empty_function <- function() {
   rsconnect::accountInfo()

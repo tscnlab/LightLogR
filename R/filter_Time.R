@@ -1,9 +1,10 @@
 #' Filter Times in a dataset.
 #'
 #' @inheritParams cut_Datetime
-#' @param start,end,length a `character` scalar in
-#'   the form of `"hh-mm-ss"` giving the respective start, end, or length
-#'   for the filtered dataframe.
+#' @param start,end,length a `character` scalar in the form of `"hh-mm-ss"`
+#'   giving the respective start, end, or length for the filtered dataframe. The
+#'   input can also come from a `POSIXct` datetime, where only the time
+#'   component will be used.
 #' * If one or both of start/end are not provided, the times will be taken from the respective extreme values of the `dataset`.
 #' * If `length` is provided and one of start/end is not, the other will be calculated based on the given value.
 #' * If `length` is provided and both of start/end are not, the time from the
@@ -14,8 +15,8 @@
 #' @export
 #'
 #' @examples
-#' sample.data.environment %>% 
-#' filter_Time(start = "4:00:34", length = "12:00:00") %>% 
+#' sample.data.environment %>%
+#' filter_Time(start = "4:00:34", length = "12:00:00") %>%
 #' dplyr::pull(Time.data) %>% range() %>% hms::as_hms()
 #' @family filter
 
@@ -32,26 +33,10 @@ filter_Time <- function(dataset,
     rlang::enexpr(Datetime.colname) %>% rlang::as_string()
   x <- rlang::enexpr(Datetime.colname)
   
-  if(!is.null(length)){
-    test <- 
-      stringr::str_detect(length, 
-                 pattern = "^([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$")
-    stopifnot("length needs to be in the format 'hh:mm:ss'" = test)
-  }
+  test.Time.regex(length)
+  test.Time.regex(start)
+  test.Time.regex(end)
  
-  if(!is.null(start)) {
-    test <- 
-      stringr::str_detect(start, 
-                 pattern = "^([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$")
-    stopifnot("start needs to be in the format 'hh:mm:ss'" = test)
-  }
-  if(!is.null(end)) {
-    test <- 
-      stringr::str_detect(end, 
-                 pattern = "^([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$")
-    stopifnot("end needs to be in the format 'hh:mm:ss'" = test)
-  }
-  
   stopifnot(
     "dataset is not a dataframe" = is.data.frame(dataset),
     "Datetime.colname must be part of the dataset" = 

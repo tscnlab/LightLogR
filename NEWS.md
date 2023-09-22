@@ -1,14 +1,20 @@
 # LightLogR (development version)
 
-# LightLogR 0.1.1.9000
+* Added the convenience function `create_Time.data()` to create a Time-of-Day column in datasets.
 
-* Added the convenience function [create_Time.data()] to create a Time-of-Day column in datasets.
-
-* Added the family of [filter_Datetime()], [filter_Date()] and [filter_Time()] functions to easily filter datasets.
+* Added the family of `filter_Datetime()`, `filter_Date()` and `filter_Time()` functions to easily filter datasets.
 
 * Added unit tests for the first functions.
 
-## [gg_day()]:
+* Added several helper functions to work with states like sleep or wear times.
+
+* Added an automatic ID creation at import and streamlined the `import` functions.
+
+* Added the function `join.datasets` to combine imported datasets with sensible constraints.
+
+# LightLogR 0.1.1
+
+## `gg_day()`:
 * Added `major grid marks` for the y-axis.
 
 * Added a `message` when using start or end dates to make it clear, that only the Date portion of the input will be used.

@@ -21,9 +21,10 @@ by \link{LightLogR}, take care to choose a sensible variable for the
 \code{"Datetime"} which is automatically correct for data imported with
 \link{LightLogR}. Expects a \code{symbol}. Needs to be part of the \code{dataset}.}
 
-\item{start, end, length}{a \code{character} scalar in
-the form of \code{"hh-mm-ss"} giving the respective start, end, or length
-for the filtered dataframe.
+\item{start, end, length}{a \code{character} scalar in the form of \code{"hh-mm-ss"}
+giving the respective start, end, or length for the filtered dataframe. The
+input can also come from a \code{POSIXct} datetime, where only the time
+component will be used.
 \itemize{
 \item If one or both of start/end are not provided, the times will be taken from the respective extreme values of the \code{dataset}.
 \item If \code{length} is provided and one of start/end is not, the other will be calculated based on the given value.
@@ -39,8 +40,8 @@ specified Times.
 Filter Times in a dataset.
 }
 \examples{
-sample.data.environment \%>\% 
-filter_Time(start = "4:00:34", length = "12:00:00") \%>\% 
+sample.data.environment \%>\%
+filter_Time(start = "4:00:34", length = "12:00:00") \%>\%
 dplyr::pull(Time.data) \%>\% range() \%>\% hms::as_hms()
 }
 \seealso{

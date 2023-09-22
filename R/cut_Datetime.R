@@ -16,7 +16,7 @@
 #' @param Datetime.colname column name that contains the datetime. Defaults to
 #'   `"Datetime"` which is automatically correct for data imported with
 #'   [LightLogR]. Expects a `symbol`. Needs to be part of the `dataset`.
-#' @param New.colname Column name for the added column in the dataset.
+#' @param New.colname Column name for the added column in the `dataset`.
 #' @param ... Parameter handed over to [lubridate::round_date()] and siblings
 #'
 #' @return a `data.frame` object identical to `dataset` but with the added
@@ -64,9 +64,11 @@ cut_Datetime <- function(dataset,
   #give the user the chance to use whatever function they want
   round_function_expr <- rlang::parse_expr(paste0("lubridate::", type, "_date"))
   
-  dataset %>% 
+  dataset <- dataset %>% 
     dplyr::mutate(
       {{ New.colname }} := 
         {{ Datetime.colname }} %>% eval(round_function_expr)(unit = unit, ...))
   
+  # Return ----------------------------------------------------------
+  dataset
 }

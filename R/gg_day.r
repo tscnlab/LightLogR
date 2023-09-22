@@ -84,7 +84,7 @@ gg_day <- function(dataset,
                    col = NULL,
                    group = NULL,
                    geom = "point",
-                   scales = "free_y",
+                   scales = "fixed",
                    x.axis.breaks = hms::hms(hours = seq(0, 24, by = 3)),
                    y.axis.breaks = 10^(0:5),
                    y.scale.log10 = TRUE,
@@ -182,12 +182,12 @@ gg_day <- function(dataset,
     {if(y.scale.log10){
       ggplot2::scale_y_log10(
         breaks = y.axis.breaks,
-        labels = function(x) format(x, scientific = y.scale.sc)
+        labels = function(x) format(x, scientific = y.scale.sc, big.mark = " ")
         ) 
     }
       else ggplot2::scale_y_continuous(
         breaks = y.axis.breaks,
-        labels = function(x) format(x, scientific = y.scale.sc)
+        labels = function(x) format(x, scientific = y.scale.sc, big.mark = " ")
         )
     }+
     # Styling --------------------------------------------------------------
