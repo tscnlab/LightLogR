@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -20,6 +20,12 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
+</li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/Styling.html">What´s in a Day?</a>
+  </div>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
@@ -51,7 +57,12 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">create_Time.data</span><span class="op">(</span><span class="va">dataset</span>, Datetime.colname <span class="op">=</span> <span class="va">Datetime</span>, Time.data <span class="op">=</span> <span class="va">Time.data</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">create_Time.data</span><span class="op">(</span></span>
+<span>  <span class="va">dataset</span>,</span>
+<span>  Datetime.colname <span class="op">=</span> <span class="va">Datetime</span>,</span>
+<span>  Time.data <span class="op">=</span> <span class="va">Time.data</span>,</span>
+<span>  output.dataset <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -72,13 +83,18 @@ by <a href="LightLogR-package.html">LightLogR</a>, take care to choose a sensibl
 <dd><p>Name of the newly created column. Expects a <code>symbol</code>. The
 default(<code>Time.data</code>) works well with other functions in <a href="LightLogR-package.html">LightLogR</a>.</p></dd>
 
+
+<dt>output.dataset</dt>
+<dd><p>should the output be a <code>data.frame</code> (Default <code>TRUE</code>) or
+a vector with <code>hms</code> (<code>FALSE</code>) times? Expects a <code>logical</code> scalar.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
 <p>a <code>data.frame</code> object identical to <code>dataset</code> but with the added
-column of Time-of-Day data.</p>
+column of Time-of-Day data, or a <code>vector</code> with the Time-of-Day-data</p>
     </div>
 
     <div class="section level2">

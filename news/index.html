@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -20,6 +20,12 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
+</li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/Styling.html">What´s in a Day?</a>
+  </div>
 </li>
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
@@ -45,15 +51,20 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="development version" id="lightlogr-development-version">LightLogR (development version)<a class="anchor" aria-label="anchor" href="#lightlogr-development-version"></a></h2>
-</div>
+<h2 class="pkg-version" data-toc-text="0.2.0.9000" id="lightlogr-0209000">LightLogR 0.2.0.9000<a class="anchor" aria-label="anchor" href="#lightlogr-0209000"></a></h2>
+<ul><li><p>Added the Article/Vignette “What´s in a Day” to demonstrate the LightLogR workflow.</p></li>
+<li><p>Added the convenience function <code><a href="../reference/create_Time.data.html">create_Time.data()</a></code> to create a Time-of-Day column in datasets.</p></li>
+<li><p>Added the family of <code><a href="../reference/filter_Datetime.html">filter_Datetime()</a></code>, <code><a href="../reference/filter_Datetime.html">filter_Date()</a></code> and <code><a href="../reference/filter_Time.html">filter_Time()</a></code> functions to easily filter datasets.</p></li>
+<li><p>Added unit tests for the first functions.</p></li>
+<li><p>Added several helper functions to work with states like sleep or wear times.</p></li>
+<li><p>Added an automatic ID creation at import and streamlined the <code>import</code> functions.</p></li>
+<li><p>Added the function <code>join.datasets</code> to combine imported datasets with sensible constraints.</p></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.1.9000" id="lightlogr-0119000">LightLogR 0.1.1.9000<a class="anchor" aria-label="anchor" href="#lightlogr-0119000"></a></h2>
-<ul><li><p>Added the convenience function [create_Time.data()] to create a Time-of-Day column in datasets.</p></li>
-<li><p>Added the family of [filter_Datetime()], [filter_Date()] and [filter_Time()] functions to easily filter datasets.</p></li>
-<li><p>Added unit tests for the first functions.</p></li>
-</ul><div class="section level3">
-<h3 id="gg_day-0-1-1-9000">[gg_day()]:<a class="anchor" aria-label="anchor" href="#gg_day-0-1-1-9000"></a></h3>
+<div class="section level3">
+<h3 id="gg_day-0-1-1-9000">
+<code>gg_day()</code>:<a class="anchor" aria-label="anchor" href="#gg_day-0-1-1-9000"></a></h3>
 <ul><li><p>Added <code>major grid marks</code> for the y-axis.</p></li>
 <li><p>Added a <code>message</code> when using start or end dates to make it clear, that only the Date portion of the input will be used.</p></li>
 <li><p>Changed the behavior, when there is already a Day.data column present in the data. It will only create a new column if none is present, otherwise it will use the existing column for faceting (after factorization)</p></li>

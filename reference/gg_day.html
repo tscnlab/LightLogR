@@ -14,7 +14,7 @@ styling or guides."><meta property="og:image" content="https://tscnlab.github.io
     
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,6 +24,12 @@ styling or guides."><meta property="og:image" content="https://tscnlab.github.io
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
+</li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/Styling.html">What´s in a Day?</a>
+  </div>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
@@ -62,21 +68,22 @@ styling or guides.</p>
 <span>  start.date <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  end.date <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  x.axis <span class="op">=</span> <span class="va">Datetime</span>,</span>
-<span>  <span class="va">y.axis</span>,</span>
+<span>  y.axis <span class="op">=</span> <span class="va">MEDI</span>,</span>
 <span>  col <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  group <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  geom <span class="op">=</span> <span class="st">"point"</span>,</span>
-<span>  scales <span class="op">=</span> <span class="st">"free_y"</span>,</span>
+<span>  scales <span class="op">=</span> <span class="st">"fixed"</span>,</span>
 <span>  x.axis.breaks <span class="op">=</span> <span class="fu">hms</span><span class="fu">::</span><span class="fu"><a href="https://hms.tidyverse.org/reference/hms.html" class="external-link">hms</a></span><span class="op">(</span>hours <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">24</span>, by <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  y.axis.breaks <span class="op">=</span> <span class="fl">10</span><span class="op">^</span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span>,</span>
 <span>  y.scale.log10 <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  y.scale.sc <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  x.axis.label <span class="op">=</span> <span class="st">"Time of Day"</span>,</span>
-<span>  y.axis.label <span class="op">=</span> <span class="st">"Lightlevel"</span>,</span>
+<span>  y.axis.label <span class="op">=</span> <span class="st">"Light exposure (lx, MEDI)"</span>,</span>
 <span>  format.day <span class="op">=</span> <span class="st">"%d/%m"</span>,</span>
 <span>  title <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  subtitle <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  interactive <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  facetting <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -100,8 +107,10 @@ earliest/latest date within the <code>dataset</code>.</p></dd>
 <dt>x.axis, y.axis</dt>
 <dd><p>column name that contains the datetime (x, defaults to
 <code>"Datetime"</code> which is automatically correct for data imported with
-<a href="LightLogR-package.html">LightLogR</a>) and the dependent variable (y). Expects a <code>symbol</code>. Needs to
-be part of the <code>dataset</code>.</p></dd>
+<a href="LightLogR-package.html">LightLogR</a>) and the dependent variable (y, defaults to <code>"MEDI"</code>, or
+melanopic EDI, which is a standard measure of stimulus strength for the
+nonvisual effects of light). Expects a <code>symbol</code>. Needs to be part of the
+<code>dataset</code>.</p></dd>
 
 
 <dt>col</dt>
@@ -168,6 +177,10 @@ at <code><a href="https://rdrr.io/r/base/strptime.html" class="external-link">ba
 <dt>interactive</dt>
 <dd><p>Should the plot be interactive? Expects a <code>logical</code>.
 Defaults to <code>FALSE</code>.</p></dd>
+
+
+<dt>facetting</dt>
+<dd><p>Should an automated facet by day be applie? Default is <code>TRUE</code> and uses the <code>Day.data</code> variable that the function also creates if not present.</p></dd>
 
 
 <dt>...</dt>
