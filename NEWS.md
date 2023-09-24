@@ -1,4 +1,6 @@
-# LightLogR (development version)
+# LightLogR 0.2.0
+
+* Added the Article/Vignette "What´s in a Day" to demonstrate the LightLogR workflow.
 
 * Added the convenience function `create_Time.data()` to create a Time-of-Day column in datasets.
 
