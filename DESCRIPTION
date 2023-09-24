@@ -49,8 +49,11 @@ Depends:
     R (>= 2.10)
 LazyData: true
 Suggests: 
+    gt,
     knitr,
+    patchwork,
     rmarkdown,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    tidyverse
 Config/testthat/edition: 3
 VignetteBuilder: knitr

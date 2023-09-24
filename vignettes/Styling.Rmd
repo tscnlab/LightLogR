@@ -587,5 +587,4 @@ Plot +
   annotate("text", x=x, y = 10000, label = "  outside", hjust = 0, col = "grey50")+
   annotate("text", x=x, y = 4000, label = "- Daylight Potential", hjust = 0, col = "#0073C2DD")
 
-ggsave("Day.png", width = 7, height = 4, dpi = 600)
 ```
