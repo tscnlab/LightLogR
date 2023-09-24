@@ -7,11 +7,13 @@
 sc2interval(
   dataset,
   Datetime.colname = Datetime,
-  Statechange.colname,
+  Statechange.colname = State,
+  State.colname = State,
   Interval.colname = Interval,
   full = TRUE,
   full.first = NA,
   output.dataset = TRUE,
+  Datetime.keep = FALSE,
   length.restriction = 60 * 60 * 24
 )
 }
@@ -26,30 +28,46 @@ by \link{LightLogR}, take care to choose a sensible variable for the
 
 \item{Statechange.colname, Interval.colname}{Column names that do contain the
 name/description of the \verb{state change} and that will contain the \code{Interval}
-(which is also the default). Expects a \code{symbol}. The \verb{state change} column
+(which is also the default). Expects a \code{symbol}. The \code{Statechange} column
 needs do be part of the \code{dataset}.}
 
-\item{full, full.first}{These arguments handle the state on the first day before the first state change and after the last state change on the last day. If \code{full = TRUE}(the default, expects a \code{logical}), it will create an interval on the first day from 00:00:00 up until the state change. This interval will be given the state specified in \code{full.first}, which is \code{NA} by default, but can be any \code{character} scalar. It will further extend the interval for the last state change until the end of the last given day (more specifically until 00:00:00 the next day).}
+\item{full, full.first}{These arguments handle the state on the first day
+before the first state change and after the last state change on the last
+day. If \code{full = TRUE}(the default, expects a \code{logical}), it will create an
+interval on the first day from 00:00:00 up until the state change. This
+interval will be given the state specified in \code{full.first}, which is \code{NA}
+by default, but can be any \code{character} scalar. It will further extend the
+interval for the last state change until the end of the last given day
+(more specifically until 00:00:00 the next day).}
 
 \item{output.dataset}{should the output be a \code{data.frame} (Default \code{TRUE}) or
 a vector with \code{hms} (\code{FALSE}) times? Expects a \code{logical} scalar.}
 
-\item{length.restriction}{If the length between intervals is too great, the interval state can be set to \code{NA}, which effectively produces a gap in the data. This makes sense when intervals are implausibly wrong (e.g. someone slept for 50 hours), because when this data is combined with light logger data, e.g., through \code{\link[=interval2state]{interval2state()}}, metrics and visualizations will remove the interval.}
+\item{length.restriction}{If the length between intervals is too great, the
+interval state can be set to \code{NA}, which effectively produces a gap in the
+data. This makes sense when intervals are implausibly wrong (e.g. someone
+slept for 50 hours), because when this data is combined with light logger
+data, e.g., through \code{\link[=interval2state]{interval2state()}}, metrics and visualizations will
+remove the interval.}
 }
 \value{
 One of
 \itemize{
-\item a \code{data.frame} object identical to \code{dataset} but with the interval instead of the datetime
+\item a \code{data.frame} object identical to \code{dataset} but with the interval instead of the datetime. The original \code{Statechange} column now indicates the \code{State} during the \code{Interval}.
 \item a named \code{vector} with the intervals, where the names are the states
 }
 }
 \description{
-Takes an input of \code{datetimes} and \verb{state changes} and creates a column with
-\code{intervals}. If \code{full = TRUE}, it will also create intervals for the day
-prior to the first state change and after the last. If \code{output.dataset = FALSE} it will give a named vector, otherwise a \code{tibble}. The \verb{state change}
+Takes an input of \code{datetimes} and \code{Statechanges} and creates a column with
+\code{Intervals}. If \code{full = TRUE}, it will also create intervals for the day
+prior to the first state change and after the last. If \code{output.dataset = FALSE}
+it will give a named vector, otherwise a \code{tibble}. The \verb{state change}
 info requires a description or name of the state (like \code{"sleep"} or \code{"wake"},
 or \code{"wear"}) that goes into effect at the given \code{Datetime}. Works for grouped
-data so that it does not mix up intervals between participants. Missing data should be explicit if at all possible. Also, the maximum allowed length of an interval can be set, so that implicit missing timestamps after a set period of times can be enforced.
+data so that it does not mix up intervals between participants. Missing data
+should be explicit if at all possible. Also, the maximum allowed length of an
+interval can be set, so that implicit missing timestamps after a set period
+of times can be enforced.
 }
 \examples{
 #example code

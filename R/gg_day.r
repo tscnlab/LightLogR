@@ -14,8 +14,10 @@
 #'   by [LightLogR], take care to choose a sensible variable for the `x.axis.`.
 #' @param x.axis,y.axis column name that contains the datetime (x, defaults to
 #'   `"Datetime"` which is automatically correct for data imported with
-#'   [LightLogR]) and the dependent variable (y). Expects a `symbol`. Needs to
-#'   be part of the `dataset`.
+#'   [LightLogR]) and the dependent variable (y, defaults to `"MEDI"`, or
+#'   melanopic EDI, which is a standard measure of stimulus strength for the
+#'   nonvisual effects of light). Expects a `symbol`. Needs to be part of the
+#'   `dataset`.
 #' @param x.axis.label,y.axis.label labels for the x- and y-axis. Expects a
 #'   `character`.
 #' @param format.day Label for each day. Default is `%d/%m`, which shows the day
@@ -54,6 +56,7 @@
 #'   used to adjust to adjust size or linetype.
 #' @param interactive Should the plot be interactive? Expects a `logical`.
 #'   Defaults to `FALSE`.
+#' @param facetting Should an automated facet by day be applie? Default is `TRUE` and uses the `Day.data` variable that the function also creates if not present.
 #'
 #' @return A ggplot object
 #' @export
@@ -80,7 +83,7 @@ gg_day <- function(dataset,
                    start.date = NULL,
                    end.date = NULL,
                    x.axis = Datetime,
-                   y.axis,
+                   y.axis = MEDI,
                    col = NULL,
                    group = NULL,
                    geom = "point",
@@ -90,11 +93,12 @@ gg_day <- function(dataset,
                    y.scale.log10 = TRUE,
                    y.scale.sc = FALSE,
                    x.axis.label = "Time of Day",
-                   y.axis.label = "Lightlevel",
+                   y.axis.label = "Light exposure (lx, MEDI)",
                    format.day = "%d/%m",
                    title = NULL,
                    subtitle = NULL,
                    interactive = FALSE,
+                   facetting = TRUE,
                    ...) {
   
 # Initial Checks ----------------------------------------------------------
@@ -168,13 +172,7 @@ gg_day <- function(dataset,
       ggplot2::aes(
         group = {{ group }},
         col = {{ col }},
-      ), na.rm = FALSE, ...) +
-    # Facetting ------------------------------------------------------------
-    ggplot2::facet_wrap(
-      ~Day.data, 
-      ncol=1, 
-      scales = scales, 
-      strip.position = "left") +
+      ), ...) +
     # Scales --------------------------------------------------------------
     ggsci::scale_color_jco()+
     ggplot2::scale_x_time(breaks = x.axis.breaks, 
@@ -206,7 +204,16 @@ gg_day <- function(dataset,
       # strip.background = ggplot2::element_blank(),
       strip.text.y = ggplot2::element_text(face = "bold",),
       strip.placement = "outside"
-    )
+    ) +
+    # Facetting ------------------------------------------------------------
+  if(facetting) {
+    ggplot2::facet_wrap(
+      ~Day.data, 
+      ncol=1, 
+      scales = scales, 
+      strip.position = "left")
+  }
+    
   
   # Return --------------------------------------------------------------
   if(interactive) {

@@ -7,7 +7,7 @@
 join.datasets(
   ...,
   Datetime.column = Datetime,
-  id.column = id,
+  ID.column = Id,
   preserve.name = FALSE,
   debug = FALSE
 )
@@ -15,11 +15,11 @@ join.datasets(
 \arguments{
 \item{...}{\verb{Object names} of datasets that need to be joined.}
 
-\item{Datetime.column, id.column}{Column names for the \code{Datetime} and \code{id} columns. The defaults (\code{Datetime}, \code{id}) are already set up for data imported with \link{LightLogR}.}
+\item{Datetime.column, ID.column}{Column names for the \code{Datetime} and \code{id} columns. The defaults (\code{Datetime}, \code{Id}) are already set up for data imported with \link{LightLogR}.}
 
-\item{preserve.name}{Should a column named \code{dataset} in the joined data indicate from which dataset each observation originated? Defaults to \code{FALSE} as the \code{id} column should suffice. Expects a \code{logical}.}
+\item{preserve.name}{Should a column named \code{dataset} in the joined data indicate from which dataset each observation originated? Defaults to \code{FALSE} as the \code{Id} column should suffice. Expects a \code{logical}.}
 
-\item{debug}{Output changes to a tibble indicating which dataset is missing the respective \code{Datetime} or \code{id} column. Expects a \code{logical} and defaults to \code{FALSE}.}
+\item{debug}{Output changes to a tibble indicating which dataset is missing the respective \code{Datetime} or \code{Id} column. Expects a \code{logical} and defaults to \code{FALSE}.}
 }
 \value{
 One of
@@ -29,7 +29,7 @@ One of
 }
 }
 \description{
-Join Light logging datasets that have a common structure. The least commonality are identical columns for \code{Datetime} and \code{id} across all sets.
+Join Light logging datasets that have a common structure. The least commonality are identical columns for \code{Datetime} and \code{Id} across all sets.
 }
 \examples{
 #load in two datasets

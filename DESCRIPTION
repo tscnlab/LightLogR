@@ -1,6 +1,6 @@
 Package: LightLogR
 Title: Work With Data from Wearable Light Loggers and Optical Radiation Dosimeters
-Version: 0.2.0
+Version: 0.2.0.9000
 Authors@R: c(
     person("Johannes", "Zauner", 
       email = "johannes.zauner@tum.de", role = c("aut", "cre"),

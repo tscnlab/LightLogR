@@ -8,10 +8,10 @@ interval2state(
   dataset,
   Datetime.colname = Datetime,
   State.interval.dataset,
-  State.colname,
+  State.colname = State,
   Interval.colname = Interval,
-  id.colname.dataset = id,
-  id.colname.interval = id,
+  ID.colname.dataset = Id,
+  ID.colname.interval = Id,
   output.dataset = TRUE
 )
 }
@@ -24,11 +24,11 @@ by \link{LightLogR}, take care to choose a sensible variable for the
 \code{"Datetime"} which is automatically correct for data imported with
 \link{LightLogR}. Expects a \code{symbol}. Needs to be part of the \code{dataset}.}
 
-\item{State.interval.dataset}{Name of the dataset that contains \code{state} and \code{interval} columns. Sensibly, it is created through \code{\link[=sc2interval]{sc2interval()}}.}
+\item{State.interval.dataset}{Name of the dataset that contains \code{State} and \code{Interval} columns. Sensibly, it is created through \code{\link[=sc2interval]{sc2interval()}}.}
 
-\item{State.colname, Interval.colname}{Column names of the \code{state} and \code{interval} in the \code{State.interval.dataset}. Expects a \code{symbol}.}
+\item{State.colname, Interval.colname}{Column names of the \code{State} and \code{Interval} in the \code{State.interval.dataset}. Expects a \code{symbol}.}
 
-\item{id.colname.dataset, id.colname.interval}{Column names of the participant's \code{id} in both the \code{dataset} and the \code{State.interval.dataset}. On the off-chance that there are inconsistencies, the names can be different. If the datasets where imported and preprocessed with \link{LightLogR}, this just works. Both datasets need an \code{id}, because the states will be added based not only on the \code{Datetime}, but also depending on the dataset.}
+\item{ID.colname.dataset, ID.colname.interval}{Column names of the participant's \code{Id} in both the \code{dataset} and the \code{State.interval.dataset}. On the off-chance that there are inconsistencies, the names can be different. If the datasets where imported and preprocessed with \link{LightLogR}, this just works. Both datasets need an \code{Id}, because the states will be added based not only on the \code{Datetime}, but also depending on the dataset.}
 
 \item{output.dataset}{should the output be a \code{data.frame} (Default \code{TRUE}) or
 a vector with \code{hms} (\code{FALSE}) times? Expects a \code{logical} scalar.}
@@ -41,7 +41,7 @@ One of
 }
 }
 \description{
-This function can make use of \code{interval} data that contain \code{states} (like \code{"sleep"}, \code{"wake"}, \code{"wear"}) and add a column to a light logger \code{dataset}, where the \code{state} of  every \code{Datetime} is specified, based on the participant's \code{id}.
+This function can make use of \code{Interval} data that contain \code{States} (like \code{"sleep"}, \code{"wake"}, \code{"wear"}) and add a column to a light logger \code{dataset}, where the \code{State} of  every \code{Datetime} is specified, based on the participant's \code{ID}.
 }
 \examples{
 #example

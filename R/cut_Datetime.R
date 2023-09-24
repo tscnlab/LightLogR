@@ -18,6 +18,7 @@
 #'   [LightLogR]. Expects a `symbol`. Needs to be part of the `dataset`.
 #' @param New.colname Column name for the added column in the `dataset`.
 #' @param ... Parameter handed over to [lubridate::round_date()] and siblings
+#' @param group_by Should the data be grouped by the new column? Defaults to `FALSE`
 #'
 #' @return a `data.frame` object identical to `dataset` but with the added
 #'   column of binned datetimes.
@@ -35,6 +36,7 @@ cut_Datetime <- function(dataset,
                          type = "round",
                          Datetime.colname = Datetime,
                          New.colname = Datetime.rounded,
+                         group_by = FALSE,
                          ...) {
   
   # Initial Checks ----------------------------------------------------------
@@ -56,7 +58,9 @@ cut_Datetime <- function(dataset,
     "Datetime.colname must be a Datetime" = 
       lubridate::is.POSIXct(dataset[[Datetime.colname.defused]]),
     "New.colname must be a Symbol" = 
-      rlang::is_symbol({{ New.colname.defused }})
+      rlang::is_symbol({{ New.colname.defused }}),
+    "group_by must be a Logical" = 
+      is.logical(group_by)
   )
   
   # Manipulation ----------------------------------------------------------
@@ -68,6 +72,10 @@ cut_Datetime <- function(dataset,
     dplyr::mutate(
       {{ New.colname }} := 
         {{ Datetime.colname }} %>% eval(round_function_expr)(unit = unit, ...))
+  
+  if(group_by) {
+    dataset <- dataset %>% dplyr::group_by({{ New.colname }}, .add = TRUE)
+  }
   
   # Return ----------------------------------------------------------
   dataset

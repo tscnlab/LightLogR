@@ -1,8 +1,26 @@
 
+#' Title
+#'
+#' @param dataset 
+#' @param Reference.data 
+#' @param Datetime.column 
+#' @param Data.column 
+#' @param Reference.column 
+#' @param filter.expression.reference 
+#' @param across.id 
+#' @param shift.start 
+#' @param length.restriction.seconds 
+#' @param shift.intervals 
+#'
+#' @return da
+#' @export
+#'
+#' @examples
+#' #ex
 data2reference <- function(dataset, 
                            Reference.data = dataset,
                            Datetime.column = Datetime,
-                           Data.column,
+                           Data.column = MEDI,
                            Reference.column = Reference,
                            filter.expression.reference = NULL,
                            across.id = FALSE,
@@ -12,6 +30,12 @@ data2reference <- function(dataset,
   
   # Initial Checks ----------------------------------------------------------
 
+  Reference.column.str <- colname.defused({{ Reference.column }})
+  
+  #give an error if the reference column is present
+  if(Reference.column.str %in% names(dataset)) 
+    stop("A Reference column with the given (or default) name is already part of the dataset. Please remove the column or choose a different name")
+  
   #is grouping between the Reference data and the dataset the same, when not across.id?
   across.which.id <- NULL
   

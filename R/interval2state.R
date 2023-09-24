@@ -59,16 +59,33 @@ interval2state <- function(dataset,
                     as.numeric(original.datapoints.fleeting))
   
   # create a new dataset from the State.interval.dataset with start times
+  State.character <-
+    State.interval.dataset[[{{ State.colname.defused }}]] %>% is.character()
+  
   State.interval.dataset2 <-
     State.interval.dataset %>%
     dplyr::mutate({{ Datetime.colname }} := lubridate::int_start(
       {{ Interval.colname }})) %>%
-    dplyr::select(- {{ Interval.colname }}) %>% 
+    dplyr::select(- {{ Interval.colname }})
+  
+  if(State.character) {
+  State.interval.dataset2 <-
+    State.interval.dataset2 %>% 
     dplyr::mutate({{ State.colname }} := 
                     dplyr::case_when(
-                      is.na({{ State.colname }}) ~ NaN,
+                      is.na({{ State.colname }}) ~ "NaN",
                       .default = {{ State.colname }}
                     ))
+  }
+  else{
+    State.interval.dataset2 <-
+      State.interval.dataset2 %>% 
+      dplyr::mutate({{ State.colname }} := 
+                      dplyr::case_when(
+                        is.na({{ State.colname }}) ~ NaN,
+                        .default = {{ State.colname }}
+                      ))
+  }
   
   # splice the two datasets together
   dataset <- 
@@ -82,14 +99,30 @@ interval2state <- function(dataset,
     dplyr::arrange({{ Datetime.colname }}, .by_group = TRUE)
 
   # fill downwards
+  if(State.character) {
   dataset <-
     dataset %>%
-    dplyr::mutate(group = cumsum(!is.na({{ State.colname }}) | is.nan({{ State.colname }}))) %>% 
+    dplyr::mutate(
+      group = cumsum(!is.na({{ State.colname }}) | {{ State.colname }} == "NaN")
+      ) %>% 
     dplyr::group_by(group, .add = TRUE) %>% 
     tidyr::fill({{ State.colname }}) %>% 
     dplyr::ungroup(group) %>% 
     dplyr::mutate({{ State.colname }} := 
-                    dplyr::na_if({{ State.colname }}, NaN))
+                    dplyr::na_if({{ State.colname }}, "NaN"))
+  }
+  else {
+    dataset <-
+      dataset %>%
+      dplyr::mutate(
+        group = cumsum(!is.na({{ State.colname }}) | is.nan({{ State.colname }}))
+      ) %>% 
+      dplyr::group_by(group, .add = TRUE) %>% 
+      tidyr::fill({{ State.colname }}) %>% 
+      dplyr::ungroup(group) %>% 
+      dplyr::mutate({{ State.colname }} := 
+                      dplyr::na_if({{ State.colname }}, NaN))
+  }
   
   # remove non-data timestamps
   dataset <- 

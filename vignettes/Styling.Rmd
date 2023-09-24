@@ -1,0 +1,591 @@
+---
+title: "What´s in a Day?"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{What´s in a Day?}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+![](images/Day.png)
+
+You are tasked with visualizing a day of light logger data, worn by a participant over the course of one week. You´re supposed to show the data in comparison with what is available outside in unobstructed daylight. And, to make matters slightly more complex, you also want to show how the participant´s light exposure compares to the current recommendations of [healthy daytime, evening, and nighttime light exporsure](https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3001571). While the figure is nothing special in itself, working with light logger data to get the data ready for plotting is fraught with many hurdles, beginning with various raw data structures depending on the device manufacturer, varying temporal resolutions, implicit missing data, irregular data, working with Datetimes, and so forth. **LightLogR** aims to make this process easier by providing a holistic workflow for the data from import over validation up to and including figure generation and metric calculation.
+
+This article guides you through the process of
+
+-   importing Light exposure data from a participant as well as the environment, and sleep data about the same participant
+
+-   creating exploratory visualizations to select a good day for the figure
+
+-   connecting the datasets to a coherent whole and setting recommended light levels based on the sleep data
+
+-   creating an appealing visualization with various styles to finish the task
+
+Let´s head right in by loading the package! We will also work a bit with data manipulation, display the odd table, and enroll the help of several plotting aids from the `ggplot2` package, so we will also need the `tidyverse` and the `gt` package. Later on, we want to combine plots, this is where `patchwork` will come in.
+
+```{r setup, message = FALSE}
+library(LightLogR)
+library(tidyverse)
+library(gt)
+library(patchwork)
+```
+
+## Importing Data
+
+The data we need are part of the `LightLogR` package. They are unprocessed (after device export) data from light loggers (and a diary app for capturing sleep times). All data is anonymous, and we can access it through the following paths:
+
+```{r}
+path <- system.file("extdata/", 
+              package = "LightLogR")
+
+file.LL <- "205_actlumus_Log_1020_20230904101707532.txt.zip"
+file.env <- "cyepiamb_CW35_Log_1431_20230904081953614.txt.zip"
+file.sleep <- "205_sleepdiary_all_20230904.csv"
+
+```
+
+### Participant Light Exposure Data
+
+`LightLogR` provides convenient import functions for a range of supported devices (use the command `supported.devices` if you want to see what devices are supported at present). Because `LightLogR` knows how the files from these devices are structured, it needs very little input. In fact, the mere filepath would suffice. It is, however, a good idea to also provide the timezone argument `tz` to specify that these measurements were made in the `Europe/Berlin` timezone. This makes your data future-proof for when it is used in comparison with other geolocations.
+
+Every light logger dataset needs an `Id` to connect or separate observations from the same or different participant/device/study/etc. If we don´t provide an `Id` to the import function (or the dataset doesn´t contain an `Id` column), the filename will be used as an `Id`. As this would be rather cumbersome in our case, we will use a `regex` to extract the first three digits from the filename, which serve this purpose here.
+
+```{r}
+tz <- "Europe/Berlin"
+dataset.LL <- import.ActLumus(file.LL, path, auto.id = "^(\\d{3})", tz = tz)
+
+```
+
+As you can see, the import is accompanied by a (hopefully) helpful message about the imported data. It contains the number ob measurements, the timezone, start- and enddate, the timespan, and all observation intervals. In this case, the measurements all follow a *10 second* epoch.
+
+Because we have no missing values that we would have to deal with first, this dataset is already good to go. If you, e.g., want to know the median value of melanopic EDI (a measure of stimulus strength for the nonvisual system) for every day in the dataset, you can do that:
+
+```{r}
+dataset.LL %>% group_by(Date = as_date(Datetime)) %>% 
+  summarize(range.MEDI = range(MEDI) %>% str_flatten(" - ")) %>% gt()
+```
+
+Same goes for visualization - it is always helpful to get a good look at data immediately after import. The `gg_day` function creates a simple `ggplot` of the data, stacked vertically by Days. The function needs very little input beyond the dataset (in fact, it would even work without the `size` input, which just makes the default point size smaller, and the `interactive` command sends the output to `plotly` to facilitate data exploration). `gg_day` features a lot of flexibility, and can be adapted and extended to fit various needs, as we will see shortly.
+
+```{r, fig.retina=2, fig.width=7, fig.height = 14}
+dataset.LL %>% gg_day(size = 0.25, interactive = TRUE)
+```
+
+We can already see some patterns and features in the light exposure across the days. In general, the participant seems to have woken (or at least started wearing the light logger) after 9:00 and went to bed (or, again, stopped wearing the device) at around 23:00.
+
+The warning that was generated alongside the plot refers to the fact, that we have lots of MEDI values with 0 lux - these don´t scale well to log. In the interactive plot these values are removed, in the static `ggplot`, they are shown at the very bottom of the scale.
+
+### Environmental Light Data
+
+On to our next dataset. This one contains measurement data from the same type of device, but recorded on a rooftop position of unobstructed daylight in roughly the same location as the participant data. As the device type is the same, import is the same as well. But since the filename does not contain the participant´s `ID` this time, we will give it a manual id: `"CW35"`.
+
+```{r}
+dataset.env <- import.ActLumus(file.env, path, manual.id = "CW35", tz = tz)
+```
+
+Here you can see that we follow roughly the same time span, but the measurement epoch is *30 seconds*, with one odd interval which is one second shorter.
+
+### Participant Sleep Data
+
+Our last dataset is a sleep diary that contains, among other things, a column for `Id` and a column for *sleep* and for *wake* (called *offset*). Because sleep diaries and other event datasets can vary widely in their structure, we must manually set a few arguments. Importantly, we need to specify how the Datetimes are structured. In this case, we have values like *2023-08-28 23:20*, which give a structure of `dmyHM`.
+
+What we need after import is a coherent table that contains a column with a `Datetime` besides a column with the `State` that starts at that point in time. `import.Statechanges` facilitates this, because we can provide a `vector` of column names that form a continuous indicator of a given state - in this case `Sleep`.
+
+```{r}
+dataset.sleep <- 
+  import.Statechanges(paste0(path, file.sleep), 
+                      Datetime.format = "dmyHM",
+                      State.colnames = c("sleep", "offset"),
+                      State.encoding = c("sleep", "wake"),
+                      ID.colname = record_id,
+                      sep = ";",
+                      dec = ",",
+                      tz = tz)
+
+dataset.sleep %>% head() %>% gt()
+```
+
+Now that we have imported all of our data, we need to combine it sensibly, which we will get to in the next section.
+
+## Connecting Data
+
+Connecting the data, in this case, means giving context to our participant´s light exposure data. There are a number of hurdles attached to connecting time series data, because data from different sets rarely align perfectly. Often their measurements are off by at least some seconds, or even use different measurement epochs.
+
+Also, we have the sleep data, which only has time stamps whenever there is a change in status. Also - and this is crucial - it might have missing entries! `LightLogR` provides a few helpful functions however, to deal with these topics without resorting to rounding or averaging data to a common multiple.
+
+### Solar Potential
+
+Let us start with the environmental measurements of unobstructed daylight. These can be seen as a natural potential of light exposure and thus serve as a reference for our participant´s light exposure.
+
+With the `data2reference` function, we will create this reference. This function is extraordinarily powerful in that it can create a reference tailored to the light logger data from any source that has the wanted `Reference` column (in this case the MEDI column, which is the default), a `Datetime`column, and the same grouping structure (`Id`) as the light logger data set.
+
+`data2reference` can even create a reference from a subset of the data itself. For example this makes it possible to have the first (or second, etc.) day of the data as reference for all other days. It can further apply one participant as the reference for all other participants, even when their measurements are on different times. In our case it is only necessary to specify the argument `across.id = TRUE`, as we want the reference `Id`("CW35") to be applied across the `Id` from the participant ("205").
+
+```{r}
+dataset.LL <- 
+  dataset.LL %>% data2reference(Reference.data = dataset.env, across.id = TRUE)
+
+dataset.LL <- 
+  dataset.LL %>% select(Id, Datetime, MEDI, Reference)
+
+dataset.LL %>% head() %>% gt()
+
+```
+
+For the sake of this example, we have also removed unnecessary data columns, which makes the further code examples simpler. We can already see in the table above that the reference at the start of the measurements is quite a bit higher than the light exposure at the participant´s light logger. We also see that the same reference value is applied to three participant values. This mirrors the fact that for every three measurements taken with the participant device, one measurement epoch for the environmental sensor passes.
+
+To visualize this newly reached reference data, we can easily extend `gg_day` with a dashed red reference line. Keep in mind that this visualization is still exploratory, so we are not investing heavily in styling.
+
+```{r, fig.retina=2, fig.width=7, fig.height = 10}
+dataset.LL %>% 
+  gg_day(size = 0.25) + geom_line(aes(y=Reference), lty = 2, col = "red")
+```
+
+Again, some warnings. To the known warning about the infinite values (one for the point data, one for the line), a warning about missing values was added. This is simply due to the fact that not every data point on the x-axis has a corresponding y-axis-value. The two datasets largely align, but at the fringes, especially the last day, there is some non-overlap. When we perform calculations based on the light logger data and the reference, we have to keep in mind that only timesteps where *both* are present will give non `NA` results.
+
+While basic, the graph already shows valuable information about the potential light stimulus compared to actual exposure. In the morning hours, this participant never reached a significant light dose, while light exposure in the evenin regularly was on par with daytime levels, especially on the 29th. Let us see how these measurements compare to recommendations for light exposure.
+
+### Recommended Light levels
+
+Brown et al.(2022)[^1] provide guidance for healthy, daytime dependent light stimuli, measured in melanopic EDI:
+
+[^1]: Brown, T. M., Brainard, G. C., Cajochen, C., Czeisler, C. A., Hanifin, J. P., Lockley, S. W., Lucas, R. J., Munch, M., O'Hagan, J. B., Peirson, S. N., Price, L. L. A., Roenneberg, T., Schlangen, L. J. M., Skene, D. J., Spitschan, M., Vetter, C., Zee, P. C., & Wright, K. P., Jr. (2022). Recommendations for daytime, evening, and nighttime indoor light exposure to best support physiology, sleep, and wakefulness in healthy adults. PLoS Biol, 20(3), e3001571. <https://doi.org/10.1371/journal.pbio.3001571>
+
+> Throughout the daytime, the recommended minimum melanopic EDI is 250 lux at the eye measured in the vertical plane at approximately 1.2 m height (i.e., vertical illuminance at eye level when seated). If available, daylight should be used in the first instance to meet these levels. If additional electric lighting is required, the polychromatic white light should ideally have a spectrum that, like natural daylight, is enriched in shorter wavelengths close to the peak of the melanopic action spectrum.
+
+> During the evening, starting at least 3 hours before bedtime, the recommended maximum melanopic EDI is 10 lux measured at the eye in the vertical plane approximately 1.2 m height. To help achieve this, where possible, the white light should have a spectrum depleted in short wavelengths close to the peak of the melanopic action spectrum.
+
+> The sleep environment should be as dark as possible. The recommended maximum ambient melanopic EDI is 1 lux measured at the eye. In case certain activities during the nighttime require vision, the recommended maximum melanopic EDI is 10 lux measured at the eye in the vertical plane at approximately 1.2 m height.
+
+We can see that bedtime is an important factor when determining the timepoints these three stages go into effect. Luckily we just so happen to have the sleep/wake data from the sleepdiary at hand. In a first step, we will convert the timepoints where a state changes into intervals during which the participant is awake or asleep. The `sc2interval` function provides this readily.
+
+In our case the first entry is sleep, so we can safely assume, that on that day prior the participant was awake. We could take this into account through the `full.first = "wake"` argument setting, but then it would be implied that the participant was awake from midnight on. As the first day of data is only partial anyways, we will disregard this. There are other arguments to `sc2interval` to further refine the interval creation. Probably the most important is `length.restriction`, that sets the maximum length of an interval, the default being 24 hours. This avoids implausibly long intervals with one state that is highly likely caused by implicit missing data or misentries.
+
+```{r}
+dataset.sleep <- dataset.sleep %>% sc2interval()
+dataset.sleep %>% head() %>% gt()
+```
+
+Now we can transform these sleep/wake intervals to intervals for the Brown recommendations. The `sleep.int2Brown` function facilitates this.
+
+```{r}
+Brown.intervals <- dataset.sleep %>% sleep.int2Brown()
+Brown.intervals %>% head() %>% gt()
+```
+
+We can see that the function fit a 3 hour interval in-between every sleep and wake phase, and also recoded the states. This data can now be applied to our light logger dataset. This is done through the `interval2state` function[^2]. We already used this function unknowingly, because it (alongside `sc2interval`) is under the hood of `data2reference`, making sure that data in the reference set is spread out accordingly.
+
+[^2]: Why go the extra mile to convert statechanges to intervals and those intervals back to states in a dataset? It surely could be done in one step? Well, it´s complicated... If there are no missing data or errors in the datasets, this would indeed be possible. But dividing the pipeline in two steps allows for validation steps and also greatly facilitates changes based on those states, as with the Brown recommendation
+
+```{r}
+dataset.LL <- 
+  dataset.LL %>% 
+  interval2state(
+    State.interval.dataset = Brown.intervals, State.colname = State.Brown)
+dataset.LL %>% tail() %>% gt()
+```
+
+Now we have a column in our light logger dataset that declares all the three state for the Brown et al. recommendation. With another function, `Brown2reference`, we can in one swoop add the threshhold accompanied to these states and check whether our participant is within the recommendations or not. The only thing the function needs is a name where to put the recommended values - by default these would go to `Reference`, which is already used for the Solar exposition, which is why we put it in `Reference.Brown`.
+
+```{r}
+dataset.LL <- dataset.LL %>% Brown2reference(Brown.rec.colname = Reference.Brown)
+dataset.LL %>% select(!Reference.label) %>% tail() %>% gt()
+```
+
+`Brown2reference` added three columns, two of which are shown in the table above. A third column contains a text label about the type of reference, sth. we could also have added for the solar exposition. Now let´s have a quick look at the result in the plot overview
+
+```{r, fig.retina=2, fig.width=7, fig.height = 10}
+dataset.LL %>% #dataset
+  gg_day(size = 0.25) + #base plot
+  geom_line(aes(y=Reference), lty = 2, col = "red") + #solar reference
+  geom_line(aes(y=Reference.Brown), lty = 2, col = "blue") #Brown reference
+```
+
+Looking good so far! In the next section, let us focus on picking out one day and get more into styling. Based on the available data I think **01/09** looks promising, as there is some variation during the day with some timeframes outside in the afternoon and a varied but typical light exposure in the evening.
+
+We can use the `filter_Date` function to easily cut this specific chunk out from the data. We also deactivate the facetting function from `gg_day`, as we only have one day.
+
+```{r, fig.retina=2, fig.width=7, fig.height = 4}
+dataset.LL.partial <- 
+dataset.LL %>% #dataset
+  filter_Date(start = "2023-09-01", length = days(1)) #use only one day
+
+solar.reference <-   geom_line(aes(y=Reference), lty = 2, col = "red") #solar reference
+brown.reference <-   geom_line(aes(y=Reference.Brown), lty = 2, col = "blue") #Brown reference
+
+dataset.LL.partial  %>% 
+  gg_day(size = 0.25, facetting = FALSE) + #base plot
+  solar.reference + brown.reference
+
+```
+
+## Styling Data
+
+Let us finish our task by exploring some styling options for our graph. All of these are built on the dataset we ended up with in the last section. We had to use several functions as processing steps, but it has to be noted that we rarely had to specify arguments in functions. This is due to the workflow `LightLogR` provides start to finish. Most of the techniques in this section are not specific to `LightLogR`, but rather show that you can readily use data processed with the package to work with standard plotting function.
+
+Firstly, though, too much of the plot focuses on values below *1 lux*, which is due to the logarithmic scaling. Thus we will cut the lower y-axis at 0.1. For now, let us also disable the warning messages for missing and infinite values (this is done non-visibly for the reader in the code chunks after here).
+
+```{r}
+scale.correction <- coord_cartesian(
+  ylim = c(0.1, 10^5), # tweak the y axis
+  xlim = c(0, 24.5*60*60), #make sure the x axis covers 24 hours (+a bit for the label)
+  expand = FALSE)  #set the axis limits exactly at ylim and xlim
+```
+
+### Participants Light Exposure {.tabset .tabset-pills}
+
+By default, `gg_day` uses a point geom for the data display. We can, however, play around with other geoms.
+
+#### `geom_point`
+
+```{r, fig.retina=2, fig.width=7, fig.height = 4, warning=FALSE}
+dataset.LL.partial  %>% 
+  gg_day(size = 0.25, geom = "point", facetting = FALSE) + #base plot
+  solar.reference + brown.reference + scale.correction
+```
+
+This is the standard behavior of `gg_day`. We would not have to specify the `geom = "point"` in this case, but being verbose should communicate that we specify this argument.
+
+#### `geom_line`
+
+```{r, fig.retina=2, fig.width=7, fig.height = 4, warning=FALSE}
+dataset.LL.partial  %>% 
+  gg_day(size = 0.25, facetting = FALSE, geom = "line") + #base plot
+  solar.reference + brown.reference + scale.correction
+```
+
+The line geom shows changes in light exposure a bit better and might be a better choice in this case.
+
+#### `geom_ribbon`
+
+```{r, fig.retina=2, fig.width=7, fig.height = 4, warning=FALSE}
+dataset.LL.partial  %>% 
+  gg_day(size = 0.25, facetting = FALSE, geom = "blank") + #base plot
+  geom_ribbon(aes(ymin = 0, ymax = MEDI), alpha = 0.25, fill = "#EFC000", 
+              outline.type = "upper", col = "#EFC000", size = 0.25) + #ribbon geom
+  solar.reference + brown.reference + scale.correction
+```
+
+The `geom_area` fills an area from 0 up to the given value. Unfortunately this doesn´t work nicely with logarithmic plots (where 10\^0 = 1, so it would start at 1). We can, however, disable any geom in `gg_day`and instead add a `geom_ribbon` that can be force set to zero with `ymin = 0`.
+
+#### `geom_boxplot`
+
+```{r, fig.retina=2, fig.width=7, fig.height = 4, warning=FALSE}
+dataset.LL.partial  %>% 
+  cut_Datetime(unit = "0.5 hours") %>% #provide an interval for the boxplot
+  gg_day(size = 0.25, facetting = FALSE, geom = "boxplot", group = Datetime.rounded) + #base plot
+  solar.reference + brown.reference + scale.correction
+```
+
+To create a boxplot representation, we not only need to specify the geom but also what time interval we want the boxplot to span. Here the `cut_Datetime` function from **LightLogR** comes to the rescue. It will round the datetimes to the desired interval, which then can be specified as the `group` argument of `gg_day`. While this can be a nice representation, I don´t think it fits our goal for the overall figure in our specific case.
+
+#### `geom_hexplot`
+
+```{r, fig.retina=2, fig.width=7, fig.height = 4, warning=FALSE}
+dataset.LL.partial  %>% 
+  gg_day(size = 0.25, facetting = FALSE, geom = "bin2d", bins = 24) + #base plot
+  solar.reference + brown.reference + scale.correction
+```
+
+The geom family of `hex`, `bin2d`, or `density_2d` is particularly well suited if you have many, possibly overlaying observations. It reduces complexity by cutting the x- and y-axis into bins and counts how many observations fall within this bin. By choosing 24 bins, we see dominant values for every hour of the day.
+
+###  {.unnumbered}
+
+**Conclusion:** The `line` or `ribbon` geom seem like a good choice for our task. However, The high resolution of the data (*10 seconds*) makes the line very noisy. Sometimes this level of detail is good, but our figure should give more of a general representation of light exposure, so we should aggregate the data somewhat. We can use the same function as for the boxplot, `cut_Datetime` and use this to aggregate our data to the desired resolution. For the sake of this example, let´s create a function to try several aggregation times.
+
+```{r}
+dataset.LL.aggregate <- function(unit) {
+  if(unit != "none")
+dataset.LL.partial  %>% 
+  cut_Datetime(unit = unit, group_by = TRUE) %>% #choose the resolution of our aggregated data
+  summarize(across(where(is.numeric), mean), #average all numerics
+            across(where(is.character), \(x) names(which.max(table(x)))), #choose the dominant string
+            across(where(is.logical), \(x) sum(x) > (length(x) / 2)), # average a binary outcome
+            .groups = "drop_last") %>% #remove the rounded Datetime group
+  mutate(Reference.check = Brown.check(MEDI, State.Brown)) %>% #recalculate conformity to Brown recs.
+  rename(Datetime = Datetime.rounded) #remove the rounded Datetime column
+}
+```
+
+### Data aggregation {.tabset .tabset-pills}
+
+With the new aggregate function, let us taste some variants:
+
+#### None
+
+```{r, fig.retina=2, fig.width=7, fig.height = 4, warning=FALSE}
+dataset.LL.partial  %>% 
+  gg_day(size = 0.25, facetting = FALSE, geom = "blank") + #base plot
+  geom_ribbon(aes(ymin = 0, ymax = MEDI), alpha = 0.25, fill = "#EFC000", 
+              outline.type = "upper", col = "#EFC000", size = 0.25) + #ribbon geom
+  solar.reference + brown.reference + scale.correction
+```
+
+#### 1 Minute
+
+```{r, fig.retina=2, fig.width=7, fig.height = 4, warning=FALSE}
+dataset.LL.aggregate("1 min")  %>% 
+  gg_day(size = 0.25, facetting = FALSE, geom = "blank") + #base plot
+  geom_ribbon(aes(ymin = 0, ymax = MEDI), alpha = 0.25, fill = "#EFC000", 
+              outline.type = "upper", col = "#EFC000", size = 0.25) + #ribbon geom
+  solar.reference + brown.reference + scale.correction
+```
+
+#### 5 Minutes
+
+```{r, fig.retina=2, fig.width=7, fig.height = 4, warning=FALSE}
+dataset.LL.aggregate("5 mins")  %>% 
+  gg_day(size = 0.25, facetting = FALSE, geom = "blank") + #base plot
+  geom_ribbon(aes(ymin = 0, ymax = MEDI), alpha = 0.25, fill = "#EFC000", 
+              outline.type = "upper", col = "#EFC000", size = 0.25) + #ribbon geom
+  solar.reference + brown.reference + scale.correction
+```
+
+#### 30 Minutes
+
+```{r, fig.retina=2, fig.width=7, fig.height = 4, warning=FALSE}
+dataset.LL.aggregate("30 mins")  %>% 
+  gg_day(size = 0.25, facetting = FALSE, geom = "blank") + #base plot
+  geom_ribbon(aes(ymin = 0, ymax = MEDI), alpha = 0.25, fill = "#EFC000", 
+              outline.type = "upper", col = "#EFC000", size = 0.25) + #ribbon geom
+  solar.reference + brown.reference + scale.correction
+```
+
+#### 1 Hour
+
+```{r, fig.retina=2, fig.width=7, fig.height = 4, warning=FALSE}
+dataset.LL.aggregate("1 hour")  %>% 
+  gg_day(size = 0.25, facetting = FALSE, geom = "blank") + #base plot
+  geom_ribbon(aes(ymin = 0, ymax = MEDI), alpha = 0.25, fill = "#EFC000", 
+              outline.type = "upper", col = "#EFC000", size = 0.25) + #ribbon geom
+  solar.reference + brown.reference + scale.correction
+```
+
+###  {.unnumbered}
+
+**Conclusion:** The *1 minute* aggregate still is pretty noisy, whereas the *30 minutes* and *1 hour* steps are to rough. *5 Minutes* seem a good balance.
+
+```{r, warning=FALSE}
+Plot <- 
+dataset.LL.aggregate("5 mins")  %>% 
+  gg_day(facetting = FALSE, geom = "blank") + #base plot
+  geom_ribbon(aes(ymin = 0, ymax = MEDI), alpha = 0.25, fill = "#EFC000", 
+              outline.type = "upper", col = "#EFC000", size = 0.4) + #ribbon geom
+  brown.reference + scale.correction
+```
+
+### Solar Potential {.tabset .tabset-pills}
+
+Let us focus next on the solar potential that is not harnessed by the participant. We again have several choices in how to represent this.
+
+#### `geom_line`
+
+```{r, fig.retina=2, fig.width=7, fig.height = 4, warning=FALSE}
+Plot + 
+  geom_line(aes(y=Reference), lty = 2, col = "red") #solar reference
+```
+
+This was our base representation for the solar exposure. And it is not a bad one at that. Let´s keep it in the run for know.
+
+#### `geom_ribbon`
+
+```{r, fig.retina=2, fig.width=7, fig.height = 4, warning=FALSE}
+Plot + 
+  geom_ribbon(aes(ymin = MEDI, ymax=Reference), alpha = 0.25, fill = "#0073C2FF") #solar reference
+```
+
+This is a ribbon that shows the missed - and at night exceeded - potential due to daylight.
+
+#### `second plot`
+
+```{r, echo = FALSE}
+symlog_trans <- function(base = 10, thr = 1, scale = 1){
+  trans <- function(x)
+    ifelse(abs(x) < thr, x, sign(x) * 
+             (thr + scale * (log(sign(x) * x / thr, base))))
+
+  inv <- function(x)
+    ifelse(abs(x) < thr, x, sign(x) * 
+             base^((sign(x) * x - thr) / scale) * thr)
+
+  breaks <- function(x){
+    sgn <- sign(x[which.max(abs(x))])
+    if(all(abs(x) < thr))
+      scales::pretty_breaks()(x)
+    else if(prod(x) >= 0){
+      if(min(abs(x)) < thr)
+        sgn * unique(c(scales::pretty_breaks()(c(min(abs(x)), thr)),
+                       scales::log_breaks(base)(c(max(abs(x)), thr))))
+      else
+        sgn * scales::log_breaks(base)(sgn * x)
+    } else {
+      if(min(abs(x)) < thr)
+        unique(c(sgn * scales::log_breaks()(c(max(abs(x)), thr)),
+                 scales::pretty_breaks()(c(sgn * thr, x[which.min(abs(x))]))))
+      else
+        unique(c(-scales::log_breaks(base)(c(thr, -x[1])),
+                 scales::pretty_breaks()(c(-thr, thr)),
+                 scales::log_breaks(base)(c(thr, x[2]))))
+    }
+  }
+  scales::trans_new(paste("symlog", thr, base, scale, sep = "-"), trans, inv, breaks)
+}
+```
+
+```{r, fig.retina=2, fig.width=7, fig.height = 6, warning=FALSE}
+#Note: This will become a function of its own in LightLogR at some point in the future
+
+Plot_upper <- 
+dataset.LL.aggregate("5 mins")  %>% 
+  gg_day(facetting = FALSE, geom = "blank") + #base plot
+  geom_ribbon(aes(ymin = 0, ymax = MEDI), alpha = 0.25, fill = "#EFC000", 
+              outline.type = "upper", col = "#EFC000", size = 0.4) + #ribbon geom
+  geom_line(aes(y=Reference.Brown), lty = 2, col = "red") + #Brown reference
+  geom_line(aes(y=Reference), col = "#0073C2FF", size = 0.4) + #solar reference
+  labs(x = NULL) +  #remove the x-axis label
+  scale.correction
+
+Plot_lower <- 
+  dataset.LL.aggregate("5 mins")  %>% 
+  gg_day(facetting = FALSE, geom = "blank", y.axis.label = "unrealized Potential") + #base plot
+  geom_area(
+    aes(y = Reference - MEDI, 
+        group = consecutive_id((Reference - MEDI) >= 0), 
+        fill = (Reference - MEDI) >= 0, 
+        col = (Reference - MEDI) >= 0), 
+    alpha = 0.25, outline.type = "upper") + 
+  guides(fill = "none", col = "none") + 
+  scale_y_continuous(
+    trans = "symlog", 
+    breaks = c(-10^2, -10^1, -1, 0, 1, 10^1, 10^2, 10^3, 10^4, 10^5), 
+    labels = function(x) format(x, scientific = FALSE, big.mark = " ")) + 
+  geom_hline(aes(yintercept = 0), lty = 2) + 
+    scale_fill_manual(values = c("#EFC000", "#0073C2")) + 
+    scale_color_manual(values = c("#EFC000", "#0073C2")) + 
+  coord_cartesian(ylim = c(-10^2, 10^5), xlim = c(0, 24.5*60*60),expand = FALSE) 
+
+Plot_upper / Plot_lower #set up the two plots
+    
+```
+
+This plot requires a bit of preparation, but it focuses nicely on the unrealized daylight potential. For reasons of clarity, the line color for the Brown recommendation was changed from blue to red.
+
+###  {.unnumbered}
+
+**Conclusion:** While the `second plot` option is nice, it focuses on one aspect - the missed or unrealized potential. The ´geom_ribbon\` variant still includes this information, but is more general, which is exactly what we want here.
+
+```{r, warning=FALSE}
+Plot <- 
+dataset.LL.aggregate("5 mins")  %>% 
+  gg_day(facetting = FALSE, geom = "blank", y.axis.breaks = c(10^(0:5), 250)) + #base plot
+  geom_ribbon(aes(ymin = 0, ymax = MEDI), alpha = 0.25, fill = "#EFC000", 
+              outline.type = "upper", col = "#EFC000", size = 0.4) + #ribbon geom
+  geom_ribbon(aes(ymin = MEDI, ymax=Reference), 
+              alpha = 0.25, fill = "#0073C2FF") + #solar reference
+  scale.correction
+```
+
+### Brown Recommendations {.tabset .tabset-pills}
+
+The Brown recommendations add a layer of complexity, as they specify a threshold that should not be reached or that should be exceeded, depending on the time of day. We can tackle this aspect in several ways. In any case, the y-axis should reflect the datime threshhold value of 250 lx. This is already considered through the `y.axis.breaks` argument in the code chunk above.
+
+#### `geom_line`
+
+```{r, fig.retina=2, fig.width=7, fig.height = 4, warning=FALSE}
+Plot + 
+  geom_line(aes(y=Reference.Brown), lty = 2, size = 0.4, col = "grey15") #Brown reference
+
+```
+
+This is a variant of the representation used throught the document. Since the light exposure and daylight levels are very distinct in terms of color, however, the line could stay black.
+
+#### `geom_rect`
+
+```{r, fig.retina=2, fig.width=7, fig.height = 4, warning=FALSE}
+#This section will be integrated into a LightLogR function in the future
+Day.start <- as_datetime("2023-09-01 00:00:00", tz = tz)
+Day.end <- as_datetime("2023-09-01 23:59:59", tz = tz)
+Interval <- interval(Day.start, Day.end, tz = tz)
+Brown.times <- 
+  Brown.intervals %>% 
+  filter(Interval %>% int_overlaps(.env$Interval)) %>% 
+  mutate(ymin = case_match(State.Brown,
+                           "night"  ~ 0,
+                           "day" ~ 250,
+                           "evening" ~ 0),
+         ymax = case_match(State.Brown,
+                           "night"  ~ 1,
+                           "day" ~ Inf,
+                           "evening" ~ 10),
+         xmin = int_start(Interval),
+         xmax = int_end(Interval),
+         xmin = if_else(xmin < Day.start, Day.start, xmin)  %>% hms::as_hms(),
+         xmax = if_else(xmax > Day.end, Day.end, xmax) %>% hms::as_hms()
+         )
+
+recommendations <- 
+  geom_rect(
+    data = Brown.times, 
+    aes(xmin= xmin, xmax = xmax, ymin = ymin, ymax = ymax), 
+    inherit.aes = FALSE,
+    alpha = 0.15,
+    fill = "grey35")
+
+Plot2 <- Plot
+Plot2$layers <- c(recommendations, Plot2$layers)
+Plot2 
+Plot2+geom_line(aes(y=Reference.Brown), lty = 2, size = 0.4, col = "grey35") 
+
+```
+
+With the `geom_area` function we can draw target areas for our values.
+
+#### `geom_point`
+
+```{r, fig.retina=2, fig.width=7, fig.height = 4, warning=FALSE}
+Plot + 
+  geom_point(aes(col = Reference.check), size = 0.5)+
+  geom_line(aes(y=Reference.Brown), lty = 2, size = 0.4, col = "grey60") + #Brown reference
+  scale_color_manual(values = c("grey50", "#EFC000"))+
+  guides(color = "none")
+
+```
+
+This approach uses a conditional coloration of points, depending on whether or not the personal light exposure is within the recommended limits.
+
+###  {.unnumbered}
+
+**Conclusion:** The `geom_point` solution combines a lot of information in a designwise slim figure that only uses two colors (+grey) to get many points across.
+
+```{r, warning=FALSE, message=FALSE}
+Plot <- 
+Plot + 
+  geom_point(aes(col = Reference.check), size = 0.5)+
+  geom_line(aes(y=Reference.Brown), lty = 2, size = 0.4, col = "grey60") + #Brown reference
+  scale_color_manual(values = c("grey50", "#EFC000"))+
+  guides(color = "none")
+```
+
+### Final Touches
+
+Our figure needs some final touches before we can use it, namely labels. We disabled automatic guides, and they would not provide nice legends. Instead we will solve this trough `annotations`.
+
+```{r, fig.retina=2, fig.width=7, fig.height = 4, warning=FALSE}
+x <- 900
+Plot + 
+  annotate("rect", fill = "white", xmin = 0, xmax = 7.5*60*60, ymin = 2500, ymax = 60000)+
+  annotate("text", x=x, y = 1.5, label = "Brown et al. (2022)", hjust = 0, col = "grey25")+
+  annotate("text", x=x, y = 40000, label = "- Exposure within", hjust = 0, col = "#EFC000")+
+  annotate("text", x=x, y = 19500, label = "  recommended levels or", hjust = 0, col = "black")+
+  annotate("text", x=x, y = 10000, label = "  outside", hjust = 0, col = "grey50")+
+  annotate("text", x=x, y = 4000, label = "- Daylight Potential", hjust = 0, col = "#0073C2DD")
+
+ggsave("Day.png", width = 7, height = 4, dpi = 600)
+```

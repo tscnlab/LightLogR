@@ -10,6 +10,7 @@ cut_Datetime(
   type = "round",
   Datetime.colname = Datetime,
   New.colname = Datetime.rounded,
+  group_by = FALSE,
   ...
 )
 }
@@ -28,6 +29,8 @@ chooses the relevant function from \link{lubridate}.}
 \link{LightLogR}. Expects a \code{symbol}. Needs to be part of the \code{dataset}.}
 
 \item{New.colname}{Column name for the added column in the \code{dataset}.}
+
+\item{group_by}{Should the data be grouped by the new column? Defaults to \code{FALSE}}
 
 \item{...}{Parameter handed over to \code{\link[lubridate:round_date]{lubridate::round_date()}} and siblings}
 }

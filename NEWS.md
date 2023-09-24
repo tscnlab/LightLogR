@@ -1,4 +1,4 @@
-# LightLogR 0.2.0
+# LightLogR 0.2.0.9000
 
 * Added the Article/Vignette "What´s in a Day" to demonstrate the LightLogR workflow.
 
@@ -14,7 +14,7 @@
 
 * Added the function `join.datasets` to combine imported datasets with sensible constraints.
 
-# LightLogR 0.1.1
+# LightLogR 0.1.1.9000
 
 ## `gg_day()`:
 * Added `major grid marks` for the y-axis.

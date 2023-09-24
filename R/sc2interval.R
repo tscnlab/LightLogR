@@ -42,7 +42,7 @@
 sc2interval <- function(dataset, 
                         Datetime.colname = Datetime,
                         Statechange.colname = State,
-                        State.colname = Statechange.colname,
+                        State.colname = State,
                         Interval.colname = Interval,
                         full = TRUE,
                         full.first = NA,

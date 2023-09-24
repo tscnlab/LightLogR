@@ -23,6 +23,25 @@
 #   Brown2reference(MEDI.colname = `MELANOPIC EDI`) -> test
 
 
+#' Title
+#'
+#' @param dataset 
+#' @param Interval.colname 
+#' @param Sleep.colname 
+#' @param wake.state 
+#' @param sleep.state 
+#' @param Brown.day 
+#' @param Brown.evening 
+#' @param Brown.night 
+#' @param evening.length 
+#' @param Brown.state.colname 
+#' @param output.dataset 
+#'
+#' @return ds
+#' @export
+#'
+#' @examples
+#' #jf
 sleep.int2Brown <- function(dataset,
                            Interval.colname = Interval,
                            Sleep.colname = State,

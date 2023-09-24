@@ -8,10 +8,31 @@
 #                             dec = ",")
 
 
+#' Title
+#'
+#' @param filePath 
+#' @param sep 
+#' @param dec 
+#' @param Datetime.format 
+#' @param tz 
+#' @param State.colnames 
+#' @param State.encoding 
+#' @param ID.colname 
+#' @param State.newname 
+#' @param State.valueName 
+#' @param ID.newname 
+#' @param keepAllColumns 
+#'
+#' @return a dataset
+#' @export
+#'
+#' @examples
+#' #example
 import.Statechanges <- function(filePath, 
                        sep = ",", 
                        dec = ".", 
-                       Datetime.format = "yyyy-dd-mm hh-mm-ss",
+                       Datetime.format = "ymdHMS",
+                       tz = "UTC",
                        State.colnames, # a vector
                        State.encoding = State.colnames,
                        ID.colname,
@@ -34,7 +55,12 @@ import.Statechanges <- function(filePath,
   }
   
   # Read in the data with the specified separator and decimal
-  data <- readr::read_delim(filePath, delim = sep, locale = readr::locale(decimal_mark = dec), col_types = readr::cols())
+  data <- readr::read_delim(
+    filePath, 
+    delim = sep, 
+    locale = readr::locale(decimal_mark = dec), 
+    col_types = readr::cols()
+    )
   
   # Convert inputs to strings for matching
   idStr <- as.character(rlang::ensym(ID.colname))
@@ -59,10 +85,10 @@ import.Statechanges <- function(filePath,
                         {{ ID.newname }} := {{ ID.colname }}) %>% 
     dplyr::filter(!is.na({{ ID.newname }}), !is.na({{ State.valueName }})) %>% 
     dplyr::group_by({{ ID.newname }}) %>% 
-    dplyr::arrange({{ State.valueName }}, .by_group = TRUE) %>% 
     dplyr::mutate({{ State.newname }} := stateNames[{{ State.newname }}],
-                  {{ State.valueName }} := lubridate::as_datetime({{ State.valueName }}),
-                  {{ ID.newname }} := factor({{ ID.newname }}))
+                  {{ State.valueName }} := lubridate::parse_date_time({{ State.valueName }}, orders = Datetime.format, tz),
+                  {{ ID.newname }} := factor({{ ID.newname }})) %>% 
+    dplyr::arrange({{ State.valueName }}, .by_group = TRUE)
   
   # Decide on whether to keep other columns
   if (!keepAllColumns) {

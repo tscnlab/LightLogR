@@ -1,0 +1,9 @@
+record_id;redcap_repeat_instrument;redcap_repeat_instance;bedtime;sleep;sleepdelay;awakenings;awake_duration;offset;out_ofbed;sleepquality___1;sleepquality___2;sleepquality___3;sleepquality___4;sleepquality___5;comments;daytype2___1;daytype2___2;startdate;enddate
+205;;;;;;;;;;;;;;;;;;;
+205;morning_sleep_diary;1;28.08.2023 22:37;28.08.2023 23:20;15;3;10;29.08.2023 09:37;29.08.2023 09:37;0;0;1;0;0;Slept longer than usual since my kids are on Summer vacation;1;0;29.08.2023 09:37;29.08.2023 09:41
+205;morning_sleep_diary;2;29.08.2023 23:30;29.08.2023 23:40;10;1;5;30.08.2023 09:21;30.08.2023 09:23;0;0;0;1;0;no;0;1;30.08.2023 09:23;30.08.2023 09:26
+205;morning_sleep_diary;3;30.08.2023 23:15;30.08.2023 23:15;15;3;2;31.08.2023 09:47;31.08.2023 09:47;0;0;1;0;0;Kids slept in my bed;0;1;31.08.2023 09:47;31.08.2023 09:49
+205;morning_sleep_diary;4;31.08.2023 23:00;31.08.2023 23:15;10;1;5;01.09.2023 09:30;01.09.2023 09:44;0;0;0;1;0;none;0;1;01.09.2023 09:44;01.09.2023 09:46
+205;morning_sleep_diary;5;01.09.2023 23:00;01.09.2023 23:10;5;1;40;02.09.2023 09:10;02.09.2023 09:15;0;1;0;0;0;woke Up and could Not Fall asleep. went to the dining room, out on TV and Fell asleep on the couch;1;0;02.09.2023 11:59;02.09.2023 12:02
+205;morning_sleep_diary;6;02.09.2023 22:15;02.09.2023 22:55;10;0;0;03.09.2023 08:47;03.09.2023 08:47;0;0;0;1;0;none;1;0;03.09.2023 08:47;03.09.2023 08:49
+205;morning_sleep_diary;7;03.09.2023 21:20;03.09.2023 21:30;10;1;5;04.09.2023 07:25;04.09.2023 07:27;0;0;0;1;0;no;0;1;04.09.2023 07:29;04.09.2023 07:30

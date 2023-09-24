@@ -71,7 +71,7 @@
 #'
 #' ```{r}
 #' dataset %>%
-#' dplyr::select(Datetime, TEMPERATURE, LIGHT, `MELANOPIC EDI`) %>%
+#' dplyr::select(Datetime, TEMPERATURE, LIGHT, MEDI) %>%
 #' dplyr::slice(1500:1505) %>%
 #' flextable::flextable() %>%
 #' flextable::autofit()
@@ -116,7 +116,8 @@ import.ActLumus <-
                                 id = "file.name"
       )
       tmp <- tmp %>%
-        dplyr::rename(Datetime = `DATE/TIME`) %>%
+        dplyr::rename(Datetime = `DATE/TIME`,
+                      MEDI = `MELANOPIC EDI`) %>%
         dplyr::mutate(Datetime =
                         Datetime %>% lubridate::dmy_hms(tz = !!tz))
       }

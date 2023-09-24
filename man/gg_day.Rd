@@ -9,21 +9,22 @@ gg_day(
   start.date = NULL,
   end.date = NULL,
   x.axis = Datetime,
-  y.axis,
+  y.axis = MEDI,
   col = NULL,
   group = NULL,
   geom = "point",
-  scales = "free_y",
+  scales = "fixed",
   x.axis.breaks = hms::hms(hours = seq(0, 24, by = 3)),
   y.axis.breaks = 10^(0:5),
   y.scale.log10 = TRUE,
   y.scale.sc = FALSE,
   x.axis.label = "Time of Day",
-  y.axis.label = "Lightlevel",
+  y.axis.label = "Light exposure (lx, MEDI)",
   format.day = "\%d/\%m",
   title = NULL,
   subtitle = NULL,
   interactive = FALSE,
+  facetting = TRUE,
   ...
 )
 }
@@ -40,8 +41,10 @@ earliest/latest date within the \code{dataset}.}
 
 \item{x.axis, y.axis}{column name that contains the datetime (x, defaults to
 \code{"Datetime"} which is automatically correct for data imported with
-\link{LightLogR}) and the dependent variable (y). Expects a \code{symbol}. Needs to
-be part of the \code{dataset}.}
+\link{LightLogR}) and the dependent variable (y, defaults to \code{"MEDI"}, or
+melanopic EDI, which is a standard measure of stimulus strength for the
+nonvisual effects of light). Expects a \code{symbol}. Needs to be part of the
+\code{dataset}.}
 
 \item{col}{optional column name that defines separate sets and colors them.
 Expects anything that works with the layer data \code{\link[ggplot2:aes]{ggplot2::aes()}}. The
@@ -86,6 +89,8 @@ at \code{\link[base:strptime]{base::strptime()}}}
 
 \item{interactive}{Should the plot be interactive? Expects a \code{logical}.
 Defaults to \code{FALSE}.}
+
+\item{facetting}{Should an automated facet by day be applie? Default is \code{TRUE} and uses the \code{Day.data} variable that the function also creates if not present.}
 
 \item{...}{Other options that get passed to the main geom function. Can be
 used to adjust to adjust size or linetype.}
