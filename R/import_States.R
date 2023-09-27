@@ -8,18 +8,28 @@
 #                             dec = ",")
 
 
-#' Title
+#' Import data that contain `Datetimes` of `Statechanges`
+#' 
+#' Auxiliary data greatly enhances data analysis. This function allows the import of files that contain `Statechanges`, i.e., specific time points of when a `State` (like `sleep` or `wake`) starts.
+#' 
+#' Data can be present in the long or wide format.
+#' * In the `wide` format, multiple `Datetime` columns indicate the state through the column name. These get pivoted to the `long` format and can be recoded through the `State.encoding` argument.
+#' * In the `long` format, one column indicates the `State`, while the other gives the `Datetime`.
 #'
-#' @param filePath 
-#' @param sep 
-#' @param dec 
-#' @param Datetime.format 
-#' @param tz 
-#' @param State.colnames 
-#' @param State.encoding 
+#' @inheritParams import.Dataset
+#' @param sep String that separates columns in the import file. Defaults to `","`.
+#' @param dec String that indicates a decimal separator in the import file. Defaults to `"."`.
+#' @param structure String that specifies whether the import file is in the `long` or `wide` format. Defaults to `"wide"`.
+#' @param Datetime.format String that specifies the format of the `Datetimes` in the file. The default `"ymdHMS"` specifies a format like "2023-07-10 10:00:00". In the function, [lubridate::parse_date_time()] does the actual conversion - the documentation can be searched for valid inputs.
+#' @param State.colnames Column name or vector of column names (the latter only in the `wide` format). Expects a `character`.
+#' * In the `wide` format, the column names indicate the `State` and must contain `Datetimes`. The columns will be pivoted to the columns specified in `Datetime.column` and `State.newname`.
+#' * In the `long` format, the column contains the `State`
+#' @param State.encoding In the `wide` format, this enables recoding the column names to state names, if there are any differences. The default uses the `State.colnames` argument. Expects a `character` (vector) with the same length as `State.colnames`.
+#' @param Datetime.column Symbol of the `Datetime` column (which is also the default). 
+#' * In the `wide` format, this is the newly created column from the `Datetimes` in the `State.colnames`.
+#' * In the `long` format, this is the existing column that contains the `Datetimes`.
 #' @param ID.colname 
 #' @param State.newname 
-#' @param State.valueName 
 #' @param ID.newname 
 #' @param keepAllColumns 
 #'
@@ -28,16 +38,17 @@
 #'
 #' @examples
 #' #example
-import.Statechanges <- function(filePath, 
+import.Statechanges <- function(filename, path, 
                        sep = ",", 
                        dec = ".", 
+                       structure = "wide",
                        Datetime.format = "ymdHMS",
                        tz = "UTC",
                        State.colnames, # a vector
                        State.encoding = State.colnames,
+                       Datetime.column = Datetime,
                        ID.colname,
                        State.newname = State,
-                       State.valueName = Datetime,
                        ID.newname = Id,
                        keepAllColumns = FALSE) {
   
@@ -100,5 +111,5 @@ import.Statechanges <- function(filePath,
 
 import.Sleep <- function(filePath, State.newname = Sleep,
                          ...) {
-  import.Statechanges(filePath = filePath, ..., State.newname = Sleep)
+  import.Statechanges(filePath = filePath, ..., State.newname = State.newname)
 }

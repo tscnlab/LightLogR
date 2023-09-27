@@ -7,6 +7,10 @@
 #' timezone of the data to `UTC`. It will also enforce an `id` to separate
 #' different datasets and will order/arrange the dataset within each `id`.
 #'
+#' If the `Id` column is already part of the `dataset` it will just use this
+#' column. If the column is not present it will add this column and fill it with
+#' the filename of the importfile (see param `auto.id`).
+#'
 #' @param filename Filename(s) for the Dataset. Can also contain the filepath,
 #'   but `path` must then be `NULL`. Expects a `character`. If the vector is
 #'   longer than `1`, multiple files will be read in into one Tibble.
@@ -16,16 +20,14 @@
 #' @param tz Timezone of the data. `"UTC"` is the default. Expects a
 #'   `character`. You can look up the supported timezones with [OlsonNames()].
 #' @param ID.colname Lets you specify a column for the participant id. Expects a
-#'   symbol (Default is `Id`). If the column is already part of the `dataset` it
-#'   will just use this column. If the column is not present it will add this
-#'   column and fill it with the filename of the importfile (see param
-#'   `auto.id`). This column will be used for grouping ([dplyr::group_by()]).
-#' @param auto.id If the `Id.colname` column is added to the `dataset`, the 
-#'   `Id` can be automatically extracted from the filename. The argument expects
-#'   a regular expression [regex] and will by default just give the whole
-#'   filename without file extension.
-#' @param manual.id If this argument is not `NULL`, and no `ID` column is part 
-#' of the `dataset`, this `character` scalar will be used. 
+#'   symbol (Default is `Id`). This column will be used for grouping
+#'   ([dplyr::group_by()]).
+#' @param auto.id If the `Id.colname` column is added to the `dataset`, the `Id`
+#'   can be automatically extracted from the filename. The argument expects a
+#'   regular expression [regex] and will by default just give the whole filename
+#'   without file extension.
+#' @param manual.id If this argument is not `NULL`, and no `ID` column is part
+#'   of the `dataset`, this `character` scalar will be used.
 #' **Don´t use this argument if multiple files from different participants are used!**.
 #' @param ... Parameters that get handed down to the specific import functions
 #' @param device From what device do you want to import? For every supported

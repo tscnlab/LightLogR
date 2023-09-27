@@ -65,7 +65,7 @@ dataset.LL <- import.ActLumus(file.LL, path, auto.id = "^(\\d{3})", tz = tz)
 
 As you can see, the import is accompanied by a (hopefully) helpful message about the imported data. It contains the number ob measurements, the timezone, start- and enddate, the timespan, and all observation intervals. In this case, the measurements all follow a *10 second* epoch.
 
-Because we have no missing values that we would have to deal with first, this dataset is already good to go. If you, e.g., want to know the median value of melanopic EDI (a measure of stimulus strength for the nonvisual system) for every day in the dataset, you can do that:
+Because we have no missing values that we would have to deal with first, this dataset is already good to go. If you, e.g., want to know the range of melanopic EDI (a measure of stimulus strength for the nonvisual system) for every day in the dataset, you can do that:
 
 ```{r}
 dataset.LL %>% group_by(Date = as_date(Datetime)) %>% 
@@ -94,7 +94,7 @@ Here you can see that we follow roughly the same time span, but the measurement 
 
 ### Participant Sleep Data
 
-Our last dataset is a sleep diary that contains, among other things, a column for `Id` and a column for *sleep* and for *wake* (called *offset*). Because sleep diaries and other event datasets can vary widely in their structure, we must manually set a few arguments. Importantly, we need to specify how the Datetimes are structured. In this case, we have values like *2023-08-28 23:20*, which give a structure of `dmyHM`.
+Our last dataset is a sleep diary that contains, among other things, a column for `Id` and a column for *sleep* and for *wake* (called *offset*). Because sleep diaries and other event datasets can vary widely in their structure, we must manually set a few arguments. Importantly, we need to specify how the Datetimes are structured. In this case, we have values like *28-08-2023 23:20*, which give a structure of `dmyHM`.
 
 What we need after import is a coherent table that contains a column with a `Datetime` besides a column with the `State` that starts at that point in time. `import.Statechanges` facilitates this, because we can provide a `vector` of column names that form a continuous indicator of a given state - in this case `Sleep`.
 
@@ -309,9 +309,10 @@ dataset.LL.partial  %>%
             across(where(is.character), \(x) names(which.max(table(x)))), #choose the dominant string
             across(where(is.logical), \(x) sum(x) > (length(x) / 2)), # average a binary outcome
             .groups = "drop_last") %>% #remove the rounded Datetime group
-  mutate(Reference.check = Brown.check(MEDI, State.Brown)) %>% #recalculate conformity to Brown recs.
-  rename(Datetime = Datetime.rounded) #remove the rounded Datetime column
-}
+  rename(Datetime = Datetime.rounded) %>%  #remove the rounded Datetime column
+  select(-Reference.Brown) %>% #remove the rounded 
+  Brown2reference(Brown.rec.colname = Reference.Brown) #recalculate the brown times
+    }
 ```
 
 ### Data aggregation {.tabset .tabset-pills}
@@ -482,13 +483,15 @@ This plot requires a bit of preparation, but it focuses nicely on the unrealized
 **Conclusion:** While the `second plot` option is nice, it focuses on one aspect - the missed or unrealized potential. The ´geom_ribbon\` variant still includes this information, but is more general, which is exactly what we want here.
 
 ```{r, warning=FALSE}
+Day.end <- as_datetime("2023-09-01 23:59:59", tz = tz)
 Plot <- 
-dataset.LL.aggregate("5 mins")  %>% 
+dataset.LL.aggregate("5 mins") %>% filter_Datetime(end = Day.end) %>% 
   gg_day(facetting = FALSE, geom = "blank", y.axis.breaks = c(10^(0:5), 250)) + #base plot
-  geom_ribbon(aes(ymin = 0, ymax = MEDI), alpha = 0.25, fill = "#EFC000", 
+    geom_ribbon(aes(ymin = MEDI, ymax=Reference), 
+              alpha = 0.25, fill = "#0073C2FF",
+              outline.type = "upper", col = "#0073C2FF", size = 0.15) + #solar reference
+  geom_ribbon(aes(ymin = 0, ymax = MEDI), alpha = 0.30, fill = "#EFC000", 
               outline.type = "upper", col = "#EFC000", size = 0.4) + #ribbon geom
-  geom_ribbon(aes(ymin = MEDI, ymax=Reference), 
-              alpha = 0.25, fill = "#0073C2FF") + #solar reference
   scale.correction
 ```
 
@@ -568,23 +571,48 @@ This approach uses a conditional coloration of points, depending on whether or n
 Plot <- 
 Plot + 
   geom_point(aes(col = Reference.check), size = 0.5)+
-  geom_line(aes(y=Reference.Brown), lty = 2, size = 0.4, col = "grey60") + #Brown reference
+  geom_line(aes(y=Reference.Brown, 
+                # group = consecutive_id(State.Brown)
+                ), 
+            col = "grey40",
+            lty = 2, size = 0.4) + #Brown reference
   scale_color_manual(values = c("grey50", "#EFC000"))+
   guides(color = "none")
 ```
 
 ### Final Touches
 
-Our figure needs some final touches before we can use it, namely labels. We disabled automatic guides, and they would not provide nice legends. Instead we will solve this trough `annotations`.
+Our figure needs some final touches before we can use it, namely labels. Automatic guides and labels work well when we use color palettes. Here, we mostly specified the coloring ourselves. Thus we disabled automatic guides. Instead we will solve this trough `annotations`.
 
 ```{r, fig.retina=2, fig.width=7, fig.height = 4, warning=FALSE}
 x <- 900
-Plot + 
-  annotate("rect", fill = "white", xmin = 0, xmax = 7.5*60*60, ymin = 2500, ymax = 60000)+
-  annotate("text", x=x, y = 1.5, label = "Brown et al. (2022)", hjust = 0, col = "grey25")+
-  annotate("text", x=x, y = 40000, label = "- Exposure within", hjust = 0, col = "#EFC000")+
-  annotate("text", x=x, y = 19500, label = "  recommended levels or", hjust = 0, col = "black")+
-  annotate("text", x=x, y = 10000, label = "  outside", hjust = 0, col = "grey50")+
-  annotate("text", x=x, y = 4000, label = "- Daylight Potential", hjust = 0, col = "#0073C2DD")
 
+Brown.times <- 
+  Brown.times %>% 
+  mutate(xmean = (xmax - xmin)/2 + xmin,
+         label.Brown = case_match(State.Brown,
+                                  "night" ~ "sleep",
+                                  "evening" ~ "pre-bed",
+                                  .default = State.Brown))
+
+Plot + 
+  geom_vline(data = Brown.times[-1,],
+             aes(xintercept = xmin), lty = 2, col = "grey40", size = 0.4) + #adding vertical lines
+  geom_label(data = Brown.times[-4,], 
+             aes(x = xmean, y = 0.2, label = label.Brown), 
+             col = "grey40", alpha = 0.75) + #adding labels
+  annotate("rect", fill = "white", xmin = 0, xmax = 7.5*60*60, 
+           ymin = 2500, ymax = 60000)+
+  annotate("text", x=x, y = 1.7, label = "Brown et al. (2022)", 
+           hjust = 0, col = "grey25")+
+  annotate("text", x=x, y = 40000, label = "- Exposure within", 
+           hjust = 0, col = "#EFC000")+
+  annotate("text", x=x, y = 19500, label = "  recommended levels or", 
+           hjust = 0, col = "black")+
+  annotate("text", x=x, y = 10000, label = "  outside", 
+           hjust = 0, col = "grey50")+
+  annotate("text", x=x, y = 4000, label = "- Daylight Potential", 
+           hjust = 0, col = "#0073C2DD")
+
+ggsave("Day2.png", dpi = 600, height = 4, width = 7)
 ```
