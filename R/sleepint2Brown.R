@@ -23,25 +23,46 @@
 #   Brown2reference(MEDI.colname = `MELANOPIC EDI`) -> test
 
 
-#' Title
+#' Recode Sleep/Wake intervals to Brown state intervals
 #'
-#' @param dataset 
-#' @param Interval.colname 
-#' @param Sleep.colname 
-#' @param wake.state 
-#' @param sleep.state 
-#' @param Brown.day 
-#' @param Brown.evening 
-#' @param Brown.night 
-#' @param evening.length 
-#' @param Brown.state.colname 
-#' @param output.dataset 
+#' Takes a dataset with sleep/wake intervals and recodes them to Brown state
+#' intervals. Specifically, it recodes the `sleep` intervals to `night`, reduces
+#' `wake` intervals by a specified `evening.length` and recodes them to
+#' `evening` and `day` intervals. The `evening.length` is the time between `day`
+#' and `night`. The result can be used as input for [interval2state()] and might
+#' be used subsequently with [Brown2reference()].
 #'
-#' @return ds
+#' @param dataset A dataset with sleep/wake intervals.
+#' @param Interval.colname The name of the column with the intervals. Defaults to `Interval`.
+#' @param Sleep.colname The name of the column with the sleep/wake states. Defaults to `State`.
+#' @param wake.state,sleep.state The names of the wake and sleep states in the `Sleep.colname`. Default to `"wake"` and `"sleep"`. Expected to be a `character` scalar and must be an exact match.
+#' @param Brown.day,Brown.evening,Brown.night The names of the Brown states that will be used. Defaults to `"day"`, `"evening"` and `"night"`.
+#' @param evening.length The length of the evening interval in seconds. Can also use [lubridate] duration or period objects. Defaults to 3 hours.
+#' @param Brown.state.colname The name of the column with the newly created Brown states. Works as a simple renaming of the `Sleep.colname`.
+#' @param output.dataset Whether to return the whole `dataset` or a `vector` with the Brown states.
+#'
+#' @return A dataset with the Brown states or a vector with the Brown states. The Brown states are created in a new column with the name specified in `Brown.state.colname`. The dataset will have more rows than the original dataset, because the `wake` intervals are split into `day` and `evening` intervals.
 #' @export
 #'
+#' @references https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3001571
+#' @family Brown
+#'
 #' @examples
-#' #jf
+#' #create a sample dataset
+#' library(tibble)
+#' sample <- tibble::tibble(Datetime = c("2023-08-15 6:00:00",
+#'                                          "2023-08-15 23:00:00",
+#'                                          "2023-08-16 6:00:00",
+#'                                          "2023-08-16 22:00:00",
+#'                                          "2023-08-17 6:30:00",
+#'                                          "2023-08-18 1:00:00"),
+#'                          State = rep(c("wake", "sleep"), 3),
+#'                          Id = "Participant")
+#' #intervals from sample
+#' sc2interval(sample) 
+#' #recoded intervals                       
+#' sc2interval(sample) %>% sleep.int2Brown()
+#'                                          
 sleep.int2Brown <- function(dataset,
                            Interval.colname = Interval,
                            Sleep.colname = State,

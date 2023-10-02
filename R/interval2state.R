@@ -1,4 +1,3 @@
-
 #' Adds a state column to a dataset from interval data
 #' 
 #' This function can make use of `Interval` data that contain `States` (like `"sleep"`, `"wake"`, `"wear"`) and add a column to a light logger `dataset`, where the `State` of  every `Datetime` is specified, based on the participant's `ID`.
