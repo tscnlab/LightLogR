@@ -2,7 +2,7 @@
 % Please edit documentation in R/sleepint2Brown.R
 \name{sleep.int2Brown}
 \alias{sleep.int2Brown}
-\title{Title}
+\title{Recode Sleep/Wake intervals to Brown state intervals}
 \usage{
 sleep.int2Brown(
   dataset,
@@ -19,34 +19,57 @@ sleep.int2Brown(
 )
 }
 \arguments{
-\item{dataset}{}
+\item{dataset}{A dataset with sleep/wake intervals.}
 
-\item{Interval.colname}{}
+\item{Interval.colname}{The name of the column with the intervals. Defaults to \code{Interval}.}
 
-\item{Sleep.colname}{}
+\item{Sleep.colname}{The name of the column with the sleep/wake states. Defaults to \code{State}.}
 
-\item{wake.state}{}
+\item{wake.state, sleep.state}{The names of the wake and sleep states in the \code{Sleep.colname}. Default to \code{"wake"} and \code{"sleep"}. Expected to be a \code{character} scalar and must be an exact match.}
 
-\item{sleep.state}{}
+\item{Brown.day, Brown.evening, Brown.night}{The names of the Brown states that will be used. Defaults to \code{"day"}, \code{"evening"} and \code{"night"}.}
 
-\item{Brown.day}{}
+\item{evening.length}{The length of the evening interval in seconds. Can also use \link{lubridate} duration or period objects. Defaults to 3 hours.}
 
-\item{Brown.evening}{}
+\item{Brown.state.colname}{The name of the column with the newly created Brown states. Works as a simple renaming of the \code{Sleep.colname}.}
 
-\item{Brown.night}{}
-
-\item{evening.length}{}
-
-\item{Brown.state.colname}{}
-
-\item{output.dataset}{}
+\item{output.dataset}{Whether to return the whole \code{dataset} or a \code{vector} with the Brown states.}
 }
 \value{
-ds
+A dataset with the Brown states or a vector with the Brown states. The Brown states are created in a new column with the name specified in \code{Brown.state.colname}. The dataset will have more rows than the original dataset, because the \code{wake} intervals are split into \code{day} and \code{evening} intervals.
 }
 \description{
-Title
+Takes a dataset with sleep/wake intervals and recodes them to Brown state
+intervals. Specifically, it recodes the \code{sleep} intervals to \code{night}, reduces
+\code{wake} intervals by a specified \code{evening.length} and recodes them to
+\code{evening} and \code{day} intervals. The \code{evening.length} is the time between \code{day}
+and \code{night}. The result can be used as input for \code{\link[=interval2state]{interval2state()}} and might
+be used subsequently with \code{\link[=Brown2reference]{Brown2reference()}}.
 }
 \examples{
-#jf
+#create a sample dataset
+library(tibble)
+sample <- tibble::tibble(Datetime = c("2023-08-15 6:00:00",
+                                         "2023-08-15 23:00:00",
+                                         "2023-08-16 6:00:00",
+                                         "2023-08-16 22:00:00",
+                                         "2023-08-17 6:30:00",
+                                         "2023-08-18 1:00:00"),
+                         State = rep(c("wake", "sleep"), 3),
+                         Id = "Participant")
+#intervals from sample
+sc2interval(sample) 
+#recoded intervals                       
+sc2interval(sample) \%>\% sleep.int2Brown()
+                                         
 }
+\references{
+https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3001571
+}
+\seealso{
+Other Brown: 
+\code{\link{Brown.check}()},
+\code{\link{Brown.rec}()},
+\code{\link{Brown2reference}()}
+}
+\concept{Brown}

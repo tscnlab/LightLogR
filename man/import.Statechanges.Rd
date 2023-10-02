@@ -2,54 +2,108 @@
 % Please edit documentation in R/import_States.R
 \name{import.Statechanges}
 \alias{import.Statechanges}
-\title{Title}
+\title{Import data that contain \code{Datetimes} of \code{Statechanges}}
 \usage{
 import.Statechanges(
-  filePath,
+  filename,
+  path = ".",
   sep = ",",
   dec = ".",
+  structure = "wide",
   Datetime.format = "ymdHMS",
   tz = "UTC",
   State.colnames,
   State.encoding = State.colnames,
+  Datetime.column = Datetime,
   ID.colname,
   State.newname = State,
-  State.valueName = Datetime,
   ID.newname = Id,
   keepAllColumns = FALSE
 )
 }
 \arguments{
-\item{filePath}{}
+\item{filename}{Filename(s) for the Dataset. Can also contain the filepath,
+but \code{path} must then be \code{NULL}. Expects a \code{character}. If the vector is
+longer than \code{1}, multiple files will be read in into one Tibble.}
 
-\item{sep}{}
+\item{path}{Optional path for the dataset(s). \code{NULL} is the default. Expects
+a \code{character}.}
 
-\item{dec}{}
+\item{sep}{String that separates columns in the import file. Defaults to
+\code{","}.}
 
-\item{Datetime.format}{}
+\item{dec}{String that indicates a decimal separator in the import file.
+Defaults to \code{"."}.}
 
-\item{tz}{}
+\item{structure}{String that specifies whether the import file is in the
+\code{long} or \code{wide} format. Defaults to \code{"wide"}.}
 
-\item{State.colnames}{}
+\item{Datetime.format}{String that specifies the format of the \code{Datetimes} in
+the file. The default \code{"ymdHMS"} specifies a format like "2023-07-10
+10:00:00". In the function, \code{\link[lubridate:parse_date_time]{lubridate::parse_date_time()}} does the actual
+conversion - the documentation can be searched for valid inputs.}
 
-\item{State.encoding}{}
+\item{tz}{Timezone of the data. \code{"UTC"} is the default. Expects a
+\code{character}. You can look up the supported timezones with \code{\link[=OlsonNames]{OlsonNames()}}.}
 
-\item{ID.colname}{}
+\item{State.colnames}{Column name or vector of column names (the latter only
+in the \code{wide} format). Expects a \code{character}.
+\itemize{
+\item In the \code{wide} format, the column names indicate the \code{State} and must contain \code{Datetimes}. The columns will be pivoted to the columns specified in \code{Datetime.column} and \code{State.newname}.
+\item In the \code{long} format, the column contains the \code{State}
+}}
 
-\item{State.newname}{}
+\item{State.encoding}{In the \code{wide} format, this enables recoding the column
+names to state names, if there are any differences. The default uses the
+\code{State.colnames} argument. Expects a \code{character} (vector) with the same
+length as \code{State.colnames}.}
 
-\item{State.valueName}{}
+\item{Datetime.column}{Symbol of the \code{Datetime} column (which is also the
+default).
+\itemize{
+\item In the \code{wide} format, this is the newly created column from the \code{Datetimes} in the \code{State.colnames}.
+\item In the \code{long} format, this is the existing column that contains the \code{Datetimes}.
+}}
 
-\item{ID.newname}{}
+\item{ID.colname}{Symbol of the column that contains the \code{ID} of the subject.}
 
-\item{keepAllColumns}{}
+\item{State.newname}{Symbol of the column that will contain the \code{State} of
+the subject. In the \code{wide} format, this is the newly created column from
+the \code{State.colnames}. In the \code{long} format, this argument is used to rename
+the \code{State} column.}
+
+\item{ID.newname}{Column name used for renaming the \code{ID.colname} column.}
+
+\item{keepAllColumns}{Logical that specifies whether all columns should be
+kept in the output. Defaults to \code{FALSE}.}
 }
 \value{
-a dataset
+a dataset with the \code{ID}, \code{State}, and \code{Datetime} columns. May contain
+additional columns if \code{keepAllColumns} is \code{TRUE}.
 }
 \description{
-Title
+Auxiliary data greatly enhances data analysis. This function allows the
+import of files that contain \code{Statechanges}, i.e., specific time points of
+when a \code{State} (like \code{sleep} or \code{wake}) starts.
+}
+\details{
+Data can be present in the long or wide format.
+\itemize{
+\item In the \code{wide} format, multiple \code{Datetime} columns indicate the state through the column name. These get pivoted to the \code{long} format and can be recoded through the \code{State.encoding} argument.
+\item In the \code{long} format, one column indicates the \code{State}, while the other gives the \code{Datetime}.
+}
 }
 \examples{
-#example
+#get the example file from within the package
+path <- system.file("extdata/",
+package = "LightLogR")
+file.sleep <- "205_sleepdiary_all_20230904.csv"
+
+import.Statechanges(file.sleep, path,
+Datetime.format = "dmyHM",
+State.colnames = c("sleep", "offset"),
+State.encoding = c("sleep", "wake"),
+ID.colname = record_id,
+sep = ";",
+dec = ",")
 }

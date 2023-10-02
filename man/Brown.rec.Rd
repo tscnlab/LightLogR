@@ -2,7 +2,7 @@
 % Please edit documentation in R/Brown.R
 \name{Brown.rec}
 \alias{Brown.rec}
-\title{Title}
+\title{Calculate the recommended illuminance/MEDI levels by Brown et al. (2022)}
 \usage{
 Brown.rec(
   state,
@@ -15,27 +15,31 @@ Brown.rec(
 )
 }
 \arguments{
-\item{state}{}
+\item{state}{The state from Brown et al. (2022). Needs to be a character vector.}
 
-\item{Brown.day}{}
+\item{Brown.day, Brown.evening, Brown.night}{The names of the states from Brown et al. (2022). These are the default values (\code{"day"}, \code{"evening"}, \code{"night"}), but can be changed if the names in \code{state} are different. Needs to be a character scalar.}
 
-\item{Brown.evening}{}
-
-\item{Brown.night}{}
-
-\item{Brown.day.th}{}
-
-\item{Brown.evening.th}{}
-
-\item{Brown.night.th}{}
+\item{Brown.day.th, Brown.evening.th, Brown.night.th}{The thresholds for the states from Brown et al. (2022). These are the default values (\code{250}, \code{10}, \code{1}), but can be changed if the thresholds should be different. Needs to be a numeric scalar.}
 }
 \value{
-df
+df A dataframe with the same length as \code{state} that contains the recommended illuminance/MEDI levels.
 }
 \description{
-Title
+This is a lower level function. It calculates the recommended illuminance/MEDI levels by Brown et al. (2022) for a given state. The function is vectorized.
 }
 \examples{
-#asdf
+states <- c("day", "evening", "night")
+Brown.rec(states)
+Brown.rec(states, Brown.day.th = 100)
 
 }
+\references{
+https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3001571
+}
+\seealso{
+Other Brown: 
+\code{\link{Brown.check}()},
+\code{\link{Brown2reference}()},
+\code{\link{sleep.int2Brown}()}
+}
+\concept{Brown}

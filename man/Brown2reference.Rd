@@ -2,7 +2,7 @@
 % Please edit documentation in R/Brown.R
 \name{Brown2reference}
 \alias{Brown2reference}
-\title{Title}
+\title{Add Brown et al. (2022) reference illuminance to a dataset}
 \usage{
 Brown2reference(
   dataset,
@@ -16,28 +16,63 @@ Brown2reference(
 )
 }
 \arguments{
-\item{dataset}{}
+\item{dataset}{A dataframe that contains a column with the Brown states}
 
-\item{MEDI.colname}{}
+\item{MEDI.colname}{The name of the column that contains the MEDI values
+which are used for checks against the Brown reference illuminance. Must be
+part of the dataset.}
 
-\item{Brown.state.colname}{}
+\item{Brown.state.colname}{The name of the column that contains the Brown
+states. Must be part of the dataset.}
 
-\item{Brown.rec.colname}{}
+\item{Brown.rec.colname}{The name of the column that will contain the
+recommended illuminance. Must not be part of the dataset, otherwise it will
+throw an error.}
 
-\item{Reference.label.colname}{}
+\item{Reference.label.colname}{The name of the column that will contain the
+label for the reference.}
 
-\item{Reference.label}{}
+\item{Reference.label}{The label that will be used for the reference. Expects
+a \code{character} scalar.}
 
-\item{Brown.check.colname}{}
+\item{Brown.check.colname}{The name of the column that will contain the check
+if the illuminance is within the recommended levels.}
 
-\item{...}{}
+\item{...}{Additional arguments that will be passed to \code{\link[=Brown.rec]{Brown.rec()}} and
+\code{\link[=Brown.check]{Brown.check()}}. This is only relevant to correct the names of the daytime
+states or the thresholds used within these states. See the documentation of
+these functions for more information.}
 }
 \value{
-asdf
+A dataframe on the basis of the \code{dataset} that contains the added
+columns.
 }
 \description{
-Title
+Adds several columns to a light logger dataset. It requires column that
+contains the Brown states, e.g. "daytime", "evening", and "night". From that
+the function will add a column with the recommended illuminance, a column
+that checks if the illuminance of the dataset is within the recommended
+illuminance levels, and a column that gives a label to the reference.
+}
+\details{
+On a lower level, the function uses \code{\link[=Brown.rec]{Brown.rec()}} and \code{\link[=Brown.check]{Brown.check()}} to
+create the required information.
 }
 \examples{
-#sdf
+#add Brown reference illuminance to some sample data
+library(tibble)
+testdata <- tibble(MEDI = c(100, 10, 1, 300),
+                  State.Brown = c("day", "evening", "night", "day"))
+Brown2reference(testdata)
+
 }
+\references{
+https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3001571
+}
+\seealso{
+Other Brown: 
+\code{\link{Brown.check}()},
+\code{\link{Brown.rec}()},
+\code{\link{sleep.int2Brown}()}
+}
+\concept{Brown}

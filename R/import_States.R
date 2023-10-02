@@ -56,9 +56,8 @@
 #' State.encoding = c("sleep", "wake"),
 #' ID.colname = record_id,
 #' sep = ";",
-#' dec = ",",
-#' tz = tz)
-import.Statechanges <- function(filename, path, 
+#' dec = ",")
+import.Statechanges <- function(filename, path = ".", 
                        sep = ",", 
                        dec = ".", 
                        structure = "wide",
@@ -85,14 +84,18 @@ import.Statechanges <- function(filename, path,
     stop("The length of State.colnames and State.encoding must be equal")
   }
   
+  if (!is.null(path)) {
+    filename <- file.path(path, filename)
+  }
+  
   # Read in the data with the specified separator and decimal
   data <- readr::read_delim(
-    paste0(path, filename), 
+    filename, 
     delim = sep, 
     locale = readr::locale(decimal_mark = dec), 
     col_types = readr::cols()
     )
-  
+
   # Convert inputs to strings for matching
   idStr <- as.character(rlang::ensym(ID.colname))
   State.newnameStr <- as.character(rlang::ensym(State.newname))

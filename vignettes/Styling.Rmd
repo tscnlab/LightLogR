@@ -42,7 +42,7 @@ library(patchwork)
 The data we need are part of the `LightLogR` package. They are unprocessed (after device export) data from light loggers (and a diary app for capturing sleep times). All data is anonymous, and we can access it through the following paths:
 
 ```{r}
-path <- system.file("extdata/", 
+path <- system.file("extdata", 
               package = "LightLogR")
 
 file.LL <- "205_actlumus_Log_1020_20230904101707532.txt.zip"
@@ -100,7 +100,7 @@ What we need after import is a coherent table that contains a column with a `Dat
 
 ```{r}
 dataset.sleep <- 
-  import.Statechanges(paste0(path, file.sleep), 
+  import.Statechanges(file.sleep, path, 
                       Datetime.format = "dmyHM",
                       State.colnames = c("sleep", "offset"),
                       State.encoding = c("sleep", "wake"),
@@ -596,8 +596,8 @@ Brown.times <-
                                   .default = State.Brown))
 
 Plot + 
-  geom_vline(data = Brown.times[-1,],
-             aes(xintercept = xmin), lty = 2, col = "grey40", size = 0.4) + #adding vertical lines
+  # geom_vline(data = Brown.times[-1,],
+  #            aes(xintercept = xmin), lty = 2, col = "grey40", size = 0.4) + #adding vertical lines
   geom_label(data = Brown.times[-4,], 
              aes(x = xmean, y = 0.2, label = label.Brown), 
              col = "grey40", alpha = 0.75) + #adding labels
@@ -614,5 +614,4 @@ Plot +
   annotate("text", x=x, y = 4000, label = "- Daylight Potential", 
            hjust = 0, col = "#0073C2DD")
 
-ggsave("Day2.png", dpi = 600, height = 4, width = 7)
 ```

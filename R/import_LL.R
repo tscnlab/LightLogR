@@ -108,9 +108,13 @@ import.ActLumus <-
            auto.id = ".*",
            manual.id = NULL) {
     
+    if (!is.null(path)) {
+      filename <- file.path(path, filename)
+    }
+    
     #special handling for ActLumus files
     import.expr <- rlang::expr(
-      {tmp <- readr::read_delim(paste0(!!path, !!filename),
+      {tmp <- readr::read_delim(!!filename,
                                 skip = 32,
                                 delim = ";",
                                 n_max = !!n_max,
@@ -146,9 +150,13 @@ import.LYS <- function(filename,
                       auto.id = ".*",
                       manual.id = NULL) {
   
+  if (!is.null(path)) {
+    filename <- file.path(path, filename)
+  }
+  
   #special handling for LYS files
   import.expr <- rlang::expr(
-    {tmp <- readr::read_csv(paste0(!!path, !!filename),
+    {tmp <- readr::read_csv(!!filename,
                             n_max = !!n_max,
                             col_types = c("cfddddddddddd"),
                             id = "file.name"
