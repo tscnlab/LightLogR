@@ -24,11 +24,20 @@ by \link{LightLogR}, take care to choose a sensible variable for the
 \code{"Datetime"} which is automatically correct for data imported with
 \link{LightLogR}. Expects a \code{symbol}. Needs to be part of the \code{dataset}.}
 
-\item{State.interval.dataset}{Name of the dataset that contains \code{State} and \code{Interval} columns. Sensibly, it is created through \code{\link[=sc2interval]{sc2interval()}}.}
+\item{State.interval.dataset}{Name of the dataset that contains \code{State} and
+\code{Interval} columns. Interval data can be created, e.g., through
+\code{\link[=sc2interval]{sc2interval()}}.}
 
-\item{State.colname, Interval.colname}{Column names of the \code{State} and \code{Interval} in the \code{State.interval.dataset}. Expects a \code{symbol}.}
+\item{State.colname, Interval.colname}{Column names of the \code{State} and
+\code{Interval} in the \code{State.interval.dataset}. Expects a \code{symbol}.}
 
-\item{ID.colname.dataset, ID.colname.interval}{Column names of the participant's \code{Id} in both the \code{dataset} and the \code{State.interval.dataset}. On the off-chance that there are inconsistencies, the names can be different. If the datasets where imported and preprocessed with \link{LightLogR}, this just works. Both datasets need an \code{Id}, because the states will be added based not only on the \code{Datetime}, but also depending on the dataset.}
+\item{ID.colname.dataset, ID.colname.interval}{Column names of the
+participant's \code{Id} in both the \code{dataset} and the \code{State.interval.dataset}.
+On the off-chance that there are inconsistencies, the names can be
+different. If the datasets where imported and preprocessed with
+\link{LightLogR}, this just works. Both datasets need an \code{Id}, because the
+states will be added based not only on the \code{Datetime}, but also depending
+on the dataset.}
 
 \item{output.dataset}{should the output be a \code{data.frame} (Default \code{TRUE}) or
 a vector with \code{hms} (\code{FALSE}) times? Expects a \code{logical} scalar.}
@@ -41,8 +50,43 @@ One of
 }
 }
 \description{
-This function can make use of \code{Interval} data that contain \code{States} (like \code{"sleep"}, \code{"wake"}, \code{"wear"}) and add a column to a light logger \code{dataset}, where the \code{State} of  every \code{Datetime} is specified, based on the participant's \code{ID}.
+This function can make use of \code{Interval} data that contain \code{States} (like
+\code{"sleep"}, \code{"wake"}, \code{"wear"}) and add a column to a light logger \code{dataset},
+where the \code{State} of  every \code{Datetime} is specified, based on the
+participant's \code{ID}.
 }
 \examples{
-#example
+#create a interval dataset
+library(tibble)
+library(dplyr)
+library(lubridate)
+states <- tibble::tibble(Datetime = c("2023-08-15 6:00:00",
+                                      "2023-08-15 23:00:00",
+                                      "2023-08-16 6:00:00",
+                                      "2023-08-16 22:00:00",
+                                      "2023-08-17 6:30:00",
+                                      "2023-08-18 1:00:00",
+                                      "2023-08-18 6:00:00",
+                                      "2023-08-18 22:00:00",
+                                      "2023-08-19 6:00:00",
+                                      "2023-08-19 23:00:00",
+                                      "2023-08-20 6:00:00",
+                                      "2023-08-20 22:00:00"),
+                         State = rep(c("wake", "sleep"), 6),
+                         Id = "Participant")
+intervals <- sc2interval(states)
+
+#create a dataset with states
+dataset_with_states <-
+sample.data.environment \%>\% group_by(Source) \%>\%
+interval2state(State.interval.dataset = intervals,
+               ID.colname.dataset = Source)
+
+#visualize the states - note that the states are only added to the respective ID in the dataset?
+library(ggplot2)
+ggplot(dataset_with_states, aes(x = Datetime, y = `MELANOPIC EDI`, color = State)) +
+ geom_point() +
+ facet_wrap(~Source, ncol = 1)
+
+
 }

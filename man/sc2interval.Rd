@@ -26,10 +26,10 @@ by \link{LightLogR}, take care to choose a sensible variable for the
 \code{"Datetime"} which is automatically correct for data imported with
 \link{LightLogR}. Expects a \code{symbol}. Needs to be part of the \code{dataset}.}
 
-\item{Statechange.colname, Interval.colname}{Column names that do contain the
-name/description of the \verb{state change} and that will contain the \code{Interval}
-(which is also the default). Expects a \code{symbol}. The \code{Statechange} column
-needs do be part of the \code{dataset}.}
+\item{Statechange.colname, Interval.colname, State.colname}{Column names that
+do contain the name/description of the \verb{state change} and that will contain
+the \code{Interval} and \code{State} (which are also the default). Expects a \code{symbol}. The
+\code{Statechange} column needs do be part of the \code{dataset}.}
 
 \item{full, full.first}{These arguments handle the state on the first day
 before the first state change and after the last state change on the last
@@ -42,6 +42,8 @@ interval for the last state change until the end of the last given day
 
 \item{output.dataset}{should the output be a \code{data.frame} (Default \code{TRUE}) or
 a vector with \code{hms} (\code{FALSE}) times? Expects a \code{logical} scalar.}
+
+\item{Datetime.keep}{If \code{TRUE}, the original \code{Datetime} column will be kept.}
 
 \item{length.restriction}{If the length between intervals is too great, the
 interval state can be set to \code{NA}, which effectively produces a gap in the
@@ -60,8 +62,7 @@ One of
 \description{
 Takes an input of \code{datetimes} and \code{Statechanges} and creates a column with
 \code{Intervals}. If \code{full = TRUE}, it will also create intervals for the day
-prior to the first state change and after the last. If \code{output.dataset = FALSE}
-it will give a named vector, otherwise a \code{tibble}. The \verb{state change}
+prior to the first state change and after the last. If \code{output.dataset = FALSE} it will give a named vector, otherwise a \code{tibble}. The \verb{state change}
 info requires a description or name of the state (like \code{"sleep"} or \code{"wake"},
 or \code{"wear"}) that goes into effect at the given \code{Datetime}. Works for grouped
 data so that it does not mix up intervals between participants. Missing data
@@ -70,5 +71,25 @@ interval can be set, so that implicit missing timestamps after a set period
 of times can be enforced.
 }
 \examples{
-#example code
+library(tibble)
+library(lubridate)
+library(dplyr)
+sample <- tibble::tibble(Datetime = c("2023-08-15 6:00:00",
+                                      "2023-08-15 23:00:00",
+                                      "2023-08-16 6:00:00",
+                                      "2023-08-16 22:00:00",
+                                      "2023-08-17 6:30:00",
+                                      "2023-08-18 1:00:00"),
+                         State = rep(c("wake", "sleep"), 3),
+                         Id = "Participant")
+#intervals from sample
+sc2interval(sample)
+
+#compare sample (y) and intervals (x)
+sc2interval(sample) \%>\%
+ mutate(Datetime = int_start(Interval)) \%>\%
+ dplyr::left_join(sample, by = c("Id", "State"),
+                  relationship = "many-to-many") \%>\%
+ head()
+
 }

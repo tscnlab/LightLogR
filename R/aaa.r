@@ -1,4 +1,4 @@
-Time <- mEDI <- Time.data <- Datetime <- timestamp <- tz <- Day.data <- `DATE/TIME` <- n <- Datetime.rounded <- id <- sleep.colname.string <- file.name <- Interval <- original.datapoints.fleeting <-   NULL
+Time <- mEDI <- Time.data <- Datetime <- timestamp <- tz <- Day.data <- `DATE/TIME` <- n <- Datetime.rounded <- id <- sleep.colname.string <- file.name <- Interval <- original.datapoints.fleeting <- MEDI <- State.Brown <- Reference <- Reference.check <- Id <- Start.date.shift <- data <- Shift <- `MELANOPIC EDI` <- State <- group <- End <- Start <- NULL
 
 empty_function <- function() {
   rsconnect::accountInfo()

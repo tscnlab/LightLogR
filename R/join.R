@@ -13,8 +13,22 @@
 #' @export
 #' @examples
 #' #load in two datasets
+#' path <- system.file("extdata", 
+#' package = "LightLogR")
+#' file.LL <- "205_actlumus_Log_1020_20230904101707532.txt.zip"
+#' file.env <- "cyepiamb_CW35_Log_1431_20230904081953614.txt.zip"
+#' dataset.LL <- import.ActLumus(file.LL, path, auto.id = "^(\\d{3})")
+#' dataset.env <- import.ActLumus(file.env, path, manual.id = "CW35")
 #' 
+#' #join the datasets
+#' joined <- join.datasets(dataset.LL, dataset.env)
 #' 
+#' #compare the number of rows
+#' nrow(dataset.LL) + nrow(dataset.env) == nrow(joined)
+#' 
+#' #debug, when set to TRUE, will output a tibble of datasets with missing necessary columns
+#' dataset.LL <- dataset.LL %>% dplyr::select(-Datetime)
+#' join.datasets(dataset.LL, dataset.env, debug = TRUE)
 
 join.datasets <- function(...,
                           Datetime.column = Datetime,

@@ -3,8 +3,8 @@
 #'
 #' Takes an input of `datetimes` and `Statechanges` and creates a column with
 #' `Intervals`. If `full = TRUE`, it will also create intervals for the day
-#' prior to the first state change and after the last. If `output.dataset = FALSE` 
-#' it will give a named vector, otherwise a `tibble`. The `state change`
+#' prior to the first state change and after the last. If `output.dataset =
+#' FALSE` it will give a named vector, otherwise a `tibble`. The `state change`
 #' info requires a description or name of the state (like `"sleep"` or `"wake"`,
 #' or `"wear"`) that goes into effect at the given `Datetime`. Works for grouped
 #' data so that it does not mix up intervals between participants. Missing data
@@ -13,10 +13,10 @@
 #' of times can be enforced.
 #'
 #' @inheritParams create_Time.data
-#' @param Statechange.colname,Interval.colname Column names that do contain the
-#'   name/description of the `state change` and that will contain the `Interval`
-#'   (which is also the default). Expects a `symbol`. The `Statechange` column
-#'   needs do be part of the `dataset`.
+#' @param Statechange.colname,Interval.colname,State.colname Column names that
+#'   do contain the name/description of the `state change` and that will contain
+#'   the `Interval` and `State` (which are also the default). Expects a `symbol`. The
+#'   `Statechange` column needs do be part of the `dataset`.
 #' @param full,full.first These arguments handle the state on the first day
 #'   before the first state change and after the last state change on the last
 #'   day. If `full = TRUE`(the default, expects a `logical`), it will create an
@@ -31,6 +31,7 @@
 #'   slept for 50 hours), because when this data is combined with light logger
 #'   data, e.g., through [interval2state()], metrics and visualizations will
 #'   remove the interval.
+#' @param Datetime.keep If `TRUE`, the original `Datetime` column will be kept.
 #'
 #' @return One of
 #' * a `data.frame` object identical to `dataset` but with the interval instead of the datetime. The original `Statechange` column now indicates the `State` during the `Interval`.
@@ -38,7 +39,27 @@
 #' @export
 #'
 #' @examples
-#' #example code
+#' library(tibble)
+#' library(lubridate)
+#' library(dplyr)
+#' sample <- tibble::tibble(Datetime = c("2023-08-15 6:00:00",
+#'                                       "2023-08-15 23:00:00",
+#'                                       "2023-08-16 6:00:00",
+#'                                       "2023-08-16 22:00:00",
+#'                                       "2023-08-17 6:30:00",
+#'                                       "2023-08-18 1:00:00"),
+#'                          State = rep(c("wake", "sleep"), 3),
+#'                          Id = "Participant")
+#' #intervals from sample
+#' sc2interval(sample)
+#'
+#' #compare sample (y) and intervals (x)
+#' sc2interval(sample) %>%
+#'  mutate(Datetime = int_start(Interval)) %>%
+#'  dplyr::left_join(sample, by = c("Id", "State"),
+#'                   relationship = "many-to-many") %>%
+#'  head()
+#' 
 sc2interval <- function(dataset, 
                         Datetime.colname = Datetime,
                         Statechange.colname = State,

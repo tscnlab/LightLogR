@@ -1,11 +1,23 @@
 #' Adds a state column to a dataset from interval data
-#' 
-#' This function can make use of `Interval` data that contain `States` (like `"sleep"`, `"wake"`, `"wear"`) and add a column to a light logger `dataset`, where the `State` of  every `Datetime` is specified, based on the participant's `ID`.
+#'
+#' This function can make use of `Interval` data that contain `States` (like
+#' `"sleep"`, `"wake"`, `"wear"`) and add a column to a light logger `dataset`,
+#' where the `State` of  every `Datetime` is specified, based on the
+#' participant's `ID`.
 #'
 #' @inheritParams sc2interval
-#' @param State.interval.dataset Name of the dataset that contains `State` and `Interval` columns. Sensibly, it is created through [sc2interval()].
-#' @param State.colname,Interval.colname  Column names of the `State` and `Interval` in the `State.interval.dataset`. Expects a `symbol`.
-#' @param ID.colname.dataset,ID.colname.interval Column names of the participant's `Id` in both the `dataset` and the `State.interval.dataset`. On the off-chance that there are inconsistencies, the names can be different. If the datasets where imported and preprocessed with [LightLogR], this just works. Both datasets need an `Id`, because the states will be added based not only on the `Datetime`, but also depending on the dataset. 
+#' @param State.interval.dataset Name of the dataset that contains `State` and
+#'   `Interval` columns. Interval data can be created, e.g., through
+#'   [sc2interval()].
+#' @param State.colname,Interval.colname  Column names of the `State` and
+#'   `Interval` in the `State.interval.dataset`. Expects a `symbol`.
+#' @param ID.colname.dataset,ID.colname.interval Column names of the
+#'   participant's `Id` in both the `dataset` and the `State.interval.dataset`.
+#'   On the off-chance that there are inconsistencies, the names can be
+#'   different. If the datasets where imported and preprocessed with
+#'   [LightLogR], this just works. Both datasets need an `Id`, because the
+#'   states will be added based not only on the `Datetime`, but also depending
+#'   on the dataset.
 #'
 #' @return One of
 #' * a `data.frame` object identical to `dataset` but with the state column added
@@ -13,7 +25,39 @@
 #' @export
 #'
 #' @examples
-#' #example
+#' #create a interval dataset
+#' library(tibble)
+#' library(dplyr)
+#' library(lubridate)
+#' states <- tibble::tibble(Datetime = c("2023-08-15 6:00:00",
+#'                                       "2023-08-15 23:00:00",
+#'                                       "2023-08-16 6:00:00",
+#'                                       "2023-08-16 22:00:00",
+#'                                       "2023-08-17 6:30:00",
+#'                                       "2023-08-18 1:00:00",
+#'                                       "2023-08-18 6:00:00",
+#'                                       "2023-08-18 22:00:00",
+#'                                       "2023-08-19 6:00:00",
+#'                                       "2023-08-19 23:00:00",
+#'                                       "2023-08-20 6:00:00",
+#'                                       "2023-08-20 22:00:00"),
+#'                          State = rep(c("wake", "sleep"), 6),
+#'                          Id = "Participant")
+#' intervals <- sc2interval(states)
+#'
+#' #create a dataset with states
+#' dataset_with_states <-
+#' sample.data.environment %>% group_by(Source) %>%
+#' interval2state(State.interval.dataset = intervals,
+#'                ID.colname.dataset = Source)
+#'
+#' #visualize the states - note that the states are only added to the respective ID in the dataset?
+#' library(ggplot2)
+#' ggplot(dataset_with_states, aes(x = Datetime, y = `MELANOPIC EDI`, color = State)) +
+#'  geom_point() +
+#'  facet_wrap(~Source, ncol = 1)
+#'
+#' 
 interval2state <- function(dataset,
                            Datetime.colname = Datetime,
                            State.interval.dataset,
