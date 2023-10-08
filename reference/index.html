@@ -50,9 +50,9 @@
     </div>
 
     <div class="section level2">
-      <h2 id="all-functions">All functions<a class="anchor" aria-label="anchor" href="#all-functions"></a></h2>
+      <h2 id="import">Import<a class="anchor" aria-label="anchor" href="#import"></a></h2>
       
-      
+      <p class="section-desc"></p><p>Wearable light logger data can be imported from a variety of sources, i.e., exports from measurement devices or online databases. This section also includes functions to import auxiliary data, such as sleep/wake data. The family of import functions works on a variety of device-specific files through <code>import.*()</code>.</p>
 
       
     </div><div id="" class="section level2">
@@ -61,6 +61,83 @@
       
 
       <dl><dt>
+          
+          <code><a href="import.Dataset.html">import.Dataset()</a></code> <code><a href="import.Dataset.html">import.ActLumus()</a></code> <code><a href="import.Dataset.html">import.LYS()</a></code> 
+        </dt>
+        <dd>Import a light logger dataset or related data</dd>
+      </dl><dl><dt>
+          
+          <code><a href="import.Statechanges.html">import.Statechanges()</a></code> 
+        </dt>
+        <dd>Import data that contain <code>Datetimes</code> of <code>Statechanges</code></dd>
+      </dl></div><div class="section level2">
+      <h2 id="process">Process<a class="anchor" aria-label="anchor" href="#process"></a></h2>
+      
+      <p class="section-desc"></p><p>This section includes functions to process light logger data, e.g., to validate and clean data, to filter, cut or aggreagate data, or to join datasets.</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="create_Time.data.html">create_Time.data()</a></code> 
+        </dt>
+        <dd>Create a Time-of-Day column in the dataset</dd>
+      </dl><dl><dt>
+          
+          <code><a href="cut_Datetime.html">cut_Datetime()</a></code> 
+        </dt>
+        <dd>Create Datetime bins for visualization and calculation</dd>
+      </dl><dl><dt>
+          
+          <code><a href="filter_Datetime.html">filter_Datetime()</a></code> <code><a href="filter_Datetime.html">filter_Date()</a></code> 
+        </dt>
+        <dd>Filter Datetimes in a dataset.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="filter_Time.html">filter_Time()</a></code> 
+        </dt>
+        <dd>Filter Times in a dataset.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="join.datasets.html">join.datasets()</a></code> 
+        </dt>
+        <dd>Join similar Datasets</dd>
+      </dl></div><div class="section level2">
+      <h2 id="expand">Expand<a class="anchor" aria-label="anchor" href="#expand"></a></h2>
+      
+      <p class="section-desc"></p><p>Expanding light logger data through auxiliary data and/or reference data allows for a more comprehensive analysis.</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="data2reference.html">data2reference()</a></code> 
+        </dt>
+        <dd>Create reference data from other data</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sc2interval.html">sc2interval()</a></code> 
+        </dt>
+        <dd>Statechange (sc) Timestamps to Intervals</dd>
+      </dl><dl><dt>
+          
+          <code><a href="interval2state.html">interval2state()</a></code> 
+        </dt>
+        <dd>Adds a state column to a dataset from interval data</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sleep.int2Brown.html">sleep.int2Brown()</a></code> 
+        </dt>
+        <dd>Recode Sleep/Wake intervals to Brown state intervals</dd>
+      </dl><dl><dt>
           
           <code><a href="Brown.check.html">Brown.check()</a></code> 
         </dt>
@@ -75,78 +152,46 @@
           <code><a href="Brown2reference.html">Brown2reference()</a></code> 
         </dt>
         <dd>Add Brown et al. (2022) reference illuminance to a dataset</dd>
-      </dl><dl><dt>
-          
-          <code><a href="create_Time.data.html">create_Time.data()</a></code> 
-        </dt>
-        <dd>Create a Time-of-Day column in the dataset</dd>
-      </dl><dl><dt>
-          
-          <code><a href="cut_Datetime.html">cut_Datetime()</a></code> 
-        </dt>
-        <dd>Create Datetime bins for visualization and calculation</dd>
-      </dl><dl><dt>
-          
-          <code><a href="data2reference.html">data2reference()</a></code> 
-        </dt>
-        <dd>Create reference data from other data</dd>
-      </dl><dl><dt>
-          
-          <code><a href="filter_Datetime.html">filter_Datetime()</a></code> <code><a href="filter_Datetime.html">filter_Date()</a></code> 
-        </dt>
-        <dd>Filter Datetimes in a dataset.</dd>
-      </dl><dl><dt>
-          
-          <code><a href="filter_Time.html">filter_Time()</a></code> 
-        </dt>
-        <dd>Filter Times in a dataset.</dd>
-      </dl><dl><dt>
+      </dl></div><div class="section level2">
+      <h2 id="visualize">Visualize<a class="anchor" aria-label="anchor" href="#visualize"></a></h2>
+      
+      <p class="section-desc"></p><p>This section includes functions to visualize light logger data, e.g., to plot light exposure or to plot sleep/wake data.</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
           
           <code><a href="gg_day.html">gg_day()</a></code> 
         </dt>
         <dd>Create a simple plot of light logger data, facetted by Day</dd>
-      </dl><dl><dt>
-          
-          <code><a href="import.Dataset.html">import.Dataset()</a></code> <code><a href="import.Dataset.html">import.ActLumus()</a></code> <code><a href="import.Dataset.html">import.LYS()</a></code> 
-        </dt>
-        <dd>Import a light logger dataset or related data</dd>
-      </dl><dl><dt>
-          
-          <code><a href="import.Statechanges.html">import.Statechanges()</a></code> 
-        </dt>
-        <dd>Import data that contain <code>Datetimes</code> of <code>Statechanges</code></dd>
-      </dl><dl><dt>
-          
-          <code><a href="interval2state.html">interval2state()</a></code> 
-        </dt>
-        <dd>Adds a state column to a dataset from interval data</dd>
-      </dl><dl><dt>
-          
-          <code><a href="join.datasets.html">join.datasets()</a></code> 
-        </dt>
-        <dd>Join similar Datasets</dd>
-      </dl><dl><dt>
+      </dl></div><div class="section level2">
+      <h2 id="datasets">Datasets<a class="anchor" aria-label="anchor" href="#datasets"></a></h2>
+      
+      <p class="section-desc"></p><p>This section includes datasets that are used in the examples of the documentation.</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
           
           <code><a href="sample.data.environment.html">sample.data.environment</a></code> 
         </dt>
         <dd>Sample of wearable data combined with environmental data</dd>
       </dl><dl><dt>
           
-          <code><a href="sc2interval.html">sc2interval()</a></code> 
-        </dt>
-        <dd>Statechange (sc) Timestamps to Intervals</dd>
-      </dl><dl><dt>
-          
-          <code><a href="sleep.int2Brown.html">sleep.int2Brown()</a></code> 
-        </dt>
-        <dd>Recode Sleep/Wake intervals to Brown state intervals</dd>
-      </dl><dl><dt>
-          
           <code><a href="supported.devices.html">supported.devices</a></code> 
         </dt>
         <dd>A vector of all supported devices for import functions</dd>
       </dl></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
