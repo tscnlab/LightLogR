@@ -24,7 +24,7 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/Styling.html">What´s in a Day?</a>
+    <a class="dropdown-item" href="../articles/Styling.html">What's in a Day?</a>
   </div>
 </li>
 <li class="nav-item">
@@ -95,9 +95,47 @@
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">#load in two datasets</span></span></span>
+<span class="r-in"><span><span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, </span></span>
+<span class="r-in"><span>package <span class="op">=</span> <span class="st">"LightLogR"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">file.LL</span> <span class="op">&lt;-</span> <span class="st">"205_actlumus_Log_1020_20230904101707532.txt.zip"</span></span></span>
+<span class="r-in"><span><span class="va">file.env</span> <span class="op">&lt;-</span> <span class="st">"cyepiamb_CW35_Log_1431_20230904081953614.txt.zip"</span></span></span>
+<span class="r-in"><span><span class="va">dataset.LL</span> <span class="op">&lt;-</span> <span class="fu"><a href="import.Dataset.html">import.ActLumus</a></span><span class="op">(</span><span class="va">file.LL</span>, <span class="va">path</span>, auto.id <span class="op">=</span> <span class="st">"^(\\d{3})"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Multiple files in zip: reading '205_actlumus_Log_1020_20230904101707532.txt'</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Successfully read in 61016 observations from ActLumus-file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Timezone set is UTC.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Start: 2023-08-28 08:47:54</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> End: 2023-09-04 10:17:04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Timespan: 7.1 days</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Observation intervals: </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   interval.time     n pct  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 10 secs       <span style="text-decoration: underline;">61</span>015 100% </span>
+<span class="r-in"><span><span class="va">dataset.env</span> <span class="op">&lt;-</span> <span class="fu"><a href="import.Dataset.html">import.ActLumus</a></span><span class="op">(</span><span class="va">file.env</span>, <span class="va">path</span>, manual.id <span class="op">=</span> <span class="st">"CW35"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Multiple files in zip: reading 'cyepiamb_CW35_Log_1431_20230904081953614.txt'</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Successfully read in 20143 observations from ActLumus-file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Timezone set is UTC.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Start: 2023-08-28 08:28:39</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> End: 2023-09-04 08:19:38</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Timespan: 7 days</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Observation intervals: </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   interval.time     n pct  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 29 secs           1 0%   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 30 secs       <span style="text-decoration: underline;">20</span>141 100% </span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#join the datasets</span></span></span>
+<span class="r-in"><span><span class="va">joined</span> <span class="op">&lt;-</span> <span class="fu">join.datasets</span><span class="op">(</span><span class="va">dataset.LL</span>, <span class="va">dataset.env</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"></span>
+<span class="r-in"><span><span class="co">#compare the number of rows</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">dataset.LL</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">dataset.env</span><span class="op">)</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">joined</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#debug, when set to TRUE, will output a tibble of datasets with missing necessary columns</span></span></span>
+<span class="r-in"><span><span class="va">dataset.LL</span> <span class="op">&lt;-</span> <span class="va">dataset.LL</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">Datetime</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">join.datasets</span><span class="op">(</span><span class="va">dataset.LL</span>, <span class="va">dataset.env</span>, debug <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 × 2</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   column.names.in dataset.LL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Datetime        FALSE     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> Id              TRUE      </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
