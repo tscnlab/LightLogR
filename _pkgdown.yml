@@ -2,3 +2,57 @@ url: https://tscnlab.github.io/LightLogR/
 template:
   bootstrap: 5
 
+reference:
+  - title: Import
+    desc: >
+      Wearable light logger data can be imported from a variety of sources, i.e., 
+      exports from measurement devices or online databases. This section also
+      includes functions to import auxiliary data, such as sleep/wake data. 
+      The family of import functions works on a variety of device-specific files 
+      through `import.*()`.
+    contents:
+    - import.Dataset
+    - import.ActLumus
+    - import.LYS
+    - import.Statechanges
+  
+  - title: Process
+    desc: >
+      This section includes functions to process light logger data, e.g., to
+      validate and clean data, to filter, cut or aggreagate data, or to join 
+      datasets.
+    contents:
+    - create_Time.data
+    - cut_Datetime
+    - filter_Datetime
+    - filter_Date
+    - filter_Time
+    - join.datasets
+  
+  - title: Expand
+    desc: >
+      Expanding light logger data through auxiliary data and/or reference data
+      allows for a more comprehensive analysis.
+    contents:
+    - data2reference
+    - sc2interval
+    - interval2state
+    - sleep.int2Brown
+    - Brown.check
+    - Brown.rec
+    - Brown2reference
+  
+  - title: Visualize
+    desc: >
+      This section includes functions to visualize light logger data, e.g., to
+      plot light exposure or to plot sleep/wake data.
+    contents:
+    - gg_day
+  
+  - title: Datasets
+    desc: >
+      This section includes datasets that are used in the examples of the 
+      documentation.
+    contents:
+    - sample.data.environment
+    - supported.devices

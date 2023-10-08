@@ -162,7 +162,8 @@ import.LYS <- function(filename,
                             id = "file.name"
     )
     tmp <- tmp %>%
-      dplyr::rename(Datetime = timestamp) %>%
+      dplyr::rename(Datetime = timestamp,
+                    MEDI = mEDI) %>%
       dplyr::mutate(Datetime =
                       Datetime %>% lubridate::dmy_hms(tz = !!tz))
     }

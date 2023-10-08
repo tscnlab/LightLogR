@@ -85,6 +85,7 @@ filename <- system.file("extdata/sample_data_LYS.csv", package = "LightLogR")
 dataset <- import.LYS(filename, tz = "Europe/Berlin")
 #> Successfully read in 11422 observations from LYS-file
 #> Timezone set is Europe/Berlin.
+#> The system timezone is Europe/Zagreb. Please correct if necessary!
 #> Start: 2023-06-21 00:00:12
 #> End: 2023-06-22 23:59:48
 #> Timespan: 2 days
@@ -95,8 +96,9 @@ dataset <- import.LYS(filename, tz = "Europe/Berlin")
 #> 3 17 secs          23 0.201% 
 #> 4 18 secs          16 0.140%
 
-dataset %>% select(Datetime, lux, kelvin, mEDI) %>%  slice(8000:8005) %>% 
+dataset %>% select(Datetime, lux, kelvin, MEDI) %>%  slice(8000:8005) %>% 
   flextable() %>% autofit()
+#> Adding missing grouping variables: `Id`
 ```
 
 <img src="man/figures/README-unnamed-chunk-3-1.png" width="50%" style="display: block; margin: auto;" />
@@ -106,7 +108,7 @@ dataset %>% select(Datetime, lux, kelvin, mEDI) %>%  slice(8000:8005) %>%
 Once imported, **LightLogR** allows you conveniently visualize the data.
 
 ``` r
-dataset %>% gg_day(y.axis = mEDI, y.axis.label = "mEDI (lx)")
+dataset %>% gg_day()
 #> Warning: Transformation introduced infinite values in continuous y-axis
 ```
 
@@ -119,7 +121,7 @@ options. You can also override most of the defaults, e.g., for different
 
 ``` r
 dataset %>% 
-  gg_day(y.axis = mEDI, col = mEDI >= 250, scales = "fixed", size = 0.5) + 
+  gg_day(col = MEDI >= 250, scales = "fixed", size = 0.5) + 
   scale_color_discrete(type = c("orange", "skyblue"))
 #> Scale for colour is already present.
 #> Adding another scale for colour, which will replace the existing scale.
