@@ -135,7 +135,7 @@ dataset %>%
 The built-in dataset `sample.data.environment` shows a combined dataset
 of light logger data and a second set of data - in this case
 unobstructed outdoor light measurements. Combined datasets can be easily
-visualized with `gg_day`. The `col` parameter used on the `Source`
+visualized with `gg_day()`. The `col` parameter used on the `Source`
 column of the dataset allows for a color separation.
 
 ``` r
@@ -151,15 +151,15 @@ sample.data.environment %>%
 ```
 
 <img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" /> With
-the `cut_Datetime` function, the data can further be broken up into
+the `cut_Datetime()` function, the data can further be broken up into
 arbitrary time intervals. This can be used to easily compare different
-datasets. Just put the function in between the dataset and `gg_day`.
+datasets. Just put the function in between the dataset and `gg_day()`.
 This makes a new variable available for plotting: `Datetime.rounded`.
 Just make sure, that the `geom` parameter is set to *boxplot* and the
 `group` parameter uses both the info from the rounded time interval
 (`Datetime.rounded`) and the different datasets (`Source`). The
-`interaction` function can easily combine them. The default interval
-from `cut_Datetime` is 3 hours.
+`interaction` function can easily combine them. The default interval for
+`cut_Datetime()` is 3 hours.
 
 ``` r
 sample.data.environment %>% 

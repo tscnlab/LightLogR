@@ -12,6 +12,7 @@ Brown2reference(
   Reference.label.colname = Reference.label,
   Reference.label = "Brown et al. (2022)",
   Brown.check.colname = Reference.check,
+  overwrite.Reference = FALSE,
   ...
 )
 }
@@ -37,6 +38,9 @@ a \code{character} scalar.}
 
 \item{Brown.check.colname}{The name of the column that will contain the check
 if the illuminance is within the recommended levels.}
+
+\item{overwrite.Reference}{If \code{TRUE} (defaults to \code{FALSE}), the function will
+overwrite the \code{Brown.rec.colname} columns if it already exists.}
 
 \item{...}{Additional arguments that will be passed to \code{\link[=Brown.rec]{Brown.rec()}} and
 \code{\link[=Brown.check]{Brown.check()}}. This is only relevant to correct the names of the daytime

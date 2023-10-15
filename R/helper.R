@@ -31,3 +31,54 @@ colname.defused <- function(Colname, as_string = TRUE) {
   }
   else Colname
 }
+
+#tests whether the inputs are all scalar
+is.all.scalar <- function(...) {
+  list(...) %>% 
+    purrr::every(\(x) length(x) == 1)
+}
+
+#counts the different time differences per group (in a grouped dataset)
+count.difftime <- function(dataset, Datetime.column = Datetime) {
+  dataset %>% 
+    dplyr::mutate(
+      difftime = c(NA, diff({{Datetime.column}}) %>% lubridate::as.duration())
+      ) %>% 
+    tidyr::drop_na(difftime) %>% 
+    dplyr::count(difftime, sort = TRUE)
+}
+
+#calculate the nth percentile of time differences per group (in a grouped dataset)
+nth.difftime <- function(dataset, Datetime.column = Datetime, n = 0.95) {
+  dataset %>% 
+    dplyr::mutate(
+      difftime = c(NA, diff({{Datetime.column}}) %>% lubridate::as.duration())
+      ) %>% 
+    tidyr::drop_na(difftime) %>% 
+    dplyr::summarise(
+      percentile = quantile(difftime, probs = n, na.rm = TRUE)
+    )
+}
+
+#calculate the whether the nth percentile of time differences in one dataset is smaller or equal to the nth percentile of time differences in another dataset
+compare.difftime <- function(dataset1, dataset2, Datetime.column = Datetime, n = 0.95) {
+  percentile1 <- nth.difftime(dataset1, {{ Datetime.column }}, n = n)
+  percentile2 <- nth.difftime(dataset2, {{ Datetime.column }}, n = n)
+  #do a full join with every column but percentile
+  group_variables <- setdiff(names(percentile2), "percentile")
+  dplyr::full_join(percentile1, percentile2, by = group_variables) %>% 
+  dplyr::mutate(
+    comparison = percentile.x <= percentile.y
+  )
+}
+
+#calculate whether any of the comparisons in compare.difftime is FALSE
+compare.difftime.any <- function(...) {
+  comparison <- compare.difftime(...) %>% 
+    dplyr::filter(comparison == FALSE) %>% 
+    dplyr::rename(Dataset.Interval = percentile.x,
+                 Reference.Interval = percentile.y) %>% 
+    dplyr::select(-comparison)
+  
+  if(nrow(comparison) > 0) comparison else TRUE
+}

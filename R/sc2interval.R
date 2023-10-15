@@ -75,6 +75,9 @@ sc2interval <- function(dataset,
   Datetime.colname.defused <- colname.defused({{ Datetime.colname }})
   Statechange.colname.defused <- colname.defused({{ Statechange.colname }})
   
+  stopifnot("Datetime.colname must be part of the dataset" = 
+              Datetime.colname.defused %in% names(dataset))
+  
   if(!lubridate::is.POSIXct(dataset[[Datetime.colname.defused]])) {
     dataset[[Datetime.colname.defused]] <- 
       dataset[[Datetime.colname.defused]] %>% lubridate::as_datetime()
@@ -84,8 +87,6 @@ sc2interval <- function(dataset,
     "dataset is not a dataframe" = is.data.frame(dataset),
     "Statechange.colname must be part of the dataset" = 
       Statechange.colname.defused %in% names(dataset),
-    "Datetime.colname must be part of the dataset" = 
-      Datetime.colname.defused %in% names(dataset),
     "Datetime.colname must be a Datetime" = 
       lubridate::is.POSIXct(dataset[[Datetime.colname.defused]]),
     "output.dataset must be a logical" = is.logical(output.dataset),

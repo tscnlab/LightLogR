@@ -67,7 +67,7 @@ dataset.LL %>% group_by(Date = as_date(Datetime)) %>%
   summarize(range.MEDI = range(MEDI) %>% str_flatten(" - ")) %>% gt()
 ```
 
-Same goes for visualization - it is always helpful to get a good look at data immediately after import. The `gg_day` function creates a simple `ggplot` of the data, stacked vertically by Days. The function needs very little input beyond the dataset (in fact, it would even work without the `size` input, which just makes the default point size smaller, and the `interactive` command sends the output to `plotly` to facilitate data exploration). `gg_day` features a lot of flexibility, and can be adapted and extended to fit various needs, as we will see shortly.
+Same goes for visualization - it is always helpful to get a good look at data immediately after import. The `gg_day()` function creates a simple `ggplot` of the data, stacked vertically by Days. The function needs very little input beyond the dataset (in fact, it would even work without the `size` input, which just makes the default point size smaller, and the `interactive` command sends the output to `plotly` to facilitate data exploration). `gg_day()` features a lot of flexibility, and can be adapted and extended to fit various needs, as we will see shortly.
 
 ```{r, fig.retina=2, fig.width=7, fig.height = 14}
 dataset.LL %>% gg_day(size = 0.25, interactive = TRUE)
@@ -91,7 +91,7 @@ Here you can see that we follow roughly the same time span, but the measurement 
 
 Our last dataset is a sleep diary that contains, among other things, a column for `Id` and a column for *sleep* and for *wake* (called *offset*). Because sleep diaries and other event datasets can vary widely in their structure, we must manually set a few arguments. Importantly, we need to specify how the Datetimes are structured. In this case, we have values like *28-08-2023 23:20*, which give a structure of `dmyHM`.
 
-What we need after import is a coherent table that contains a column with a `Datetime` besides a column with the `State` that starts at that point in time. `import.Statechanges` facilitates this, because we can provide a `vector` of column names that form a continuous indicator of a given state - in this case `Sleep`.
+What we need after import is a coherent table that contains a column with a `Datetime` besides a column with the `State` that starts at that point in time. `import.Statechanges()` facilitates this, because we can provide a `vector` of column names that form a continuous indicator of a given state - in this case `Sleep`.
 
 ```{r}
 dataset.sleep <- 
@@ -111,7 +111,7 @@ Now that we have imported all of our data, we need to combine it sensibly, which
 
 ## Connecting Data
 
-Connecting the data, in this case, means giving context to our participant´s light exposure data. There are a number of hurdles attached to connecting time series data, because data from different sets rarely align perfectly. Often their measurements are off by at least some seconds, or even use different measurement epochs.
+Connecting the data, in this case, means giving context to our participant's light exposure data. There are a number of hurdles attached to connecting time series data, because data from different sets rarely align perfectly. Often their measurements are off by at least some seconds, or even use different measurement epochs.
 
 Also, we have the sleep data, which only has time stamps whenever there is a change in status. Also - and this is crucial - it might have missing entries! `LightLogR` provides a few helpful functions however, to deal with these topics without resorting to rounding or averaging data to a common multiple.
 
@@ -119,9 +119,9 @@ Also, we have the sleep data, which only has time stamps whenever there is a cha
 
 Let us start with the environmental measurements of unobstructed daylight. These can be seen as a natural potential of light exposure and thus serve as a reference for our participant´s light exposure.
 
-With the `data2reference` function, we will create this reference. This function is extraordinarily powerful in that it can create a reference tailored to the light logger data from any source that has the wanted `Reference` column (in this case the MEDI column, which is the default), a `Datetime`column, and the same grouping structure (`Id`) as the light logger data set.
+With the `data2reference()` function, we will create this reference. This function is extraordinarily powerful in that it can create a reference tailored to the light logger data from any source that has the wanted `Reference` column (in this case the MEDI column, which is the default), a `Datetime` column, and the same grouping structure (`Id`) as the light logger data set.
 
-`data2reference` can even create a reference from a subset of the data itself. For example this makes it possible to have the first (or second, etc.) day of the data as reference for all other days. It can further apply one participant as the reference for all other participants, even when their measurements are on different times. In our case it is only necessary to specify the argument `across.id = TRUE`, as we want the reference `Id`("CW35") to be applied across the `Id` from the participant ("205").
+`data2reference()` can even create a reference from a subset of the data itself. For example this makes it possible to have the first (or second, etc.) day of the data as reference for all other days. It can further apply one participant as the reference for all other participants, even when their measurements are on different times. In our case it is only necessary to specify the argument `across.id = TRUE`, as we want the reference `Id`("CW35") to be applied across the `Id` from the participant ("205").
 
 ```{r}
 dataset.LL <- 
@@ -136,7 +136,7 @@ dataset.LL %>% head() %>% gt()
 
 For the sake of this example, we have also removed unnecessary data columns, which makes the further code examples simpler. We can already see in the table above that the reference at the start of the measurements is quite a bit higher than the light exposure at the participant´s light logger. We also see that the same reference value is applied to three participant values. This mirrors the fact that for every three measurements taken with the participant device, one measurement epoch for the environmental sensor passes.
 
-To visualize this newly reached reference data, we can easily extend `gg_day` with a dashed red reference line. Keep in mind that this visualization is still exploratory, so we are not investing heavily in styling.
+To visualize this newly reached reference data, we can easily extend `gg_day()` with a dashed red reference line. Keep in mind that this visualization is still exploratory, so we are not investing heavily in styling.
 
 ```{r, fig.retina=2, fig.width=7, fig.height = 10}
 dataset.LL %>% 
@@ -159,23 +159,23 @@ Brown et al.(2022)[^1] provide guidance for healthy, daytime dependent light sti
 
 > The sleep environment should be as dark as possible. The recommended maximum ambient melanopic EDI is 1 lux measured at the eye. In case certain activities during the nighttime require vision, the recommended maximum melanopic EDI is 10 lux measured at the eye in the vertical plane at approximately 1.2 m height.
 
-We can see that bedtime is an important factor when determining the timepoints these three stages go into effect. Luckily we just so happen to have the sleep/wake data from the sleepdiary at hand. In a first step, we will convert the timepoints where a state changes into intervals during which the participant is awake or asleep. The `sc2interval` function provides this readily.
+We can see that bedtime is an important factor when determining the timepoints these three stages go into effect. Luckily we just so happen to have the sleep/wake data from the sleep diary at hand. In a first step, we will convert the timepoints where a state changes into intervals during which the participant is awake or asleep. The `sc2interval()` function provides this readily.
 
-In our case the first entry is sleep, so we can safely assume, that on that day prior the participant was awake. We could take this into account through the `full.first = "wake"` argument setting, but then it would be implied that the participant was awake from midnight on. As the first day of data is only partial anyways, we will disregard this. There are other arguments to `sc2interval` to further refine the interval creation. Probably the most important is `length.restriction`, that sets the maximum length of an interval, the default being 24 hours. This avoids implausibly long intervals with one state that is highly likely caused by implicit missing data or misentries.
+In our case the first entry is sleep, so we can safely assume, that on that day prior the participant was awake. We could take this into account through the `full.first = "wake"` argument setting, but then it would be implied that the participant was awake from midnight on. As the first day of data is only partial anyways, we will disregard this. There are other arguments to `sc2interval()` to further refine the interval creation. Probably the most important is `length.restriction`, that sets the maximum length of an interval, the default being 24 hours. This avoids implausibly long intervals with one state that is highly likely caused by implicit missing data or misentries.
 
 ```{r}
 dataset.sleep <- dataset.sleep %>% sc2interval()
 dataset.sleep %>% head() %>% gt()
 ```
 
-Now we can transform these sleep/wake intervals to intervals for the Brown recommendations. The `sleep.int2Brown` function facilitates this.
+Now we can transform these sleep/wake intervals to intervals for the Brown recommendations. The `sleep.int2Brown()` function facilitates this.
 
 ```{r}
 Brown.intervals <- dataset.sleep %>% sleep.int2Brown()
 Brown.intervals %>% head() %>% gt()
 ```
 
-We can see that the function fit a 3 hour interval in-between every sleep and wake phase, and also recoded the states. This data can now be applied to our light logger dataset. This is done through the `interval2state` function[^2]. We already used this function unknowingly, because it (alongside `sc2interval`) is under the hood of `data2reference`, making sure that data in the reference set is spread out accordingly.
+We can see that the function fit a 3 hour interval in-between every sleep and wake phase, and also recoded the states. This data can now be applied to our light logger dataset. This is done through the `interval2state()` function[^2]. We already used this function unknowingly, because it (alongside `sc2interval()`) is under the hood of `data2reference()`, making sure that data in the reference set is spread out accordingly.
 
 [^2]: Why go the extra mile to convert statechanges to intervals and those intervals back to states in a dataset? It surely could be done in one step? Well, it´s complicated... If there are no missing data or errors in the datasets, this would indeed be possible. But dividing the pipeline in two steps allows for validation steps and also greatly facilitates changes based on those states, as with the Brown recommendation
 
@@ -187,14 +187,14 @@ dataset.LL <-
 dataset.LL %>% tail() %>% gt()
 ```
 
-Now we have a column in our light logger dataset that declares all the three state for the Brown et al. recommendation. With another function, `Brown2reference`, we can in one swoop add the threshhold accompanied to these states and check whether our participant is within the recommendations or not. The only thing the function needs is a name where to put the recommended values - by default these would go to `Reference`, which is already used for the Solar exposition, which is why we put it in `Reference.Brown`.
+Now we have a column in our light logger dataset that declares all the three state for the Brown et al. recommendation. With another function, `Brown2reference()`, we can in one swoop add the threshhold accompanied to these states and check whether our participant is within the recommendations or not. The only thing the function needs is a name where to put the recommended values - by default these would go to `Reference`, which is already used for the Solar exposition, which is why we put it in `Reference.Brown`.
 
 ```{r}
 dataset.LL <- dataset.LL %>% Brown2reference(Brown.rec.colname = Reference.Brown)
 dataset.LL %>% select(!Reference.label) %>% tail() %>% gt()
 ```
 
-`Brown2reference` added three columns, two of which are shown in the table above. A third column contains a text label about the type of reference, sth. we could also have added for the solar exposition. Now let´s have a quick look at the result in the plot overview
+`Brown2reference()` added three columns, two of which are shown in the table above. A third column contains a text label about the type of reference, sth. we could also have added for the solar exposition. Now let´s have a quick look at the result in the plot overview
 
 ```{r, fig.retina=2, fig.width=7, fig.height = 10}
 dataset.LL %>% #dataset
@@ -205,7 +205,7 @@ dataset.LL %>% #dataset
 
 Looking good so far! In the next section, let us focus on picking out one day and get more into styling. Based on the available data I think **01/09** looks promising, as there is some variation during the day with some timeframes outside in the afternoon and a varied but typical light exposure in the evening.
 
-We can use the `filter_Date` function to easily cut this specific chunk out from the data. We also deactivate the facetting function from `gg_day`, as we only have one day.
+We can use the `filter_Date()` function to easily cut this specific chunk out from the data. We also deactivate the facetting function from `gg_day()`, as we only have one day.
 
 ```{r, fig.retina=2, fig.width=7, fig.height = 4}
 dataset.LL.partial <- 
@@ -236,7 +236,7 @@ scale.correction <- coord_cartesian(
 
 ### Participants Light Exposure {.tabset .tabset-pills}
 
-By default, `gg_day` uses a point geom for the data display. We can, however, play around with other geoms.
+By default, `gg_day()` uses a point geom for the data display. We can, however, play around with other geoms.
 
 #### `geom_point`
 
@@ -246,7 +246,7 @@ dataset.LL.partial  %>%
   solar.reference + brown.reference + scale.correction
 ```
 
-This is the standard behavior of `gg_day`. We would not have to specify the `geom = "point"` in this case, but being verbose should communicate that we specify this argument.
+This is the standard behavior of `gg_day()`. We would not have to specify the `geom = "point"` in this case, but being verbose should communicate that we specify this argument.
 
 #### `geom_line`
 
@@ -268,7 +268,7 @@ dataset.LL.partial  %>%
   solar.reference + brown.reference + scale.correction
 ```
 
-The `geom_area` fills an area from 0 up to the given value. Unfortunately this doesn´t work nicely with logarithmic plots (where 10\^0 = 1, so it would start at 1). We can, however, disable any geom in `gg_day`and instead add a `geom_ribbon` that can be force set to zero with `ymin = 0`.
+The `geom_area` fills an area from 0 up to the given value. Unfortunately this doesn´t work nicely with logarithmic plots (where 10\^0 = 1, so it would start at 1). We can, however, disable any geom in `gg_day()`and instead add a `geom_ribbon` that can be force set to zero with `ymin = 0`.
 
 #### `geom_boxplot`
 
@@ -279,7 +279,7 @@ dataset.LL.partial  %>%
   solar.reference + brown.reference + scale.correction
 ```
 
-To create a boxplot representation, we not only need to specify the geom but also what time interval we want the boxplot to span. Here the `cut_Datetime` function from **LightLogR** comes to the rescue. It will round the datetimes to the desired interval, which then can be specified as the `group` argument of `gg_day`. While this can be a nice representation, I don´t think it fits our goal for the overall figure in our specific case.
+To create a boxplot representation, we not only need to specify the geom but also what time interval we want the boxplot to span. Here the `cut_Datetime()` function from **LightLogR** comes to the rescue. It will round the datetimes to the desired interval, which then can be specified as the `group` argument of `gg_day()`. While this can be a nice representation, I don´t think it fits our goal for the overall figure in our specific case.
 
 #### `geom_hexplot`
 
@@ -293,7 +293,7 @@ The geom family of `hex`, `bin2d`, or `density_2d` is particularly well suited i
 
 ###  {.unnumbered}
 
-**Conclusion:** The `line` or `ribbon` geom seem like a good choice for our task. However, The high resolution of the data (*10 seconds*) makes the line very noisy. Sometimes this level of detail is good, but our figure should give more of a general representation of light exposure, so we should aggregate the data somewhat. We can use the same function as for the boxplot, `cut_Datetime` and use this to aggregate our data to the desired resolution. For the sake of this example, let´s create a function to try several aggregation times.
+**Conclusion:** The `line` or `ribbon` geom seem like a good choice for our task. However, The high resolution of the data (*10 seconds*) makes the line very noisy. Sometimes this level of detail is good, but our figure should give more of a general representation of light exposure, so we should aggregate the data somewhat. We can use the same function as for the boxplot, `cut_Datetime()` and use this to aggregate our data to the desired resolution. For the sake of this example, let´s create a function to try several aggregation times.
 
 ```{r}
 dataset.LL.aggregate <- function(unit) {
@@ -379,7 +379,7 @@ dataset.LL.aggregate("5 mins")  %>%
 
 ### Solar Potential {.tabset .tabset-pills}
 
-Let us focus next on the solar potential that is not harnessed by the participant. We again have several choices in how to represent this.
+Let us focus next on the solar potential that is not harnessed by the participant. We have several choices in how to represent this.
 
 #### `geom_line`
 
@@ -388,7 +388,7 @@ Plot +
   geom_line(aes(y=Reference), lty = 2, col = "red") #solar reference
 ```
 
-This was our base representation for the solar exposure. And it is not a bad one at that. Let´s keep it in the run for know.
+This was our base representation for the solar exposure. And it is not a bad one at that. Let's keep it in the run for know.
 
 #### `geom_ribbon`
 
@@ -475,7 +475,7 @@ This plot requires a bit of preparation, but it focuses nicely on the unrealized
 
 ###  {.unnumbered}
 
-**Conclusion:** While the `second plot` option is nice, it focuses on one aspect - the missed or unrealized potential. The ´geom_ribbon\` variant still includes this information, but is more general, which is exactly what we want here.
+**Conclusion:** While the `second plot` option is nice, it focuses on one aspect - the missed or unrealized potential. The `geom_ribbon` variant still includes this information, but is more general, which is exactly what we want here.
 
 ```{r, warning=FALSE}
 Day.end <- as_datetime("2023-09-01 23:59:59", tz = tz)
@@ -610,3 +610,5 @@ Plot +
            hjust = 0, col = "#0073C2DD")
 
 ```
+
+This concludes our task. We have gone from importing multiple source files to a final figure that is ready to be used in a publication. **LightLogR** facilitated the importing and processing steps in between and also enabled us to test various decisions, like the choice of `geom` or `time.aggregation`.

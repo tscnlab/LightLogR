@@ -12,7 +12,8 @@ filter_Datetime(
   end = NULL,
   length = NULL,
   full.day = FALSE,
-  tz = NULL
+  tz = NULL,
+  filter.expr = NULL
 )
 
 filter_Date(..., start = NULL, end = NULL)
@@ -52,6 +53,8 @@ on to avoid empty days in plotting with \code{\link[=gg_day]{gg_day()}}.}
 
 \item{tz}{Timezone of the start/end times. If \code{NULL} (the default), it will
 take the timezone from the \code{Datetime.colname} column.}
+
+\item{filter.expr}{Advanced filtering conditions. If not \code{NULL} (default) and given an \code{expression}, this is used to \code{\link[dplyr:filter]{dplyr::filter()}} the results. This can be useful to filter, e.g. for group-specific conditions, like starting after the first two days of measurement (see examples).}
 
 \item{...}{Parameter handed over to \code{\link[lubridate:round_date]{lubridate::round_date()}} and siblings}
 }
@@ -95,6 +98,19 @@ pull(Datetime) \%>\% range()
 sample.data.environment \%>\%
 filter_Datetime(length = days(2)) \%>\%
 pull(Datetime) \%>\% range()
+
+#advanced filtering based on grouping (second day of each group)
+sample.data.environment \%>\%
+group_by(Source) \%>\% 
+#shift the "Environment" group by one day
+mutate(
+Datetime = ifelse(Source == "Environment", Datetime + ddays(1), Datetime) \%>\% 
+as_datetime()) -> sample
+sample \%>\% summarize(Daterange = paste(min(Datetime), max(Datetime), sep = " - "))
+#now we can use the `filter.expr` argument to filter from the second day of each group
+sample \%>\% 
+filter_Datetime(filter.expr = Datetime > Datetime[1] + days(1)) \%>\% 
+summarize(Daterange = paste(min(Datetime), max(Datetime), sep = " - "))
 sample.data.environment \%>\% filter_Date(end = "2023-08-17")
 }
 \seealso{

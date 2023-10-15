@@ -1,28 +1,3 @@
-# sleepdata <- tibble::tibble(Datetime = rep(c("2023-08-15 6:00:00",
-#                                              "2023-08-15 23:00:00",
-#                                              "2023-08-16 6:00:00",
-#                                              "2023-08-16 22:00:00",
-#                                              "2023-08-17 6:30:00",
-#                                              "2023-08-18 1:00:00",
-#                                              "2023-08-18 6:00:00",
-#                                              "2023-08-19 0:30:00",
-#                                              "2023-08-19 6:00:00",
-#                                              "2023-08-20 1:30:00",
-#                                              "2023-08-20 6:15:00",
-#                                              "2023-08-20 23:23:00"
-# ), 2) , 
-# status = rep(c("wake", "sleep"), 12),
-# Id = rep(c("Environment", "Participant"), each = 12))
-
-
-# sample.data.environment %>%
-#   interval2state(
-#     State.interval.dataset =
-#       {interval.sleepdata %>% sleep.int2Brown(Sleep.colname = status)},
-#     ID.colname.dataset = Source) %>%
-#   Brown2reference(MEDI.colname = `MELANOPIC EDI`) -> test
-
-
 #' Recode Sleep/Wake intervals to Brown state intervals
 #'
 #' Takes a dataset with sleep/wake intervals and recodes them to Brown state
@@ -49,7 +24,6 @@
 #'
 #' @examples
 #' #create a sample dataset
-#' library(tibble)
 #' sample <- tibble::tibble(Datetime = c("2023-08-15 6:00:00",
 #'                                          "2023-08-15 23:00:00",
 #'                                          "2023-08-16 6:00:00",
@@ -92,6 +66,10 @@ sleep.int2Brown <- function(dataset,
     "Sleep/Wake and Brown states must be of type character" = is.character(
       c(wake.state, sleep.state, Brown.day, Brown.evening, Brown.night)
     ),
+    "Sleep/Wake and Brown states must be scalars" = 
+      is.all.scalar(
+        wake.state, sleep.state, Brown.day, Brown.evening, Brown.night
+    ),
     "output.dataset must be a logical" = is.logical(output.dataset)
   )
   
@@ -114,7 +92,7 @@ sleep.int2Brown <- function(dataset,
   #create new intervals across all timestamps
   dataset <-
     dataset %>%
-    dplyr::full_join(evening.data) %>%
+    {suppressMessages(dplyr::full_join(., evening.data))} %>%
     dplyr::arrange(Start, .by_group = TRUE) %>%
     dplyr::mutate(
       {{ Sleep.colname }} := 

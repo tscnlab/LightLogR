@@ -50,6 +50,7 @@
 #' package = "LightLogR")
 #' file.sleep <- "205_sleepdiary_all_20230904.csv"
 #'
+#' #import Data in the wide format (sleep/wake times)
 #' import.Statechanges(file.sleep, path,
 #' Datetime.format = "dmyHM",
 #' State.colnames = c("sleep", "offset"),
@@ -57,7 +58,17 @@
 #' ID.colname = record_id,
 #' sep = ";",
 #' dec = ",")
-import.Statechanges <- function(filename, path = ".", 
+#'
+#' #import in the long format (Comments on sleep)
+#' import.Statechanges(file.sleep, path,
+#'                    Datetime.format = "dmyHM",
+#'                    State.colnames = "comments",
+#'                    Datetime.column = sleep,
+#'                    ID.colname = record_id,
+#'                    sep = ";",
+#'                    dec = ",", structure = "long")
+
+import.Statechanges <- function(filename, path = NULL, 
                        sep = ",", 
                        dec = ".", 
                        structure = "wide",
@@ -71,6 +82,9 @@ import.Statechanges <- function(filename, path = ".",
                        ID.newname = Id,
                        keepAllColumns = FALSE) {
   
+  # Initial Checks ----------------------------------------------------------
+  
+  # Check inputs
   if(!is.character(filename)) {
     stop("The specified filename must be a character")
   }
@@ -83,6 +97,26 @@ import.Statechanges <- function(filename, path = ".",
   if(length(State.colnames) != length(State.encoding)) {
     stop("The length of State.colnames and State.encoding must be equal")
   }
+  if(structure == "long" & length(State.colnames) > 1) {
+    stop("In the long format, State.colnames must be a scalar")
+  }
+  if(!is.logical(keepAllColumns)) {
+    stop("The specified keepAllColumns must be a logical")
+  }
+  if(!structure %in% c("wide", "long")) {
+    stop("The specified structure must be either 'wide' or 'long'")
+  }
+  if(!is.character(Datetime.format)) {
+    stop("The specified Datetime.format must be a character that works with lubridate::parse_date_time")
+  }
+  if(!is.character(tz)) {
+    stop("The specified tz must be a character")
+  }
+  if(!tz %in% OlsonNames()) {
+    stop("The specified tz must be a valid time zone from the OlsonNames vector")
+  }
+  
+  # Logic ----------------------------------------------------------
   
   if (!is.null(path)) {
     filename <- file.path(path, filename)
@@ -103,30 +137,61 @@ import.Statechanges <- function(filename, path = ".",
   stateStrs <- State.colnames
   stateNames <- rlang::set_names(State.encoding, State.colnames)
   
+  
   # Check if the specified columns exist
   if(!all(c(idStr, stateStrs) %in% colnames(data))) {
-    stop("The specified Datetime, ID, or one of the State columns is not present in the data!")
+    stop("The specified ID, or one of the State columns is not present in the data!")
+  }
+  #check if the Datetime column is present when the structure argument is set to `long`
+  if(structure == "long" & !Datetime.columnStr %in% colnames(data)) {
+    stop("The specified Datetime column is not present in the data!")
   }
   
-  # Pivot state columns longer
+  # Pivot state columns longer when the structure argument is set to `wide`
+  if(structure == "wide") {
   data <- data %>%
     tidyr::pivot_longer(cols = dplyr::all_of(stateStrs),
                         names_to = {{ State.newnameStr }},
                         values_to = {{ Datetime.columnStr }})
-
-  # Rename columns using the {{ }} syntax, remove NA and group by ID, arrange it, recode, and set Datetimes as POSIXct
+  }
+  
+  # Rename columns using the {{ }} syntax, remove NA and group by ID, arrange 
+  # it, recode, and set Datetimes as POSIXct
   data <- dplyr::rename(data,
                         {{ ID.newname }} := {{ ID.colname }}) %>% 
     dplyr::filter(!is.na({{ ID.newname }}), !is.na({{ Datetime.column }})) %>% 
-    dplyr::group_by({{ ID.newname }}) %>% 
-    dplyr::mutate({{ State.newname }} := stateNames[{{ State.newname }}],
-                  {{ Datetime.column }} := lubridate::parse_date_time({{ Datetime.column }}, orders = Datetime.format, tz),
+    dplyr::group_by({{ ID.newname }})
+  
+  data <- 
+    if(structure == "wide") {
+    data %>% 
+        dplyr::mutate({{ State.newname }} := stateNames[{{ State.newname }}])
+    } else data %>% 
+        dplyr::rename({{ State.newname }} := {{ State.colnames }})
+  
+  data <- data %>%  
+    dplyr::mutate(Datetime = 
+                    lubridate::parse_date_time({{ Datetime.column }},   
+                                               orders = Datetime.format, tz
+                    ),
                   {{ ID.newname }} := factor({{ ID.newname }})) %>% 
     dplyr::arrange({{ Datetime.column }}, .by_group = TRUE)
   
+  # Return the Data ----------------------------------------------------------
+  
   # Decide on whether to keep other columns
   if (!keepAllColumns) {
-    data <- dplyr::select(data, {{ ID.newname }}, {{ State.newname }}, {{ Datetime.column }})
+    data <- 
+      dplyr::select(
+        data, {{ ID.newname }}, {{ State.newname }}, Datetime
+        )
+  }
+  
+  #create a warning if consecutive states are the same
+  if(any(dplyr::lag(data$State) == data$State, na.rm = TRUE)) {
+    warning(
+      "There are consecutive states that are the same. This may be an error in the data."
+      )
   }
   
   return(data)

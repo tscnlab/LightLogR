@@ -15,17 +15,27 @@ Brown.rec(
 )
 }
 \arguments{
-\item{state}{The state from Brown et al. (2022). Needs to be a character vector.}
+\item{state}{The state from Brown et al. (2022). Needs to be a character
+vector.}
 
-\item{Brown.day, Brown.evening, Brown.night}{The names of the states from Brown et al. (2022). These are the default values (\code{"day"}, \code{"evening"}, \code{"night"}), but can be changed if the names in \code{state} are different. Needs to be a character scalar.}
+\item{Brown.day, Brown.evening, Brown.night}{The names of the states from Brown
+et al. (2022). These are the default values (\code{"day"}, \code{"evening"},
+\code{"night"}), but can be changed if the names in \code{state} are different. Needs
+to be a character scalar.}
 
-\item{Brown.day.th, Brown.evening.th, Brown.night.th}{The thresholds for the states from Brown et al. (2022). These are the default values (\code{250}, \code{10}, \code{1}), but can be changed if the thresholds should be different. Needs to be a numeric scalar.}
+\item{Brown.day.th, Brown.evening.th, Brown.night.th}{The thresholds for the
+states from Brown et al. (2022). These are the default values (\code{250}, \code{10},
+\code{1}), but can be changed if the thresholds should be different. Needs to be
+a numeric scalar.}
 }
 \value{
-df A dataframe with the same length as \code{state} that contains the recommended illuminance/MEDI levels.
+df A dataframe with the same length as \code{state} that contains the
+recommended illuminance/MEDI levels.
 }
 \description{
-This is a lower level function. It calculates the recommended illuminance/MEDI levels by Brown et al. (2022) for a given state. The function is vectorized.
+This is a lower level function. It calculates the recommended
+illuminance/MEDI levels by Brown et al. (2022) for a given state. The
+function is vectorized.
 }
 \examples{
 states <- c("day", "evening", "night")

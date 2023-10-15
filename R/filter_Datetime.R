@@ -24,6 +24,7 @@
 #'   at the documentation from [lubridate]. Basically, periods model clocktimes,
 #'   whereas durations model physical processes. This matters on several
 #'   occasions, like leap years, or daylight savings.
+#' @param filter.expr Advanced filtering conditions. If not `NULL` (default) and given an `expression`, this is used to [dplyr::filter()] the results. This can be useful to filter, e.g. for group-specific conditions, like starting after the first two days of measurement (see examples).
 #' @param tz Timezone of the start/end times. If `NULL` (the default), it will
 #'   take the timezone from the `Datetime.colname` column.
 #' @param full.day A `logical` indicating wether the `start` param should be
@@ -63,6 +64,19 @@
 #' sample.data.environment %>%
 #' filter_Datetime(length = days(2)) %>%
 #' pull(Datetime) %>% range()
+#' 
+#' #advanced filtering based on grouping (second day of each group)
+#' sample.data.environment %>%
+#' group_by(Source) %>% 
+#' #shift the "Environment" group by one day
+#' mutate(
+#' Datetime = ifelse(Source == "Environment", Datetime + ddays(1), Datetime) %>% 
+#' as_datetime()) -> sample
+#' sample %>% summarize(Daterange = paste(min(Datetime), max(Datetime), sep = " - "))
+#' #now we can use the `filter.expr` argument to filter from the second day of each group
+#' sample %>% 
+#' filter_Datetime(filter.expr = Datetime > Datetime[1] + days(1)) %>% 
+#' summarize(Daterange = paste(min(Datetime), max(Datetime), sep = " - "))
 
 
 filter_Datetime <- function(dataset, 
@@ -71,9 +85,12 @@ filter_Datetime <- function(dataset,
                             end = NULL, 
                             length = NULL,
                             full.day = FALSE,
-                            tz = NULL) {
+                            tz = NULL,
+                            filter.expr = NULL) {
   
   # Initial Checks ----------------------------------------------------------
+  
+  filter.expr <- rlang::enexpr(filter.expr)
   
   Datetime.colname.defused <- 
     rlang::enexpr(Datetime.colname) %>% rlang::as_string()
@@ -93,15 +110,13 @@ filter_Datetime <- function(dataset,
       Datetime.colname.defused %in% names(dataset),
     "Datetime.colname must be a Datetime" = 
       lubridate::is.POSIXct(dataset[[Datetime.colname.defused]]),
-    "At least one parameter from `start`, `end` or `length` must be specified" =
-      !all(is.null(start), is.null(end), is.null(length)),
+    "At least one parameter from `start`, `end`, `length` or `filter.expr` must be specified" =
+      !all(is.null(start), is.null(end), is.null(length), is.null(filter.expr)),
     "tz needs to be a character" = is.character(tz),
     "tz needs to be a valid time zone, see `OlsonNames()`" = tz %in% OlsonNames(),
     "full.day needs to be a `logical`" = is.logical(full.day)
     )
  
-  # if(!is.null(c(end, start, length))) message("length will be ignored")
-  
   # Manipulation ----------------------------------------------------------
    
   #calculate starting time if length and end are given
@@ -134,6 +149,10 @@ filter_Datetime <- function(dataset,
         {{ Datetime.colname }} >= lubridate::as_datetime(start, tz = tz),
         {{ Datetime.colname }} <= lubridate::as_datetime(end, tz = tz)
         )
+    #possible extra filter step
+    if(!is.null(filter.expr)) {
+      dataset <- dataset %>% dplyr::filter(!!filter.expr)
+    }
   
   # Return --------------------------------------------------------------
   dataset

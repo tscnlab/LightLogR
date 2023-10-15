@@ -1,5 +1,11 @@
 # LightLogR 0.2.0.9000
 
+* Added Unit tests and documentation for all new functions.
+
+* To `filter_Datetime()` and `filter_Date()` added the option to filter for group specific dates.
+
+* Added the family of functions around `States` and `Reference` to import, process, and add states to light logger data, like sleep/wake times, wear times, or other data. This family includes `import.Statechanges()`, `sc2interval()`, `ìnterval2state()`, `data2reference()`, `sleep.int2Brown()`, `Brown.check()`, `Brown.rec()`, and `Brown2reference()`. 
+
 * Added the Article/Vignette "What´s in a Day" to demonstrate the LightLogR workflow.
 
 * Added the convenience function `create_Time.data()` to create a Time-of-Day column in datasets.

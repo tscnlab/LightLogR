@@ -24,13 +24,15 @@
 #'   a `character` scalar.
 #' @param Brown.check.colname The name of the column that will contain the check
 #'   if the illuminance is within the recommended levels.
+#' @param overwrite.Reference If `TRUE` (defaults to `FALSE`), the function will
+#'   overwrite the `Brown.rec.colname` columns if it already exists.
 #' @param ... Additional arguments that will be passed to [Brown.rec()] and
 #'   [Brown.check()]. This is only relevant to correct the names of the daytime
 #'   states or the thresholds used within these states. See the documentation of
 #'   these functions for more information.
 #'
 #' @references
-#'   https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3001571
+#' https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3001571
 #'
 #' @return A dataframe on the basis of the `dataset` that contains the added
 #'   columns.
@@ -51,6 +53,7 @@ Brown2reference <- function(dataset,
                             Reference.label.colname = Reference.label,
                             Reference.label = "Brown et al. (2022)",
                             Brown.check.colname = Reference.check,
+                            overwrite.Reference = FALSE,
                             ...) {
   
   
@@ -58,12 +61,13 @@ Brown2reference <- function(dataset,
   
   MEDI.colname.defused <- colname.defused({{ MEDI.colname }})
   Brown.state.colname.defused <- colname.defused({{ Brown.state.colname }})
-  
   Brown.rec.colname.str <- colname.defused({{ Brown.rec.colname }})
   
-  #give an error if the reference column is present
-  if(Brown.rec.colname.str %in% names(dataset)) 
+  #give an error or warning if the reference column is present
+  if(Brown.rec.colname.str %in% names(dataset) & !overwrite.Reference) 
     stop("A Reference column with the given (or default) name is already part of the dataset. Please remove the column or choose a different name")
+  if(Brown.rec.colname.str %in% names(dataset)) 
+    warning("A Reference column with the given (or default) name is already part of the dataset. It is overwritten, because `overwrite.Reference = TRUE ` was set.")
   
   stopifnot(
     "dataset is not a dataframe" = is.data.frame(dataset),
@@ -72,7 +76,9 @@ Brown2reference <- function(dataset,
     "Brown.state.colname must be part of the dataset" = 
       Brown.state.colname.defused %in% names(dataset),
     "MEDI.colname must be a numeric column" = 
-      is.numeric(dataset[[MEDI.colname.defused]])
+      is.numeric(dataset[[MEDI.colname.defused]]),
+    "overwrite.Reference must be a logical" = 
+      is.logical(overwrite.Reference)
   )
 
   #check whether the dataset has the right labels
@@ -101,23 +107,38 @@ Brown2reference <- function(dataset,
   dataset
 }
 
-#' Check whether a value is within the recommended illuminance/MEDI levels by Brown et al. (2022)
-#' 
-#' This is a lower level function. It checks a given value against a threshold for the states given by Brown et al. (2022). The function is vectorized. For `day` the threshold is a lower limit, for `evening` and `night` the threshold is an upper limit.
+#' Check whether a value is within the recommended illuminance/MEDI levels by
+#' Brown et al. (2022)
 #'
-#' @param value Illuminance value to check against the recommendation. needs to be numeric, can be a vector.
-#' @param state The state from Brown et al. (2022). Needs to be a character vector with the same length as `value`.
-#' @param Brown.day,Brown.evening,Brown.night The names of the states from Brown et al. (2022). These are the default values (`"day"`, `"evening"`, `"night"`), but can be changed if the names in `state` are different. Needs to be a character scalar.
-#' @param Brown.day.th,Brown.evening.th,Brown.night.th The thresholds for the states from Brown et al. (2022). These are the default values (`250`, `10`, `1`), but can be changed if the thresholds should be different. Needs to be a numeric scalar.
+#' This is a lower level function. It checks a given value against a threshold
+#' for the states given by Brown et al. (2022). The function is vectorized. For
+#' `day` the threshold is a lower limit, for `evening` and `night` the threshold
+#' is an upper limit.
 #'
-#' @return A logical vector with the same length as `value` that indicates whether the value is within the recommended illuminance levels.
+#' @param value Illuminance value to check against the recommendation. needs to
+#'   be numeric, can be a vector.
+#' @param state The state from Brown et al. (2022). Needs to be a character
+#'   vector with the same length as `value`.
+#' @param Brown.day,Brown.evening,Brown.night The names of the states from Brown
+#'   et al. (2022). These are the default values (`"day"`, `"evening"`,
+#'   `"night"`), but can be changed if the names in `state` are different. Needs
+#'   to be a character scalar.
+#' @param Brown.day.th,Brown.evening.th,Brown.night.th The thresholds for the
+#'   states from Brown et al. (2022). These are the default values (`250`, `10`,
+#'   `1`), but can be changed if the thresholds should be different. Needs to be
+#'   a numeric scalar.
+#'
+#' @return A logical vector with the same length as `value` that indicates
+#'   whether the value is within the recommended illuminance levels.
 #' @export
-#' @references https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3001571
+#' @references
+#'   https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3001571
 #'
 #' @family Brown
 #' @examples
 #' states <- c("day", "evening", "night", "day")
 #' values <- c(100, 10, 1, 300)
+#' Brown.check(values, states)
 #' Brown.check(values, states, Brown.day.th = 100)
 #' 
 Brown.check <- function(value,
@@ -130,13 +151,12 @@ Brown.check <- function(value,
                         Brown.night.th = 1) {
   
   stopifnot("Thresholds need to be numeric" = 
-              is.numeric(
-                c(Brown.day.th, Brown.evening.th, Brown.night.th
-                )
-              )
+              is.numeric(c(Brown.day.th, Brown.evening.th, Brown.night.th)),
+            "States need to be scalars" =
+              is.all.scalar(Brown.day, Brown.evening, Brown.night)
   )
   
-  #check wheter state has the same length as value, give an error if not
+  #check whether state has the same length as value, give an error if not
   stopifnot(
     "state needs to be a character vector with the same length as value" = 
               is.character(state) & length(state) == length(value)
@@ -155,15 +175,20 @@ Brown.check <- function(value,
 
 #' Calculate the recommended illuminance/MEDI levels by Brown et al. (2022)
 #'
-#' This is a lower level function. It calculates the recommended illuminance/MEDI levels by Brown et al. (2022) for a given state. The function is vectorized.
+#' This is a lower level function. It calculates the recommended
+#' illuminance/MEDI levels by Brown et al. (2022) for a given state. The
+#' function is vectorized.
 #'
 #' @inheritParams Brown.check
-#' @param state The state from Brown et al. (2022). Needs to be a character vector.
+#' @param state The state from Brown et al. (2022). Needs to be a character
+#'   vector.
 #'
-#' @return df A dataframe with the same length as `state` that contains the recommended illuminance/MEDI levels.
+#' @return df A dataframe with the same length as `state` that contains the
+#'   recommended illuminance/MEDI levels.
 #' @export
-#' 
-#' @references https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3001571
+#'
+#' @references
+#'   https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3001571
 #'
 #' @family Brown
 #' @examples
@@ -180,15 +205,15 @@ Brown.rec <- function(state,
                       Brown.night.th = 1){
   
   stopifnot("Thresholds need to be numeric" = 
-              is.numeric(
-                c(Brown.day.th, Brown.evening.th, Brown.night.th
-                )
-              )
+              is.numeric(c(Brown.day.th, Brown.evening.th, Brown.night.th)),
+            "States need to be scalars" =
+              is.all.scalar(Brown.day, Brown.evening, Brown.night)
   )
   
   dplyr::case_when(
     state == Brown.day ~ Brown.day.th,
     state == Brown.evening ~ Brown.evening.th,
-    state == Brown.night ~ Brown.night.th
+    state == Brown.night ~ Brown.night.th,
+    .default = NA
   )
 }

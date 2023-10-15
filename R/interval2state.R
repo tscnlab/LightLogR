@@ -92,6 +92,7 @@ interval2state <- function(dataset,
       lubridate::is.POSIXct(dataset[[Datetime.colname.defused]]),
     "output.dataset must be a logical" = is.logical(output.dataset)
   )
+  
   # Manipulation ----------------------------------------------------------
   
   #add a marker to the dataset that tells us, what the original Timepoints were
@@ -130,7 +131,17 @@ interval2state <- function(dataset,
                       ))
   }
   
-  # splice the two datasets together
+  #test whether the time differences in the two datasets are acceptable
+  are.intervals.smaller <- 
+    compare.difftime.any(dataset, State.interval.dataset2)
+  
+  if(!rlang::is_true(are.intervals.smaller)) {
+    warning("The time differences between consecutive time points in the reference dataset are larger than in the dataset. This means multiple reference dates connect to one dataset datum - only the last one prior to each datum will be used. Please use an aggregate function on the reference dataset to resolve this warning. The given output shows what grouping is problematic and what 95% of time differences in the Dataset compared to the Reference Data is.")
+    are.intervals.smaller
+    return()
+  }
+  
+  # join the two datasets together
   dataset <- 
     dataset %>% 
     dplyr::full_join(
