@@ -65,7 +65,7 @@ when a <code>State</code> (like <code>sleep</code> or <code>wake</code>) starts.
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">import.Statechanges</span><span class="op">(</span></span>
 <span>  <span class="va">filename</span>,</span>
-<span>  path <span class="op">=</span> <span class="st">"."</span>,</span>
+<span>  path <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  sep <span class="op">=</span> <span class="st">","</span>,</span>
 <span>  dec <span class="op">=</span> <span class="st">"."</span>,</span>
 <span>  structure <span class="op">=</span> <span class="st">"wide"</span>,</span>
@@ -182,6 +182,7 @@ additional columns if <code>keepAllColumns</code> is <code>TRUE</code>.</p>
 <span class="r-in"><span>package <span class="op">=</span> <span class="st">"LightLogR"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">file.sleep</span> <span class="op">&lt;-</span> <span class="st">"205_sleepdiary_all_20230904.csv"</span></span></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#import Data in the wide format (sleep/wake times)</span></span></span>
 <span class="r-in"><span><span class="fu">import.Statechanges</span><span class="op">(</span><span class="va">file.sleep</span>, <span class="va">path</span>,</span></span>
 <span class="r-in"><span>Datetime.format <span class="op">=</span> <span class="st">"dmyHM"</span>,</span></span>
 <span class="r-in"><span>State.colnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sleep"</span>, <span class="st">"offset"</span><span class="op">)</span>,</span></span>
@@ -207,6 +208,26 @@ additional columns if <code>keepAllColumns</code> is <code>TRUE</code>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span> 205   wake  2023-09-03 <span style="color: #949494;">08:47:00</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">13</span> 205   sleep 2023-09-03 <span style="color: #949494;">21:30:00</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">14</span> 205   wake  2023-09-04 <span style="color: #949494;">07:25:00</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#import in the long format (Comments on sleep)</span></span></span>
+<span class="r-in"><span><span class="fu">import.Statechanges</span><span class="op">(</span><span class="va">file.sleep</span>, <span class="va">path</span>,</span></span>
+<span class="r-in"><span>                   Datetime.format <span class="op">=</span> <span class="st">"dmyHM"</span>,</span></span>
+<span class="r-in"><span>                   State.colnames <span class="op">=</span> <span class="st">"comments"</span>,</span></span>
+<span class="r-in"><span>                   Datetime.column <span class="op">=</span> <span class="va">sleep</span>,</span></span>
+<span class="r-in"><span>                   ID.colname <span class="op">=</span> <span class="va">record_id</span>,</span></span>
+<span class="r-in"><span>                   sep <span class="op">=</span> <span class="st">";"</span>,</span></span>
+<span class="r-in"><span>                   dec <span class="op">=</span> <span class="st">","</span>, structure <span class="op">=</span> <span class="st">"long"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 7 × 3</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Groups:   Id [1]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Id    State                                                Datetime           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                                <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 205   woke Up and could Not Fall asleep. went to the dini… 2023-09-01 <span style="color: #949494;">23:10:00</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 205   none                                                 2023-09-02 <span style="color: #949494;">22:55:00</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 205   no                                                   2023-09-03 <span style="color: #949494;">21:30:00</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 205   Slept longer than usual since my kids are on Summer… 2023-08-28 <span style="color: #949494;">23:20:00</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 205   no                                                   2023-08-29 <span style="color: #949494;">23:40:00</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> 205   Kids slept in my bed                                 2023-08-30 <span style="color: #949494;">23:15:00</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> 205   none                                                 2023-08-31 <span style="color: #949494;">23:15:00</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
