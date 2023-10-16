@@ -6,8 +6,8 @@
 \usage{
 interval2state(
   dataset,
-  Datetime.colname = Datetime,
   State.interval.dataset,
+  Datetime.colname = Datetime,
   State.colname = State,
   Interval.colname = Interval,
   ID.colname.dataset = Id,
@@ -20,13 +20,13 @@ interval2state(
 by \link{LightLogR}, take care to choose a sensible variable for the
 \code{Datetime.colname}.}
 
-\item{Datetime.colname}{column name that contains the datetime. Defaults to
-\code{"Datetime"} which is automatically correct for data imported with
-\link{LightLogR}. Expects a \code{symbol}. Needs to be part of the \code{dataset}.}
-
 \item{State.interval.dataset}{Name of the dataset that contains \code{State} and
 \code{Interval} columns. Interval data can be created, e.g., through
 \code{\link[=sc2interval]{sc2interval()}}.}
+
+\item{Datetime.colname}{column name that contains the datetime. Defaults to
+\code{"Datetime"} which is automatically correct for data imported with
+\link{LightLogR}. Expects a \code{symbol}. Needs to be part of the \code{dataset}.}
 
 \item{State.colname, Interval.colname}{Column names of the \code{State} and
 \code{Interval} in the \code{State.interval.dataset}. Expects a \code{symbol}.}

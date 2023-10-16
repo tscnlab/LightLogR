@@ -48,7 +48,6 @@ be used subsequently with \code{\link[=Brown2reference]{Brown2reference()}}.
 }
 \examples{
 #create a sample dataset
-library(tibble)
 sample <- tibble::tibble(Datetime = c("2023-08-15 6:00:00",
                                          "2023-08-15 23:00:00",
                                          "2023-08-16 6:00:00",

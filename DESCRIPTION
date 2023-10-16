@@ -41,6 +41,7 @@ Imports:
     rsconnect,
     scales,
     shiny,
+    stats,
     stringr,
     tibble,
     tidyr,

@@ -59,8 +59,8 @@
 #'
 #' 
 interval2state <- function(dataset,
-                           Datetime.colname = Datetime,
                            State.interval.dataset,
+                           Datetime.colname = Datetime,
                            State.colname = State,
                            Interval.colname = Interval,
                            ID.colname.dataset = Id,
@@ -136,9 +136,8 @@ interval2state <- function(dataset,
     compare.difftime.any(dataset, State.interval.dataset2)
   
   if(!rlang::is_true(are.intervals.smaller)) {
-    warning("The time differences between consecutive time points in the reference dataset are larger than in the dataset. This means multiple reference dates connect to one dataset datum - only the last one prior to each datum will be used. Please use an aggregate function on the reference dataset to resolve this warning. The given output shows what grouping is problematic and what 95% of time differences in the Dataset compared to the Reference Data is.")
-    are.intervals.smaller
-    return()
+    cat("Warning: The time differences between consecutive time points in the reference dataset are larger than in the dataset. This means multiple reference data connect to one dataset datum - only the last one prior to each datum will be used. Please use an aggregate function on the reference dataset to resolve this warning. \nThe following output shows what grouping is problematic and what 95% of time intervals in the Dataset compared to the Reference data is.\n\n")
+    utils::capture.output(are.intervals.smaller)[c(-1,-3)] %>% cat(sep = "\n")
   }
   
   # join the two datasets together

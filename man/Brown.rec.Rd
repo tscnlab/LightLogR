@@ -2,7 +2,7 @@
 % Please edit documentation in R/Brown.R
 \name{Brown.rec}
 \alias{Brown.rec}
-\title{Calculate the recommended illuminance/MEDI levels by Brown et al. (2022)}
+\title{Set the recommended illuminance/MEDI levels by Brown et al. (2022)}
 \usage{
 Brown.rec(
   state,
@@ -29,11 +29,11 @@ states from Brown et al. (2022). These are the default values (\code{250}, \code
 a numeric scalar.}
 }
 \value{
-df A dataframe with the same length as \code{state} that contains the
+A dataframe with the same length as \code{state} that contains the
 recommended illuminance/MEDI levels.
 }
 \description{
-This is a lower level function. It calculates the recommended
+This is a lower level function. It sets the recommended
 illuminance/MEDI levels by Brown et al. (2022) for a given state. The
 function is vectorized.
 }

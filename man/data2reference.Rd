@@ -11,11 +11,13 @@ data2reference(
   Data.column = MEDI,
   ID.column = Id,
   Reference.column = Reference,
+  overwrite.Reference = FALSE,
   filter.expression.reference = NULL,
   across.id = FALSE,
   shift.start = FALSE,
   length.restriction.seconds = 60,
-  shift.intervals = "auto"
+  shift.intervals = "auto",
+  Reference.label = NULL
 )
 }
 \arguments{
@@ -36,6 +38,9 @@ to a reference. Default is \code{MEDI}.}
 \item{Reference.column}{Name of the reference column that will be added to
 the \code{dataset}. Default is \code{Reference}. Cannot be the same as any other
 column in the \code{dataset} and will throw an error if it is.}
+
+\item{overwrite.Reference}{If \code{TRUE} (defaults to \code{FALSE}), the function will
+overwrite the \code{Reference.colname} column if it already exists.}
 
 \item{filter.expression.reference}{Expression that is used to filter the
 \code{Reference.data} before it is used as reference. Default is \code{NULL}. See}
@@ -60,6 +65,9 @@ calculated by halving the most frequent time difference between two data
 points in the reference data. If a number is given, this number in seconds
 is used as the shift. Can also use \code{\link[lubridate:duration]{lubridate::duration()}} to specify the
 shift.}
+
+\item{Reference.label}{Label that is added to the reference data. If \code{NULL},
+no label is added.}
 }
 \value{
 A \code{dataset} with a new column \code{Reference} that contains the reference
@@ -91,15 +99,15 @@ library(lubridate)
 library(ggplot2)
 
 gg_reference <- function(dataset) {
-dataset \%>\% 
-ggplot(aes(x = Datetime, y = `MELANOPIC EDI`, color = Source)) + 
-geom_line(size = 1) + 
-geom_line(aes(y = Reference), color = "black", size = 0.25, linetype = "dashed") + 
+dataset \%>\%
+ggplot(aes(x = Datetime, y = `MELANOPIC EDI`, color = Source)) +
+geom_line(size = 1) +
+geom_line(aes(y = Reference), color = "black", size = 0.25, linetype = "dashed") +
 theme_minimal() + facet_wrap(~ Source, scales = "free_y")
 }
 
 #in this example, each data point is its own reference
-sample.data.environment \%>\% group_by(Source) \%>\% 
+sample.data.environment \%>\% group_by(Source) \%>\%
   data2reference(Data.column = `MELANOPIC EDI`, ID.column = Source) \%>\%
   gg_reference()
 
@@ -107,9 +115,9 @@ sample.data.environment \%>\% group_by(Source) \%>\%
 #this requires grouping of the Data by Day, which is then specified in across.id
 #also, shift.start needs to be set to TRUE, to shift the reference data to the
 #start of the groupings
-sample.data.environment \%>\% group_by(Source, Day = as_date(Datetime)) \%>\% 
+sample.data.environment \%>\% group_by(Source, Day = as_date(Datetime)) \%>\%
 data2reference(
-  Data.column = `MELANOPIC EDI`, 
+  Data.column = `MELANOPIC EDI`,
   ID.column = Source,
   filter.expression.reference =  as_date(Datetime) == min(as_date(Datetime)),
   shift.start = TRUE,
@@ -117,9 +125,9 @@ data2reference(
   gg_reference()
 
 #in this example, the Environment Data will be used as a reference
-sample.data.environment \%>\% group_by(Source) \%>\% 
+sample.data.environment \%>\% group_by(Source) \%>\%
 data2reference(
-  Data.column = `MELANOPIC EDI`, 
+  Data.column = `MELANOPIC EDI`,
   ID.column = Source,
   filter.expression.reference =  Source == "Environment",
   across.id = TRUE) \%>\%

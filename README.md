@@ -85,7 +85,6 @@ filename <- system.file("extdata/sample_data_LYS.csv", package = "LightLogR")
 dataset <- import.LYS(filename, tz = "Europe/Berlin")
 #> Successfully read in 11422 observations from LYS-file
 #> Timezone set is Europe/Berlin.
-#> The system timezone is Europe/Zagreb. Please correct if necessary!
 #> Start: 2023-06-21 00:00:12
 #> End: 2023-06-22 23:59:48
 #> Timespan: 2 days

@@ -18,14 +18,10 @@
 #' @param Brown.rec.colname The name of the column that will contain the
 #'   recommended illuminance. Must not be part of the dataset, otherwise it will
 #'   throw an error.
-#' @param Reference.label.colname The name of the column that will contain the
-#'   label for the reference.
 #' @param Reference.label The label that will be used for the reference. Expects
 #'   a `character` scalar.
-#' @param Brown.check.colname The name of the column that will contain the check
-#'   if the illuminance is within the recommended levels.
 #' @param overwrite.Reference If `TRUE` (defaults to `FALSE`), the function will
-#'   overwrite the `Brown.rec.colname` columns if it already exists.
+#'   overwrite the `Brown.rec.colname` column if it already exists.
 #' @param ... Additional arguments that will be passed to [Brown.rec()] and
 #'   [Brown.check()]. This is only relevant to correct the names of the daytime
 #'   states or the thresholds used within these states. See the documentation of
@@ -41,8 +37,7 @@
 #' @family Brown
 #' @examples
 #' #add Brown reference illuminance to some sample data
-#' library(tibble)
-#' testdata <- tibble(MEDI = c(100, 10, 1, 300),
+#' testdata <- tibble::tibble(MEDI = c(100, 10, 1, 300),
 #'                   State.Brown = c("day", "evening", "night", "day"))
 #' Brown2reference(testdata)
 #' 
@@ -50,9 +45,7 @@ Brown2reference <- function(dataset,
                             MEDI.colname = MEDI,
                             Brown.state.colname = State.Brown,
                             Brown.rec.colname = Reference,
-                            Reference.label.colname = Reference.label,
                             Reference.label = "Brown et al. (2022)",
-                            Brown.check.colname = Reference.check,
                             overwrite.Reference = FALSE,
                             ...) {
   
@@ -62,6 +55,7 @@ Brown2reference <- function(dataset,
   MEDI.colname.defused <- colname.defused({{ MEDI.colname }})
   Brown.state.colname.defused <- colname.defused({{ Brown.state.colname }})
   Brown.rec.colname.str <- colname.defused({{ Brown.rec.colname }})
+  Reference.label.column.str <- paste0(Brown.rec.colname.str, ".check")
   
   #give an error or warning if the reference column is present
   if(Brown.rec.colname.str %in% names(dataset) & !overwrite.Reference) 
@@ -92,18 +86,21 @@ Brown2reference <- function(dataset,
         Brown.rec(state = {{ Brown.state.colname }},
                   ...)
       )
+  
   #add a column with the checks
   dataset <- dataset %>% 
     dplyr::mutate(
-      {{ Brown.check.colname }} := 
+      !!Reference.label.column.str := 
         Brown.check(
           value = {{ MEDI.colname }},
           state = {{ Brown.state.colname }},
-          ...),
-      {{ Reference.label.colname }} :=
-        dplyr::if_else(!is.na({{ Brown.check.colname }}), Reference.label, NA)
+          ...)
     )
     
+  #add a column with the reference label
+  dataset <- 
+    create.Reference.label(dataset, {{ Brown.rec.colname }}, Reference.label)
+  
   dataset
 }
 
@@ -173,9 +170,9 @@ Brown.check <- function(value,
   )
 }
 
-#' Calculate the recommended illuminance/MEDI levels by Brown et al. (2022)
+#' Set the recommended illuminance/MEDI levels by Brown et al. (2022)
 #'
-#' This is a lower level function. It calculates the recommended
+#' This is a lower level function. It sets the recommended
 #' illuminance/MEDI levels by Brown et al. (2022) for a given state. The
 #' function is vectorized.
 #'
@@ -183,7 +180,7 @@ Brown.check <- function(value,
 #' @param state The state from Brown et al. (2022). Needs to be a character
 #'   vector.
 #'
-#' @return df A dataframe with the same length as `state` that contains the
+#' @return A dataframe with the same length as `state` that contains the
 #'   recommended illuminance/MEDI levels.
 #' @export
 #'
@@ -206,6 +203,8 @@ Brown.rec <- function(state,
   
   stopifnot("Thresholds need to be numeric" = 
               is.numeric(c(Brown.day.th, Brown.evening.th, Brown.night.th)),
+            "Thresholds need to be scalars" = 
+              is.all.scalar(Brown.day.th, Brown.evening.th, Brown.night.th),
             "States need to be scalars" =
               is.all.scalar(Brown.day, Brown.evening, Brown.night)
   )

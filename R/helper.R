@@ -48,7 +48,7 @@ count.difftime <- function(dataset, Datetime.column = Datetime) {
     dplyr::count(difftime, sort = TRUE)
 }
 
-#calculate the nth percentile of time differences per group (in a grouped dataset)
+#calculate the nth Quantile of time differences per group (in a grouped dataset)
 nth.difftime <- function(dataset, Datetime.column = Datetime, n = 0.95) {
   dataset %>% 
     dplyr::mutate(
@@ -56,19 +56,19 @@ nth.difftime <- function(dataset, Datetime.column = Datetime, n = 0.95) {
       ) %>% 
     tidyr::drop_na(difftime) %>% 
     dplyr::summarise(
-      percentile = quantile(difftime, probs = n, na.rm = TRUE)
+      Quant = stats::quantile(difftime, probs = n, na.rm = TRUE)
     )
 }
 
-#calculate the whether the nth percentile of time differences in one dataset is smaller or equal to the nth percentile of time differences in another dataset
+#calculate the whether the nth quantile of time differences in one dataset is smaller or equal to the nth quantile of time differences in another dataset
 compare.difftime <- function(dataset1, dataset2, Datetime.column = Datetime, n = 0.95) {
-  percentile1 <- nth.difftime(dataset1, {{ Datetime.column }}, n = n)
-  percentile2 <- nth.difftime(dataset2, {{ Datetime.column }}, n = n)
-  #do a full join with every column but percentile
-  group_variables <- setdiff(names(percentile2), "percentile")
-  dplyr::full_join(percentile1, percentile2, by = group_variables) %>% 
+  Quant1 <- nth.difftime(dataset1, {{ Datetime.column }}, n = n)
+  Quant2 <- nth.difftime(dataset2, {{ Datetime.column }}, n = n)
+  #do a full join with every column but Quantile
+  group_variables <- setdiff(names(Quant2), "Quant")
+  dplyr::full_join(Quant1, Quant2, by = group_variables) %>% 
   dplyr::mutate(
-    comparison = percentile.x <= percentile.y
+    comparison = Quant.x <= Quant.y
   )
 }
 
@@ -76,9 +76,28 @@ compare.difftime <- function(dataset1, dataset2, Datetime.column = Datetime, n =
 compare.difftime.any <- function(...) {
   comparison <- compare.difftime(...) %>% 
     dplyr::filter(comparison == FALSE) %>% 
-    dplyr::rename(Dataset.Interval = percentile.x,
-                 Reference.Interval = percentile.y) %>% 
+    dplyr::rename(Dataset.Interval = Quant.x,
+                 Reference.Interval = Quant.y) %>% 
     dplyr::select(-comparison)
   
   if(nrow(comparison) > 0) comparison else TRUE
 }
+
+#create a reference label
+create.Reference.label <- function(dataset, 
+                                   Reference.column, 
+                                   Reference.label = NULL) {
+  if(!is.null(Reference.label)) {
+    Reference.column.str <- colname.defused({{ Reference.column }})
+    Reference.label.column.str <- paste0(Reference.column.str, ".label")
+    
+    dataset <- 
+      dataset %>% 
+      dplyr::mutate(!!Reference.label.column.str := 
+                      dplyr::if_else(
+                        !is.na({{ Reference.column }}), Reference.label, NA
+                        )
+      )
+    dataset
+    } else dataset
+  }

@@ -92,6 +92,7 @@ dataset %>%
 ```
 
 ### More than one dataset
+
 The built-in dataset `sample.data.environment` shows a combined dataset of light logger data and a second set of data - in this case unobstructed outdoor light measurements. Combined datasets can be easily visualized with `gg_day()`. The `col` parameter used on the `Source` column of the dataset allows for a color separation.
 
 ```{r, fig.height= 6, fig.retina=2}

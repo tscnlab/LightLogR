@@ -9,9 +9,7 @@ Brown2reference(
   MEDI.colname = MEDI,
   Brown.state.colname = State.Brown,
   Brown.rec.colname = Reference,
-  Reference.label.colname = Reference.label,
   Reference.label = "Brown et al. (2022)",
-  Brown.check.colname = Reference.check,
   overwrite.Reference = FALSE,
   ...
 )
@@ -30,17 +28,11 @@ states. Must be part of the dataset.}
 recommended illuminance. Must not be part of the dataset, otherwise it will
 throw an error.}
 
-\item{Reference.label.colname}{The name of the column that will contain the
-label for the reference.}
-
 \item{Reference.label}{The label that will be used for the reference. Expects
 a \code{character} scalar.}
 
-\item{Brown.check.colname}{The name of the column that will contain the check
-if the illuminance is within the recommended levels.}
-
 \item{overwrite.Reference}{If \code{TRUE} (defaults to \code{FALSE}), the function will
-overwrite the \code{Brown.rec.colname} columns if it already exists.}
+overwrite the \code{Brown.rec.colname} column if it already exists.}
 
 \item{...}{Additional arguments that will be passed to \code{\link[=Brown.rec]{Brown.rec()}} and
 \code{\link[=Brown.check]{Brown.check()}}. This is only relevant to correct the names of the daytime
@@ -64,8 +56,7 @@ create the required information.
 }
 \examples{
 #add Brown reference illuminance to some sample data
-library(tibble)
-testdata <- tibble(MEDI = c(100, 10, 1, 300),
+testdata <- tibble::tibble(MEDI = c(100, 10, 1, 300),
                   State.Brown = c("day", "evening", "night", "day"))
 Brown2reference(testdata)
 
