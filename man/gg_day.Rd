@@ -19,7 +19,7 @@ gg_day(
   y.scale.log10 = TRUE,
   y.scale.sc = FALSE,
   x.axis.label = "Time of Day",
-  y.axis.label = "Light exposure (lx, MEDI)",
+  y.axis.label = "Illuminance (lx, MEDI)",
   format.day = "\%d/\%m",
   title = NULL,
   subtitle = NULL,
