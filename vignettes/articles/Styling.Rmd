@@ -11,11 +11,11 @@ knitr::opts_chunk$set(
 
 ![](images/Day.png)
 
-You are tasked with visualizing a day of light logger data, worn by a participant over the course of one week. You´re supposed to show the data in comparison with what is available outside in unobstructed daylight. And, to make matters slightly more complex, you also want to show how the participant´s light exposure compares to the current recommendations of [healthy daytime, evening, and nighttime light exporsure](https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3001571). While the figure is nothing special in itself, working with light logger data to get the data ready for plotting is fraught with many hurdles, beginning with various raw data structures depending on the device manufacturer, varying temporal resolutions, implicit missing data, irregular data, working with Datetimes, and so forth. **LightLogR** aims to make this process easier by providing a holistic workflow for the data from import over validation up to and including figure generation and metric calculation.
+You are tasked with visualizing a day of light logger data, worn by a participant over the course of one week. You´re supposed to show the data in comparison with what is available outside in unobstructed daylight. And, to make matters slightly more complex, you also want to show how the participant´s luminous exposure compares to the current recommendations of [healthy daytime, evening, and nighttime light exporsure](https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3001571). While the figure is nothing special in itself, working with light logger data to get the data ready for plotting is fraught with many hurdles, beginning with various raw data structures depending on the device manufacturer, varying temporal resolutions, implicit missing data, irregular data, working with Datetimes, and so forth. **LightLogR** aims to make this process easier by providing a holistic workflow for the data from import over validation up to and including figure generation and metric calculation.
 
 This article guides you through the process of
 
--   importing Light exposure data from a participant as well as the environment, and sleep data about the same participant
+-   importing Light Logger data from a participant as well as the environment, and sleep data about the same participant
 
 -   creating exploratory visualizations to select a good day for the figure
 
@@ -46,7 +46,7 @@ file.sleep <- "205_sleepdiary_all_20230904.csv"
 
 ```
 
-### Participant Light Exposure Data
+### Participant Light Logger Data
 
 `LightLogR` provides convenient import functions for a range of supported devices (use the command `supported.devices` if you want to see what devices are supported at present). Because `LightLogR` knows how the files from these devices are structured, it needs very little input. In fact, the mere filepath would suffice. It is, however, a good idea to also provide the timezone argument `tz` to specify that these measurements were made in the `Europe/Berlin` timezone. This makes your data future-proof for when it is used in comparison with other geolocations.
 
@@ -73,7 +73,7 @@ Same goes for visualization - it is always helpful to get a good look at data im
 dataset.LL %>% gg_day(size = 0.25, interactive = TRUE)
 ```
 
-We can already see some patterns and features in the light exposure across the days. In general, the participant seems to have woken (or at least started wearing the light logger) after 9:00 and went to bed (or, again, stopped wearing the device) at around 23:00.
+We can already see some patterns and features in the luminous exposure across the days. In general, the participant seems to have woken (or at least started wearing the light logger) after 9:00 and went to bed (or, again, stopped wearing the device) at around 23:00.
 
 The warning that was generated alongside the plot refers to the fact, that we have lots of MEDI values with 0 lux - these don´t scale well to log. In the interactive plot these values are removed, in the static `ggplot`, they are shown at the very bottom of the scale.
 
@@ -111,13 +111,13 @@ Now that we have imported all of our data, we need to combine it sensibly, which
 
 ## Connecting Data
 
-Connecting the data, in this case, means giving context to our participant's light exposure data. There are a number of hurdles attached to connecting time series data, because data from different sets rarely align perfectly. Often their measurements are off by at least some seconds, or even use different measurement epochs.
+Connecting the data, in this case, means giving context to our participant's luminous exposure data. There are a number of hurdles attached to connecting time series data, because data from different sets rarely align perfectly. Often their measurements are off by at least some seconds, or even use different measurement epochs.
 
 Also, we have the sleep data, which only has time stamps whenever there is a change in status. Also - and this is crucial - it might have missing entries! `LightLogR` provides a few helpful functions however, to deal with these topics without resorting to rounding or averaging data to a common multiple.
 
 ### Solar Potential
 
-Let us start with the environmental measurements of unobstructed daylight. These can be seen as a natural potential of light exposure and thus serve as a reference for our participant´s light exposure.
+Let us start with the environmental measurements of unobstructed daylight. These can be seen as a natural potential of luminous exposure and thus serve as a reference for our participant´s luminous exposure.
 
 With the `data2reference()` function, we will create this reference. This function is extraordinarily powerful in that it can create a reference tailored to the light logger data from any source that has the wanted `Reference` column (in this case the MEDI column, which is the default), a `Datetime` column, and the same grouping structure (`Id`) as the light logger data set.
 
@@ -134,7 +134,7 @@ dataset.LL %>% head() %>% gt()
 
 ```
 
-For the sake of this example, we have also removed unnecessary data columns, which makes the further code examples simpler. We can already see in the table above that the reference at the start of the measurements is quite a bit higher than the light exposure at the participant´s light logger. We also see that the same reference value is applied to three participant values. This mirrors the fact that for every three measurements taken with the participant device, one measurement epoch for the environmental sensor passes.
+For the sake of this example, we have also removed unnecessary data columns, which makes the further code examples simpler. We can already see in the table above that the reference at the start of the measurements is quite a bit higher than the luminous exposure at the participant´s light logger. We also see that the same reference value is applied to three participant values. This mirrors the fact that for every three measurements taken with the participant device, one measurement epoch for the environmental sensor passes.
 
 To visualize this newly reached reference data, we can easily extend `gg_day()` with a dashed red reference line. Keep in mind that this visualization is still exploratory, so we are not investing heavily in styling.
 
@@ -145,7 +145,7 @@ dataset.LL %>%
 
 Again, some warnings. To the known warning about the infinite values (one for the point data, one for the line), a warning about missing values was added. This is simply due to the fact that not every data point on the x-axis has a corresponding y-axis-value. The two datasets largely align, but at the fringes, especially the last day, there is some non-overlap. When we perform calculations based on the light logger data and the reference, we have to keep in mind that only timesteps where *both* are present will give non `NA` results.
 
-While basic, the graph already shows valuable information about the potential light stimulus compared to actual exposure. In the morning hours, this participant never reached a significant light dose, while light exposure in the evenin regularly was on par with daytime levels, especially on the 29th. Let us see how these measurements compare to recommendations for light exposure.
+While basic, the graph already shows valuable information about the potential light stimulus compared to actual exposure. In the morning hours, this participant never reached a significant light dose, while luminous exposure in the evening regularly was on par with daytime levels, especially on the 29th. Let us see how these measurements compare to recommendations for luminous exposure.
 
 ### Recommended Light levels
 
@@ -203,7 +203,7 @@ dataset.LL %>% #dataset
   geom_line(aes(y=Reference.Brown), lty = 2, col = "blue") #Brown reference
 ```
 
-Looking good so far! In the next section, let us focus on picking out one day and get more into styling. Based on the available data I think **01/09** looks promising, as there is some variation during the day with some timeframes outside in the afternoon and a varied but typical light exposure in the evening.
+Looking good so far! In the next section, let us focus on picking out one day and get more into styling. Based on the available data I think **01/09** looks promising, as there is some variation during the day with some timeframes outside in the afternoon and a varied but typical luminous exposure in the evening.
 
 We can use the `filter_Date()` function to easily cut this specific chunk out from the data. We also deactivate the facetting function from `gg_day()`, as we only have one day.
 
@@ -234,7 +234,7 @@ scale.correction <- coord_cartesian(
   expand = FALSE)  #set the axis limits exactly at ylim and xlim
 ```
 
-### Participants Light Exposure {.tabset .tabset-pills}
+### Participants luminous exposure {.tabset .tabset-pills}
 
 By default, `gg_day()` uses a point geom for the data display. We can, however, play around with other geoms.
 
@@ -256,7 +256,7 @@ dataset.LL.partial  %>%
   solar.reference + brown.reference + scale.correction
 ```
 
-The line geom shows changes in light exposure a bit better and might be a better choice in this case.
+The line geom shows changes in luminous exposure a bit better and might be a better choice in this case.
 
 #### `geom_ribbon`
 
@@ -293,7 +293,7 @@ The geom family of `hex`, `bin2d`, or `density_2d` is particularly well suited i
 
 ###  {.unnumbered}
 
-**Conclusion:** The `line` or `ribbon` geom seem like a good choice for our task. However, The high resolution of the data (*10 seconds*) makes the line very noisy. Sometimes this level of detail is good, but our figure should give more of a general representation of light exposure, so we should aggregate the data somewhat. We can use the same function as for the boxplot, `cut_Datetime()` and use this to aggregate our data to the desired resolution. For the sake of this example, let´s create a function to try several aggregation times.
+**Conclusion:** The `line` or `ribbon` geom seem like a good choice for our task. However, The high resolution of the data (*10 seconds*) makes the line very noisy. Sometimes this level of detail is good, but our figure should give more of a general representation of luminous exposure, so we should aggregate the data somewhat. We can use the same function as for the boxplot, `cut_Datetime()` and use this to aggregate our data to the desired resolution. For the sake of this example, let´s create a function to try several aggregation times.
 
 ```{r}
 dataset.LL.aggregate <- function(unit) {
@@ -502,7 +502,7 @@ Plot +
 
 ```
 
-This is a variant of the representation used throught the document. Since the light exposure and daylight levels are very distinct in terms of color, however, the line could stay black.
+This is a variant of the representation used throught the document. Since the luminous exposure and daylight levels are very distinct in terms of color, however, the line could stay black.
 
 #### `geom_rect`
 
@@ -556,7 +556,7 @@ Plot +
 
 ```
 
-This approach uses a conditional coloration of points, depending on whether or not the personal light exposure is within the recommended limits.
+This approach uses a conditional coloration of points, depending on whether or not the personal luminous exposure is within the recommended limits.
 
 ###  {.unnumbered}
 
