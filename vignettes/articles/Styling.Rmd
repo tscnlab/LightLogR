@@ -191,7 +191,7 @@ Now we have a column in our light logger dataset that declares all the three sta
 
 ```{r}
 dataset.LL <- dataset.LL %>% Brown2reference(Brown.rec.colname = Reference.Brown)
-dataset.LL %>% select(!Reference.label) %>% tail() %>% gt()
+dataset.LL %>% select(!Reference.Brown.label) %>% tail() %>% gt()
 ```
 
 `Brown2reference()` added three columns, two of which are shown in the table above. A third column contains a text label about the type of reference, sth. we could also have added for the solar exposition. Now let´s have a quick look at the result in the plot overview
@@ -549,7 +549,7 @@ With the `geom_area` function we can draw target areas for our values.
 
 ```{r, fig.retina=2, fig.width=7, fig.height = 4, warning=FALSE}
 Plot + 
-  geom_point(aes(col = Reference.check), size = 0.5)+
+  geom_point(aes(col = Reference.Brown.check), size = 0.5)+
   geom_line(aes(y=Reference.Brown), lty = 2, size = 0.4, col = "grey60") + #Brown reference
   scale_color_manual(values = c("grey50", "#EFC000"))+
   guides(color = "none")
@@ -565,7 +565,7 @@ This approach uses a conditional coloration of points, depending on whether or n
 ```{r, warning=FALSE, message=FALSE}
 Plot <- 
 Plot + 
-  geom_point(aes(col = Reference.check), size = 0.5)+
+  geom_point(aes(col = Reference.Brown.check), size = 0.5)+
   geom_line(aes(y=Reference.Brown, 
                 # group = consecutive_id(State.Brown)
                 ), 
