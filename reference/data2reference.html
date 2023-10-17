@@ -85,11 +85,13 @@ reference data beforehand to lenghten the inteval.</strong></p>
 <span>  Data.column <span class="op">=</span> <span class="va">MEDI</span>,</span>
 <span>  ID.column <span class="op">=</span> <span class="va">Id</span>,</span>
 <span>  Reference.column <span class="op">=</span> <span class="va">Reference</span>,</span>
+<span>  overwrite.Reference <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  filter.expression.reference <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  across.id <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  shift.start <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  length.restriction.seconds <span class="op">=</span> <span class="fl">60</span>,</span>
-<span>  shift.intervals <span class="op">=</span> <span class="st">"auto"</span></span>
+<span>  shift.intervals <span class="op">=</span> <span class="st">"auto"</span>,</span>
+<span>  Reference.label <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -125,6 +127,11 @@ the <code>dataset</code>. Default is <code>Reference</code>. Cannot be the same 
 column in the <code>dataset</code> and will throw an error if it is.</p></dd>
 
 
+<dt>overwrite.Reference</dt>
+<dd><p>If <code>TRUE</code> (defaults to <code>FALSE</code>), the function will
+overwrite the <code>Reference.colname</code> column if it already exists.</p></dd>
+
+
 <dt>filter.expression.reference</dt>
 <dd><p>Expression that is used to filter the
 <code>Reference.data</code> before it is used as reference. Default is <code>NULL</code>. See</p></dd>
@@ -157,6 +164,11 @@ calculated by halving the most frequent time difference between two data
 points in the reference data. If a number is given, this number in seconds
 is used as the shift. Can also use <code><a href="https://lubridate.tidyverse.org/reference/duration.html" class="external-link">lubridate::duration()</a></code> to specify the
 shift.</p></dd>
+
+
+<dt>Reference.label</dt>
+<dd><p>Label that is added to the reference data. If <code>NULL</code>,
+no label is added.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -197,15 +209,15 @@ within <code><a href="https://dplyr.tidyverse.org/reference/filter.html" class="
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">gg_reference</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">dataset</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="va">dataset</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> </span></span>
-<span class="r-in"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Datetime</span>, y <span class="op">=</span> <span class="va">`MELANOPIC EDI`</span>, color <span class="op">=</span> <span class="va">Source</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span></span>
-<span class="r-in"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span> </span></span>
-<span class="r-in"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">Reference</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"black"</span>, size <span class="op">=</span> <span class="fl">0.25</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span> <span class="op">+</span> </span></span>
+<span class="r-in"><span><span class="va">dataset</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Datetime</span>, y <span class="op">=</span> <span class="va">`MELANOPIC EDI`</span>, color <span class="op">=</span> <span class="va">Source</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">Reference</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"black"</span>, size <span class="op">=</span> <span class="fl">0.25</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span> <span class="op">+</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">Source</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#in this example, each data point is its own reference</span></span></span>
-<span class="r-in"><span><span class="va">sample.data.environment</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Source</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> </span></span>
+<span class="r-in"><span><span class="va">sample.data.environment</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Source</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu">data2reference</span><span class="op">(</span>Data.column <span class="op">=</span> <span class="va">`MELANOPIC EDI`</span>, ID.column <span class="op">=</span> <span class="va">Source</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu">gg_reference</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding missing grouping variables: `Source`</span>
@@ -218,9 +230,9 @@ within <code><a href="https://dplyr.tidyverse.org/reference/filter.html" class="
 <span class="r-in"><span><span class="co">#this requires grouping of the Data by Day, which is then specified in across.id</span></span></span>
 <span class="r-in"><span><span class="co">#also, shift.start needs to be set to TRUE, to shift the reference data to the</span></span></span>
 <span class="r-in"><span><span class="co">#start of the groupings</span></span></span>
-<span class="r-in"><span><span class="va">sample.data.environment</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Source</span>, Day <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">as_date</a></span><span class="op">(</span><span class="va">Datetime</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> </span></span>
+<span class="r-in"><span><span class="va">sample.data.environment</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Source</span>, Day <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">as_date</a></span><span class="op">(</span><span class="va">Datetime</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span><span class="fu">data2reference</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  Data.column <span class="op">=</span> <span class="va">`MELANOPIC EDI`</span>, </span></span>
+<span class="r-in"><span>  Data.column <span class="op">=</span> <span class="va">`MELANOPIC EDI`</span>,</span></span>
 <span class="r-in"><span>  ID.column <span class="op">=</span> <span class="va">Source</span>,</span></span>
 <span class="r-in"><span>  filter.expression.reference <span class="op">=</span>  <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">as_date</a></span><span class="op">(</span><span class="va">Datetime</span><span class="op">)</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">as_date</a></span><span class="op">(</span><span class="va">Datetime</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  shift.start <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
@@ -236,9 +248,9 @@ within <code><a href="https://dplyr.tidyverse.org/reference/filter.html" class="
 <span class="r-plt img"><img src="data2reference-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#in this example, the Environment Data will be used as a reference</span></span></span>
-<span class="r-in"><span><span class="va">sample.data.environment</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Source</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> </span></span>
+<span class="r-in"><span><span class="va">sample.data.environment</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Source</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span><span class="fu">data2reference</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  Data.column <span class="op">=</span> <span class="va">`MELANOPIC EDI`</span>, </span></span>
+<span class="r-in"><span>  Data.column <span class="op">=</span> <span class="va">`MELANOPIC EDI`</span>,</span></span>
 <span class="r-in"><span>  ID.column <span class="op">=</span> <span class="va">Source</span>,</span></span>
 <span class="r-in"><span>  filter.expression.reference <span class="op">=</span>  <span class="va">Source</span> <span class="op">==</span> <span class="st">"Environment"</span>,</span></span>
 <span class="r-in"><span>  across.id <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>

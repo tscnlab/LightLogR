@@ -68,8 +68,8 @@ participant's <code>ID</code>.</p>
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">interval2state</span><span class="op">(</span></span>
 <span>  <span class="va">dataset</span>,</span>
-<span>  Datetime.colname <span class="op">=</span> <span class="va">Datetime</span>,</span>
 <span>  <span class="va">State.interval.dataset</span>,</span>
+<span>  Datetime.colname <span class="op">=</span> <span class="va">Datetime</span>,</span>
 <span>  State.colname <span class="op">=</span> <span class="va">State</span>,</span>
 <span>  Interval.colname <span class="op">=</span> <span class="va">Interval</span>,</span>
 <span>  ID.colname.dataset <span class="op">=</span> <span class="va">Id</span>,</span>
@@ -86,16 +86,16 @@ by <a href="LightLogR-package.html">LightLogR</a>, take care to choose a sensibl
 <code>Datetime.colname</code>.</p></dd>
 
 
-<dt>Datetime.colname</dt>
-<dd><p>column name that contains the datetime. Defaults to
-<code>"Datetime"</code> which is automatically correct for data imported with
-<a href="LightLogR-package.html">LightLogR</a>. Expects a <code>symbol</code>. Needs to be part of the <code>dataset</code>.</p></dd>
-
-
 <dt>State.interval.dataset</dt>
 <dd><p>Name of the dataset that contains <code>State</code> and
 <code>Interval</code> columns. Interval data can be created, e.g., through
 <code><a href="sc2interval.html">sc2interval()</a></code>.</p></dd>
+
+
+<dt>Datetime.colname</dt>
+<dd><p>column name that contains the datetime. Defaults to
+<code>"Datetime"</code> which is automatically correct for data imported with
+<a href="LightLogR-package.html">LightLogR</a>. Expects a <code>symbol</code>. Needs to be part of the <code>dataset</code>.</p></dd>
 
 
 <dt>State.colname, Interval.colname</dt>
