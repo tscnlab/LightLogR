@@ -74,6 +74,7 @@ participant's <code>ID</code>.</p>
 <span>  Interval.colname <span class="op">=</span> <span class="va">Interval</span>,</span>
 <span>  ID.colname.dataset <span class="op">=</span> <span class="va">Id</span>,</span>
 <span>  ID.colname.interval <span class="op">=</span> <span class="va">Id</span>,</span>
+<span>  overwrite.State <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  output.dataset <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -100,7 +101,9 @@ by <a href="LightLogR-package.html">LightLogR</a>, take care to choose a sensibl
 
 <dt>State.colname, Interval.colname</dt>
 <dd><p>Column names of the <code>State</code> and
-<code>Interval</code> in the <code>State.interval.dataset</code>. Expects a <code>symbol</code>.</p></dd>
+<code>Interval</code> in the <code>State.interval.dataset</code>. Expects a <code>symbol</code>. <code>State</code>
+can't be in the <code>dataset</code> yet or the function will give an error. You can
+also set <code>overwrite.State = TRUE</code>.</p></dd>
 
 
 <dt>ID.colname.dataset, ID.colname.interval</dt>
@@ -111,6 +114,11 @@ different. If the datasets where imported and preprocessed with
 <a href="LightLogR-package.html">LightLogR</a>, this just works. Both datasets need an <code>Id</code>, because the
 states will be added based not only on the <code>Datetime</code>, but also depending
 on the dataset.</p></dd>
+
+
+<dt>overwrite.State</dt>
+<dd><p>If <code>TRUE</code> (defaults to <code>FALSE</code>), the function will
+overwrite the <code>State.colname</code> column if it already exists.</p></dd>
 
 
 <dt>output.dataset</dt>

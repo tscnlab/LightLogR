@@ -141,11 +141,11 @@
 <span><span class="co">#&gt; End: 2023-06-22 23:59:48</span></span>
 <span><span class="co">#&gt; Timespan: 2 days</span></span>
 <span><span class="co">#&gt; Observation intervals: </span></span>
-<span><span class="co">#&gt;   interval.time     n pct    </span></span>
-<span><span class="co">#&gt; 1 15 secs       10015 87.689%</span></span>
-<span><span class="co">#&gt; 2 16 secs        1367 11.969%</span></span>
-<span><span class="co">#&gt; 3 17 secs          23 0.201% </span></span>
-<span><span class="co">#&gt; 4 18 secs          16 0.140%</span></span>
+<span><span class="co">#&gt;   Id              interval.time     n pct    </span></span>
+<span><span class="co">#&gt; 1 sample_data_LYS 15s           10015 87.689%</span></span>
+<span><span class="co">#&gt; 2 sample_data_LYS 16s            1367 11.969%</span></span>
+<span><span class="co">#&gt; 3 sample_data_LYS 17s              23 0.201% </span></span>
+<span><span class="co">#&gt; 4 sample_data_LYS 18s              16 0.140%</span></span>
 <span></span>
 <span><span class="va">dataset</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">Datetime</span>, <span class="va">lux</span>, <span class="va">kelvin</span>, <span class="va">MEDI</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="fl">8000</span><span class="op">:</span><span class="fl">8005</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://davidgohel.github.io/flextable/reference/flextable.html" class="external-link">flextable</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://davidgohel.github.io/flextable/reference/autofit.html" class="external-link">autofit</a></span><span class="op">(</span><span class="op">)</span></span>
