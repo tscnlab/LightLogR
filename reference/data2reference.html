@@ -220,10 +220,9 @@ within <code><a href="https://dplyr.tidyverse.org/reference/filter.html" class="
 <span class="r-in"><span><span class="va">sample.data.environment</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Source</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu">data2reference</span><span class="op">(</span>Data.column <span class="op">=</span> <span class="va">`MELANOPIC EDI`</span>, ID.column <span class="op">=</span> <span class="va">Source</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu">gg_reference</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding missing grouping variables: `Source`</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Please use `linewidth` instead.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 2 rows containing missing values (`geom_line()`).</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 1 row containing missing values (`geom_line()`).</span>
 <span class="r-plt img"><img src="data2reference-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#in this example, the first day of each ID is the reference for the other days</span></span></span>
@@ -239,12 +238,11 @@ within <code><a href="https://dplyr.tidyverse.org/reference/filter.html" class="
 <span class="r-in"><span>  across.id <span class="op">=</span> <span class="st">"Day"</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu">gg_reference</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Joining with `by = join_by(Source, Day)`</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding missing grouping variables: `Source`, `Day`</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding missing grouping variables: `Source`</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Joining with `by = join_by(Source)`</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Joining with `by = join_by(Source, Day)`</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Joining with `by = join_by(Source, Day)`</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 2 rows containing missing values (`geom_line()`).</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 1 row containing missing values (`geom_line()`).</span>
 <span class="r-plt img"><img src="data2reference-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#in this example, the Environment Data will be used as a reference</span></span></span>
@@ -255,8 +253,7 @@ within <code><a href="https://dplyr.tidyverse.org/reference/filter.html" class="
 <span class="r-in"><span>  filter.expression.reference <span class="op">=</span>  <span class="va">Source</span> <span class="op">==</span> <span class="st">"Environment"</span>,</span></span>
 <span class="r-in"><span>  across.id <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu">gg_reference</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding missing grouping variables: `Source`</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 4 rows containing missing values (`geom_line()`).</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 1 row containing missing values (`geom_line()`).</span>
 <span class="r-plt img"><img src="data2reference-3.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
