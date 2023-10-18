@@ -146,6 +146,16 @@ data2reference <- function(dataset,
   
   filter.expression.reference <- rlang::enexpr(filter.expression.reference)
   
+  #if the dataset has no grouping, group by the ID column
+  if(dplyr::n_groups(dataset) == 0) {
+    dataset <- dataset %>% dplyr::group_by({{ ID.column }})
+  }
+  
+  #if the Reference.data has no grouping, group by the ID column
+  if(dplyr::n_groups(Reference.data) == 0) {
+    Reference.data <- Reference.data %>% dplyr::group_by({{ ID.column }})
+  }
+  
   #set arguments based on the across.id argument
   across.which.id <- NULL
   
@@ -216,13 +226,13 @@ data2reference <- function(dataset,
     sc2interval(
       Statechange.colname = {{ Data.column }},
       length.restriction = length.restriction.seconds,
-      full = FALSE,
+      full = TRUE,
       State.colname = {{ Reference.column }},
       Datetime.keep = TRUE
       ) %>%
-    dplyr::select(Interval, {{ Reference.column }}) %>% 
+    dplyr::select(dplyr::group_cols(), Interval, {{ Reference.column }}) %>%
     dplyr::mutate(
-      Interval = 
+      Interval =
         lubridate::int_shift(Interval, - shift.intervals[1]), .before = 1)
   
   #making the reference data work across id´s
@@ -280,8 +290,8 @@ data2reference <- function(dataset,
   }
   
   # unnest the reference data
-  Reference.data <- 
-    Reference.data %>% 
+  Reference.data <-
+    Reference.data %>%
     tidyr::unnest(data)
   }
   
@@ -296,10 +306,10 @@ data2reference <- function(dataset,
   }
   
   #apply the Reference to the dataset
-  dataset <- 
-    dataset %>% 
+  dataset <-
+    dataset %>%
     interval2state(
-      State.interval.dataset = Reference.data, 
+      State.interval.dataset = Reference.data,
       State.colname = {{ Reference.column }},
       ID.colname.dataset = {{ ID.column }},
       ID.colname.interval = {{ ID.column }})
