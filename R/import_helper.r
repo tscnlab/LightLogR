@@ -29,7 +29,7 @@ import.LL <- function(filename,
            "TRUE" =
     {tmp <- tmp %>% 
       dplyr::mutate({{ ID.colname }} := 
-                      basename(filename) %>% 
+                      basename(file.name) %>% 
                       tools::file_path_sans_ext() %>% 
                       stringr::str_extract(auto.id),
                     .before = 1)},
@@ -39,14 +39,14 @@ import.LL <- function(filename,
     )
   }
   tmp <- tmp %>% 
-    dplyr::mutate(file.name = basename(filename) %>% 
+    dplyr::mutate(file.name = basename(file.name) %>% 
                     tools::file_path_sans_ext(),
                   {{ ID.colname }} := factor({{ ID.colname }})) %>% 
     dplyr::group_by({{ ID.colname }}) %>% 
     dplyr::arrange(Datetime, .by_group = TRUE)
   
   #give info about the file
-  import.info(tmp, device, tz)
+  import.info(tmp, device, tz, {{ ID.colname }})
   
   #return the file
   tmp
@@ -54,8 +54,9 @@ import.LL <- function(filename,
 
 
 #This internal helper function prints basic information about a dataset and is used for import function
-import.info <- function(tmp, device, tz) {
+import.info <- function(tmp, device, tz, ID.colname) {
   #give info about the file
+  
   
   min.time <- min(tmp$Datetime)
   max.time <- max(tmp$Datetime)
@@ -64,8 +65,10 @@ import.info <- function(tmp, device, tz) {
     dplyr::reframe(
       interval.time = diff(Datetime)
       ) %>% 
+    dplyr::group_by({{ ID.colname }}) %>%
     dplyr::count(interval.time) %>% 
-    dplyr::mutate(pct = (n/sum(n)) %>% scales::percent())
+    dplyr::mutate(pct = (n/sum(n)) %>% scales::percent(),
+                  interval.time = interval.time %>% lubridate::as.duration())
 
     cat(
     "Successfully read in ", nrow(tmp), " observations from ", device, "-file", 
@@ -81,7 +84,7 @@ import.info <- function(tmp, device, tz) {
     "Timespan: " , diff(c(min.time, max.time)) %>% format(digits = 2), "\n",
     "Observation intervals: \n",
     sep = "")
-  utils::capture.output(interval.time)[c(-1,-3)] %>% cat(sep = "\n")
+  utils::capture.output(interval.time)[c(-1,-2,-4)] %>% cat(sep = "\n")
 }
 
 #This internal helper functions provides a link from the specific import function to the generic import function
