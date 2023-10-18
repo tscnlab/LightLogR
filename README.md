@@ -89,11 +89,11 @@ dataset <- import.LYS(filename, tz = "Europe/Berlin")
 #> End: 2023-06-22 23:59:48
 #> Timespan: 2 days
 #> Observation intervals: 
-#>   interval.time     n pct    
-#> 1 15 secs       10015 87.689%
-#> 2 16 secs        1367 11.969%
-#> 3 17 secs          23 0.201% 
-#> 4 18 secs          16 0.140%
+#>   Id              interval.time     n pct    
+#> 1 sample_data_LYS 15s           10015 87.689%
+#> 2 sample_data_LYS 16s            1367 11.969%
+#> 3 sample_data_LYS 17s              23 0.201% 
+#> 4 sample_data_LYS 18s              16 0.140%
 
 dataset %>% select(Datetime, lux, kelvin, MEDI) %>%  slice(8000:8005) %>% 
   flextable() %>% autofit()

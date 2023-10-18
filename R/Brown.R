@@ -59,7 +59,7 @@ Brown2reference <- function(dataset,
   
   #give an error or warning if the reference column is present
   if(Brown.rec.colname.str %in% names(dataset) & !overwrite.Reference) 
-    stop("A Reference column with the given (or default) name is already part of the dataset. Please remove the column or choose a different name")
+    stop("A Reference column with the given (or default) name is already part of the dataset. Please remove the column, choose a different name, or set `overwrite.Reference = TRUE`")
   if(Brown.rec.colname.str %in% names(dataset)) 
     warning("A Reference column with the given (or default) name is already part of the dataset. It is overwritten, because `overwrite.Reference = TRUE ` was set.")
   

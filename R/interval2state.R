@@ -10,7 +10,9 @@
 #'   `Interval` columns. Interval data can be created, e.g., through
 #'   [sc2interval()].
 #' @param State.colname,Interval.colname  Column names of the `State` and
-#'   `Interval` in the `State.interval.dataset`. Expects a `symbol`.
+#'   `Interval` in the `State.interval.dataset`. Expects a `symbol`. `State`
+#'   can't be in the `dataset` yet or the function will give an error. You can
+#'   also set `overwrite.State = TRUE`.
 #' @param ID.colname.dataset,ID.colname.interval Column names of the
 #'   participant's `Id` in both the `dataset` and the `State.interval.dataset`.
 #'   On the off-chance that there are inconsistencies, the names can be
@@ -18,6 +20,8 @@
 #'   [LightLogR], this just works. Both datasets need an `Id`, because the
 #'   states will be added based not only on the `Datetime`, but also depending
 #'   on the dataset.
+#' @param overwrite.State If `TRUE` (defaults to `FALSE`), the function will
+#'   overwrite the `State.colname` column if it already exists.
 #'
 #' @return One of
 #' * a `data.frame` object identical to `dataset` but with the state column added
@@ -65,6 +69,7 @@ interval2state <- function(dataset,
                            Interval.colname = Interval,
                            ID.colname.dataset = Id,
                            ID.colname.interval = Id,
+                           overwrite.State = FALSE,
                            output.dataset = TRUE) {
   
   # Initial Checks ----------------------------------------------------------
@@ -93,7 +98,24 @@ interval2state <- function(dataset,
     "output.dataset must be a logical" = is.logical(output.dataset)
   )
   
+  #give an error or warning if the reference column is present
+  if(all(
+    State.colname.defused %in% names(dataset),
+    !overwrite.State,
+    State.colname.defused %in% names(State.interval.dataset)))
+    stop("A `State` column with the given (or default) name is already part of the dataset. Please remove the column, rename it, or set `overwrite.State = TRUE`")
+    if(all(
+      State.colname.defused %in% names(dataset),
+      State.colname.defused %in% names(State.interval.dataset))) 
+      warning("A `State` column with the given (or default) name is already part of the dataset. It is overwritten, because `overwrite.State = TRUE ` was set.")
+  
+  
   # Manipulation ----------------------------------------------------------
+  
+  #remove the State.colname from the dataset if it is already present
+  if(State.colname.defused %in% names(dataset)) {
+    dataset <- dataset %>% dplyr::select(- {{ State.colname }})
+  }
   
   #add a marker to the dataset that tells us, what the original Timepoints were
   dataset <- 

@@ -609,7 +609,7 @@ Plot +
   annotate("text", x=x, y = 4000, label = "- Daylight Potential", 
            hjust = 0, col = "#0073C2DD")
 
-ggplot2::ggsave("Brown_et_al_2022.png", width = 7, height = 4, dpi = 600)
+# ggplot2::ggsave("Brown_et_al_2022.png", width = 7, height = 4, dpi = 600)
 
 ```
 

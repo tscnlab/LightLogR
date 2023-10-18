@@ -12,6 +12,7 @@ interval2state(
   Interval.colname = Interval,
   ID.colname.dataset = Id,
   ID.colname.interval = Id,
+  overwrite.State = FALSE,
   output.dataset = TRUE
 )
 }
@@ -29,7 +30,9 @@ by \link{LightLogR}, take care to choose a sensible variable for the
 \link{LightLogR}. Expects a \code{symbol}. Needs to be part of the \code{dataset}.}
 
 \item{State.colname, Interval.colname}{Column names of the \code{State} and
-\code{Interval} in the \code{State.interval.dataset}. Expects a \code{symbol}.}
+\code{Interval} in the \code{State.interval.dataset}. Expects a \code{symbol}. \code{State}
+can't be in the \code{dataset} yet or the function will give an error. You can
+also set \code{overwrite.State = TRUE}.}
 
 \item{ID.colname.dataset, ID.colname.interval}{Column names of the
 participant's \code{Id} in both the \code{dataset} and the \code{State.interval.dataset}.
@@ -38,6 +41,9 @@ different. If the datasets where imported and preprocessed with
 \link{LightLogR}, this just works. Both datasets need an \code{Id}, because the
 states will be added based not only on the \code{Datetime}, but also depending
 on the dataset.}
+
+\item{overwrite.State}{If \code{TRUE} (defaults to \code{FALSE}), the function will
+overwrite the \code{State.colname} column if it already exists.}
 
 \item{output.dataset}{should the output be a \code{data.frame} (Default \code{TRUE}) or
 a vector with \code{hms} (\code{FALSE}) times? Expects a \code{logical} scalar.}

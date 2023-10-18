@@ -158,8 +158,9 @@ import.Statechanges <- function(filename, path = NULL,
   # Rename columns using the {{ }} syntax, remove NA and group by ID, arrange 
   # it, recode, and set Datetimes as POSIXct
   data <- dplyr::rename(data,
-                        {{ ID.newname }} := {{ ID.colname }}) %>% 
-    dplyr::filter(!is.na({{ ID.newname }}), !is.na({{ Datetime.column }})) %>% 
+                        {{ ID.newname }} := {{ ID.colname }},
+                        Datetime = {{ Datetime.column }}) %>% 
+    dplyr::filter(!is.na({{ ID.newname }}), !is.na(Datetime)) %>% 
     dplyr::group_by({{ ID.newname }})
   
   data <- 
@@ -169,13 +170,17 @@ import.Statechanges <- function(filename, path = NULL,
     } else data %>% 
         dplyr::rename({{ State.newname }} := {{ State.colnames }})
   
+  if(!lubridate::is.POSIXct(data$Datetime)){
+    data <- data %>%  
+      dplyr::mutate(Datetime = 
+                      lubridate::parse_date_time(Datetime,   
+                                                 orders = Datetime.format, tz
+                      ))
+  }
+  
   data <- data %>%  
-    dplyr::mutate(Datetime = 
-                    lubridate::parse_date_time({{ Datetime.column }},   
-                                               orders = Datetime.format, tz
-                    ),
-                  {{ ID.newname }} := factor({{ ID.newname }})) %>% 
-    dplyr::arrange({{ Datetime.column }}, .by_group = TRUE)
+    dplyr::mutate({{ ID.newname }} := factor({{ ID.newname }})) %>% 
+    dplyr::arrange(Datetime, .by_group = TRUE)
   
   # Return the Data ----------------------------------------------------------
   
@@ -193,6 +198,8 @@ import.Statechanges <- function(filename, path = NULL,
       "There are consecutive states that are the same. This may be an error in the data."
       )
   }
+  
+  import.info(data, "Statechanges", tz, {{ ID.newname }})
   
   return(data)
 }
