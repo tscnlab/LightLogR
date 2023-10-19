@@ -77,7 +77,8 @@ when a <code>State</code> (like <code>sleep</code> or <code>wake</code>) starts.
 <span>  <span class="va">ID.colname</span>,</span>
 <span>  State.newname <span class="op">=</span> <span class="va">State</span>,</span>
 <span>  ID.newname <span class="op">=</span> <span class="va">Id</span>,</span>
-<span>  keepAllColumns <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  keepAllColumns <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  suppress.summary <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -160,6 +161,11 @@ the <code>State</code> column.</p></dd>
 <dt>keepAllColumns</dt>
 <dd><p>Logical that specifies whether all columns should be
 kept in the output. Defaults to <code>FALSE</code>.</p></dd>
+
+
+<dt>suppress.summary</dt>
+<dd><p>Logical that specifies whether a summary of the
+imported data should not be shown. Defaults to <code>FALSE</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
