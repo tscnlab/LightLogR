@@ -1,15 +1,12 @@
 # imports a wide and long dataset
 
     Code
-      path <- system.file("extdata/", package = "LightLogR")
-      file.sleep <- "205_sleepdiary_all_20230904.csv"
       import.Statechanges(file.sleep, path, Datetime.format = "dmyHM",
         State.colnames = c("sleep", "offset"), State.encoding = c("sleep", "wake"),
-        ID.colname = record_id, sep = ";", dec = ",")
+        ID.colname = record_id, sep = ";", dec = ",", tz = tz)
     Output
       Successfully read in 14 observations from Statechanges-file
-      Timezone set is UTC.
-      The system timezone is Europe/Berlin. Please correct if necessary!
+      Timezone set is Europe/Berlin.
       Start: 2023-08-28 23:20:00
       End: 2023-09-04 07:25:00
       Timespan: 6.3 days
@@ -50,15 +47,12 @@
 ---
 
     Code
-      path <- system.file("extdata/", package = "LightLogR")
-      file.sleep <- "205_sleepdiary_all_20230904.csv"
       import.Statechanges(file.sleep, path, Datetime.format = "dmyHM",
         State.colnames = "comments", Datetime.column = sleep, ID.colname = record_id,
-        sep = ";", dec = ",", structure = "long")
+        sep = ";", dec = ",", structure = "long", tz = tz)
     Output
       Successfully read in 7 observations from Statechanges-file
-      Timezone set is UTC.
-      The system timezone is Europe/Berlin. Please correct if necessary!
+      Timezone set is Europe/Berlin.
       Start: 2023-08-28 23:20:00
       End: 2023-09-03 21:30:00
       Timespan: 5.9 days
