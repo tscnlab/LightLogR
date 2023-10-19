@@ -18,7 +18,8 @@ import.Statechanges(
   ID.colname,
   State.newname = State,
   ID.newname = Id,
-  keepAllColumns = FALSE
+  keepAllColumns = FALSE,
+  suppress.summary = FALSE
 )
 }
 \arguments{
@@ -76,6 +77,9 @@ the \code{State} column.}
 
 \item{keepAllColumns}{Logical that specifies whether all columns should be
 kept in the output. Defaults to \code{FALSE}.}
+
+\item{suppress.summary}{Logical that specifies whether a summary of the
+imported data should not be shown. Defaults to \code{FALSE}.}
 }
 \value{
 a dataset with the \code{ID}, \code{State}, and \code{Datetime} columns. May contain

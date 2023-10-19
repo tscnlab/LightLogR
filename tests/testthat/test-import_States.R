@@ -4,6 +4,7 @@ test_that("imports a wide and long dataset", {
   path <- system.file("extdata/",
                       package = "LightLogR")
   file.sleep <- "205_sleepdiary_all_20230904.csv"
+  
   tz <- "Europe/Berlin"
   
   #wide data
@@ -15,7 +16,8 @@ test_that("imports a wide and long dataset", {
   ID.colname = record_id,
   sep = ";",
   dec = ",",
-  tz = tz)
+  tz = tz,
+  suppress.summary = TRUE)
   }
   )
   
@@ -29,7 +31,7 @@ test_that("imports a wide and long dataset", {
                           ID.colname = record_id,
                           sep = ";",
                           dec = ",", structure = "long",
-                          tz = tz)
+                          tz = tz, suppress.summary = TRUE)
     }
   )
 }

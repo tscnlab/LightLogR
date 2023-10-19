@@ -39,6 +39,8 @@
 #' @param ID.newname Column name used for renaming the `ID.colname` column.
 #' @param keepAllColumns Logical that specifies whether all columns should be
 #'   kept in the output. Defaults to `FALSE`.
+#' @param suppress.summary Logical that specifies whether a summary of the
+#'   imported data should not be shown. Defaults to `FALSE`.
 #'
 #' @return a dataset with the `ID`, `State`, and `Datetime` columns. May contain
 #'   additional columns if `keepAllColumns` is `TRUE`.
@@ -80,7 +82,8 @@ import.Statechanges <- function(filename, path = NULL,
                        ID.colname,
                        State.newname = State,
                        ID.newname = Id,
-                       keepAllColumns = FALSE) {
+                       keepAllColumns = FALSE,
+                       suppress.summary = FALSE) {
   
   # Initial Checks ----------------------------------------------------------
   
@@ -114,6 +117,9 @@ import.Statechanges <- function(filename, path = NULL,
   }
   if(!tz %in% OlsonNames()) {
     stop("The specified tz must be a valid time zone from the OlsonNames vector")
+  }
+  if(!is.logical(suppress.summary)) {
+    stop("The specified suppress.summary must be a logical")
   }
   
   # Logic ----------------------------------------------------------
@@ -199,7 +205,7 @@ import.Statechanges <- function(filename, path = NULL,
       )
   }
   
-  import.info(data, "Statechanges", tz, {{ ID.newname }})
+  if(!suppress.summary) import.info(data, "Statechanges", tz, {{ ID.newname }})
   
   return(data)
 }
