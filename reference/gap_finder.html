@@ -14,7 +14,7 @@ gap_handler() internally."><meta property="og:image" content="https://tscnlab.gi
     
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -145,15 +145,21 @@ number of gaps between measurement data.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#look for gaps assuming the epoch is the dominant epoch of each group</span></span></span>
 <span class="r-in"><span><span class="fu">gap_finder</span><span class="op">(</span><span class="va">dataset</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in gap_finder(dataset):</span> could not find function "gap_finder"</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Found 2 gaps. 6 Datetimes fall into the regular sequence.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#return the gaps as a tibble</span></span></span>
 <span class="r-in"><span><span class="fu">gap_finder</span><span class="op">(</span><span class="va">dataset</span>, gap.data <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in gap_finder(dataset, gap.data = TRUE):</span> could not find function "gap_finder"</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Found 2 gaps. 6 Datetimes fall into the regular sequence.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 × 3</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Groups:   Id [1]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   gap.id Datetime            Id   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>      1 1970-01-01 <span style="color: #949494;">12:00:01</span> A    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>      1 1970-01-02 <span style="color: #949494;">00:00:01</span> A    </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#assuming the epoch is 1 day, we have different gaps, and the datapoint at noon is now `irregular`</span></span></span>
 <span class="r-in"><span><span class="fu">gap_finder</span><span class="op">(</span><span class="va">dataset</span>, epoch <span class="op">=</span> <span class="st">"1 day"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in gap_finder(dataset, epoch = "1 day"):</span> could not find function "gap_finder"</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Found 3 gaps. 5 Datetimes fall into the regular sequence.</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
