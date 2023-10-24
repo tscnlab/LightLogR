@@ -100,4 +100,11 @@ create.Reference.label <- function(dataset,
       )
     dataset
     } else dataset
-  }
+}
+
+#helper to pick the colums that are used for grouping
+pick.grouping.columns <- function(dataset) {
+  dplyr::pick(
+    dplyr::group_vars(dataset)
+  )
+}

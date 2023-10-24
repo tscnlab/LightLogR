@@ -1,4 +1,4 @@
-Time <- mEDI <- Time.data <- Datetime <- timestamp <- tz <- Day.data <- `DATE/TIME` <- n <- Datetime.rounded <- id <- sleep.colname.string <- file.name <- Interval <- original.datapoints.fleeting <- MEDI <- State.Brown <- Reference <- Reference.check <- Id <- Start.date.shift <- data <- Shift <- `MELANOPIC EDI` <- State <- group <- End <- Start <- Quant.x <- Quant.y <- NULL
+Time <- mEDI <- Time.data <- Datetime <- timestamp <- tz <- Day.data <- `DATE/TIME` <- n <- Datetime.rounded <- id <- sleep.colname.string <- file.name <- Interval <- original.datapoints.fleeting <- MEDI <- State.Brown <- Reference <- Reference.check <- Id <- Start.date.shift <- data <- Shift <- `MELANOPIC EDI` <- State <- group <- End <- Start <- Quant.x <- Quant.y <- is.implicit <- group.indices <- Id2 <- gap.id <-  NULL
 
 empty_function <- function() {
   rsconnect::accountInfo()
@@ -10,3 +10,4 @@ empty_function <- function() {
   utils::globalVariables("supported.devices")
   utils::globalVariables(".")
 }
+

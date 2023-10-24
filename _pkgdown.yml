@@ -22,6 +22,10 @@ reference:
       validate and clean data, to filter, cut or aggreagate data, or to join 
       datasets.
     contents:
+    - dominant_epoch
+    - gapless_Datetimes
+    - gap_handler
+    - gap_finder
     - create_Time.data
     - cut_Datetime
     - filter_Datetime

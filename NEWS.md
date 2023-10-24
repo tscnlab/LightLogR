@@ -1,3 +1,7 @@
+* Added the family of `regularize` functions to find and deal with implicit missing data. These functions include `dominant_epoch()`, `gapless_Datetimes()`, `gap_handler()`, and `gap_finder()`. 
+
+* A ton of updates to documentation, unit tests, and bug fixes.
+
 # LightLogR 0.2.0.9000
 
 * Added Unit tests and documentation for all new functions.
