@@ -43,10 +43,22 @@
     <loc>https://tscnlab.github.io/LightLogR/reference/data2reference.html</loc>
   </url>
   <url>
+    <loc>https://tscnlab.github.io/LightLogR/reference/dominant_epoch.html</loc>
+  </url>
+  <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/filter_Datetime.html</loc>
   </url>
   <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/filter_Time.html</loc>
+  </url>
+  <url>
+    <loc>https://tscnlab.github.io/LightLogR/reference/gap_finder.html</loc>
+  </url>
+  <url>
+    <loc>https://tscnlab.github.io/LightLogR/reference/gap_handler.html</loc>
+  </url>
+  <url>
+    <loc>https://tscnlab.github.io/LightLogR/reference/gapless_Datetimes.html</loc>
   </url>
   <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/gg_day.html</loc>
