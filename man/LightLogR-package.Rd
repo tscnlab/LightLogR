@@ -29,6 +29,7 @@ Authors:
 
 Other contributors:
 \itemize{
+  \item MeLiDos [funder]
   \item EURAMET [funder]
   \item TSCN-Lab (www.tscnlab.org) [copyright holder]
 }

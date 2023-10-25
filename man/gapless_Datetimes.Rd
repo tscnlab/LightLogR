@@ -6,14 +6,14 @@
 \usage{
 gapless_Datetimes(
   dataset,
-  Datetime.column = Datetime,
+  Datetime.colname = Datetime,
   epoch = "dominant.epoch"
 )
 }
 \arguments{
 \item{dataset}{A light logger dataset. Needs to be a dataframe.}
 
-\item{Datetime.column}{The column that contains the datetime. Needs to be a
+\item{Datetime.colname}{The column that contains the datetime. Needs to be a
 \code{POSIXct} and part of the dataset.}
 
 \item{epoch}{The epoch to use for the gapless sequence. Can be either a

@@ -128,6 +128,21 @@ gg_day <- function(dataset,
 
 # Data Preparation --------------------------------------------------------
 
+  #special case for geom = "ribbon"
+  ribbon <- list()
+  if(geom == "ribbon") {
+    geom <- "blank"
+    ribbon <- 
+      list(
+        ggplot2::geom_ribbon(
+          ggplot2::aes(ymin = 0, ymax = !!y),
+          outline.type = "upper",
+          ...
+          )
+      )
+    
+  }
+  
   #filter by start and end date
   if(!is.null(start.date)) {
     dataset <-
@@ -173,6 +188,7 @@ gg_day <- function(dataset,
         group = {{ group }},
         col = {{ col }},
       ), ...) +
+    ribbon +
     # Scales --------------------------------------------------------------
     ggsci::scale_color_jco()+
     ggplot2::scale_x_time(breaks = x.axis.breaks, 

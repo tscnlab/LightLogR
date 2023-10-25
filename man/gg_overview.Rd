@@ -6,8 +6,8 @@
 \usage{
 gg_overview(
   dataset,
-  Datetime.column = Datetime,
-  Id.column = Id,
+  Datetime.colname = Datetime,
+  Id.colname = Id,
   gap_range_data = NULL,
   ...,
   interactive = FALSE
@@ -17,11 +17,11 @@ gg_overview(
 \item{dataset}{A light logger dataset. Expects a \code{dataframe}. If not imported
 by \link{LightLogR}, take care to choose a sensible variable for the \code{x.axis.}.}
 
-\item{Datetime.column}{column name that contains the datetime. Defaults to
+\item{Datetime.colname}{column name that contains the datetime. Defaults to
 \code{"Datetime"} which is automatically correct for data imported with
 \link{LightLogR}. Expects a \code{symbol}. Needs to be part of the \code{dataset}.}
 
-\item{Id.column}{The column name of the Id column (default is \code{Id}), needs to
+\item{Id.colname}{The column name of the Id column (default is \code{Id}), needs to
 be in the \code{dataset}. This is also used as the y-axis variable and is the
 minimum grouping variable.}
 
@@ -45,5 +45,5 @@ A \code{ggplot} object
 Plot an overview of dataset intervals with implicit missing data
 }
 \examples{
-sample.data.environment \%>\% gg_overview(Id.column = Source)
+sample.data.environment \%>\% gg_overview(Id.colname = Source)
 }

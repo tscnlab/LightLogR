@@ -21,10 +21,10 @@ test_that("dominant_epoch throws appropriate errors", {
                      lubridate::days(c(0:2, 4, 6, 8)))
   expect_error(dataset$Id %>% dominant_epoch(),
                "dataset is not a dataframe")
-  expect_error(dataset %>% dominant_epoch(Datetime.column = Status),
-               "Datetime.column must be part of the dataset")
-  expect_error(dataset %>% dominant_epoch(Datetime.column = Id),
-               "Datetime.column must be a Datetime")
+  expect_error(dataset %>% dominant_epoch(Datetime.colname = Status),
+               "Datetime.colname must be part of the dataset")
+  expect_error(dataset %>% dominant_epoch(Datetime.colname = Id),
+               "Datetime.colname must be a Datetime")
 })
 
 test_that("gapless_Datetimes works", {
@@ -64,10 +64,10 @@ test_that("gapless_Datetimes throws appropriate errors", {
                      lubridate::days(c(0:2, 4, 6, 8)))
   expect_error(dataset$Id %>% gapless_Datetimes(),
                "dataset is not a dataframe")
-  expect_error(dataset %>% gapless_Datetimes(Datetime.column = Status),
-               "Datetime.column must be part of the dataset")
-  expect_error(dataset %>% gapless_Datetimes(Datetime.column = Id),
-               "Datetime.column must be a Datetime")
+  expect_error(dataset %>% gapless_Datetimes(Datetime.colname = Status),
+               "Datetime.colname must be part of the dataset")
+  expect_error(dataset %>% gapless_Datetimes(Datetime.colname = Id),
+               "Datetime.colname must be a Datetime")
   expect_error(dataset %>% gapless_Datetimes(epoch = 5),
                "epoch must either be a duration or a string")
 })
@@ -111,10 +111,10 @@ test_that("gapless_Datetimes throws appropriate errors", {
                      lubridate::days(c(0:2, 4, 6, 8)))
   expect_error(dataset$Id %>% gap_handler(),
                "dataset is not a dataframe")
-  expect_error(dataset %>% gap_handler(Datetime.column = Status),
-               "Datetime.column must be part of the dataset")
-  expect_error(dataset %>% gap_handler(Datetime.column = Id),
-               "Datetime.column must be a Datetime")
+  expect_error(dataset %>% gap_handler(Datetime.colname = Status),
+               "Datetime.colname must be part of the dataset")
+  expect_error(dataset %>% gap_handler(Datetime.colname = Id),
+               "Datetime.colname must be a Datetime")
   expect_error(dataset %>% gap_handler(epoch = 5),
                "epoch must either be a duration or a string")
   expect_error(dataset %>% gap_handler(behavior = "foo"),
