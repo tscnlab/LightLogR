@@ -30,6 +30,7 @@ Imports:
     flextable,
     ggplot2,
     ggsci,
+    ggtext,
     hms,
     lubridate,
     magrittr,

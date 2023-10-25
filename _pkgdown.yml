@@ -51,6 +51,7 @@ reference:
       This section includes functions to visualize light logger data, e.g., to
       plot light exposure or to plot sleep/wake data.
     contents:
+    - gg_overview
     - gg_day
   
   - title: Datasets

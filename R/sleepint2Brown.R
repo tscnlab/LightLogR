@@ -75,7 +75,7 @@ sleep.int2Brown <- function(dataset,
     "output.dataset must be a logical" = is.logical(output.dataset)
   )
   
-  # Manipulation ----------------------------------------------------------
+  # Function ----------------------------------------------------------
   
   #filter out intervals other than "sleep" and are shorter than the evening length
   dataset <-

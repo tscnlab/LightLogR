@@ -335,7 +335,7 @@ gap_finder <- function(dataset,
       dat2, " Datetimes fall into the regular sequence.")
   }
   
-  if(dat_filtered !=0 & gap.data) {
+  if(gap.data) {
     dat %>% 
       dplyr::mutate(gap.id = dplyr::consecutive_id(is.implicit)/2) %>% 
       dplyr::filter(is.implicit) %>% 
