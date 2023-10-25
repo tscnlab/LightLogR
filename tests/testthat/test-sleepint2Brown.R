@@ -6,7 +6,7 @@ test_that("sleep.int2Brown works as expected", {
                             State = rep(c("wake", "sleep"), 2),
                             Id = "Participant")
   sample <- sample %>% sc2interval()
-  output <- c(NA, "day", "evening", "night", "day", "evening", "night", NA)
+  output <- c(NA, "day", "evening", "night", "day", "evening", "night")
   expect_equal(sample %>% 
                  sleep.int2Brown() %>% 
                  dplyr::pull(State.Brown), output)

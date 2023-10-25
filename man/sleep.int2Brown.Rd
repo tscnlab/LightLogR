@@ -46,6 +46,9 @@ intervals. Specifically, it recodes the \code{sleep} intervals to \code{night}, 
 and \code{night}. The result can be used as input for \code{\link[=interval2state]{interval2state()}} and might
 be used subsequently with \code{\link[=Brown2reference]{Brown2reference()}}.
 }
+\details{
+The function will filter out any non-sleep intervals that are shorter than the specified \code{evening.length}. This prevents problematic behaviour when the \code{evening.length} is longer than the \code{wake} intervals or, e.g., when the first state is sleep after midnight and there is a prior \code{NA} interval from midnight till sleep. This behavior might, however, result in problematic results for specialized experimental setups with ultra short wake/sleep cycles. The \code{sleep.int2Brown()} function would not be applicable in those cases anyways.
+}
 \examples{
 #create a sample dataset
 sample <- tibble::tibble(Datetime = c("2023-08-15 6:00:00",

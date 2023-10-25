@@ -6,6 +6,8 @@
 #' `evening` and `day` intervals. The `evening.length` is the time between `day`
 #' and `night`. The result can be used as input for [interval2state()] and might
 #' be used subsequently with [Brown2reference()].
+#' 
+#' The function will filter out any non-sleep intervals that are shorter than the specified `evening.length`. This prevents problematic behaviour when the `evening.length` is longer than the `wake` intervals or, e.g., when the first state is sleep after midnight and there is a prior `NA` interval from midnight till sleep. This behavior might, however, result in problematic results for specialized experimental setups with ultra short wake/sleep cycles. The `sleep.int2Brown()` function would not be applicable in those cases anyways.
 #'
 #' @param dataset A dataset with sleep/wake intervals.
 #' @param Interval.colname The name of the column with the intervals. Defaults to `Interval`.
@@ -74,6 +76,14 @@ sleep.int2Brown <- function(dataset,
   )
   
   # Manipulation ----------------------------------------------------------
+  
+  #filter out intervals other than "sleep" and are shorter than the evening length
+  dataset <-
+    dataset %>%
+    dplyr::filter(
+      !({{ Sleep.colname }} != sleep.state &
+       lubridate::int_length({{ Interval.colname }}) < evening.length)
+    )
   
   #get intervals that are of type "sleep" and create start and endpoints for a new interval "evening"
   evening.data <- dataset %>%
