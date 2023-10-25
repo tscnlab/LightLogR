@@ -15,8 +15,8 @@ gg_day(
   geom = "point",
   scales = "fixed",
   x.axis.breaks = hms::hms(hours = seq(0, 24, by = 3)),
-  y.axis.breaks = 10^(0:5),
-  y.scale.log10 = TRUE,
+  y.axis.breaks = c(-10^(5:0), 0, 10^(0:5)),
+  y.scale = "symlog",
   y.scale.sc = FALSE,
   x.axis.label = "Time of Day",
   y.axis.label = "Illuminance (lx, MEDI)",
@@ -70,8 +70,13 @@ y.axis? Expects a \verb{numeric vector} with all the breaks. If you want to
 activate the default behaviour of \link{ggplot2}, you need to put in
 \code{\link[ggplot2:waiver]{ggplot2::waiver()}}.}
 
-\item{y.scale.log10}{Should \code{y} be scaled on a log10 basis? Expects a
-\code{logical}.}
+\item{y.scale}{How should the y-axis be scaled?
+\itemize{
+\item Defaults to \code{"symlog"}, which is a logarithmic scale that can also handle negative values.
+\item \code{"log10"} would be a straight logarithmic scale, but cannot handle negative values.
+\item \code{"identity"} does nothing (continuous scaling).
+\item a transforming function, such as \code{\link[=symlog_trans]{symlog_trans()}} or \code{\link[scales:identity_trans]{scales::identity_trans()}}, which allow for more control.
+}}
 
 \item{y.scale.sc}{\code{logical} for whether scientific notation shall be used.
 Defaults to \code{FALSE}.}

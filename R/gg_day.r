@@ -33,8 +33,11 @@
 #'   earliest/latest date within the `dataset`.
 #' @param scales For [ggplot2::facet_wrap()], should scales be "fixed", "free"
 #'   or free in one dimension ("free_y" is the default). Expects a `character`.
-#' @param y.scale.log10 Should `y` be scaled on a log10 basis? Expects a
-#'   `logical`.
+#' @param y.scale How should the y-axis be scaled? 
+#' * Defaults to `"symlog"`, which is a logarithmic scale that can also handle negative values. 
+#' * `"log10"` would be a straight logarithmic scale, but cannot handle negative values.
+#' * `"identity"` does nothing (continuous scaling).
+#' * a transforming function, such as [symlog_trans()] or [scales::identity_trans()], which allow for more control.
 #' @param col optional column name that defines separate sets and colors them.
 #'   Expects anything that works with the layer data [ggplot2::aes()]. The
 #'   default color palette can be overwritten outside the function (see
@@ -89,8 +92,8 @@ gg_day <- function(dataset,
                    geom = "point",
                    scales = "fixed",
                    x.axis.breaks = hms::hms(hours = seq(0, 24, by = 3)),
-                   y.axis.breaks = 10^(0:5),
-                   y.scale.log10 = TRUE,
+                   y.axis.breaks = c(-10^(5:0), 0, 10^(0:5)),
+                   y.scale = "symlog",
                    y.scale.sc = FALSE,
                    x.axis.label = "Time of Day",
                    y.axis.label = "Illuminance (lx, MEDI)",
@@ -120,8 +123,6 @@ gg_day <- function(dataset,
       is.character(format.day),
     "The X axis label must be a string" = is.character(x.axis.label),
     "The Y axis label must be a string" = is.character(y.axis.label),
-    "y.scale.log10 must be a logical, i.e., TRUE or FALSE" = 
-      is.logical(y.scale.log10),
     "interactive must be a logical" = is.logical(interactive)
     # paste("Unsupported geom:", geom)
     )
@@ -193,17 +194,11 @@ gg_day <- function(dataset,
     ggsci::scale_color_jco()+
     ggplot2::scale_x_time(breaks = x.axis.breaks, 
                           labels = scales::label_time(format = "%H:%M")) + 
-    {if(y.scale.log10){
-      ggplot2::scale_y_log10(
+    ggplot2::scale_y_continuous(
+        trans = y.scale,
         breaks = y.axis.breaks,
         labels = function(x) format(x, scientific = y.scale.sc, big.mark = " ")
-        ) 
-    }
-      else ggplot2::scale_y_continuous(
-        breaks = y.axis.breaks,
-        labels = function(x) format(x, scientific = y.scale.sc, big.mark = " ")
-        )
-    }+
+        )+
     # Styling --------------------------------------------------------------
     ggplot2::labs(
       y= y.axis.label, 
