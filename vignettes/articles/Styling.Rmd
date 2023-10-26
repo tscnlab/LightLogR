@@ -266,7 +266,9 @@ dataset.LL.partial  %>%
   solar.reference + brown.reference + scale.correction
 ```
 
-The `geom_area` fills an area from 0 up to the given value. Unfortunately this doesn´t work nicely with logarithmic plots (where 10\^0 = 1, so it would start at 1). We can, however, disable any geom in `gg_day()` with `geom = "blank"` and instead add a `geom_ribbon` that can be force-based to zero with `ymin = 0`. Setting `geom = "ribbon"` does this automatically behind the scenes.
+The `geom_area` fills an area from 0 up to the given value. For some reason, however, this is very slow and unfortunately doesn´t work nicely with purely logarithmic plots (where 10\^0 = 1, so it would start at 1[^3]). We can, however, disable any geom in `gg_day()` with `geom = "blank"` and instead add a `geom_ribbon` that can be force-based to zero with `ymin = 0`. Setting `geom = "ribbon"` does this automatically behind the scenes and is very fast.
+
+[^3]: `gg_day()` works with `geom_area`, however, because it uses the `symlog` scale by default that doesn´t transform data between -1 and 1 (or between a given threshold, set in the `symlog_trans()` function).
 
 #### `geom_boxplot`
 
@@ -336,8 +338,7 @@ dataset.LL.partial %>% aggregate_Datetime2(unit = "5 mins")  %>%
 #### 30 Minutes
 
 ```{r, fig.retina=2, fig.width=7, fig.height = 4, warning=FALSE}
-dataset.LL.partial %>% 
-  aggregate_Datetime2(unit = "30 mins") %>% 
+dataset.LL.partial %>% aggregate_Datetime2(unit = "30 mins") %>% 
   gg_day(facetting = FALSE, geom = "ribbon", alpha = 0.25, size = 0.25,
          fill = "#EFC000", color = "#EFC000") + #base plot
   solar.reference + brown.reference + scale.correction
@@ -543,7 +544,7 @@ Plot +
   # geom_vline(data = Brown.times[-1,],
   #            aes(xintercept = xmin), lty = 2, col = "grey40", size = 0.4) + #adding vertical lines
   geom_label(data = Brown.times[-4,], 
-             aes(x = xmean, y = 0.2, label = label.Brown), 
+             aes(x = xmean, y = 0.3, label = label.Brown), 
              col = "grey40", alpha = 0.75) + #adding labels
   annotate("rect", fill = "white", xmin = 0, xmax = 7.5*60*60, 
            ymin = 2500, ymax = 60000)+

@@ -10,6 +10,9 @@
 #' * `Day.data` is a factor that is used for facetting with [ggplot2::facet_wrap()]. Make sure to use this variable, if you change the faceting manually. Also, the function checks, whether this variable already exists. If it does, it will only convert it to a factor and do the faceting on that variable.
 #' * `Time.data` is an `hms` created with [hms::as_hms()] that is used for the x.axis
 #'
+#' The default scaling of the y-axis is a `symlog` scale, which is a logarithmic
+#' scale that only starts scaling after a given threshold (default = 0). This enables values of 0 in the plot, which are common in light logger data, and even enables negative values, which might be sensible for non-light data. See [symlog_trans()] for details on tweaking this scale. The scale can also be changed to a normal or logarithmic scale - see the y.scale argument for more.
+#' 
 #' @param dataset A light logger dataset. Expects a `dataframe`. If not imported
 #'   by [LightLogR], take care to choose a sensible variable for the `x.axis.`.
 #' @param x.axis,y.axis column name that contains the datetime (x, defaults to

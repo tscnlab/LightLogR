@@ -1,5 +1,9 @@
 # LightLogR 0.2.1.9000
 
+* Added the `symlog_trans()` function from a [post on stack overflow](https://stackoverflow.com/a/14674703). This function leads to a better visualization of light logger data, as a logarithmic transformation is necessary, but values of 0 are common. The function was integrated as a default for `gg_day()` and will likely be the basis of upcoming visualization functions.
+
+* Added the `aggregate_Datetime()` function to aggregate data to a given time interval.
+
 * Added the `gg_overview()` function to get a sense for the timeframe of measurement data.
 
 * Added the family of `regularize` functions to find and deal with implicit missing data. These functions include `dominant_epoch()`, `gapless_Datetimes()`, `gap_handler()`, and `gap_finder()`. 
