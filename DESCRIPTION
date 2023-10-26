@@ -8,6 +8,7 @@ Authors@R: c(
     person("Manuel", "Spitschan", 
       email = "manuel.spitschan@tum.de", role = "aut",
       comment = c(ORCID = "0000-0002-8572-9268")),
+    person("MeLiDos", role = "fnd"),
     person("EURAMET", role = "fnd"),
     person("TSCN-Lab", comment = c(URL = "www.tscnlab.org"), role = "cph"))
 Description: LightLogR is a package under development as part of the MeLiDos 

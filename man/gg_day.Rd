@@ -15,8 +15,8 @@ gg_day(
   geom = "point",
   scales = "fixed",
   x.axis.breaks = hms::hms(hours = seq(0, 24, by = 3)),
-  y.axis.breaks = 10^(0:5),
-  y.scale.log10 = TRUE,
+  y.axis.breaks = c(-10^(5:0), 0, 10^(0:5)),
+  y.scale = "symlog",
   y.scale.sc = FALSE,
   x.axis.label = "Time of Day",
   y.axis.label = "Illuminance (lx, MEDI)",
@@ -70,8 +70,13 @@ y.axis? Expects a \verb{numeric vector} with all the breaks. If you want to
 activate the default behaviour of \link{ggplot2}, you need to put in
 \code{\link[ggplot2:waiver]{ggplot2::waiver()}}.}
 
-\item{y.scale.log10}{Should \code{y} be scaled on a log10 basis? Expects a
-\code{logical}.}
+\item{y.scale}{How should the y-axis be scaled?
+\itemize{
+\item Defaults to \code{"symlog"}, which is a logarithmic scale that can also handle negative values.
+\item \code{"log10"} would be a straight logarithmic scale, but cannot handle negative values.
+\item \code{"identity"} does nothing (continuous scaling).
+\item a transforming function, such as \code{\link[=symlog_trans]{symlog_trans()}} or \code{\link[scales:identity_trans]{scales::identity_trans()}}, which allow for more control.
+}}
 
 \item{y.scale.sc}{\code{logical} for whether scientific notation shall be used.
 Defaults to \code{FALSE}.}
@@ -110,6 +115,9 @@ Besides plotting, the function creates two new variables from the given
 \item \code{Day.data} is a factor that is used for facetting with \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}}. Make sure to use this variable, if you change the faceting manually. Also, the function checks, whether this variable already exists. If it does, it will only convert it to a factor and do the faceting on that variable.
 \item \code{Time.data} is an \code{hms} created with \code{\link[hms:hms]{hms::as_hms()}} that is used for the x.axis
 }
+
+The default scaling of the y-axis is a \code{symlog} scale, which is a logarithmic
+scale that only starts scaling after a given threshold (default = 0). This enables values of 0 in the plot, which are common in light logger data, and even enables negative values, which might be sensible for non-light data. See \code{\link[=symlog_trans]{symlog_trans()}} for details on tweaking this scale. The scale can also be changed to a normal or logarithmic scale - see the y.scale argument for more.
 }
 \examples{
 #use `col`for separation of different sets

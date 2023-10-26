@@ -1,10 +1,10 @@
 #' Plot an overview of dataset intervals with implicit missing data
 #'
 #' @inheritParams gg_day
-#' @param Datetime.column column name that contains the datetime. Defaults to
+#' @param Datetime.colname column name that contains the datetime. Defaults to
 #'   `"Datetime"` which is automatically correct for data imported with
 #'   [LightLogR]. Expects a `symbol`. Needs to be part of the `dataset`.
-#' @param Id.column The column name of the Id column (default is `Id`), needs to
+#' @param Id.colname The column name of the Id column (default is `Id`), needs to
 #'   be in the `dataset`. This is also used as the y-axis variable and is the
 #'   minimum grouping variable.
 #' @param gap_range_data Optionally provide a `tibble` with `start` and `end`
@@ -20,10 +20,10 @@
 #' @export
 #'
 #' @examples
-#' sample.data.environment %>% gg_overview(Id.column = Source)
+#' sample.data.environment %>% gg_overview(Id.colname = Source)
 gg_overview <- function(dataset,
-                        Datetime.column = Datetime,
-                        Id.column = Id,
+                        Datetime.colname = Datetime,
+                        Id.colname = Id,
                         gap_range_data = NULL,
                         ...,
                         interactive = FALSE) {
@@ -32,11 +32,24 @@ gg_overview <- function(dataset,
   
   #dataset must be a dataset with a posixct datetime column
   
+  Datetime.colname.str <- colname.defused({{ Datetime.colname }})
+  Id.colname.str <- colname.defused({{ Id.colname }})
+  
+  stopifnot(
+    "The given dataset is not a dataframe" = is.data.frame(dataset),
+    "The Datetime.colname is not in the dataset." = 
+      Datetime.colname.str %in% names(dataset),
+    "The Id.colname is not in the dataset." = 
+      Id.colname.str %in% names(dataset),
+    "The Datetime.colname is not a Datetime" = 
+      lubridate::is.POSIXct(dataset[[Datetime.colname.str]]),
+    "interactive must be a logical" = is.logical(interactive)
+  )
   
   # Function ----------------------------------------------------------
   
-  #make sure the dataset is at least grouped by the Id.column
-  dataset <- dataset %>% dplyr::group_by({{ Id.column }}, .add = TRUE)
+  #make sure the dataset is at least grouped by the Id.colname
+  dataset <- dataset %>% dplyr::group_by({{ Id.colname }}, .add = TRUE)
   
   #calculate the ranges of gap data if none is provided
   if(is.null(gap_range_data)) {
@@ -52,7 +65,7 @@ gg_overview <- function(dataset,
       gap_range_data <- 
         gap_range_data %>% 
         dplyr::summarize(
-          start = min({{ Datetime.column}}), end = max({{ Datetime.column}}))
+          start = min({{ Datetime.colname}}), end = max({{ Datetime.colname}}))
     }
   }
   
@@ -65,8 +78,8 @@ gg_overview <- function(dataset,
       list(
         ggplot2::geom_linerange(
           data = gap_range_data,
-          ggplot2::aes(xmin = start, xmax = end, y = {{ Id.column}}),
-          col = "grey", size = 1),
+          ggplot2::aes(xmin = start, xmax = end, y = {{ Id.colname}}),
+          col = "grey", linewidth = 1),
       ggplot2::labs(
         caption = 
           "<b>Dataset intervals</b>, with times of <b style = 'color:grey'>implicit missing data </b>."
@@ -77,22 +90,22 @@ gg_overview <- function(dataset,
   dataset_range <- 
     dataset %>%
     dplyr::summarize(
-      start = min({{ Datetime.column}}), end = max({{ Datetime.column}}))
+      start = min({{ Datetime.colname}}), end = max({{ Datetime.colname}}))
   
   Plot <- 
     #setup the plot
     dataset_range %>% 
     ggplot2::ggplot(
-      ggplot2::aes(xmin = start, xmax = end, y = {{ Id.column }},...)
+      ggplot2::aes(xmin = start, xmax = end, y = {{ Id.colname }},...)
       ) + 
     #add the lineranges
-    ggplot2::geom_linerange(size = 1) +
+    ggplot2::geom_linerange(linewidth = 1) +
     implicit_data +
     #add start and stop points
     ggplot2::geom_point(
-      ggplot2::aes(x = start, y = {{ Id.column}}), size = 2) +
+      ggplot2::aes(x = start, y = {{ Id.colname}}), size = 2) +
     ggplot2::geom_point(
-      ggplot2::aes(x = end, y = {{ Id.column}}), size = 2) +
+      ggplot2::aes(x = end, y = {{ Id.colname}}), size = 2) +
     #general information
     ggplot2::labs(x = "Datetime")+
     #theming and styling

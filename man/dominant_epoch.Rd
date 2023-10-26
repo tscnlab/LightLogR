@@ -4,12 +4,12 @@
 \alias{dominant_epoch}
 \title{Determine the dominant epoch/interval of a dataset}
 \usage{
-dominant_epoch(dataset, Datetime.column = Datetime)
+dominant_epoch(dataset, Datetime.colname = Datetime)
 }
 \arguments{
 \item{dataset}{A light logger dataset. Needs to be a dataframe.}
 
-\item{Datetime.column}{The column that contains the datetime. Needs to be a
+\item{Datetime.colname}{The column that contains the datetime. Needs to be a
 \code{POSIXct} and part of the dataset.}
 }
 \value{

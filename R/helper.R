@@ -39,20 +39,20 @@ is.all.scalar <- function(...) {
 }
 
 #counts the different time differences per group (in a grouped dataset)
-count.difftime <- function(dataset, Datetime.column = Datetime) {
+count.difftime <- function(dataset, Datetime.colname = Datetime) {
   dataset %>% 
     dplyr::mutate(
-      difftime = c(NA, diff({{Datetime.column}}) %>% lubridate::as.duration())
+      difftime = c(NA, diff({{Datetime.colname}}) %>% lubridate::as.duration())
       ) %>% 
     tidyr::drop_na(difftime) %>% 
     dplyr::count(difftime, sort = TRUE)
 }
 
 #calculate the nth Quantile of time differences per group (in a grouped dataset)
-nth.difftime <- function(dataset, Datetime.column = Datetime, n = 0.95) {
+nth.difftime <- function(dataset, Datetime.colname = Datetime, n = 0.95) {
   dataset %>% 
     dplyr::mutate(
-      difftime = c(NA, diff({{Datetime.column}}) %>% lubridate::as.duration())
+      difftime = c(NA, diff({{Datetime.colname}}) %>% lubridate::as.duration())
       ) %>% 
     tidyr::drop_na(difftime) %>% 
     dplyr::summarise(
@@ -61,9 +61,9 @@ nth.difftime <- function(dataset, Datetime.column = Datetime, n = 0.95) {
 }
 
 #calculate the whether the nth quantile of time differences in one dataset is smaller or equal to the nth quantile of time differences in another dataset
-compare.difftime <- function(dataset1, dataset2, Datetime.column = Datetime, n = 0.95) {
-  Quant1 <- nth.difftime(dataset1, {{ Datetime.column }}, n = n)
-  Quant2 <- nth.difftime(dataset2, {{ Datetime.column }}, n = n)
+compare.difftime <- function(dataset1, dataset2, Datetime.colname = Datetime, n = 0.95) {
+  Quant1 <- nth.difftime(dataset1, {{ Datetime.colname }}, n = n)
+  Quant2 <- nth.difftime(dataset2, {{ Datetime.colname }}, n = n)
   #do a full join with every column but Quantile
   group_variables <- setdiff(names(Quant2), "Quant")
   dplyr::full_join(Quant1, Quant2, by = group_variables) %>% 

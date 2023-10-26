@@ -10,6 +10,9 @@
 #' * `Day.data` is a factor that is used for facetting with [ggplot2::facet_wrap()]. Make sure to use this variable, if you change the faceting manually. Also, the function checks, whether this variable already exists. If it does, it will only convert it to a factor and do the faceting on that variable.
 #' * `Time.data` is an `hms` created with [hms::as_hms()] that is used for the x.axis
 #'
+#' The default scaling of the y-axis is a `symlog` scale, which is a logarithmic
+#' scale that only starts scaling after a given threshold (default = 0). This enables values of 0 in the plot, which are common in light logger data, and even enables negative values, which might be sensible for non-light data. See [symlog_trans()] for details on tweaking this scale. The scale can also be changed to a normal or logarithmic scale - see the y.scale argument for more.
+#' 
 #' @param dataset A light logger dataset. Expects a `dataframe`. If not imported
 #'   by [LightLogR], take care to choose a sensible variable for the `x.axis.`.
 #' @param x.axis,y.axis column name that contains the datetime (x, defaults to
@@ -33,8 +36,11 @@
 #'   earliest/latest date within the `dataset`.
 #' @param scales For [ggplot2::facet_wrap()], should scales be "fixed", "free"
 #'   or free in one dimension ("free_y" is the default). Expects a `character`.
-#' @param y.scale.log10 Should `y` be scaled on a log10 basis? Expects a
-#'   `logical`.
+#' @param y.scale How should the y-axis be scaled? 
+#' * Defaults to `"symlog"`, which is a logarithmic scale that can also handle negative values. 
+#' * `"log10"` would be a straight logarithmic scale, but cannot handle negative values.
+#' * `"identity"` does nothing (continuous scaling).
+#' * a transforming function, such as [symlog_trans()] or [scales::identity_trans()], which allow for more control.
 #' @param col optional column name that defines separate sets and colors them.
 #'   Expects anything that works with the layer data [ggplot2::aes()]. The
 #'   default color palette can be overwritten outside the function (see
@@ -89,8 +95,8 @@ gg_day <- function(dataset,
                    geom = "point",
                    scales = "fixed",
                    x.axis.breaks = hms::hms(hours = seq(0, 24, by = 3)),
-                   y.axis.breaks = 10^(0:5),
-                   y.scale.log10 = TRUE,
+                   y.axis.breaks = c(-10^(5:0), 0, 10^(0:5)),
+                   y.scale = "symlog",
                    y.scale.sc = FALSE,
                    x.axis.label = "Time of Day",
                    y.axis.label = "Illuminance (lx, MEDI)",
@@ -120,14 +126,27 @@ gg_day <- function(dataset,
       is.character(format.day),
     "The X axis label must be a string" = is.character(x.axis.label),
     "The Y axis label must be a string" = is.character(y.axis.label),
-    "y.scale.log10 must be a logical, i.e., TRUE or FALSE" = 
-      is.logical(y.scale.log10),
     "interactive must be a logical" = is.logical(interactive)
     # paste("Unsupported geom:", geom)
     )
 
 # Data Preparation --------------------------------------------------------
 
+  #special case for geom = "ribbon"
+  ribbon <- list()
+  if(geom == "ribbon") {
+    geom <- "blank"
+    ribbon <- 
+      list(
+        ggplot2::geom_ribbon(
+          ggplot2::aes(ymin = 0, ymax = !!y),
+          outline.type = "upper",
+          ...
+          )
+      )
+    
+  }
+  
   #filter by start and end date
   if(!is.null(start.date)) {
     dataset <-
@@ -173,21 +192,16 @@ gg_day <- function(dataset,
         group = {{ group }},
         col = {{ col }},
       ), ...) +
+    ribbon +
     # Scales --------------------------------------------------------------
     ggsci::scale_color_jco()+
     ggplot2::scale_x_time(breaks = x.axis.breaks, 
                           labels = scales::label_time(format = "%H:%M")) + 
-    {if(y.scale.log10){
-      ggplot2::scale_y_log10(
+    ggplot2::scale_y_continuous(
+        trans = y.scale,
         breaks = y.axis.breaks,
         labels = function(x) format(x, scientific = y.scale.sc, big.mark = " ")
-        ) 
-    }
-      else ggplot2::scale_y_continuous(
-        breaks = y.axis.breaks,
-        labels = function(x) format(x, scientific = y.scale.sc, big.mark = " ")
-        )
-    }+
+        )+
     # Styling --------------------------------------------------------------
     ggplot2::labs(
       y= y.axis.label, 

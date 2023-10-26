@@ -75,8 +75,6 @@ dataset.LL %>% gg_day(size = 0.25, interactive = TRUE)
 
 We can already see some patterns and features in the luminous exposure across the days. In general, the participant seems to have woken (or at least started wearing the light logger) after 9:00 and went to bed (or, again, stopped wearing the device) at around 23:00.
 
-The warning that was generated alongside the plot refers to the fact, that we have lots of MEDI values with 0 lux - these don´t scale well to log. In the interactive plot these values are removed, in the static `ggplot`, they are shown at the very bottom of the scale.
-
 ### Environmental Light Data
 
 On to our next dataset. This one contains measurement data from the same type of device, but recorded on a rooftop position of unobstructed daylight in roughly the same location as the participant data. As the device type is the same, import is the same as well. But since the filename does not contain the participant´s `ID` this time, we will give it a manual id: `"CW35"`.
@@ -143,7 +141,7 @@ dataset.LL %>%
   gg_day(size = 0.25) + geom_line(aes(y=Reference), lty = 2, col = "red")
 ```
 
-Again, some warnings. To the known warning about the infinite values (one for the point data, one for the line), a warning about missing values was added. This is simply due to the fact that not every data point on the x-axis has a corresponding y-axis-value. The two datasets largely align, but at the fringes, especially the last day, there is some non-overlap. When we perform calculations based on the light logger data and the reference, we have to keep in mind that only timesteps where *both* are present will give non `NA` results.
+Here, a warning about missing values was added. This is simply due to the fact that not every data point on the x-axis has a corresponding y-axis-value. The two datasets largely align, but at the fringes, especially the last day, there is some non-overlap. When we perform calculations based on the light logger data and the reference, we have to keep in mind that only timesteps where *both* are present will give non `NA` results.
 
 While basic, the graph already shows valuable information about the potential light stimulus compared to actual exposure. In the morning hours, this participant never reached a significant light dose, while luminous exposure in the evening regularly was on par with daytime levels, especially on the 29th. Let us see how these measurements compare to recommendations for luminous exposure.
 
@@ -216,7 +214,7 @@ solar.reference <-   geom_line(aes(y=Reference), lty = 2, col = "red") #solar re
 brown.reference <-   geom_line(aes(y=Reference.Brown), lty = 2, col = "blue") #Brown reference
 
 dataset.LL.partial  %>% 
-  gg_day(size = 0.25, facetting = FALSE) + #base plot
+  gg_day(size = 0.25, facetting = FALSE, y.scale = symlog_trans()) + #base plot
   solar.reference + brown.reference
 
 ```
@@ -225,11 +223,10 @@ dataset.LL.partial  %>%
 
 Let us finish our task by exploring some styling options for our graph. All of these are built on the dataset we ended up with in the last section. We had to use several functions as processing steps, but it has to be noted that we rarely had to specify arguments in functions. This is due to the workflow `LightLogR` provides start to finish. Most of the techniques in this section are not specific to `LightLogR`, but rather show that you can readily use data processed with the package to work with standard plotting function.
 
-Firstly, though, too much of the plot focuses on values below *1 lux*, which is due to the logarithmic scaling. Thus we will cut the lower y-axis at 0.1. For now, let us also disable the warning messages for missing and infinite values (this is done non-visibly for the reader in the code chunks after here).
+Firstly, though, let us slightly tweak the y-axis.
 
 ```{r}
 scale.correction <- coord_cartesian(
-  ylim = c(0.1, 10^5), # tweak the y axis
   xlim = c(0, 24.5*60*60), #make sure the x axis covers 24 hours (+a bit for the label)
   expand = FALSE)  #set the axis limits exactly at ylim and xlim
 ```
@@ -242,7 +239,8 @@ By default, `gg_day()` uses a point geom for the data display. We can, however, 
 
 ```{r, fig.retina=2, fig.width=7, fig.height = 4, warning=FALSE}
 dataset.LL.partial  %>% 
-  gg_day(size = 0.25, geom = "point", facetting = FALSE) + #base plot
+  gg_day(
+    size = 0.25, geom = "point", facetting = FALSE) + #base plot
   solar.reference + brown.reference + scale.correction
 ```
 
@@ -252,7 +250,8 @@ This is the standard behavior of `gg_day()`. We would not have to specify the `g
 
 ```{r, fig.retina=2, fig.width=7, fig.height = 4, warning=FALSE}
 dataset.LL.partial  %>% 
-  gg_day(size = 0.25, facetting = FALSE, geom = "line") + #base plot
+  gg_day(
+    size = 0.25, facetting = FALSE, geom = "line") + #base plot
   solar.reference + brown.reference + scale.correction
 ```
 
@@ -262,13 +261,14 @@ The line geom shows changes in luminous exposure a bit better and might be a bet
 
 ```{r, fig.retina=2, fig.width=7, fig.height = 4, warning=FALSE}
 dataset.LL.partial  %>% 
-  gg_day(size = 0.25, facetting = FALSE, geom = "blank") + #base plot
-  geom_ribbon(aes(ymin = 0, ymax = MEDI), alpha = 0.25, fill = "#EFC000", 
-              outline.type = "upper", col = "#EFC000", size = 0.25) + #ribbon geom
+  gg_day(facetting = FALSE, geom = "ribbon", alpha = 0.25, size = 0.25,
+         fill = "#EFC000", color = "#EFC000") + #base plot
   solar.reference + brown.reference + scale.correction
 ```
 
-The `geom_area` fills an area from 0 up to the given value. Unfortunately this doesn´t work nicely with logarithmic plots (where 10\^0 = 1, so it would start at 1). We can, however, disable any geom in `gg_day()`and instead add a `geom_ribbon` that can be force set to zero with `ymin = 0`.
+The `geom_area` fills an area from 0 up to the given value. For some reason, however, this is very slow and unfortunately doesn´t work nicely with purely logarithmic plots (where 10\^0 = 1, so it would start at 1[^3]). We can, however, disable any geom in `gg_day()` with `geom = "blank"` and instead add a `geom_ribbon` that can be force-based to zero with `ymin = 0`. Setting `geom = "ribbon"` does this automatically behind the scenes and is very fast.
+
+[^3]: `gg_day()` works with `geom_area`, however, because it uses the `symlog` scale by default that doesn´t transform data between -1 and 1 (or between a given threshold, set in the `symlog_trans()` function).
 
 #### `geom_boxplot`
 
@@ -285,7 +285,8 @@ To create a boxplot representation, we not only need to specify the geom but als
 
 ```{r, fig.retina=2, fig.width=7, fig.height = 4, warning=FALSE}
 dataset.LL.partial  %>% 
-  gg_day(size = 0.25, facetting = FALSE, geom = "bin2d", bins = 24) + #base plot
+  gg_day(
+    size = 0.25, facetting = FALSE, geom = "bin2d", bins = 24) + #base plot
   solar.reference + brown.reference + scale.correction
 ```
 
@@ -293,18 +294,11 @@ The geom family of `hex`, `bin2d`, or `density_2d` is particularly well suited i
 
 ###  {.unnumbered}
 
-**Conclusion:** The `line` or `ribbon` geom seem like a good choice for our task. However, The high resolution of the data (*10 seconds*) makes the line very noisy. Sometimes this level of detail is good, but our figure should give more of a general representation of luminous exposure, so we should aggregate the data somewhat. We can use the same function as for the boxplot, `cut_Datetime()` and use this to aggregate our data to the desired resolution. For the sake of this example, let´s create a function to try several aggregation times.
+**Conclusion:** The `line` or `ribbon` geom seem like a good choice for our task. However, The high resolution of the data (*10 seconds*) makes the line very noisy. Sometimes this level of detail is good, but our figure should give more of a general representation of luminous exposure, so we should aggregate the data somewhat. We can use a similar function as for the boxplot, `aggregate_Datetime()` and use this to aggregate our data to the desired resolution. It has sensible defaults to handle numeric (mean), logical and character (most represented) data, that can be adjusted. For the sake of this example, let´s wrap the aggregate function with some additional code to recalculate the `Brown.recommendations`, because while the default numeric aggregation is fine for measurement data, it does not make sense for the `Brown.recommendations` column.
 
 ```{r}
-dataset.LL.aggregate <- function(unit) {
-  if(unit != "none")
-dataset.LL.partial  %>% 
-  cut_Datetime(unit = unit, group_by = TRUE) %>% #choose the resolution of our aggregated data
-  summarize(across(where(is.numeric), mean), #average all numerics
-            across(where(is.character), \(x) names(which.max(table(x)))), #choose the dominant string
-            across(where(is.logical), \(x) sum(x) > (length(x) / 2)), # average a binary outcome
-            .groups = "drop_last") %>% #remove the rounded Datetime group
-  rename(Datetime = Datetime.rounded) %>%  #remove the rounded Datetime column
+aggregate_Datetime2 <- function(...) {
+  aggregate_Datetime(...) %>% #aggregate the data
   select(-Reference.Brown) %>% #remove the rounded 
   Brown2reference(Brown.rec.colname = Reference.Brown) #recalculate the brown times
     }
@@ -318,49 +312,44 @@ With the new aggregate function, let us taste some variants:
 
 ```{r, fig.retina=2, fig.width=7, fig.height = 4, warning=FALSE}
 dataset.LL.partial  %>% 
-  gg_day(size = 0.25, facetting = FALSE, geom = "blank") + #base plot
-  geom_ribbon(aes(ymin = 0, ymax = MEDI), alpha = 0.25, fill = "#EFC000", 
-              outline.type = "upper", col = "#EFC000", size = 0.25) + #ribbon geom
+  gg_day(facetting = FALSE, geom = "ribbon", alpha = 0.25, size = 0.25,
+         fill = "#EFC000", color = "#EFC000") + #base plot
   solar.reference + brown.reference + scale.correction
 ```
 
 #### 1 Minute
 
 ```{r, fig.retina=2, fig.width=7, fig.height = 4, warning=FALSE}
-dataset.LL.aggregate("1 min")  %>% 
-  gg_day(size = 0.25, facetting = FALSE, geom = "blank") + #base plot
-  geom_ribbon(aes(ymin = 0, ymax = MEDI), alpha = 0.25, fill = "#EFC000", 
-              outline.type = "upper", col = "#EFC000", size = 0.25) + #ribbon geom
+dataset.LL.partial %>% aggregate_Datetime2(unit = "1 min")  %>% 
+  gg_day(facetting = FALSE, geom = "ribbon", alpha = 0.25, size = 0.25,
+         fill = "#EFC000", color = "#EFC000") + #base plot
   solar.reference + brown.reference + scale.correction
 ```
 
 #### 5 Minutes
 
 ```{r, fig.retina=2, fig.width=7, fig.height = 4, warning=FALSE}
-dataset.LL.aggregate("5 mins")  %>% 
-  gg_day(size = 0.25, facetting = FALSE, geom = "blank") + #base plot
-  geom_ribbon(aes(ymin = 0, ymax = MEDI), alpha = 0.25, fill = "#EFC000", 
-              outline.type = "upper", col = "#EFC000", size = 0.25) + #ribbon geom
+dataset.LL.partial %>% aggregate_Datetime2(unit = "5 mins")  %>% 
+  gg_day(facetting = FALSE, geom = "ribbon", alpha = 0.25, size = 0.25,
+         fill = "#EFC000", color = "#EFC000") + #base plot
   solar.reference + brown.reference + scale.correction
 ```
 
 #### 30 Minutes
 
 ```{r, fig.retina=2, fig.width=7, fig.height = 4, warning=FALSE}
-dataset.LL.aggregate("30 mins")  %>% 
-  gg_day(size = 0.25, facetting = FALSE, geom = "blank") + #base plot
-  geom_ribbon(aes(ymin = 0, ymax = MEDI), alpha = 0.25, fill = "#EFC000", 
-              outline.type = "upper", col = "#EFC000", size = 0.25) + #ribbon geom
+dataset.LL.partial %>% aggregate_Datetime2(unit = "30 mins") %>% 
+  gg_day(facetting = FALSE, geom = "ribbon", alpha = 0.25, size = 0.25,
+         fill = "#EFC000", color = "#EFC000") + #base plot
   solar.reference + brown.reference + scale.correction
 ```
 
 #### 1 Hour
 
 ```{r, fig.retina=2, fig.width=7, fig.height = 4, warning=FALSE}
-dataset.LL.aggregate("1 hour")  %>% 
-  gg_day(size = 0.25, facetting = FALSE, geom = "blank") + #base plot
-  geom_ribbon(aes(ymin = 0, ymax = MEDI), alpha = 0.25, fill = "#EFC000", 
-              outline.type = "upper", col = "#EFC000", size = 0.25) + #ribbon geom
+dataset.LL.partial %>% aggregate_Datetime2(unit = "1 hour")  %>% 
+  gg_day(facetting = FALSE, geom = "ribbon", alpha = 0.25, size = 0.25,
+         fill = "#EFC000", color = "#EFC000") + #base plot
   solar.reference + brown.reference + scale.correction
 ```
 
@@ -370,10 +359,9 @@ dataset.LL.aggregate("1 hour")  %>%
 
 ```{r, warning=FALSE}
 Plot <- 
-dataset.LL.aggregate("5 mins")  %>% 
-  gg_day(facetting = FALSE, geom = "blank") + #base plot
-  geom_ribbon(aes(ymin = 0, ymax = MEDI), alpha = 0.25, fill = "#EFC000", 
-              outline.type = "upper", col = "#EFC000", size = 0.4) + #ribbon geom
+dataset.LL.partial %>% aggregate_Datetime2(unit = "5 mins")  %>% 
+  gg_day(facetting = FALSE, geom = "ribbon", alpha = 0.25, size = 0.25,
+         fill = "#EFC000", color = "#EFC000") + #base plot
   brown.reference + scale.correction
 ```
 
@@ -401,55 +389,20 @@ This is a ribbon that shows the missed - and at night exceeded - potential due t
 
 #### `second plot`
 
-```{r, echo = FALSE}
-symlog_trans <- function(base = 10, thr = 1, scale = 1){
-  trans <- function(x)
-    ifelse(abs(x) < thr, x, sign(x) * 
-             (thr + scale * (log(sign(x) * x / thr, base))))
-
-  inv <- function(x)
-    ifelse(abs(x) < thr, x, sign(x) * 
-             base^((sign(x) * x - thr) / scale) * thr)
-
-  breaks <- function(x){
-    sgn <- sign(x[which.max(abs(x))])
-    if(all(abs(x) < thr))
-      scales::pretty_breaks()(x)
-    else if(prod(x) >= 0){
-      if(min(abs(x)) < thr)
-        sgn * unique(c(scales::pretty_breaks()(c(min(abs(x)), thr)),
-                       scales::log_breaks(base)(c(max(abs(x)), thr))))
-      else
-        sgn * scales::log_breaks(base)(sgn * x)
-    } else {
-      if(min(abs(x)) < thr)
-        unique(c(sgn * scales::log_breaks()(c(max(abs(x)), thr)),
-                 scales::pretty_breaks()(c(sgn * thr, x[which.min(abs(x))]))))
-      else
-        unique(c(-scales::log_breaks(base)(c(thr, -x[1])),
-                 scales::pretty_breaks()(c(-thr, thr)),
-                 scales::log_breaks(base)(c(thr, x[2]))))
-    }
-  }
-  scales::trans_new(paste("symlog", thr, base, scale, sep = "-"), trans, inv, breaks)
-}
-```
-
 ```{r, fig.retina=2, fig.width=7, fig.height = 6, warning=FALSE}
 #Note: This will become a function of its own in LightLogR at some point in the future
 
 Plot_upper <- 
-dataset.LL.aggregate("5 mins")  %>% 
-  gg_day(facetting = FALSE, geom = "blank") + #base plot
-  geom_ribbon(aes(ymin = 0, ymax = MEDI), alpha = 0.25, fill = "#EFC000", 
-              outline.type = "upper", col = "#EFC000", size = 0.4) + #ribbon geom
+dataset.LL.partial %>% aggregate_Datetime2(unit = "5 mins") %>% 
+  gg_day(facetting = FALSE, geom = "ribbon", alpha = 0.25, size = 0.4,
+         fill = "#EFC000", color = "#EFC000") + #base plot
   geom_line(aes(y=Reference.Brown), lty = 2, col = "red") + #Brown reference
   geom_line(aes(y=Reference), col = "#0073C2FF", size = 0.4) + #solar reference
   labs(x = NULL) +  #remove the x-axis label
   scale.correction
 
 Plot_lower <- 
-  dataset.LL.aggregate("5 mins")  %>% 
+dataset.LL.partial %>% aggregate_Datetime2(unit = "5 mins") %>% 
   gg_day(facetting = FALSE, geom = "blank", y.axis.label = "unrealized Potential") + #base plot
   geom_area(
     aes(y = Reference - MEDI, 
@@ -458,14 +411,10 @@ Plot_lower <-
         col = (Reference - MEDI) >= 0), 
     alpha = 0.25, outline.type = "upper") + 
   guides(fill = "none", col = "none") + 
-  scale_y_continuous(
-    trans = "symlog", 
-    breaks = c(-10^2, -10^1, -1, 0, 1, 10^1, 10^2, 10^3, 10^4, 10^5), 
-    labels = function(x) format(x, scientific = FALSE, big.mark = " ")) + 
   geom_hline(aes(yintercept = 0), lty = 2) + 
     scale_fill_manual(values = c("#EFC000", "#0073C2")) + 
     scale_color_manual(values = c("#EFC000", "#0073C2")) + 
-  coord_cartesian(ylim = c(-10^2, 10^5), xlim = c(0, 24.5*60*60),expand = FALSE) 
+  scale.correction
 
 Plot_upper / Plot_lower #set up the two plots
     
@@ -480,8 +429,9 @@ This plot requires a bit of preparation, but it focuses nicely on the unrealized
 ```{r, warning=FALSE}
 Day.end <- as_datetime("2023-09-01 23:59:59", tz = tz)
 Plot <- 
-dataset.LL.aggregate("5 mins") %>% filter_Datetime(end = Day.end) %>% 
-  gg_day(facetting = FALSE, geom = "blank", y.axis.breaks = c(10^(0:5), 250)) + #base plot
+dataset.LL.partial %>% 
+  aggregate_Datetime2(unit = "5 mins") %>% filter_Datetime(end = Day.end) %>% 
+  gg_day(facetting = FALSE, geom = "blank", y.axis.breaks = c(0, 10^(0:5), 250)) + #base plot
     geom_ribbon(aes(ymin = MEDI, ymax=Reference), 
               alpha = 0.25, fill = "#0073C2FF",
               outline.type = "upper", col = "#0073C2FF", size = 0.15) + #solar reference
@@ -510,7 +460,7 @@ This is a variant of the representation used throught the document. Since the lu
 #This section will be integrated into a LightLogR function in the future
 Day.start <- as_datetime("2023-09-01 00:00:00", tz = tz)
 Day.end <- as_datetime("2023-09-01 23:59:59", tz = tz)
-Interval <- interval(Day.start, Day.end, tz = tz)
+Interval <- lubridate::interval(start = Day.start, end = Day.end, tzone = tz)
 Brown.times <- 
   Brown.intervals %>% 
   filter(Interval %>% int_overlaps(.env$Interval)) %>% 
@@ -594,7 +544,7 @@ Plot +
   # geom_vline(data = Brown.times[-1,],
   #            aes(xintercept = xmin), lty = 2, col = "grey40", size = 0.4) + #adding vertical lines
   geom_label(data = Brown.times[-4,], 
-             aes(x = xmean, y = 0.2, label = label.Brown), 
+             aes(x = xmean, y = 0.3, label = label.Brown), 
              col = "grey40", alpha = 0.75) + #adding labels
   annotate("rect", fill = "white", xmin = 0, xmax = 7.5*60*60, 
            ymin = 2500, ymax = 60000)+

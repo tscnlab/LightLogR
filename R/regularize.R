@@ -7,7 +7,7 @@
 #' one) is chosen.
 #'
 #' @param dataset A light logger dataset. Needs to be a dataframe.
-#' @param Datetime.column The column that contains the datetime. Needs to be a
+#' @param Datetime.colname The column that contains the datetime. Needs to be a
 #'   `POSIXct` and part of the dataset.
 #'
 #' @return A `tibble` with one row per group and a column with the
@@ -32,25 +32,25 @@
 #' dataset %>%
 #' dominant_epoch()              
 dominant_epoch <- function(dataset, 
-                           Datetime.column = Datetime) {
+                           Datetime.colname = Datetime) {
  
   # Initial Checks ----------------------------------------------------------
   
-  #dataset needs to be a dataframe and Datetime.column needs to be part of the dataset and a POSIXct
+  #dataset needs to be a dataframe and Datetime.colname needs to be part of the dataset and a POSIXct
   stopifnot(
     "dataset is not a dataframe" = is.data.frame(dataset),
-    "Datetime.column must be part of the dataset" = 
-      colname.defused({{ Datetime.column }}) %in% names(dataset),
-    "Datetime.column must be a Datetime" = 
+    "Datetime.colname must be part of the dataset" = 
+      colname.defused({{ Datetime.colname }}) %in% names(dataset),
+    "Datetime.colname must be a Datetime" = 
       lubridate::is.POSIXct(
-        dataset[[colname.defused({{ Datetime.column }})]])
+        dataset[[colname.defused({{ Datetime.colname }})]])
   )
   
   # Function ----------------------------------------------------------
   
   dat <- 
     dataset %>% 
-    count.difftime(Datetime.column = {{ Datetime.column }}) %>% 
+    count.difftime(Datetime.colname = {{ Datetime.colname }}) %>% 
     dplyr::summarize(
       dominant.epoch = difftime[which.max(n)] %>% lubridate::as.duration(),
       group.indices = dplyr::cur_group_id()
@@ -88,18 +88,18 @@ dominant_epoch <- function(dataset,
 #'   dataset %>% gapless_Datetimes(epoch = "1 day")
 
 gapless_Datetimes <- function(dataset, 
-                              Datetime.column = Datetime,
+                              Datetime.colname = Datetime,
                               epoch = "dominant.epoch") {
   
   # Initial Checks ----------------------------------------------------------
   
   stopifnot(
     "dataset is not a dataframe" = is.data.frame(dataset),
-    "Datetime.column must be part of the dataset" = 
-      colname.defused({{ Datetime.column }}) %in% names(dataset),
-    "Datetime.column must be a Datetime" = 
+    "Datetime.colname must be part of the dataset" = 
+      colname.defused({{ Datetime.colname }}) %in% names(dataset),
+    "Datetime.colname must be a Datetime" = 
       lubridate::is.POSIXct(
-        dataset[[colname.defused({{ Datetime.column }})]]),
+        dataset[[colname.defused({{ Datetime.colname }})]]),
     "epoch must either be a duration or a string" = 
       lubridate::is.duration(epoch) | is.character(epoch)
   )
@@ -107,7 +107,7 @@ gapless_Datetimes <- function(dataset,
   # Function ----------------------------------------------------------
   
   #get the epochs based on the data
-  epochs <- dataset %>% dominant_epoch(Datetime.column = {{ Datetime.column }})
+  epochs <- dataset %>% dominant_epoch(Datetime.colname = {{ Datetime.colname }})
   
   #if the user specified an epoch, use that instead
   if(epoch != "dominant.epoch") {
@@ -118,9 +118,9 @@ gapless_Datetimes <- function(dataset,
   dat <- 
     dataset %>% 
     dplyr::reframe( Id2 = dplyr::cur_group_id(),
-      {{ Datetime.column }} := 
+      {{ Datetime.colname }} := 
         seq(
-          min({{ Datetime.column }}), max({{ Datetime.column }}), 
+          min({{ Datetime.colname }}), max({{ Datetime.colname }}), 
           by = 
             epochs %>% 
             dplyr::filter(group.indices == Id2) %>% 
@@ -176,7 +176,7 @@ gapless_Datetimes <- function(dataset,
 #' dataset %>% gap_handler(epoch = "1 day", behavior = "regulars")
 
 gap_handler <- function(dataset, 
-                        Datetime.column = Datetime,
+                        Datetime.colname = Datetime,
                         epoch = "dominant.epoch",
                         behavior = "full_sequence") {
   
@@ -184,11 +184,11 @@ gap_handler <- function(dataset,
   
   stopifnot(
     "dataset is not a dataframe" = is.data.frame(dataset),
-    "Datetime.column must be part of the dataset" = 
-      colname.defused({{ Datetime.column }}) %in% names(dataset),
-    "Datetime.column must be a Datetime" = 
+    "Datetime.colname must be part of the dataset" = 
+      colname.defused({{ Datetime.colname }}) %in% names(dataset),
+    "Datetime.colname must be a Datetime" = 
       lubridate::is.POSIXct(
-        dataset[[colname.defused({{ Datetime.column }})]]),
+        dataset[[colname.defused({{ Datetime.colname }})]]),
     "epoch must either be a duration or a string" = 
       lubridate::is.duration(epoch) | is.character(epoch),
     "behavior must be one of 'full_sequence', 'regulars', 'irregulars', 'gaps'" = 
@@ -201,18 +201,18 @@ gap_handler <- function(dataset,
   gapless <- 
     dataset %>% 
     gapless_Datetimes(
-      Datetime.column = {{ Datetime.column }},
+      Datetime.colname = {{ Datetime.colname }},
       epoch = epoch
       )
   
   #add a column to the dataset to indicate that the provided datetimes are explicit
   dataset <- 
     dataset %>% 
-    dplyr::mutate(is.implicit = FALSE, .after = {{ Datetime.column }})
+    dplyr::mutate(is.implicit = FALSE, .after = {{ Datetime.colname }})
   
   #collect the grouping variables and the Datetime column (needed for silent joining)
   by_vars <- 
-    c(dplyr::group_vars(dataset), colname.defused({{ Datetime.column }}))
+    c(dplyr::group_vars(dataset), colname.defused({{ Datetime.colname }}))
   
   #join the datasets
   dat <- 
@@ -236,7 +236,7 @@ gap_handler <- function(dataset,
   }
   
   dat <- 
-    dat %>% dplyr::arrange({{ Datetime.column }}, .by_group = TRUE)
+    dat %>% dplyr::arrange({{ Datetime.colname }}, .by_group = TRUE)
   
   # Return ----------------------------------------------------------
   dat
@@ -285,7 +285,7 @@ gap_handler <- function(dataset,
 #' gap_finder(dataset, epoch = "1 day")
 
 gap_finder <- function(dataset, 
-                       Datetime.column = Datetime,
+                       Datetime.colname = Datetime,
                        epoch = "dominant.epoch",
                        gap.data = FALSE,
                        silent = FALSE) {
@@ -294,11 +294,11 @@ gap_finder <- function(dataset,
   
   stopifnot(
     "dataset is not a dataframe" = is.data.frame(dataset),
-    "Datetime.column must be part of the dataset" = 
-      colname.defused({{ Datetime.column }}) %in% names(dataset),
-    "Datetime.column must be a Datetime" = 
+    "Datetime.colname must be part of the dataset" = 
+      colname.defused({{ Datetime.colname }}) %in% names(dataset),
+    "Datetime.colname must be a Datetime" = 
       lubridate::is.POSIXct(
-        dataset[[colname.defused({{ Datetime.column }})]]),
+        dataset[[colname.defused({{ Datetime.colname }})]]),
     "epoch must either be a duration or a string" = 
       lubridate::is.duration(epoch) | is.character(epoch),
     "gap.data must be logical" = is.logical(gap.data),
@@ -310,7 +310,7 @@ gap_finder <- function(dataset,
   #create the full dataset including implicit values
   dat <- 
     dataset %>% gap_handler(
-    Datetime.column = {{ Datetime.column }},
+    Datetime.colname = {{ Datetime.colname }},
     epoch = epoch) 
     
   dat_filtered <- 
@@ -321,7 +321,7 @@ gap_finder <- function(dataset,
   #how many timestamps fall into the regular sequence
   dat2 <- 
     dataset %>% gap_handler(
-    Datetime.column = {{ Datetime.column }},
+    Datetime.colname = {{ Datetime.colname }},
     epoch = epoch,
     behavior = "regulars") %>% 
     nrow()
@@ -339,7 +339,7 @@ gap_finder <- function(dataset,
     dat %>% 
       dplyr::mutate(gap.id = dplyr::consecutive_id(is.implicit)/2) %>% 
       dplyr::filter(is.implicit) %>% 
-      dplyr::select(gap.id, {{ Datetime.column }}, dplyr::group_cols())
+      dplyr::select(gap.id, {{ Datetime.colname }}, dplyr::group_cols())
   }
   
 }
