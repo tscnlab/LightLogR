@@ -65,7 +65,7 @@ short summary, and can optionally return the gaps as a <code>tibble</code>. Uses
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">gap_finder</span><span class="op">(</span></span>
 <span>  <span class="va">dataset</span>,</span>
-<span>  Datetime.column <span class="op">=</span> <span class="va">Datetime</span>,</span>
+<span>  Datetime.colname <span class="op">=</span> <span class="va">Datetime</span>,</span>
 <span>  epoch <span class="op">=</span> <span class="st">"dominant.epoch"</span>,</span>
 <span>  gap.data <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  silent <span class="op">=</span> <span class="cn">FALSE</span></span>
@@ -78,7 +78,7 @@ short summary, and can optionally return the gaps as a <code>tibble</code>. Uses
 <dd><p>A light logger dataset. Needs to be a dataframe.</p></dd>
 
 
-<dt>Datetime.column</dt>
+<dt>Datetime.colname</dt>
 <dd><p>The column that contains the datetime. Needs to be a
 <code>POSIXct</code> and part of the dataset.</p></dd>
 
@@ -167,7 +167,7 @@ number of gaps between measurement data.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by Johannes Zauner, Manuel Spitschan, EURAMET.</p>
+  <p></p><p>Developed by Johannes Zauner, Manuel Spitschan, MeLiDos, EURAMET.</p>
 </div>
 
 <div class="pkgdown-footer-right">

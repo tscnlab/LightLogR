@@ -34,6 +34,9 @@
     <loc>https://tscnlab.github.io/LightLogR/reference/LightLogR-package.html</loc>
   </url>
   <url>
+    <loc>https://tscnlab.github.io/LightLogR/reference/aggregate_Datetime.html</loc>
+  </url>
+  <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/create_Time.data.html</loc>
   </url>
   <url>
@@ -95,5 +98,8 @@
   </url>
   <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/supported.devices.html</loc>
+  </url>
+  <url>
+    <loc>https://tscnlab.github.io/LightLogR/reference/symlog_trans.html</loc>
   </url>
 </urlset>

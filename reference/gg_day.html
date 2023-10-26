@@ -74,8 +74,8 @@ styling or guides.</p>
 <span>  geom <span class="op">=</span> <span class="st">"point"</span>,</span>
 <span>  scales <span class="op">=</span> <span class="st">"fixed"</span>,</span>
 <span>  x.axis.breaks <span class="op">=</span> <span class="fu">hms</span><span class="fu">::</span><span class="fu"><a href="https://hms.tidyverse.org/reference/hms.html" class="external-link">hms</a></span><span class="op">(</span>hours <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">24</span>, by <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  y.axis.breaks <span class="op">=</span> <span class="fl">10</span><span class="op">^</span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span>,</span>
-<span>  y.scale.log10 <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  y.axis.breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">10</span><span class="op">^</span><span class="op">(</span><span class="fl">5</span><span class="op">:</span><span class="fl">0</span><span class="op">)</span>, <span class="fl">0</span>, <span class="fl">10</span><span class="op">^</span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  y.scale <span class="op">=</span> <span class="st">"symlog"</span>,</span>
 <span>  y.scale.sc <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  x.axis.label <span class="op">=</span> <span class="st">"Time of Day"</span>,</span>
 <span>  y.axis.label <span class="op">=</span> <span class="st">"Illuminance (lx, MEDI)"</span>,</span>
@@ -145,9 +145,12 @@ activate the default behaviour of <a href="https://ggplot2.tidyverse.org/referen
 <code><a href="https://ggplot2.tidyverse.org/reference/waiver.html" class="external-link">ggplot2::waiver()</a></code>.</p></dd>
 
 
-<dt>y.scale.log10</dt>
-<dd><p>Should <code>y</code> be scaled on a log10 basis? Expects a
-<code>logical</code>.</p></dd>
+<dt>y.scale</dt>
+<dd><p>How should the y-axis be scaled?</p><ul><li><p>Defaults to <code>"symlog"</code>, which is a logarithmic scale that can also handle negative values.</p></li>
+<li><p><code>"log10"</code> would be a straight logarithmic scale, but cannot handle negative values.</p></li>
+<li><p><code>"identity"</code> does nothing (continuous scaling).</p></li>
+<li><p>a transforming function, such as <code><a href="symlog_trans.html">symlog_trans()</a></code> or <code><a href="https://scales.r-lib.org/reference/identity_trans.html" class="external-link">scales::identity_trans()</a></code>, which allow for more control.</p></li>
+</ul></dd>
 
 
 <dt>y.scale.sc</dt>
@@ -199,7 +202,9 @@ used to adjust to adjust size or linetype.</p></dd>
     <p>Besides plotting, the function creates two new variables from the given
 <code>Datetime</code>:</p><ul><li><p><code>Day.data</code> is a factor that is used for facetting with <code><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">ggplot2::facet_wrap()</a></code>. Make sure to use this variable, if you change the faceting manually. Also, the function checks, whether this variable already exists. If it does, it will only convert it to a factor and do the faceting on that variable.</p></li>
 <li><p><code>Time.data</code> is an <code>hms</code> created with <code><a href="https://hms.tidyverse.org/reference/hms.html" class="external-link">hms::as_hms()</a></code> that is used for the x.axis</p></li>
-</ul></div>
+</ul><p>The default scaling of the y-axis is a <code>symlog</code> scale, which is a logarithmic
+scale that only starts scaling after a given threshold (default = 0). This enables values of 0 in the plot, which are common in light logger data, and even enables negative values, which might be sensible for non-light data. See <code><a href="symlog_trans.html">symlog_trans()</a></code> for details on tweaking this scale. The scale can also be changed to a normal or logarithmic scale - see the y.scale argument for more.</p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
@@ -214,19 +219,16 @@ used to adjust to adjust size or linetype.</p></dd>
 <span class="r-in"><span>col <span class="op">=</span> <span class="va">Source</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Only Dates will be used from start.date and end.date input. If you also want to set Datetimes or Times, consider using the `filter_Datetime()` function instead.</span>
 <span class="r-in"><span><span class="va">plot</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Transformation introduced infinite values in continuous y-axis</span>
 <span class="r-plt img"><img src="gg_day-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#you can easily overwrite the color scale afterwards</span></span></span>
 <span class="r-in"><span><span class="va">plot</span> <span class="op">+</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_colour_discrete.html" class="external-link">scale_color_discrete</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Scale for <span style="color: #00BB00;">colour</span> is already present.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding another scale for <span style="color: #00BB00;">colour</span>, which will replace the existing scale.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Transformation introduced infinite values in continuous y-axis</span>
 <span class="r-plt img"><img src="gg_day-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#or change the facetting</span></span></span>
 <span class="r-in"><span><span class="va">plot</span> <span class="op">+</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">Day.data</span> <span class="op">+</span> <span class="va">Source</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Transformation introduced infinite values in continuous y-axis</span>
 <span class="r-plt img"><img src="gg_day-3.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
@@ -235,7 +237,7 @@ used to adjust to adjust size or linetype.</p></dd>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by Johannes Zauner, Manuel Spitschan, EURAMET.</p>
+  <p></p><p>Developed by Johannes Zauner, Manuel Spitschan, MeLiDos, EURAMET.</p>
 </div>
 
 <div class="pkgdown-footer-right">
