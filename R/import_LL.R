@@ -33,10 +33,12 @@
 #' * `manual.id`: If this argument is not `NULL`, and no `ID` column is part
 #' of the `dataset`, this `character` scalar will be used. **Don´t use this
 #' argument if multiple files from different participants are used!**
+#' * `locale`: The locale controls defaults that vary from place to place.
+#' * `...`: supply additional arguments to the [readr] import functions, like `na`. Might also be used to supply arguments to the specific import functions, like `column_names` for `Actiwatch_Spectrum` devices. Those devices will alway throw a helpful error message if you forget to supply the necessary arguments.
 #'
 #' @details If the `Id` column is already part of the `dataset` it will just use
-#' this column. If the column is not present it will add this column and fill it
-#' with the filename of the importfile (see param `auto.id`).
+#'   this column. If the column is not present it will add this column and fill
+#'   it with the filename of the importfile (see param `auto.id`).
 #'
 #' @param ... Parameters that get handed down to the specific import functions
 #' @param device From what device do you want to import? For every supported
@@ -45,6 +47,7 @@
 #'   by the `device.ext` spec to access the sample file):
 #' * `"ActLumus"` (ActLumus.txt)
 #' * `"LYS"` (LYS.csv)
+#' * `"Actiwatch_Spectrum"` (Actiwatch.csv) *Note: as the `locale` argument use `readr::locale(encoding="latin1")` . This is due to the fact that the German Actiwatch software from which this sample file was taken, uses a different encoding than UTF-8.*
 #' @importFrom rlang :=
 #' @return Tibble/Dataframe with a POSIXct column for the datetime
 #' @export
@@ -119,7 +122,9 @@ imports <- function(device,
       tz = "UTC",
       ID.colname = Id,
       auto.id = ".*",
-      manual.id = NULL
+      manual.id = NULL,
+      locale = readr::default_locale(),
+      ... =
     ),
     #function expression
     rlang::expr({
@@ -175,6 +180,7 @@ imports <- function(device,
 }
 
 import_arguments <- list(
+  #ActLumus
   ActLumus = rlang::expr({
     tmp <- readr::read_delim(
       filename,
@@ -182,7 +188,9 @@ import_arguments <- list(
       delim = ";",
       n_max = n_max,
       col_types = paste0("c", rep("d", 32)),
-      id = "file.name"
+      id = "file.name",
+      locale = locale,
+      ...
     )
     tmp <- tmp %>%
       dplyr::rename(Datetime = `DATE/TIME`,
@@ -190,18 +198,69 @@ import_arguments <- list(
       dplyr::mutate(Datetime =
                       Datetime %>% lubridate::dmy_hms(tz = tz))
   }),
+  #LYS
   LYS = rlang::expr({
     tmp <- readr::read_csv(filename,
                            n_max = n_max,
                            col_types = c("cfddddddddddd"),
-                           id = "file.name"
+                           id = "file.name",
+                           locale = locale,
+                           ...
     )
     tmp <- tmp %>%
       dplyr::rename(Datetime = timestamp,
                     MEDI = mEDI) %>%
       dplyr::mutate(Datetime =
                       Datetime %>% lubridate::dmy_hms(tz = tz))
+  }),
+  #Actiwatch Spectrum
+  Actiwatch_Spectrum = rlang::expr({
+    #separate the dots list in the column_names and the rest
+    dots <- rlang::list2(...)
+    column_names <- dots$column_names
+    if(is.null(column_names)) 
+      stop("Actiwatch Spectrum requires a vector of `column_names` in the order in which they appear in the file in order to properly detect the starting row")
+    dots$column_names <- NULL
+
+    tmp <- 
+      purrr::map(
+        filename,
+        \(x) {
+          rows_to_skip <- detect_starting_row(x, 
+                                              locale = locale, 
+                                              column_names = column_names,
+                                              n_max = n_max)
+          df <- suppressMessages(do.call(
+            readr::read_csv,
+            append(list(
+            x, 
+            skip = rows_to_skip,
+            locale=locale,
+            id = "file.name",
+            show_col_types = FALSE
+            ),
+            dots)))
+          
+          df %>% 
+            dplyr::select(!dplyr::starts_with("..."))
+          
+        }) %>% purrr::list_rbind()
+    tmp <- tmp %>%
+      tidyr::unite(col = "Datetime",
+                   tidyselect::where(lubridate::is.Date),
+                   tidyselect::where(hms::is_hms),
+                   remove = FALSE
+      ) %>% 
+      dplyr::mutate(
+        Datetime = lubridate::ymd_hms(Datetime),
+        dplyr::across(
+          dplyr::where(is.character) & 
+            dplyr::where(~ any(stringr::str_detect(.x, ","), na.rm = TRUE)),
+          ~ stringr::str_replace(.x, ",", ".") %>% 
+              as.numeric()
+        ))
   })
+
 )
 
 #' Import Datasets from supported devices
