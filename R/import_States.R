@@ -8,7 +8,13 @@
 #' * In the `wide` format, multiple `Datetime` columns indicate the state through the column name. These get pivoted to the `long` format and can be recoded through the `State.encoding` argument.
 #' * In the `long` format, one column indicates the `State`, while the other gives the `Datetime`.
 #'
-#' @inheritParams import.Dataset
+#' @param filename Filename(s) for the Dataset. Can also contain the filepath,
+#' but `path` must then be `NULL`. Expects a `character`. If the vector is
+#' longer than `1`, multiple files will be read in into one Tibble.
+#' @param path Optional path for the dataset(s). `NULL` is the default. Expects
+#' a `character`.
+#' @param tz Timezone of the data. `"UTC"` is the default. Expects a
+#' `character`. You can look up the supported timezones with [OlsonNames()].
 #' @param sep String that separates columns in the import file. Defaults to
 #'   `","`.
 #' @param dec String that indicates a decimal separator in the import file.

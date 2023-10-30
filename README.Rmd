@@ -71,7 +71,7 @@ You can import a light logger dataset with ease. The import functions give quick
 
 ```{r, out.width="50%", fig.align='center'}
 filename <- system.file("extdata/sample_data_LYS.csv", package = "LightLogR")
-dataset <- import.LYS(filename, tz = "Europe/Berlin")
+dataset <- import$LYS(filename, tz = "Europe/Berlin")
 
 dataset %>% select(Datetime, lux, kelvin, MEDI) %>%  slice(8000:8005) %>% 
   flextable() %>% autofit()
@@ -81,6 +81,7 @@ dataset %>% select(Datetime, lux, kelvin, MEDI) %>%  slice(8000:8005) %>%
 Once imported, **LightLogR** allows you conveniently visualize the data.
 
 ```{r, fig.retina=2}
+dataset %>% gg_overview()
 dataset %>% gg_day()
 ```
 
@@ -88,7 +89,8 @@ There is a wide range of options to the `gg_day()` function to customize the out
 
 ```{r, fig.retina=2}
 dataset %>% 
-  gg_day(col = MEDI >= 250, scales = "fixed", size = 0.5) + 
+  gg_day(
+    col = MEDI >= 250, scales = "fixed", size = 0.5) + 
   scale_color_discrete(type = c("orange", "skyblue"))
 ```
 

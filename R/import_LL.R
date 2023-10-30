@@ -2,33 +2,42 @@
 
 #' Import a light logger dataset or related data
 #'
+#' @description
+#'
 #' Imports a dataset and does the necessary transformations to get the right
 #' column formats. Unless specified otherwise, the function will set the
 #' timezone of the data to `UTC`. It will also enforce an `id` to separate
 #' different datasets and will order/arrange the dataset within each `id`.
 #'
-#' If the `Id` column is already part of the `dataset` it will just use this
-#' column. If the column is not present it will add this column and fill it with
-#' the filename of the importfile (see param `auto.id`).
+#' There are specific and a general import function. The general import function
+#' is described below, whereas the specific import functions take the form of
+#' `import$device()`. The general import function is a thin wrapper around the
+#' specific import functions. The specific import functions take the following
+#' arguments:
 #'
-#' @param filename Filename(s) for the Dataset. Can also contain the filepath,
-#'   but `path` must then be `NULL`. Expects a `character`. If the vector is
-#'   longer than `1`, multiple files will be read in into one Tibble.
-#' @param path Optional path for the dataset(s). `NULL` is the default. Expects
-#'   a `character`.
-#' @param n_max maximum number of lines to read. Default is `Inf`.
-#' @param tz Timezone of the data. `"UTC"` is the default. Expects a
-#'   `character`. You can look up the supported timezones with [OlsonNames()].
-#' @param ID.colname Lets you specify a column for the participant id. Expects a
-#'   symbol (Default is `Id`). This column will be used for grouping
-#'   ([dplyr::group_by()]).
-#' @param auto.id If the `Id.colname` column is added to the `dataset`, the `Id`
-#'   can be automatically extracted from the filename. The argument expects a
-#'   regular expression [regex] and will by default just give the whole filename
-#'   without file extension.
-#' @param manual.id If this argument is not `NULL`, and no `ID` column is part
-#'   of the `dataset`, this `character` scalar will be used.
-#' **Don´t use this argument if multiple files from different participants are used!**.
+#' * `filename`: Filename(s) for the Dataset. Can also contain the filepath,
+#' but `path` must then be `NULL`. Expects a `character`. If the vector is
+#' longer than `1`, multiple files will be read in into one Tibble.
+#' * `path`: Optional path for the dataset(s). `NULL` is the default. Expects
+#' a `character`.
+#' * `n_max`: maximum number of lines to read. Default is `Inf`.
+#' * `tz`: Timezone of the data. `"UTC"` is the default. Expects a
+#' `character`. You can look up the supported timezones with [OlsonNames()].
+#' * `ID.colname`: Lets you specify a column for the participant id. Expects a
+#' symbol (Default is `Id`). This column will be used for grouping
+#' ([dplyr::group_by()]).
+#' * `auto.id`: If the `Id.colname` column is added to the `dataset`, the `Id`
+#' can be automatically extracted from the filename. The argument expects a
+#' regular expression [regex] and will by default just give the whole filename
+#' without file extension.
+#' * `manual.id`: If this argument is not `NULL`, and no `ID` column is part
+#' of the `dataset`, this `character` scalar will be used. **Don´t use this
+#' argument if multiple files from different participants are used!**
+#'
+#' @details If the `Id` column is already part of the `dataset` it will just use
+#' this column. If the column is not present it will add this column and fill it
+#' with the filename of the importfile (see param `auto.id`).
+#'
 #' @param ... Parameters that get handed down to the specific import functions
 #' @param device From what device do you want to import? For every supported
 #'   device, there is a sample data file that you can use to test the function
@@ -68,12 +77,12 @@
 #'
 #' ```{r}
 #' filepath <- system.file("extdata/sample_data_ActLumus.txt", package = "LightLogR")
-#' dataset <- import.ActLumus(filepath)
+#' dataset <- import$ActLumus(filepath)
 #' ```
 #'
 #' ```{r}
 #' dataset %>%
-#' dplyr::select(Datetime, TEMPERATURE, LIGHT, MEDI) %>%
+#' dplyr::select(Datetime, TEMPERATURE, LIGHT, MEDI, Id) %>%
 #' dplyr::slice(1500:1505) %>%
 #' flextable::flextable() %>%
 #' flextable::autofit()
@@ -87,89 +96,116 @@ import.Dataset <- function(device, ...) {
       device %in% supported.devices
   )
   
-  import_function_expr <- rlang::parse_expr(paste0("import.", device))
+  import_function_expr <- rlang::parse_expr(paste0("import$", device))
   
   eval(import_function_expr)(...)
 }
 
-# ActLumus ----------------------------------------------------------------
-
-#' Import Dataset from ActLumus
-#'
-#' @rdname import.Dataset
-#' @export
-
-import.ActLumus <- 
-  function(filename, 
-           path = NULL, 
-           n_max = Inf,
-           tz = "UTC",
-           ID.colname = Id,
-           auto.id = ".*",
-           manual.id = NULL) {
-    
-    if (!is.null(path)) {
-      filename <- file.path(path, filename)
-    }
-    
-    #special handling for ActLumus files
-    import.expr <- rlang::expr(
-      {tmp <- readr::read_delim(!!filename,
-                                skip = 32,
-                                delim = ";",
-                                n_max = !!n_max,
-                                col_types = paste0("c",rep("d",32)),
-                                id = "file.name"
-      )
-      tmp <- tmp %>%
-        dplyr::rename(Datetime = `DATE/TIME`,
-                      MEDI = `MELANOPIC EDI`) %>%
-        dplyr::mutate(Datetime =
-                        Datetime %>% lubridate::dmy_hms(tz = !!tz))
+# General ----------------------------------------------------------------
+#This internal helper function is a function factory to create import functions
+#based on device name and specific import expression
+imports <- function(device,
+                    import.expr) {
+  
+  import.expr <- rlang::enexpr(import.expr)
+  ID.colname <- quote({{ ID.colname}})
+  
+  rlang::new_function(
+    #function arguments
+    rlang::exprs(
+      filename =, 
+      path = NULL, 
+      n_max = Inf,
+      tz = "UTC",
+      ID.colname = Id,
+      auto.id = ".*",
+      manual.id = NULL
+    ),
+    #function expression
+    rlang::expr({
+      
+      if (!is.null(path)) {
+        filename <- file.path(path, filename)
       }
+      
+      id.colname.defused <- colname.defused(!!ID.colname)
+      #initial checks
+      stopifnot(
+        "filename needs to be a character (vector)" = is.character(filename),
+        "device needs to be a character" = is.character(!!device),
+        "tz needs to be a character" = is.character(tz),
+        "tz needs to be a valid time zone, see `OlsonNames()`" = tz %in% OlsonNames(),
+        "auto.id needs to be a string" = is.character(auto.id),
+        "n_max needs to be a positive numeric" = is.numeric(n_max)
+      )
+      #import the file
+      tmp <- rlang::eval_tidy(!!import.expr)
+      
+      #validate/manipulate the file
+      if(!id.colname.defused %in% names(tmp)) {
+        switch(is.null(manual.id) %>% as.character(),
+               "TRUE" =
+                 {tmp <- tmp %>%
+                   dplyr::mutate(!!ID.colname :=
+                                   basename(file.name) %>%
+                                   tools::file_path_sans_ext() %>%
+                                   stringr::str_extract(auto.id),
+                                 .before = 1)},
+               "FALSE" =
+                 {tmp <- tmp %>%
+                   dplyr::mutate(!!ID.colname := manual.id, .before = 1)}
+        )
+      }
+      tmp <- tmp %>%
+        dplyr::mutate(file.name = basename(file.name) %>%
+                        tools::file_path_sans_ext(),
+                      !!ID.colname := factor(!!ID.colname)) %>%
+        dplyr::group_by(!!ID.colname) %>%
+        dplyr::arrange(Datetime, .by_group = TRUE)
+      
+      #give info about the file
+      import.info(tmp, !!device, tz, !!ID.colname)
+      
+      #return the file
+      tmp
+      
+    }),
+    rlang::caller_env()
+  )
+}
+
+import_arguments <- list(
+  ActLumus = rlang::expr({
+    tmp <- readr::read_delim(
+      filename,
+      skip = 32,
+      delim = ";",
+      n_max = n_max,
+      col_types = paste0("c", rep("d", 32)),
+      id = "file.name"
     )
-    
-    #generic import function
-    import.link("ActLumus", {{ ID.colname }})
-    
-  }
-
-
-# LYS ---------------------------------------------------------------------
-
-#' Import Dataset from LYS Button
-#'
-#' @rdname import.Dataset
-#' @export
-
-import.LYS <- function(filename, 
-                      path = NULL, 
-                      n_max = Inf,
-                      tz = "UTC",
-                      ID.colname = Id,
-                      auto.id = ".*",
-                      manual.id = NULL) {
-  
-  if (!is.null(path)) {
-    filename <- file.path(path, filename)
-  }
-  
-  #special handling for LYS files
-  import.expr <- rlang::expr(
-    {tmp <- readr::read_csv(!!filename,
-                            n_max = !!n_max,
-                            col_types = c("cfddddddddddd"),
-                            id = "file.name"
+    tmp <- tmp %>%
+      dplyr::rename(Datetime = `DATE/TIME`,
+                    MEDI = `MELANOPIC EDI`) %>%
+      dplyr::mutate(Datetime =
+                      Datetime %>% lubridate::dmy_hms(tz = tz))
+  }),
+  LYS = rlang::expr({
+    tmp <- readr::read_csv(filename,
+                           n_max = n_max,
+                           col_types = c("cfddddddddddd"),
+                           id = "file.name"
     )
     tmp <- tmp %>%
       dplyr::rename(Datetime = timestamp,
                     MEDI = mEDI) %>%
       dplyr::mutate(Datetime =
-                      Datetime %>% lubridate::dmy_hms(tz = !!tz))
-    }
-  )
-  
-  #generic import function
-  import.link("LYS", {{ ID.colname }})
-  
-}
+                      Datetime %>% lubridate::dmy_hms(tz = tz))
+  })
+)
+
+#' Import Datasets from supported devices
+#'
+#' @rdname import.Dataset
+#' @export
+import <- purrr::imap(import_arguments, \(x, idx) imports(idx,x))

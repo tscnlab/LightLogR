@@ -15,8 +15,8 @@ server <- function(input, output) {
     writeLines(lines, temp_file)
     
     read_methods <- list(
-      LYS = import.LYS,
-      ActLumus = import.ActLumus,
+      LYS = import$LYS,
+      ActLumus = import$ActLumus,
       read_csv = function(x) readr::read_csv(x)
     )
     
