@@ -22,6 +22,11 @@
 
 #' A vector of all supported devices for import functions
 #'
+#' These are all supported devices where there is a dedicated import function.
+#' Import functions can be called either through [import.Dataset()] with the
+#' respective `device = "device"` argument, or directly, e.g.,
+#' `import$ActLumus()`.
+#'
 #' @format `supported.devices` A character vector, listing all supported devices
 #' \describe{
 #'   \item{suppored.devices}{strings}

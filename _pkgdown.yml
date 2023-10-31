@@ -12,8 +12,7 @@ reference:
       through `import.*()`.
     contents:
     - import.Dataset
-    - import.ActLumus
-    - import.LYS
+    - import
     - import.Statechanges
   
   - title: Process

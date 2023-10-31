@@ -54,7 +54,7 @@ Every light logger dataset needs an `Id` to connect or separate observations fro
 
 ```{r}
 tz <- "Europe/Berlin"
-dataset.LL <- import.ActLumus(file.LL, path, auto.id = "^(\\d{3})", tz = tz)
+dataset.LL <- import$ActLumus(file.LL, path, auto.id = "^(\\d{3})", tz = tz)
 
 ```
 
@@ -80,7 +80,7 @@ We can already see some patterns and features in the luminous exposure across th
 On to our next dataset. This one contains measurement data from the same type of device, but recorded on a rooftop position of unobstructed daylight in roughly the same location as the participant data. As the device type is the same, import is the same as well. But since the filename does not contain the participant´s `ID` this time, we will give it a manual id: `"CW35"`.
 
 ```{r}
-dataset.env <- import.ActLumus(file.env, path, manual.id = "CW35", tz = tz)
+dataset.env <- import$ActLumus(file.env, path, manual.id = "CW35", tz = tz)
 ```
 
 Here you can see that we follow roughly the same time span, but the measurement epoch is *30 seconds*, with one odd interval which is one second shorter.
@@ -559,7 +559,7 @@ Plot +
   annotate("text", x=x, y = 4000, label = "- Daylight Potential", 
            hjust = 0, col = "#0073C2DD")
 
-# ggplot2::ggsave("Brown_et_al_2022.png", width = 7, height = 4, dpi = 600)
+ggplot2::ggsave("images/Day.png", width = 7, height = 4, dpi = 600)
 
 ```
 

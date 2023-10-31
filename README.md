@@ -82,7 +82,7 @@ give quick, helpful feedback about the dataset.
 
 ``` r
 filename <- system.file("extdata/sample_data_LYS.csv", package = "LightLogR")
-dataset <- import.LYS(filename, tz = "Europe/Berlin")
+dataset <- import$LYS(filename, tz = "Europe/Berlin")
 #> Successfully read in 11422 observations from LYS-file
 #> Timezone set is Europe/Berlin.
 #> Start: 2023-06-21 00:00:12
@@ -107,11 +107,16 @@ dataset %>% select(Datetime, lux, kelvin, MEDI) %>%  slice(8000:8005) %>%
 Once imported, **LightLogR** allows you conveniently visualize the data.
 
 ``` r
-dataset %>% gg_day()
-#> Warning: Transformation introduced infinite values in continuous y-axis
+dataset %>% gg_overview()
 ```
 
 <img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
+
+``` r
+dataset %>% gg_day()
+```
+
+<img src="man/figures/README-unnamed-chunk-4-2.png" width="100%" />
 
 There is a wide range of options to the `gg_day()` function to customize
 the output. Have a look at the reference page (`?gg_day`) to see all
@@ -120,11 +125,11 @@ options. You can also override most of the defaults, e.g., for different
 
 ``` r
 dataset %>% 
-  gg_day(col = MEDI >= 250, scales = "fixed", size = 0.5) + 
+  gg_day(
+    col = MEDI >= 250, scales = "fixed", size = 0.5) + 
   scale_color_discrete(type = c("orange", "skyblue"))
 #> Scale for colour is already present.
 #> Adding another scale for colour, which will replace the existing scale.
-#> Warning: Transformation introduced infinite values in continuous y-axis
 ```
 
 <img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
@@ -146,7 +151,6 @@ sample.data.environment %>%
     scales = "fixed",
     geom = "line")
 #> Only Dates will be used from start.date and end.date input. If you also want to set Datetimes or Times, consider using the `filter_Datetime()` function instead.
-#> Warning: Transformation introduced infinite values in continuous y-axis
 ```
 
 <img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" /> With
@@ -172,8 +176,6 @@ sample.data.environment %>%
     group = interaction(Source, Datetime.rounded)) + 
   theme(legend.position = "bottom")
 #> Only Dates will be used from start.date and end.date input. If you also want to set Datetimes or Times, consider using the `filter_Datetime()` function instead.
-#> Warning: Transformation introduced infinite values in continuous y-axis
-#> Warning: Removed 3429 rows containing non-finite values (`stat_boxplot()`).
 ```
 
 <img src="man/figures/README-unnamed-chunk-7-1.png" width="100%" />
