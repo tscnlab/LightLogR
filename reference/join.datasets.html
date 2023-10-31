@@ -99,7 +99,7 @@
 <span class="r-in"><span>package <span class="op">=</span> <span class="st">"LightLogR"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">file.LL</span> <span class="op">&lt;-</span> <span class="st">"205_actlumus_Log_1020_20230904101707532.txt.zip"</span></span></span>
 <span class="r-in"><span><span class="va">file.env</span> <span class="op">&lt;-</span> <span class="st">"cyepiamb_CW35_Log_1431_20230904081953614.txt.zip"</span></span></span>
-<span class="r-in"><span><span class="va">dataset.LL</span> <span class="op">&lt;-</span> <span class="fu"><a href="import.Dataset.html">import.ActLumus</a></span><span class="op">(</span><span class="va">file.LL</span>, <span class="va">path</span>, auto.id <span class="op">=</span> <span class="st">"^(\\d{3})"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dataset.LL</span> <span class="op">&lt;-</span> <span class="va">import</span><span class="op">$</span><span class="fu">ActLumus</span><span class="op">(</span><span class="va">file.LL</span>, <span class="va">path</span>, auto.id <span class="op">=</span> <span class="st">"^(\\d{3})"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Multiple files in zip: reading '205_actlumus_Log_1020_20230904101707532.txt'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Successfully read in 61016 observations from ActLumus-file</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Timezone set is UTC.</span>
@@ -109,7 +109,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> Observation intervals: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Id    interval.time     n pct  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 205   10s           <span style="text-decoration: underline;">61</span>015 100% </span>
-<span class="r-in"><span><span class="va">dataset.env</span> <span class="op">&lt;-</span> <span class="fu"><a href="import.Dataset.html">import.ActLumus</a></span><span class="op">(</span><span class="va">file.env</span>, <span class="va">path</span>, manual.id <span class="op">=</span> <span class="st">"CW35"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dataset.env</span> <span class="op">&lt;-</span> <span class="va">import</span><span class="op">$</span><span class="fu">ActLumus</span><span class="op">(</span><span class="va">file.env</span>, <span class="va">path</span>, manual.id <span class="op">=</span> <span class="st">"CW35"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Multiple files in zip: reading 'cyepiamb_CW35_Log_1431_20230904081953614.txt'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Successfully read in 20143 observations from ActLumus-file</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Timezone set is UTC.</span>
