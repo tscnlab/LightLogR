@@ -25,6 +25,7 @@ gg_day(
   subtitle = NULL,
   interactive = FALSE,
   facetting = TRUE,
+  jco_color = TRUE,
   ...
 )
 }
@@ -95,7 +96,12 @@ at \code{\link[base:strptime]{base::strptime()}}}
 \item{interactive}{Should the plot be interactive? Expects a \code{logical}.
 Defaults to \code{FALSE}.}
 
-\item{facetting}{Should an automated facet by day be applie? Default is \code{TRUE} and uses the \code{Day.data} variable that the function also creates if not present.}
+\item{facetting}{Should an automated facet by day be applie? Default is
+\code{TRUE} and uses the \code{Day.data} variable that the function also creates if
+not present.}
+
+\item{jco_color}{Should the \code{\link[ggsci:scale_jco]{ggsci::scale_color_jco()}} color palette be used?
+Defaults to \code{TRUE}.}
 
 \item{...}{Other options that get passed to the main geom function. Can be
 used to adjust to adjust size or linetype.}
@@ -117,7 +123,11 @@ Besides plotting, the function creates two new variables from the given
 }
 
 The default scaling of the y-axis is a \code{symlog} scale, which is a logarithmic
-scale that only starts scaling after a given threshold (default = 0). This enables values of 0 in the plot, which are common in light logger data, and even enables negative values, which might be sensible for non-light data. See \code{\link[=symlog_trans]{symlog_trans()}} for details on tweaking this scale. The scale can also be changed to a normal or logarithmic scale - see the y.scale argument for more.
+scale that only starts scaling after a given threshold (default = 0). This
+enables values of 0 in the plot, which are common in light logger data, and
+even enables negative values, which might be sensible for non-light data. See
+\code{\link[=symlog_trans]{symlog_trans()}} for details on tweaking this scale. The scale can also be
+changed to a normal or logarithmic scale - see the y.scale argument for more.
 }
 \examples{
 #use `col`for separation of different sets

@@ -11,8 +11,12 @@
 #' * `Time.data` is an `hms` created with [hms::as_hms()] that is used for the x.axis
 #'
 #' The default scaling of the y-axis is a `symlog` scale, which is a logarithmic
-#' scale that only starts scaling after a given threshold (default = 0). This enables values of 0 in the plot, which are common in light logger data, and even enables negative values, which might be sensible for non-light data. See [symlog_trans()] for details on tweaking this scale. The scale can also be changed to a normal or logarithmic scale - see the y.scale argument for more.
-#' 
+#' scale that only starts scaling after a given threshold (default = 0). This
+#' enables values of 0 in the plot, which are common in light logger data, and
+#' even enables negative values, which might be sensible for non-light data. See
+#' [symlog_trans()] for details on tweaking this scale. The scale can also be
+#' changed to a normal or logarithmic scale - see the y.scale argument for more.
+#'
 #' @param dataset A light logger dataset. Expects a `dataframe`. If not imported
 #'   by [LightLogR], take care to choose a sensible variable for the `x.axis.`.
 #' @param x.axis,y.axis column name that contains the datetime (x, defaults to
@@ -36,8 +40,8 @@
 #'   earliest/latest date within the `dataset`.
 #' @param scales For [ggplot2::facet_wrap()], should scales be "fixed", "free"
 #'   or free in one dimension ("free_y" is the default). Expects a `character`.
-#' @param y.scale How should the y-axis be scaled? 
-#' * Defaults to `"symlog"`, which is a logarithmic scale that can also handle negative values. 
+#' @param y.scale How should the y-axis be scaled?
+#' * Defaults to `"symlog"`, which is a logarithmic scale that can also handle negative values.
 #' * `"log10"` would be a straight logarithmic scale, but cannot handle negative values.
 #' * `"identity"` does nothing (continuous scaling).
 #' * a transforming function, such as [symlog_trans()] or [scales::identity_trans()], which allow for more control.
@@ -62,7 +66,11 @@
 #'   used to adjust to adjust size or linetype.
 #' @param interactive Should the plot be interactive? Expects a `logical`.
 #'   Defaults to `FALSE`.
-#' @param facetting Should an automated facet by day be applie? Default is `TRUE` and uses the `Day.data` variable that the function also creates if not present.
+#' @param facetting Should an automated facet by day be applie? Default is
+#'   `TRUE` and uses the `Day.data` variable that the function also creates if
+#'   not present.
+#' @param jco_color Should the [ggsci::scale_color_jco()] color palette be used?
+#'   Defaults to `TRUE`.
 #'
 #' @return A ggplot object
 #' @export
@@ -105,6 +113,7 @@ gg_day <- function(dataset,
                    subtitle = NULL,
                    interactive = FALSE,
                    facetting = TRUE,
+                   jco_color = TRUE,
                    ...) {
   
 # Initial Checks ----------------------------------------------------------
@@ -143,6 +152,15 @@ gg_day <- function(dataset,
           )
       )
     
+  }
+  
+  #jco color palette
+  jco_color_scheme <- list()
+  if(jco_color) {
+    jco_color_scheme <- 
+      list(
+        ggsci::scale_color_jco()
+      )
   }
   
   #filter by start and end date
@@ -192,7 +210,7 @@ gg_day <- function(dataset,
       ), ...) +
     ribbon +
     # Scales --------------------------------------------------------------
-    ggsci::scale_color_jco()+
+    jco_color_scheme+
     ggplot2::scale_x_time(breaks = x.axis.breaks, 
                           labels = scales::label_time(format = "%H:%M")) + 
     ggplot2::scale_y_continuous(
