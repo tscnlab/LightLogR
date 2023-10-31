@@ -109,17 +109,15 @@ gg_day <- function(dataset,
   
 # Initial Checks ----------------------------------------------------------
 
-  x <- rlang::enexpr(x.axis)
+  x <- rlang::enexpr(x.axis) 
   y <- rlang::enexpr(y.axis)
-  axis_columns <- (purrr::map_chr(c(x,y), rlang::as_string))
+  axis_columns <- (purrr::map_chr(c(x,y), deparse1))
   stopifnot(
     "The given dataset is not a dataframe" = is.data.frame(dataset),
     "The given column for X is not in the Dataset. If you did not specify X, you are working with data not originating from LightLogR. Please specify an appropriate Datetime column" = 
       rlang::as_string(x) %in% names(dataset),
     "The given column for X is not a Datetime" =
       lubridate::is.POSIXct(dataset[[rlang::as_string(x)]]),
-    "The given column for Y is not in the Dataset" = 
-      rlang::as_string(y) %in% names(dataset),
     "scales must be one of `fixed`, `free_x`, `free_y`, or `free`" = 
       scales %in% c("free_y", "free_x", "fixed", "free"),
     "format.day must be a character. Please make shure it is of type `base::strptime`" = 

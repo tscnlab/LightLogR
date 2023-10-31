@@ -47,7 +47,7 @@
 #'   by the `device.ext` spec to access the sample file):
 #' * `"ActLumus"` (ActLumus.txt)
 #' * `"LYS"` (LYS.csv)
-#' * `"Actiwatch_Spectrum"` (Actiwatch.csv) *Note: as the `locale` argument use `readr::locale(encoding="latin1")` . This is due to the fact that the German Actiwatch software from which this sample file was taken, uses a different encoding than UTF-8.*
+#' * `"Actiwatch_Spectrum"` (Actiwatch.csv) **Special Argument: `column_names`** A character vector containing column names in the order in which they appear in the file. This is necessary to find the starting point of actual data.*Note: as the `locale` argument use `readr::locale(encoding="latin1")` . This is due to the fact that the German Actiwatch software from which this sample file was taken, uses a different encoding than UTF-8.*
 #' @importFrom rlang :=
 #' @return Tibble/Dataframe with a POSIXct column for the datetime
 #' @export
