@@ -1,7 +1,7 @@
 
-#' Create a simple plot of light logger data, facetted by Day
+#' Create a simple Time-of-Day plot of light logger data, faceted by Date
 #'
-#' `gg_day` will create a simple ggplot for every data in a dataset. The result
+#' [gg_day()] will create a simple ggplot for every data in a dataset. The result
 #' can further be manipulated like any ggplot. This will be sensible to refine
 #' styling or guides.
 #'
@@ -35,7 +35,7 @@
 #' @param start.date,end.date Choose an optional start or end date within your
 #'   `dataset`. Expects a `date`, which can also be a `character` that is
 #'   interpretable as a date, e.g., `"2023-06-03"`. If you need a Datetime or
-#'   want to cut specific times of each day, use the [filter_Datetime] function.
+#'   want to cut specific times of each day, use the [filter_Datetime()] function.
 #'   Defaults to `NULL`, which means that the plot starts/ends with the
 #'   earliest/latest date within the `dataset`.
 #' @param scales For [ggplot2::facet_wrap()], should scales be "fixed", "free"
@@ -56,17 +56,18 @@
 #' @param y.scale.sc `logical` for whether scientific notation shall be used.
 #'   Defaults to `FALSE`.
 #' @param geom What geom should be used for visualization? Expects a `character`
-#' * `"point"` for [ggplot2::geom_point()] (the default)
+#' * `"point"` for [ggplot2::geom_point()]
 #' * `"line"`  for [ggplot2::geom_line()]
-#' * as the value is just input into the `geom_` function from [ggplot2], other variants might work as well, but are not tested.
+#' * `"ribbon"` for [ggplot2::geom_ribbon()]
+#' * as the value is just input into the `geom_` function from [ggplot2], other variants work as well, but are not extensively tested.
 #' @param group Optional column name that defines separate sets. Useful for
 #'   certain geoms like `boxplot`.Expects anything that works with the layer
 #'   data [ggplot2::aes()]
 #' @param ... Other options that get passed to the main geom function. Can be
-#'   used to adjust to adjust size or linetype.
+#'   used to adjust to adjust size, linewidth, or linetype.
 #' @param interactive Should the plot be interactive? Expects a `logical`.
 #'   Defaults to `FALSE`.
-#' @param facetting Should an automated facet by day be applie? Default is
+#' @param facetting Should an automated facet by day be applied? Default is
 #'   `TRUE` and uses the `Day.data` variable that the function also creates if
 #'   not present.
 #' @param jco_color Should the [ggsci::scale_color_jco()] color palette be used?
@@ -146,7 +147,9 @@ gg_day <- function(dataset,
     ribbon <- 
       list(
         ggplot2::geom_ribbon(
-          ggplot2::aes(ymin = 0, ymax = !!y),
+          ggplot2::aes(ymin = 0, ymax = !!y,
+                       group = {{ group }},
+                       col = {{ col }}),
           outline.type = "upper",
           ...
           )
