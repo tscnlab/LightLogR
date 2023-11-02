@@ -15,20 +15,29 @@ reference:
     - import
     - import.Statechanges
   
-  - title: Process
+  - title: Insight
+    desc: >
+      This section includes functions to gain more insight into light logger. 
+      Functions in this section will not return a version of the input dataset, 
+      but rather information based on it.
+    contents:
+    - count.difftime
+    - dominant_epoch
+    - gapless_Datetimes
+    - gap_finder
+  
+  - title: Validate & Process
     desc: >
       This section includes functions to process light logger data, e.g., to
       validate and clean data, to filter, cut or aggreagate data, or to join 
-      datasets.
+      datasets. All of these functions will return a version of the input dataset.
     contents:
-    - dominant_epoch
-    - gapless_Datetimes
     - gap_handler
-    - gap_finder
     - cut_Datetime
     - aggregate_Datetime
     - create_Time.data
     - filter_Datetime
+    - filter_Datetime_multiple
     - filter_Date
     - filter_Time
     - join.datasets
@@ -53,7 +62,15 @@ reference:
     contents:
     - gg_overview
     - gg_day
+    - gg_days
+    
+  - title: Helpers
+    desc: >
+      This section includes helper functions that are used in the other sections.
+    contents:
     - symlog_trans
+    - Datetime_breaks
+    - Datetime_limits
     
   - title: Datasets
     desc: >

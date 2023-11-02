@@ -109,6 +109,7 @@ gg_overview <- function(dataset,
     #general information
     ggplot2::labs(x = "Datetime")+
     #theming and styling
+    ggplot2::scale_x_datetime()+
     cowplot::theme_cowplot()+
     ggplot2::theme(
       panel.grid.major = ggplot2::element_line(colour = "grey98"), 

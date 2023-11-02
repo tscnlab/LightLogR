@@ -1,9 +1,9 @@
 
 #' Create a simple Time-of-Day plot of light logger data, faceted by Date
 #'
-#' [gg_day()] will create a simple ggplot for every data in a dataset. The result
-#' can further be manipulated like any ggplot. This will be sensible to refine
-#' styling or guides.
+#' [gg_day()] will create a simple ggplot for every data in a dataset. The
+#' result can further be manipulated like any ggplot. This will be sensible to
+#' refine styling or guides.
 #'
 #' Besides plotting, the function creates two new variables from the given
 #' `Datetime`:
@@ -35,9 +35,9 @@
 #' @param start.date,end.date Choose an optional start or end date within your
 #'   `dataset`. Expects a `date`, which can also be a `character` that is
 #'   interpretable as a date, e.g., `"2023-06-03"`. If you need a Datetime or
-#'   want to cut specific times of each day, use the [filter_Datetime()] function.
-#'   Defaults to `NULL`, which means that the plot starts/ends with the
-#'   earliest/latest date within the `dataset`.
+#'   want to cut specific times of each day, use the [filter_Datetime()]
+#'   function. Defaults to `NULL`, which means that the plot starts/ends with
+#'   the earliest/latest date within the `dataset`.
 #' @param scales For [ggplot2::facet_wrap()], should scales be "fixed", "free"
 #'   or free in one dimension ("free_y" is the default). Expects a `character`.
 #' @param y.scale How should the y-axis be scaled?
@@ -45,10 +45,10 @@
 #' * `"log10"` would be a straight logarithmic scale, but cannot handle negative values.
 #' * `"identity"` does nothing (continuous scaling).
 #' * a transforming function, such as [symlog_trans()] or [scales::identity_trans()], which allow for more control.
-#' @param col optional column name that defines separate sets and colors them.
-#'   Expects anything that works with the layer data [ggplot2::aes()]. The
-#'   default color palette can be overwritten outside the function (see
-#'   examples).
+#' @param aes_col,aes_fill optional arguments that define separate sets and
+#'   colors or fills them. Expects anything that works with the layer data
+#'   [ggplot2::aes()]. The default color palette can be overwritten outside the
+#'   function (see examples).
 #' @param x.axis.breaks,y.axis.breaks Where should breaks occur on the x and
 #'   y.axis? Expects a `numeric vector` with all the breaks. If you want to
 #'   activate the default behaviour of [ggplot2], you need to put in
@@ -85,7 +85,7 @@
 #' x.axis = Datetime,
 #' y.axis = `MELANOPIC EDI`,
 #' y.axis.label = "mEDI (lx)",
-#' col = Source)
+#' aes_col = Source)
 #' plot
 #'
 #' #you can easily overwrite the color scale afterwards
@@ -99,7 +99,8 @@ gg_day <- function(dataset,
                    end.date = NULL,
                    x.axis = Datetime,
                    y.axis = MEDI,
-                   col = NULL,
+                   aes_col = NULL,
+                   aes_fill = NULL,
                    group = NULL,
                    geom = "point",
                    scales = "fixed",
@@ -149,7 +150,8 @@ gg_day <- function(dataset,
         ggplot2::geom_ribbon(
           ggplot2::aes(ymin = 0, ymax = !!y,
                        group = {{ group }},
-                       col = {{ col }}),
+                       col = {{ aes_col }},
+                       fill = {{ aes_fill }}),
           outline.type = "upper",
           ...
           )
@@ -209,7 +211,8 @@ gg_day <- function(dataset,
     eval(geom_function_expr)(
       ggplot2::aes(
         group = {{ group }},
-        col = {{ col }},
+        col = {{ aes_col }},
+        fill = {{ aes_fill }},
       ), ...) +
     ribbon +
     # Scales --------------------------------------------------------------

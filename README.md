@@ -126,7 +126,7 @@ options. You can also override most of the defaults, e.g., for different
 ``` r
 dataset %>% 
   gg_day(
-    col = MEDI >= 250, scales = "fixed", size = 0.5) + 
+    aes_col = MEDI >= 250, scales = "fixed", size = 0.5) + 
   scale_color_discrete(type = c("orange", "skyblue"))
 #> Scale for colour is already present.
 #> Adding another scale for colour, which will replace the existing scale.
@@ -147,7 +147,7 @@ sample.data.environment %>%
   gg_day(
     start.date = "2023-08-18",
     y.axis = `MELANOPIC EDI`,
-    col = Source,
+    aes_col = Source,
     scales = "fixed",
     geom = "line")
 #> Only Dates will be used from start.date and end.date input. If you also want to set Datetimes or Times, consider using the `filter_Datetime()` function instead.
@@ -170,7 +170,7 @@ sample.data.environment %>%
   gg_day(
     end.date = "2023-08-15",
     y.axis = `MELANOPIC EDI`,
-    col = Source,
+    aes_col = Source,
     scales = "fixed",
     geom = "boxplot",
     group = interaction(Source, Datetime.rounded)) + 

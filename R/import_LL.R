@@ -124,6 +124,7 @@ imports <- function(device,
       auto.id = ".*",
       manual.id = NULL,
       locale = readr::default_locale(),
+      silent = FALSE,
       ... =
     ),
     #function expression
@@ -169,7 +170,7 @@ imports <- function(device,
         dplyr::arrange(Datetime, .by_group = TRUE)
       
       #give info about the file
-      import.info(tmp, !!device, tz, !!ID.colname)
+      if(!silent) import.info(tmp, !!device, tz, !!ID.colname)
       
       #return the file
       tmp

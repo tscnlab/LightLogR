@@ -10,7 +10,8 @@ gg_day(
   end.date = NULL,
   x.axis = Datetime,
   y.axis = MEDI,
-  col = NULL,
+  aes_col = NULL,
+  aes_fill = NULL,
   group = NULL,
   geom = "point",
   scales = "fixed",
@@ -36,9 +37,9 @@ by \link{LightLogR}, take care to choose a sensible variable for the \code{x.axi
 \item{start.date, end.date}{Choose an optional start or end date within your
 \code{dataset}. Expects a \code{date}, which can also be a \code{character} that is
 interpretable as a date, e.g., \code{"2023-06-03"}. If you need a Datetime or
-want to cut specific times of each day, use the \code{\link[=filter_Datetime]{filter_Datetime()}} function.
-Defaults to \code{NULL}, which means that the plot starts/ends with the
-earliest/latest date within the \code{dataset}.}
+want to cut specific times of each day, use the \code{\link[=filter_Datetime]{filter_Datetime()}}
+function. Defaults to \code{NULL}, which means that the plot starts/ends with
+the earliest/latest date within the \code{dataset}.}
 
 \item{x.axis, y.axis}{column name that contains the datetime (x, defaults to
 \code{"Datetime"} which is automatically correct for data imported with
@@ -47,10 +48,10 @@ melanopic EDI, which is a standard measure of stimulus strength for the
 nonvisual effects of light). Expects a \code{symbol}. Needs to be part of the
 \code{dataset}.}
 
-\item{col}{optional column name that defines separate sets and colors them.
-Expects anything that works with the layer data \code{\link[ggplot2:aes]{ggplot2::aes()}}. The
-default color palette can be overwritten outside the function (see
-examples).}
+\item{aes_col, aes_fill}{optional arguments that define separate sets and
+colors or fills them. Expects anything that works with the layer data
+\code{\link[ggplot2:aes]{ggplot2::aes()}}. The default color palette can be overwritten outside the
+function (see examples).}
 
 \item{group}{Optional column name that defines separate sets. Useful for
 certain geoms like \code{boxplot}.Expects anything that works with the layer
@@ -111,9 +112,9 @@ used to adjust to adjust size, linewidth, or linetype.}
 A ggplot object
 }
 \description{
-\code{\link[=gg_day]{gg_day()}} will create a simple ggplot for every data in a dataset. The result
-can further be manipulated like any ggplot. This will be sensible to refine
-styling or guides.
+\code{\link[=gg_day]{gg_day()}} will create a simple ggplot for every data in a dataset. The
+result can further be manipulated like any ggplot. This will be sensible to
+refine styling or guides.
 }
 \details{
 Besides plotting, the function creates two new variables from the given
@@ -139,7 +140,7 @@ end.date = "2023-08-16",
 x.axis = Datetime,
 y.axis = `MELANOPIC EDI`,
 y.axis.label = "mEDI (lx)",
-col = Source)
+aes_col = Source)
 plot
 
 #you can easily overwrite the color scale afterwards

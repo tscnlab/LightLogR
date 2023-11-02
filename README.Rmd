@@ -90,7 +90,7 @@ There is a wide range of options to the `gg_day()` function to customize the out
 ```{r, fig.retina=2}
 dataset %>% 
   gg_day(
-    col = MEDI >= 250, scales = "fixed", size = 0.5) + 
+    aes_col = MEDI >= 250, scales = "fixed", size = 0.5) + 
   scale_color_discrete(type = c("orange", "skyblue"))
 ```
 
@@ -103,7 +103,7 @@ sample.data.environment %>%
   gg_day(
     start.date = "2023-08-18",
     y.axis = `MELANOPIC EDI`,
-    col = Source,
+    aes_col = Source,
     scales = "fixed",
     geom = "line")
 ```
@@ -114,7 +114,7 @@ sample.data.environment %>%
   gg_day(
     end.date = "2023-08-15",
     y.axis = `MELANOPIC EDI`,
-    col = Source,
+    aes_col = Source,
     scales = "fixed",
     geom = "boxplot",
     group = interaction(Source, Datetime.rounded)) + 
