@@ -31,10 +31,19 @@
     <loc>https://tscnlab.github.io/LightLogR/reference/Brown2reference.html</loc>
   </url>
   <url>
+    <loc>https://tscnlab.github.io/LightLogR/reference/Datetime_breaks.html</loc>
+  </url>
+  <url>
+    <loc>https://tscnlab.github.io/LightLogR/reference/Datetime_limits.html</loc>
+  </url>
+  <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/LightLogR-package.html</loc>
   </url>
   <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/aggregate_Datetime.html</loc>
+  </url>
+  <url>
+    <loc>https://tscnlab.github.io/LightLogR/reference/count.difftime.html</loc>
   </url>
   <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/create_Time.data.html</loc>
@@ -52,6 +61,9 @@
     <loc>https://tscnlab.github.io/LightLogR/reference/filter_Datetime.html</loc>
   </url>
   <url>
+    <loc>https://tscnlab.github.io/LightLogR/reference/filter_Datetime_multiple.html</loc>
+  </url>
+  <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/filter_Time.html</loc>
   </url>
   <url>
@@ -65,6 +77,9 @@
   </url>
   <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/gg_day.html</loc>
+  </url>
+  <url>
+    <loc>https://tscnlab.github.io/LightLogR/reference/gg_days.html</loc>
   </url>
   <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/gg_overview.html</loc>

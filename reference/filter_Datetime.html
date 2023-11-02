@@ -83,6 +83,7 @@ day, look to <code><a href="filter_Time.html">filter_Time()</a></code>.</p>
 <span>  length <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  full.day <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  tz <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  only_Id <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  filter.expr <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -134,6 +135,10 @@ on to avoid empty days in plotting with <code><a href="gg_day.html">gg_day()</a>
 <dt>tz</dt>
 <dd><p>Timezone of the start/end times. If <code>NULL</code> (the default), it will
 take the timezone from the <code>Datetime.colname</code> column.</p></dd>
+
+
+<dt>only_Id</dt>
+<dd><p>An expression of <code>ids</code> where the filtering should be applied to. If <code>NULL</code> (the default), the filtering will be applied to all <code>ids</code>. Based on the this expression, the dataset will be split in two and only where the given expression evaluates to <code>TRUE</code>, will the filtering take place. Afterwards both sets are recombined and sorted by <code>Datetime</code>.</p></dd>
 
 
 <dt>filter.expr</dt>

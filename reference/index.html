@@ -71,9 +71,9 @@
         </dt>
         <dd>Import data that contain <code>Datetimes</code> of <code>Statechanges</code></dd>
       </dl></div><div class="section level2">
-      <h2 id="process">Process<a class="anchor" aria-label="anchor" href="#process"></a></h2>
+      <h2 id="insight">Insight<a class="anchor" aria-label="anchor" href="#insight"></a></h2>
       
-      <p class="section-desc"></p><p>This section includes functions to process light logger data, e.g., to validate and clean data, to filter, cut or aggreagate data, or to join datasets.</p>
+      <p class="section-desc"></p><p>This section includes functions to gain more insight into light logger. Functions in this section will not return a version of the input dataset, but rather information based on it.</p>
 
       
     </div><div id="" class="section level2">
@@ -82,6 +82,11 @@
       
 
       <dl><dt>
+          
+          <code><a href="count.difftime.html">count.difftime()</a></code> 
+        </dt>
+        <dd>Counts the Time differences (epochs) per group (in a grouped dataset)</dd>
+      </dl><dl><dt>
           
           <code><a href="dominant_epoch.html">dominant_epoch()</a></code> 
         </dt>
@@ -93,14 +98,25 @@
         <dd>Create a gapless sequence of Datetimes</dd>
       </dl><dl><dt>
           
-          <code><a href="gap_handler.html">gap_handler()</a></code> 
-        </dt>
-        <dd>Fill implicit gaps in a light logger dataset</dd>
-      </dl><dl><dt>
-          
           <code><a href="gap_finder.html">gap_finder()</a></code> 
         </dt>
         <dd>Check for and output gaps in a dataset</dd>
+      </dl></div><div class="section level2">
+      <h2 id="validate-process">Validate &amp; Process<a class="anchor" aria-label="anchor" href="#validate-process"></a></h2>
+      
+      <p class="section-desc"></p><p>This section includes functions to process light logger data, e.g., to validate and clean data, to filter, cut or aggreagate data, or to join datasets. All of these functions will return a version of the input dataset.</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="gap_handler.html">gap_handler()</a></code> 
+        </dt>
+        <dd>Fill implicit gaps in a light logger dataset</dd>
       </dl><dl><dt>
           
           <code><a href="cut_Datetime.html">cut_Datetime()</a></code> 
@@ -121,6 +137,11 @@
           <code><a href="filter_Datetime.html">filter_Datetime()</a></code> <code><a href="filter_Datetime.html">filter_Date()</a></code> 
         </dt>
         <dd>Filter Datetimes in a dataset.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="filter_Datetime_multiple.html">filter_Datetime_multiple()</a></code> 
+        </dt>
+        <dd>Filter multiple times based on a list of arguments.</dd>
       </dl><dl><dt>
           
           <code><a href="filter_Time.html">filter_Time()</a></code> 
@@ -198,12 +219,38 @@ Brown et al. (2022)</dd>
           
           <code><a href="gg_day.html">gg_day()</a></code> 
         </dt>
-        <dd>Create a simple plot of light logger data, facetted by Day</dd>
+        <dd>Create a simple Time-of-Day plot of light logger data, faceted by Date</dd>
       </dl><dl><dt>
+          
+          <code><a href="gg_days.html">gg_days()</a></code> 
+        </dt>
+        <dd>Create a simple datetime plot of light logger data, faceted by group</dd>
+      </dl></div><div class="section level2">
+      <h2 id="helpers">Helpers<a class="anchor" aria-label="anchor" href="#helpers"></a></h2>
+      
+      <p class="section-desc"></p><p>This section includes helper functions that are used in the other sections.</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
           
           <code><a href="symlog_trans.html">symlog_trans()</a></code> 
         </dt>
         <dd>Scale positive and negative values on a log scale</dd>
+      </dl><dl><dt>
+          
+          <code><a href="Datetime_breaks.html">Datetime_breaks()</a></code> 
+        </dt>
+        <dd>Create a (shifted) sequence of Datetimes for axis breaks</dd>
+      </dl><dl><dt>
+          
+          <code><a href="Datetime_limits.html">Datetime_limits()</a></code> 
+        </dt>
+        <dd>Find or set sensible limits for Datetime axis</dd>
       </dl></div><div class="section level2">
       <h2 id="datasets">Datasets<a class="anchor" aria-label="anchor" href="#datasets"></a></h2>
       
