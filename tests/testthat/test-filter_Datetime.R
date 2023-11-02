@@ -57,3 +57,19 @@ test_that("giving wrong input types gives an error", {
   )
   
 })
+
+test_that("filter_multiple_Datetimes works as expected", {
+  arguments <- list(
+    list(start = "2023-08-17", only_Id = quote(Source == "Participant")),
+    list(end = "2023-08-17", only_Id = quote(Source == "Environment")))
+  result <- 
+    sample.data.environment %>% dplyr::group_by(Source) %>% 
+    filter_Datetime_multiple(arguments = arguments, filter_Date) %>%
+    dplyr::summarize(max = max(Datetime), min = min(Datetime))
+  expectation <- 
+    tibble::tibble(Source = c("Environment", "Participant"),
+                  max = as.POSIXct(c("2023-08-17 23:59:32", "2023-08-20 23:59:51"), tz = "UTC"),
+                  min = as.POSIXct(c("2023-08-15 00:00:02", "2023-08-17 00:00:01"), tz = "UTC"))
+  expect_equal(result, expectation)
+})
+  

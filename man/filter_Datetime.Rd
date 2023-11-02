@@ -13,6 +13,7 @@ filter_Datetime(
   length = NULL,
   full.day = FALSE,
   tz = NULL,
+  only_Id = NULL,
   filter.expr = NULL
 )
 
@@ -53,6 +54,8 @@ on to avoid empty days in plotting with \code{\link[=gg_day]{gg_day()}}.}
 
 \item{tz}{Timezone of the start/end times. If \code{NULL} (the default), it will
 take the timezone from the \code{Datetime.colname} column.}
+
+\item{only_Id}{An expression of \code{ids} where the filtering should be applied to. If \code{NULL} (the default), the filtering will be applied to all \code{ids}. Based on the this expression, the dataset will be split in two and only where the given expression evaluates to \code{TRUE}, will the filtering take place. Afterwards both sets are recombined and sorted by \code{Datetime}.}
 
 \item{filter.expr}{Advanced filtering conditions. If not \code{NULL} (default) and given an \code{expression}, this is used to \code{\link[dplyr:filter]{dplyr::filter()}} the results. This can be useful to filter, e.g. for group-specific conditions, like starting after the first two days of measurement (see examples).}
 

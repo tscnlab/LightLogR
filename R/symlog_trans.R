@@ -23,13 +23,13 @@
 #'                                      .default = `MELANOPIC EDI`))
 #' #basic application where transformation, breaks and labels are set manually
 #' dataset %>%                                     
-#' gg_day(col = Source) +
+#' gg_day(aes_col = Source) +
 #' ggplot2::scale_y_continuous(
 #' trans = "symlog")
 #'
 #' #the same plot, but with breaks and labels set manually                            
 #' dataset %>%                                     
-#' gg_day(col = Source) +
+#' gg_day(aes_col = Source) +
 #' ggplot2::scale_y_continuous(
 #' trans = "symlog", 
 #' breaks = c(-10^(5:0), 0, 10^(0:5)),
@@ -38,7 +38,7 @@
 #' #setting individual arguments of the symlog function manually allows
 #' #e.g., to emphasize values smaller than 1
 #' dataset %>%                                     
-#' gg_day(col = Source) +
+#' gg_day(aes_col = Source) +
 #' ggplot2::scale_y_continuous(
 #' trans = symlog_trans(thr = 0.01),
 #' breaks = c(-10^(5:-1), 0, 10^(-1:5)),
