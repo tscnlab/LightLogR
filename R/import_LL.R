@@ -155,7 +155,11 @@ imports <- function(device,
                    dplyr::mutate(!!ID.colname :=
                                    basename(file.name) %>%
                                    tools::file_path_sans_ext() %>%
-                                   stringr::str_extract(auto.id),
+                                   stringr::str_extract(
+                                     auto.id,
+                                     group =  
+                                       if(stringr::str_detect(auto.id, "\\(")) 1
+                                     ),
                                  .before = 1)},
                "FALSE" =
                  {tmp <- tmp %>%
@@ -238,7 +242,8 @@ import_arguments <- list(
             skip = rows_to_skip,
             locale=locale,
             id = "file.name",
-            show_col_types = FALSE
+            show_col_types = FALSE,
+            col_types = c("iDtfdfccccfdf")
             ),
             dots)))
           
@@ -255,11 +260,12 @@ import_arguments <- list(
       dplyr::mutate(
         Datetime = lubridate::ymd_hms(Datetime),
         dplyr::across(
-          dplyr::where(is.character) & 
+          dplyr::where(is.character) &
             dplyr::where(~ any(stringr::str_detect(.x, ","), na.rm = TRUE)),
-          ~ stringr::str_replace(.x, ",", ".") %>% 
+          ~ stringr::str_replace(.x, ",", ".") %>%
               as.numeric()
-        ))
+        )
+        )
   })
 
 )

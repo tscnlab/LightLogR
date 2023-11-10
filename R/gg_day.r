@@ -164,7 +164,8 @@ gg_day <- function(dataset,
   if(jco_color) {
     jco_color_scheme <- 
       list(
-        ggsci::scale_color_jco()
+        ggsci::scale_color_jco(),
+        ggsci::scale_fill_jco()
       )
   }
   
