@@ -32,7 +32,7 @@ participants (see examples)"><meta property="og:image" content="https://tscnlab.
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/Styling.html">What's in a Day?</a>
+    <a class="dropdown-item" href="../articles/Day.html">What's in a Day?</a>
   </div>
 </li>
 <li class="nav-item">
@@ -69,7 +69,12 @@ participants (see examples)</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">filter_Datetime_multiple</span><span class="op">(</span><span class="va">dataset</span>, <span class="va">arguments</span>, filter_function <span class="op">=</span> <span class="va">filter_Datetime</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">filter_Datetime_multiple</span><span class="op">(</span></span>
+<span>  <span class="va">dataset</span>,</span>
+<span>  <span class="va">arguments</span>,</span>
+<span>  filter_function <span class="op">=</span> <span class="va">filter_Datetime</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -88,6 +93,10 @@ to be quoted with <code><a href="https://rdrr.io/r/base/substitute.html" class="
 <dt>filter_function</dt>
 <dd><p>The function to be used for filtering, either
 <code>filter_Datetime</code> (the default) or <code>filter_Date</code></p></dd>
+
+
+<dt>...</dt>
+<dd><p>Additional arguments passed to the filter function</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -117,7 +126,7 @@ to be quoted with <code><a href="https://rdrr.io/r/base/substitute.html" class="
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by Johannes Zauner, Manuel Spitschan, MeLiDos, EURAMET.</p>
+  <p></p><p>Developed by Johannes Zauner, Manuel Spitschan, EURAMET, European Union.</p>
 </div>
 
 <div class="pkgdown-footer-right">
