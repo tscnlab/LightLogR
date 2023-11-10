@@ -161,7 +161,7 @@ filter_Datetime <- function(dataset,
       dataset %>% 
       dplyr::filter(
         {{ Datetime.colname }} >= lubridate::as_datetime(start, tz = tz),
-        {{ Datetime.colname }} <= lubridate::as_datetime(end, tz = tz)
+        {{ Datetime.colname }} < lubridate::as_datetime(end, tz = tz),
         )
     #possible extra filter step
     if(!is.null(filter.expr)) {
@@ -220,6 +220,7 @@ filter_Date <- function(...,
 #'   to be quoted with [quote()] or [rlang::expr()].
 #' @param filter_function The function to be used for filtering, either
 #'   `filter_Datetime` (the default) or `filter_Date`
+#' @param ... Additional arguments passed to the filter function
 #'
 #' @return A dataframe with the filtered data
 #' @export
@@ -236,9 +237,10 @@ filter_Date <- function(...,
 #'  gg_overview(Id.colname = Source)
 filter_Datetime_multiple <- function(dataset, 
                                      arguments, 
-                                     filter_function = filter_Datetime) {
+                                     filter_function = filter_Datetime,
+                                     ...) {
   
   purrr::reduce(arguments, function(dataset, params) {
-    do.call({{ filter_function }}, c(list(dataset = dataset), params))
+    do.call({{ filter_function }}, c(list(dataset = dataset), params, ...))
   }, .init = dataset)
 }

@@ -4,7 +4,12 @@
 \alias{filter_Datetime_multiple}
 \title{Filter multiple times based on a list of arguments.}
 \usage{
-filter_Datetime_multiple(dataset, arguments, filter_function = filter_Datetime)
+filter_Datetime_multiple(
+  dataset,
+  arguments,
+  filter_function = filter_Datetime,
+  ...
+)
 }
 \arguments{
 \item{dataset}{A light logger dataset}
@@ -16,6 +21,8 @@ to be quoted with \code{\link[=quote]{quote()}} or \code{\link[rlang:expr]{rlang
 
 \item{filter_function}{The function to be used for filtering, either
 \code{filter_Datetime} (the default) or \code{filter_Date}}
+
+\item{...}{Additional arguments passed to the filter function}
 }
 \value{
 A dataframe with the filtered data

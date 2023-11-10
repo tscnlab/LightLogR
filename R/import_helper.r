@@ -24,8 +24,8 @@ import.info <- function(tmp, device, tz, ID.colname) {
         "The system timezone is ",
         Sys.timezone(),
         ". Please correct if necessary!\n")},
-    "Start: ", format(tmp$Datetime[1]), "\n",
-    "End: ", format(max(tmp$Datetime)), "\n",
+    "Start: ", format(min.time), "\n",
+    "End: ", format(max.time), "\n",
     "Timespan: " , diff(c(min.time, max.time)) %>% format(digits = 2), "\n",
     "Observation intervals: \n",
     sep = "")

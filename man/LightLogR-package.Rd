@@ -29,8 +29,8 @@ Authors:
 
 Other contributors:
 \itemize{
-  \item MeLiDos [funder]
-  \item EURAMET [funder]
+  \item EURAMET (European Association of National Metrology Institutes. Website: www.euramet.org. Grant Number: 22NRM05 MeLiDos. Grant Statement: The project (22NRM05 MeLiDos) has received funding from the European Partnership on Metrology, co-financed from the European Union’s Horizon Europe Research and Innovation Programme and by the Participating States.) [funder]
+  \item European Union (Co-funded by the European Union. Views and opinions expressed are however those of the author(s) only and do not necessarily reflect those of the European Union or EURAMET. Neither the European Union nor the granting authority can be held responsible for them.) [funder]
   \item TSCN-Lab (www.tscnlab.org) [copyright holder]
 }
 

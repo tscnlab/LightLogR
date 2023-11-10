@@ -1,7 +1,7 @@
 citHeader("To cite LightLogR in publications use:")
 
-citEntry(
-  entry    = "Misc",
+bibentry(
+  bibtype  = "Misc",
   title    = "LightLogR: Working With Wearable Light Logger Data",
   author   = "Johannes Zauner, Manuel Spitschan",
   journal  = "",
@@ -11,6 +11,6 @@ citEntry(
   pages    = "",
   url      = "https://github.com/tscnlab/LightLogR",
   textVersion = paste(
-  "Zauner, J.; Spitschan, M. (2023): LightLogR: Working With Wearable Light Logger Data. R Package, Available on https://github.com/tscnlab/LightLogR"
+  "Zauner, J.; Spitschan, M. (2023): LightLogR: Working With Wearable Light Logger Data. R Package, Available on https://github.com/tscnlab/LightLogR. Funded by EURAMET, co-funded by the European Union, Grant#22NRM05 MeLiDos"
   )
 )
