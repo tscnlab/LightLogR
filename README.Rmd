@@ -53,9 +53,7 @@ Have a look at the **Example** section down below to get started, or dive into t
 
 [*MeLiDos*](https://www.melidos.eu) is a joint, [EURAMET](https://www.euramet.org)-funded project involving sixteen partners across Europe, aimed at developing a metrology and a standard workflow for wearable light logger data and optical radiation dosimeters. Its primary contributions towards fostering FAIR data include the development of a common file format, robust metadata descriptors, and an accompanying open-source software ecosystem.
 
-![](man/figures/Co-Funded-By-the-EU.png){width="288"}
-
-[![](man/figures/Metrology_Partnership_LOGO.jpg){width="282"}](https://www.euramet.org)
+[![](man/figures/Metrology_Partnership_LOGO.jpg){width="282"}](https://www.euramet.org)     ![](man/figures/Co-Funded-By-the-EU.png){width="288"}
 
 The project (22NRM05 MeLiDos) has received funding from the European Partnership on Metrology, co-financed from the European Union's Horizon Europe Research and Innovation Programme and by the Participating States. Views and opinions expressed are however those of the author(s) only and do not necessarily reflect those of the European Union or EURAMET. Neither the European Union nor the granting authority can be held responsible for them.
 
@@ -84,7 +82,7 @@ library(ggplot2)
 
 You can import a light logger dataset with ease. The import functions give quick, helpful feedback about the dataset.
 
-```{r, out.width="50%", fig.align='center'}
+```{r, out.width="60%", fig.align='center'}
 filename <- system.file("extdata/sample_data_LYS.csv", package = "LightLogR")
 dataset <- import$LYS(filename, tz = "Europe/Berlin")
 
@@ -103,20 +101,20 @@ LLdata %>% gg_overview()
 ```
 
 ::: {style="text-align:center"}
-![](man/figures/gg_overview2.png){width="50%"}
+![](man/figures/gg_overview2.png){width="60%"}
 :::
 
 ### Visualize
 
 Once imported, **LightLogR** allows you conveniently visualize the data.
 
-```{r, out.width= "50%", fig.align='center'}
+```{r, out.width= "60%", fig.align='center'}
 dataset %>% gg_day()
 ```
 
 There is a wide range of options to the `gg_day()` function to customize the output. Have a look at the reference page (`?gg_day`) to see all options. You can also override most of the defaults, e.g., for different `color`, `facetting`, `theme` options.
 
-```{r, out.width= "60%", fig.align='center'}
+```{r, out.width= "70%", fig.align='center'}
 dataset %>% 
   gg_day(aes_col = MEDI < 250, size = 0.75) + 
   theme(legend.position = "bottom")
@@ -126,7 +124,7 @@ dataset %>%
 
 The built-in dataset `sample.data.environment` shows a combined dataset of light logger data and a second set of data - in this case unobstructed outdoor light measurements. Combined datasets can be easily visualized with `gg_day()`. The `col` parameter used on the `Source` column of the dataset allows for a color separation.
 
-```{r, out.width= "60%", fig.align='center', fig.height = 6}
+```{r, out.width= "70%", fig.align='center', fig.height = 6}
 sample.data.environment %>% 
   gg_day(
     start.date = "2023-08-18",
@@ -136,7 +134,7 @@ sample.data.environment %>%
     geom = "line") + theme(legend.position = "bottom")
 ```
 
-If you get a feeling for the data over the course of multiple days, the `gg_days()` function comes in handy. It works similar to `gg_day()`. It is also opinionated in terms of the scaling and linebreaks to only show whole days, all of which can be adjusted.
+If you want to get a feeling for the data over the course of multiple days, the `gg_days()` function comes in handy. It works similar to `gg_day()`. It is also opinionated in terms of the scaling and linebreaks to only show whole days, all of which can be adjusted.
 
 ```{r, fig.width = 10, warning=FALSE}
 sample.data.environment %>% group_by(Source) %>% 
@@ -144,7 +142,7 @@ sample.data.environment %>% group_by(Source) %>%
 ```
 
 
-With the `cut_Datetime()` function, the data can further be broken up into arbitrary time intervals. This can be used to easily compare different datasets. Just put the function in between the dataset and `gg_day()`. This makes a new variable available for plotting: `Datetime.rounded`. Just make sure, that the `geom` parameter is set to *boxplot* and the `group` parameter uses both the info from the rounded time interval (`Datetime.rounded`) and the different datasets (`Source`). The `interaction` function can easily combine them. The default interval for `cut_Datetime()` is 3 hours.
+With the `cut_Datetime()` function, the data can further be broken up into arbitrary time intervals. This can be used to easily compare different datasets. Just put the function in between the dataset and `gg_day()`. This makes a new variable available for plotting: `Datetime.rounded`. Just make sure, that the `geom` parameter is set to *boxplot* and the `group` parameter uses both the info from the rounded time interval (`Datetime.rounded`) and the different datasets (`Source`). The `base::interaction()` function can easily combine them. The default interval for `cut_Datetime()` is 3 hours.
 
 ```{r, out.width= "60%", fig.align='center'}
 sample.data.environment %>% 
@@ -173,7 +171,7 @@ The huge amount of gaps comes from the fact that the measurement intervals are s
 dataset %>% ungroup() %>% count.difftime()
 ```
 
-We can eliminate this through teh `gap_handler()` function. This function will automatically fill in the gaps with NA values. As the most dominant interval in the dataset is now not 15 seconds anymore(because intermediate datapoints have been added), we need to specify the epoch for `gap_finder()`.
+We can eliminate this through the `gap_handler()` function. This function will automatically fill in the gaps with NA values. As the most dominant interval in the dataset is now not 15 seconds anymore (because intermediate datapoints have been added), we need to specify the epoch for `gap_finder()`.
 
 ```{r}
 dataset %>% gap_handler() %>% gap_finder(epoch = "15 sec")

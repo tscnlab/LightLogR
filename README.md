@@ -74,9 +74,8 @@ dosimeters. Its primary contributions towards fostering FAIR data
 include the development of a common file format, robust metadata
 descriptors, and an accompanying open-source software ecosystem.
 
-<img src="man/figures/Co-Funded-By-the-EU.png" width="288" />
-
 [<img src="man/figures/Metrology_Partnership_LOGO.jpg" width="282" />](https://www.euramet.org)
+<img src="man/figures/Co-Funded-By-the-EU.png" width="288" />
 
 The project (22NRM05 MeLiDos) has received funding from the European
 Partnership on Metrology, co-financed from the European Union’s Horizon
@@ -132,7 +131,7 @@ dataset %>% ungroup() %>% select(Datetime, lux, kelvin, MEDI) %>%
   slice(8000:8005) %>% flextable() %>% autofit()
 ```
 
-<img src="man/figures/README-unnamed-chunk-3-1.png" width="50%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-3-1.png" width="60%" style="display: block; margin: auto;" />
 
 <div style="color: white">
 
@@ -149,7 +148,7 @@ based on the measurement epochs found in the data.
 
 <div style="text-align:center">
 
-<img src="man/figures/gg_overview2.png" style="width:50.0%" />
+<img src="man/figures/gg_overview2.png" style="width:60.0%" />
 
 </div>
 
@@ -161,7 +160,7 @@ Once imported, **LightLogR** allows you conveniently visualize the data.
 dataset %>% gg_day()
 ```
 
-<img src="man/figures/README-unnamed-chunk-4-1.png" width="50%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-4-1.png" width="60%" style="display: block; margin: auto;" />
 
 There is a wide range of options to the `gg_day()` function to customize
 the output. Have a look at the reference page (`?gg_day`) to see all
@@ -174,7 +173,7 @@ dataset %>%
   theme(legend.position = "bottom")
 ```
 
-<img src="man/figures/README-unnamed-chunk-5-1.png" width="60%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-5-1.png" width="70%" style="display: block; margin: auto;" />
 
 ### More than one dataset
 
@@ -195,12 +194,12 @@ sample.data.environment %>%
 #> Only Dates will be used from start.date and end.date input. If you also want to set Datetimes or Times, consider using the `filter_Datetime()` function instead.
 ```
 
-<img src="man/figures/README-unnamed-chunk-6-1.png" width="60%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-6-1.png" width="70%" style="display: block; margin: auto;" />
 
-If you get a feeling for the data over the course of multiple days, the
-`gg_days()` function comes in handy. It works similar to `gg_day()`. It
-is also opinionated in terms of the scaling and linebreaks to only show
-whole days, all of which can be adjusted.
+If you want to get a feeling for the data over the course of multiple
+days, the `gg_days()` function comes in handy. It works similar to
+`gg_day()`. It is also opinionated in terms of the scaling and
+linebreaks to only show whole days, all of which can be adjusted.
 
 ``` r
 sample.data.environment %>% group_by(Source) %>% 
@@ -216,8 +215,8 @@ different datasets. Just put the function in between the dataset and
 `Datetime.rounded`. Just make sure, that the `geom` parameter is set to
 *boxplot* and the `group` parameter uses both the info from the rounded
 time interval (`Datetime.rounded`) and the different datasets
-(`Source`). The `interaction` function can easily combine them. The
-default interval for `cut_Datetime()` is 3 hours.
+(`Source`). The `base::interaction()` function can easily combine them.
+The default interval for `cut_Datetime()` is 3 hours.
 
 ``` r
 sample.data.environment %>% 
@@ -263,9 +262,9 @@ dataset %>% ungroup() %>% count.difftime()
 #> 4 18s           16
 ```
 
-We can eliminate this through teh `gap_handler()` function. This
+We can eliminate this through the `gap_handler()` function. This
 function will automatically fill in the gaps with NA values. As the most
-dominant interval in the dataset is now not 15 seconds anymore(because
+dominant interval in the dataset is now not 15 seconds anymore (because
 intermediate datapoints have been added), we need to specify the epoch
 for `gap_finder()`.
 
