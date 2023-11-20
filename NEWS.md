@@ -1,3 +1,7 @@
+* Removed minor inconsistencies in naming conventions. Also, all imported columns will have syntactic naming now
+
+* Added an option to all `gap` functions, to extend the gapless Datetime range to full days.
+
 # LightLogR 0.2.1.9000
 
 * Exports the up to now internal function `count_difftime()` that is the basis for `dominant_epoch()`. But whereas the latter gets only the most common epoch, `count_difftime()` returns a table with the counts of all epochs. This is useful in conjunction with `gap_finder()`, to check the distribution of data intervals.

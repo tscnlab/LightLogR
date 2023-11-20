@@ -8,6 +8,7 @@
 #' @param epoch The epoch to use for the gapless sequence. Can be either a
 #'  `lubridate::duration()` or a string. If it is a string, it needs to be
 #'  either '"dominant.epoch"' (the default) for a guess based on the data or a valid `lubridate::duration()` string, e.g., `"1 day"` or `"10 sec"`.
+#' @param full.days If `TRUE`, the gapless sequence will include the whole first and last day where there is data.
 #'
 #' @return A `tibble` with a gapless sequence of `Datetime` as specified by
 #'   `epoch`.
@@ -27,7 +28,8 @@
 
 gapless_Datetimes <- function(dataset, 
                               Datetime.colname = Datetime,
-                              epoch = "dominant.epoch") {
+                              epoch = "dominant.epoch",
+                              full.days = FALSE) {
   
   # Initial Checks ----------------------------------------------------------
   
@@ -39,7 +41,8 @@ gapless_Datetimes <- function(dataset,
       lubridate::is.POSIXct(
         dataset[[colname.defused({{ Datetime.colname }})]]),
     "epoch must either be a duration or a string" = 
-      lubridate::is.duration(epoch) | is.character(epoch)
+      lubridate::is.duration(epoch) | is.character(epoch),
+    "full.days must be a logical" = is.logical(full.days)
   )
   
   # Function ----------------------------------------------------------
@@ -49,21 +52,49 @@ gapless_Datetimes <- function(dataset,
   
   #if the user specified an epoch, use that instead
   if(epoch != "dominant.epoch") {
-    epochs <- epochs %>% dplyr::mutate(dominant.epoch = epoch)
+    epochs <- 
+      epochs %>% dplyr::mutate(dominant.epoch = lubridate::as.duration(epoch))
   }
+  
+  expr_standard <- rlang::expr(
+    seq(
+      min({{ Datetime.colname }}),
+      if(full.days) lubridate::ceiling_date(max({{ Datetime.colname }}), 
+                                            unit = "day") - 1
+      else max({{ Datetime.colname }}),
+      by = 
+        epochs %>% 
+        dplyr::filter(group.indices == Id2) %>% 
+        .[["dominant.epoch"]]
+    )
+  )
+  
+  expr_full_day <- rlang::expr(
+    c(
+      if(full.days) {
+        rev(
+          seq(
+            min({{ Datetime.colname }}),
+            lubridate::floor_date(min({{ Datetime.colname }}), 
+                                  unit = "day"),
+            by = 
+              epochs %>% 
+              dplyr::filter(group.indices == Id2) %>% 
+              .[["dominant.epoch"]] %>% {.*(-1)}
+          )[-1]
+        )  
+      },
+      !!expr_standard
+    )
+  )
   
   #create the gapless sequence
   dat <- 
     dataset %>% 
     dplyr::reframe( Id2 = dplyr::cur_group_id(),
       {{ Datetime.colname }} := 
-        seq(
-          min({{ Datetime.colname }}), max({{ Datetime.colname }}), 
-          by = 
-            epochs %>% 
-            dplyr::filter(group.indices == Id2) %>% 
-            .[["dominant.epoch"]]
-          )
+      if(full.days) !!expr_full_day
+      else !!expr_standard
       ) %>% 
     dplyr::select(-Id2) %>% 
     dplyr::group_by(
@@ -116,7 +147,8 @@ gapless_Datetimes <- function(dataset,
 gap_handler <- function(dataset, 
                         Datetime.colname = Datetime,
                         epoch = "dominant.epoch",
-                        behavior = "full_sequence") {
+                        behavior = "full_sequence",
+                        full.days = FALSE) {
   
   # Initial Checks ----------------------------------------------------------
   
@@ -130,7 +162,8 @@ gap_handler <- function(dataset,
     "epoch must either be a duration or a string" = 
       lubridate::is.duration(epoch) | is.character(epoch),
     "behavior must be one of 'full_sequence', 'regulars', 'irregulars', 'gaps'" = 
-      behavior %in% c("full_sequence", "regulars", "irregulars", "gaps")
+      behavior %in% c("full_sequence", "regulars", "irregulars", "gaps"),
+    "full.days must be a logical" = is.logical(full.days)
   )
   
   # Function ----------------------------------------------------------
@@ -140,7 +173,8 @@ gap_handler <- function(dataset,
     dataset %>% 
     gapless_Datetimes(
       Datetime.colname = {{ Datetime.colname }},
-      epoch = epoch
+      epoch = epoch,
+      full.days = full.days
       )
   
   #add a column to the dataset to indicate that the provided datetimes are explicit
@@ -226,7 +260,8 @@ gap_finder <- function(dataset,
                        Datetime.colname = Datetime,
                        epoch = "dominant.epoch",
                        gap.data = FALSE,
-                       silent = FALSE) {
+                       silent = FALSE,
+                       full.days = FALSE) {
   
   # Initial Checks ----------------------------------------------------------
   
@@ -240,7 +275,8 @@ gap_finder <- function(dataset,
     "epoch must either be a duration or a string" = 
       lubridate::is.duration(epoch) | is.character(epoch),
     "gap.data must be logical" = is.logical(gap.data),
-    "silent must be logical" = is.logical(silent)
+    "silent must be logical" = is.logical(silent),
+    "full.days must be logical" = is.logical(full.days)
   )
   
   # Function ----------------------------------------------------------
@@ -249,7 +285,9 @@ gap_finder <- function(dataset,
   dat <- 
     dataset %>% gap_handler(
     Datetime.colname = {{ Datetime.colname }},
-    epoch = epoch) 
+    epoch = epoch,
+    full.days = full.days
+    ) 
     
   dat_filtered <- 
     dat %>% 
