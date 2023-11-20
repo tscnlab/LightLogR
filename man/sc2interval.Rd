@@ -11,7 +11,7 @@ sc2interval(
   State.colname = State,
   Interval.colname = Interval,
   full = TRUE,
-  full.first = NA,
+  starting.state = NA,
   output.dataset = TRUE,
   Datetime.keep = FALSE,
   length.restriction = 60 * 60 * 24
@@ -31,11 +31,11 @@ do contain the name/description of the \verb{state change} and that will contain
 the \code{Interval} and \code{State} (which are also the default). Expects a \code{symbol}. The
 \code{Statechange} column needs do be part of the \code{dataset}.}
 
-\item{full, full.first}{These arguments handle the state on the first day
+\item{full, starting.state}{These arguments handle the state on the first day
 before the first state change and after the last state change on the last
 day. If \code{full = TRUE}(the default, expects a \code{logical}), it will create an
 interval on the first day from 00:00:00 up until the state change. This
-interval will be given the state specified in \code{full.first}, which is \code{NA}
+interval will be given the state specified in \code{starting.state}, which is \code{NA}
 by default, but can be any \code{character} scalar. It will further extend the
 interval for the last state change until the end of the last given day
 (more specifically until 00:00:00 the next day).}

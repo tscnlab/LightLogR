@@ -1,6 +1,6 @@
 # LightLogR 0.2.1.9000
 
-* Exports the up to now internal function `count.difftime()` that is the basis for `dominant_epoch()`. But whereas the latter gets only the most common epoch, `count.difftime()` returns a table with the counts of all epochs. This is useful in conjunction with `gap_finder()`, to check the distribution of data intervals.
+* Exports the up to now internal function `count_difftime()` that is the basis for `dominant_epoch()`. But whereas the latter gets only the most common epoch, `count_difftime()` returns a table with the counts of all epochs. This is useful in conjunction with `gap_finder()`, to check the distribution of data intervals.
 
 * Added the `gg_days()` function to visualize multiple days of data in a single plot. Alongside come two helper functions, `Datetime_limits()` and `Datetime_breaks()`, to set the limits and breaks of the x-axis. 
 
@@ -24,11 +24,11 @@
 
 * To `filter_Datetime()` and `filter_Date()` added the option to filter for group specific dates.
 
-* Added the family of functions around `States` and `Reference` to import, process, and add states to light logger data, like sleep/wake times, wear times, or other data. This family includes `import.Statechanges()`, `sc2interval()`, `ìnterval2state()`, `data2reference()`, `sleep.int2Brown()`, `Brown.check()`, `Brown.rec()`, and `Brown2reference()`. 
+* Added the family of functions around `States` and `Reference` to import, process, and add states to light logger data, like sleep/wake times, wear times, or other data. This family includes `import_Statechanges()`, `sc2interval()`, `ìnterval2state()`, `data2reference()`, `sleep_int2Brown()`, `Brown_check()`, `Brown_rec()`, and `Brown2reference()`. 
 
 * Added the Article/Vignette "What´s in a Day" to demonstrate the LightLogR workflow.
 
-* Added the convenience function `create_Time.data()` to create a Time-of-Day column in datasets.
+* Added the convenience function `create_Timedata()` to create a Time-of-Day column in datasets.
 
 * Added the family of `filter_Datetime()`, `filter_Date()` and `filter_Time()` functions to easily filter datasets.
 
@@ -38,7 +38,7 @@
 
 * Added an automatic ID creation at import and streamlined the `import` functions.
 
-* Added the function `join.datasets` to combine imported datasets with sensible constraints.
+* Added the function `join_datasets` to combine imported datasets with sensible constraints.
 
 # LightLogR 0.1.1.9000
 

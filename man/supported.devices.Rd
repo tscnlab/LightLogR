@@ -15,7 +15,7 @@ supported.devices
 }
 \description{
 These are all supported devices where there is a dedicated import function.
-Import functions can be called either through \code{\link[=import.Dataset]{import.Dataset()}} with the
+Import functions can be called either through \code{\link[=import_Dataset]{import_Dataset()}} with the
 respective \code{device = "device"} argument, or directly, e.g.,
 \code{import$ActLumus()}.
 }

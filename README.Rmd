@@ -122,14 +122,13 @@ dataset %>%
 
 ### More than one dataset
 
-The built-in dataset `sample.data.environment` shows a combined dataset of light logger data and a second set of data - in this case unobstructed outdoor light measurements. Combined datasets can be easily visualized with `gg_day()`. The `col` parameter used on the `Source` column of the dataset allows for a color separation.
+The built-in dataset `sample.data.environment` shows a combined dataset of light logger data and a second set of data - in this case unobstructed outdoor light measurements. Combined datasets can be easily visualized with `gg_day()`. The `col` parameter used on the `Id` column of the dataset allows for a color separation.
 
 ```{r, out.width= "70%", fig.align='center', fig.height = 6}
 sample.data.environment %>% 
   gg_day(
     start.date = "2023-08-18",
-    y.axis = `MELANOPIC EDI`,
-    aes_col = Source,
+    aes_col = Id,
     scales = "fixed",
     geom = "line") + theme(legend.position = "bottom")
 ```
@@ -137,8 +136,8 @@ sample.data.environment %>%
 If you want to get a feeling for the data over the course of multiple days, the `gg_days()` function comes in handy. It works similar to `gg_day()`. It is also opinionated in terms of the scaling and linebreaks to only show whole days, all of which can be adjusted.
 
 ```{r, fig.width = 10, warning=FALSE}
-sample.data.environment %>% group_by(Source) %>% 
-  gg_days(y.axis = `MELANOPIC EDI`, geom = "ribbon", alpha = 0.25, col = "black")
+sample.data.environment %>% 
+  gg_days(geom = "ribbon", alpha = 0.25, col = "black")
 ```
 
 
@@ -149,11 +148,10 @@ sample.data.environment %>%
   cut_Datetime() %>% 
   gg_day(
     end.date = "2023-08-15",
-    y.axis = `MELANOPIC EDI`,
-    aes_col = Source,
+    aes_col = Id,
     scales = "fixed",
     geom = "boxplot",
-    group = interaction(Source, Datetime.rounded)) + 
+    group = interaction(Id, Datetime.rounded)) + 
   theme(legend.position = "bottom")
 ```
 
@@ -165,10 +163,10 @@ sample.data.environment %>%
 dataset %>% gap_finder()
 ```
 
-The huge amount of gaps comes from the fact that the measurement intervals are somewhat irregular between 15 and 18 seconds in this case. This leaves very little intervals to start regularly. We got this information after import, but can still get to this info through `count.difftime()`.
+The huge amount of gaps comes from the fact that the measurement intervals are somewhat irregular between 15 and 18 seconds in this case. This leaves very little intervals to start regularly. We got this information after import, but can still get to this info through `count_difftime()`.
 
 ```{r}
-dataset %>% ungroup() %>% count.difftime()
+dataset %>% ungroup() %>% count_difftime()
 ```
 
 We can eliminate this through the `gap_handler()` function. This function will automatically fill in the gaps with NA values. As the most dominant interval in the dataset is now not 15 seconds anymore (because intermediate datapoints have been added), we need to specify the epoch for `gap_finder()`.

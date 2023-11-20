@@ -68,10 +68,9 @@
 #' 
 #' #advanced filtering based on grouping (second day of each group)
 #' sample.data.environment %>%
-#' group_by(Source) %>% 
 #' #shift the "Environment" group by one day
 #' mutate(
-#' Datetime = ifelse(Source == "Environment", Datetime + ddays(1), Datetime) %>% 
+#' Datetime = ifelse(Id == "Environment", Datetime + ddays(1), Datetime) %>% 
 #' as_datetime()) -> sample
 #' sample %>% summarize(Daterange = paste(min(Datetime), max(Datetime), sep = " - "))
 #' #now we can use the `filter.expr` argument to filter from the second day of each group
@@ -227,14 +226,14 @@ filter_Date <- function(...,
 #'
 #' @examples
 #' arguments <- list(
-#'  list(start = "2023-08-17", only_Id = quote(Source == "Participant")),
-#'  list(end = "2023-08-17", only_Id = quote(Source == "Environment")))
+#'  list(start = "2023-08-17", only_Id = quote(Id == "Participant")),
+#'  list(end = "2023-08-17", only_Id = quote(Id == "Environment")))
 #'  #compare the unfiltered dataset
-#'  sample.data.environment %>% gg_overview(Id.colname = Source)
+#'  sample.data.environment %>% gg_overview(Id.colname = Id)
 #'  #compare the unfiltered dataset
 #'  sample.data.environment %>% 
 #'  filter_Datetime_multiple(arguments = arguments, filter_Date) %>%
-#'  gg_overview(Id.colname = Source)
+#'  gg_overview(Id.colname = Id)
 filter_Datetime_multiple <- function(dataset, 
                                      arguments, 
                                      filter_function = filter_Datetime,

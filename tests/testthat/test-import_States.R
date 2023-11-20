@@ -1,4 +1,4 @@
-#test for import.Statechanges
+#test for import_Statechanges
 test_that("imports a wide and long dataset", {
   
   path <- system.file("extdata/",
@@ -9,29 +9,29 @@ test_that("imports a wide and long dataset", {
   
   #wide data
   expect_snapshot({
-  import.Statechanges(file.sleep, path,
+  import_Statechanges(file.sleep, path,
   Datetime.format = "dmyHM",
   State.colnames = c("sleep", "offset"),
   State.encoding = c("sleep", "wake"),
-  ID.colname = record_id,
+  Id.colname = record_id,
   sep = ";",
   dec = ",",
   tz = tz,
-  suppress.summary = TRUE)
+  silent = TRUE)
   }
   )
   
   #long data
   expect_snapshot(
     {
-      import.Statechanges(file.sleep, path,
+      import_Statechanges(file.sleep, path,
                           Datetime.format = "dmyHM",
                           State.colnames = "comments",
                           Datetime.column = sleep,
-                          ID.colname = record_id,
+                          Id.colname = record_id,
                           sep = ";",
                           dec = ",", structure = "long",
-                          tz = tz, suppress.summary = TRUE)
+                          tz = tz, silent = TRUE)
     }
   )
 }
@@ -43,6 +43,6 @@ test_that("expect snapshot needs certain info",{
     path <- system.file("extdata/",
                         package = "LightLogR")
     file.sleep <- "205_sleepdiary_all_20230904.csv"
-    import.Statechanges(file.sleep, path)
+    import_Statechanges(file.sleep, path)
     })
 })

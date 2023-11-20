@@ -104,10 +104,9 @@ pull(Datetime) \%>\% range()
 
 #advanced filtering based on grouping (second day of each group)
 sample.data.environment \%>\%
-group_by(Source) \%>\% 
 #shift the "Environment" group by one day
 mutate(
-Datetime = ifelse(Source == "Environment", Datetime + ddays(1), Datetime) \%>\% 
+Datetime = ifelse(Id == "Environment", Datetime + ddays(1), Datetime) \%>\% 
 as_datetime()) -> sample
 sample \%>\% summarize(Daterange = paste(min(Datetime), max(Datetime), sep = " - "))
 #now we can use the `filter.expr` argument to filter from the second day of each group

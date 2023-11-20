@@ -6,8 +6,8 @@
 #'
 #' Imports a dataset and does the necessary transformations to get the right
 #' column formats. Unless specified otherwise, the function will set the
-#' timezone of the data to `UTC`. It will also enforce an `id` to separate
-#' different datasets and will order/arrange the dataset within each `id`.
+#' timezone of the data to `UTC`. It will also enforce an `Id` to separate
+#' different datasets and will order/arrange the dataset within each `Id`.
 #'
 #' There are specific and a general import function. The general import function
 #' is described below, whereas the specific import functions take the form of
@@ -23,7 +23,7 @@
 #' * `n_max`: maximum number of lines to read. Default is `Inf`.
 #' * `tz`: Timezone of the data. `"UTC"` is the default. Expects a
 #' `character`. You can look up the supported timezones with [OlsonNames()].
-#' * `ID.colname`: Lets you specify a column for the participant id. Expects a
+#' * `Id.colname`: Lets you specify a column for the participant id. Expects a
 #' symbol (Default is `Id`). This column will be used for grouping
 #' ([dplyr::group_by()]).
 #' * `auto.id`: If the `Id.colname` column is added to the `dataset`, the `Id`
@@ -41,13 +41,13 @@
 #'   it with the filename of the importfile (see param `auto.id`).
 #'
 #' @param ... Parameters that get handed down to the specific import functions
-#' @param device From what device do you want to import? For every supported
-#'   device, there is a sample data file that you can use to test the function
-#'   (see the examples). Currently the following devices are supported (followed
-#'   by the `device.ext` spec to access the sample file):
-#' * `"ActLumus"` (ActLumus.txt)
-#' * `"LYS"` (LYS.csv)
-#' * `"Actiwatch_Spectrum"` (Actiwatch.csv) **Special Argument: `column_names`** A character vector containing column names in the order in which they appear in the file. This is necessary to find the starting point of actual data.*Note: as the `locale` argument use `readr::locale(encoding="latin1")` . This is due to the fact that the German Actiwatch software from which this sample file was taken, uses a different encoding than UTF-8.*
+#' @param device From what device do you want to import? For a few devices,
+#'   there is a sample data file that you can use to test the function (see the
+#'   examples). Currently the following devices are supported (followed by the
+#'   `device.ext` spec to access the sample file):
+#' * `"ActLumus"` ("205_actlumus_Log_1020_20230904101707532.txt.zip")
+#' * `"LYS"` ("sample_data_LYS.csv")
+#' * `"Actiwatch_Spectrum"` **Special Argument: `column_names`** A character vector containing column names in the order in which they appear in the file. This is necessary to find the starting point of actual data.
 #' @importFrom rlang :=
 #' @return Tibble/Dataframe with a POSIXct column for the datetime
 #' @export
@@ -67,19 +67,19 @@
 #' ```
 #'
 #'   To import a file, simple specify the filename (and path) and feed it to the
-#'   `import.Dataset` function. There are sample datasets for all devices.
+#'   `import_Dataset` function. There are sample datasets for all devices.
 #'
 #'   The import functions provide a basic overview of the data after import,
 #'   such as the intervals between measurements or the start and end dates.
 #'
 #' ```{r}
 #' filepath <- system.file("extdata/sample_data_LYS.csv", package = "LightLogR")
-#' dataset <- import.Dataset("LYS", filepath)
+#' dataset <- import_Dataset("LYS", filepath)
 #' ```
 #'   Import functions can also be called directly:
 #'
 #' ```{r}
-#' filepath <- system.file("extdata/sample_data_ActLumus.txt", package = "LightLogR")
+#' filepath <- system.file("extdata/205_actlumus_Log_1020_20230904101707532.txt.zip", package = "LightLogR")
 #' dataset <- import$ActLumus(filepath)
 #' ```
 #'
@@ -91,7 +91,7 @@
 #' flextable::autofit()
 #' ```
 
-import.Dataset <- function(device, ...) {
+import_Dataset <- function(device, ...) {
   
   #input control
   stopifnot(
@@ -111,7 +111,8 @@ imports <- function(device,
                     import.expr) {
   
   import.expr <- rlang::enexpr(import.expr)
-  ID.colname <- quote({{ ID.colname}})
+  #this next step is needed to make the function work with the rlang::new_function
+  Id.colname <- quote({{ Id.colname }})
   
   rlang::new_function(
     #function arguments
@@ -120,7 +121,7 @@ imports <- function(device,
       path = NULL, 
       n_max = Inf,
       tz = "UTC",
-      ID.colname = Id,
+      Id.colname = Id,
       auto.id = ".*",
       manual.id = NULL,
       locale = readr::default_locale(),
@@ -134,7 +135,7 @@ imports <- function(device,
         filename <- file.path(path, filename)
       }
       
-      id.colname.defused <- colname.defused(!!ID.colname)
+      id.colname.defused <- colname.defused(!!Id.colname)
       #initial checks
       stopifnot(
         "filename needs to be a character (vector)" = is.character(filename),
@@ -148,11 +149,15 @@ imports <- function(device,
       tmp <- rlang::eval_tidy(!!import.expr)
       
       #validate/manipulate the file
+      if(dim(tmp)[1] == 0) {
+        stop("No data could be imported. Please check your file and settings")
+      }
+      
       if(!id.colname.defused %in% names(tmp)) {
         switch(is.null(manual.id) %>% as.character(),
                "TRUE" =
                  {tmp <- tmp %>%
-                   dplyr::mutate(!!ID.colname :=
+                   dplyr::mutate(!!Id.colname :=
                                    basename(file.name) %>%
                                    tools::file_path_sans_ext() %>%
                                    stringr::str_extract(
@@ -163,18 +168,18 @@ imports <- function(device,
                                  .before = 1)},
                "FALSE" =
                  {tmp <- tmp %>%
-                   dplyr::mutate(!!ID.colname := manual.id, .before = 1)}
+                   dplyr::mutate(!!Id.colname := manual.id, .before = 1)}
         )
       }
       tmp <- tmp %>%
         dplyr::mutate(file.name = basename(file.name) %>%
                         tools::file_path_sans_ext(),
-                      !!ID.colname := factor(!!ID.colname)) %>%
-        dplyr::group_by(!!ID.colname) %>%
+                      !!Id.colname := factor(!!Id.colname)) %>%
+        dplyr::group_by(!!Id.colname) %>%
         dplyr::arrange(Datetime, .by_group = TRUE)
       
       #give info about the file
-      if(!silent) import.info(tmp, !!device, tz, !!ID.colname)
+      if(!silent) import.info(tmp, !!device, tz, !!Id.colname)
       
       #return the file
       tmp
@@ -187,7 +192,8 @@ imports <- function(device,
 import_arguments <- list(
   #ActLumus
   ActLumus = rlang::expr({
-    tmp <- readr::read_delim(
+    tmp <- suppressMessages( 
+      readr::read_delim(
       filename,
       skip = 32,
       delim = ";",
@@ -195,23 +201,26 @@ import_arguments <- list(
       col_types = paste0("c", rep("d", 32)),
       id = "file.name",
       locale = locale,
+      name_repair = "universal",
       ...
-    )
+    ))
     tmp <- tmp %>%
-      dplyr::rename(Datetime = `DATE/TIME`,
-                    MEDI = `MELANOPIC EDI`) %>%
+      dplyr::rename(Datetime = DATE.TIME,
+                    MEDI = MELANOPIC.EDI) %>%
       dplyr::mutate(Datetime =
                       Datetime %>% lubridate::dmy_hms(tz = tz))
   }),
   #LYS
   LYS = rlang::expr({
-    tmp <- readr::read_csv(filename,
+    tmp <-suppressMessages( 
+      readr::read_csv(filename,
                            n_max = n_max,
                            col_types = c("cfddddddddddd"),
                            id = "file.name",
                            locale = locale,
+                           name_repair = "universal",
                            ...
-    )
+    ))
     tmp <- tmp %>%
       dplyr::rename(Datetime = timestamp,
                     MEDI = mEDI) %>%
@@ -243,7 +252,8 @@ import_arguments <- list(
             locale=locale,
             id = "file.name",
             show_col_types = FALSE,
-            col_types = c("iDtfdfccccfdf")
+            col_types = c("iDtfdfccccfdf"),
+            name_repair = "universal"
             ),
             dots)))
           
@@ -272,6 +282,6 @@ import_arguments <- list(
 
 #' Import Datasets from supported devices
 #'
-#' @rdname import.Dataset
+#' @rdname import_Dataset
 #' @export
 import <- purrr::imap(import_arguments, \(x, idx) imports(idx,x))

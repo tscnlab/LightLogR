@@ -37,19 +37,19 @@
 #'   default).
 #' * In the `wide` format, this is the newly created column from the `Datetimes` in the `State.colnames`.
 #' * In the `long` format, this is the existing column that contains the `Datetimes`.
-#' @param ID.colname Symbol of the column that contains the `ID` of the subject.
+#' @param Id.colname Symbol of the column that contains the `ID` of the subject.
 #' @param State.newname Symbol of the column that will contain the `State` of
 #'   the subject. In the `wide` format, this is the newly created column from
 #'   the `State.colnames`. In the `long` format, this argument is used to rename
 #'   the `State` column.
-#' @param ID.newname Column name used for renaming the `ID.colname` column.
-#' @param keepAllColumns Logical that specifies whether all columns should be
+#' @param Id.newname Column name used for renaming the `Id.colname` column.
+#' @param keep.all Logical that specifies whether all columns should be
 #'   kept in the output. Defaults to `FALSE`.
-#' @param suppress.summary Logical that specifies whether a summary of the
-#'   imported data should not be shown. Defaults to `FALSE`.
+#' @param silent Logical that specifies whether a summary of the
+#'   imported data should be shown. Defaults to `FALSE`.
 #'
 #' @return a dataset with the `ID`, `State`, and `Datetime` columns. May contain
-#'   additional columns if `keepAllColumns` is `TRUE`.
+#'   additional columns if `keep.all` is `TRUE`.
 #' @export
 #'
 #' @examples
@@ -59,24 +59,25 @@
 #' file.sleep <- "205_sleepdiary_all_20230904.csv"
 #'
 #' #import Data in the wide format (sleep/wake times)
-#' import.Statechanges(file.sleep, path,
+#' import_Statechanges(file.sleep, path,
 #' Datetime.format = "dmyHM",
 #' State.colnames = c("sleep", "offset"),
 #' State.encoding = c("sleep", "wake"),
-#' ID.colname = record_id,
+#' Id.colname = record_id,
 #' sep = ";",
 #' dec = ",")
 #'
 #' #import in the long format (Comments on sleep)
-#' import.Statechanges(file.sleep, path,
+#' import_Statechanges(file.sleep, path,
 #'                    Datetime.format = "dmyHM",
 #'                    State.colnames = "comments",
 #'                    Datetime.column = sleep,
-#'                    ID.colname = record_id,
+#'                    Id.colname = record_id,
 #'                    sep = ";",
 #'                    dec = ",", structure = "long")
 
-import.Statechanges <- function(filename, path = NULL, 
+import_Statechanges <- function(filename, 
+                       path = NULL, 
                        sep = ",", 
                        dec = ".", 
                        structure = "wide",
@@ -85,11 +86,11 @@ import.Statechanges <- function(filename, path = NULL,
                        State.colnames, # a vector
                        State.encoding = State.colnames,
                        Datetime.column = Datetime,
-                       ID.colname,
+                       Id.colname,
                        State.newname = State,
-                       ID.newname = Id,
-                       keepAllColumns = FALSE,
-                       suppress.summary = FALSE) {
+                       Id.newname = Id,
+                       keep.all = FALSE,
+                       silent = FALSE) {
   
   # Initial Checks ----------------------------------------------------------
   
@@ -109,8 +110,8 @@ import.Statechanges <- function(filename, path = NULL,
   if(structure == "long" & length(State.colnames) > 1) {
     stop("In the long format, State.colnames must be a scalar")
   }
-  if(!is.logical(keepAllColumns)) {
-    stop("The specified keepAllColumns must be a logical")
+  if(!is.logical(keep.all)) {
+    stop("The specified keep.all must be a logical")
   }
   if(!structure %in% c("wide", "long")) {
     stop("The specified structure must be either 'wide' or 'long'")
@@ -124,8 +125,8 @@ import.Statechanges <- function(filename, path = NULL,
   if(!tz %in% OlsonNames()) {
     stop("The specified tz must be a valid time zone from the OlsonNames vector")
   }
-  if(!is.logical(suppress.summary)) {
-    stop("The specified suppress.summary must be a logical")
+  if(!is.logical(silent)) {
+    stop("The specified silent must be a logical")
   }
   
   # Logic ----------------------------------------------------------
@@ -143,7 +144,7 @@ import.Statechanges <- function(filename, path = NULL,
     )
 
   # Convert inputs to strings for matching
-  idStr <- as.character(rlang::ensym(ID.colname))
+  idStr <- as.character(rlang::ensym(Id.colname))
   State.newnameStr <- as.character(rlang::ensym(State.newname))
   Datetime.columnStr <- as.character(rlang::ensym(Datetime.column))
   stateStrs <- State.colnames
@@ -170,10 +171,10 @@ import.Statechanges <- function(filename, path = NULL,
   # Rename columns using the {{ }} syntax, remove NA and group by ID, arrange 
   # it, recode, and set Datetimes as POSIXct
   data <- dplyr::rename(data,
-                        {{ ID.newname }} := {{ ID.colname }},
+                        {{ Id.newname }} := {{ Id.colname }},
                         Datetime = {{ Datetime.column }}) %>% 
-    dplyr::filter(!is.na({{ ID.newname }}), !is.na(Datetime)) %>% 
-    dplyr::group_by({{ ID.newname }})
+    dplyr::filter(!is.na({{ Id.newname }}), !is.na(Datetime)) %>% 
+    dplyr::group_by({{ Id.newname }})
   
   data <- 
     if(structure == "wide") {
@@ -191,16 +192,16 @@ import.Statechanges <- function(filename, path = NULL,
   }
   
   data <- data %>%  
-    dplyr::mutate({{ ID.newname }} := factor({{ ID.newname }})) %>% 
+    dplyr::mutate({{ Id.newname }} := factor({{ Id.newname }})) %>% 
     dplyr::arrange(Datetime, .by_group = TRUE)
   
   # Return the Data ----------------------------------------------------------
   
   # Decide on whether to keep other columns
-  if (!keepAllColumns) {
+  if (!keep.all) {
     data <- 
       dplyr::select(
-        data, {{ ID.newname }}, {{ State.newname }}, Datetime
+        data, {{ Id.newname }}, {{ State.newname }}, Datetime
         )
   }
   
@@ -211,7 +212,7 @@ import.Statechanges <- function(filename, path = NULL,
       )
   }
   
-  if(!suppress.summary) import.info(data, "Statechanges", tz, {{ ID.newname }})
+  if(!silent) import.info(data, "Statechanges", tz, {{ Id.newname }})
   
   return(data)
 }

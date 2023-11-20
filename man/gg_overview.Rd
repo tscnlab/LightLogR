@@ -8,7 +8,7 @@ gg_overview(
   dataset,
   Datetime.colname = Datetime,
   Id.colname = Id,
-  gap_range_data = NULL,
+  gap.data = NULL,
   ...,
   interactive = FALSE
 )
@@ -25,7 +25,7 @@ by \link{LightLogR}, take care to choose a sensible variable for the \code{x.axi
 be in the \code{dataset}. This is also used as the y-axis variable and is the
 minimum grouping variable.}
 
-\item{gap_range_data}{Optionally provide a \code{tibble} with \code{start} and \code{end}
+\item{gap.data}{Optionally provide a \code{tibble} with \code{start} and \code{end}
 \code{Datetimes} of gaps per group. If not provided, the function uses
 \code{\link[=gap_finder]{gap_finder()}} to calculate implicit missing data. This might be
 computationally intensive for large datasets and many missing data. In
@@ -45,5 +45,5 @@ A \code{ggplot} object
 Plot an overview of dataset intervals with implicit missing data
 }
 \examples{
-sample.data.environment \%>\% gg_overview(Id.colname = Source)
+sample.data.environment \%>\% gg_overview()
 }

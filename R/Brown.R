@@ -6,7 +6,7 @@
 #' that checks if the illuminance of the dataset is within the recommended
 #' illuminance levels, and a column that gives a label to the reference.
 #'
-#' On a lower level, the function uses [Brown.rec()] and [Brown.check()] to
+#' On a lower level, the function uses [Brown_rec()] and [Brown_check()] to
 #' create the required information.
 #'
 #' @param dataset A dataframe that contains a column with the Brown states
@@ -20,10 +20,10 @@
 #'   throw an error.
 #' @param Reference.label The label that will be used for the reference. Expects
 #'   a `character` scalar.
-#' @param overwrite.Reference If `TRUE` (defaults to `FALSE`), the function will
+#' @param overwrite If `TRUE` (defaults to `FALSE`), the function will
 #'   overwrite the `Brown.rec.colname` column if it already exists.
-#' @param ... Additional arguments that will be passed to [Brown.rec()] and
-#'   [Brown.check()]. This is only relevant to correct the names of the daytime
+#' @param ... Additional arguments that will be passed to [Brown_rec()] and
+#'   [Brown_check()]. This is only relevant to correct the names of the daytime
 #'   states or the thresholds used within these states. See the documentation of
 #'   these functions for more information.
 #'
@@ -46,7 +46,7 @@ Brown2reference <- function(dataset,
                             Brown.state.colname = State.Brown,
                             Brown.rec.colname = Reference,
                             Reference.label = "Brown et al. (2022)",
-                            overwrite.Reference = FALSE,
+                            overwrite = FALSE,
                             ...) {
   
   
@@ -58,10 +58,10 @@ Brown2reference <- function(dataset,
   Reference.label.column.str <- paste0(Brown.rec.colname.str, ".check")
   
   #give an error or warning if the reference column is present
-  if(Brown.rec.colname.str %in% names(dataset) & !overwrite.Reference) 
-    stop("A Reference column with the given (or default) name is already part of the dataset. Please remove the column, choose a different name, or set `overwrite.Reference = TRUE`")
+  if(Brown.rec.colname.str %in% names(dataset) & !overwrite) 
+    stop("A Reference column with the given (or default) name is already part of the dataset. Please remove the column, choose a different name, or set `overwrite = TRUE`")
   if(Brown.rec.colname.str %in% names(dataset)) 
-    warning("A Reference column with the given (or default) name is already part of the dataset. It is overwritten, because `overwrite.Reference = TRUE ` was set.")
+    warning("A Reference column with the given (or default) name is already part of the dataset. It is overwritten, because `overwrite = TRUE ` was set.")
   
   stopifnot(
     "dataset is not a dataframe" = is.data.frame(dataset),
@@ -71,8 +71,8 @@ Brown2reference <- function(dataset,
       Brown.state.colname.defused %in% names(dataset),
     "MEDI.colname must be a numeric column" = 
       is.numeric(dataset[[MEDI.colname.defused]]),
-    "overwrite.Reference must be a logical" = 
-      is.logical(overwrite.Reference)
+    "overwrite must be a logical" = 
+      is.logical(overwrite)
   )
 
   #check whether the dataset has the right labels
@@ -83,7 +83,7 @@ Brown2reference <- function(dataset,
   dataset <- dataset %>% 
     dplyr::mutate(
       {{ Brown.rec.colname }} := 
-        Brown.rec(state = {{ Brown.state.colname }},
+        Brown_rec(state = {{ Brown.state.colname }},
                   ...)
       )
   
@@ -91,7 +91,7 @@ Brown2reference <- function(dataset,
   dataset <- dataset %>% 
     dplyr::mutate(
       !!Reference.label.column.str := 
-        Brown.check(
+        Brown_check(
           value = {{ MEDI.colname }},
           state = {{ Brown.state.colname }},
           ...)
@@ -135,10 +135,10 @@ Brown2reference <- function(dataset,
 #' @examples
 #' states <- c("day", "evening", "night", "day")
 #' values <- c(100, 10, 1, 300)
-#' Brown.check(values, states)
-#' Brown.check(values, states, Brown.day.th = 100)
+#' Brown_check(values, states)
+#' Brown_check(values, states, Brown.day.th = 100)
 #' 
-Brown.check <- function(value,
+Brown_check <- function(value,
                         state,
                         Brown.day = "day",
                         Brown.evening = "evening",
@@ -176,7 +176,7 @@ Brown.check <- function(value,
 #' illuminance/MEDI levels by Brown et al. (2022) for a given state. The
 #' function is vectorized.
 #'
-#' @inheritParams Brown.check
+#' @inheritParams Brown_check
 #' @param state The state from Brown et al. (2022). Needs to be a character
 #'   vector.
 #'
@@ -190,10 +190,10 @@ Brown.check <- function(value,
 #' @family Brown
 #' @examples
 #' states <- c("day", "evening", "night")
-#' Brown.rec(states)
-#' Brown.rec(states, Brown.day.th = 100)
+#' Brown_rec(states)
+#' Brown_rec(states, Brown.day.th = 100)
 #' 
-Brown.rec <- function(state,
+Brown_rec <- function(state,
                       Brown.day = "day",
                       Brown.evening = "evening",
                       Brown.night = "night",

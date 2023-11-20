@@ -7,7 +7,7 @@
 #' and `night`. The result can be used as input for [interval2state()] and might
 #' be used subsequently with [Brown2reference()].
 #' 
-#' The function will filter out any non-sleep intervals that are shorter than the specified `evening.length`. This prevents problematic behaviour when the `evening.length` is longer than the `wake` intervals or, e.g., when the first state is sleep after midnight and there is a prior `NA` interval from midnight till sleep. This behavior might, however, result in problematic results for specialized experimental setups with ultra short wake/sleep cycles. The `sleep.int2Brown()` function would not be applicable in those cases anyways.
+#' The function will filter out any non-sleep intervals that are shorter than the specified `evening.length`. This prevents problematic behaviour when the `evening.length` is longer than the `wake` intervals or, e.g., when the first state is sleep after midnight and there is a prior `NA` interval from midnight till sleep. This behavior might, however, result in problematic results for specialized experimental setups with ultra short wake/sleep cycles. The `sleep_int2Brown()` function would not be applicable in those cases anyways.
 #'
 #' @param dataset A dataset with sleep/wake intervals.
 #' @param Interval.colname The name of the column with the intervals. Defaults to `Interval`.
@@ -37,9 +37,9 @@
 #' #intervals from sample
 #' sc2interval(sample) 
 #' #recoded intervals                       
-#' sc2interval(sample) %>% sleep.int2Brown()
+#' sc2interval(sample) %>% sleep_int2Brown()
 #'                                          
-sleep.int2Brown <- function(dataset,
+sleep_int2Brown <- function(dataset,
                            Interval.colname = Interval,
                            Sleep.colname = State,
                            wake.state = "wake",

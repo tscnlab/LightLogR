@@ -12,16 +12,16 @@
 #' interval can be set, so that implicit missing timestamps after a set period
 #' of times can be enforced.
 #'
-#' @inheritParams create_Time.data
+#' @inheritParams create_Timedata
 #' @param Statechange.colname,Interval.colname,State.colname Column names that
 #'   do contain the name/description of the `state change` and that will contain
 #'   the `Interval` and `State` (which are also the default). Expects a `symbol`. The
 #'   `Statechange` column needs do be part of the `dataset`.
-#' @param full,full.first These arguments handle the state on the first day
+#' @param full,starting.state These arguments handle the state on the first day
 #'   before the first state change and after the last state change on the last
 #'   day. If `full = TRUE`(the default, expects a `logical`), it will create an
 #'   interval on the first day from 00:00:00 up until the state change. This
-#'   interval will be given the state specified in `full.first`, which is `NA`
+#'   interval will be given the state specified in `starting.state`, which is `NA`
 #'   by default, but can be any `character` scalar. It will further extend the
 #'   interval for the last state change until the end of the last given day
 #'   (more specifically until 00:00:00 the next day).
@@ -66,7 +66,7 @@ sc2interval <- function(dataset,
                         State.colname = State,
                         Interval.colname = Interval,
                         full = TRUE,
-                        full.first = NA,
+                        starting.state = NA,
                         output.dataset = TRUE,
                         Datetime.keep = FALSE,
                         length.restriction = 60*60*24) {
@@ -107,7 +107,7 @@ sc2interval <- function(dataset,
         }) %>% 
       dplyr::group_modify( ~ {
       dplyr::add_row(.x,
-        {{ Statechange.colname }} := full.first,
+        {{ Statechange.colname }} := starting.state,
         {{ Datetime.colname }} := min(.[[Datetime.colname.defused]]) %>% 
           lubridate::floor_date(unit = "day"), .before = 1)
         })

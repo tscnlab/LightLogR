@@ -38,50 +38,6 @@ is.all.scalar <- function(...) {
     purrr::every(\(x) length(x) == 1)
 }
 
-#' Counts the Time differences (epochs) per group (in a grouped dataset)
-#'
-#' @inheritParams cut_Datetime
-#'
-#' @return a `tibble` with the number of occurences of each time difference per
-#'   group
-#' @export
-#'
-#' @examples
-#' #get a dataset with irregular intervals
-#' filepath <- system.file("extdata/sample_data_LYS.csv", package = "LightLogR")
-#' dataset <- import$LYS(filepath)
-#' 
-#' #count.difftime returns the number of occurences of each time difference
-#' #and is more comprehensive in terms of a summary than `gap_finder` or 
-#' #`dominant_epoch`
-#' count.difftime(dataset)
-#' dominant_epoch(dataset)
-#' gap_finder(dataset)
-#' 
-#' #irregular data can be regularized with `aggregate_Datetime`
-#' dataset %>% aggregate_Datetime(unit = "15 secs") %>% count.difftime()
-
-count.difftime <- function(dataset, Datetime.colname = Datetime) {
-  dataset %>% 
-    dplyr::mutate(
-      difftime = c(NA, diff({{Datetime.colname}}) %>% lubridate::as.duration())
-      ) %>% 
-    tidyr::drop_na(difftime) %>% 
-    dplyr::count(difftime = difftime %>% lubridate::as.duration(), sort = TRUE)
-}
-
-#calculate the nth Quantile of time differences per group (in a grouped dataset)
-nth.difftime <- function(dataset, Datetime.colname = Datetime, n = 0.95) {
-  dataset %>% 
-    dplyr::mutate(
-      difftime = c(NA, diff({{Datetime.colname}}) %>% lubridate::as.duration())
-      ) %>% 
-    tidyr::drop_na(difftime) %>% 
-    dplyr::summarise(
-      Quant = stats::quantile(difftime, probs = n, na.rm = TRUE)
-    )
-}
-
 #calculate the whether the nth quantile of time differences in one dataset is smaller or equal to the nth quantile of time differences in another dataset
 compare.difftime <- function(dataset1, dataset2, Datetime.colname = Datetime, n = 0.95) {
   Quant1 <- nth.difftime(dataset1, {{ Datetime.colname }}, n = n)

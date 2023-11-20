@@ -125,14 +125,12 @@ changed to a normal or logarithmic scale - see the y.scale argument for more.
 \examples{
 dataset <-
 sample.data.environment \%>\%
-dplyr::group_by(Source) \%>\%
 aggregate_Datetime(unit = "5 mins")
 
-dataset \%>\% gg_days(y.axis = `MELANOPIC EDI`)
+dataset \%>\% gg_days()
 #restrict the x-axis to 3 days
 dataset \%>\%
 gg_days(
-y.axis = `MELANOPIC EDI`,
 x.axis.limits = \(x) Datetime_limits(x, length = lubridate::ddays(3))
 )
 }

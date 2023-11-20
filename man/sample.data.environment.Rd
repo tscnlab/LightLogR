@@ -8,8 +8,8 @@
 \code{sample.data.environment} A tibble with 69,120 rows and 3 columns:
 \describe{
 \item{Datetime}{POSIXct Datetime}
-\item{MELANOPIC EDI}{melanopic EDI measurement data. Unit is lux.}
-\item{Source}{A \code{character} vector indicating whether the data is from the \code{Participant} or from the \code{Environment}.}
+\item{MEDI}{melanopic EDI measurement data. Unit is lux.}
+\item{Id}{A \code{character} vector indicating whether the data is from the \code{Participant} or from the \code{Environment}.}
 }
 }
 \source{

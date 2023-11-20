@@ -10,7 +10,7 @@ Brown2reference(
   Brown.state.colname = State.Brown,
   Brown.rec.colname = Reference,
   Reference.label = "Brown et al. (2022)",
-  overwrite.Reference = FALSE,
+  overwrite = FALSE,
   ...
 )
 }
@@ -31,11 +31,11 @@ throw an error.}
 \item{Reference.label}{The label that will be used for the reference. Expects
 a \code{character} scalar.}
 
-\item{overwrite.Reference}{If \code{TRUE} (defaults to \code{FALSE}), the function will
+\item{overwrite}{If \code{TRUE} (defaults to \code{FALSE}), the function will
 overwrite the \code{Brown.rec.colname} column if it already exists.}
 
-\item{...}{Additional arguments that will be passed to \code{\link[=Brown.rec]{Brown.rec()}} and
-\code{\link[=Brown.check]{Brown.check()}}. This is only relevant to correct the names of the daytime
+\item{...}{Additional arguments that will be passed to \code{\link[=Brown_rec]{Brown_rec()}} and
+\code{\link[=Brown_check]{Brown_check()}}. This is only relevant to correct the names of the daytime
 states or the thresholds used within these states. See the documentation of
 these functions for more information.}
 }
@@ -51,7 +51,7 @@ that checks if the illuminance of the dataset is within the recommended
 illuminance levels, and a column that gives a label to the reference.
 }
 \details{
-On a lower level, the function uses \code{\link[=Brown.rec]{Brown.rec()}} and \code{\link[=Brown.check]{Brown.check()}} to
+On a lower level, the function uses \code{\link[=Brown_rec]{Brown_rec()}} and \code{\link[=Brown_check]{Brown_check()}} to
 create the required information.
 }
 \examples{
@@ -66,8 +66,8 @@ https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3001571
 }
 \seealso{
 Other Brown: 
-\code{\link{Brown.check}()},
-\code{\link{Brown.rec}()},
-\code{\link{sleep.int2Brown}()}
+\code{\link{Brown_check}()},
+\code{\link{Brown_rec}()},
+\code{\link{sleep_int2Brown}()}
 }
 \concept{Brown}

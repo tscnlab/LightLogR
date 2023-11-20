@@ -13,8 +13,8 @@
 #' @format `sample.data.environment` A tibble with 69,120 rows and 3 columns:
 #' \describe{
 #'   \item{Datetime}{POSIXct Datetime}
-#'   \item{MELANOPIC EDI}{melanopic EDI measurement data. Unit is lux.}
-#'   \item{Source}{A `character` vector indicating whether the data is from the `Participant` or from the `Environment`.}
+#'   \item{MEDI}{melanopic EDI measurement data. Unit is lux.}
+#'   \item{Id}{A `character` vector indicating whether the data is from the `Participant` or from the `Environment`.}
 #' }
 #' @source <https://www.tscnlab.org>
 "sample.data.environment"
@@ -23,7 +23,7 @@
 #' A vector of all supported devices for import functions
 #'
 #' These are all supported devices where there is a dedicated import function.
-#' Import functions can be called either through [import.Dataset()] with the
+#' Import functions can be called either through [import_Dataset()] with the
 #' respective `device = "device"` argument, or directly, e.g.,
 #' `import$ActLumus()`.
 #'
