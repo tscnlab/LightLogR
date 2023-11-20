@@ -190,6 +190,25 @@ imports <- function(device,
 }
 
 import_arguments <- list(
+  #LiDo
+  LiDo = rlang::expr({
+    tmp <- suppressMessages(
+      readr::read_csv2(
+        filename,
+        n_max = n_max,
+        id = "file.name",
+        locale = locale,
+        name_repair = "universal",
+        ...
+      )
+    )
+    tmp <- tmp %>%
+      dplyr::rename(Datetime = UTC.Timestamp,
+                    MEDI = Ev_mel_D65.in.lx) %>% 
+      dplyr::mutate(Datetime = 
+                      Datetime %>% lubridate::dmy_hms() %>% 
+                      lubridate::with_tz(tzone = tz))
+  }),
   #ActLumus
   ActLumus = rlang::expr({
     tmp <- suppressMessages( 
