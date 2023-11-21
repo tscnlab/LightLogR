@@ -114,6 +114,7 @@ sc2interval <- function(dataset,
   }
   
   #add the interval column and filter out intervals of unplausible length.
+  #also filters out NA intervals
   dataset <- dataset %>% 
     dplyr::mutate(
       {{ Interval.colname }} := 
@@ -125,7 +126,8 @@ sc2interval <- function(dataset,
         lubridate::int_length({{ Interval.colname }}) <= 
           length.restriction ~ {{ Statechange.colname }},
         .default = NA
-      ))
+      )) %>% 
+    dplyr::filter(!is.na({{ Interval.colname }}))
   
   if(!Datetime.keep) {
     dataset <- dataset %>% dplyr::select(-{{ Datetime.colname }})
