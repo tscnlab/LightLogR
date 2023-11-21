@@ -21,8 +21,8 @@
 #' Datetime_breaks(dataset, by = "12 hours")
 
 Datetime_breaks <- function(x, 
-                              shift = lubridate::duration(12, "hours"),
-                              by = "1 day") {
+                            shift = lubridate::duration(12, "hours"),
+                            by = "1 day") {
   x <- lubridate::as_datetime(x)
   (min(x) + shift) %>% 
     seq(max(x), by = by)

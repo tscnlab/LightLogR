@@ -44,7 +44,9 @@ respective start is taken.
 will give a duration. For the difference between periods and durations look
 at the documentation from \link{lubridate}. Basically, periods model clocktimes,
 whereas durations model physical processes. This matters on several
-occasions, like leap years, or daylight savings.}
+occasions, like leap years, or daylight savings. You can also provide a
+\code{character} scalar in the form of e.g. "1 day", which will be converted
+into a period.}
 
 \item{full.day}{A \code{logical} indicating wether the \code{start} param should be
 rounded to a full day, when only the \code{length} argument is provided (Default
@@ -55,9 +57,16 @@ on to avoid empty days in plotting with \code{\link[=gg_day]{gg_day()}}.}
 \item{tz}{Timezone of the start/end times. If \code{NULL} (the default), it will
 take the timezone from the \code{Datetime.colname} column.}
 
-\item{only_Id}{An expression of \code{ids} where the filtering should be applied to. If \code{NULL} (the default), the filtering will be applied to all \code{ids}. Based on the this expression, the dataset will be split in two and only where the given expression evaluates to \code{TRUE}, will the filtering take place. Afterwards both sets are recombined and sorted by \code{Datetime}.}
+\item{only_Id}{An expression of \code{ids} where the filtering should be applied
+to. If \code{NULL} (the default), the filtering will be applied to all \code{ids}.
+Based on the this expression, the dataset will be split in two and only
+where the given expression evaluates to \code{TRUE}, will the filtering take
+place. Afterwards both sets are recombined and sorted by \code{Datetime}.}
 
-\item{filter.expr}{Advanced filtering conditions. If not \code{NULL} (default) and given an \code{expression}, this is used to \code{\link[dplyr:filter]{dplyr::filter()}} the results. This can be useful to filter, e.g. for group-specific conditions, like starting after the first two days of measurement (see examples).}
+\item{filter.expr}{Advanced filtering conditions. If not \code{NULL} (default) and
+given an \code{expression}, this is used to \code{\link[dplyr:filter]{dplyr::filter()}} the results. This
+can be useful to filter, e.g. for group-specific conditions, like starting
+after the first two days of measurement (see examples).}
 
 \item{...}{Parameter handed over to \code{\link[lubridate:round_date]{lubridate::round_date()}} and siblings}
 }
@@ -69,13 +78,13 @@ specified Dates/Times.
 Filtering a dataset based on Dates or Datetimes may often be necessary prior
 to calcuation or visualization. The functions allow for a filtering based on
 simple \code{strings} or \code{Datetime} scalars, or by specifying a length. They also
-support prior \link{dplyr} grouping, which is useful, e.g., when you only want
-to filter the first two days of measurement data for every participant,
+support prior \link{dplyr} grouping, which is useful, e.g., when you only want to
+filter the first two days of measurement data for every participant,
 regardless of the actual date. If you want to filter based on times of the
 day, look to \code{\link[=filter_Time]{filter_Time()}}.
 }
 \examples{
- 
+
 library(lubridate)
 library(dplyr)
 #baseline
@@ -83,9 +92,9 @@ range.unfiltered <- sample.data.environment$Datetime \%>\% range()
 range.unfiltered
 
 #setting the start of a dataset
-sample.data.environment \%>\% 
-filter_Datetime(start = "2023-08-18 12:00:00") \%>\% 
-pull(Datetime) \%>\% 
+sample.data.environment \%>\%
+filter_Datetime(start = "2023-08-18 12:00:00") \%>\%
+pull(Datetime) \%>\%
 range()
 
 #setting the end of a dataset
@@ -104,15 +113,14 @@ pull(Datetime) \%>\% range()
 
 #advanced filtering based on grouping (second day of each group)
 sample.data.environment \%>\%
-group_by(Source) \%>\% 
 #shift the "Environment" group by one day
 mutate(
-Datetime = ifelse(Source == "Environment", Datetime + ddays(1), Datetime) \%>\% 
+Datetime = ifelse(Id == "Environment", Datetime + ddays(1), Datetime) \%>\%
 as_datetime()) -> sample
 sample \%>\% summarize(Daterange = paste(min(Datetime), max(Datetime), sep = " - "))
 #now we can use the `filter.expr` argument to filter from the second day of each group
-sample \%>\% 
-filter_Datetime(filter.expr = Datetime > Datetime[1] + days(1)) \%>\% 
+sample \%>\%
+filter_Datetime(filter.expr = Datetime > Datetime[1] + days(1)) \%>\%
 summarize(Daterange = paste(min(Datetime), max(Datetime), sep = " - "))
 sample.data.environment \%>\% filter_Date(end = "2023-08-17")
 }

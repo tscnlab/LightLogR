@@ -40,13 +40,15 @@ test_that("filtering works", {
             max()}
   ))
   
+  #string input of duration
+  expect_equal(
+    sample.data.environment %>% filter_Datetime(length = "2 mins") %>% nrow(),
+    16
+  )
+  
 })
 
 test_that("giving wrong input types gives an error", {
-  #string input of duration
-  expect_error(
-    sample.data.environment %>% filter_Datetime(length = "2 mins")
-  )
   
   #Datetime is not part of the function
   expect_error(
@@ -60,14 +62,14 @@ test_that("giving wrong input types gives an error", {
 
 test_that("filter_multiple_Datetimes works as expected", {
   arguments <- list(
-    list(start = "2023-08-17", only_Id = quote(Source == "Participant")),
-    list(end = "2023-08-17", only_Id = quote(Source == "Environment")))
+    list(start = "2023-08-17", only_Id = quote(Id == "Participant")),
+    list(end = "2023-08-17", only_Id = quote(Id == "Environment")))
   result <- 
-    sample.data.environment %>% dplyr::group_by(Source) %>% 
+    sample.data.environment %>%
     filter_Datetime_multiple(arguments = arguments, filter_Date) %>%
     dplyr::summarize(max = max(Datetime), min = min(Datetime))
   expectation <- 
-    tibble::tibble(Source = c("Environment", "Participant"),
+    tibble::tibble(Id = c("Environment", "Participant"),
                   max = as.POSIXct(c("2023-08-17 23:59:32", "2023-08-20 23:59:51"), tz = "UTC"),
                   min = as.POSIXct(c("2023-08-15 00:00:02", "2023-08-17 00:00:01"), tz = "UTC"))
   expect_equal(result, expectation)

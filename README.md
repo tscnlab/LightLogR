@@ -74,9 +74,8 @@ dosimeters. Its primary contributions towards fostering FAIR data
 include the development of a common file format, robust metadata
 descriptors, and an accompanying open-source software ecosystem.
 
-<img src="man/figures/Co-Funded-By-the-EU.png" width="288" />
-
 [<img src="man/figures/Metrology_Partnership_LOGO.jpg" width="282" />](https://www.euramet.org)
+<img src="man/figures/Co-Funded-By-the-EU.png" width="288" />
 
 The project (22NRM05 MeLiDos) has received funding from the European
 Partnership on Metrology, co-financed from the European Union’s Horizon
@@ -132,7 +131,7 @@ dataset %>% ungroup() %>% select(Datetime, lux, kelvin, MEDI) %>%
   slice(8000:8005) %>% flextable() %>% autofit()
 ```
 
-<img src="man/figures/README-unnamed-chunk-3-1.png" width="50%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-3-1.png" width="60%" style="display: block; margin: auto;" />
 
 <div style="color: white">
 
@@ -149,7 +148,7 @@ based on the measurement epochs found in the data.
 
 <div style="text-align:center">
 
-<img src="man/figures/gg_overview2.png" style="width:50.0%" />
+<img src="man/figures/gg_overview2.png" style="width:60.0%" />
 
 </div>
 
@@ -161,7 +160,7 @@ Once imported, **LightLogR** allows you conveniently visualize the data.
 dataset %>% gg_day()
 ```
 
-<img src="man/figures/README-unnamed-chunk-4-1.png" width="50%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-4-1.png" width="60%" style="display: block; margin: auto;" />
 
 There is a wide range of options to the `gg_day()` function to customize
 the output. Have a look at the reference page (`?gg_day`) to see all
@@ -174,37 +173,36 @@ dataset %>%
   theme(legend.position = "bottom")
 ```
 
-<img src="man/figures/README-unnamed-chunk-5-1.png" width="60%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-5-1.png" width="70%" style="display: block; margin: auto;" />
 
 ### More than one dataset
 
 The built-in dataset `sample.data.environment` shows a combined dataset
 of light logger data and a second set of data - in this case
 unobstructed outdoor light measurements. Combined datasets can be easily
-visualized with `gg_day()`. The `col` parameter used on the `Source`
-column of the dataset allows for a color separation.
+visualized with `gg_day()`. The `col` parameter used on the `Id` column
+of the dataset allows for a color separation.
 
 ``` r
 sample.data.environment %>% 
   gg_day(
     start.date = "2023-08-18",
-    y.axis = `MELANOPIC EDI`,
-    aes_col = Source,
+    aes_col = Id,
     scales = "fixed",
     geom = "line") + theme(legend.position = "bottom")
 #> Only Dates will be used from start.date and end.date input. If you also want to set Datetimes or Times, consider using the `filter_Datetime()` function instead.
 ```
 
-<img src="man/figures/README-unnamed-chunk-6-1.png" width="60%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-6-1.png" width="70%" style="display: block; margin: auto;" />
 
-If you get a feeling for the data over the course of multiple days, the
-`gg_days()` function comes in handy. It works similar to `gg_day()`. It
-is also opinionated in terms of the scaling and linebreaks to only show
-whole days, all of which can be adjusted.
+If you want to get a feeling for the data over the course of multiple
+days, the `gg_days()` function comes in handy. It works similar to
+`gg_day()`. It is also opinionated in terms of the scaling and
+linebreaks to only show whole days, all of which can be adjusted.
 
 ``` r
-sample.data.environment %>% group_by(Source) %>% 
-  gg_days(y.axis = `MELANOPIC EDI`, geom = "ribbon", alpha = 0.25, col = "black")
+sample.data.environment %>% 
+  gg_days(geom = "ribbon", alpha = 0.25, col = "black")
 ```
 
 <img src="man/figures/README-unnamed-chunk-7-1.png" width="100%" />
@@ -216,19 +214,18 @@ different datasets. Just put the function in between the dataset and
 `Datetime.rounded`. Just make sure, that the `geom` parameter is set to
 *boxplot* and the `group` parameter uses both the info from the rounded
 time interval (`Datetime.rounded`) and the different datasets
-(`Source`). The `interaction` function can easily combine them. The
-default interval for `cut_Datetime()` is 3 hours.
+(`Source`). The `base::interaction()` function can easily combine them.
+The default interval for `cut_Datetime()` is 3 hours.
 
 ``` r
 sample.data.environment %>% 
   cut_Datetime() %>% 
   gg_day(
     end.date = "2023-08-15",
-    y.axis = `MELANOPIC EDI`,
-    aes_col = Source,
+    aes_col = Id,
     scales = "fixed",
     geom = "boxplot",
-    group = interaction(Source, Datetime.rounded)) + 
+    group = interaction(Id, Datetime.rounded)) + 
   theme(legend.position = "bottom")
 #> Only Dates will be used from start.date and end.date input. If you also want to set Datetimes or Times, consider using the `filter_Datetime()` function instead.
 ```
@@ -250,10 +247,10 @@ The huge amount of gaps comes from the fact that the measurement
 intervals are somewhat irregular between 15 and 18 seconds in this case.
 This leaves very little intervals to start regularly. We got this
 information after import, but can still get to this info through
-`count.difftime()`.
+`count_difftime()`.
 
 ``` r
-dataset %>% ungroup() %>% count.difftime()
+dataset %>% ungroup() %>% count_difftime()
 #> # A tibble: 4 × 2
 #>   difftime       n
 #>   <Duration> <int>
@@ -263,9 +260,9 @@ dataset %>% ungroup() %>% count.difftime()
 #> 4 18s           16
 ```
 
-We can eliminate this through teh `gap_handler()` function. This
+We can eliminate this through the `gap_handler()` function. This
 function will automatically fill in the gaps with NA values. As the most
-dominant interval in the dataset is now not 15 seconds anymore(because
+dominant interval in the dataset is now not 15 seconds anymore (because
 intermediate datapoints have been added), we need to specify the epoch
 for `gap_finder()`.
 

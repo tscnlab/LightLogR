@@ -89,15 +89,15 @@ Here you can see that we follow roughly the same time span, but the measurement 
 
 Our last dataset is a sleep diary that contains, among other things, a column for `Id` and a column for *sleep* and for *wake* (called *offset*). Because sleep diaries and other event datasets can vary widely in their structure, we must manually set a few arguments. Importantly, we need to specify how the Datetimes are structured. In this case, we have values like *28-08-2023 23:20*, which give a structure of `dmyHM`.
 
-What we need after import is a coherent table that contains a column with a `Datetime` besides a column with the `State` that starts at that point in time. `import.Statechanges()` facilitates this, because we can provide a `vector` of column names that form a continuous indicator of a given state - in this case `Sleep`.
+What we need after import is a coherent table that contains a column with a `Datetime` besides a column with the `State` that starts at that point in time. `import_Statechanges()` facilitates this, because we can provide a `vector` of column names that form a continuous indicator of a given state - in this case `Sleep`.
 
 ```{r}
 dataset.sleep <- 
-  import.Statechanges(file.sleep, path, 
+  import_Statechanges(file.sleep, path, 
                       Datetime.format = "dmyHM",
                       State.colnames = c("sleep", "offset"),
                       State.encoding = c("sleep", "wake"),
-                      ID.colname = record_id,
+                      Id.colname = record_id,
                       sep = ";",
                       dec = ",",
                       tz = tz)
@@ -159,17 +159,17 @@ Brown et al.(2022)[^1] provide guidance for healthy, daytime dependent light sti
 
 We can see that bedtime is an important factor when determining the timepoints these three stages go into effect. Luckily we just so happen to have the sleep/wake data from the sleep diary at hand. In a first step, we will convert the timepoints where a state changes into intervals during which the participant is awake or asleep. The `sc2interval()` function provides this readily.
 
-In our case the first entry is sleep, so we can safely assume, that on that day prior the participant was awake. We could take this into account through the `full.first = "wake"` argument setting, but then it would be implied that the participant was awake from midnight on. As the first day of data is only partial anyways, we will disregard this. There are other arguments to `sc2interval()` to further refine the interval creation. Probably the most important is `length.restriction`, that sets the maximum length of an interval, the default being 24 hours. This avoids implausibly long intervals with one state that is highly likely caused by implicit missing data or misentries.
+In our case the first entry is sleep, so we can safely assume, that on that day prior the participant was awake. We could take this into account through the `starting.state = "wake"` argument setting, but then it would be implied that the participant was awake from midnight on. As the first day of data is only partial anyways, we will disregard this. There are other arguments to `sc2interval()` to further refine the interval creation. Probably the most important is `length.restriction`, that sets the maximum length of an interval, the default being 24 hours. This avoids implausibly long intervals with one state that is highly likely caused by implicit missing data or misentries.
 
 ```{r}
 dataset.sleep <- dataset.sleep %>% sc2interval()
 dataset.sleep %>% head() %>% gt()
 ```
 
-Now we can transform these sleep/wake intervals to intervals for the Brown recommendations. The `sleep.int2Brown()` function facilitates this.
+Now we can transform these sleep/wake intervals to intervals for the Brown recommendations. The `sleep_int2Brown()` function facilitates this.
 
 ```{r}
-Brown.intervals <- dataset.sleep %>% sleep.int2Brown()
+Brown.intervals <- dataset.sleep %>% sleep_int2Brown()
 Brown.intervals %>% head() %>% gt()
 ```
 
@@ -294,7 +294,7 @@ The geom family of `hex`, `bin2d`, or `density_2d` is particularly well suited i
 
 ###  {.unnumbered}
 
-**Conclusion:** The `line` or `ribbon` geom seem like a good choice for our task. However, The high resolution of the data (*10 seconds*) makes the line very noisy. Sometimes this level of detail is good, but our figure should give more of a general representation of luminous exposure, so we should aggregate the data somewhat. We can use a similar function as for the boxplot, `aggregate_Datetime()` and use this to aggregate our data to the desired resolution. It has sensible defaults to handle numeric (mean), logical and character (most represented) data, that can be adjusted. For the sake of this example, let´s wrap the aggregate function with some additional code to recalculate the `Brown.recommendations`, because while the default numeric aggregation is fine for measurement data, it does not make sense for the `Brown.recommendations` column.
+**Conclusion:** The `line` or `ribbon` geom seem like a good choice for our task. However, The high resolution of the data (*10 seconds*) makes the line very noisy. Sometimes this level of detail is good, but our figure should give more of a general representation of luminous exposure, so we should aggregate the data somewhat. We can use a similar function as for the boxplot, `aggregate_Datetime()` and use this to aggregate our data to the desired resolution. It has sensible defaults to handle numeric (mean), logical and character (most represented) data, that can be adjusted. For the sake of this example, let´s wrap the aggregate function with some additional code to recalculate the `Brown_recommendations`, because while the default numeric aggregation is fine for measurement data, it does not make sense for the `Brown_recommendations` column.
 
 ```{r}
 aggregate_Datetime2 <- function(...) {

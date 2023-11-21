@@ -5,8 +5,8 @@ test_that("sc2interval works as expected", {
                             Id = "Participant")
   expect_snapshot(sc2interval(sample))
   expect_setequal(names(sc2interval(sample)), c("Id", "State", "Interval"))
-  expect_equal(sample %>% sc2interval() %>% nrow(), 4)
-  expect_equal(sample %>% sc2interval(full = FALSE) %>% nrow(), 2)
+  expect_equal(sample %>% sc2interval() %>% nrow(), 3)
+  expect_equal(sample %>% sc2interval(full = FALSE) %>% nrow(), 1)
 }
 )
 

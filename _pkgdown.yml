@@ -9,11 +9,11 @@ reference:
       exports from measurement devices or online databases. This section also
       includes functions to import auxiliary data, such as sleep/wake data. 
       The family of import functions works on a variety of device-specific files 
-      through `import.*()`.
+      through `import_*()`.
     contents:
-    - import.Dataset
+    - import_Dataset
     - import
-    - import.Statechanges
+    - import_Statechanges
   
   - title: Insight
     desc: >
@@ -21,7 +21,7 @@ reference:
       Functions in this section will not return a version of the input dataset, 
       but rather information based on it.
     contents:
-    - count.difftime
+    - count_difftime
     - dominant_epoch
     - gapless_Datetimes
     - gap_finder
@@ -35,12 +35,12 @@ reference:
     - gap_handler
     - cut_Datetime
     - aggregate_Datetime
-    - create_Time.data
+    - create_Timedata
     - filter_Datetime
     - filter_Datetime_multiple
     - filter_Date
     - filter_Time
-    - join.datasets
+    - join_datasets
   
   - title: Expand
     desc: >
@@ -50,9 +50,9 @@ reference:
     - data2reference
     - sc2interval
     - interval2state
-    - sleep.int2Brown
-    - Brown.check
-    - Brown.rec
+    - sleep_int2Brown
+    - Brown_check
+    - Brown_rec
     - Brown2reference
   
   - title: Visualize

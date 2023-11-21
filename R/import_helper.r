@@ -1,8 +1,6 @@
 #This internal helper function prints basic information about a dataset and is used for import function
-import.info <- function(tmp, device, tz, ID.colname) {
+import.info <- function(tmp, device, tz, Id.colname) {
   #give info about the file
-  
-  
   min.time <- min(tmp$Datetime)
   max.time <- max(tmp$Datetime)
   interval.time <- 
@@ -10,7 +8,7 @@ import.info <- function(tmp, device, tz, ID.colname) {
     dplyr::reframe(
       interval.time = diff(Datetime)
       ) %>% 
-    dplyr::group_by({{ ID.colname }}) %>%
+    dplyr::group_by({{ Id.colname }}) %>%
     dplyr::count(interval.time) %>% 
     dplyr::mutate(pct = (n/sum(n)) %>% scales::percent(),
                   interval.time = interval.time %>% lubridate::as.duration())

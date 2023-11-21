@@ -83,16 +83,15 @@
 #' scales = "fixed",
 #' end.date = "2023-08-16",
 #' x.axis = Datetime,
-#' y.axis = `MELANOPIC EDI`,
 #' y.axis.label = "mEDI (lx)",
-#' aes_col = Source)
+#' aes_col = Id)
 #' plot
 #'
 #' #you can easily overwrite the color scale afterwards
 #' plot + ggplot2::scale_color_discrete()
 #'
 #' #or change the facetting
-#' plot + ggplot2::facet_wrap(~Day.data + Source)
+#' plot + ggplot2::facet_wrap(~Day.data + Id)
 
 gg_day <- function(dataset,
                    start.date = NULL,
@@ -191,7 +190,7 @@ gg_day <- function(dataset,
           !!x %>% format(format = format.day))
   }
   
-  dataset <- dataset %>% create_Time.data(Datetime.colname = !!x)
+  dataset <- dataset %>% create_Timedata(Datetime.colname = !!x)
   
   dataset <-
     dataset %>%

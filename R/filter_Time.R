@@ -21,11 +21,11 @@
 #' @family filter
 
 filter_Time <- function(dataset, 
-                            Datetime.colname = Datetime, 
-                            start = NULL, 
-                            end = NULL, 
-                            length = NULL
-                            ) {
+                        Datetime.colname = Datetime, 
+                        start = NULL, 
+                        end = NULL, 
+                        length = NULL
+                        ) {
   
   # Initial Checks ----------------------------------------------------------
   
@@ -50,7 +50,7 @@ filter_Time <- function(dataset,
   # Manipulation ----------------------------------------------------------
   
   #create a time-of-day column
-  dataset <- dataset %>% create_Time.data(!!x)
+  dataset <- dataset %>% create_Timedata(!!x)
   
   #calculate starting time if length and end are given
   if(is.null(start) & !is.null(length) & !is.null(end)) {
