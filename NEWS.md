@@ -1,3 +1,5 @@
+* Added import support for new devices: `LiDo`, `DeLux`, and `Speccy`
+
 * Removed minor inconsistencies in naming conventions. Also, all imported columns will have syntactic naming now
 
 * Added an option to all `gap` functions, to extend the gapless Datetime range to full days.

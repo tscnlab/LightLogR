@@ -8,7 +8,8 @@ gap_handler(
   dataset,
   Datetime.colname = Datetime,
   epoch = "dominant.epoch",
-  behavior = "full_sequence"
+  behavior = "full_sequence",
+  full.days = FALSE
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ gap_handler(
 either '"dominant.epoch"' (the default) for a guess based on the data or a valid \code{lubridate::duration()} string, e.g., \code{"1 day"} or \code{"10 sec"}.}
 
 \item{behavior}{The behavior of the join of the \code{dataset} with the \code{gapless} sequence. Can be one of \code{"full_sequence"} (the default), \code{"regulars"}, \code{"irregulars"}, or \code{"gaps"}. See @return for details.}
+
+\item{full.days}{If \code{TRUE}, the gapless sequence will include the whole first and last day where there is data.}
 }
 \value{
 A modified \code{tibble} similar to \code{dataset} but with handling of implicit gaps, depending on the \code{behavior} argument:

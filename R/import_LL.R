@@ -7,8 +7,11 @@
 #' Imports a dataset and does the necessary transformations to get the right
 #' column formats. Unless specified otherwise, the function will set the
 #' timezone of the data to `UTC`. It will also enforce an `Id` to separate
-#' different datasets and will order/arrange the dataset within each `Id`.
+#' different datasets and will order/arrange the dataset within each `Id` by 
+#' Datetime. See the Details and Devices section for more information and the
+#' full list of arguments.
 #'
+#' @details 
 #' There are specific and a general import function. The general import function
 #' is described below, whereas the specific import functions take the form of
 #' `import$device()`. The general import function is a thin wrapper around the
@@ -23,48 +26,59 @@
 #' * `n_max`: maximum number of lines to read. Default is `Inf`.
 #' * `tz`: Timezone of the data. `"UTC"` is the default. Expects a
 #' `character`. You can look up the supported timezones with [OlsonNames()].
-#' * `Id.colname`: Lets you specify a column for the participant id. Expects a
+#' * `Id.colname`: Lets you specify a column for the id of a dataset. Expects a
 #' symbol (Default is `Id`). This column will be used for grouping
 #' ([dplyr::group_by()]).
-#' * `auto.id`: If the `Id.colname` column is added to the `dataset`, the `Id`
+#' * `auto.id`: If the `Id.colname` column is not part of the `dataset`, the `Id`
 #' can be automatically extracted from the filename. The argument expects a
 #' regular expression [regex] and will by default just give the whole filename
 #' without file extension.
-#' * `manual.id`: If this argument is not `NULL`, and no `ID` column is part
-#' of the `dataset`, this `character` scalar will be used. **Don´t use this
-#' argument if multiple files from different participants are used!**
+#' * `manual.id`: If this argument is not `NULL`, and no `Id` column is part
+#' of the `dataset`, this `character` scalar will be used. **We discourage the
+#' use of this arguments when importing more than one file**
 #' * `locale`: The locale controls defaults that vary from place to place.
 #' * `...`: supply additional arguments to the [readr] import functions, like `na`. Might also be used to supply arguments to the specific import functions, like `column_names` for `Actiwatch_Spectrum` devices. Those devices will alway throw a helpful error message if you forget to supply the necessary arguments.
-#'
-#' @details If the `Id` column is already part of the `dataset` it will just use
+#'   If the `Id` column is already part of the `dataset` it will just use
 #'   this column. If the column is not present it will add this column and fill
 #'   it with the filename of the importfile (see param `auto.id`).
 #'
 #' @param ... Parameters that get handed down to the specific import functions
 #' @param device From what device do you want to import? For a few devices,
 #'   there is a sample data file that you can use to test the function (see the
-#'   examples). Currently the following devices are supported (followed by the
-#'   `device.ext` spec to access the sample file):
-#' * `"ActLumus"` ("205_actlumus_Log_1020_20230904101707532.txt.zip")
-#' * `"LYS"` ("sample_data_LYS.csv")
-#' * `"Actiwatch_Spectrum"` **Special Argument: `column_names`** A character vector containing column names in the order in which they appear in the file. This is necessary to find the starting point of actual data.
+#'   examples). See [supported.devices] for a list of supported devices and see
+#'   below for more information on devices with specific requirements.
 #' @importFrom rlang :=
 #' @return Tibble/Dataframe with a POSIXct column for the datetime
 #' @export
-#' @section Examples:
-#'
-#'   ## Imports made easy
-#'
+#' @seealso [supported.devices]
+#' @section Devices: 
 #'   The set of import functions provide a convenient way to import light logger
 #'   data that is then perfectly formatted to add metadata, make visualizations
 #'   and analyses. There are a number of devices supported, where import should
 #'   just work out of the box. To get an overview, you can simply call the
 #'   `supported.devices` dataset. The list will grow continuously as the package
 #'   is maintained.
-#'
 #' ```{r}
 #' supported.devices
 #' ```
+#' 
+#'   ## ActLumus 
+#'   A sample file is provided with the package, it can be accessed through
+#'   `system.file("extdata/205_actlumus_Log_1020_20230904101707532.txt.zip",
+#'   package = "LightLogR")`. It does not need to be unzipped to be imported.
+#'   This sample file is a good example for a regular dataset without gaps
+#'   ## LYS 
+#'   A sample file is provided with the package, it can be accessed
+#'   through `system.file("extdata/sample_data_LYS.csv", package =
+#'   "LightLogR")`. This sample file is a good example for an irregular dataset.
+#'   ## Actiwatch_Spectrum:
+#'   **Required Argument: `column_names`** A character vector containing column 
+#'   names in the order in which they appear in the file. This is necessary to 
+#'   find the starting point of actual data.
+#'
+#' @section Examples:
+#'
+#'   ## Imports made easy
 #'
 #'   To import a file, simple specify the filename (and path) and feed it to the
 #'   `import_Dataset` function. There are sample datasets for all devices.
@@ -175,11 +189,11 @@ imports <- function(device,
         dplyr::mutate(file.name = basename(file.name) %>%
                         tools::file_path_sans_ext(),
                       !!Id.colname := factor(!!Id.colname)) %>%
-        dplyr::group_by(!!Id.colname) %>%
+        dplyr::group_by(Id = !!Id.colname) %>%
         dplyr::arrange(Datetime, .by_group = TRUE)
       
       #give info about the file
-      if(!silent) import.info(tmp, !!device, tz, !!Id.colname)
+      if(!silent) import.info(tmp, !!device, tz, Id)
       
       #return the file
       tmp
@@ -190,6 +204,37 @@ imports <- function(device,
 }
 
 import_arguments <- list(
+  #Speccy
+  Speccy = rlang::expr({
+    tmp <-suppressMessages( 
+      readr::read_csv(filename,
+                      n_max = n_max,
+                      id = "file.name",
+                      locale = locale,
+                      name_repair = "universal",
+                      ...
+      ))
+    tmp <- tmp %>%
+      dplyr::rename(MEDI = Melanopic.EDI) %>% 
+      dplyr::mutate(Datetime =
+                      Datetime %>% lubridate::parse_date_time(
+                        orders =  "HMSdmy",tz = tz))
+  }),
+  #Intelligent Automation Inc DeLux
+  DeLux = rlang::expr({
+    tmp <-suppressMessages( 
+      readr::read_csv(filename,
+                      n_max = n_max,
+                      id = "file.name",
+                      locale = locale,
+                      name_repair = "universal",
+                      ...
+      ))
+    tmp <- tmp %>%
+      dplyr::rename(Datetime = Timestamp) %>%
+      dplyr::mutate(Datetime =
+                      Datetime %>% lubridate::ymd_hms(tz = tz))
+  }),
   #LiDo
   LiDo = rlang::expr({
     tmp <- suppressMessages(
@@ -206,7 +251,8 @@ import_arguments <- list(
       dplyr::rename(Datetime = UTC.Timestamp,
                     MEDI = Ev_mel_D65.in.lx) %>% 
       dplyr::mutate(Datetime = 
-                      Datetime %>% lubridate::dmy_hms() %>% 
+                      Datetime %>% 
+                      lubridate::dmy_hms() %>% 
                       lubridate::with_tz(tzone = tz))
   }),
   #ActLumus

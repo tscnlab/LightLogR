@@ -7,7 +7,8 @@
 gapless_Datetimes(
   dataset,
   Datetime.colname = Datetime,
-  epoch = "dominant.epoch"
+  epoch = "dominant.epoch",
+  full.days = FALSE
 )
 }
 \arguments{
@@ -19,6 +20,8 @@ gapless_Datetimes(
 \item{epoch}{The epoch to use for the gapless sequence. Can be either a
 \code{lubridate::duration()} or a string. If it is a string, it needs to be
 either '"dominant.epoch"' (the default) for a guess based on the data or a valid \code{lubridate::duration()} string, e.g., \code{"1 day"} or \code{"10 sec"}.}
+
+\item{full.days}{If \code{TRUE}, the gapless sequence will include the whole first and last day where there is data.}
 }
 \value{
 A \code{tibble} with a gapless sequence of \code{Datetime} as specified by

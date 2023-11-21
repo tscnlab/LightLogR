@@ -40,13 +40,15 @@ test_that("filtering works", {
             max()}
   ))
   
+  #string input of duration
+  expect_equal(
+    sample.data.environment %>% filter_Datetime(length = "2 mins") %>% nrow(),
+    16
+  )
+  
 })
 
 test_that("giving wrong input types gives an error", {
-  #string input of duration
-  expect_error(
-    sample.data.environment %>% filter_Datetime(length = "2 mins")
-  )
   
   #Datetime is not part of the function
   expect_error(

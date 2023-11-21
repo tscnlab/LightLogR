@@ -9,7 +9,8 @@ gap_finder(
   Datetime.colname = Datetime,
   epoch = "dominant.epoch",
   gap.data = FALSE,
-  silent = FALSE
+  silent = FALSE,
+  full.days = FALSE
 )
 }
 \arguments{
@@ -27,6 +28,8 @@ dataset. Default is \code{FALSE}.}
 
 \item{silent}{Logical. If \code{TRUE}, suppresses the message with the summary of
 the gaps in the dataset. Default is \code{FALSE}. Only used for unit tests.}
+
+\item{full.days}{If \code{TRUE}, the gapless sequence will include the whole first and last day where there is data.}
 }
 \value{
 Prints message with a short summary of the gaps in the dataset. If
