@@ -88,7 +88,7 @@ of times can be enforced.</p>
 <span>  State.colname <span class="op">=</span> <span class="va">State</span>,</span>
 <span>  Interval.colname <span class="op">=</span> <span class="va">Interval</span>,</span>
 <span>  full <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  full.first <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  starting.state <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  output.dataset <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  Datetime.keep <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  length.restriction <span class="op">=</span> <span class="fl">60</span> <span class="op">*</span> <span class="fl">60</span> <span class="op">*</span> <span class="fl">24</span></span>
@@ -116,12 +116,12 @@ the <code>Interval</code> and <code>State</code> (which are also the default). E
 <code>Statechange</code> column needs do be part of the <code>dataset</code>.</p></dd>
 
 
-<dt>full, full.first</dt>
+<dt>full, starting.state</dt>
 <dd><p>These arguments handle the state on the first day
 before the first state change and after the last state change on the last
 day. If <code>full = TRUE</code>(the default, expects a <code>logical</code>), it will create an
 interval on the first day from 00:00:00 up until the state change. This
-interval will be given the state specified in <code>full.first</code>, which is <code>NA</code>
+interval will be given the state specified in <code>starting.state</code>, which is <code>NA</code>
 by default, but can be any <code>character</code> scalar. It will further extend the
 interval for the last state change until the end of the last given day
 (more specifically until 00:00:00 the next day).</p></dd>
@@ -168,7 +168,7 @@ remove the interval.</p></dd>
 <span class="r-in"><span>                         Id <span class="op">=</span> <span class="st">"Participant"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co">#intervals from sample</span></span></span>
 <span class="r-in"><span><span class="fu">sc2interval</span><span class="op">(</span><span class="va">sample</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 8 × 3</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 7 × 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   State Id          Interval                                        </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;Interval&gt;</span>                                      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>          2023-08-15 00:00:00 UTC--2023-08-15 06:00:00 UTC</span>
@@ -178,7 +178,6 @@ remove the interval.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> sleep Participant 2023-08-16 22:00:00 UTC--2023-08-17 06:30:00 UTC</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> wake  Participant 2023-08-17 06:30:00 UTC--2023-08-18 01:00:00 UTC</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> sleep Participant 2023-08-18 01:00:00 UTC--2023-08-19 00:00:00 UTC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">8</span> <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>          2023-08-19 00:00:00 UTC--NA                     </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#compare sample (y) and intervals (x)</span></span></span>
 <span class="r-in"><span><span class="fu">sc2interval</span><span class="op">(</span><span class="va">sample</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>

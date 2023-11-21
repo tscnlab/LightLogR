@@ -61,7 +61,7 @@
 <span>  <span class="va">dataset</span>,</span>
 <span>  Datetime.colname <span class="op">=</span> <span class="va">Datetime</span>,</span>
 <span>  Id.colname <span class="op">=</span> <span class="va">Id</span>,</span>
-<span>  gap_range_data <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  gap.data <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span>,</span>
 <span>  interactive <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -86,7 +86,7 @@ be in the <code>dataset</code>. This is also used as the y-axis variable and is 
 minimum grouping variable.</p></dd>
 
 
-<dt>gap_range_data</dt>
+<dt>gap.data</dt>
 <dd><p>Optionally provide a <code>tibble</code> with <code>start</code> and <code>end</code>
 <code>Datetimes</code> of gaps per group. If not provided, the function uses
 <code><a href="gap_finder.html">gap_finder()</a></code> to calculate implicit missing data. This might be
@@ -114,7 +114,7 @@ Defaults to <code>FALSE</code>.</p></dd>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">sample.data.environment</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu">gg_overview</span><span class="op">(</span>Id.colname <span class="op">=</span> <span class="va">Source</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">sample.data.environment</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu">gg_overview</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="gg_overview-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>

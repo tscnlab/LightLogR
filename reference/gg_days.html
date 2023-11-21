@@ -227,15 +227,13 @@ changed to a normal or logarithmic scale - see the y.scale argument for more.</p
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">dataset</span> <span class="op">&lt;-</span></span></span>
 <span class="r-in"><span><span class="va">sample.data.environment</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
-<span class="r-in"><span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Source</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span><span class="fu"><a href="aggregate_Datetime.html">aggregate_Datetime</a></span><span class="op">(</span>unit <span class="op">=</span> <span class="st">"5 mins"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">dataset</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu">gg_days</span><span class="op">(</span>y.axis <span class="op">=</span> <span class="va">`MELANOPIC EDI`</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dataset</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu">gg_days</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="gg_days-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="co">#restrict the x-axis to 3 days</span></span></span>
 <span class="r-in"><span><span class="va">dataset</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span><span class="fu">gg_days</span><span class="op">(</span></span></span>
-<span class="r-in"><span>y.axis <span class="op">=</span> <span class="va">`MELANOPIC EDI`</span>,</span></span>
 <span class="r-in"><span>x.axis.limits <span class="op">=</span> \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="Datetime_limits.html">Datetime_limits</a></span><span class="op">(</span><span class="va">x</span>, length <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/duration.html" class="external-link">ddays</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 864 rows containing missing values (`geom_line()`).</span>

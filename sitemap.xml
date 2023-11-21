@@ -22,13 +22,13 @@
     <loc>https://tscnlab.github.io/LightLogR/news/index.html</loc>
   </url>
   <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/Brown.check.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/Brown.rec.html</loc>
-  </url>
-  <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/Brown2reference.html</loc>
+  </url>
+  <url>
+    <loc>https://tscnlab.github.io/LightLogR/reference/Brown_check.html</loc>
+  </url>
+  <url>
+    <loc>https://tscnlab.github.io/LightLogR/reference/Brown_rec.html</loc>
   </url>
   <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/Datetime_breaks.html</loc>
@@ -43,10 +43,10 @@
     <loc>https://tscnlab.github.io/LightLogR/reference/aggregate_Datetime.html</loc>
   </url>
   <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/count.difftime.html</loc>
+    <loc>https://tscnlab.github.io/LightLogR/reference/count_difftime.html</loc>
   </url>
   <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/create_Time.data.html</loc>
+    <loc>https://tscnlab.github.io/LightLogR/reference/create_Timedata.html</loc>
   </url>
   <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/cut_Datetime.html</loc>
@@ -85,10 +85,10 @@
     <loc>https://tscnlab.github.io/LightLogR/reference/gg_overview.html</loc>
   </url>
   <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/import.Dataset.html</loc>
+    <loc>https://tscnlab.github.io/LightLogR/reference/import_Dataset.html</loc>
   </url>
   <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/import.Statechanges.html</loc>
+    <loc>https://tscnlab.github.io/LightLogR/reference/import_Statechanges.html</loc>
   </url>
   <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/index.html</loc>
@@ -97,7 +97,7 @@
     <loc>https://tscnlab.github.io/LightLogR/reference/interval2state.html</loc>
   </url>
   <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/join.datasets.html</loc>
+    <loc>https://tscnlab.github.io/LightLogR/reference/join_datasets.html</loc>
   </url>
   <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/pipe.html</loc>
@@ -109,7 +109,7 @@
     <loc>https://tscnlab.github.io/LightLogR/reference/sc2interval.html</loc>
   </url>
   <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/sleep.int2Brown.html</loc>
+    <loc>https://tscnlab.github.io/LightLogR/reference/sleep_int2Brown.html</loc>
   </url>
   <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/supported.devices.html</loc>

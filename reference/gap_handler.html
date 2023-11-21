@@ -47,7 +47,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Fill implicit gaps in a light logger dataset</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/HEAD/R/regularize.R" class="external-link"><code>R/regularize.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/HEAD/R/gaps.R" class="external-link"><code>R/gaps.R</code></a></small>
       <div class="d-none name"><code>gap_handler.Rd</code></div>
     </div>
 
@@ -61,7 +61,8 @@
 <span>  <span class="va">dataset</span>,</span>
 <span>  Datetime.colname <span class="op">=</span> <span class="va">Datetime</span>,</span>
 <span>  epoch <span class="op">=</span> <span class="st">"dominant.epoch"</span>,</span>
-<span>  behavior <span class="op">=</span> <span class="st">"full_sequence"</span></span>
+<span>  behavior <span class="op">=</span> <span class="st">"full_sequence"</span>,</span>
+<span>  full.days <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -84,6 +85,10 @@ either '"dominant.epoch"' (the default) for a guess based on the data or a valid
 
 <dt>behavior</dt>
 <dd><p>The behavior of the join of the <code>dataset</code> with the <code>gapless</code> sequence. Can be one of <code>"full_sequence"</code> (the default), <code>"regulars"</code>, <code>"irregulars"</code>, or <code>"gaps"</code>. See @return for details.</p></dd>
+
+
+<dt>full.days</dt>
+<dd><p>If <code>TRUE</code>, the gapless sequence will include the whole first and last day where there is data.</p></dd>
 
 </dl></div>
     <div class="section level2">

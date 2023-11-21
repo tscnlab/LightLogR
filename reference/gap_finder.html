@@ -51,7 +51,7 @@ gap_handler() internally."><meta property="og:image" content="https://tscnlab.gi
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Check for and output gaps in a dataset</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/HEAD/R/regularize.R" class="external-link"><code>R/regularize.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/HEAD/R/gaps.R" class="external-link"><code>R/gaps.R</code></a></small>
       <div class="d-none name"><code>gap_finder.Rd</code></div>
     </div>
 
@@ -68,7 +68,8 @@ short summary, and can optionally return the gaps as a <code>tibble</code>. Uses
 <span>  Datetime.colname <span class="op">=</span> <span class="va">Datetime</span>,</span>
 <span>  epoch <span class="op">=</span> <span class="st">"dominant.epoch"</span>,</span>
 <span>  gap.data <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  silent <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  silent <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  full.days <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -97,6 +98,10 @@ dataset. Default is <code>FALSE</code>.</p></dd>
 <dt>silent</dt>
 <dd><p>Logical. If <code>TRUE</code>, suppresses the message with the summary of
 the gaps in the dataset. Default is <code>FALSE</code>. Only used for unit tests.</p></dd>
+
+
+<dt>full.days</dt>
+<dd><p>If <code>TRUE</code>, the gapless sequence will include the whole first and last day where there is data.</p></dd>
 
 </dl></div>
     <div class="section level2">

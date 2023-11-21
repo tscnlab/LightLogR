@@ -75,7 +75,7 @@ illuminance levels, and a column that gives a label to the reference.</p>
 <span>  Brown.state.colname <span class="op">=</span> <span class="va">State.Brown</span>,</span>
 <span>  Brown.rec.colname <span class="op">=</span> <span class="va">Reference</span>,</span>
 <span>  Reference.label <span class="op">=</span> <span class="st">"Brown et al. (2022)"</span>,</span>
-<span>  overwrite.Reference <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -108,14 +108,14 @@ throw an error.</p></dd>
 a <code>character</code> scalar.</p></dd>
 
 
-<dt>overwrite.Reference</dt>
+<dt>overwrite</dt>
 <dd><p>If <code>TRUE</code> (defaults to <code>FALSE</code>), the function will
 overwrite the <code>Brown.rec.colname</code> column if it already exists.</p></dd>
 
 
 <dt>...</dt>
-<dd><p>Additional arguments that will be passed to <code><a href="Brown.rec.html">Brown.rec()</a></code> and
-<code><a href="Brown.check.html">Brown.check()</a></code>. This is only relevant to correct the names of the daytime
+<dd><p>Additional arguments that will be passed to <code><a href="Brown_rec.html">Brown_rec()</a></code> and
+<code><a href="Brown_check.html">Brown_check()</a></code>. This is only relevant to correct the names of the daytime
 states or the thresholds used within these states. See the documentation of
 these functions for more information.</p></dd>
 
@@ -129,7 +129,7 @@ columns.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>On a lower level, the function uses <code><a href="Brown.rec.html">Brown.rec()</a></code> and <code><a href="Brown.check.html">Brown.check()</a></code> to
+    <p>On a lower level, the function uses <code><a href="Brown_rec.html">Brown_rec()</a></code> and <code><a href="Brown_check.html">Brown_check()</a></code> to
 create the required information.</p>
     </div>
     <div class="section level2">
@@ -139,9 +139,9 @@ create the required information.</p>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other Brown: 
-<code><a href="Brown.check.html">Brown.check</a>()</code>,
-<code><a href="Brown.rec.html">Brown.rec</a>()</code>,
-<code><a href="sleep.int2Brown.html">sleep.int2Brown</a>()</code></p></div>
+<code><a href="Brown_check.html">Brown_check</a>()</code>,
+<code><a href="Brown_rec.html">Brown_rec</a>()</code>,
+<code><a href="sleep_int2Brown.html">sleep_int2Brown</a>()</code></p></div>
     </div>
 
     <div class="section level2">
