@@ -1,4 +1,6 @@
-# LightLogR 0.2.2
+# LightLogR 0.2.2.9000
+
+* Bugfix for `LiDo` import
 
 * Added import support for new devices: `LiDo`, `DeLux`, and `Speccy`
 
