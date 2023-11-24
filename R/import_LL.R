@@ -238,8 +238,9 @@ import_arguments <- list(
   #LiDo
   LiDo = rlang::expr({
     tmp <- suppressMessages(
-      readr::read_csv2(
+      readr::read_delim(
         filename,
+        delim = ";",
         n_max = n_max,
         id = "file.name",
         locale = locale,
