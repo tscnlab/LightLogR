@@ -8,6 +8,9 @@ Authors@R: c(
     person("Manuel", "Spitschan", 
       email = "manuel.spitschan@tum.de", role = "aut",
       comment = c(ORCID = "0000-0002-8572-9268")),
+    person("Steffen", "Hartmeyer", 
+      email = "steffen.hartmeyer@epfl.ch", role = "aut",
+      comment = c(ORCID = "0000-0002-2813-2668")),
     person("MeLiDos", role = "fnd"),
     person("EURAMET", role = "fnd"),
     person("TSCN-Lab", comment = c(URL = "www.tscnlab.org"), role = "cph"))

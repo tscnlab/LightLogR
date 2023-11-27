@@ -108,3 +108,35 @@ pick.grouping.columns <- function(dataset) {
     dplyr::group_vars(dataset)
   )
 }
+
+# Compare with threshold
+threshold <- function(Light.vector,
+                      threshold,
+                      comparison = c("above", "below"),
+                      na.replace = FALSE){
+  
+  comparison = match.arg(comparison)
+  
+  stopifnot(
+    "`Light.vector` must be numeric!" = is.numeric(Light.vector),
+    "`threshold` must be numeric!" = is.numeric(threshold),
+    "`threshold` must be either one or two values!" = length(threshold) %in% c(1, 2),
+    "`na.replace` must be logical!" = is.logical(na.replace)
+  )
+  
+  if(length(threshold) == 1){
+    out <- switch(comparison,
+                  "above" = Light.vector >= threshold,
+                  "below" = Light.vector <= threshold)
+  }
+  else{
+    threshold <- sort(threshold)
+    out <- Light.vector >= threshold[1] & Light.vector <= threshold[2]
+  }
+  
+  if(na.replace){
+    out <- tidyr::replace_na(out, FALSE)
+  }
+  
+  return(out)
+}

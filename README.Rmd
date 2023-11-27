@@ -59,7 +59,7 @@ Here is a quick starter on how do use **LightLogR**.
 
 ```{r, message = FALSE}
 library(LightLogR)
-#these packages are just needed for the examples as shown.
+# these packages are just needed for the examples as shown.
 library(flextable)
 library(dplyr)
 library(ggplot2)
@@ -73,8 +73,11 @@ You can import a light logger dataset with ease. The import functions give quick
 filename <- system.file("extdata/sample_data_LYS.csv", package = "LightLogR")
 dataset <- import.LYS(filename, tz = "Europe/Berlin")
 
-dataset %>% select(Datetime, lux, kelvin, MEDI) %>%  slice(8000:8005) %>% 
-  flextable() %>% autofit()
+dataset %>%
+  select(Datetime, lux, kelvin, MEDI) %>%
+  slice(8000:8005) %>%
+  flextable() %>%
+  autofit()
 ```
 
 ### Visualize
@@ -87,8 +90,8 @@ dataset %>% gg_day()
 There is a wide range of options to the `gg_day()` function to customize the output. Have a look at the reference page (`?gg_day`) to see all options. You can also override most of the defaults, e.g., for different `color`, `facetting`, `theme` options.
 
 ```{r, fig.retina=2}
-dataset %>% 
-  gg_day(col = MEDI >= 250, scales = "fixed", size = 0.5) + 
+dataset %>%
+  gg_day(col = MEDI >= 250, scales = "fixed", size = 0.5) +
   scale_color_discrete(type = c("orange", "skyblue"))
 ```
 
@@ -97,25 +100,27 @@ dataset %>%
 The built-in dataset `sample.data.environment` shows a combined dataset of light logger data and a second set of data - in this case unobstructed outdoor light measurements. Combined datasets can be easily visualized with `gg_day()`. The `col` parameter used on the `Source` column of the dataset allows for a color separation.
 
 ```{r, fig.height= 6, fig.retina=2}
-sample.data.environment %>% 
+sample.data.environment %>%
   gg_day(
     start.date = "2023-08-18",
     y.axis = `MELANOPIC EDI`,
     col = Source,
     scales = "fixed",
-    geom = "line")
+    geom = "line"
+  )
 ```
 With the `cut_Datetime()` function, the data can further be broken up into arbitrary time intervals. This can be used to easily compare different datasets. Just put the function in between the dataset and `gg_day()`. This makes a new variable available for plotting: `Datetime.rounded`. Just make sure, that the `geom` parameter is set to *boxplot* and the `group` parameter uses both the info from the rounded time interval (`Datetime.rounded`) and the different datasets (`Source`). The `interaction` function can easily combine them. The default interval for `cut_Datetime()` is 3 hours.
 ```{r, fig.retina=2}
-sample.data.environment %>% 
-  cut_Datetime() %>% 
+sample.data.environment %>%
+  cut_Datetime() %>%
   gg_day(
     end.date = "2023-08-15",
     y.axis = `MELANOPIC EDI`,
     col = Source,
     scales = "fixed",
     geom = "boxplot",
-    group = interaction(Source, Datetime.rounded)) + 
+    group = interaction(Source, Datetime.rounded)
+  ) +
   theme(legend.position = "bottom")
 ```
 

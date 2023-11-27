@@ -25,6 +25,7 @@ Useful links:
 Authors:
 \itemize{
   \item Manuel Spitschan \email{manuel.spitschan@tum.de} (\href{https://orcid.org/0000-0002-8572-9268}{ORCID})
+  \item Steffen Hartmeyer \email{steffen.hartmeyer@epfl.ch} (\href{https://orcid.org/0000-0002-2813-2668}{ORCID})
 }
 
 Other contributors:
