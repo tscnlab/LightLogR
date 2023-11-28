@@ -32,7 +32,9 @@ bright_dark_period(
 either \code{"dominant.epoch"} (the default) for a guess based on the data, or a valid
 \code{lubridate::duration()} string, e.g., \code{"1 day"} or \code{"10 sec"}.}
 
-\item{loop}{Logical. Should the data be looped? Defaults to \code{FALSE}.}
+\item{loop}{Logical. Should the data be looped? If \code{TRUE}, a full copy of the data
+will be concatenated at the end of the data. Makes only sense for 24 h data.
+Defaults to \code{FALSE}.}
 
 \item{na.rm}{Logical. Should missing values be removed for the calculation?
 Defaults to \code{FALSE}.}
@@ -41,19 +43,20 @@ Defaults to \code{FALSE}.}
 to \code{TRUE}.}
 }
 \value{
-Data frame or matrix with pairs of timespan and calculated values.
-If wide is TRUE then variable names will be concatenated with the timespan.
+A named list with the \code{mean}, \code{onset}, \code{midpoint}, and \code{offset} of the
+calculated brightest or darkest period, or if \code{as.df == TRUE} a data frame
+with columns named \verb{\{period\}_\{timespan\}_\{metric\}}.
 }
 \description{
 This function finds the brightest or darkest continuous period of a given
-timespan and calculates its \code{mean} light level, \code{onset},
-\code{midpoint}, and \code{offset}. Defined as the period with the maximum
-or minimum mean light level.
+timespan and calculates its \code{mean} light level, as well as the timing of the period's
+\code{onset}, \code{midpoint}, and \code{offset}. It is defined as the period with the maximum
+or minimum mean light level. Note that the data need to be regularly spaced
+(i.e., no gaps) for correct results.
 }
 \details{
 Assumes regular 24h light data. Otherwise, results may not be
 meaningful. Looping the data is recommended for finding the darkest period.
-Missing light values will be removed by default.
 }
 \examples{
 dataset1 <-

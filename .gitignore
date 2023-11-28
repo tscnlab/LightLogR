@@ -50,3 +50,6 @@ rsconnect/
 .Rproj.user
 docs
 inst/doc
+
+# DS_Store file
+.DS_Store

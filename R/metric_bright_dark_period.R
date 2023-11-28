@@ -1,9 +1,10 @@
 #' Brightest or darkest continuous period
 #'
 #' This function finds the brightest or darkest continuous period of a given
-#' timespan and calculates its \code{mean} light level, \code{onset},
-#' \code{midpoint}, and \code{offset}. Defined as the period with the maximum
-#' or minimum mean light level.
+#' timespan and calculates its `mean` light level, as well as the timing of the period's
+#' `onset`, `midpoint`, and `offset`. It is defined as the period with the maximum
+#' or minimum mean light level. Note that the data need to be regularly spaced 
+#' (i.e., no gaps) for correct results.
 #'
 #' @param Light.vector Numeric vector containing the light data.
 #' @param Datetime.vector Vector containing the time data. Can be POSIXct or numeric.
@@ -16,18 +17,20 @@
 #'  `lubridate::duration()` or a string. If it is a string, it needs to be
 #'  either `"dominant.epoch"` (the default) for a guess based on the data, or a valid
 #'  `lubridate::duration()` string, e.g., `"1 day"` or `"10 sec"`.
-#' @param loop Logical. Should the data be looped? Defaults to `FALSE`.
+#' @param loop Logical. Should the data be looped? If `TRUE`, a full copy of the data 
+#'    will be concatenated at the end of the data. Makes only sense for 24 h data.
+#'    Defaults to `FALSE`.
 #' @param na.rm Logical. Should missing values be removed for the calculation?
 #'    Defaults to `FALSE`.
 #' @param as.df Logical. Should the output be returned as a data frame? Defaults
 #'    to `TRUE`.
 #'
-#' @return Data frame or matrix with pairs of timespan and calculated values.
-#'    If wide is TRUE then variable names will be concatenated with the timespan.
+#' @return A named list with the `mean`, `onset`, `midpoint`, and `offset` of the
+#'    calculated brightest or darkest period, or if `as.df == TRUE` a data frame 
+#'    with columns named `{period}_{timespan}_{metric}`. 
 #'
 #' @details Assumes regular 24h light data. Otherwise, results may not be
 #'    meaningful. Looping the data is recommended for finding the darkest period.
-#'    Missing light values will be removed by default.
 #'
 #' @export
 #'
@@ -113,10 +116,10 @@ bright_dark_period <- function(Light.vector,
 
   # Prepare output
   out <- list(
-    mean = means[center],
-    midpoint = hms::as_hms(Datetime.vector[center]),
-    onset = hms::as_hms(Datetime.vector[center - (window / 2) + 1]),
-    offset = hms::as_hms(Datetime.vector[center + (window / 2)])
+    "mean" = means[center],
+    "midpoint" = hms::as_hms(Datetime.vector[center]),
+    "onset" = hms::as_hms(Datetime.vector[center - (window / 2) + 1]),
+    "offset" = hms::as_hms(Datetime.vector[center + (window / 2)])
   )
 
   # Return as data frame or numeric matrix
