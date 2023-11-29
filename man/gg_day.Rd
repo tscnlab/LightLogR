@@ -130,6 +130,15 @@ enables values of 0 in the plot, which are common in light logger data, and
 even enables negative values, which might be sensible for non-light data. See
 \code{\link[=symlog_trans]{symlog_trans()}} for details on tweaking this scale. The scale can also be
 changed to a normal or logarithmic scale - see the y.scale argument for more.
+
+The default scaling of the color and fill scales is discrete, with the
+\code{\link[ggsci:scale_jco]{ggsci::scale_color_jco()}} and \code{\link[ggsci:scale_jco]{ggsci::scale_fill_jco()}} scales. To use a
+continuous scale, use the \code{jco_color = FALSE} setting. Both \code{fill} and
+\code{color} aesthetics are set to \code{NULL} by default. For most geoms, this is not
+important, but geoms that automatically use those aesthetics (like
+geom_bin2d, where fill = stat(count)) are affected by this. Manually adding
+the required aesthetic (like \code{aes_fill = ggplot2::stat(count)} will fix
+this).
 }
 \examples{
 #use `col`for separation of different sets
@@ -137,7 +146,6 @@ plot <- gg_day(
 sample.data.environment,
 scales = "fixed",
 end.date = "2023-08-16",
-x.axis = Datetime,
 y.axis.label = "mEDI (lx)",
 aes_col = Id)
 plot

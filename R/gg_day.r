@@ -17,6 +17,15 @@
 #' [symlog_trans()] for details on tweaking this scale. The scale can also be
 #' changed to a normal or logarithmic scale - see the y.scale argument for more.
 #'
+#' The default scaling of the color and fill scales is discrete, with the
+#' [ggsci::scale_color_jco()] and [ggsci::scale_fill_jco()] scales. To use a
+#' continuous scale, use the `jco_color = FALSE` setting. Both `fill` and
+#' `color` aesthetics are set to `NULL` by default. For most geoms, this is not
+#' important, but geoms that automatically use those aesthetics (like
+#' geom_bin2d, where fill = stat(count)) are affected by this. Manually adding
+#' the required aesthetic (like `aes_fill = ggplot2::stat(count)` will fix
+#' this).
+#'
 #' @param dataset A light logger dataset. Expects a `dataframe`. If not imported
 #'   by [LightLogR], take care to choose a sensible variable for the `x.axis.`.
 #' @param x.axis,y.axis column name that contains the datetime (x, defaults to
@@ -82,7 +91,6 @@
 #' sample.data.environment,
 #' scales = "fixed",
 #' end.date = "2023-08-16",
-#' x.axis = Datetime,
 #' y.axis.label = "mEDI (lx)",
 #' aes_col = Id)
 #' plot
@@ -210,10 +218,11 @@ gg_day <- function(dataset,
     ggplot2::ggplot(ggplot2::aes(x=Time.data, y = !!y)) +
     eval(geom_function_expr)(
       ggplot2::aes(
+        x=Time.data, y = !!y,
         group = {{ group }},
         col = {{ aes_col }},
         fill = {{ aes_fill }},
-      ), ...) +
+        ), ...) +
     ribbon +
     # Scales --------------------------------------------------------------
     jco_color_scheme+
