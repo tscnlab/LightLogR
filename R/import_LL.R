@@ -204,6 +204,24 @@ imports <- function(device,
 }
 
 import_arguments <- list(
+  #SpectraWear
+  SpectraWear = rlang::expr({
+    tmp <-suppressMessages( 
+      readr::read_csv(filename,
+                      n_max = n_max,
+                      id = "file.name",
+                      locale = locale,
+                      name_repair = "universal",
+                      ...
+      ))
+    tmp <- tmp %>%
+      dplyr::rename(MEDI = Mel
+                    ) %>% 
+      dplyr::mutate(Datetime =
+                      lubridate::dmy_hms(paste(Date, Time), tz = tz),
+                    Id = paste(.data$id, .data$ls, sep = ".")
+                      )
+  }),
   #Speccy
   Speccy = rlang::expr({
     tmp <-suppressMessages( 
@@ -228,6 +246,7 @@ import_arguments <- list(
                       id = "file.name",
                       locale = locale,
                       name_repair = "universal",
+                      col_types = c("fccdddddddddddddddddd"),
                       ...
       ))
     tmp <- tmp %>%
