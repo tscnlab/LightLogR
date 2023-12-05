@@ -6,7 +6,7 @@
 \usage{
 bright_dark_period(
   Light.vector,
-  Datetime.vector,
+  Time.vector,
   period = c("brightest", "darkest"),
   timespan = "10 hours",
   epoch = "dominant.epoch",
@@ -18,7 +18,7 @@ bright_dark_period(
 \arguments{
 \item{Light.vector}{Numeric vector containing the light data.}
 
-\item{Datetime.vector}{Vector containing the time data. Can be POSIXct or numeric.}
+\item{Time.vector}{Vector containing the time data. Can be HMS or POSIXct.}
 
 \item{period}{String indicating the type of period to look for. Can be either
 \code{"brightest"}(the default) or \code{"darkest"}.}
@@ -45,7 +45,9 @@ to \code{TRUE}.}
 \value{
 A named list with the \code{mean}, \code{onset}, \code{midpoint}, and \code{offset} of the
 calculated brightest or darkest period, or if \code{as.df == TRUE} a data frame
-with columns named \verb{\{period\}_\{timespan\}_\{metric\}}.
+with columns named \verb{\{period\}_\{timespan\}_\{metric\}}. The output type corresponds
+to the type of \code{Time.vector}, e.g., if \code{Time.vector} is HMS, the timing metrics
+will be also HMS, and vice versa for POSIXct and numeric.
 }
 \description{
 This function finds the brightest or darkest continuous period of a given
@@ -67,11 +69,23 @@ dataset1 <-
   )
 
 dataset1 \%>\%
-  dplyr::summarise(bright_dark_period(MEDI, Datetime, "brightest", "10 hours",
-    as.df = TRUE
-  ))
+  dplyr::reframe(bright_dark_period(MEDI, Datetime, "brightest", "10 hours",
+    as.df = TRUE))
 dataset1 \%>\%
-  dplyr::summarise(bright_dark_period(MEDI, Datetime, "darkest", "5 hours",
-    loop = TRUE, as.df = TRUE
-  ))
+  dplyr::reframe(bright_dark_period(MEDI, Datetime, "darkest", "5 hours",
+    loop = TRUE, as.df = TRUE))
 }
+\references{
+Hartmeyer, S.L., Andersen, M. (2023). Towards a framework for light-dosimetry studies:
+Quantification metrics. \emph{Lighting Research & Technology}.
+\url{https://doi.org/10.1177/14771535231170500}
+}
+\seealso{
+Other metrics: 
+\code{\link{centroidLE}()},
+\code{\link{duration_above_threshold}()},
+\code{\link{interdaily_stability}()},
+\code{\link{intradaily_variability}()},
+\code{\link{timing_above_threshold}()}
+}
+\concept{metrics}

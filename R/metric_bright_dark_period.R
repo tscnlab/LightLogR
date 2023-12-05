@@ -7,7 +7,7 @@
 #' (i.e., no gaps) for correct results.
 #'
 #' @param Light.vector Numeric vector containing the light data.
-#' @param Datetime.vector Vector containing the time data. Can be POSIXct or numeric.
+#' @param Time.vector Vector containing the time data. Can be HMS or POSIXct.
 #' @param period String indicating the type of period to look for. Can be either
 #'  `"brightest"`(the default) or `"darkest"`.
 #' @param timespan The timespan across which to calculate. Can be either a
@@ -27,12 +27,21 @@
 #'
 #' @return A named list with the `mean`, `onset`, `midpoint`, and `offset` of the
 #'    calculated brightest or darkest period, or if `as.df == TRUE` a data frame 
-#'    with columns named `{period}_{timespan}_{metric}`. 
+#'    with columns named `{period}_{timespan}_{metric}`. The output type corresponds
+#'    to the type of `Time.vector`, e.g., if `Time.vector` is HMS, the timing metrics 
+#'    will be also HMS, and vice versa for POSIXct and numeric. 
 #'
 #' @details Assumes regular 24h light data. Otherwise, results may not be
 #'    meaningful. Looping the data is recommended for finding the darkest period.
 #'
+#' @references 
+#'   Hartmeyer, S.L., Andersen, M. (2023). Towards a framework for light-dosimetry studies:
+#'   Quantification metrics. \emph{Lighting Research & Technology}. 
+#'   \url{https://doi.org/10.1177/14771535231170500}
+#'
 #' @export
+#' 
+#' @family metrics
 #'
 #' @examples
 # Dataset with light > 250lx between 06:00 and 18:00
@@ -42,17 +51,16 @@
 #'     Datetime = lubridate::as_datetime(0) + lubridate::hours(0:23),
 #'     MEDI = c(rep(1, 6), rep(250, 13), rep(1, 5))
 #'   )
-#'
+#' 
 #' dataset1 %>%
-#'   dplyr::summarise(bright_dark_period(MEDI, Datetime, "brightest", "10 hours",
-#'     as.df = TRUE
-#'   ))
+#'   dplyr::reframe(bright_dark_period(MEDI, Datetime, "brightest", "10 hours",
+#'     as.df = TRUE))
 #' dataset1 %>%
-#'   dplyr::summarise(bright_dark_period(MEDI, Datetime, "darkest", "5 hours",
-#'     loop = TRUE, as.df = TRUE
-#'   ))
+#'   dplyr::reframe(bright_dark_period(MEDI, Datetime, "darkest", "5 hours",
+#'     loop = TRUE, as.df = TRUE))
+
 bright_dark_period <- function(Light.vector,
-                               Datetime.vector,
+                               Time.vector,
                                period = c("brightest", "darkest"),
                                timespan = "10 hours",
                                epoch = "dominant.epoch",
@@ -65,7 +73,8 @@ bright_dark_period <- function(Light.vector,
   # Perform argument checks
   stopifnot(
     "`Light.vector` must be numeric!" = is.numeric(Light.vector),
-    "`Datetime.vector` must be POSIXct" = lubridate::is.POSIXct(Datetime.vector),
+    "`Time.vector` must be POSIXct or HMS" = lubridate::is.POSIXct(Time.vector) | 
+      hms::is_hms(Time.vector),
     "`epoch` must either be a duration or a string" =
       lubridate::is.duration(epoch) | is.character(epoch),
     "`timespan` must either be a duration or a string" =
@@ -75,25 +84,30 @@ bright_dark_period <- function(Light.vector,
   )
 
   # Check whether time series is regularly spaced
-  if (length(unique(diff(Datetime.vector))) > 1) {
-    warning("`Datetime.vector` is not regularly spaced. Calculated results may be incorrect!")
+  if (length(unique(diff(Time.vector))) > 1) {
+    warning("`Time.vector` is not regularly spaced. Calculated results may be incorrect!")
   }
 
   # Get the epochs based on the data
   if (epoch == "dominant.epoch") {
-    epoch <- count.difftime(tibble::tibble(Datetime = Datetime.vector))$difftime[1]
+    epoch <- count.difftime(tibble::tibble(Datetime = Time.vector))$difftime[1]
   }
   # If the user specified an epoch, use that instead
   epoch <- lubridate::as.duration(epoch)
 
   # Convert timespan to seconds
   timespan <- lubridate::as.duration(timespan)
+  
+  # Check if timespan longer than Time.vector
+  time.total <- dplyr::last(Time.vector) - dplyr::first(Time.vector)
+  stopifnot("Timespan must be shorter than length of `Time.vector` interval!" = 
+              timespan < time.total)
 
   # Loop data
   if (loop) {
     Light.vector <- c(Light.vector, Light.vector)
-    span <- dplyr::last(Datetime.vector) - Datetime.vector[1]
-    Datetime.vector <- c(Datetime.vector, Datetime.vector + span + epoch)
+    span <- dplyr::last(Time.vector) - Time.vector[1]
+    Time.vector <- c(Time.vector, Time.vector + span + epoch)
   }
 
   # Calculate window size
@@ -103,10 +117,9 @@ bright_dark_period <- function(Light.vector,
   }
 
   # Calculate rolling means
-  means <- zoo::rollapply(Light.vector, window, mean,
-    na.rm = na.rm,
-    partial = FALSE, fill = NA
-  )
+  means <- slider::slide_vec(Light.vector, .f = mean, na.rm = na.rm,
+                         .before = window/2-1, .after = window/2, 
+                         .complete = TRUE)
 
   # Find maximum/minimum mean value
   center <- switch(period,
@@ -117,16 +130,16 @@ bright_dark_period <- function(Light.vector,
   # Prepare output
   out <- list(
     "mean" = means[center],
-    "midpoint" = hms::as_hms(Datetime.vector[center]),
-    "onset" = hms::as_hms(Datetime.vector[center - (window / 2) + 1]),
-    "offset" = hms::as_hms(Datetime.vector[center + (window / 2)])
+    "midpoint" = Time.vector[center],
+    "onset" = Time.vector[center - (window / 2 - 1)],
+    "offset" = Time.vector[center + (window / 2)]
   )
 
   # Return as data frame or numeric matrix
   if (as.df) {
     ts <- paste0(as.numeric(timespan, unit = "hours"), "h")
     out <- tibble::as_tibble(out) %>%
-      dplyr::rename_with(~ paste(period, ts, .x, sep = "_"))
+      dplyr::rename_with(~paste(period, ts, .x, sep = "_"))
   }
   return(out)
 }

@@ -27,7 +27,7 @@ Numeric value or dataframe with column 'IS'.
 \description{
 This function calculates the variability of 24h light exposure patterns across
 multiple days. Calculated as the ratio of the variance of the average daily
-pattern to the total variance across all days. Calculated for mean hourly
+pattern to the total variance across all days. Calculated with mean hourly
 light levels. Ranges between 0 (Gaussian noise) and 1 (Perfect Stability).
 }
 \details{
@@ -56,4 +56,17 @@ McCall, W. V., & Rosenquist, P. B. (1999). Bright Light Therapy: Improved
 Sensitivity to Its Effects on Rest-Activity Rhythms in Alzheimer Patients
 by Application of Nonparametric Methods. \emph{Chronobiology International},
 16(4), 505–518. \url{https://doi.org/10.3109/07420529908998724}
+
+Hartmeyer, S.L., Andersen, M. (2023). Towards a framework for light-dosimetry studies:
+Quantification metrics. \emph{Lighting Research & Technology}.
+\url{https://doi.org/10.1177/14771535231170500}
 }
+\seealso{
+Other metrics: 
+\code{\link{bright_dark_period}()},
+\code{\link{centroidLE}()},
+\code{\link{duration_above_threshold}()},
+\code{\link{intradaily_variability}()},
+\code{\link{timing_above_threshold}()}
+}
+\concept{metrics}

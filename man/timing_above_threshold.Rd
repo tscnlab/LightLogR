@@ -7,7 +7,6 @@
 timing_above_threshold(
   Light.vector,
   Time.vector,
-  metric = c("mean", "first", "last"),
   comparison = c("above", "below"),
   threshold,
   na.rm = FALSE,
@@ -18,9 +17,6 @@ timing_above_threshold(
 \item{Light.vector}{Numeric vector containing the light data.}
 
 \item{Time.vector}{Vector containing the time data. Can be numeric, HMS or POSIXct.}
-
-\item{metric}{String indicating which timing metrics to calculate. Possible values
-are \code{"mean"} (default), \code{"first"}, and \code{"last"} timing above threshold.}
 
 \item{comparison}{String specifying whether the time above or below threshold
 should be calculated. Can be either \code{"above"} (the default) or \code{"below"}. If
@@ -35,17 +31,19 @@ calculated.}
 Defaults to \code{FALSE}.}
 
 \item{as.df}{Logical. Should a data frame with be returned? If \code{TRUE}, a data
-frame with a single column named \verb{\{metric\}_\{threshold\}} will be returned.
-Defaults to \code{FALSE}.}
+frame with three columns (MLiT, FLiT, LLiT) and the threshold (e.g., \verb{MLiT_\{threshold\}})
+will be returned. Defaults to \code{FALSE}.}
 }
 \value{
-Single value or single column dataframe. If \code{Time.vector} is of type
-HMS or POSIXct a HMS object (see \code{\link[hms]{hms}}) will be returned,
-otherwise a numeric object.
+List or dataframe with the three values: \code{mean}, \code{first}, and \code{last} timing
+above threshold. The output type corresponds to the type of \code{Time.vector},
+e.g., if \code{Time.vector} is HMS, the timing metrics will be also
+HMS, and vice versa for POSIXct and numeric.
 }
 \description{
-This function calculates the mean/first/last timepoint where light levels are
-above or below a given threshold intensity within the given interval.
+This function calculates the mean, first, and last timepoint (MLiT, FLiT, LLiT)
+where light levels are above or below a given threshold intensity within the given
+time interval.
 }
 \examples{
 # Dataset with light > 250lx between 06:00 and 18:00
@@ -56,14 +54,17 @@ dataset1 <-
     MEDI = c(rep(1, 6), rep(250, 13), rep(1, 5))
   )
 
+# Above threshold
 dataset1 \%>\%
-  dplyr::summarise(timing_above_threshold(MEDI, Datetime, "mean", "above", 250))
+  dplyr::reframe(timing_above_threshold(MEDI, Datetime, "above", 250, as.df = TRUE))
 
+# Below threshold
 dataset1 \%>\%
-  dplyr::summarise(timing_above_threshold(MEDI, Datetime, "first", "above", 250))
+  dplyr::reframe(timing_above_threshold(MEDI, Datetime, "below", 10, as.df = TRUE))
 
+# Input = HMS -> Output = HMS
 dataset1 \%>\%
-  dplyr::summarise(timing_above_threshold(MEDI, Datetime, "last", "above", 250))
+  dplyr::reframe(timing_above_threshold(MEDI, hms::as_hms(Datetime), "above", 250, as.df = TRUE))
 
 }
 \references{
@@ -71,4 +72,17 @@ Reid, K. J., Santostasi, G., Baron, K. G., Wilson, J., Kang, J.,
 & Zee, P. C. (2014). Timing and Intensity of Light Correlate with Body Weight
 in Adults. \emph{PLOS ONE}, 9(4), e92251.
 \url{https://doi.org/10.1371/journal.pone.0092251}
+
+Hartmeyer, S.L., Andersen, M. (2023). Towards a framework for light-dosimetry studies:
+Quantification metrics. \emph{Lighting Research & Technology}.
+\url{https://doi.org/10.1177/14771535231170500}
 }
+\seealso{
+Other metrics: 
+\code{\link{bright_dark_period}()},
+\code{\link{centroidLE}()},
+\code{\link{duration_above_threshold}()},
+\code{\link{interdaily_stability}()},
+\code{\link{intradaily_variability}()}
+}
+\concept{metrics}

@@ -23,8 +23,15 @@
 #'
 #' @return A duration object (see \code{\link[lubridate]{duration}}) as single value,
 #'    or single column data frame.
+#'    
+#' @references 
+#'   Hartmeyer, S.L., Andersen, M. (2023). Towards a framework for light-dosimetry studies:
+#'   Quantification metrics. \emph{Lighting Research & Technology}. 
+#'   \url{https://doi.org/10.1177/14771535231170500}
 #'
 #' @export
+#' 
+#' @family metrics
 #'
 #' @examples
 #' N <- 50
@@ -43,14 +50,18 @@
 #'     MEDI = sample(c(sample(1:249, N / 2), sample(250:1000, N / 2))),
 #'   )
 #' dataset.combined <- rbind(dataset1, dataset2)
-#'
+#' 
 #' dataset1 %>%
-#'   dplyr::summarise("TAT >250lx" = duration_above_threshold(MEDI, Datetime, threshold = 250))
-#'
+#'   dplyr::reframe("TAT >250lx" = duration_above_threshold(MEDI, Datetime, threshold = 250))
+#' 
+#' dataset1 %>%
+#'   dplyr::reframe(duration_above_threshold(MEDI, Datetime, threshold = 250, as.df = T))
+#' 
 #' # Group by Id to account for different epochs
 #' dataset.combined %>%
 #'   dplyr::group_by(Id) %>%
-#'   dplyr::summarise("TAT >250lx" = duration_above_threshold(MEDI, Datetime, threshold = 250))
+#'   dplyr::reframe("TAT >250lx" = duration_above_threshold(MEDI, Datetime, threshold = 250))
+#' 
 duration_above_threshold <- function(Light.vector,
                                      Time.vector,
                                      comparison = c("above", "below"),
@@ -95,7 +106,7 @@ duration_above_threshold <- function(Light.vector,
   # Return data frame or numeric value
   if (as.df) {
     threshold <- stringr::str_flatten(sort(threshold), collapse = "-")
-    return(tibble::tibble("TAT_{threshold}" := tat))
+    return(tibble::tibble("duration_{comparison}_{threshold}" := tat))
   } else {
     return(tat)
   }

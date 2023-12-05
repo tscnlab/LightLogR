@@ -2,7 +2,7 @@
 #'
 #' This function calculates the variability of consecutive Light levels within
 #' a 24h day. Calculated as the ratio of the variance of the differences between
-#' consecutive Light levels to the total variance across the day. Calculated for
+#' consecutive Light levels to the total variance across the day. Calculated with
 #' mean hourly Light levels. Higher values indicate more fragmentation.
 #'
 #' @param Light.vector Numeric vector containing the light data.
@@ -12,13 +12,20 @@
 #'    to `FALSE`.
 #'
 #' @return Numeric value or dataframe with column 'IV'.
+#' 
 #' @export
+#'
+#' @family metrics
 #'
 #' @references Van Someren, E. J. W., Swaab, D. F., Colenda, C. C., Cohen, W.,
 #'    McCall, W. V., & Rosenquist, P. B. (1999). Bright Light Therapy: Improved
 #'    Sensitivity to Its Effects on Rest-Activity Rhythms in Alzheimer Patients
 #'    by Application of Nonparametric Methods. \emph{Chronobiology International},
 #'    16(4), 505–518. \url{https://doi.org/10.3109/07420529908998724}
+#'    
+#'   Hartmeyer, S.L., Andersen, M. (2023). Towards a framework for light-dosimetry studies:
+#'   Quantification metrics. \emph{Lighting Research & Technology}. 
+#'   \url{https://doi.org/10.1177/14771535231170500}
 #'
 #' @examples
 #'
@@ -117,7 +124,7 @@ intradaily_variability <- function(Light.vector,
 
   # Return data frame or numeric vector
   if (as.df) {
-    return(tibble::tibble("IV" = iv))
+    return(tibble::tibble("intradaily_variability" = iv))
   } else {
     return(iv)
   }

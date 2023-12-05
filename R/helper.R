@@ -110,7 +110,7 @@ pick.grouping.columns <- function(dataset) {
 }
 
 # Compare with threshold
-threshold <- function(Light.vector,
+compare_threshold <- function(Light.vector,
                       threshold,
                       comparison = c("above", "below"),
                       na.replace = FALSE){

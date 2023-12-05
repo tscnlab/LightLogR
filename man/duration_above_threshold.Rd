@@ -66,10 +66,28 @@ dataset2 <-
 dataset.combined <- rbind(dataset1, dataset2)
 
 dataset1 \%>\%
-  dplyr::summarise("TAT >250lx" = duration_above_threshold(MEDI, Datetime, threshold = 250))
+  dplyr::reframe("TAT >250lx" = duration_above_threshold(MEDI, Datetime, threshold = 250))
+
+dataset1 \%>\%
+  dplyr::reframe(duration_above_threshold(MEDI, Datetime, threshold = 250, as.df = T))
 
 # Group by Id to account for different epochs
 dataset.combined \%>\%
   dplyr::group_by(Id) \%>\%
-  dplyr::summarise("TAT >250lx" = duration_above_threshold(MEDI, Datetime, threshold = 250))
+  dplyr::reframe("TAT >250lx" = duration_above_threshold(MEDI, Datetime, threshold = 250))
+
 }
+\references{
+Hartmeyer, S.L., Andersen, M. (2023). Towards a framework for light-dosimetry studies:
+Quantification metrics. \emph{Lighting Research & Technology}.
+\url{https://doi.org/10.1177/14771535231170500}
+}
+\seealso{
+Other metrics: 
+\code{\link{bright_dark_period}()},
+\code{\link{centroidLE}()},
+\code{\link{interdaily_stability}()},
+\code{\link{intradaily_variability}()},
+\code{\link{timing_above_threshold}()}
+}
+\concept{metrics}
