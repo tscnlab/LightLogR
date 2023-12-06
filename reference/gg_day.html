@@ -152,7 +152,7 @@ activate the default behaviour of <a href="https://ggplot2.tidyverse.org/referen
 <dd><p>How should the y-axis be scaled?</p><ul><li><p>Defaults to <code>"symlog"</code>, which is a logarithmic scale that can also handle negative values.</p></li>
 <li><p><code>"log10"</code> would be a straight logarithmic scale, but cannot handle negative values.</p></li>
 <li><p><code>"identity"</code> does nothing (continuous scaling).</p></li>
-<li><p>a transforming function, such as <code><a href="symlog_trans.html">symlog_trans()</a></code> or <code><a href="https://scales.r-lib.org/reference/identity_trans.html" class="external-link">scales::identity_trans()</a></code>, which allow for more control.</p></li>
+<li><p>a transforming function, such as <code><a href="symlog_trans.html">symlog_trans()</a></code> or <code><a href="https://scales.r-lib.org/reference/transform_identity.html" class="external-link">scales::identity_trans()</a></code>, which allow for more control.</p></li>
 </ul></dd>
 
 
@@ -218,6 +218,14 @@ enables values of 0 in the plot, which are common in light logger data, and
 even enables negative values, which might be sensible for non-light data. See
 <code><a href="symlog_trans.html">symlog_trans()</a></code> for details on tweaking this scale. The scale can also be
 changed to a normal or logarithmic scale - see the y.scale argument for more.</p>
+<p>The default scaling of the color and fill scales is discrete, with the
+<code><a href="https://nanx.me/ggsci/reference/scale_jco.html" class="external-link">ggsci::scale_color_jco()</a></code> and <code><a href="https://nanx.me/ggsci/reference/scale_jco.html" class="external-link">ggsci::scale_fill_jco()</a></code> scales. To use a
+continuous scale, use the <code>jco_color = FALSE</code> setting. Both <code>fill</code> and
+<code>color</code> aesthetics are set to <code>NULL</code> by default. For most geoms, this is not
+important, but geoms that automatically use those aesthetics (like
+geom_bin2d, where fill = stat(count)) are affected by this. Manually adding
+the required aesthetic (like <code>aes_fill = ggplot2::stat(count)</code> will fix
+this).</p>
     </div>
 
     <div class="section level2">
@@ -227,7 +235,6 @@ changed to a normal or logarithmic scale - see the y.scale argument for more.</p
 <span class="r-in"><span><span class="va">sample.data.environment</span>,</span></span>
 <span class="r-in"><span>scales <span class="op">=</span> <span class="st">"fixed"</span>,</span></span>
 <span class="r-in"><span>end.date <span class="op">=</span> <span class="st">"2023-08-16"</span>,</span></span>
-<span class="r-in"><span>x.axis <span class="op">=</span> <span class="va">Datetime</span>,</span></span>
 <span class="r-in"><span>y.axis.label <span class="op">=</span> <span class="st">"mEDI (lx)"</span>,</span></span>
 <span class="r-in"><span>aes_col <span class="op">=</span> <span class="va">Id</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Only Dates will be used from start.date and end.date input. If you also want to set Datetimes or Times, consider using the `filter_Datetime()` function instead.</span>
