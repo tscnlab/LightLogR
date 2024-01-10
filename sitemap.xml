@@ -43,6 +43,9 @@
     <loc>https://tscnlab.github.io/LightLogR/reference/aggregate_Datetime.html</loc>
   </url>
   <url>
+    <loc>https://tscnlab.github.io/LightLogR/reference/bright_dark_period.html</loc>
+  </url>
+  <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/count_difftime.html</loc>
   </url>
   <url>
@@ -56,6 +59,9 @@
   </url>
   <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/dominant_epoch.html</loc>
+  </url>
+  <url>
+    <loc>https://tscnlab.github.io/LightLogR/reference/duration_above_threshold.html</loc>
   </url>
   <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/filter_Datetime.html</loc>
@@ -94,7 +100,13 @@
     <loc>https://tscnlab.github.io/LightLogR/reference/index.html</loc>
   </url>
   <url>
+    <loc>https://tscnlab.github.io/LightLogR/reference/interdaily_stability.html</loc>
+  </url>
+  <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/interval2state.html</loc>
+  </url>
+  <url>
+    <loc>https://tscnlab.github.io/LightLogR/reference/intradaily_variability.html</loc>
   </url>
   <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/join_datasets.html</loc>
@@ -116,5 +128,8 @@
   </url>
   <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/symlog_trans.html</loc>
+  </url>
+  <url>
+    <loc>https://tscnlab.github.io/LightLogR/reference/timing_above_threshold.html</loc>
   </url>
 </urlset>
