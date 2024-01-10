@@ -69,7 +69,7 @@ dataset1 \%>\%
   dplyr::reframe("TAT >250lx" = duration_above_threshold(MEDI, Datetime, threshold = 250))
 
 dataset1 \%>\%
-  dplyr::reframe(duration_above_threshold(MEDI, Datetime, threshold = 250, as.df = T))
+  dplyr::reframe(duration_above_threshold(MEDI, Datetime, threshold = 250, as.df = TRUE))
 
 # Group by Id to account for different epochs
 dataset.combined \%>\%

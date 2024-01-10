@@ -63,6 +63,16 @@ reference:
     - gg_overview
     - gg_day
     - gg_days
+
+  - title: Metrics
+    desc: >
+      This section includes functions to calculate light exposure metrics .
+    contents:
+    - bright_dark_period
+    - duration_above_threshold
+    - intradaily_variability
+    - interdaily_stability
+    - timing_above_threshold
     
   - title: Helpers
     desc: >

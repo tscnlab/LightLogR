@@ -71,7 +71,7 @@ interdaily_stability <- function(Light.vector,
 
   N_hours <- hours_per_day %>%
     dplyr::group_by(Day) %>%
-    dplyr::summarise(N = n()) %>%
+    dplyr::summarise(N = dplyr::n()) %>%
     dplyr::select(Day, N)
 
   # Warning if days are not full 24h
