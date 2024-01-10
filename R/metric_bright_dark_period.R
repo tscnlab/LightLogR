@@ -90,7 +90,7 @@ bright_dark_period <- function(Light.vector,
 
   # Get the epochs based on the data
   if (epoch == "dominant.epoch") {
-    epoch <- count.difftime(tibble::tibble(Datetime = Time.vector))$difftime[1]
+    epoch <- count_difftime(tibble::tibble(Datetime = Time.vector))$difftime[1]
   }
   # If the user specified an epoch, use that instead
   epoch <- lubridate::as.duration(epoch)

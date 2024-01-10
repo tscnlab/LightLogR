@@ -82,7 +82,6 @@ Quantification metrics. \emph{Lighting Research & Technology}.
 }
 \seealso{
 Other metrics: 
-\code{\link{centroidLE}()},
 \code{\link{duration_above_threshold}()},
 \code{\link{interdaily_stability}()},
 \code{\link{intradaily_variability}()},

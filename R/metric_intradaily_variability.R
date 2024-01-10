@@ -79,7 +79,7 @@ intradaily_variability <- function(Light.vector,
       "Intradaily variability might not be meaningful for non-24 h days.",
       "These days contain less than 24 h:",
       paste(
-        capture.output(print(
+        utils::capture.output(print(
           dplyr::filter(N_hours, N < 24) %>% dplyr::pull(Day)
         )),
         sep = "\n", collapse = "\n"
@@ -95,7 +95,7 @@ intradaily_variability <- function(Light.vector,
       "Data contains some hours with only missing values",
       "These hours contain only missing values: ",
       paste(
-        capture.output(print(
+        utils::capture.output(print(
           dplyr::filter(hours_per_day, is_missing) %>% dplyr::pull(Hour)
         )),
         sep = "\n", collapse = "\n"
@@ -120,7 +120,7 @@ intradaily_variability <- function(Light.vector,
     sum(diff(total_hourly$Light)^2) / (length(total_hourly$Light) - 1)
 
   # Variance of consecutive differences / variance across all days
-  iv <- var_hourly_diff / var(total_hourly$Light)
+  iv <- var_hourly_diff / stats::var(total_hourly$Light)
 
   # Return data frame or numeric vector
   if (as.df) {

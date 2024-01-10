@@ -81,7 +81,7 @@ interdaily_stability <- function(Light.vector,
       "Interdaily stability might not be meaningful for non-24 h days.",
       "These days contain less than 24 h:",
       paste(
-        capture.output(print(
+        utils::capture.output(print(
           dplyr::filter(N_hours, N < 24) %>% dplyr::pull(Day)
         )),
         sep = "\n", collapse = "\n"
@@ -97,7 +97,7 @@ interdaily_stability <- function(Light.vector,
       "Data contains some hours with only missing values",
       "These hours contain only missing values: ",
       paste(
-        capture.output(print(
+        utils::capture.output(print(
           dplyr::filter(hours_per_day, is_missing) %>% dplyr::pull(Hour)
         )),
         sep = "\n", collapse = "\n"
@@ -123,7 +123,7 @@ interdaily_stability <- function(Light.vector,
     dplyr::summarise(Light = mean(Light))
 
   # Variance across average day / variance across all days
-  is <- var(avg_hourly$Light) / var(total_hourly$Light)
+  is <- stats::var(avg_hourly$Light) / stats::var(total_hourly$Light)
 
   # Return data frame or numeric vector
   if (as.df) {
