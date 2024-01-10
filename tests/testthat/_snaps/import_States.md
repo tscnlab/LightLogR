@@ -1,9 +1,9 @@
 # imports a wide and long dataset
 
     Code
-      import.Statechanges(file.sleep, path, Datetime.format = "dmyHM",
+      import_Statechanges(file.sleep, path, Datetime.format = "dmyHM",
         State.colnames = c("sleep", "offset"), State.encoding = c("sleep", "wake"),
-        ID.colname = record_id, sep = ";", dec = ",", tz = tz, suppress.summary = TRUE)
+        Id.colname = record_id, sep = ";", dec = ",", tz = tz, silent = TRUE)
     Output
       # A tibble: 14 x 3
       # Groups:   Id [1]
@@ -27,9 +27,9 @@
 ---
 
     Code
-      import.Statechanges(file.sleep, path, Datetime.format = "dmyHM",
-        State.colnames = "comments", Datetime.column = sleep, ID.colname = record_id,
-        sep = ";", dec = ",", structure = "long", tz = tz, suppress.summary = TRUE)
+      import_Statechanges(file.sleep, path, Datetime.format = "dmyHM",
+        State.colnames = "comments", Datetime.column = sleep, Id.colname = record_id,
+        sep = ";", dec = ",", structure = "long", tz = tz, silent = TRUE)
     Output
       # A tibble: 7 x 3
       # Groups:   Id [1]

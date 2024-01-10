@@ -2,7 +2,7 @@
 % Please edit documentation in R/gg_day.r
 \name{gg_day}
 \alias{gg_day}
-\title{Create a simple plot of light logger data, facetted by Day}
+\title{Create a simple Time-of-Day plot of light logger data, faceted by Date}
 \usage{
 gg_day(
   dataset,
@@ -10,7 +10,8 @@ gg_day(
   end.date = NULL,
   x.axis = Datetime,
   y.axis = MEDI,
-  col = NULL,
+  aes_col = NULL,
+  aes_fill = NULL,
   group = NULL,
   geom = "point",
   scales = "fixed",
@@ -25,6 +26,7 @@ gg_day(
   subtitle = NULL,
   interactive = FALSE,
   facetting = TRUE,
+  jco_color = TRUE,
   ...
 )
 }
@@ -35,9 +37,9 @@ by \link{LightLogR}, take care to choose a sensible variable for the \code{x.axi
 \item{start.date, end.date}{Choose an optional start or end date within your
 \code{dataset}. Expects a \code{date}, which can also be a \code{character} that is
 interpretable as a date, e.g., \code{"2023-06-03"}. If you need a Datetime or
-want to cut specific times of each day, use the \link{filter_Datetime} function.
-Defaults to \code{NULL}, which means that the plot starts/ends with the
-earliest/latest date within the \code{dataset}.}
+want to cut specific times of each day, use the \code{\link[=filter_Datetime]{filter_Datetime()}}
+function. Defaults to \code{NULL}, which means that the plot starts/ends with
+the earliest/latest date within the \code{dataset}.}
 
 \item{x.axis, y.axis}{column name that contains the datetime (x, defaults to
 \code{"Datetime"} which is automatically correct for data imported with
@@ -46,10 +48,10 @@ melanopic EDI, which is a standard measure of stimulus strength for the
 nonvisual effects of light). Expects a \code{symbol}. Needs to be part of the
 \code{dataset}.}
 
-\item{col}{optional column name that defines separate sets and colors them.
-Expects anything that works with the layer data \code{\link[ggplot2:aes]{ggplot2::aes()}}. The
-default color palette can be overwritten outside the function (see
-examples).}
+\item{aes_col, aes_fill}{optional arguments that define separate sets and
+colors or fills them. Expects anything that works with the layer data
+\code{\link[ggplot2:aes]{ggplot2::aes()}}. The default color palette can be overwritten outside the
+function (see examples).}
 
 \item{group}{Optional column name that defines separate sets. Useful for
 certain geoms like \code{boxplot}.Expects anything that works with the layer
@@ -57,9 +59,10 @@ data \code{\link[ggplot2:aes]{ggplot2::aes()}}}
 
 \item{geom}{What geom should be used for visualization? Expects a \code{character}
 \itemize{
-\item \code{"point"} for \code{\link[ggplot2:geom_point]{ggplot2::geom_point()}} (the default)
+\item \code{"point"} for \code{\link[ggplot2:geom_point]{ggplot2::geom_point()}}
 \item \code{"line"}  for \code{\link[ggplot2:geom_path]{ggplot2::geom_line()}}
-\item as the value is just input into the \code{geom_} function from \link{ggplot2}, other variants might work as well, but are not tested.
+\item \code{"ribbon"} for \code{\link[ggplot2:geom_ribbon]{ggplot2::geom_ribbon()}}
+\item as the value is just input into the \code{geom_} function from \link{ggplot2}, other variants work as well, but are not extensively tested.
 }}
 
 \item{scales}{For \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}}, should scales be "fixed", "free"
@@ -95,18 +98,23 @@ at \code{\link[base:strptime]{base::strptime()}}}
 \item{interactive}{Should the plot be interactive? Expects a \code{logical}.
 Defaults to \code{FALSE}.}
 
-\item{facetting}{Should an automated facet by day be applie? Default is \code{TRUE} and uses the \code{Day.data} variable that the function also creates if not present.}
+\item{facetting}{Should an automated facet by day be applied? Default is
+\code{TRUE} and uses the \code{Day.data} variable that the function also creates if
+not present.}
+
+\item{jco_color}{Should the \code{\link[ggsci:scale_jco]{ggsci::scale_color_jco()}} color palette be used?
+Defaults to \code{TRUE}.}
 
 \item{...}{Other options that get passed to the main geom function. Can be
-used to adjust to adjust size or linetype.}
+used to adjust to adjust size, linewidth, or linetype.}
 }
 \value{
 A ggplot object
 }
 \description{
-\code{gg_day} will create a simple ggplot for every data in a dataset. The result
-can further be manipulated like any ggplot. This will be sensible to refine
-styling or guides.
+\code{\link[=gg_day]{gg_day()}} will create a simple ggplot for every data in a dataset. The
+result can further be manipulated like any ggplot. This will be sensible to
+refine styling or guides.
 }
 \details{
 Besides plotting, the function creates two new variables from the given
@@ -117,7 +125,20 @@ Besides plotting, the function creates two new variables from the given
 }
 
 The default scaling of the y-axis is a \code{symlog} scale, which is a logarithmic
-scale that only starts scaling after a given threshold (default = 0). This enables values of 0 in the plot, which are common in light logger data, and even enables negative values, which might be sensible for non-light data. See \code{\link[=symlog_trans]{symlog_trans()}} for details on tweaking this scale. The scale can also be changed to a normal or logarithmic scale - see the y.scale argument for more.
+scale that only starts scaling after a given threshold (default = 0). This
+enables values of 0 in the plot, which are common in light logger data, and
+even enables negative values, which might be sensible for non-light data. See
+\code{\link[=symlog_trans]{symlog_trans()}} for details on tweaking this scale. The scale can also be
+changed to a normal or logarithmic scale - see the y.scale argument for more.
+
+The default scaling of the color and fill scales is discrete, with the
+\code{\link[ggsci:scale_jco]{ggsci::scale_color_jco()}} and \code{\link[ggsci:scale_jco]{ggsci::scale_fill_jco()}} scales. To use a
+continuous scale, use the \code{jco_color = FALSE} setting. Both \code{fill} and
+\code{color} aesthetics are set to \code{NULL} by default. For most geoms, this is not
+important, but geoms that automatically use those aesthetics (like
+geom_bin2d, where fill = stat(count)) are affected by this. Manually adding
+the required aesthetic (like \code{aes_fill = ggplot2::stat(count)} will fix
+this).
 }
 \examples{
 #use `col`for separation of different sets
@@ -125,15 +146,13 @@ plot <- gg_day(
 sample.data.environment,
 scales = "fixed",
 end.date = "2023-08-16",
-x.axis = Datetime,
-y.axis = `MELANOPIC EDI`,
 y.axis.label = "mEDI (lx)",
-col = Source)
+aes_col = Id)
 plot
 
 #you can easily overwrite the color scale afterwards
 plot + ggplot2::scale_color_discrete()
 
 #or change the facetting
-plot + ggplot2::facet_wrap(~Day.data + Source)
+plot + ggplot2::facet_wrap(~Day.data + Id)
 }

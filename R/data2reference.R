@@ -23,12 +23,12 @@
 #'   Need to be the same in both sets. Default is `Datetime`.
 #' @param Data.column Data column in the `Reference.data` that is then converted
 #'   to a reference. Default is `MEDI`.
-#' @param ID.column Name of the `ID.column` in both the `dataset` and the
+#' @param Id.column Name of the `Id.column` in both the `dataset` and the
 #'   `Reference.data`.
 #' @param Reference.column Name of the reference column that will be added to
 #'   the `dataset`. Default is `Reference`. Cannot be the same as any other
 #'   column in the `dataset` and will throw an error if it is.
-#' @param overwrite.Reference If `TRUE` (defaults to `FALSE`), the function will
+#' @param overwrite If `TRUE` (defaults to `FALSE`), the function will
 #'   overwrite the `Reference.colname` column if it already exists.
 #' @param filter.expression.reference Expression that is used to filter the
 #'   `Reference.data` before it is used as reference. Default is `NULL`. See
@@ -65,45 +65,41 @@
 #'
 #' gg_reference <- function(dataset) {
 #' dataset %>%
-#' ggplot(aes(x = Datetime, y = `MELANOPIC EDI`, color = Source)) +
-#' geom_line(size = 1) +
+#' ggplot(aes(x = Datetime, y = MEDI, color = Id)) +
+#' geom_line(linewidth = 1) +
 #' geom_line(aes(y = Reference), color = "black", size = 0.25, linetype = "dashed") +
-#' theme_minimal() + facet_wrap(~ Source, scales = "free_y")
+#' theme_minimal() + facet_wrap(~ Id, scales = "free_y")
 #' }
 #'
 #' #in this example, each data point is its own reference
-#' sample.data.environment %>% group_by(Source) %>%
-#'   data2reference(Data.column = `MELANOPIC EDI`, ID.column = Source) %>%
+#' sample.data.environment %>%
+#'   data2reference() %>%
 #'   gg_reference()
 #'
 #' #in this example, the first day of each ID is the reference for the other days
 #' #this requires grouping of the Data by Day, which is then specified in across.id
 #' #also, shift.start needs to be set to TRUE, to shift the reference data to the
 #' #start of the groupings
-#' sample.data.environment %>% group_by(Source, Day = as_date(Datetime)) %>%
+#' sample.data.environment %>% group_by(Id, Day = as_date(Datetime)) %>%
 #' data2reference(
-#'   Data.column = `MELANOPIC EDI`,
-#'   ID.column = Source,
 #'   filter.expression.reference =  as_date(Datetime) == min(as_date(Datetime)),
 #'   shift.start = TRUE,
 #'   across.id = "Day") %>%
 #'   gg_reference()
 #'
 #' #in this example, the Environment Data will be used as a reference
-#' sample.data.environment %>% group_by(Source) %>%
+#' sample.data.environment %>%
 #' data2reference(
-#'   Data.column = `MELANOPIC EDI`,
-#'   ID.column = Source,
-#'   filter.expression.reference =  Source == "Environment",
+#'   filter.expression.reference =  Id == "Environment",
 #'   across.id = TRUE) %>%
 #'   gg_reference()
 data2reference <- function(dataset, 
                            Reference.data = dataset,
                            Datetime.column = Datetime,
                            Data.column = MEDI,
-                           ID.column = Id,
+                           Id.column = Id,
                            Reference.column = Reference,
-                           overwrite.Reference = FALSE,
+                           overwrite = FALSE,
                            filter.expression.reference = NULL,
                            across.id = FALSE,
                            shift.start = FALSE,
@@ -115,10 +111,10 @@ data2reference <- function(dataset,
 
   Datetime.column.str <- colname.defused({{ Datetime.column }})
   Data.column.str <- colname.defused({{ Data.column }})
-  ID.column.str <- colname.defused({{ ID.column }})
+  Id.column.str <- colname.defused({{ Id.column }})
   Reference.column.str <- colname.defused({{ Reference.column }})
 
-  existing.names <- c(Datetime.column.str, Data.column.str, ID.column.str)
+  existing.names <- c(Datetime.column.str, Data.column.str, Id.column.str)
   
   #give an error if dataset is not a data.frame
   if(!is.data.frame(dataset)) stop("dataset is not a data.frame")
@@ -136,10 +132,10 @@ data2reference <- function(dataset,
   if(!is.numeric(length.restriction.seconds)) stop("length.restriction.seconds is not a numeric")
   
     #give an error or warning if the reference column is present
-  if(Reference.column.str %in% names(dataset) & !overwrite.Reference) 
+  if(Reference.column.str %in% names(dataset) & !overwrite) 
     stop("A Reference column with the given (or default) name is already part of the dataset. Please remove the column or choose a different name")
   if(Reference.column.str %in% names(dataset)) 
-    warning("A Reference column with the given (or default) name is already part of the dataset. It is overwritten, because `overwrite.Reference = TRUE ` was set.")
+    warning("A Reference column with the given (or default) name is already part of the dataset. It is overwritten, because `overwrite = TRUE ` was set.")
 
   
   # Manipulation ----------------------------------------------------------
@@ -148,12 +144,12 @@ data2reference <- function(dataset,
   
   #if the dataset has no grouping, group by the ID column
   if(dplyr::n_groups(dataset) == 0) {
-    dataset <- dataset %>% dplyr::group_by({{ ID.column }})
+    dataset <- dataset %>% dplyr::group_by({{ Id.column }})
   }
   
   #if the Reference.data has no grouping, group by the ID column
   if(dplyr::n_groups(Reference.data) == 0) {
-    Reference.data <- Reference.data %>% dplyr::group_by({{ ID.column }})
+    Reference.data <- Reference.data %>% dplyr::group_by({{ Id.column }})
   }
   
   #set arguments based on the across.id argument
@@ -311,8 +307,8 @@ data2reference <- function(dataset,
     interval2state(
       State.interval.dataset = Reference.data,
       State.colname = {{ Reference.column }},
-      ID.colname.dataset = {{ ID.column }},
-      ID.colname.interval = {{ ID.column }})
+      Id.colname.dataset = {{ Id.column }},
+      Id.colname.interval = {{ Id.column }})
   
   #if there is a reference label given, apply it to the dataset
   dataset <-

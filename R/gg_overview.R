@@ -7,7 +7,7 @@
 #' @param Id.colname The column name of the Id column (default is `Id`), needs to
 #'   be in the `dataset`. This is also used as the y-axis variable and is the
 #'   minimum grouping variable.
-#' @param gap_range_data Optionally provide a `tibble` with `start` and `end`
+#' @param gap.data Optionally provide a `tibble` with `start` and `end`
 #'   `Datetimes` of gaps per group. If not provided, the function uses
 #'   [gap_finder()] to calculate implicit missing data. This might be
 #'   computationally intensive for large datasets and many missing data. In
@@ -20,11 +20,11 @@
 #' @export
 #'
 #' @examples
-#' sample.data.environment %>% gg_overview(Id.colname = Source)
+#' sample.data.environment %>% gg_overview()
 gg_overview <- function(dataset,
                         Datetime.colname = Datetime,
                         Id.colname = Id,
-                        gap_range_data = NULL,
+                        gap.data = NULL,
                         ...,
                         interactive = FALSE) {
   
@@ -52,32 +52,32 @@ gg_overview <- function(dataset,
   dataset <- dataset %>% dplyr::group_by({{ Id.colname }}, .add = TRUE)
   
   #calculate the ranges of gap data if none is provided
-  if(is.null(gap_range_data)) {
-    gap_range_data <- 
+  if(is.null(gap.data)) {
+    gap.data <- 
       dataset %>% 
       gap_finder(gap.data = TRUE, silent = TRUE) %>% 
       dplyr::group_by(gap.id, .add = TRUE) %>% 
       dplyr::filter(dplyr::n() > 1)
     
-    there_are_gaps <- nrow(gap_range_data) > 0
+    there_are_gaps <- nrow(gap.data) > 0
     
     if(there_are_gaps) {
-      gap_range_data <- 
-        gap_range_data %>% 
+      gap.data <- 
+        gap.data %>% 
         dplyr::summarize(
           start = min({{ Datetime.colname}}), end = max({{ Datetime.colname}}))
     }
   }
   
   #are there missing data
-  there_are_gaps <- nrow(gap_range_data) > 0
+  there_are_gaps <- nrow(gap.data) > 0
   
   #only add missing data when there is some
   implicit_data <- 
     if(there_are_gaps) {
       list(
         ggplot2::geom_linerange(
-          data = gap_range_data,
+          data = gap.data,
           ggplot2::aes(xmin = start, xmax = end, y = {{ Id.colname}}),
           col = "grey", linewidth = 1),
       ggplot2::labs(
@@ -109,6 +109,7 @@ gg_overview <- function(dataset,
     #general information
     ggplot2::labs(x = "Datetime")+
     #theming and styling
+    ggplot2::scale_x_datetime()+
     cowplot::theme_cowplot()+
     ggplot2::theme(
       panel.grid.major = ggplot2::element_line(colour = "grey98"), 

@@ -3,8 +3,8 @@
 #' Filtering a dataset based on Dates or Datetimes may often be necessary prior
 #' to calcuation or visualization. The functions allow for a filtering based on
 #' simple `strings` or `Datetime` scalars, or by specifying a length. They also
-#' support prior [dplyr] grouping, which is useful, e.g., when you only want
-#' to filter the first two days of measurement data for every participant,
+#' support prior [dplyr] grouping, which is useful, e.g., when you only want to
+#' filter the first two days of measurement data for every participant,
 #' regardless of the actual date. If you want to filter based on times of the
 #' day, look to [filter_Time()].
 #'
@@ -23,8 +23,13 @@
 #'   will give a duration. For the difference between periods and durations look
 #'   at the documentation from [lubridate]. Basically, periods model clocktimes,
 #'   whereas durations model physical processes. This matters on several
-#'   occasions, like leap years, or daylight savings.
-#' @param filter.expr Advanced filtering conditions. If not `NULL` (default) and given an `expression`, this is used to [dplyr::filter()] the results. This can be useful to filter, e.g. for group-specific conditions, like starting after the first two days of measurement (see examples).
+#'   occasions, like leap years, or daylight savings. You can also provide a
+#'   `character` scalar in the form of e.g. "1 day", which will be converted
+#'   into a period.
+#' @param filter.expr Advanced filtering conditions. If not `NULL` (default) and
+#'   given an `expression`, this is used to [dplyr::filter()] the results. This
+#'   can be useful to filter, e.g. for group-specific conditions, like starting
+#'   after the first two days of measurement (see examples).
 #' @param tz Timezone of the start/end times. If `NULL` (the default), it will
 #'   take the timezone from the `Datetime.colname` column.
 #' @param full.day A `logical` indicating wether the `start` param should be
@@ -32,13 +37,18 @@
 #'   is FALSE). This is useful, e.g., when the first observation in the dataset
 #'   is slightly after midnight. If TRUE, it will count the length from midnight
 #'   on to avoid empty days in plotting with [gg_day()].
+#' @param only_Id An expression of `ids` where the filtering should be applied
+#'   to. If `NULL` (the default), the filtering will be applied to all `ids`.
+#'   Based on the this expression, the dataset will be split in two and only
+#'   where the given expression evaluates to `TRUE`, will the filtering take
+#'   place. Afterwards both sets are recombined and sorted by `Datetime`.
 #'
 #' @return a `data.frame` object identical to `dataset` but with only the
 #'   specified Dates/Times.
 #' @export
 #' @family filter
 #' @examples
-#'  
+#'
 #' library(lubridate)
 #' library(dplyr)
 #' #baseline
@@ -46,11 +56,11 @@
 #' range.unfiltered
 #'
 #' #setting the start of a dataset
-#' sample.data.environment %>% 
-#' filter_Datetime(start = "2023-08-18 12:00:00") %>% 
-#' pull(Datetime) %>% 
+#' sample.data.environment %>%
+#' filter_Datetime(start = "2023-08-18 12:00:00") %>%
+#' pull(Datetime) %>%
 #' range()
-#' 
+#'
 #' #setting the end of a dataset
 #' sample.data.environment %>%
 #' filter_Datetime(end = "2023-08-18 12:00:00") %>% pull(Datetime) %>% range()
@@ -64,18 +74,17 @@
 #' sample.data.environment %>%
 #' filter_Datetime(length = days(2)) %>%
 #' pull(Datetime) %>% range()
-#' 
+#'
 #' #advanced filtering based on grouping (second day of each group)
 #' sample.data.environment %>%
-#' group_by(Source) %>% 
 #' #shift the "Environment" group by one day
 #' mutate(
-#' Datetime = ifelse(Source == "Environment", Datetime + ddays(1), Datetime) %>% 
+#' Datetime = ifelse(Id == "Environment", Datetime + ddays(1), Datetime) %>%
 #' as_datetime()) -> sample
 #' sample %>% summarize(Daterange = paste(min(Datetime), max(Datetime), sep = " - "))
 #' #now we can use the `filter.expr` argument to filter from the second day of each group
-#' sample %>% 
-#' filter_Datetime(filter.expr = Datetime > Datetime[1] + days(1)) %>% 
+#' sample %>%
+#' filter_Datetime(filter.expr = Datetime > Datetime[1] + days(1)) %>%
 #' summarize(Daterange = paste(min(Datetime), max(Datetime), sep = " - "))
 
 
@@ -86,11 +95,14 @@ filter_Datetime <- function(dataset,
                             length = NULL,
                             full.day = FALSE,
                             tz = NULL,
+                            only_Id = NULL,
                             filter.expr = NULL) {
   
   # Initial Checks ----------------------------------------------------------
   
   filter.expr <- rlang::enexpr(filter.expr)
+  
+  only_Id <- rlang::enexpr(only_Id)
   
   Datetime.colname.defused <- 
     rlang::enexpr(Datetime.colname) %>% rlang::as_string()
@@ -100,8 +112,8 @@ filter_Datetime <- function(dataset,
   }
   
   if(!is.null(length)){
-    test <- lubridate::is.duration(length) | lubridate::is.period(length)
-    stopifnot("length needs to be either a duration or a period from lubridate::" = test)
+    test <- lubridate::is.duration(length) | lubridate::is.period(length) | is.character(length)
+    stopifnot("length needs to be either a valid character, duration or a period from {lubridate}" = test)
   }
   
   stopifnot(
@@ -119,6 +131,21 @@ filter_Datetime <- function(dataset,
  
   # Manipulation ----------------------------------------------------------
    
+  #split the dataset in two parts, based on the only_Id expression
+  if(!is.null(only_Id)) {
+    dataset_unfiltered <-
+      dataset %>% 
+      dplyr::filter(!(!!only_Id), .preserve = TRUE)
+    dataset <- 
+      dataset %>% 
+      dplyr::filter(!!only_Id, .preserve = TRUE)
+  }
+  
+  #if length is a character, convert it to a period
+  if(is.character(length)) {
+    length <- lubridate::as.period(length)
+  }
+
   #calculate starting time if length and end are given
   if(is.null(start) & !is.null(length) & !is.null(end)) {
     start <- lubridate::as_datetime(end, tz = tz) - length
@@ -147,7 +174,7 @@ filter_Datetime <- function(dataset,
       dataset %>% 
       dplyr::filter(
         {{ Datetime.colname }} >= lubridate::as_datetime(start, tz = tz),
-        {{ Datetime.colname }} <= lubridate::as_datetime(end, tz = tz)
+        {{ Datetime.colname }} < lubridate::as_datetime(end, tz = tz),
         )
     #possible extra filter step
     if(!is.null(filter.expr)) {
@@ -155,7 +182,10 @@ filter_Datetime <- function(dataset,
     }
   
   # Return --------------------------------------------------------------
-  dataset
+    if(!is.null(only_Id)) {
+      dplyr::bind_rows(dataset, dataset_unfiltered) %>% 
+        dplyr::arrange({{ Datetime.colname }}, .by_group = TRUE)
+    } else dataset
 }
 
 
@@ -184,4 +214,46 @@ filter_Date <- function(...,
   filter_Datetime(...,
                   start = start,
                   end = end)
+}
+
+# multiple filter_Date -------------------------------------------------------------
+
+#' Filter multiple times based on a list of arguments.
+#'
+#' [filter_Datetime_multiple()] is a wrapper around [filter_Datetime()] or
+#' [filter_Date()] that allows the cumulative filtering of `Datetimes` based on
+#' varying filter conditions. It is most useful in conjunction with the
+#' `only_Id` argument, e.g., to selectively cut off dates depending on
+#' participants (see examples)
+#'
+#' @param dataset A light logger dataset
+#' @param arguments A list of arguments to be passed to [filter_Datetime()] or
+#'   [filter_Date()]. each list entry must itself be a list of arguments, e.g,
+#'   `list(start = "2021-01-01", only_Id = quote(Id == 216))`. Expressions have
+#'   to be quoted with [quote()] or [rlang::expr()].
+#' @param filter_function The function to be used for filtering, either
+#'   `filter_Datetime` (the default) or `filter_Date`
+#' @param ... Additional arguments passed to the filter function
+#'
+#' @return A dataframe with the filtered data
+#' @export
+#'
+#' @examples
+#' arguments <- list(
+#'  list(start = "2023-08-17", only_Id = quote(Id == "Participant")),
+#'  list(end = "2023-08-17", only_Id = quote(Id == "Environment")))
+#'  #compare the unfiltered dataset
+#'  sample.data.environment %>% gg_overview(Id.colname = Id)
+#'  #compare the unfiltered dataset
+#'  sample.data.environment %>% 
+#'  filter_Datetime_multiple(arguments = arguments, filter_Date) %>%
+#'  gg_overview(Id.colname = Id)
+filter_Datetime_multiple <- function(dataset, 
+                                     arguments, 
+                                     filter_function = filter_Datetime,
+                                     ...) {
+  
+  purrr::reduce(arguments, function(dataset, params) {
+    do.call({{ filter_function }}, c(list(dataset = dataset), params, ...))
+  }, .init = dataset)
 }

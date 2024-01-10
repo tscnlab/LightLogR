@@ -38,28 +38,6 @@ is.all.scalar <- function(...) {
     purrr::every(\(x) length(x) == 1)
 }
 
-#counts the different time differences per group (in a grouped dataset)
-count.difftime <- function(dataset, Datetime.colname = Datetime) {
-  dataset %>% 
-    dplyr::mutate(
-      difftime = c(NA, diff({{Datetime.colname}}) %>% lubridate::as.duration())
-      ) %>% 
-    tidyr::drop_na(difftime) %>% 
-    dplyr::count(difftime, sort = TRUE)
-}
-
-#calculate the nth Quantile of time differences per group (in a grouped dataset)
-nth.difftime <- function(dataset, Datetime.colname = Datetime, n = 0.95) {
-  dataset %>% 
-    dplyr::mutate(
-      difftime = c(NA, diff({{Datetime.colname}}) %>% lubridate::as.duration())
-      ) %>% 
-    tidyr::drop_na(difftime) %>% 
-    dplyr::summarise(
-      Quant = stats::quantile(difftime, probs = n, na.rm = TRUE)
-    )
-}
-
 #calculate the whether the nth quantile of time differences in one dataset is smaller or equal to the nth quantile of time differences in another dataset
 compare.difftime <- function(dataset1, dataset2, Datetime.colname = Datetime, n = 0.95) {
   Quant1 <- nth.difftime(dataset1, {{ Datetime.colname }}, n = n)

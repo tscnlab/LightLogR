@@ -3,7 +3,7 @@
 #' This function can make use of `Interval` data that contain `States` (like
 #' `"sleep"`, `"wake"`, `"wear"`) and add a column to a light logger `dataset`,
 #' where the `State` of  every `Datetime` is specified, based on the
-#' participant's `ID`.
+#' participant's `Id`.
 #'
 #' @inheritParams sc2interval
 #' @param State.interval.dataset Name of the dataset that contains `State` and
@@ -12,15 +12,15 @@
 #' @param State.colname,Interval.colname  Column names of the `State` and
 #'   `Interval` in the `State.interval.dataset`. Expects a `symbol`. `State`
 #'   can't be in the `dataset` yet or the function will give an error. You can
-#'   also set `overwrite.State = TRUE`.
-#' @param ID.colname.dataset,ID.colname.interval Column names of the
+#'   also set `overwrite = TRUE`.
+#' @param Id.colname.dataset,Id.colname.interval Column names of the
 #'   participant's `Id` in both the `dataset` and the `State.interval.dataset`.
 #'   On the off-chance that there are inconsistencies, the names can be
 #'   different. If the datasets where imported and preprocessed with
 #'   [LightLogR], this just works. Both datasets need an `Id`, because the
 #'   states will be added based not only on the `Datetime`, but also depending
 #'   on the dataset.
-#' @param overwrite.State If `TRUE` (defaults to `FALSE`), the function will
+#' @param overwrite If `TRUE` (defaults to `FALSE`), the function will
 #'   overwrite the `State.colname` column if it already exists.
 #'
 #' @return One of
@@ -51,15 +51,14 @@
 #'
 #' #create a dataset with states
 #' dataset_with_states <-
-#' sample.data.environment %>% group_by(Source) %>%
-#' interval2state(State.interval.dataset = intervals,
-#'                ID.colname.dataset = Source)
+#' sample.data.environment %>%
+#' interval2state(State.interval.dataset = intervals)
 #'
 #' #visualize the states - note that the states are only added to the respective ID in the dataset?
 #' library(ggplot2)
-#' ggplot(dataset_with_states, aes(x = Datetime, y = `MELANOPIC EDI`, color = State)) +
+#' ggplot(dataset_with_states, aes(x = Datetime, y = MEDI, color = State)) +
 #'  geom_point() +
-#'  facet_wrap(~Source, ncol = 1)
+#'  facet_wrap(~Id, ncol = 1)
 #'
 #' 
 interval2state <- function(dataset,
@@ -67,17 +66,17 @@ interval2state <- function(dataset,
                            Datetime.colname = Datetime,
                            State.colname = State,
                            Interval.colname = Interval,
-                           ID.colname.dataset = Id,
-                           ID.colname.interval = Id,
-                           overwrite.State = FALSE,
+                           Id.colname.dataset = Id,
+                           Id.colname.interval = Id,
+                           overwrite = FALSE,
                            output.dataset = TRUE) {
   
   # Initial Checks ----------------------------------------------------------
   Datetime.colname.defused <- colname.defused({{ Datetime.colname }})
   State.colname.defused <- colname.defused({{ State.colname }})
   Interval.colname.defused <- colname.defused({{ Interval.colname }})
-  ID.colname.dataset.defused <- colname.defused({{ ID.colname.dataset }})
-  ID.colname.interval.defused <- colname.defused({{ ID.colname.interval }})
+  Id.colname.dataset.defused <- colname.defused({{ Id.colname.dataset }})
+  Id.colname.interval.defused <- colname.defused({{ Id.colname.interval }})
   
   stopifnot(
     "dataset is not a dataframe" = is.data.frame(dataset),
@@ -87,10 +86,10 @@ interval2state <- function(dataset,
       State.colname.defused %in% names(State.interval.dataset),
     "Interval.colname must be part of the State.interval.dataset" = 
       Interval.colname.defused %in% names(State.interval.dataset),
-    "ID.colname.interval must be part of the State.interval.dataset" = 
-      ID.colname.interval.defused %in% names(State.interval.dataset),
-    "ID.colname.dataset must be part of the dataset" = 
-      ID.colname.dataset.defused %in% names(dataset),
+    "Id.colname.interval must be part of the State.interval.dataset" = 
+      Id.colname.interval.defused %in% names(State.interval.dataset),
+    "Id.colname.dataset must be part of the dataset" = 
+      Id.colname.dataset.defused %in% names(dataset),
     "Datetime.colname must be part of the dataset" = 
       Datetime.colname.defused %in% names(dataset),
     "Datetime.colname must be a Datetime" = 
@@ -101,13 +100,13 @@ interval2state <- function(dataset,
   #give an error or warning if the reference column is present
   if(all(
     State.colname.defused %in% names(dataset),
-    !overwrite.State,
+    !overwrite,
     State.colname.defused %in% names(State.interval.dataset)))
-    stop("A `State` column with the given (or default) name is already part of the dataset. Please remove the column, rename it, or set `overwrite.State = TRUE`")
+    stop("A `State` column with the given (or default) name is already part of the dataset. Please remove the column, rename it, or set `overwrite = TRUE`")
     if(all(
       State.colname.defused %in% names(dataset),
       State.colname.defused %in% names(State.interval.dataset))) 
-      warning("A `State` column with the given (or default) name is already part of the dataset. It is overwritten, because `overwrite.State = TRUE ` was set.")
+      warning("A `State` column with the given (or default) name is already part of the dataset. It is overwritten, because `overwrite = TRUE ` was set.")
   
   
   # Manipulation ----------------------------------------------------------
@@ -168,7 +167,7 @@ interval2state <- function(dataset,
     dplyr::full_join(
       State.interval.dataset2,
       by = dplyr::join_by(
-        {{ ID.colname.dataset }} == {{ ID.colname.interval }},
+        {{ Id.colname.dataset }} == {{ Id.colname.interval }},
         {{ Datetime.colname }})
     ) %>% 
     dplyr::arrange({{ Datetime.colname }}, .by_group = TRUE)

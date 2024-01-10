@@ -14,6 +14,9 @@
 supported.devices
 }
 \description{
-A vector of all supported devices for import functions
+These are all supported devices where there is a dedicated import function.
+Import functions can be called either through \code{\link[=import_Dataset]{import_Dataset()}} with the
+respective \code{device = "device"} argument, or directly, e.g.,
+\code{import$ActLumus()}.
 }
 \keyword{datasets}

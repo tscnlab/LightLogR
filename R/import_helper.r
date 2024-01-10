@@ -1,63 +1,6 @@
-#This internal helper function is used for setup of imports of various device files
-import.LL <- function(filename,
-                     device = "none",
-                     import.expr,
-                     n_max = Inf,
-                     tz = "UTC",
-                     ID.colname = Id,
-                     auto.id = ".*",
-                     manual.id = NULL) {
-  
-  id.colname.defused <- colname.defused(id)
-  tz <- tz
-  
-  #initial checks
-  stopifnot(
-    "filename needs to be a character (vector)" = is.character(filename),
-    "device needs to be a character" = is.character(device),
-    "tz needs to be a character" = is.character(tz),
-    "tz needs to be a valid time zone, see `OlsonNames()`" = tz %in% OlsonNames(),
-    "auto.id needs to be a string" = is.character(auto.id),
-    "n_max needs to be a positive numeric" = is.numeric(n_max)
-  )
-  #import the file
-  tmp <- rlang::eval_tidy(import.expr)
-  
-  #validate/manipulate the file
-  if(!id.colname.defused %in% names(tmp)) {
-    switch(is.null(manual.id) %>% as.character(),
-           "TRUE" =
-    {tmp <- tmp %>% 
-      dplyr::mutate({{ ID.colname }} := 
-                      basename(file.name) %>% 
-                      tools::file_path_sans_ext() %>% 
-                      stringr::str_extract(auto.id),
-                    .before = 1)},
-    "FALSE" =
-      {tmp <- tmp %>% 
-      dplyr::mutate({{ ID.colname }} := manual.id, .before = 1)}
-    )
-  }
-  tmp <- tmp %>% 
-    dplyr::mutate(file.name = basename(file.name) %>% 
-                    tools::file_path_sans_ext(),
-                  {{ ID.colname }} := factor({{ ID.colname }})) %>% 
-    dplyr::group_by({{ ID.colname }}) %>% 
-    dplyr::arrange(Datetime, .by_group = TRUE)
-  
-  #give info about the file
-  import.info(tmp, device, tz, {{ ID.colname }})
-  
-  #return the file
-  tmp
-}
-
-
 #This internal helper function prints basic information about a dataset and is used for import function
-import.info <- function(tmp, device, tz, ID.colname) {
+import.info <- function(tmp, device, tz, Id.colname) {
   #give info about the file
-  
-  
   min.time <- min(tmp$Datetime)
   max.time <- max(tmp$Datetime)
   interval.time <- 
@@ -65,7 +8,7 @@ import.info <- function(tmp, device, tz, ID.colname) {
     dplyr::reframe(
       interval.time = diff(Datetime)
       ) %>% 
-    dplyr::group_by({{ ID.colname }}) %>%
+    dplyr::group_by({{ Id.colname }}) %>%
     dplyr::count(interval.time) %>% 
     dplyr::mutate(pct = (n/sum(n)) %>% scales::percent(),
                   interval.time = interval.time %>% lubridate::as.duration())
@@ -79,34 +22,51 @@ import.info <- function(tmp, device, tz, ID.colname) {
         "The system timezone is ",
         Sys.timezone(),
         ". Please correct if necessary!\n")},
-    "Start: ", format(tmp$Datetime[1]), "\n",
-    "End: ", format(max(tmp$Datetime)), "\n",
+    "Start: ", format(min.time), "\n",
+    "End: ", format(max.time), "\n",
     "Timespan: " , diff(c(min.time, max.time)) %>% format(digits = 2), "\n",
     "Observation intervals: \n",
     sep = "")
   utils::capture.output(interval.time)[c(-1,-2,-4)] %>% cat(sep = "\n")
 }
 
-#This internal helper functions provides a link from the specific import function to the generic import function
-
-import.link <- function(device, ID.colname) {
+#This internal helper function looks for the starting row of an import file based on a vector of column names in order.
+detect_starting_row <- 
+  function(filepath,
+           locale = readr::default_locale(),
+           column_names,
+           n_max = 250) {
+    
+  #make a regex pattern from the column names
+  column_names <- 
+    column_names %>% 
+    stringr::str_flatten(collapse = ".*")
   
-  env <- parent.frame()
-  filename <- env$filename
-  tz<- env$tz
-  auto.id<- env$auto.id
-  manual.id <- env$manual.id
-  n_max<- env$n_max
-  path<- env$path
-  import.expr <- env$import.expr
+  #read in all the lines and remove junk
+  line_read <- 
+    readr::read_lines(filepath, n_max = n_max, locale=locale)
   
-  #generic import function
-  import.LL(filename = filename,
-            device = device,
-            import.expr = import.expr,
-            n_max = n_max,
-            tz = tz,
-            manual.id = manual.id,
-            ID.colname = {{ ID.colname }},
-            auto.id = auto.id)
+  #find the row where the column names are
+  which_lines <- 
+  line_read %>% 
+    purrr::map_vec(
+      \(x) stringr::str_detect(x,column_names)
+      ) %>% which()
+  
+  #if there is no line with the column names, return an error
+  if(length(which_lines) == 0) {
+    stop("Could not find a line with this order of column names in the file. Please check the correct order and spelling of the given columns.")
+  }
+  
+  #if there is more than one line with the column names, return an error
+  if(length(which_lines) > 1) {
+    stop(paste("Found", length(which_lines), "lines with the given column names, but require exactly 1. Please provide a more specific pattern."))
+  }
+  
+  #if there is only one line with the column names, return the line number
+  #and reduce it by one to get the lines to skip
+  if(length(which_lines) == 1) {
+    return(which_lines-1)
+  }
+  
 }

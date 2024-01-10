@@ -1,4 +1,4 @@
-test_that("join.datasets works as expected",{
+test_that("join_datasets works as expected",{
   # create test data
   dataset <- 
     tibble::tibble(
@@ -25,11 +25,11 @@ test_that("join.datasets works as expected",{
       )
 
   # test the function
-  expect_equal(dataset %>% join.datasets(dataset2), 
+  expect_equal(dataset %>% join_datasets(dataset2), 
                dataset %>% dplyr::bind_rows(dataset2))
 })
 
-test_that("join.datasets gives errors as expected",{
+test_that("join_datasets gives errors as expected",{
   # create test data
   dataset <- 
     tibble::tibble(
@@ -56,12 +56,12 @@ test_that("join.datasets gives errors as expected",{
       )
 
   # test the function
-  expect_error(dataset %>% join.datasets(dataset2, 
-                                         ID.column = "Id2"), 
+  expect_error(dataset %>% join_datasets(dataset2, 
+                                         Id.column = "Id2"), 
                "Not all datasets have the required Datetime and ID columns.")
-  expect_error(dataset %>% join.datasets(dataset2, 
+  expect_error(dataset %>% join_datasets(dataset2, 
                                          Datetime.column = "Datetime2"), 
                "Not all datasets have the required Datetime and ID columns.")
-  expect_error(dataset %>% join.datasets("State"), 
+  expect_error(dataset %>% join_datasets("State"), 
                "all given datasets must be data.frames")
 })

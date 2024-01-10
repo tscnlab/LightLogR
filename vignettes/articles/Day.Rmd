@@ -54,7 +54,7 @@ Every light logger dataset needs an `Id` to connect or separate observations fro
 
 ```{r}
 tz <- "Europe/Berlin"
-dataset.LL <- import.ActLumus(file.LL, path, auto.id = "^(\\d{3})", tz = tz)
+dataset.LL <- import$ActLumus(file.LL, path, auto.id = "^(\\d{3})", tz = tz)
 
 ```
 
@@ -80,7 +80,7 @@ We can already see some patterns and features in the luminous exposure across th
 On to our next dataset. This one contains measurement data from the same type of device, but recorded on a rooftop position of unobstructed daylight in roughly the same location as the participant data. As the device type is the same, import is the same as well. But since the filename does not contain the participant´s `ID` this time, we will give it a manual id: `"CW35"`.
 
 ```{r}
-dataset.env <- import.ActLumus(file.env, path, manual.id = "CW35", tz = tz)
+dataset.env <- import$ActLumus(file.env, path, manual.id = "CW35", tz = tz)
 ```
 
 Here you can see that we follow roughly the same time span, but the measurement epoch is *30 seconds*, with one odd interval which is one second shorter.
@@ -89,15 +89,15 @@ Here you can see that we follow roughly the same time span, but the measurement 
 
 Our last dataset is a sleep diary that contains, among other things, a column for `Id` and a column for *sleep* and for *wake* (called *offset*). Because sleep diaries and other event datasets can vary widely in their structure, we must manually set a few arguments. Importantly, we need to specify how the Datetimes are structured. In this case, we have values like *28-08-2023 23:20*, which give a structure of `dmyHM`.
 
-What we need after import is a coherent table that contains a column with a `Datetime` besides a column with the `State` that starts at that point in time. `import.Statechanges()` facilitates this, because we can provide a `vector` of column names that form a continuous indicator of a given state - in this case `Sleep`.
+What we need after import is a coherent table that contains a column with a `Datetime` besides a column with the `State` that starts at that point in time. `import_Statechanges()` facilitates this, because we can provide a `vector` of column names that form a continuous indicator of a given state - in this case `Sleep`.
 
 ```{r}
 dataset.sleep <- 
-  import.Statechanges(file.sleep, path, 
+  import_Statechanges(file.sleep, path, 
                       Datetime.format = "dmyHM",
                       State.colnames = c("sleep", "offset"),
                       State.encoding = c("sleep", "wake"),
-                      ID.colname = record_id,
+                      Id.colname = record_id,
                       sep = ";",
                       dec = ",",
                       tz = tz)
@@ -159,17 +159,17 @@ Brown et al.(2022)[^1] provide guidance for healthy, daytime dependent light sti
 
 We can see that bedtime is an important factor when determining the timepoints these three stages go into effect. Luckily we just so happen to have the sleep/wake data from the sleep diary at hand. In a first step, we will convert the timepoints where a state changes into intervals during which the participant is awake or asleep. The `sc2interval()` function provides this readily.
 
-In our case the first entry is sleep, so we can safely assume, that on that day prior the participant was awake. We could take this into account through the `full.first = "wake"` argument setting, but then it would be implied that the participant was awake from midnight on. As the first day of data is only partial anyways, we will disregard this. There are other arguments to `sc2interval()` to further refine the interval creation. Probably the most important is `length.restriction`, that sets the maximum length of an interval, the default being 24 hours. This avoids implausibly long intervals with one state that is highly likely caused by implicit missing data or misentries.
+In our case the first entry is sleep, so we can safely assume, that on that day prior the participant was awake. We could take this into account through the `starting.state = "wake"` argument setting, but then it would be implied that the participant was awake from midnight on. As the first day of data is only partial anyways, we will disregard this. There are other arguments to `sc2interval()` to further refine the interval creation. Probably the most important is `length.restriction`, that sets the maximum length of an interval, the default being 24 hours. This avoids implausibly long intervals with one state that is highly likely caused by implicit missing data or misentries.
 
 ```{r}
 dataset.sleep <- dataset.sleep %>% sc2interval()
 dataset.sleep %>% head() %>% gt()
 ```
 
-Now we can transform these sleep/wake intervals to intervals for the Brown recommendations. The `sleep.int2Brown()` function facilitates this.
+Now we can transform these sleep/wake intervals to intervals for the Brown recommendations. The `sleep_int2Brown()` function facilitates this.
 
 ```{r}
-Brown.intervals <- dataset.sleep %>% sleep.int2Brown()
+Brown.intervals <- dataset.sleep %>% sleep_int2Brown()
 Brown.intervals %>% head() %>% gt()
 ```
 
@@ -281,20 +281,22 @@ dataset.LL.partial  %>%
 
 To create a boxplot representation, we not only need to specify the geom but also what time interval we want the boxplot to span. Here the `cut_Datetime()` function from **LightLogR** comes to the rescue. It will round the datetimes to the desired interval, which then can be specified as the `group` argument of `gg_day()`. While this can be a nice representation, I don´t think it fits our goal for the overall figure in our specific case.
 
-#### `geom_hexplot`
+#### `geom_bin2d`
 
 ```{r, fig.retina=2, fig.width=7, fig.height = 4, warning=FALSE}
-dataset.LL.partial  %>% 
-  gg_day(
-    size = 0.25, facetting = FALSE, geom = "bin2d", bins = 24) + #base plot
+dataset.LL.partial  %>% gg_day(
+  size = 0.25, facetting = FALSE, geom = "bin2d", 
+  jco_color = FALSE, bins = 24, aes_fill = stat(count)) + #base plot
   solar.reference + brown.reference + scale.correction
 ```
 
-The geom family of `hex`, `bin2d`, or `density_2d` is particularly well suited if you have many, possibly overlaying observations. It reduces complexity by cutting the x- and y-axis into bins and counts how many observations fall within this bin. By choosing 24 bins, we see dominant values for every hour of the day.
+The geom family of `hex`, `bin2d`, or `density_2d` is particularly well suited if you have many, possibly overlaying observations. It reduces complexity by cutting the x- and y-axis into bins and counts how many observations fall within this bin. By choosing 24 bins, we see dominant values for every hour of the day. The `jco_color = FALSE` argument is necessary to disable the default discrete color scheme of `gg_day()`, because a continuous scale is necessary for counts or densities. Finally, we habe to use the `aes_fill = stat(count)` argument to color the bins according to the number of observations in the bin[^4].
+
+[^4]: Normally, using `ggplot2::geom_bin2d()` would automatically use the fill aesthetic for this, but `gg_day()` has certain defaults that are favorable in most cases, but is a bit more work here.
 
 ###  {.unnumbered}
 
-**Conclusion:** The `line` or `ribbon` geom seem like a good choice for our task. However, The high resolution of the data (*10 seconds*) makes the line very noisy. Sometimes this level of detail is good, but our figure should give more of a general representation of luminous exposure, so we should aggregate the data somewhat. We can use a similar function as for the boxplot, `aggregate_Datetime()` and use this to aggregate our data to the desired resolution. It has sensible defaults to handle numeric (mean), logical and character (most represented) data, that can be adjusted. For the sake of this example, let´s wrap the aggregate function with some additional code to recalculate the `Brown.recommendations`, because while the default numeric aggregation is fine for measurement data, it does not make sense for the `Brown.recommendations` column.
+**Conclusion:** The `line` or `ribbon` geom seem like a good choice for our task. However, The high resolution of the data (*10 seconds*) makes the line very noisy. Sometimes this level of detail is good, but our figure should give more of a general representation of luminous exposure, so we should aggregate the data somewhat. We can use a similar function as for the boxplot, `aggregate_Datetime()` and use this to aggregate our data to the desired resolution. It has sensible defaults to handle numeric (mean), logical and character (most represented) data, that can be adjusted. For the sake of this example, let´s wrap the aggregate function with some additional code to recalculate the `Brown_recommendations`, because while the default numeric aggregation is fine for measurement data, it does not make sense for the `Brown_recommendations` column.
 
 ```{r}
 aggregate_Datetime2 <- function(...) {
@@ -559,7 +561,7 @@ Plot +
   annotate("text", x=x, y = 4000, label = "- Daylight Potential", 
            hjust = 0, col = "#0073C2DD")
 
-# ggplot2::ggsave("Brown_et_al_2022.png", width = 7, height = 4, dpi = 600)
+ggplot2::ggsave("images/Day.png", width = 7, height = 4, dpi = 600)
 
 ```
 

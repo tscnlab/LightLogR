@@ -1,7 +1,7 @@
 citHeader("To cite LightLogR in publications use:")
 
-citEntry(
-  entry    = "Misc",
+bibentry(
+  bibtype  = "Misc",
   title    = "LightLogR: Working With Wearable Light Logger Data",
   author   = "Johannes Zauner, Manuel Spitschan",
   journal  = "",

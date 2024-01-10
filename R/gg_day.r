@@ -1,9 +1,9 @@
 
-#' Create a simple plot of light logger data, facetted by Day
+#' Create a simple Time-of-Day plot of light logger data, faceted by Date
 #'
-#' `gg_day` will create a simple ggplot for every data in a dataset. The result
-#' can further be manipulated like any ggplot. This will be sensible to refine
-#' styling or guides.
+#' [gg_day()] will create a simple ggplot for every data in a dataset. The
+#' result can further be manipulated like any ggplot. This will be sensible to
+#' refine styling or guides.
 #'
 #' Besides plotting, the function creates two new variables from the given
 #' `Datetime`:
@@ -11,8 +11,21 @@
 #' * `Time.data` is an `hms` created with [hms::as_hms()] that is used for the x.axis
 #'
 #' The default scaling of the y-axis is a `symlog` scale, which is a logarithmic
-#' scale that only starts scaling after a given threshold (default = 0). This enables values of 0 in the plot, which are common in light logger data, and even enables negative values, which might be sensible for non-light data. See [symlog_trans()] for details on tweaking this scale. The scale can also be changed to a normal or logarithmic scale - see the y.scale argument for more.
-#' 
+#' scale that only starts scaling after a given threshold (default = 0). This
+#' enables values of 0 in the plot, which are common in light logger data, and
+#' even enables negative values, which might be sensible for non-light data. See
+#' [symlog_trans()] for details on tweaking this scale. The scale can also be
+#' changed to a normal or logarithmic scale - see the y.scale argument for more.
+#'
+#' The default scaling of the color and fill scales is discrete, with the
+#' [ggsci::scale_color_jco()] and [ggsci::scale_fill_jco()] scales. To use a
+#' continuous scale, use the `jco_color = FALSE` setting. Both `fill` and
+#' `color` aesthetics are set to `NULL` by default. For most geoms, this is not
+#' important, but geoms that automatically use those aesthetics (like
+#' geom_bin2d, where fill = stat(count)) are affected by this. Manually adding
+#' the required aesthetic (like `aes_fill = ggplot2::stat(count)` will fix
+#' this).
+#'
 #' @param dataset A light logger dataset. Expects a `dataframe`. If not imported
 #'   by [LightLogR], take care to choose a sensible variable for the `x.axis.`.
 #' @param x.axis,y.axis column name that contains the datetime (x, defaults to
@@ -31,20 +44,20 @@
 #' @param start.date,end.date Choose an optional start or end date within your
 #'   `dataset`. Expects a `date`, which can also be a `character` that is
 #'   interpretable as a date, e.g., `"2023-06-03"`. If you need a Datetime or
-#'   want to cut specific times of each day, use the [filter_Datetime] function.
-#'   Defaults to `NULL`, which means that the plot starts/ends with the
-#'   earliest/latest date within the `dataset`.
+#'   want to cut specific times of each day, use the [filter_Datetime()]
+#'   function. Defaults to `NULL`, which means that the plot starts/ends with
+#'   the earliest/latest date within the `dataset`.
 #' @param scales For [ggplot2::facet_wrap()], should scales be "fixed", "free"
 #'   or free in one dimension ("free_y" is the default). Expects a `character`.
-#' @param y.scale How should the y-axis be scaled? 
-#' * Defaults to `"symlog"`, which is a logarithmic scale that can also handle negative values. 
+#' @param y.scale How should the y-axis be scaled?
+#' * Defaults to `"symlog"`, which is a logarithmic scale that can also handle negative values.
 #' * `"log10"` would be a straight logarithmic scale, but cannot handle negative values.
 #' * `"identity"` does nothing (continuous scaling).
 #' * a transforming function, such as [symlog_trans()] or [scales::identity_trans()], which allow for more control.
-#' @param col optional column name that defines separate sets and colors them.
-#'   Expects anything that works with the layer data [ggplot2::aes()]. The
-#'   default color palette can be overwritten outside the function (see
-#'   examples).
+#' @param aes_col,aes_fill optional arguments that define separate sets and
+#'   colors or fills them. Expects anything that works with the layer data
+#'   [ggplot2::aes()]. The default color palette can be overwritten outside the
+#'   function (see examples).
 #' @param x.axis.breaks,y.axis.breaks Where should breaks occur on the x and
 #'   y.axis? Expects a `numeric vector` with all the breaks. If you want to
 #'   activate the default behaviour of [ggplot2], you need to put in
@@ -52,17 +65,22 @@
 #' @param y.scale.sc `logical` for whether scientific notation shall be used.
 #'   Defaults to `FALSE`.
 #' @param geom What geom should be used for visualization? Expects a `character`
-#' * `"point"` for [ggplot2::geom_point()] (the default)
+#' * `"point"` for [ggplot2::geom_point()]
 #' * `"line"`  for [ggplot2::geom_line()]
-#' * as the value is just input into the `geom_` function from [ggplot2], other variants might work as well, but are not tested.
+#' * `"ribbon"` for [ggplot2::geom_ribbon()]
+#' * as the value is just input into the `geom_` function from [ggplot2], other variants work as well, but are not extensively tested.
 #' @param group Optional column name that defines separate sets. Useful for
 #'   certain geoms like `boxplot`.Expects anything that works with the layer
 #'   data [ggplot2::aes()]
 #' @param ... Other options that get passed to the main geom function. Can be
-#'   used to adjust to adjust size or linetype.
+#'   used to adjust to adjust size, linewidth, or linetype.
 #' @param interactive Should the plot be interactive? Expects a `logical`.
 #'   Defaults to `FALSE`.
-#' @param facetting Should an automated facet by day be applie? Default is `TRUE` and uses the `Day.data` variable that the function also creates if not present.
+#' @param facetting Should an automated facet by day be applied? Default is
+#'   `TRUE` and uses the `Day.data` variable that the function also creates if
+#'   not present.
+#' @param jco_color Should the [ggsci::scale_color_jco()] color palette be used?
+#'   Defaults to `TRUE`.
 #'
 #' @return A ggplot object
 #' @export
@@ -73,24 +91,23 @@
 #' sample.data.environment,
 #' scales = "fixed",
 #' end.date = "2023-08-16",
-#' x.axis = Datetime,
-#' y.axis = `MELANOPIC EDI`,
 #' y.axis.label = "mEDI (lx)",
-#' col = Source)
+#' aes_col = Id)
 #' plot
 #'
 #' #you can easily overwrite the color scale afterwards
 #' plot + ggplot2::scale_color_discrete()
 #'
 #' #or change the facetting
-#' plot + ggplot2::facet_wrap(~Day.data + Source)
+#' plot + ggplot2::facet_wrap(~Day.data + Id)
 
 gg_day <- function(dataset,
                    start.date = NULL,
                    end.date = NULL,
                    x.axis = Datetime,
                    y.axis = MEDI,
-                   col = NULL,
+                   aes_col = NULL,
+                   aes_fill = NULL,
                    group = NULL,
                    geom = "point",
                    scales = "fixed",
@@ -105,21 +122,20 @@ gg_day <- function(dataset,
                    subtitle = NULL,
                    interactive = FALSE,
                    facetting = TRUE,
+                   jco_color = TRUE,
                    ...) {
   
 # Initial Checks ----------------------------------------------------------
 
-  x <- rlang::enexpr(x.axis)
+  x <- rlang::enexpr(x.axis) 
   y <- rlang::enexpr(y.axis)
-  axis_columns <- (purrr::map_chr(c(x,y), rlang::as_string))
+  axis_columns <- (purrr::map_chr(c(x,y), deparse1))
   stopifnot(
     "The given dataset is not a dataframe" = is.data.frame(dataset),
     "The given column for X is not in the Dataset. If you did not specify X, you are working with data not originating from LightLogR. Please specify an appropriate Datetime column" = 
       rlang::as_string(x) %in% names(dataset),
     "The given column for X is not a Datetime" =
       lubridate::is.POSIXct(dataset[[rlang::as_string(x)]]),
-    "The given column for Y is not in the Dataset" = 
-      rlang::as_string(y) %in% names(dataset),
     "scales must be one of `fixed`, `free_x`, `free_y`, or `free`" = 
       scales %in% c("free_y", "free_x", "fixed", "free"),
     "format.day must be a character. Please make shure it is of type `base::strptime`" = 
@@ -139,12 +155,25 @@ gg_day <- function(dataset,
     ribbon <- 
       list(
         ggplot2::geom_ribbon(
-          ggplot2::aes(ymin = 0, ymax = !!y),
+          ggplot2::aes(ymin = 0, ymax = !!y,
+                       group = {{ group }},
+                       col = {{ aes_col }},
+                       fill = {{ aes_fill }}),
           outline.type = "upper",
           ...
           )
       )
     
+  }
+  
+  #jco color palette
+  jco_color_scheme <- list()
+  if(jco_color) {
+    jco_color_scheme <- 
+      list(
+        ggsci::scale_color_jco(),
+        ggsci::scale_fill_jco()
+      )
   }
   
   #filter by start and end date
@@ -169,7 +198,7 @@ gg_day <- function(dataset,
           !!x %>% format(format = format.day))
   }
   
-  dataset <- dataset %>% create_Time.data(Datetime.colname = !!x)
+  dataset <- dataset %>% create_Timedata(Datetime.colname = !!x)
   
   dataset <-
     dataset %>%
@@ -189,12 +218,14 @@ gg_day <- function(dataset,
     ggplot2::ggplot(ggplot2::aes(x=Time.data, y = !!y)) +
     eval(geom_function_expr)(
       ggplot2::aes(
+        x=Time.data, y = !!y,
         group = {{ group }},
-        col = {{ col }},
-      ), ...) +
+        col = {{ aes_col }},
+        fill = {{ aes_fill }},
+        ), ...) +
     ribbon +
     # Scales --------------------------------------------------------------
-    ggsci::scale_color_jco()+
+    jco_color_scheme+
     ggplot2::scale_x_time(breaks = x.axis.breaks, 
                           labels = scales::label_time(format = "%H:%M")) + 
     ggplot2::scale_y_continuous(

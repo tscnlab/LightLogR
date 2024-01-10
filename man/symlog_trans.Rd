@@ -24,20 +24,20 @@ The \code{symlog} transformation can be accessed either via the \code{trans = "s
 }
 \examples{
 dataset <- 
-sample.data.environment \%>\% dplyr::group_by(Source) \%>\% 
+sample.data.environment \%>\%
 filter_Date(end = "2023-08-15") \%>\% 
 dplyr::mutate(MEDI = dplyr::case_when(
-                                     Source == "Environment" ~ -`MELANOPIC EDI`,
-                                     .default = `MELANOPIC EDI`))
+                                     Id == "Environment" ~ -MEDI,
+                                     .default = MEDI))
 #basic application where transformation, breaks and labels are set manually
 dataset \%>\%                                     
-gg_day(col = Source) +
+gg_day(aes_col = Id) +
 ggplot2::scale_y_continuous(
 trans = "symlog")
 
 #the same plot, but with breaks and labels set manually                            
 dataset \%>\%                                     
-gg_day(col = Source) +
+gg_day(aes_col = Id) +
 ggplot2::scale_y_continuous(
 trans = "symlog", 
 breaks = c(-10^(5:0), 0, 10^(0:5)),
@@ -46,7 +46,7 @@ labels = function(x) format(x, scientific = FALSE, big.mark = " "))
 #setting individual arguments of the symlog function manually allows
 #e.g., to emphasize values smaller than 1
 dataset \%>\%                                     
-gg_day(col = Source) +
+gg_day(aes_col = Id) +
 ggplot2::scale_y_continuous(
 trans = symlog_trans(thr = 0.01),
 breaks = c(-10^(5:-1), 0, 10^(-1:5)),
