@@ -66,7 +66,7 @@ reference:
 
   - title: Metrics
     desc: >
-      This section includes functions to calculate light exposure metrics .
+      This section includes functions to calculate light exposure metrics.
     contents:
     - bright_dark_period
     - duration_above_threshold

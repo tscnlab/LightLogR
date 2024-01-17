@@ -1,4 +1,4 @@
-#' #' Time above/below threshold or within threshold range
+#' Time above/below threshold or within threshold range
 #'
 #' This function calculates the time spent above/below a specified threshold
 #' light level or within a specified range of light levels.
