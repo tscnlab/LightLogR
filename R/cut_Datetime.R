@@ -33,13 +33,16 @@
 
 cut_Datetime <- function(dataset,
                          unit = "3 hours",
-                         type = "round",
+                         type = c("round", "floor", "ceiling"),
                          Datetime.colname = Datetime,
                          New.colname = Datetime.rounded,
                          group_by = FALSE,
                          ...) {
   
   # Initial Checks ----------------------------------------------------------
+  
+  # Match input arguments
+  type <- match.arg(type)
   
   type.allowed <- c("round", "ceiling", "floor")
   Datetime.colname.defused <- 
