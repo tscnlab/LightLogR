@@ -127,7 +127,7 @@ gg_days <- function(dataset,
         group = {{ group }},
         fill = {{ aes_fill }},
         col = {{ aes_col }},
-      ), ...) +
+      ), if(geom == "ribbon") ...) +
     ribbon +
     # Scales --------------------------------------------------------------
     ggplot2::scale_y_continuous(

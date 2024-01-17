@@ -221,8 +221,8 @@ gg_day <- function(dataset,
         x=Time.data, y = !!y,
         group = {{ group }},
         col = {{ aes_col }},
-        fill = {{ aes_fill }},
-        ), ...) +
+        fill ={{ aes_fill }},
+        ), if(geom == "ribbon") ...) +
     ribbon +
     # Scales --------------------------------------------------------------
     jco_color_scheme+
