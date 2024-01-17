@@ -80,7 +80,7 @@ import_Statechanges <- function(filename,
                        path = NULL, 
                        sep = ",", 
                        dec = ".", 
-                       structure = "wide",
+                       structure = c("wide", "long"),
                        Datetime.format = "ymdHMS",
                        tz = "UTC",
                        State.colnames, # a vector
@@ -93,6 +93,9 @@ import_Statechanges <- function(filename,
                        silent = FALSE) {
   
   # Initial Checks ----------------------------------------------------------
+  
+  # Match input arguments
+  structure <- match.arg(structure)
   
   # Check inputs
   if(!is.character(filename)) {
@@ -112,9 +115,6 @@ import_Statechanges <- function(filename,
   }
   if(!is.logical(keep.all)) {
     stop("The specified keep.all must be a logical")
-  }
-  if(!structure %in% c("wide", "long")) {
-    stop("The specified structure must be either 'wide' or 'long'")
   }
   if(!is.character(Datetime.format)) {
     stop("The specified Datetime.format must be a character that works with lubridate::parse_date_time")
