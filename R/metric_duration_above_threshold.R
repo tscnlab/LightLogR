@@ -88,9 +88,6 @@ duration_above_threshold <- function(Light.vector,
   # Get the epochs based on the data
   if (epoch == "dominant.epoch") {
     epoch <- count_difftime(tibble::tibble(Datetime = Time.vector))$difftime[1]
-    epoch <- ifelse(hms::is_hms(Time.vector) | lubridate::is.POSIXct(Time.vector),
-      lubridate::as.duration(epoch), epoch
-    )
   }
   # If the user specified an epoch, use that instead
   else {

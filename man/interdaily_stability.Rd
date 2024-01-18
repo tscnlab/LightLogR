@@ -64,8 +64,14 @@ Quantification metrics. \emph{Lighting Research & Technology}.
 \seealso{
 Other metrics: 
 \code{\link{bright_dark_period}()},
+\code{\link{centroidLE}()},
+\code{\link{cumulative_nvRD}()},
+\code{\link{disparity_index}()},
 \code{\link{duration_above_threshold}()},
 \code{\link{intradaily_variability}()},
+\code{\link{midpointCE}()},
+\code{\link{nvRC}()},
+\code{\link{nvRD}()},
 \code{\link{timing_above_threshold}()}
 }
 \concept{metrics}
