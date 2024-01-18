@@ -8,7 +8,7 @@ cumulative_nvRD(nvRD, Time.vector, epoch = "dominant.epoch", as.df = FALSE)
 }
 \arguments{
 \item{nvRD}{Numeric vector containing the non-visual direct response.
-See \code{\link{nvR_direct}}.}
+See \code{\link{nvRD}}.}
 
 \item{Time.vector}{Vector containing the time data. Can be numeric, HMS or POSIXct.}
 
@@ -37,14 +37,20 @@ dataset1 <-
     Illuminance = c(rep(0, 60*8), rep(sample(1:1000, 14, replace = TRUE), each = 60), rep(0, 60*2)),
     MEDI = Illuminance * sample(0.5:1.5, 60 * 24, replace = TRUE)
   ) \%>\%
-  mutate(
+  dplyr::mutate(
     nvRD = nvRD(MEDI, Illuminance, Datetime)
   ) 
 dataset1 \%>\% 
-  summarise(
+  dplyr::summarise(
     "cumulative nvRD" = cumulative_nvRD(nvRD, Datetime)
   )
 
+}
+\references{
+Amundadottir, M.L. (2016). Light-driven model for identifying
+indicators of non-visual health potential in the built environment
+[Doctoral dissertation, EPFL]. EPFL infoscience.
+\url{http://dx.doi.org/10.5075/epfl-thesis-7146}
 }
 \seealso{
 Other metrics: 

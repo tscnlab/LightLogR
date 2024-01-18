@@ -3,7 +3,7 @@ citHeader("To cite LightLogR in publications use:")
 bibentry(
   bibtype  = "Misc",
   title    = "LightLogR: Working With Wearable Light Logger Data",
-  author   = "Johannes Zauner, "Steffen L. Hartmeyer", Manuel Spitschan",
+  author   = "Zauner, Johannes and Hartmeyer, Steffen L. and Spitschan, Manuel",
   journal  = "",
   year     = "2023",
   volume   = "",

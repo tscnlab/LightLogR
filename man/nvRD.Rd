@@ -55,16 +55,16 @@ dataset.combined <- rbind(dataset1, dataset2)
 
 # Calculate nvRD per ID
 dataset.combined.nvRD <- dataset.combined \%>\% 
-  group_by(Id) \%>\% 
-  mutate(
+  dplyr::group_by(Id) \%>\% 
+  dplyr::mutate(
     nvRD = nvRD(MEDI, Illuminance, Datetime)
   )
 
 }
 \references{
 Amundadottir, M.L. (2016). Light-driven model for identifying
-indicators of non-visual health potential in the built environment.
-\link{Doctoral dissertation, EPFL}. EPFL infoscience.
+indicators of non-visual health potential in the built environment
+[Doctoral dissertation, EPFL]. EPFL infoscience.
 \url{http://dx.doi.org/10.5075/epfl-thesis-7146}
 }
 \seealso{

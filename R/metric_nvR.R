@@ -8,7 +8,7 @@
 #' unit of the resulting value thus is "nvRD*h".
 #'
 #' @param nvRD Numeric vector containing the non-visual direct response. 
-#'    See \code{\link{nvR_direct}}.
+#'    See \code{\link{nvRD}}.
 #' @param Time.vector Vector containing the time data. Can be numeric, HMS or POSIXct.
 #' @param epoch The epoch at which the data was sampled. Can be either a
 #'    `lubridate::duration()` or a string. If it is a string, it needs to be
@@ -23,6 +23,11 @@
 #' 
 #' @family metrics
 #'
+#' @references Amundadottir, M.L. (2016). Light-driven model for identifying
+#'    indicators of non-visual health potential in the built environment
+#'    \[Doctoral dissertation, EPFL\]. EPFL infoscience.
+#'    \url{http://dx.doi.org/10.5075/epfl-thesis-7146}
+#'
 #' @examples
 #' dataset1 <-
 #'   tibble::tibble(
@@ -31,11 +36,11 @@
 #'     Illuminance = c(rep(0, 60*8), rep(sample(1:1000, 14, replace = TRUE), each = 60), rep(0, 60*2)),
 #'     MEDI = Illuminance * sample(0.5:1.5, 60 * 24, replace = TRUE)
 #'   ) %>%
-#'   mutate(
+#'   dplyr::mutate(
 #'     nvRD = nvRD(MEDI, Illuminance, Datetime)
 #'   ) 
 #' dataset1 %>% 
-#'   summarise(
+#'   dplyr::summarise(
 #'     "cumulative nvRD" = cumulative_nvRD(nvRD, Datetime)
 #'   )
 #' 
@@ -98,8 +103,8 @@ cumulative_nvRD <- function(nvRD,
 #'    light data will be replaced by 0.
 #'
 #' @references Amundadottir, M.L. (2016). Light-driven model for identifying
-#'    indicators of non-visual health potential in the built environment.
-#'    [Doctoral dissertation, EPFL]. EPFL infoscience.
+#'    indicators of non-visual health potential in the built environment
+#'    \[Doctoral dissertation, EPFL\]. EPFL infoscience.
 #'    \url{http://dx.doi.org/10.5075/epfl-thesis-7146}
 #'
 #' @examples
@@ -126,8 +131,8 @@ cumulative_nvRD <- function(nvRD,
 #' 
 #' # Calculate nvRD per ID
 #' dataset.combined.nvRD <- dataset.combined %>% 
-#'   group_by(Id) %>% 
-#'   mutate(
+#'   dplyr::group_by(Id) %>% 
+#'   dplyr::mutate(
 #'     nvRD = nvRD(MEDI, Illuminance, Datetime)
 #'   )
 #' 
@@ -213,7 +218,7 @@ nvRD <- function(MEDI.vector,
 #'    If `Time.vector` is HMS or POSIXct, `sleep.onset` must be HMS. Likewise, if
 #'    `Time.vector` is numeric, `sleep.onset` must be numeric.
 #'
-#' @return A numeric vector containing the nvRD data. The output has the same
+#' @return A numeric vector containing the nvRC data. The output has the same
 #'    length as `Time.vector`.
 #' @export
 #' 
@@ -223,8 +228,8 @@ nvRD <- function(MEDI.vector,
 #'    light data will be replaced by 0.
 #'
 #' @references Amundadottir, M.L. (2016). Light-driven model for identifying
-#'    indicators of non-visual health potential in the built environment.
-#'    [Doctoral dissertation, EPFL]. EPFL infoscience.
+#'    indicators of non-visual health potential in the built environment
+#'    \[Doctoral dissertation, EPFL\]. EPFL infoscience.
 #'    \url{http://dx.doi.org/10.5075/epfl-thesis-7146}
 #'
 #' @examples
@@ -235,10 +240,10 @@ nvRD <- function(MEDI.vector,
 #'     Illuminance = c(rep(0, 60*8), rep(sample(1:1000, 16, replace = TRUE), each = 60),
 #'                     rep(0, 60*8), rep(sample(1:1000, 16, replace = TRUE), each = 60)),
 #'     MEDI = Illuminance * rep(sample(0.5:1.5, 48, replace = TRUE), each = 60)
-#'   ) 
+#'   )
 #' 
-#' dataset1.nvRC <- dataset1 %>% 
-#'   mutate(
+#' dataset1.nvRC <- dataset1 %>%
+#'   dplyr::mutate(
 #'     nvRC = nvRC(MEDI, Illuminance, Datetime, sleep.onset = hms::as_hms("22:00:00"))
 #'   )
 #' 

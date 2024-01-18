@@ -30,7 +30,7 @@ If \code{Time.vector} is HMS or POSIXct, \code{sleep.onset} must be HMS. Likewis
 \code{Time.vector} is numeric, \code{sleep.onset} must be numeric.}
 }
 \value{
-A numeric vector containing the nvRD data. The output has the same
+A numeric vector containing the nvRC data. The output has the same
 length as \code{Time.vector}.
 }
 \description{
@@ -51,18 +51,18 @@ dataset1 <-
     Illuminance = c(rep(0, 60*8), rep(sample(1:1000, 16, replace = TRUE), each = 60),
                     rep(0, 60*8), rep(sample(1:1000, 16, replace = TRUE), each = 60)),
     MEDI = Illuminance * rep(sample(0.5:1.5, 48, replace = TRUE), each = 60)
-  ) 
+  )
 
-dataset1.nvRC <- dataset1 \%>\% 
-  mutate(
+dataset1.nvRC <- dataset1 \%>\%
+  dplyr::mutate(
     nvRC = nvRC(MEDI, Illuminance, Datetime, sleep.onset = hms::as_hms("22:00:00"))
   )
 
 }
 \references{
 Amundadottir, M.L. (2016). Light-driven model for identifying
-indicators of non-visual health potential in the built environment.
-\link{Doctoral dissertation, EPFL}. EPFL infoscience.
+indicators of non-visual health potential in the built environment
+[Doctoral dissertation, EPFL]. EPFL infoscience.
 \url{http://dx.doi.org/10.5075/epfl-thesis-7146}
 }
 \seealso{

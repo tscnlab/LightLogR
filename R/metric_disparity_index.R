@@ -43,7 +43,7 @@ disparity_index <- function(Light.vector,
   
   # Remove NAs
   if (na.rm) {
-    Light.vector <- na.omit(Light.vector)
+    Light.vector <- Light.vector[!is.na(Light.vector)]
   }
   
   if (length(Light.vector) == 1) {
