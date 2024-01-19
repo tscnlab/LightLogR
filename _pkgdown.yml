@@ -70,14 +70,17 @@ reference:
     contents:
     - bright_dark_period
     - centroidLE
-    - cumulative_nvRD
     - disparity_index
     - duration_above_threshold
     - intradaily_variability
     - interdaily_stability
     - midpointCE
-    - nvRD
     - nvRC
+    - nvRC_circadianBias
+    - nvRC_circadianDisturbance
+    - nvRC_relativeAmplitudeError
+    - nvRD
+    - nvRD_cumulative_response
     - timing_above_threshold
     
   - title: Helpers

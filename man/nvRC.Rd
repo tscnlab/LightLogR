@@ -37,11 +37,79 @@ length as \code{Time.vector}.
 This function calculates the non-visual circadian response (nvRC). It takes into account
 the assumed response dynamics of the non-visual system and the circadian rhythm
 and processes the light exposure signal to quantify the effective circadian-weighted
-input to the non-visual system.
+input to the non-visual system (see Details).
 }
 \details{
 The timeseries is assumed to be regular. Missing values in the
 light data will be replaced by 0.
+
+The inputs to the model are discrete time samples of melanopic equivalent
+daylight (D65) illuminance (mEDI) \eqn{E_{v,mel}^{D65}(t)}, transformed into
+the effective light stimulus \eqn{I(t)}.
+
+\deqn{I(t) = E_{v,mel}^{D65} * K_{mel,v}^{D65}/A_{mel},}
+
+where \eqn{K_{mel,v}^{D65} = 1.3262 / 1000} is the melanopic normalization factor
+to convert melanopic EDI to melanopic Irradiance and \eqn{A_{mel} = 97.07} is the
+area of the melanopic sensitivity curve.
+
+The light stimulus \eqn{I(t)} is then passed through a linear filter \eqn{L1},
+which is associated with the temporal integration of the retina, to determine the
+output \eqn{u(t)}.
+
+\deqn{u(t) = \frac{1}{d_{1}}  \sum_{i=0}^{d_{1}/\Delta t} I(t-1)\Delta t,}
+
+where \eqn{d_{1}} is the length of filter \eqn{L1}. The time step size
+\eqn{\Delta t} is the epoch at which the data was sampled.
+Then \eqn{u(t)} is transformed by a nonlinear function \eqn{N(u)}, describing the
+intensity-response relationship to the light stimulus, to determine the
+output \eqn{v(t)}.
+
+\deqn{v(t) = N(u(t)) \times N_{C}(t) = \frac{N_{C}(t)}{1+(\sigma(t)/u(t))^n}.}
+
+The saturation intensity is controlled by the circadian sensitivity modulator
+
+\deqn{N_{C}(t)=(1−0.4C_{1}(t))(1−0.4C_{2}(t)),}
+   
+acting as a simple harmonic oscillator
+
+\deqn{
+   \begin{array}{l}
+   C_{1} = \cos(\pi(t/12+1)+\phi_{xcx}/2),\\
+   C_{2} = -\sin(\pi(t/12+1)+\phi_{xcx}/2),
+   \end{array}
+   }
+
+where the phase angle to CBT min \eqn{\phi_{xcx}} is equal to \eqn{-2.98} rad,
+assuming that sleep onset is at \eqn{t_{0}}.
+
+The half-maximum constant \eqn{\sigma} adapts to prior light history
+
+\deqn{
+   \begin{array}{ll}
+   \sigma(t)=\sigma_{0}/2, & \qquad & \forall u_{H}(t)<0,\\
+   \sigma(t)=\sigma_{0}\times2^{u_{H}(t)-1}, & \qquad & \forall u_{H}(t)\geq 0. 
+   \end{array}
+   }
+
+The prior history of light exposure is calculated using a moving window,
+filter \eqn{LH}, to average the input
+
+\deqn{u_{H}(t) = \frac{1}{d_{H}}\sum_{i=0}^{d_{H}/\Delta t} 
+   \log_{10}(E_{v}(t-i))\Delta t,}
+
+where \eqn{dH} is the width of the filter \eqn{LH} in hours and \eqn{E_{v}}
+is the photopic illuminance.
+
+The signal \eqn{v(t)} is finally passed through a second filter \eqn{L2},
+which reflects the adaptation of the non-visual system to continuous light
+exposure, to determine the final output \eqn{r_{C}(t)}.
+
+\deqn{r_{C}(t)=\alpha \times v(t−1)+(1−\alpha) \times r_{C}(t−1),}
+   
+   where \eqn{\alpha=2/(d2/\Delta t+1)} and \eqn{d2} is the length of filter
+\eqn{L2} in hours. The model outputs are time-sampled relative non-visual
+responses.
 }
 \examples{
 dataset1 <-
@@ -69,12 +137,12 @@ indicators of non-visual health potential in the built environment
 Other metrics: 
 \code{\link{bright_dark_period}()},
 \code{\link{centroidLE}()},
-\code{\link{cumulative_nvRD}()},
 \code{\link{disparity_index}()},
 \code{\link{duration_above_threshold}()},
 \code{\link{interdaily_stability}()},
 \code{\link{intradaily_variability}()},
 \code{\link{midpointCE}()},
+\code{\link{nvRD_cumulative_response}()},
 \code{\link{nvRD}()},
 \code{\link{timing_above_threshold}()}
 }
