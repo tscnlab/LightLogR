@@ -30,7 +30,7 @@ calculated.}
 \item{na.rm}{Logical. Should missing values be removed for the calculation?
 Defaults to \code{FALSE}.}
 
-\item{as.df}{Logical. Should a data frame with be returned? If \code{TRUE}, a data
+\item{as.df}{Logical. Should a data frame be returned? If \code{TRUE}, a data
 frame with three columns (MLiT, FLiT, LLiT) and the threshold (e.g., \verb{MLiT_\{threshold\}})
 will be returned. Defaults to \code{FALSE}.}
 }
@@ -83,11 +83,14 @@ Other metrics:
 \code{\link{centroidLE}()},
 \code{\link{disparity_index}()},
 \code{\link{duration_above_threshold}()},
+\code{\link{frequency_crossing_threshold}()},
 \code{\link{interdaily_stability}()},
 \code{\link{intradaily_variability}()},
 \code{\link{midpointCE}()},
 \code{\link{nvRC}()},
 \code{\link{nvRD_cumulative_response}()},
-\code{\link{nvRD}()}
+\code{\link{nvRD}()},
+\code{\link{period_above_threshold}()},
+\code{\link{threshold_for_duration}()}
 }
 \concept{metrics}

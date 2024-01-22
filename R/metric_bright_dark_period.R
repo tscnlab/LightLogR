@@ -89,7 +89,7 @@ bright_dark_period <- function(Light.vector,
   }
 
   # Get the epochs based on the data
-  if (epoch == "dominant.epoch") {
+  if (is.character(epoch) && epoch == "dominant.epoch") {
     epoch <- count_difftime(tibble::tibble(Datetime = Time.vector))$difftime[1]
   }
   # If the user specified an epoch, use that instead

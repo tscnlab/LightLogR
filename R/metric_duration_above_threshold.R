@@ -1,6 +1,6 @@
-#' #' Time above/below threshold or within threshold range
+#' Duration above/below threshold or within threshold range
 #'
-#' This function calculates the time spent above/below a specified threshold
+#' This function calculates the duration spent above/below a specified threshold
 #' light level or within a specified range of light levels.
 #'
 #' @param Light.vector Numeric vector containing the light data.
@@ -18,7 +18,7 @@
 #' @param na.rm Logical. Should missing values (NA) be removed for the calculation?
 #'    Defaults to `FALSE`.
 #' @param as.df Logical. Should a data frame with be returned? If `TRUE`, a data
-#'    frame with a single column named `TAT_{threshold}` will be returned.
+#'    frame with a single column named `duration_{comparison}_{threshold}` will be returned.
 #'    Defaults to `FALSE`.
 #'
 #' @return A duration object (see \code{\link[lubridate]{duration}}) as single value,
@@ -34,7 +34,7 @@
 #' @family metrics
 #'
 #' @examples
-#' N <- 50
+#' N <- 60
 #' # Dataset with epoch = 1min
 #' dataset1 <-
 #'   tibble::tibble(
@@ -86,7 +86,7 @@ duration_above_threshold <- function(Light.vector,
   )
 
   # Get the epochs based on the data
-  if (epoch == "dominant.epoch") {
+  if (is.character(epoch) && epoch == "dominant.epoch") {
     epoch <- count_difftime(tibble::tibble(Datetime = Time.vector))$difftime[1]
   }
   # If the user specified an epoch, use that instead

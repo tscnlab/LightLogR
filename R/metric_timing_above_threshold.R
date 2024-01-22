@@ -15,7 +15,7 @@
 #'    calculated.
 #' @param na.rm Logical. Should missing values be removed for the calculation?
 #'    Defaults to `FALSE`.
-#' @param as.df Logical. Should a data frame with be returned? If `TRUE`, a data
+#' @param as.df Logical. Should a data frame be returned? If `TRUE`, a data
 #'    frame with three columns (MLiT, FLiT, LLiT) and the threshold (e.g., `MLiT_{threshold}`)
 #'    will be returned. Defaults to `FALSE`.
 #'

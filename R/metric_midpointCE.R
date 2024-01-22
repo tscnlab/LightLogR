@@ -3,13 +3,13 @@
 #' This function calculates the timing corresponding to half of the cumulative
 #' light exposure within the given time series.
 #'
-#' @param Light.vector Numeric vector containing the light data. Missing values are
-#'    replaced with 0.
+#' @param Light.vector Numeric vector containing the light data.
 #' @param Time.vector Vector containing the time data. Can be numeric, HMS or POSIXct.
-#' @param na.rm Logical. Should missing values be removed for the calculation?
+#' @param na.rm Logical. Should missing values be removed for the calculation? If `TRUE`,
+#'    missing values will be replaced by zero. Defaults to `FALSE`. 
+#' @param as.df Logical. Should the output be returned as a data frame? If `TRUE`, a data
+#'    frame with a single column named `midpointCE` will be returned.
 #'    Defaults to `FALSE`.
-#' @param as.df Logical. Should the output be returned as a data frame? Defaults
-#'    to `FALSE`.
 #'
 #' @return Single column data frame or vector.
 #' 
@@ -83,15 +83,21 @@ midpointCE <- function(Light.vector,
     Light.vector[is.na(Light.vector)] <- 0
   }
   
-  # Find midpoint of CE
-  cumsum <- cumsum(Light.vector)
-  halfSum <- cumsum[length(cumsum)] / 2
-  midpointCE <- which.min(abs(cumsum - halfSum))
+  # If any value is NA, return NA
+  if(any(is.na(Light.vector))){
+    midpointCE = NA
+  }
+  else{
+    # Find midpoint of CE
+    cumsum <- cumsum(Light.vector)
+    halfSum <- cumsum[length(cumsum)] / 2
+    midpointCE = Time.vector[which.min(abs(cumsum - halfSum))]
+  }
   
   # Return as data frame or numeric vector
   if (as.df) {
-    return(tibble::tibble("midpointCE" = Time.vector[midpointCE]))
+    return(tibble::tibble("midpointCE" = midpointCE))
   } else {
-    return(Time.vector[midpointCE])
+    return(midpointCE)
   }
 }

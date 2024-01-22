@@ -140,7 +140,7 @@ nvRD <- function(MEDI.vector,
   slope <- 3.55
   
   # Get the epochs based on the data
-  if (epoch == "dominant.epoch") {
+  if (is.character(epoch) && epoch == "dominant.epoch") {
     epoch <- count_difftime(tibble::tibble(Datetime = Time.vector))$difftime[1]
   }
   # If the user specified an epoch, use that instead
@@ -185,7 +185,7 @@ nvRD <- function(MEDI.vector,
 #'    either `"dominant.epoch"` (the default) for a guess based on the data, or a valid
 #'    `lubridate::duration()` string, e.g., `"1 day"` or `"10 sec"`.
 #' @param as.df Logical. Should a data frame with be returned? If `TRUE`, a data
-#'    frame with a single column named `TAT_{threshold}` will be returned.
+#'    frame with a single column named `nvRD_cumulative` will be returned.
 #'    Defaults to `FALSE`.
 #'
 #' @return A numeric value or single column data frame. 
@@ -230,7 +230,7 @@ nvRD_cumulative_response <- function(nvRD,
   )
   
   # Get the epochs based on the data
-  if (epoch == "dominant.epoch") {
+  if (is.character(epoch) && epoch == "dominant.epoch") {
     epoch <- count_difftime(tibble::tibble(Datetime = Time.vector))$difftime[1]
   }
   # If the user specified an epoch, use that instead
@@ -399,7 +399,7 @@ nvRC <- function(MEDI.vector,
   slope <- 1.42
   
   # Get the epochs based on the data
-  if (epoch == "dominant.epoch") {
+  if (is.character(epoch) && epoch == "dominant.epoch") {
     epoch <- count_difftime(tibble::tibble(Datetime = Time.vector))$difftime[1]
   }
   # If the user specified an epoch, use that instead

@@ -23,7 +23,7 @@ either \code{"dominant.epoch"} (the default) for a guess based on the data, or a
 \code{lubridate::duration()} string, e.g., \code{"1 day"} or \code{"10 sec"}.}
 
 \item{as.df}{Logical. Should a data frame with be returned? If \code{TRUE}, a data
-frame with a single column named \verb{TAT_\{threshold\}} will be returned.
+frame with a single column named \code{nvRD_cumulative} will be returned.
 Defaults to \code{FALSE}.}
 }
 \value{
@@ -63,11 +63,14 @@ Other metrics:
 \code{\link{centroidLE}()},
 \code{\link{disparity_index}()},
 \code{\link{duration_above_threshold}()},
+\code{\link{frequency_crossing_threshold}()},
 \code{\link{interdaily_stability}()},
 \code{\link{intradaily_variability}()},
 \code{\link{midpointCE}()},
 \code{\link{nvRC}()},
 \code{\link{nvRD}()},
+\code{\link{period_above_threshold}()},
+\code{\link{threshold_for_duration}()},
 \code{\link{timing_above_threshold}()}
 }
 \concept{metrics}

@@ -12,8 +12,9 @@
 #'    must be also numeric. If nothing is provided, no binning will be performed.
 #' @param na.rm Logical. Should missing values be removed for the calculation?
 #'    Defaults to `FALSE`.
-#' @param as.df Logical. Should the output be returned as a data frame? Defaults
-#'    to `FALSE`.
+#' @param as.df Logical. Should the output be returned as a data frame? If `TRUE`, a data
+#'    frame with a single column named `centroidLE` will be returned.
+#'    Defaults to `FALSE`.
 #'
 #' @return Single column data frame or vector.
 #' 

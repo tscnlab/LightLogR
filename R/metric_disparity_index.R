@@ -6,8 +6,9 @@
 #'
 #' @param Light.vector Numeric vector containing the light data.
 #' @param na.rm Logical. Should missing values be removed? Defaults to FALSE
-#' @param as.df Logical. Should the output be returned as a data frame? Defaults
-#'    to FALSE
+#' @param as.df Logical. Should the output be returned as a data frame? If `TRUE`, a data
+#'    frame with a single column named `disparity_index` will be returned.
+#'    Defaults to `FALSE`.
 #'
 #' @return Single column data frame or vector.
 #' 

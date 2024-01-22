@@ -18,8 +18,9 @@ intradaily_variability(
 
 \item{na.rm}{Logical. Should missing values be removed? Defaults to \code{FALSE}.}
 
-\item{as.df}{Logical. Should the output be returned as a data frame? Defaults
-to \code{FALSE}.}
+\item{as.df}{Logical. Should the output be returned as a data frame? If \code{TRUE}, a data
+frame with a single column named \code{intradaily_variability} will be returned.
+Defaults to \code{FALSE}.}
 }
 \value{
 Numeric value or dataframe with column 'IV'.
@@ -64,11 +65,14 @@ Other metrics:
 \code{\link{centroidLE}()},
 \code{\link{disparity_index}()},
 \code{\link{duration_above_threshold}()},
+\code{\link{frequency_crossing_threshold}()},
 \code{\link{interdaily_stability}()},
 \code{\link{midpointCE}()},
 \code{\link{nvRC}()},
 \code{\link{nvRD_cumulative_response}()},
 \code{\link{nvRD}()},
+\code{\link{period_above_threshold}()},
+\code{\link{threshold_for_duration}()},
 \code{\link{timing_above_threshold}()}
 }
 \concept{metrics}
