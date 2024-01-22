@@ -46,6 +46,9 @@
     <loc>https://tscnlab.github.io/LightLogR/reference/bright_dark_period.html</loc>
   </url>
   <url>
+    <loc>https://tscnlab.github.io/LightLogR/reference/centroidLE.html</loc>
+  </url>
+  <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/count_difftime.html</loc>
   </url>
   <url>
@@ -56,6 +59,9 @@
   </url>
   <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/data2reference.html</loc>
+  </url>
+  <url>
+    <loc>https://tscnlab.github.io/LightLogR/reference/disparity_index.html</loc>
   </url>
   <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/dominant_epoch.html</loc>
@@ -110,6 +116,21 @@
   </url>
   <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/join_datasets.html</loc>
+  </url>
+  <url>
+    <loc>https://tscnlab.github.io/LightLogR/reference/midpointCE.html</loc>
+  </url>
+  <url>
+    <loc>https://tscnlab.github.io/LightLogR/reference/nvRC.html</loc>
+  </url>
+  <url>
+    <loc>https://tscnlab.github.io/LightLogR/reference/nvRC_metrics.html</loc>
+  </url>
+  <url>
+    <loc>https://tscnlab.github.io/LightLogR/reference/nvRD.html</loc>
+  </url>
+  <url>
+    <loc>https://tscnlab.github.io/LightLogR/reference/nvRD_cumulative_response.html</loc>
   </url>
   <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/pipe.html</loc>
