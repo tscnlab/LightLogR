@@ -236,7 +236,7 @@ import_arguments <- list(
       dplyr::rename(MEDI = Melanopic.EDI) %>% 
       dplyr::mutate(Datetime =
                       Datetime %>% lubridate::parse_date_time(
-                        orders =  "HMSdmy",tz = tz))
+                        orders =  c("%H:%M:%S %d/%m/%y", "%d/%m/%Y %H:%M") ,tz = tz, exact = TRUE))
   }),
   #Intelligent Automation Inc DeLux
   DeLux = rlang::expr({
