@@ -381,7 +381,8 @@ nvRC <- function(MEDI.vector,
       is.numeric(Time.vector) | hms::is_hms(Time.vector) | lubridate::is.POSIXct(Time.vector),
     "`epoch` must either be a duration or a string" =
       lubridate::is.duration(epoch) | is.character(epoch),
-    "`sleep.onset` must be numeric, HMS, or NULL" = is.null(sleep.onset) | hms::is_hms(sleep.onset)
+    "`sleep.onset` must be numeric, HMS, or NULL" = 
+      is.null(sleep.onset) | hms::is_hms(sleep.onset) | is.numeric(sleep.onset)
   )
   
   # Replace missing values

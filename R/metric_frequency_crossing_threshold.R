@@ -46,17 +46,31 @@ frequency_crossing_threshold <- function(Light.vector,
                                         na.rm = FALSE,
                                         as.df = FALSE) {
   
+  # Perform argument checks
+  stopifnot(
+    "`Light.vector` must be numeric!" = is.numeric(Light.vector),
+    "`threshold` must be numeric!" = is.numeric(threshold),
+    "`threshold` must be one value!" = length(threshold) == 1,
+    "`na.rm` must be logical!" = is.logical(na.rm),
+    "`as.df` must be logical!" = is.logical(as.df)
+  )
+  
   # Remove NAs
   if (na.rm) {
     Light.vector <- Light.vector[!is.na(Light.vector)]
   }
   
-  # Calculate FIC
-  fic <- sum(abs(diff(compare_threshold(Light.vector, threshold))))
+  if (any(is.na(Light.vector))){
+    fic <- NA
+  }
+  else{
+    # Calculate FIC
+    fic <- sum(abs(diff(compare_threshold(Light.vector, threshold))))
+  }
   
   # Return data frame or numeric value
   if (as.df) {
-    threshold <- stringr::str_flatten(sort(threshold), collapse = "-")
+    threshold <- as.character(threshold)
     return(tibble::tibble("frequency_crossing_{threshold}" := fic))
   } else {
     return(fic)
