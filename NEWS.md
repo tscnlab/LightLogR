@@ -1,3 +1,5 @@
+# LightLogR 0.3.0
+
 # LightLogR 0.2.2.9000
 
 * Bugfix for `LiDo` import
