@@ -72,9 +72,18 @@ reference:
       This section includes functions to calculate light exposure metrics.
     contents:
     - bright_dark_period
+    - centroidLE
+    - disparity_index
     - duration_above_threshold
     - intradaily_variability
     - interdaily_stability
+    - midpointCE
+    - nvRC
+    - nvRC_circadianBias
+    - nvRC_circadianDisturbance
+    - nvRC_relativeAmplitudeError
+    - nvRD
+    - nvRD_cumulative_response
     - timing_above_threshold
     
   - title: Helpers
