@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.2.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,6 +61,7 @@
 <span>  <span class="va">dataset</span>,</span>
 <span>  Datetime.colname <span class="op">=</span> <span class="va">Datetime</span>,</span>
 <span>  unit <span class="op">=</span> <span class="st">"none"</span>,</span>
+<span>  type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"round"</span>, <span class="st">"floor"</span>, <span class="st">"ceiling"</span><span class="op">)</span>,</span>
 <span>  numeric.handler <span class="op">=</span> <span class="va">mean</span>,</span>
 <span>  character.handler <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/which.min.html" class="external-link">which.max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  logical.handler <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="fl">0.5</span>,</span>
@@ -85,6 +86,11 @@ by <a href="LightLogR-package.html">LightLogR</a>, take care to choose a sensibl
 
 <dt>unit</dt>
 <dd><p>Unit of binning. See <code><a href="https://lubridate.tidyverse.org/reference/round_date.html" class="external-link">lubridate::round_date()</a></code> for examples.</p></dd>
+
+
+<dt>type</dt>
+<dd><p>One of <code>"round"</code>(the default), <code>"ceiling"</code> or <code>"floor"</code>. Setting
+chooses the relevant function from lubridate.</p></dd>
 
 
 <dt>numeric.handler, character.handler, logical.handler, factor.handler</dt>

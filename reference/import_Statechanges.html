@@ -14,7 +14,7 @@ when a State (like sleep or wake) starts."><meta property="og:image" content="ht
     
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.2.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,7 +68,7 @@ when a <code>State</code> (like <code>sleep</code> or <code>wake</code>) starts.
 <span>  path <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  sep <span class="op">=</span> <span class="st">","</span>,</span>
 <span>  dec <span class="op">=</span> <span class="st">"."</span>,</span>
-<span>  structure <span class="op">=</span> <span class="st">"wide"</span>,</span>
+<span>  structure <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"wide"</span>, <span class="st">"long"</span><span class="op">)</span>,</span>
 <span>  Datetime.format <span class="op">=</span> <span class="st">"ymdHMS"</span>,</span>
 <span>  tz <span class="op">=</span> <span class="st">"UTC"</span>,</span>
 <span>  <span class="va">State.colnames</span>,</span>
@@ -196,11 +196,14 @@ additional columns if <code>keep.all</code> is <code>TRUE</code>.</p>
 <span class="r-in"><span>Id.colname <span class="op">=</span> <span class="va">record_id</span>,</span></span>
 <span class="r-in"><span>sep <span class="op">=</span> <span class="st">";"</span>,</span></span>
 <span class="r-in"><span>dec <span class="op">=</span> <span class="st">","</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Successfully read in 14 observations from Statechanges-file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Successfully read in 14 observations across 1 Ids from 1 Statechanges-file(s).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Timezone set is UTC.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Start: 2023-08-28 23:20:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> End: 2023-09-04 07:25:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> First Observation: 2023-08-28 23:20:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Last Observation: 2023-09-04 07:25:00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Timespan: 6.3 days</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Observation intervals: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Id    interval.time             n pct  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 205   34860s (~9.68 hours)      1 8%   </span>
@@ -243,11 +246,14 @@ additional columns if <code>keep.all</code> is <code>TRUE</code>.</p>
 <span class="r-in"><span>                   Id.colname <span class="op">=</span> <span class="va">record_id</span>,</span></span>
 <span class="r-in"><span>                   sep <span class="op">=</span> <span class="st">";"</span>,</span></span>
 <span class="r-in"><span>                   dec <span class="op">=</span> <span class="st">","</span>, structure <span class="op">=</span> <span class="st">"long"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Successfully read in 7 observations from Statechanges-file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Successfully read in 7 observations across 1 Ids from 1 Statechanges-file(s).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Timezone set is UTC.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Start: 2023-08-28 23:20:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> End: 2023-09-03 21:30:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> First Observation: 2023-08-28 23:20:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Last Observation: 2023-09-03 21:30:00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Timespan: 5.9 days</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Observation intervals: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Id    interval.time             n pct  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 205   81300s (~22.58 hours)     1 17%  </span>

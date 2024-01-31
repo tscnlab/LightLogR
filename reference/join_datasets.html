@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.2.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -100,20 +100,26 @@
 <span class="r-in"><span><span class="va">file.LL</span> <span class="op">&lt;-</span> <span class="st">"205_actlumus_Log_1020_20230904101707532.txt.zip"</span></span></span>
 <span class="r-in"><span><span class="va">file.env</span> <span class="op">&lt;-</span> <span class="st">"cyepiamb_CW35_Log_1431_20230904081953614.txt.zip"</span></span></span>
 <span class="r-in"><span><span class="va">dataset.LL</span> <span class="op">&lt;-</span> <span class="va">import</span><span class="op">$</span><span class="fu">ActLumus</span><span class="op">(</span><span class="va">file.LL</span>, <span class="va">path</span>, auto.id <span class="op">=</span> <span class="st">"^(\\d{3})"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Successfully read in 61016 observations from ActLumus-file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Successfully read in 61'016 observations across 1 Ids from 1 ActLumus-file(s).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Timezone set is UTC.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Start: 2023-08-28 08:47:54</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> End: 2023-09-04 10:17:04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> First Observation: 2023-08-28 08:47:54</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Last Observation: 2023-09-04 10:17:04</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Timespan: 7.1 days</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Observation intervals: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Id    interval.time     n pct  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 205   10s           <span style="text-decoration: underline;">61</span>015 100% </span>
 <span class="r-in"><span><span class="va">dataset.env</span> <span class="op">&lt;-</span> <span class="va">import</span><span class="op">$</span><span class="fu">ActLumus</span><span class="op">(</span><span class="va">file.env</span>, <span class="va">path</span>, manual.id <span class="op">=</span> <span class="st">"CW35"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Successfully read in 20143 observations from ActLumus-file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Successfully read in 20'143 observations across 1 Ids from 1 ActLumus-file(s).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Timezone set is UTC.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Start: 2023-08-28 08:28:39</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> End: 2023-09-04 08:19:38</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> First Observation: 2023-08-28 08:28:39</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Last Observation: 2023-09-04 08:19:38</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Timespan: 7 days</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Observation intervals: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Id    interval.time     n pct  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> CW35  29s               1 0%   </span>

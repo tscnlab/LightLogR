@@ -67,6 +67,12 @@
     <loc>https://tscnlab.github.io/LightLogR/reference/dominant_epoch.html</loc>
   </url>
   <url>
+    <loc>https://tscnlab.github.io/LightLogR/reference/dst_change_handler.html</loc>
+  </url>
+  <url>
+    <loc>https://tscnlab.github.io/LightLogR/reference/dst_change_summary.html</loc>
+  </url>
+  <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/duration_above_threshold.html</loc>
   </url>
   <url>
@@ -103,6 +109,9 @@
     <loc>https://tscnlab.github.io/LightLogR/reference/import_Statechanges.html</loc>
   </url>
   <url>
+    <loc>https://tscnlab.github.io/LightLogR/reference/import_adjustment.html</loc>
+  </url>
+  <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/index.html</loc>
   </url>
   <url>
@@ -116,6 +125,9 @@
   </url>
   <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/join_datasets.html</loc>
+  </url>
+  <url>
+    <loc>https://tscnlab.github.io/LightLogR/reference/ll_import_expr.html</loc>
   </url>
   <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/midpointCE.html</loc>

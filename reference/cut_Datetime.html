@@ -18,7 +18,7 @@ summary step.'><meta property="og:image" content="https://tscnlab.github.io/Ligh
     
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.2.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,7 +72,7 @@ summary step.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">cut_Datetime</span><span class="op">(</span></span>
 <span>  <span class="va">dataset</span>,</span>
 <span>  unit <span class="op">=</span> <span class="st">"3 hours"</span>,</span>
-<span>  type <span class="op">=</span> <span class="st">"round"</span>,</span>
+<span>  type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"round"</span>, <span class="st">"floor"</span>, <span class="st">"ceiling"</span><span class="op">)</span>,</span>
 <span>  Datetime.colname <span class="op">=</span> <span class="va">Datetime</span>,</span>
 <span>  New.colname <span class="op">=</span> <span class="va">Datetime.rounded</span>,</span>
 <span>  group_by <span class="op">=</span> <span class="cn">FALSE</span>,</span>

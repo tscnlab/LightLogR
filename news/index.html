@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.2.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,14 +51,21 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.2.2.9000" id="lightlogr-0229000">LightLogR 0.2.2.9000<a class="anchor" aria-label="anchor" href="#lightlogr-0229000"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.3.0" id="lightlogr-030">LightLogR 0.3.0<a class="anchor" aria-label="anchor" href="#lightlogr-030"></a></h2>
+<ul><li><p>Added the functions <code><a href="../reference/dst_change_summary.html">dst_change_summary()</a></code> and <code><a href="../reference/dst_change_handler.html">dst_change_handler()</a></code> to detect and deal with Daylight Savings. The functionality is also integrated into the import functions, so that a user can automatically apply it during the import process.</p></li>
+<li><p>Added <strong>Steffen Hartmeyer</strong> as a collaborator, who added a number of light metrics from the <code>lightdosimetry</code> package.</p></li>
+<li><p>Added the <code><a href="../reference/import_adjustment.html">import_adjustment()</a></code> function for more flexibility when importing light logger data that does not conform to the standard format. This goes hand in hand with the <code>ll_import_expr</code> list that contains specific expressions for all supported devices.</p></li>
+<li><p>lots of bug fixes and improvements</p></li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.2.2" id="lightlogr-022">LightLogR 0.2.2<a class="anchor" aria-label="anchor" href="#lightlogr-022"></a></h2>
 <ul><li><p>Bugfix for <code>LiDo</code> import</p></li>
 <li><p>Added import support for new devices: <code>LiDo</code>, <code>DeLux</code>, and <code>Speccy</code></p></li>
 <li><p>Removed minor inconsistencies in naming conventions. Also, all imported columns will have syntactic naming now</p></li>
 <li><p>Added an option to all <code>gap</code> functions, to extend the gapless Datetime range to full days.</p></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.2.1.9000" id="lightlogr-0219000">LightLogR 0.2.1.9000<a class="anchor" aria-label="anchor" href="#lightlogr-0219000"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.2.1" id="lightlogr-021">LightLogR 0.2.1<a class="anchor" aria-label="anchor" href="#lightlogr-021"></a></h2>
 <ul><li><p>Exports the up to now internal function <code><a href="../reference/count_difftime.html">count_difftime()</a></code> that is the basis for <code><a href="../reference/dominant_epoch.html">dominant_epoch()</a></code>. But whereas the latter gets only the most common epoch, <code><a href="../reference/count_difftime.html">count_difftime()</a></code> returns a table with the counts of all epochs. This is useful in conjunction with <code><a href="../reference/gap_finder.html">gap_finder()</a></code>, to check the distribution of data intervals.</p></li>
 <li><p>Added the <code><a href="../reference/gg_days.html">gg_days()</a></code> function to visualize multiple days of data in a single plot. Alongside come two helper functions, <code><a href="../reference/Datetime_limits.html">Datetime_limits()</a></code> and <code><a href="../reference/Datetime_breaks.html">Datetime_breaks()</a></code>, to set the limits and breaks of the x-axis.</p></li>
 <li><p>Added the <code><a href="../reference/filter_Datetime_multiple.html">filter_Datetime_multiple()</a></code> function to filter for multiple Datetime ranges depending on certain conditions, e.g. different filter cutoffs for different participants. It wraps around <code><a href="../reference/filter_Datetime.html">filter_Datetime()</a></code> or <code><a href="../reference/filter_Datetime.html">filter_Date()</a></code>.</p></li>
@@ -70,7 +77,7 @@
 <li><p>A ton of updates to documentation, unit tests, and bug fixes.</p></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.2.0.9000" id="lightlogr-0209000">LightLogR 0.2.0.9000<a class="anchor" aria-label="anchor" href="#lightlogr-0209000"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.2.0" id="lightlogr-020">LightLogR 0.2.0<a class="anchor" aria-label="anchor" href="#lightlogr-020"></a></h2>
 <ul><li><p>Added Unit tests and documentation for all new functions.</p></li>
 <li><p>To <code><a href="../reference/filter_Datetime.html">filter_Datetime()</a></code> and <code><a href="../reference/filter_Datetime.html">filter_Date()</a></code> added the option to filter for group specific dates.</p></li>
 <li><p>Added the family of functions around <code>States</code> and <code>Reference</code> to import, process, and add states to light logger data, like sleep/wake times, wear times, or other data. This family includes <code><a href="../reference/import_Statechanges.html">import_Statechanges()</a></code>, <code><a href="../reference/sc2interval.html">sc2interval()</a></code>, <code>ìnterval2state()</code>, <code><a href="../reference/data2reference.html">data2reference()</a></code>, <code><a href="../reference/sleep_int2Brown.html">sleep_int2Brown()</a></code>, <code><a href="../reference/Brown_check.html">Brown_check()</a></code>, <code><a href="../reference/Brown_rec.html">Brown_rec()</a></code>, and <code><a href="../reference/Brown2reference.html">Brown2reference()</a></code>.</p></li>
@@ -83,10 +90,10 @@
 <li><p>Added the function <code>join_datasets</code> to combine imported datasets with sensible constraints.</p></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.1.9000" id="lightlogr-0119000">LightLogR 0.1.1.9000<a class="anchor" aria-label="anchor" href="#lightlogr-0119000"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.1.1" id="lightlogr-011">LightLogR 0.1.1<a class="anchor" aria-label="anchor" href="#lightlogr-011"></a></h2>
 <div class="section level3">
-<h3 id="gg_day-0-1-1-9000">
-<code>gg_day()</code>:<a class="anchor" aria-label="anchor" href="#gg_day-0-1-1-9000"></a></h3>
+<h3 id="gg_day-0-1-1">
+<code>gg_day()</code>:<a class="anchor" aria-label="anchor" href="#gg_day-0-1-1"></a></h3>
 <ul><li><p>Added <code>major grid marks</code> for the y-axis.</p></li>
 <li><p>Added a <code>message</code> when using start or end dates to make it clear, that only the Date portion of the input will be used.</p></li>
 <li><p>Changed the behavior, when there is already a Day.data column present in the data. It will only create a new column if none is present, otherwise it will use the existing column for faceting (after factorization)</p></li>
@@ -94,7 +101,7 @@
 </ul></div>
 </div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.0.9000" id="lightlogr-0109000">LightLogR 0.1.0.9000<a class="anchor" aria-label="anchor" href="#lightlogr-0109000"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.1.0" id="lightlogr-010">LightLogR 0.1.0<a class="anchor" aria-label="anchor" href="#lightlogr-010"></a></h2>
 <ul><li>Added a <code>NEWS.md</code> file to track changes to the package.</li>
 </ul></div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
