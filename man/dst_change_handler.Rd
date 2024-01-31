@@ -41,23 +41,25 @@ function results in a gap during the DST jump, which should be handled by
 timestamps during the jum back from DST to standard time. This will result
 in some inconsistencies with some functions, so we recommend to use
 \code{aggregate_Datetime()} afterwards with a \code{unit} equal to the dominant epoch.
+Finally, the function is not equipped to handle more than one jump per group.
+The jump is based on whether the group starts out with DST or not.
 }
 \details{
-The detection of a DST jump is based on the function \code{lubridate::dst()} and jumps are only applied within a group. During import, this function is used if \code{dst_adjustmen = TRUE} is set and includes by default the filename as the grouping variable, additionally to \code{Id}.
+The detection of a DST jump is based on the function \code{lubridate::dst()} and jumps are only applied within a group. During import, this function is used if \code{dst_adjustment = TRUE} is set and includes by default the filename as the grouping variable, additionally to \code{Id}.
 }
 \examples{
 #create some data that crosses a DST jump
 data <- 
  tibble::tibble(
- Datetime = seq.POSIXt(from = as.POSIXct("2023-03-26 00:00:00", tz = "Europe/Berlin"),
-                     to = as.POSIXct("2023-03-26 5:00:00", tz = "Europe/Berlin"),
+ Datetime = seq.POSIXt(from = as.POSIXct("2023-03-26 01:30:00", tz = "Europe/Berlin"),
+                     to = as.POSIXct("2023-03-26 03:00:00", tz = "Europe/Berlin"),
                      by = "30 mins"),
                      Value = 1)
  #as can be seen next, there is a gap in the data - this is necessary when
  #using a timezone with DST. 
  data \%>\% .$Datetime
  #Let us say now, that the device did not adjust for the DST - thus the 03:00 
- #timestamp is actually 04:00 in local time. This can be corrected for by
+ #timestamp is actually 04:00 in local time. This can be corrected for by:
  data \%>\% dst_change_handler() \%>\% .$Datetime
 }
 \seealso{
