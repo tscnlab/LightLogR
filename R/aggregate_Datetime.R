@@ -26,6 +26,7 @@
 aggregate_Datetime <- function(dataset,
                                Datetime.colname = Datetime,
                                unit = "none",
+                               type = c("round", "floor", "ceiling"),
                                numeric.handler = mean,
                                character.handler = \(x) names(which.max(table(x))),
                                logical.handler = \(x) mean(x) >= 0.5,
@@ -33,6 +34,9 @@ aggregate_Datetime <- function(dataset,
                                ...) {
   
   # Initial Checks ----------------------------------------------------------
+  
+  # Match input arguments
+  type <- match.arg(type)
   
   Datetime.colname.str <- colname.defused({{ Datetime.colname }})
   Datetime.colname.defused <- colname.defused({{ Datetime.colname }}, as_string = FALSE)
@@ -61,6 +65,7 @@ aggregate_Datetime <- function(dataset,
     cut_Datetime(
       Datetime.colname = !!Datetime.colname.defused,
       unit = unit, 
+      type = type,
       group_by = TRUE) %>% #choose the resolution of our aggregated data
     dplyr::summarize(dplyr::across(dplyr::where(is.numeric), !!numeric.handler), #average all numerics
               dplyr::across(dplyr::where(is.character), !!character.handler), #choose the dominant string

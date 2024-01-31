@@ -2,7 +2,7 @@
 % Please edit documentation in R/metric_duration_above_threshold.R
 \name{duration_above_threshold}
 \alias{duration_above_threshold}
-\title{#' Time above/below threshold or within threshold range}
+\title{Time above/below threshold or within threshold range}
 \usage{
 duration_above_threshold(
   Light.vector,

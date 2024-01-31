@@ -155,12 +155,15 @@ data2reference <- function(dataset,
   #set arguments based on the across.id argument
   across.which.id <- NULL
   
+  #make sure that no shift is applied, if across.id is FALSE
   if(rlang::is_false(across.id)) {
     shift.start <- FALSE
   }
+  #if across.id is TRUE, use everything() as the across.id
   else if(rlang::is_true(across.id)) {
     across.which.id <- rlang::expr(tidyr::everything())
   }
+  #if across ID is a 
   else {
     across.which.id <- rlang::enexpr(across.id)
     across.id <- TRUE
@@ -274,7 +277,7 @@ data2reference <- function(dataset,
     Reference.data %>% 
       dplyr::ungroup(rlang::eval_tidy(!!across.which.id)) %>% 
       dplyr::left_join(Reference.start.times) %>% 
-      tidyr::fill(Reference.start.times) %>% 
+      tidyr::fill(Reference.start.times, .direction = c("downup")) %>% 
       dplyr::group_by(dplyr::across(dplyr::all_of(group.keys)))
     # Reference.data$Reference.Start.date.shift <- Reference.start.times
     

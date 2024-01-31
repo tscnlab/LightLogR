@@ -33,7 +33,7 @@
 
 cut_Datetime <- function(dataset,
                          unit = "3 hours",
-                         type = "round",
+                         type = c("round", "floor", "ceiling"),
                          Datetime.colname = Datetime,
                          New.colname = Datetime.rounded,
                          group_by = FALSE,
@@ -41,7 +41,9 @@ cut_Datetime <- function(dataset,
   
   # Initial Checks ----------------------------------------------------------
   
-  type.allowed <- c("round", "ceiling", "floor")
+  # Match input arguments
+  type <- match.arg(type)
+  
   Datetime.colname.defused <- 
     rlang::enexpr(Datetime.colname) %>% rlang::as_string()
   New.colname.defused <- 
@@ -51,8 +53,6 @@ cut_Datetime <- function(dataset,
     "dataset is not a dataframe" = is.data.frame(dataset),
     "unit is not a character string" = is.character(unit),
     "unit is not a scalar" = length(unit) == 1,
-    "type must be a scalar character of either `round`, `ceiling` or `floor`" = 
-      type %in% type.allowed,
     "Datetime.colname must be part of the dataset" = 
       Datetime.colname.defused %in% names(dataset),
     "Datetime.colname must be a Datetime" = 

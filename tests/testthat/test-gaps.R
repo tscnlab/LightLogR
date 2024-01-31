@@ -89,7 +89,7 @@ test_that("gapless_Datetimes throws appropriate errors", {
   expect_error(dataset %>% gap_handler(epoch = 5),
                "epoch must either be a duration or a string")
   expect_error(dataset %>% gap_handler(behavior = "foo"),
-               "behavior must be one of 'full_sequence', 'regulars', 'irregulars', 'gaps'")
+               "'arg' should be one of ")
   
 })
 

@@ -147,10 +147,13 @@ gapless_Datetimes <- function(dataset,
 gap_handler <- function(dataset, 
                         Datetime.colname = Datetime,
                         epoch = "dominant.epoch",
-                        behavior = "full_sequence",
+                        behavior = c("full_sequence", "regulars", "irregulars", "gaps"),
                         full.days = FALSE) {
   
   # Initial Checks ----------------------------------------------------------
+  
+  #Argument matching
+  behavior <- match.arg(behavior)
   
   stopifnot(
     "dataset is not a dataframe" = is.data.frame(dataset),
@@ -161,8 +164,6 @@ gap_handler <- function(dataset,
         dataset[[colname.defused({{ Datetime.colname }})]]),
     "epoch must either be a duration or a string" = 
       lubridate::is.duration(epoch) | is.character(epoch),
-    "behavior must be one of 'full_sequence', 'regulars', 'irregulars', 'gaps'" = 
-      behavior %in% c("full_sequence", "regulars", "irregulars", "gaps"),
     "full.days must be a logical" = is.logical(full.days)
   )
   

@@ -1,6 +1,6 @@
 Package: LightLogR
 Title: Work With Data from Wearable Light Loggers and Optical Radiation Dosimeters
-Version: 0.2.2.9000
+Version: 0.3.0
 Authors@R: c(
     person("Johannes", "Zauner", 
       email = "johannes.zauner@tum.de", role = c("aut", "cre"),
@@ -25,7 +25,7 @@ Description: LightLogR is a package under development as part of the MeLiDos
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 URL: https://github.com/tscnlab/LightLogR,
     https://tscnlab.github.io/LightLogR/
 BugReports: https://github.com/tscnlab/LightLogR/issues

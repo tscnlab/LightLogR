@@ -33,6 +33,9 @@
 #'   which is the weekday and date. See [base::strptime()] for more options.
 #' @param facetting Should an automated facet by grouping be applied? Default is
 #'   `TRUE`.
+#' @param scales For [ggplot2::facet_wrap()], should scales be `"fixed"`,
+#'   `"free"` or `"free"` in one dimension (`"free_x"` is the default). Expects
+#'   a `character`.
 #'
 #' @return A ggplot object
 #' @export
@@ -55,7 +58,7 @@ gg_days <- function(dataset,
                    aes_fill = NULL,
                    group = NULL,
                    geom = "line",
-                   scales = "free_x",
+                   scales = c("free_x", "free_y", "fixed", "free"),
                    x.axis.breaks = Datetime_breaks,
                    y.axis.breaks = c(-10^(5:0), 0, 10^(0:5)),
                    y.scale = "symlog",
@@ -72,6 +75,9 @@ gg_days <- function(dataset,
   
   # Initial Checks ----------------------------------------------------------
   
+  # Match input arguments
+  scales <- match.arg(scales)
+  
   x <- rlang::enexpr(x.axis) 
   y <- rlang::enexpr(y.axis)
   axis_columns <- (purrr::map_chr(c(x,y), deparse1))
@@ -81,8 +87,6 @@ gg_days <- function(dataset,
       rlang::as_string(x) %in% names(dataset),
     "The given column for X is not a Datetime" =
       lubridate::is.POSIXct(dataset[[rlang::as_string(x)]]),
-    "scales must be one of `fixed`, `free_x`, `free_y`, or `free`" = 
-      scales %in% c("free_y", "free_x", "fixed", "free"),
     "The X axis label must be a string" = is.character(x.axis.label),
     "The Y axis label must be a string" = is.character(y.axis.label),
     "interactive must be a logical" = is.logical(interactive)
@@ -127,7 +131,7 @@ gg_days <- function(dataset,
         group = {{ group }},
         fill = {{ aes_fill }},
         col = {{ aes_col }},
-      ), ...) +
+      ), if(geom == "ribbon") ...) +
     ribbon +
     # Scales --------------------------------------------------------------
     ggplot2::scale_y_continuous(

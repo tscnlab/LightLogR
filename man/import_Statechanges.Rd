@@ -9,7 +9,7 @@ import_Statechanges(
   path = NULL,
   sep = ",",
   dec = ".",
-  structure = "wide",
+  structure = c("wide", "long"),
   Datetime.format = "ymdHMS",
   tz = "UTC",
   State.colnames,
