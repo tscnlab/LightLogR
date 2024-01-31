@@ -1,5 +1,11 @@
 #This internal helper function prints basic information about a dataset and is used for import function
-import.info <- function(tmp, device, tz, Id.colname, dst_adjustment) {
+import.info <- function(tmp, 
+                        device, 
+                        tz, 
+                        Id.colname, 
+                        dst_adjustment,
+                        dst_info = TRUE,
+                        filename) {
   #give info about the file
   min.time <- min(tmp$Datetime)
   max.time <- max(tmp$Datetime)
@@ -15,15 +21,17 @@ import.info <- function(tmp, device, tz, Id.colname, dst_adjustment) {
 
   #number of Ids
   n_ids <- tmp %>% dplyr::group_keys() %>% nrow()
-  #number of files
-  n_files <- tmp$file.name %>% unique() %>% length()
+  #number of files 
+  n_files <- filename %>% unique() %>% length()
   
   #check for dst_adjustment
-  dst_info <- 
-    tmp %>% dplyr::group_by(file.name, .add = TRUE) %>% dst_change_summary()
+  if(dst_info) {
+    dst_info <- 
+      tmp %>% dplyr::group_by(file.name, .add = TRUE) %>% dst_change_summary()
+  }
   
   #prepare dst info
-  if(nrow(dst_info) != 0) {
+  if(rlang::is_true(nrow(dst_info) != 0)) {
     dst_info <- 
       paste0(
         "Observations in the following ", 

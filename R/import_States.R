@@ -212,7 +212,8 @@ import_Statechanges <- function(filename,
       )
   }
   
-  if(!silent) import.info(data, "Statechanges", tz, {{ Id.newname }})
+  if(!silent) 
+    import.info(data, "Statechanges", tz, {{ Id.newname }}, FALSE, FALSE, filename)
   
   return(data)
 }

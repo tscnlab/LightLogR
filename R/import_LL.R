@@ -204,7 +204,8 @@ imports <- function(device,
         tmp <- tmp %>% dst_change_handler(filename.colname = file.name)
       }
       #give info about the file
-      if(!silent) import.info(tmp, !!device, tz, Id, dst_adjustment)
+      if(!silent) 
+        import.info(tmp, !!device, tz, Id, dst_adjustment, TRUE, filename)
       
       #return the file
       tmp
