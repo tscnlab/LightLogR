@@ -204,6 +204,168 @@ imports <- function(device,
   )
 }
 
+ll_import_expr <- list(
+  #SpectraWear
+  SpectraWear = rlang::expr({
+    tmp <-suppressMessages( 
+      readr::read_csv(filename,
+                      n_max = n_max,
+                      id = "file.name",
+                      locale = locale,
+                      name_repair = "universal",
+                      ...
+      ))
+    tmp <- tmp %>%
+      dplyr::rename(MEDI = Mel
+      ) %>% 
+      dplyr::mutate(Datetime =
+                      lubridate::dmy_hms(paste(Date, Time), tz = tz),
+                    Id = paste(.data$id, .data$ls, sep = ".")
+      )
+  }),
+  #Speccy
+  Speccy = rlang::expr({
+    tmp <-suppressMessages( 
+      readr::read_csv(filename,
+                      n_max = n_max,
+                      id = "file.name",
+                      locale = locale,
+                      name_repair = "universal",
+                      ...
+      ))
+    tmp <- tmp %>%
+      dplyr::rename(MEDI = Melanopic.EDI) %>% 
+      dplyr::mutate(Datetime =
+                      Datetime %>% lubridate::parse_date_time(
+                        orders =  c("%H:%M:%S %d/%m/%y", "%d/%m/%Y %H:%M") ,tz = tz, exact = TRUE))
+  }),
+  #Intelligent Automation Inc DeLux
+  DeLux = rlang::expr({
+    tmp <-suppressMessages( 
+      readr::read_csv(filename,
+                      n_max = n_max,
+                      id = "file.name",
+                      locale = locale,
+                      name_repair = "universal",
+                      col_types = c("fccdddddddddddddddddd"),
+                      ...
+      ))
+    tmp <- tmp %>%
+      dplyr::rename(Datetime = Timestamp) %>%
+      dplyr::mutate(Datetime =
+                      Datetime %>% lubridate::ymd_hms(tz = tz))
+  }),
+  #LiDo
+  LiDo = rlang::expr({
+    tmp <- suppressMessages(
+      readr::read_delim(
+        filename,
+        delim = ";",
+        n_max = n_max,
+        id = "file.name",
+        locale = locale,
+        name_repair = "universal",
+        ...
+      )
+    )
+    tmp <- tmp %>%
+      dplyr::rename(Datetime = UTC.Timestamp,
+                    MEDI = Ev_mel_D65.in.lx) %>% 
+      dplyr::mutate(Datetime = 
+                      Datetime %>% 
+                      lubridate::dmy_hms() %>% 
+                      lubridate::with_tz(tzone = tz))
+  }),
+  #ActLumus
+  ActLumus = rlang::expr({
+    tmp <- suppressMessages( 
+      readr::read_delim(
+        filename,
+        skip = 32,
+        delim = ";",
+        n_max = n_max,
+        col_types = paste0("c", rep("d", 32)),
+        id = "file.name",
+        locale = locale,
+        name_repair = "universal",
+        ...
+      ))
+    tmp <- tmp %>%
+      dplyr::rename(Datetime = DATE.TIME,
+                    MEDI = MELANOPIC.EDI) %>%
+      dplyr::mutate(Datetime =
+                      Datetime %>% lubridate::dmy_hms(tz = tz))
+  }),
+  #LYS
+  LYS = rlang::expr({
+    tmp <-suppressMessages( 
+      readr::read_csv(filename,
+                      n_max = n_max,
+                      col_types = c("cfddddddddddd"),
+                      id = "file.name",
+                      locale = locale,
+                      name_repair = "universal",
+                      ...
+      ))
+    tmp <- tmp %>%
+      dplyr::rename(Datetime = timestamp,
+                    MEDI = mEDI) %>%
+      dplyr::mutate(Datetime =
+                      Datetime %>% lubridate::dmy_hms(tz = tz))
+  }),
+  #Actiwatch Spectrum
+  Actiwatch_Spectrum = rlang::expr({
+    #separate the dots list in the column_names and the rest
+    dots <- rlang::list2(...)
+    column_names <- dots$column_names
+    if(is.null(column_names)) 
+      stop("Actiwatch Spectrum requires a vector of `column_names` in the order in which they appear in the file in order to properly detect the starting row")
+    dots$column_names <- NULL
+    
+    tmp <- 
+      purrr::map(
+        filename,
+        \(x) {
+          rows_to_skip <- detect_starting_row(x, 
+                                              locale = locale, 
+                                              column_names = column_names,
+                                              n_max = n_max)
+          df <- suppressMessages(do.call(
+            readr::read_csv,
+            append(list(
+              x, 
+              skip = rows_to_skip,
+              locale=locale,
+              id = "file.name",
+              show_col_types = FALSE,
+              col_types = c("iDtfdfccccfdf"),
+              name_repair = "universal"
+            ),
+            dots)))
+          
+          df %>% 
+            dplyr::select(!dplyr::starts_with("..."))
+          
+        }) %>% purrr::list_rbind()
+    tmp <- tmp %>%
+      tidyr::unite(col = "Datetime",
+                   tidyselect::where(lubridate::is.Date),
+                   tidyselect::where(hms::is_hms),
+                   remove = FALSE
+      ) %>% 
+      dplyr::mutate(
+        Datetime = lubridate::ymd_hms(Datetime),
+        dplyr::across(
+          dplyr::where(is.character) &
+            dplyr::where(~ any(stringr::str_detect(.x, ","), na.rm = TRUE)),
+          ~ stringr::str_replace(.x, ",", ".") %>%
+            as.numeric()
+        )
+      )
+  })
+  
+)
+
 # Import functions -------------------------------------------------------
 
 
@@ -212,3 +374,43 @@ imports <- function(device,
 #' @rdname import_Dataset
 #' @export
 import <- purrr::imap(ll_import_expr, \(x, idx) imports(idx,x))
+
+
+#' Adjust device imports or make your own
+#'
+#' @param import_expr A named list of import expressions. The basis for
+#'   `LightLogR`'s import functions is the included dataset `ll_import_expr`. If
+#'   this function were to be given that exact dataset, and bound to a variable
+#'   called `import`, it would be identical to the `import` function. See
+#'   `details`.
+#'
+#' @details This function should only be used with some knowledge of how
+#' expressions work in R. The minimal required output for an expression to work
+#' as expected, it must lead to a data frame containing a `Datetime` column with
+#' the correct time zone. It has access to all arguments defined in the
+#' description of `import_Dataset()`. The `...` argument should be passed to
+#' whatever csv reader function is used, so that it works as expected. Look at
+#' `ll_import_expr$LYS` for a quite minimal example.
+#'
+#' @return A list of import functions
+#' @export
+#'
+#' @examples
+#' #create a new import function for the LYS device, same as the old
+#' new_import <- import_adjustment(ll_import_expr)
+#' #the new one is identical to the old one in terms of the function body
+#' identical(body(import$LYS), body(new_import$LYS))
+#'
+#' #change the import expression for the LYS device to add a message at the top
+#' ll_import_expr$LYS[[4]] <-
+#' rlang::expr({ cat("**This is a new import function**\n")
+#' tmp
+#' })
+#' new_import <- import_adjustment(ll_import_expr)
+#' filepath <- system.file("extdata/sample_data_LYS.csv", package = "LightLogR")
+#' #Now, a message is printed when the import function is called
+#' new_import <- new_import$LYS(filepath)
+
+import_adjustment <- function(import_expr) {
+    purrr::imap(import_expr, \(x, idx) imports(idx,x))
+}
