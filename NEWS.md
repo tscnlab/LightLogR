@@ -2,13 +2,13 @@
 
 * Added the functions `dst_change_summary()` and `dst_change_handler()` to detect and deal with Daylight Savings. The functionality is also integrated into the import functions, so that a user can automatically apply it during the import process.
 
-* Added **Steffen Hartmeyer** as a collaborator, who added a number of light metrics from the `lightdosimetry` package. You can access them individually by their name or collectively through `metrics$metricname`.
+* Added **Steffen Hartmeyer** as a collaborator, who added a number of light metrics from the `lightdosimetry` package.
 
 * Added the `import_adjustment()` function for more flexibility when importing light logger data that does not conform to the standard format. This goes hand in hand with the `ll_import_expr` list that contains specific expressions for all supported devices.
 
 * lots of bug fixes and improvements
 
-# LightLogR 0.2.2.9000
+# LightLogR 0.2.2
 
 * Bugfix for `LiDo` import
 
@@ -18,7 +18,7 @@
 
 * Added an option to all `gap` functions, to extend the gapless Datetime range to full days.
 
-# LightLogR 0.2.1.9000
+# LightLogR 0.2.1
 
 * Exports the up to now internal function `count_difftime()` that is the basis for `dominant_epoch()`. But whereas the latter gets only the most common epoch, `count_difftime()` returns a table with the counts of all epochs. This is useful in conjunction with `gap_finder()`, to check the distribution of data intervals.
 
@@ -38,7 +38,7 @@
 
 * A ton of updates to documentation, unit tests, and bug fixes.
 
-# LightLogR 0.2.0.9000
+# LightLogR 0.2.0
 
 * Added Unit tests and documentation for all new functions.
 
@@ -60,7 +60,7 @@
 
 * Added the function `join_datasets` to combine imported datasets with sensible constraints.
 
-# LightLogR 0.1.1.9000
+# LightLogR 0.1.1
 
 ## `gg_day()`:
 * Added `major grid marks` for the y-axis.
@@ -71,7 +71,7 @@
 
 * Added the option to create an `interactive` plot by feeding the plot to the [plotly] package.
 
-# LightLogR 0.1.0.9000
+# LightLogR 0.1.0
 
 * Added a `NEWS.md` file to track changes to the package.
 
