@@ -136,6 +136,7 @@ imports <- function(device,
       path = NULL, 
       n_max = Inf,
       tz = "UTC",
+      dst_adjustment = FALSE,
       Id.colname = Id,
       auto.id = ".*",
       manual.id = NULL,
@@ -158,6 +159,7 @@ imports <- function(device,
         "tz needs to be a character" = is.character(tz),
         "tz needs to be a valid time zone, see `OlsonNames()`" = tz %in% OlsonNames(),
         "auto.id needs to be a string" = is.character(auto.id),
+        "dst_adjustment needs to be a logical" = is.logical(dst_adjustment),
         "n_max needs to be a positive numeric" = is.numeric(n_max)
       )
       #import the file
@@ -168,6 +170,7 @@ imports <- function(device,
         stop("No data could be imported. Please check your file and settings")
       }
       
+      #check if the id column is present, if not, add it
       if(!id.colname.defused %in% names(tmp)) {
         switch(is.null(manual.id) %>% as.character(),
                "TRUE" =
@@ -186,6 +189,9 @@ imports <- function(device,
                    dplyr::mutate(!!Id.colname := manual.id, .before = 1)}
         )
       }
+      
+      #add a filename
+      #check if the id column is a factor, if not, make it one, and group by it
       tmp <- tmp %>%
         dplyr::mutate(file.name = basename(file.name) %>%
                         tools::file_path_sans_ext(),
@@ -193,8 +199,12 @@ imports <- function(device,
         dplyr::group_by(Id = !!Id.colname) %>%
         dplyr::arrange(Datetime, .by_group = TRUE)
       
+      #if dst_adjustment is TRUE, adjust the datetime column
+      if(dst_adjustment) {
+        tmp <- tmp %>% dst_change_handler(filename.colname = file.name)
+      }
       #give info about the file
-      if(!silent) import.info(tmp, !!device, tz, Id)
+      if(!silent) import.info(tmp, !!device, tz, Id, dst_adjustment)
       
       #return the file
       tmp

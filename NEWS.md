@@ -1,8 +1,10 @@
 # LightLogR 0.3.0
 
-* Added a whole range of functions to detect and deal with Daylight Savings
+* Added the functions `dst_change_summary()` and `dst_change_handler()` to detect and deal with Daylight Savings. The functionality is also integrated into the import functions, so that a user can automatically apply it during the import process.
 
 * Added **Steffen Hartmeyer** as a collaborator, who added a number of light metrics from the `lightdosimetry` package. You can access them individually by their name or collectively through `metrics$metricname`.
+
+* Added the `import_adjustment()` function for more flexibility when importing light logger data that does not conform to the standard format. This goes hand in hand with the `ll_import_expr` list that contains specific expressions for all supported devices.
 
 * lots of bug fixes and improvements
 
