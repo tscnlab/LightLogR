@@ -1,5 +1,11 @@
 # LightLogR 0.3.0
 
+* Added a whole range of functions to detect and deal with Daylight Savings
+
+* Added **Steffen Hartmeyer** as a collaborator, who added a number of light metrics from the `lightdosimetry` package. You can access them individually by their name or collectively through `metrics$metricname`.
+
+* lots of bug fixes and improvements
+
 # LightLogR 0.2.2.9000
 
 * Bugfix for `LiDo` import

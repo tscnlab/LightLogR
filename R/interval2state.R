@@ -154,7 +154,7 @@ interval2state <- function(dataset,
   
   #test whether the time differences in the two datasets are acceptable
   are.intervals.smaller <- 
-    compare.difftime.any(dataset, State.interval.dataset2)
+    compare_difftime.any(dataset, State.interval.dataset2)
   
   if(!rlang::is_true(are.intervals.smaller)) {
     cat("Warning: The time differences between consecutive time points in the reference dataset are larger than in the dataset. This means multiple reference data connect to one dataset datum - only the last one prior to each datum will be used. Please use an aggregate function on the reference dataset to resolve this warning. \nThe following output shows what grouping is problematic and what 95% of time intervals in the Dataset compared to the Reference data is.\n\n")

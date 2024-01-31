@@ -7,7 +7,7 @@
 cut_Datetime(
   dataset,
   unit = "3 hours",
-  type = "round",
+  type = c("round", "floor", "ceiling"),
   Datetime.colname = Datetime,
   New.colname = Datetime.rounded,
   group_by = FALSE,

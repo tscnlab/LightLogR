@@ -8,6 +8,7 @@ aggregate_Datetime(
   dataset,
   Datetime.colname = Datetime,
   unit = "none",
+  type = c("round", "floor", "ceiling"),
   numeric.handler = mean,
   character.handler = function(x) names(which.max(table(x))),
   logical.handler = function(x) mean(x) >= 0.5,
@@ -25,6 +26,9 @@ by \link{LightLogR}, take care to choose a sensible variable for the
 \link{LightLogR}. Expects a \code{symbol}. Needs to be part of the \code{dataset}.}
 
 \item{unit}{Unit of binning. See \code{\link[lubridate:round_date]{lubridate::round_date()}} for examples.}
+
+\item{type}{One of \code{"round"}(the default), \code{"ceiling"} or \code{"floor"}. Setting
+chooses the relevant function from \link{lubridate}.}
 
 \item{numeric.handler, character.handler, logical.handler, factor.handler}{functions that handle the respective data types. The default handlers calculate the \code{mean} for \code{numeric} and the \code{mode} for \code{character}, \code{factor} and \code{logical} types.}
 

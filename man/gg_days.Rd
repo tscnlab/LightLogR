@@ -12,7 +12,7 @@ gg_days(
   aes_fill = NULL,
   group = NULL,
   geom = "line",
-  scales = "free_x",
+  scales = c("free_x", "free_y", "fixed", "free"),
   x.axis.breaks = Datetime_breaks,
   y.axis.breaks = c(-10^(5:0), 0, 10^(0:5)),
   y.scale = "symlog",
@@ -55,8 +55,9 @@ data \code{\link[ggplot2:aes]{ggplot2::aes()}}}
 \item as the value is just input into the \code{geom_} function from \link{ggplot2}, other variants work as well, but are not extensively tested.
 }}
 
-\item{scales}{For \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}}, should scales be "fixed", "free"
-or free in one dimension ("free_y" is the default). Expects a \code{character}.}
+\item{scales}{For \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}}, should scales be \code{"fixed"},
+\code{"free"} or \code{"free"} in one dimension (\code{"free_x"} is the default). Expects
+a \code{character}.}
 
 \item{x.axis.breaks}{The (major) breaks of the x-axis. Defaults to
 \code{\link[=Datetime_breaks]{Datetime_breaks()}}. The function has several options for adjustment. The
@@ -73,7 +74,7 @@ based on the limits. If you want to activate the default behaviour of
 \item Defaults to \code{"symlog"}, which is a logarithmic scale that can also handle negative values.
 \item \code{"log10"} would be a straight logarithmic scale, but cannot handle negative values.
 \item \code{"identity"} does nothing (continuous scaling).
-\item a transforming function, such as \code{\link[=symlog_trans]{symlog_trans()}} or \code{\link[scales:identity_trans]{scales::identity_trans()}}, which allow for more control.
+\item a transforming function, such as \code{\link[=symlog_trans]{symlog_trans()}} or \code{\link[scales:transform_identity]{scales::identity_trans()}}, which allow for more control.
 }}
 
 \item{y.scale.sc}{\code{logical} for whether scientific notation shall be used.

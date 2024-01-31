@@ -25,6 +25,7 @@ reference:
     - dominant_epoch
     - gapless_Datetimes
     - gap_finder
+    - dst_change_summary
   
   - title: Validate & Process
     desc: >
@@ -41,6 +42,7 @@ reference:
     - filter_Date
     - filter_Time
     - join_datasets
+    - dst_change_handler
   
   - title: Expand
     desc: >
