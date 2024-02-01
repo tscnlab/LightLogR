@@ -87,7 +87,7 @@ Other metrics:
 \code{\link{intradaily_variability}()},
 \code{\link{midpointCE}()},
 \code{\link{nvRC}()},
-\code{\link{nvRD_cumulative_response}()},
-\code{\link{nvRD}()}
+\code{\link{nvRD}()},
+\code{\link{nvRD_cumulative_response}()}
 }
 \concept{metrics}

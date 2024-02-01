@@ -82,8 +82,8 @@ Other metrics:
 \code{\link{interdaily_stability}()},
 \code{\link{intradaily_variability}()},
 \code{\link{nvRC}()},
-\code{\link{nvRD_cumulative_response}()},
 \code{\link{nvRD}()},
+\code{\link{nvRD_cumulative_response}()},
 \code{\link{timing_above_threshold}()}
 }
 \concept{metrics}

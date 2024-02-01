@@ -72,10 +72,20 @@
 #'   A sample file is provided with the package, it can be accessed
 #'   through `system.file("extdata/sample_data_LYS.csv", package =
 #'   "LightLogR")`. This sample file is a good example for an irregular dataset.
-#'   ## Actiwatch_Spectrum:
+#'   ## Actiwatch_Spectrum
 #'   **Required Argument: `column_names`** A character vector containing column 
 #'   names in the order in which they appear in the file. This is necessary to 
 #'   find the starting point of actual data.
+#'   ## ActTrust
+#'   This function works for both ActTrust 1 and 2 devices
+#'   ## Speccy
+#'   .  
+#'   ## DeLux
+#'   . 
+#'   ## LiDo
+#'   .  
+#'   ## SpectraWear
+#'   .
 #'
 #' @section Examples:
 #'
@@ -216,6 +226,26 @@ imports <- function(device,
 }
 
 ll_import_expr <- list(
+  #ActTrust 1 & 2
+  ActTrust = rlang::expr({
+    tmp <- suppressMessages(
+      readr::read_delim(
+        filename,
+        skip = 28,
+        delim = ";",
+        n_max = n_max,
+        col_types = paste0("c", rep("d", 20)),
+        id = "file.name",
+        locale = locale,
+        name_repair = "universal",
+        ...
+      )
+    )
+    tmp <-
+      tmp %>%
+      dplyr::rename(Datetime = DATE.TIME) %>%
+      dplyr::mutate(Datetime = Datetime %>% lubridate::dmy_hms(tz = tz))
+  }),
   #SpectraWear
   SpectraWear = rlang::expr({
     tmp <-suppressMessages( 
