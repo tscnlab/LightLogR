@@ -242,13 +242,15 @@ ll_import_expr <- list(
                       id = "file.name",
                       locale = locale,
                       name_repair = "universal",
+                      col_types = c("fccdddddddddddddddddd"),
                       ...
       ))
     tmp <- tmp %>%
       dplyr::rename(MEDI = Melanopic.EDI) %>% 
       dplyr::mutate(Datetime =
                       Datetime %>% lubridate::parse_date_time(
-                        orders =  c("%H:%M:%S %d/%m/%y", "%d/%m/%Y %H:%M") ,tz = tz, exact = TRUE))
+                        orders =  c("%H:%M:%S %d/%m/%y", "%d/%m/%Y %H:%M"),
+                        tz = tz, exact = TRUE))
   }),
   #Intelligent Automation Inc DeLux
   DeLux = rlang::expr({
