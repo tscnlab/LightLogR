@@ -290,9 +290,9 @@ dataset.LL.partial  %>% gg_day(
   solar.reference + brown.reference + scale.correction
 ```
 
-The geom family of `hex`, `bin2d`, or `density_2d` is particularly well suited if you have many, possibly overlaying observations. It reduces complexity by cutting the x- and y-axis into bins and counts how many observations fall within this bin. By choosing 24 bins, we see dominant values for every hour of the day. The `jco_color = FALSE` argument is necessary to disable the default discrete color scheme of `gg_day()`, because a continuous scale is necessary for counts or densities. Finally, we habe to use the `aes_fill = stat(count)` argument to color the bins according to the number of observations in the bin[^4].
+The geom family of `hex`, `bin2d`, or `density_2d` is particularly well suited if you have many, possibly overlaying observations. It reduces complexity by cutting the x- and y-axis into bins and counts how many observations fall within this bin. By choosing 24 bins, we see dominant values for every hour of the day. The `jco_color = FALSE` argument is necessary to disable the default discrete color scheme of `gg_day()`, because a continuous scale is necessary for counts or densities. Finally, we have to use the `aes_fill = stat(count)` argument to color the bins according to the number of observations in the bin[^4].
 
-[^4]: Normally, using `ggplot2::geom_bin2d()` would automatically use the fill aesthetic for this, but `gg_day()` has certain defaults that are favorable in most cases, but is a bit more work here.
+[^4]: Normally, using `ggplot2::geom_bin2d()` would automatically use the fill aesthetic for this, but `gg_day()` has certain defaults that are favorable in most cases, but result in a bit more work here.
 
 ###  {.unnumbered}
 
