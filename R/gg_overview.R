@@ -37,11 +37,11 @@ gg_overview <- function(dataset,
   
   stopifnot(
     "The given dataset is not a dataframe" = is.data.frame(dataset),
-    "The Datetime.colname is not in the dataset." = 
+    "The Datetime.colname is not in the dataset." =
       Datetime.colname.str %in% names(dataset),
-    "The Id.colname is not in the dataset." = 
+    "The Id.colname is not in the dataset." =
       Id.colname.str %in% names(dataset),
-    "The Datetime.colname is not a Datetime" = 
+    "The Datetime.colname is not a Datetime" =
       lubridate::is.POSIXct(dataset[[Datetime.colname.str]]),
     "interactive must be a logical" = is.logical(interactive)
   )
@@ -55,7 +55,9 @@ gg_overview <- function(dataset,
   if(is.null(gap.data)) {
     gap.data <- 
       dataset %>% 
-      gap_finder(gap.data = TRUE, silent = TRUE) %>% 
+      gap_finder(
+        Datetime.colname = {{ Datetime.colname }},
+        gap.data = TRUE, silent = TRUE) %>% 
       dplyr::group_by(gap.id, .add = TRUE) %>% 
       dplyr::filter(dplyr::n() > 1)
     
@@ -65,7 +67,7 @@ gg_overview <- function(dataset,
       gap.data <- 
         gap.data %>% 
         dplyr::summarize(
-          start = min({{ Datetime.colname}}), end = max({{ Datetime.colname}}))
+          start = min({{ Datetime.colname }}), end = max({{ Datetime.colname }}))
     }
   }
   
