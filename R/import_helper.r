@@ -5,7 +5,8 @@ import.info <- function(tmp,
                         Id.colname, 
                         dst_adjustment,
                         dst_info = TRUE,
-                        filename) {
+                        filename,
+                        na.count) {
   #give info about the file
   min.time <- min(tmp$Datetime)
   max.time <- max(tmp$Datetime)
@@ -46,6 +47,13 @@ import.info <- function(tmp,
   } else {
     dst_info <- NULL
   }
+    
+  #prepare NA datetimes
+  if(na.count == 0) {
+    na.count <- NULL
+  } else {
+    na.count <- paste0(na.count, " observations were dropped due to a missing or non-parseable Datetime value (e.g., non-valid timestamps during DST jumps). \n")
+  }
   
   #print all infos
     cat(
@@ -58,7 +66,7 @@ import.info <- function(tmp,
         "The system timezone is ",
         Sys.timezone(),
         ". Please correct if necessary!\n")},
-    dst_info, "\n",
+    dst_info, na.count, "\n",
     "First Observation: ", format(min.time), "\n",
     "Last Observation: ", format(max.time), "\n",
     "Timespan: " , diff(c(min.time, max.time)) %>% format(digits = 2), "\n\n",
@@ -79,7 +87,7 @@ detect_starting_row <-
     column_names %>% 
     stringr::str_flatten(collapse = ".*")
   
-  #read in all the lines and remove junk
+  #read in all the lines
   line_read <- 
     readr::read_lines(filepath, n_max = n_max, locale=locale)
   

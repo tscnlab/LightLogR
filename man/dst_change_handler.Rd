@@ -42,7 +42,8 @@ timestamps during the jum back from DST to standard time. This will result
 in some inconsistencies with some functions, so we recommend to use
 \code{aggregate_Datetime()} afterwards with a \code{unit} equal to the dominant epoch.
 Finally, the function is not equipped to handle more than one jump per group.
-The jump is based on whether the group starts out with DST or not.
+The jump is based on whether the group starts out with DST or not. \strong{the
+function will remove datetime rows with \code{NA} values}.
 }
 \details{
 The detection of a DST jump is based on the function \code{lubridate::dst()} and jumps are only applied within a group. During import, this function is used if \code{dst_adjustment = TRUE} is set and includes by default the filename as the grouping variable, additionally to \code{Id}.

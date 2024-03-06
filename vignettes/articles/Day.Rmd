@@ -58,7 +58,7 @@ dataset.LL <- import$ActLumus(file.LL, path, auto.id = "^(\\d{3})", tz = tz)
 
 ```
 
-As you can see, the import is accompanied by a (hopefully) helpful message about the imported data. It contains the number ob measurements, the timezone, start- and enddate, the timespan, and all observation intervals. In this case, the measurements all follow a *10 second* epoch.
+As you can see, the import is accompanied by a (hopefully) helpful message about the imported data. It contains the number ob measurements, the timezone, start- and enddate, the timespan, and all observation intervals. In this case, the measurements all follow a *10 second* epoch. We also get a plotted overview of the data. In our case, this is not particularly helpful, but quickly helps to assess how different datasets compare to one another on the timeline. We could deactivate this plot by setting `auto.plot = FALSE` during import, or create it separately with the `gg_overview()` function.
 
 Because we have no missing values that we would have to deal with first, this dataset is already good to go. If you, e.g., want to know the range of melanopic EDI (a measure of stimulus strength for the nonvisual system) for every day in the dataset, you can do that:
 

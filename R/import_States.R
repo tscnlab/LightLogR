@@ -191,9 +191,17 @@ import_Statechanges <- function(filename,
                       ))
   }
   
+  #create a factor from Id and arrange the data by Datetime
   data <- data %>%  
     dplyr::mutate({{ Id.newname }} := factor({{ Id.newname }})) %>% 
     dplyr::arrange(Datetime, .by_group = TRUE)
+  
+  #if there are Datetimes with NA value, drop them
+  na.count <- 0
+  if(any(is.na(data$Datetime))) {
+    na.count <- sum(is.na(data$Datetime))
+    data <- data %>% tidyr::drop_na(Datetime)
+  }
   
   # Return the Data ----------------------------------------------------------
   
@@ -208,12 +216,20 @@ import_Statechanges <- function(filename,
   #create a warning if consecutive states are the same
   if(any(dplyr::lag(data$State) == data$State, na.rm = TRUE)) {
     warning(
-      "There are consecutive states that are the same. This may be an error in the data."
+      "There are consecutive states that are the same. This may or may not be an error in the data."
       )
   }
   
+  #give a summary about the imported data
   if(!silent) 
-    import.info(data, "Statechanges", tz, {{ Id.newname }}, FALSE, FALSE, filename)
+    import.info(tmp = data, 
+                device = "Statechanges", 
+                tz = tz, 
+                Id.colname = {{ Id.newname }}, 
+                dst_adjustment = FALSE, 
+                dst_info = FALSE, 
+                filename = filename, 
+                na.count = na.count)
   
   return(data)
 }

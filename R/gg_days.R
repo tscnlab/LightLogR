@@ -94,6 +94,9 @@ gg_days <- function(dataset,
   
   # Data Preparation --------------------------------------------------------
   
+  #dots
+  dots <- rlang::list2(...)
+  
   #special case for geom = "ribbon"
   ribbon <- list()
   if(geom == "ribbon") {
@@ -120,18 +123,22 @@ gg_days <- function(dataset,
   #give the user the chance to use whatever geom they want
   geom_function_expr <- rlang::parse_expr(paste0("ggplot2::geom_", geom))
   
+  if(geom == "blank") {
+    dots <- NULL
+  }
+  
   # Plot Creation -----------------------------------------------------------
   
   Plot <- 
     dataset %>% 
     #basic setup
     ggplot2::ggplot(ggplot2::aes(x=!!x, y = !!y)) +
-    eval(geom_function_expr)(
-      ggplot2::aes(
+    rlang::inject(eval(geom_function_expr)(
+        ggplot2::aes(
         group = {{ group }},
         fill = {{ aes_fill }},
         col = {{ aes_col }},
-      ), if(geom == "ribbon") ...) +
+      ), !!!dots )) +
     ribbon +
     # Scales --------------------------------------------------------------
     ggplot2::scale_y_continuous(

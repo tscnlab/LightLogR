@@ -115,17 +115,25 @@ give quick, helpful feedback about the dataset.
 ``` r
 filename <- system.file("extdata/sample_data_LYS.csv", package = "LightLogR")
 dataset <- import$LYS(filename, tz = "Europe/Berlin")
-#> Successfully read in 11422 observations from LYS-file
+#> 
+#> Successfully read in 11'422 observations across 1 Ids from 1 LYS-file(s).
 #> Timezone set is Europe/Berlin.
-#> Start: 2023-06-21 00:00:12
-#> End: 2023-06-22 23:59:48
+#> 
+#> First Observation: 2023-06-21 02:00:12
+#> Last Observation: 2023-06-23 01:59:48
 #> Timespan: 2 days
+#> 
 #> Observation intervals: 
 #>   Id              interval.time     n pct    
 #> 1 sample_data_LYS 15s           10015 87.689%
 #> 2 sample_data_LYS 16s            1367 11.969%
 #> 3 sample_data_LYS 17s              23 0.201% 
 #> 4 sample_data_LYS 18s              16 0.140%
+```
+
+<img src="man/figures/README-unnamed-chunk-3-2.png" width="60%" style="display: block; margin: auto;" />
+
+``` r
 
 dataset %>% ungroup() %>% select(Datetime, lux, kelvin, MEDI) %>%  
   slice(8000:8005) %>% flextable() %>% autofit()
@@ -140,9 +148,10 @@ dataset %>% ungroup() %>% select(Datetime, lux, kelvin, MEDI) %>%
 </div>
 
 For more complex data, there is the useful `gg_overview()` function to
-get an immediate grasp of your data. See it here in action for a dataset
-with multiple participants. It also indicates where data is missing,
-based on the measurement epochs found in the data.
+get an immediate grasp of your data. It was automatically called during
+import (set `auto.plot = FALSE` to suppress this), but really shines for
+datasets with multiple participants. It also indicates where data is
+missing, based on the measurement epochs found in the data.
 
     LLdata %>% gg_overview()
 

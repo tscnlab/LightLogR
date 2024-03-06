@@ -20,7 +20,8 @@
 #' in some inconsistencies with some functions, so we recommend to use
 #' `aggregate_Datetime()` afterwards with a `unit` equal to the dominant epoch.
 #' Finally, the function is not equipped to handle more than one jump per group.
-#' The jump is based on whether the group starts out with DST or not.
+#' The jump is based on whether the group starts out with DST or not. **the
+#' function will remove datetime rows with `NA` values**.
 #'
 #' @inheritParams dst_change_summary
 #' @param filename.colname (optional) column name that contains the filename. 
@@ -97,13 +98,14 @@ dst_change_handler <- function(dataset,
   
   #join the summary to the dataset to check affected groupings
   dataset <- 
-    dataset %>% 
+    dataset %>%
     dplyr::left_join(dataset_summary, by = dplyr::group_vars(dataset))
   
   #change the Datetime in the affected ids depending on whether the change is from dst to non-dst or vice versa
   dataset <- 
     dataset %>% 
     dst_indicator() %>% 
+    tidyr::drop_na(.dst) %>% 
     dplyr::mutate(
       .change =
         dplyr::case_when(
@@ -163,7 +165,8 @@ dst_change_summary <- function(dataset, Datetime.colname = Datetime) {
   }
   
   #add a column to the dataset that indicates DST
-  dataset <- dataset %>% dst_indicator({{ Datetime.colname }})
+  dataset <- 
+    dataset %>% dst_indicator({{ Datetime.colname }}) %>% tidyr::drop_na(.dst)
   #summarize the dataset to check whether there are any DST changes
   dataset <- 
     dataset %>% dplyr::summarize(

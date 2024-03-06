@@ -38,6 +38,7 @@
 #' use of this arguments when importing more than one file**
 #' * `locale`: The locale controls defaults that vary from place to place.
 #' * `dst_adjustment`: If a file crosses daylight savings time, but the device does not adjust timestamps accordingly, you can set this argument to `TRUE`, to apply this shift manually. It is selective, so it will only be done in files that cross between DST and standard time. Default is `FALSE`. Uses `dst_change_handler()` to do the adjustment. Look there for more infos. It is not equipped to handle two jumps in one file (so back and forth between DST and standard time), but will work fine if jums occur in separate files.
+#' * `auto.plot`: a logical on whether to call [gg_overview()] after import. Default is `TRUE`.
 #' * `...`: supply additional arguments to the [readr] import functions, like `na`. Might also be used to supply arguments to the specific import functions, like `column_names` for `Actiwatch_Spectrum` devices. Those devices will alway throw a helpful error message if you forget to supply the necessary arguments.
 #'   If the `Id` column is already part of the `dataset` it will just use
 #'   this column. If the column is not present it will add this column and fill
@@ -99,13 +100,14 @@
 #'
 #' ```{r}
 #' filepath <- system.file("extdata/sample_data_LYS.csv", package = "LightLogR")
-#' dataset <- import_Dataset("LYS", filepath)
+#' dataset <- import_Dataset("LYS", filepath, auto.plot = FALSE)
 #' ```
 #'   Import functions can also be called directly:
 #'
 #' ```{r}
 #' filepath <- system.file("extdata/205_actlumus_Log_1020_20230904101707532.txt.zip", package = "LightLogR")
-#' dataset <- import$ActLumus(filepath)
+#' dataset <- import$ActLumus(filepath, auto.plot = FALSE)
+#' dataset %>% gg_days()
 #' ```
 #'
 #' ```{r}
@@ -150,6 +152,7 @@ imports <- function(device,
       Id.colname = Id,
       auto.id = ".*",
       manual.id = NULL,
+      auto.plot = TRUE,
       locale = readr::default_locale(),
       silent = FALSE,
       ... =
@@ -209,14 +212,33 @@ imports <- function(device,
         dplyr::group_by(Id = !!Id.colname) %>%
         dplyr::arrange(Datetime, .by_group = TRUE)
       
+      #if there are Datetimes with NA value, drop them
+      na.count <- 0
+      if(any(is.na(tmp$Datetime))) {
+        na.count <- sum(is.na(tmp$Datetime))
+        tmp <- tmp %>% tidyr::drop_na(Datetime)
+      }
+      
       #if dst_adjustment is TRUE, adjust the datetime column
       if(dst_adjustment) {
         tmp <- tmp %>% dst_change_handler(filename.colname = file.name)
       }
       #give info about the file
       if(!silent) 
-        import.info(tmp, !!device, tz, Id, dst_adjustment, TRUE, filename)
+        import.info(
+          tmp = tmp, #the data 
+          device = !!device, #the type of device
+          tz = tz, #the timezone
+          Id.colname = Id, #the id column name
+          dst_adjustment = dst_adjustment, #whether there is a dst adjustment
+          filename = filename, #what the filename(s) is/are
+          na.count = na.count #how many NA values were dropped
+          )
       
+      #if autoplot is TRUE, make a plot
+      if(auto.plot) {
+        tmp %>% gg_overview() %>% print()
+      }
       #return the file
       tmp
       
@@ -228,23 +250,34 @@ imports <- function(device,
 ll_import_expr <- list(
   #ActTrust 1 & 2
   ActTrust = rlang::expr({
-    tmp <- suppressMessages(
-      readr::read_delim(
+    column_names <- c("DATE/TIME", "MS", "EVENT", "TEMPERATURE")
+    tmp <- 
+      purrr::map(
         filename,
-        skip = 28,
-        delim = ";",
-        n_max = n_max,
-        col_types = paste0("c", rep("d", 20)),
-        id = "file.name",
-        locale = locale,
-        name_repair = "universal",
-        ...
-      )
-    )
+        \(x) {
+          rows_to_skip <- detect_starting_row(x, 
+                                              locale = locale, 
+                                              column_names = column_names,
+                                              n_max = n_max)
+          suppressMessages(
+            readr::read_delim(
+              x,
+              skip = rows_to_skip,
+              delim = ";",
+              n_max = n_max,
+              col_types = paste0("c", rep("d", 20)),
+              id = "file.name",
+              locale = locale,
+              name_repair = "universal",
+              ...
+            )
+          )
+        }) %>% purrr::list_rbind()
     tmp <-
       tmp %>%
       dplyr::rename(Datetime = DATE.TIME) %>%
-      dplyr::mutate(Datetime = Datetime %>% lubridate::dmy_hms(tz = tz))
+      dplyr::mutate(Datetime = Datetime %>% 
+                      lubridate::dmy_hms(tz = tz, quiet = TRUE))
   }),
   #SpectraWear
   SpectraWear = rlang::expr({
@@ -354,7 +387,8 @@ ll_import_expr <- list(
       dplyr::rename(Datetime = timestamp,
                     MEDI = mEDI) %>%
       dplyr::mutate(Datetime =
-                      Datetime %>% lubridate::dmy_hms(tz = tz))
+                      Datetime %>% lubridate::dmy_hms() %>% 
+                      lubridate::with_tz(tzone = tz))
   }),
   #Actiwatch Spectrum
   Actiwatch_Spectrum = rlang::expr({
