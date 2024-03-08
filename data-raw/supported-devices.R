@@ -1,6 +1,6 @@
 ## code to prepare `supported.devices` dataset goes here
 
 library(LightLogR)
-supported.devices <- names(import_arguments) %>% sort()
+supported.devices <- names(ll_import_expr) %>% sort()
 
 usethis::use_data(supported.devices, overwrite = TRUE)

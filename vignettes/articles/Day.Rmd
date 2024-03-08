@@ -58,7 +58,7 @@ dataset.LL <- import$ActLumus(file.LL, path, auto.id = "^(\\d{3})", tz = tz)
 
 ```
 
-As you can see, the import is accompanied by a (hopefully) helpful message about the imported data. It contains the number ob measurements, the timezone, start- and enddate, the timespan, and all observation intervals. In this case, the measurements all follow a *10 second* epoch.
+As you can see, the import is accompanied by a (hopefully) helpful message about the imported data. It contains the number ob measurements, the timezone, start- and enddate, the timespan, and all observation intervals. In this case, the measurements all follow a *10 second* epoch. We also get a plotted overview of the data. In our case, this is not particularly helpful, but quickly helps to assess how different datasets compare to one another on the timeline. We could deactivate this plot by setting `auto.plot = FALSE` during import, or create it separately with the `gg_overview()` function.
 
 Because we have no missing values that we would have to deal with first, this dataset is already good to go. If you, e.g., want to know the range of melanopic EDI (a measure of stimulus strength for the nonvisual system) for every day in the dataset, you can do that:
 
@@ -290,9 +290,9 @@ dataset.LL.partial  %>% gg_day(
   solar.reference + brown.reference + scale.correction
 ```
 
-The geom family of `hex`, `bin2d`, or `density_2d` is particularly well suited if you have many, possibly overlaying observations. It reduces complexity by cutting the x- and y-axis into bins and counts how many observations fall within this bin. By choosing 24 bins, we see dominant values for every hour of the day. The `jco_color = FALSE` argument is necessary to disable the default discrete color scheme of `gg_day()`, because a continuous scale is necessary for counts or densities. Finally, we habe to use the `aes_fill = stat(count)` argument to color the bins according to the number of observations in the bin[^4].
+The geom family of `hex`, `bin2d`, or `density_2d` is particularly well suited if you have many, possibly overlaying observations. It reduces complexity by cutting the x- and y-axis into bins and counts how many observations fall within this bin. By choosing 24 bins, we see dominant values for every hour of the day. The `jco_color = FALSE` argument is necessary to disable the default discrete color scheme of `gg_day()`, because a continuous scale is necessary for counts or densities. Finally, we have to use the `aes_fill = stat(count)` argument to color the bins according to the number of observations in the bin[^4].
 
-[^4]: Normally, using `ggplot2::geom_bin2d()` would automatically use the fill aesthetic for this, but `gg_day()` has certain defaults that are favorable in most cases, but is a bit more work here.
+[^4]: Normally, using `ggplot2::geom_bin2d()` would automatically use the fill aesthetic for this, but `gg_day()` has certain defaults that are favorable in most cases, but result in a bit more work here.
 
 ###  {.unnumbered}
 

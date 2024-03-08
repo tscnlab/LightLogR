@@ -56,6 +56,8 @@ gapless_Datetimes <- function(dataset,
       epochs %>% dplyr::mutate(dominant.epoch = lubridate::as.duration(epoch))
   }
   
+  #create an expression for a sequence from the minimum datetime to the maximum
+  #or, if full.days is TRUE, to the end of the day of the maximum datetime
   expr_standard <- rlang::expr(
     seq(
       min({{ Datetime.colname }}),
@@ -69,6 +71,7 @@ gapless_Datetimes <- function(dataset,
     )
   )
   
+  #extend the above expression by the whole first day if full.days is TRUE
   expr_full_day <- rlang::expr(
     c(
       if(full.days) {

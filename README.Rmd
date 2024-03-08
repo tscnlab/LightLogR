@@ -94,7 +94,7 @@ dataset %>% ungroup() %>% select(Datetime, lux, kelvin, MEDI) %>%
 .
 :::
 
-For more complex data, there is the useful `gg_overview()` function to get an immediate grasp of your data. See it here in action for a dataset with multiple participants. It also indicates where data is missing, based on the measurement epochs found in the data.
+For more complex data, there is the useful `gg_overview()` function to get an immediate grasp of your data. It was automatically called during import (set `auto.plot = FALSE` to suppress this), but really shines for datasets with multiple participants. It also indicates where data is missing, based on the measurement epochs found in the data.
 
 ```         
 LLdata %>% gg_overview()

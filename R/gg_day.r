@@ -149,6 +149,9 @@ gg_day <- function(dataset,
 
 # Data Preparation --------------------------------------------------------
 
+  #dots
+  dots <- rlang::list2(...)
+  
   #special case for geom = "ribbon"
   ribbon <- list()
   if(geom == "ribbon") {
@@ -211,19 +214,26 @@ gg_day <- function(dataset,
   #give the user the chance to use whatever geom they want
   geom_function_expr <- rlang::parse_expr(paste0("ggplot2::geom_", geom))
 
+  #set up the basic plot
+  if(geom == "blank") {
+    dots <- NULL
+  }
+  geom_function_expr <- rlang::expr({
+    (!!geom_function_expr)(
+      ggplot2::aes(
+        group = {{ group }},
+        col = {{ aes_col }},
+        fill ={{ aes_fill }}
+      ), !!!dots)
+  })
+  
 # Plot Creation -----------------------------------------------------------
   
   Plot <- 
     dataset %>% 
     #basic setup
     ggplot2::ggplot(ggplot2::aes(x=Time.data, y = !!y)) +
-    eval(geom_function_expr)(
-      ggplot2::aes(
-        x=Time.data, y = !!y,
-        group = {{ group }},
-        col = {{ aes_col }},
-        fill ={{ aes_fill }},
-        ), if(geom == "ribbon") ...) +
+    eval(geom_function_expr) +
     ribbon +
     # Scales --------------------------------------------------------------
     jco_color_scheme+
