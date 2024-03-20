@@ -191,6 +191,11 @@ import_Statechanges <- function(filename,
                       ))
   }
   
+  #make sure there were no parsing errors
+  if(any(is.na(data$Datetime))) {
+    stop("Some of the Datetime values could not be parsed! Check the Datetime.format parameter and the data. If you read in more than one file, make sure that the format is consistent across all files. If not, try `files %>% purrr::map(import_Statechanges, *arguments here* ) %>% dplyr::bind_rows()`")
+  }
+  
   #create a factor from Id and arrange the data by Datetime
   data <- data %>%  
     dplyr::mutate({{ Id.newname }} := factor({{ Id.newname }})) %>% 

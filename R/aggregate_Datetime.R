@@ -27,10 +27,14 @@ aggregate_Datetime <- function(dataset,
                                Datetime.colname = Datetime,
                                unit = "none",
                                type = c("round", "floor", "ceiling"),
-                               numeric.handler = mean,
-                               character.handler = \(x) names(which.max(table(x))),
-                               logical.handler = \(x) mean(x) >= 0.5,
-                               factor.handler = \(x) factor(names(which.max(table(x)))),
+                               numeric.handler = 
+                                 mean,
+                               character.handler = 
+                                 \(x) names(which.max(table(x, useNA = "ifany"))),
+                               logical.handler = 
+                                 \(x) mean(x) >= 0.5,
+                               factor.handler = 
+                                 \(x) factor(names(which.max(table(x, useNA = "ifany")))),
                                ...) {
   
   # Initial Checks ----------------------------------------------------------
