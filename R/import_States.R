@@ -189,6 +189,11 @@ import_Statechanges <- function(filename,
                       lubridate::parse_date_time(Datetime,   
                                                  orders = Datetime.format, tz
                       ))
+  } else {
+    data <- data %>%  
+      dplyr::mutate(Datetime = 
+                      lubridate::force_tz(Datetime, tz = tz)
+                      )
   }
   
   #make sure there were no parsing errors
