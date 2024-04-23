@@ -4,7 +4,8 @@
 #' a specified threshold light level or within a specified range of light levels.
 #'
 #' @param Light.vector Numeric vector containing the light data.
-#' @param Time.vector Vector containing the time data. Can be numeric, HMS or POSIXct.
+#' @param Time.vector Vector containing the time data. Can be \link[base]{POSIXct}, 
+#'    \link[hms]{hms}, \link[lubridate]{duration}, or \link[base]{difftime}.
 #' @param comparison String specifying whether the period of light levels above or 
 #'    below threshold should be calculated. Can be either `"above"` (the default) 
 #'    or `"below"`. If two values are provided for `threshold`, this argument will be ignored.
@@ -12,9 +13,9 @@
 #'    threshold light level(s) to compare with. If a vector with two values is provided,
 #'    the period of light levels within the two thresholds will be calculated.
 #' @param epoch The epoch at which the data was sampled. Can be either a
-#'  `lubridate::duration()` or a string. If it is a string, it needs to be
+#'  \link[lubridate]{duration} or a string. If it is a string, it needs to be
 #'  either `"dominant.epoch"` (the default) for a guess based on the data, or a valid
-#'  `lubridate::duration()` string, e.g., `"1 day"` or `"10 sec"`.
+#'  \link[lubridate]{duration} string, e.g., `"1 day"` or `"10 sec"`.
 #' @param loop Logical. Should the data be looped? Defaults to `FALSE`.
 #' @param na.replace Logical. Should missing values (NA) be replaced 
 #'    for the calculation? If `TRUE` missing values will not be removed but will 
@@ -82,8 +83,9 @@ period_above_threshold <- function(Light.vector,
   # Perform argument checks
   stopifnot(
     "`Light.vector` must be numeric!" = is.numeric(Light.vector),
-    "`Time.vector` must be numeric, HMS, or POSIXct" =
-      is.numeric(Time.vector) | hms::is_hms(Time.vector) | lubridate::is.POSIXct(Time.vector),
+    "`Time.vector` must be POSIXct, hms, duration, or difftime!" =
+      lubridate::is.POSIXct(Time.vector) | hms::is_hms(Time.vector) | 
+      lubridate::is.duration(Time.vector) | lubridate::is.difftime(Time.vector),
     "`threshold` must be numeric!" = is.numeric(threshold),
     "`threshold` must be either one or two values!" = length(threshold) %in% c(1, 2),
     "`epoch` must either be a duration or a string" =

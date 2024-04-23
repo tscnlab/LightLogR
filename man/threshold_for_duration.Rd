@@ -16,19 +16,20 @@ threshold_for_duration(
 \arguments{
 \item{Light.vector}{Numeric vector containing the light data.}
 
-\item{Time.vector}{Vector containing the time data. Can be numeric, HMS or POSIXct.}
+\item{Time.vector}{Vector containing the time data. Can be \link[base]{POSIXct},
+\link[hms]{hms}, \link[lubridate]{duration}, or \link[base]{difftime}.}
 
 \item{duration}{The duration for which the threshold should be found. Can be either a
-\code{lubridate::duration()} or a string. If it is a string, it needs to be a valid
-\code{lubridate::duration()} string, e.g., \code{"1 day"} or \code{"10 sec"}.}
+\link[lubridate]{duration} or a string. If it is a string, it needs to be a valid
+\link[lubridate]{duration} string, e.g., \code{"1 day"} or \code{"10 sec"}.}
 
 \item{comparison}{String specifying whether light levels above or below the threshold
 should be considered. Can be either \code{"above"} (the default) or \code{"below"}.}
 
 \item{epoch}{The epoch at which the data was sampled. Can be either a
-\code{lubridate::duration()} or a string. If it is a string, it needs to be
+\link[lubridate]{duration} or a string. If it is a string, it needs to be
 either \code{"dominant.epoch"} (the default) for a guess based on the data, or a valid
-\code{lubridate::duration()} string, e.g., \code{"1 day"} or \code{"10 sec"}.}
+\link[lubridate]{duration} string, e.g., \code{"1 day"} or \code{"10 sec"}.}
 
 \item{as.df}{Logical. Should a data frame with be returned? If \code{TRUE}, a data
 frame with a single column named \verb{threshold_\{comparison\}_for_\{duration\}} will be returned.
@@ -73,6 +74,7 @@ Other metrics:
 \code{\link{centroidLE}()},
 \code{\link{disparity_index}()},
 \code{\link{duration_above_threshold}()},
+\code{\link{exponential_moving_average}()},
 \code{\link{frequency_crossing_threshold}()},
 \code{\link{interdaily_stability}()},
 \code{\link{intradaily_variability}()},

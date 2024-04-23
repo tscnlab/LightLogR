@@ -16,7 +16,8 @@ timing_above_threshold(
 \arguments{
 \item{Light.vector}{Numeric vector containing the light data.}
 
-\item{Time.vector}{Vector containing the time data. Can be numeric, HMS or POSIXct.}
+\item{Time.vector}{Vector containing the time data. Can be \link[base]{POSIXct},
+\link[hms]{hms}, \link[lubridate]{duration}, or \link[base]{difftime}.}
 
 \item{comparison}{String specifying whether the time above or below threshold
 should be calculated. Can be either \code{"above"} (the default) or \code{"below"}. If
@@ -83,6 +84,7 @@ Other metrics:
 \code{\link{centroidLE}()},
 \code{\link{disparity_index}()},
 \code{\link{duration_above_threshold}()},
+\code{\link{exponential_moving_average}()},
 \code{\link{frequency_crossing_threshold}()},
 \code{\link{interdaily_stability}()},
 \code{\link{intradaily_variability}()},

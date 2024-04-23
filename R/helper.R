@@ -16,9 +16,9 @@ test.Time.regex <- function(input) {
     
     if(!test){
       stop(paste("input:",
-        rlang::as_string(
-          input.defused), 
-        "needs to be in the format 'hh:mm:ss'"))
+                 rlang::as_string(
+                   input.defused), 
+                 "needs to be in the format 'hh:mm:ss'"))
     }
   }
 }
@@ -45,9 +45,9 @@ compare.difftime <- function(dataset1, dataset2, Datetime.colname = Datetime, n 
   #do a full join with every column but Quantile
   group_variables <- setdiff(names(Quant2), "Quant")
   dplyr::full_join(Quant1, Quant2, by = group_variables) %>% 
-  dplyr::mutate(
-    comparison = Quant.x <= Quant.y
-  )
+    dplyr::mutate(
+      comparison = Quant.x <= Quant.y
+    )
 }
 
 #calculate whether any of the comparisons in compare.difftime is FALSE
@@ -55,7 +55,7 @@ compare.difftime.any <- function(...) {
   comparison <- compare.difftime(...) %>% 
     dplyr::filter(comparison == FALSE) %>% 
     dplyr::rename(Dataset.Interval = Quant.x,
-                 Reference.Interval = Quant.y) %>% 
+                  Reference.Interval = Quant.y) %>% 
     dplyr::select(-comparison)
   
   if(nrow(comparison) > 0) comparison else TRUE
@@ -74,10 +74,10 @@ create.Reference.label <- function(dataset,
       dplyr::mutate(!!Reference.label.column.str := 
                       dplyr::if_else(
                         !is.na({{ Reference.column }}), Reference.label, NA
-                        )
+                      )
       )
     dataset
-    } else dataset
+  } else dataset
 }
 
 #helper to pick the colums that are used for grouping
@@ -89,9 +89,9 @@ pick.grouping.columns <- function(dataset) {
 
 # Compare with threshold
 compare_threshold <- function(Light.vector,
-                      threshold,
-                      comparison = c("above", "below"),
-                      na.replace = FALSE){
+                              threshold,
+                              comparison = c("above", "below"),
+                              na.replace = FALSE){
   
   comparison = match.arg(comparison)
   
@@ -117,4 +117,77 @@ compare_threshold <- function(Light.vector,
   }
   
   return(out)
+}
+
+# Find clusters of consecutive `TRUE` values in logical vector. 
+# Allows to concatenate periods of consecutive values that are interrupted 
+# by periods of `FALSE` values. 
+find_clusters <- function(x,
+                          min_length,
+                          max_interrupt = 0,
+                          prop_interrupt = 1,
+                          cluster_name = "cluster") {
+  # Replace NA with FALSE
+  x <- tidyr::replace_na(x, FALSE)
+  
+  # Find the start and end indices of each cluster of consecutive values
+  start_indices <- which(x & !dplyr::lag(x, default = FALSE))
+  end_indices <- which(x & !dplyr::lead(x, default = FALSE))
+  ranges <- as.numeric(matrix(rbind(start_indices, end_indices), nrow = 2))
+  
+  # Remove ranges < min_length
+  intra_diff <- diff(ranges)[1:(length(ranges) - 1) %% 2 != 0] + 1
+  exclude_ranges <- c(
+    which(intra_diff < min_length) * 2,
+    which(intra_diff < min_length) * 2 - 1
+  )
+  if (length(exclude_ranges) > 0) {
+    ranges <- ranges[-exclude_ranges]
+  }
+  
+  # Calculate cumulative ranges
+  intra_diff <- diff(ranges)[1:(length(ranges) - 1) %% 2 != 0] + 1
+  intra_cumsum <- intra_diff[1:length(intra_diff)-1] + intra_diff[2:length(intra_diff)]
+  
+  # Inter-range differences
+  inter_diff <- diff(ranges)[1:(length(ranges) - 1) %% 2 == 0] - 1
+  
+  # Proportion inter-range difference and cumulative range sums
+  interrupt_ratio <- inter_diff / intra_cumsum
+  
+  # Combine ranges with inter-range difference <= max_interrupt &
+  # interrupt ratio <= prop_interrupt
+  exclude_ranges <- c(
+    which(inter_diff <= max_interrupt & interrupt_ratio <= prop_interrupt) * 2,
+    which(inter_diff <= max_interrupt & interrupt_ratio <= prop_interrupt) * 2 + 1
+  )
+  if (length(exclude_ranges) > 0) {
+    ranges <- ranges[-exclude_ranges]
+  }
+  
+  # Make data frame with intervals
+  if (length(ranges) > 0) {
+    intervals <-
+      matrix(ranges, ncol = 2, byrow = TRUE) %>%
+      as.data.frame() %>%
+      magrittr::set_names(c("cluster_start", "cluster_end")) %>%
+      dplyr::mutate(cluster_idx = 1:length(cluster_start)) %>%
+      dplyr::rowwise() %>%
+      dplyr::mutate(row_idx = list(seq(cluster_start, cluster_end))) %>%
+      tidyr::unnest(cols = c(row_idx)) %>%
+      dplyr::ungroup() %>%
+      dplyr::mutate(is_cluster = TRUE) %>%
+      dplyr::relocate(row_idx, is_cluster, cluster_idx, cluster_start, cluster_end)
+  } else {
+    intervals <-
+      tibble::tibble(
+        row_idx = 1, is_cluster = NA, cluster_idx = NA,
+        cluster_start = NA, cluster_end = NA
+      )
+  }
+  # Replace "cluster" with custom name
+  intervals <- intervals %>% 
+    dplyr::rename_with(~gsub("cluster", cluster_name, .x))
+  
+  return(intervals)
 }

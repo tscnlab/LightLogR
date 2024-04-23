@@ -5,16 +5,17 @@
 #' \code{\link{duration_above_threshold}}.
 #'
 #' @param Light.vector Numeric vector containing the light data.
-#' @param Time.vector Vector containing the time data. Can be numeric, HMS or POSIXct.
+#' @param Time.vector Vector containing the time data. Can be \link[base]{POSIXct}, 
+#'    \link[hms]{hms}, \link[lubridate]{duration}, or \link[base]{difftime}.
 #' @param duration The duration for which the threshold should be found. Can be either a
-#'  `lubridate::duration()` or a string. If it is a string, it needs to be a valid
-#'  `lubridate::duration()` string, e.g., `"1 day"` or `"10 sec"`.
+#'  \link[lubridate]{duration} or a string. If it is a string, it needs to be a valid
+#'  \link[lubridate]{duration} string, e.g., `"1 day"` or `"10 sec"`.
 #' @param comparison String specifying whether light levels above or below the threshold 
 #'    should be considered. Can be either `"above"` (the default) or `"below"`.
 #' @param epoch The epoch at which the data was sampled. Can be either a
-#'  `lubridate::duration()` or a string. If it is a string, it needs to be
+#'  \link[lubridate]{duration} or a string. If it is a string, it needs to be
 #'  either `"dominant.epoch"` (the default) for a guess based on the data, or a valid
-#'  `lubridate::duration()` string, e.g., `"1 day"` or `"10 sec"`.
+#'  \link[lubridate]{duration} string, e.g., `"1 day"` or `"10 sec"`.
 #' @param as.df Logical. Should a data frame with be returned? If `TRUE`, a data
 #'    frame with a single column named `threshold_{comparison}_for_{duration}` will be returned.
 #'    Defaults to `FALSE`.
@@ -63,8 +64,9 @@ threshold_for_duration <- function(Light.vector,
   # Perform argument checks
   stopifnot(
     "`Light.vector` must be numeric!" = is.numeric(Light.vector),
-    "`Time.vector` must be numeric, HMS, or POSIXct" =
-      is.numeric(Time.vector) | hms::is_hms(Time.vector) | lubridate::is.POSIXct(Time.vector),
+    "`Time.vector` must be POSIXct, hms, duration, or difftime!" =
+      lubridate::is.POSIXct(Time.vector) | hms::is_hms(Time.vector) | 
+      lubridate::is.duration(Time.vector) | lubridate::is.difftime(Time.vector),
     "`duration` must either be duration or a string!" = 
       lubridate::is.duration(duration) | is.character(duration),
     "`epoch` must either be a duration or a string" =
@@ -92,7 +94,7 @@ threshold_for_duration <- function(Light.vector,
   # Return data frame or numeric value
   if (as.df) {
     duration <- stringr::str_extract(as.character(duration), "~.*") %>% 
-      stringr::str_remove("~") %>% stringr::str_replace_all(" ", "_")
+      stringr::str_remove("~") %>% stringr::str_remove("\\)") %>% stringr::str_replace_all(" ", "_")
     return(tibble::tibble("threshold_{comparison}_for_{duration}" := threshold))
   } else {
     return(threshold)

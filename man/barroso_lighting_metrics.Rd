@@ -16,12 +16,13 @@ barroso_lighting_metrics(
 \arguments{
 \item{Light.vector}{Numeric vector containing the light data.}
 
-\item{Time.vector}{Vector containing the time data. Can be numeric, HMS or POSIXct.}
+\item{Time.vector}{Vector containing the time data. Can be \link[base]{POSIXct}, \link[hms]{hms},
+\link[lubridate]{duration}, or \link[base]{difftime}.}
 
 \item{epoch}{The epoch at which the data was sampled. Can be either a
-\code{lubridate::duration()} or a string. If it is a string, it needs to be
+\link[lubridate]{duration} or a string. If it is a string, it needs to be
 either \code{"dominant.epoch"} (the default) for a guess based on the data, or a valid
-\code{lubridate::duration()} string, e.g., \code{"1 day"} or \code{"10 sec"}.}
+\link[lubridate]{duration} string, e.g., \code{"1 day"} or \code{"10 sec"}.}
 
 \item{loop}{Logical. Should the data be looped? Defaults to \code{FALSE}.}
 
@@ -37,7 +38,7 @@ frame with seven columns will be returned. Defaults to \code{FALSE}.}
 List or dataframe with the seven values: \code{bright_threshold}, \code{dark_threshold},
 \code{bright_mean_level}, \code{dark_mean_level}, \code{bright_cluster}, \code{dark_cluster},
 \code{circadian_variation}. The output type of \code{bright_cluster}, \code{dark_cluster},
-is a \code{lubridate::duration()} object.
+is a \link[lubridate]{duration} object.
 }
 \description{
 This function calculates the metrics proposed by Barroso et al. (2014)

@@ -15,13 +15,12 @@ centroidLE(
 \arguments{
 \item{Light.vector}{Numeric vector containing the light data.}
 
-\item{Time.vector}{Vector containing the time data. Can be numeric, HMS or POSIXct.}
+\item{Time.vector}{Vector containing the time data. Can be \link[base]{POSIXct}, \link[hms]{hms},
+\link[lubridate]{duration}, or \link[base]{difftime}.}
 
 \item{bin.size}{Value specifying size of bins to average the light data over.
-If \code{Time.vector} is of type POSIXct or HMS, \code{bin.size} must be either a
-\code{lubridate::duration()} or a \code{lubridate::duration()} string, e.g.,
-\code{"1 day"} or \code{"10 sec"}. Otherwise, if \code{Time.vector} is numeric, \code{bin.size}
-must be also numeric. If nothing is provided, no binning will be performed.}
+Must be either a \link[lubridate]{duration} or a \link[lubridate]{duration} string, e.g.,
+\code{"1 day"} or \code{"10 sec"}. If nothing is provided, no binning will be performed.}
 
 \item{na.rm}{Logical. Should missing values be removed for the calculation?
 Defaults to \code{FALSE}.}
@@ -50,7 +49,7 @@ dataset1 \%>\%
     "Centroid of light exposure" = centroidLE(MEDI, Datetime, "2 hours")
   )
 
-# Dataset with HMS time vector
+# Dataset with hms time vector
 dataset2 <-
   tibble::tibble(
     Id = rep("A", 24),
@@ -62,16 +61,16 @@ dataset2 \%>\%
     "Centroid of light exposure" = centroidLE(MEDI, Time, "2 hours")
   )
 
-# Dataset with numeric time vector
+# Dataset with duration time vector
 dataset3 <-
   tibble::tibble(
     Id = rep("A", 24),
-    Hour = 0:23,
+    Hour = lubridate::duration(0:23, "hours"),
     MEDI = c(rep(1, 6), rep(250, 13), rep(1, 5))
   )
 dataset3 \%>\%
   dplyr::reframe(
-    "Centroid of light exposure" = centroidLE(MEDI, Hour, 2)
+    "Centroid of light exposure" = centroidLE(MEDI, Hour, "2 hours")
   )
 
 }
@@ -91,6 +90,7 @@ Other metrics:
 \code{\link{bright_dark_period}()},
 \code{\link{disparity_index}()},
 \code{\link{duration_above_threshold}()},
+\code{\link{exponential_moving_average}()},
 \code{\link{frequency_crossing_threshold}()},
 \code{\link{interdaily_stability}()},
 \code{\link{intradaily_variability}()},

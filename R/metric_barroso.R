@@ -22,11 +22,12 @@
 #' }
 #'
 #' @param Light.vector Numeric vector containing the light data.
-#' @param Time.vector Vector containing the time data. Can be numeric, HMS or POSIXct.
+#' @param Time.vector Vector containing the time data. Can be \link[base]{POSIXct}, \link[hms]{hms}, 
+#'    \link[lubridate]{duration}, or \link[base]{difftime}.
 #' @param epoch The epoch at which the data was sampled. Can be either a
-#'  `lubridate::duration()` or a string. If it is a string, it needs to be
+#'  \link[lubridate]{duration} or a string. If it is a string, it needs to be
 #'  either `"dominant.epoch"` (the default) for a guess based on the data, or a valid
-#'  `lubridate::duration()` string, e.g., `"1 day"` or `"10 sec"`.
+#'  \link[lubridate]{duration} string, e.g., `"1 day"` or `"10 sec"`.
 #' @param loop Logical. Should the data be looped? Defaults to `FALSE`.
 #' @param na.rm Logical. Should missing values (NA) be removed for the calculation? 
 #'    Defaults to `FALSE`. If `TRUE`, for the calculation of `bright_cluster` and
@@ -38,7 +39,7 @@
 #' @return List or dataframe with the seven values: `bright_threshold`, `dark_threshold`,
 #'    `bright_mean_level`, `dark_mean_level`, `bright_cluster`, `dark_cluster`, 
 #'    `circadian_variation`. The output type of `bright_cluster`, `dark_cluster`, 
-#'    is a `lubridate::duration()` object.
+#'    is a \link[lubridate]{duration} object.
 #'    
 #' @details 
 #'    
@@ -76,8 +77,9 @@ barroso_lighting_metrics <- function(Light.vector,
   # Perform argument checks
   stopifnot(
     "`Light.vector` must be numeric!" = is.numeric(Light.vector),
-    "`Time.vector` must be numeric, HMS, or POSIXct" =
-      is.numeric(Time.vector) | hms::is_hms(Time.vector) | lubridate::is.POSIXct(Time.vector),
+    "`Time.vector` must be POSIXct, hms, duration, or difftime!" =
+      lubridate::is.POSIXct(Time.vector) | hms::is_hms(Time.vector) | 
+      lubridate::is.duration(Time.vector) | lubridate::is.difftime(Time.vector),
     "`epoch` must either be a duration or a string" =
       lubridate::is.duration(epoch) | is.character(epoch),
     "`loop` must be logical!" = is.logical(loop),

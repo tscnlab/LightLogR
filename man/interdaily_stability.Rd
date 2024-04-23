@@ -68,6 +68,7 @@ Other metrics:
 \code{\link{centroidLE}()},
 \code{\link{disparity_index}()},
 \code{\link{duration_above_threshold}()},
+\code{\link{exponential_moving_average}()},
 \code{\link{frequency_crossing_threshold}()},
 \code{\link{intradaily_variability}()},
 \code{\link{midpointCE}()},

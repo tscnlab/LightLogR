@@ -18,19 +18,20 @@ bright_dark_period(
 \arguments{
 \item{Light.vector}{Numeric vector containing the light data.}
 
-\item{Time.vector}{Vector containing the time data. Can be HMS or POSIXct.}
+\item{Time.vector}{Vector containing the time data. Can be \link[base]{POSIXct},
+\link[hms]{hms}, \link[lubridate]{duration}, or \link[base]{difftime}.}
 
 \item{period}{String indicating the type of period to look for. Can be either
 \code{"brightest"}(the default) or \code{"darkest"}.}
 
 \item{timespan}{The timespan across which to calculate. Can be either a
-\code{lubridate::duration()} or a \code{lubridate::duration()} string, e.g.,
+\link[lubridate]{duration} or a \link[lubridate]{duration} string, e.g.,
 \code{"1 day"} or \code{"10 sec"}.}
 
 \item{epoch}{The epoch at which the data was sampled. Can be either a
-\code{lubridate::duration()} or a string. If it is a string, it needs to be
+\link[lubridate]{duration} or a string. If it is a string, it needs to be
 either \code{"dominant.epoch"} (the default) for a guess based on the data, or a valid
-\code{lubridate::duration()} string, e.g., \code{"1 day"} or \code{"10 sec"}.}
+\link[lubridate]{duration} string, e.g., \code{"1 day"} or \code{"10 sec"}.}
 
 \item{loop}{Logical. Should the data be looped? If \code{TRUE}, a full copy of the data
 will be concatenated at the end of the data. Makes only sense for 24 h data.
@@ -47,7 +48,7 @@ A named list with the \code{mean}, \code{onset}, \code{midpoint}, and \code{offs
 calculated brightest or darkest period, or if \code{as.df == TRUE} a data frame
 with columns named \verb{\{period\}_\{timespan\}_\{metric\}}. The output type corresponds
 to the type of \code{Time.vector}, e.g., if \code{Time.vector} is HMS, the timing metrics
-will be also HMS, and vice versa for POSIXct and numeric.
+will be also HMS, and vice versa for POSIXct.
 }
 \description{
 This function finds the brightest or darkest continuous period of a given
@@ -85,6 +86,7 @@ Other metrics:
 \code{\link{centroidLE}()},
 \code{\link{disparity_index}()},
 \code{\link{duration_above_threshold}()},
+\code{\link{exponential_moving_average}()},
 \code{\link{frequency_crossing_threshold}()},
 \code{\link{interdaily_stability}()},
 \code{\link{intradaily_variability}()},

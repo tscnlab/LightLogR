@@ -17,7 +17,8 @@ duration_above_threshold(
 \arguments{
 \item{Light.vector}{Numeric vector containing the light data.}
 
-\item{Time.vector}{Vector containing the time data. Can be numeric, HMS or POSIXct.}
+\item{Time.vector}{Vector containing the time data. Can be \link[base]{POSIXct}, \link[hms]{hms},
+\link[lubridate]{duration}, or \link[base]{difftime}.}
 
 \item{comparison}{String specifying whether the time above or below threshold
 should be calculated. Can be either \code{"above"} (the default) or \code{"below"}. If
@@ -28,9 +29,9 @@ threshold light level(s) to compare with. If a vector with two values is provide
 the time within the two thresholds will be calculated.}
 
 \item{epoch}{The epoch at which the data was sampled. Can be either a
-\code{lubridate::duration()} or a string. If it is a string, it needs to be
+\link[lubridate]{duration} or a string. If it is a string, it needs to be
 either \code{"dominant.epoch"} (the default) for a guess based on the data, or a valid
-\code{lubridate::duration()} string, e.g., \code{"1 day"} or \code{"10 sec"}.}
+\link[lubridate]{duration} string, e.g., \code{"1 day"} or \code{"10 sec"}.}
 
 \item{na.rm}{Logical. Should missing values (NA) be removed for the calculation?
 Defaults to \code{FALSE}.}
@@ -40,8 +41,7 @@ frame with a single column named \verb{duration_\{comparison\}_\{threshold\}} wi
 Defaults to \code{FALSE}.}
 }
 \value{
-A duration object (see \code{\link[lubridate]{duration}}) as single value,
-or single column data frame.
+A \link[lubridate]{duration} object as single value, or single column data frame.
 }
 \description{
 This function calculates the duration spent above/below a specified threshold
@@ -87,6 +87,7 @@ Other metrics:
 \code{\link{bright_dark_period}()},
 \code{\link{centroidLE}()},
 \code{\link{disparity_index}()},
+\code{\link{exponential_moving_average}()},
 \code{\link{frequency_crossing_threshold}()},
 \code{\link{interdaily_stability}()},
 \code{\link{intradaily_variability}()},

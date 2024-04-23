@@ -10,11 +10,12 @@
 #'
 #' @param MEDI.vector Numeric vector containing the melanopic EDI data.
 #' @param Illuminance.vector Numeric vector containing the Illuminance data.
-#' @param Time.vector Vector containing the time data. Can be numeric, HMS or POSIXct.
+#' @param Time.vector Vector containing the time data. Can be \link[base]{POSIXct}, \link[hms]{hms}, 
+#'    \link[lubridate]{duration}, or \link[base]{difftime}.
 #' @param epoch The epoch at which the data was sampled. Can be either a
-#'    `lubridate::duration()` or a string. If it is a string, it needs to be
+#'    \link[lubridate]{duration} or a string. If it is a string, it needs to be
 #'    either `"dominant.epoch"` (the default) for a guess based on the data, or a valid
-#'    `lubridate::duration()` string, e.g., `"1 day"` or `"10 sec"`.
+#'    \link[lubridate]{duration} string, e.g., `"1 day"` or `"10 sec"`.
 #'
 #' @return A numeric vector containing the nvRD data. The output has the same
 #'    length as `Time.vector`.
@@ -119,8 +120,9 @@ nvRD <- function(MEDI.vector,
   stopifnot(
     "`MEDI.vector` must be numeric!" = is.numeric(MEDI.vector),
     "`Illuminance.vector` must be numeric!" = is.numeric(Illuminance.vector),
-    "`Time.vector` must be numeric, HMS, or POSIXct" =
-      is.numeric(Time.vector) | hms::is_hms(Time.vector) | lubridate::is.POSIXct(Time.vector),
+    "`Time.vector` must be POSIXct, hms, duration, or difftime!" =
+      lubridate::is.POSIXct(Time.vector) | hms::is_hms(Time.vector) | 
+      lubridate::is.duration(Time.vector) | lubridate::is.difftime(Time.vector),
     "`epoch` must either be a duration or a string" =
       lubridate::is.duration(epoch) | is.character(epoch)
   )
@@ -179,11 +181,12 @@ nvRD <- function(MEDI.vector,
 #'
 #' @param nvRD Numeric vector containing the non-visual direct response. 
 #'    See \code{\link{nvRD}}.
-#' @param Time.vector Vector containing the time data. Can be numeric, HMS or POSIXct.
+#' @param Time.vector Vector containing the time data. Can be \link[base]{POSIXct}, \link[hms]{hms}, 
+#'    \link[lubridate]{duration}, or \link[base]{difftime}.
 #' @param epoch The epoch at which the data was sampled. Can be either a
-#'    `lubridate::duration()` or a string. If it is a string, it needs to be
+#'    \link[lubridate]{duration} or a string. If it is a string, it needs to be
 #'    either `"dominant.epoch"` (the default) for a guess based on the data, or a valid
-#'    `lubridate::duration()` string, e.g., `"1 day"` or `"10 sec"`.
+#'    \link[lubridate]{duration} string, e.g., `"1 day"` or `"10 sec"`.
 #' @param as.df Logical. Should a data frame with be returned? If `TRUE`, a data
 #'    frame with a single column named `nvRD_cumulative` will be returned.
 #'    Defaults to `FALSE`.
@@ -222,8 +225,9 @@ nvRD_cumulative_response <- function(nvRD,
   # Perform argument checks
   stopifnot(
     "`nvRD` must be numeric!" = is.numeric(nvRD),
-    "`Time.vector` must be numeric, HMS, or POSIXct" =
-      is.numeric(Time.vector) | hms::is_hms(Time.vector) | lubridate::is.POSIXct(Time.vector),
+    "`Time.vector` must be POSIXct, hms, duration, or difftime!" =
+      lubridate::is.POSIXct(Time.vector) | hms::is_hms(Time.vector) | 
+      lubridate::is.duration(Time.vector) | lubridate::is.difftime(Time.vector),
     "`epoch` must either be a duration or a string" =
       lubridate::is.duration(epoch) | is.character(epoch),
     "`as.df` must be logical!" = is.logical(as.df)
@@ -260,11 +264,12 @@ nvRD_cumulative_response <- function(nvRD,
 #'
 #' @param MEDI.vector Numeric vector containing the melanopic EDI data.
 #' @param Illuminance.vector Numeric vector containing the Illuminance data.
-#' @param Time.vector Vector containing the time data. Can be numeric, HMS or POSIXct.
+#' @param Time.vector Vector containing the time data. Can be \link[base]{POSIXct},
+#'    \link[hms]{hms}, \link[lubridate]{duration}, or \link[base]{difftime}.
 #' @param epoch The epoch at which the data was sampled. Can be either a
-#'    `lubridate::duration()` or a string. If it is a string, it needs to be
+#'    \link[lubridate]{duration} or a string. If it is a string, it needs to be
 #'    either `"dominant.epoch"` (the default) for a guess based on the data, or a valid
-#'    `lubridate::duration()` string, e.g., `"1 day"` or `"10 sec"`.
+#'    \link[lubridate]{duration} string, e.g., `"1 day"` or `"10 sec"`.
 #' @param sleep.onset The time of habitual sleep onset. Can be HMS, numeric, or NULL.
 #'    If NULL (the default), then the data is assumed to start at habitual sleep onset.
 #'    If `Time.vector` is HMS or POSIXct, `sleep.onset` must be HMS. Likewise, if
@@ -353,6 +358,7 @@ nvRD_cumulative_response <- function(nvRD,
 #'    \url{http://dx.doi.org/10.5075/epfl-thesis-7146}
 #'
 #' @examples
+#' 
 #' dataset1 <-
 #'   tibble::tibble(
 #'     Id = rep("B", 60 * 48),
@@ -361,12 +367,20 @@ nvRD_cumulative_response <- function(nvRD,
 #'                     rep(0, 60*8), rep(sample(1:1000, 16, replace = TRUE), each = 60)),
 #'     MEDI = Illuminance * rep(sample(0.5:1.5, 48, replace = TRUE), each = 60)
 #'   )
-#' 
+#' # Time.vector as POSIXct
 #' dataset1.nvRC <- dataset1 %>%
 #'   dplyr::mutate(
 #'     nvRC = nvRC(MEDI, Illuminance, Datetime, sleep.onset = hms::as_hms("22:00:00"))
 #'   )
 #' 
+#' # Time.vector as difftime
+#' dataset2 <- dataset1 %>% 
+#'   dplyr::mutate(Datetime = Datetime - lubridate::as_datetime(lubridate::dhours(22)))
+#' dataset2.nvRC <- dataset2 %>%
+#'   dplyr::mutate(
+#'     nvRC = nvRC(MEDI, Illuminance, Datetime, sleep.onset = lubridate::dhours(0))
+#'   )
+#'   
 nvRC <- function(MEDI.vector,
                  Illuminance.vector,
                  Time.vector,
@@ -377,12 +391,14 @@ nvRC <- function(MEDI.vector,
   stopifnot(
     "`MEDI.vector` must be numeric!" = is.numeric(MEDI.vector),
     "`Illuminance.vector` must be numeric!" = is.numeric(Illuminance.vector),
-    "`Time.vector` must be numeric, HMS, or POSIXct" =
-      is.numeric(Time.vector) | hms::is_hms(Time.vector) | lubridate::is.POSIXct(Time.vector),
+    "`Time.vector` must be POSIXct, hms, duration, or difftime!" =
+      lubridate::is.POSIXct(Time.vector) | hms::is_hms(Time.vector) | 
+      lubridate::is.duration(Time.vector) | lubridate::is.difftime(Time.vector),
     "`epoch` must either be a duration or a string" =
       lubridate::is.duration(epoch) | is.character(epoch),
-    "`sleep.onset` must be numeric, HMS, or NULL" = 
-      is.null(sleep.onset) | hms::is_hms(sleep.onset) | is.numeric(sleep.onset)
+    "`sleep.onset` must be hms, duration, difftime, or NULL" = 
+      is.null(sleep.onset) | hms::is_hms(sleep.onset) | 
+      lubridate::is.duration(sleep.onset) | lubridate::is.difftime(sleep.onset)
   )
   
   # Replace missing values
@@ -414,35 +430,34 @@ nvRC <- function(MEDI.vector,
   # Convert to effective irradiance
   Ieff <- nvR_getIeff(MEDI.vector, Illuminance.vector, delta)
   
-  if(is.numeric(Time.vector) & is.numeric(sleep.onset)) {
-    bt <- sleep.onset
-    dt <- Time.vector
+  if(!is.null(sleep.onset)){
+    bt = as.numeric(sleep.onset)
     
-    t <- (dt - bt)
-  }
-  else{
-    # Align circadian sensitivity curve with sleep onset
-    if (hms::is_hms(sleep.onset)) {
-      # Check that Time.vector is HMS or POSIXct
+    if(hms::is.hms(sleep.onset)){
       stopifnot("`sleep.onset` is HMS but `Time.vector` is not HMS or POSIXct" = 
                   hms::is_hms(Time.vector) | lubridate::is.POSIXct(Time.vector))
-      
-      bt <- as.numeric(sleep.onset)
+      # Normalise datetime vector
       dt <- as.numeric(Time.vector) - as.numeric(Time.vector)[1] +
         as.numeric(hms::as_hms(Time.vector[1]))
-      
-      # Seconds to hours
-      t = (dt - bt) / 3600
-      
-    } else {
-      # Check whether first three hours are darkness --> timeseries should start at
-      # habitual sleep onset.
-      if (mean(Illuminance.vector[1:(3 / delta)]) > 10) {
-        warning("Average Illuminance.vector across the first three hours is higher than 10lx. Does the timeseries really start at habitual sleep onset?")
-      }
-      t <- seq(0, (length(Ieff) * delta) - delta, delta)
     }
+    else{
+      stopifnot("`sleep.onset` is duration or difftime but `Time.vector` is not duration or difftime" = 
+                  lubridate::is.duration(Time.vector) | lubridate::is.difftime(Time.vector))
+      dt <- as.numeric(Time.vector)
+    }
+    
+    # Seconds to hours
+    t = (dt - bt) / 3600
   }
+  else {
+    # Check whether first three hours are darkness --> timeseries should start at
+    # habitual sleep onset.
+    if (mean(Illuminance.vector[1:(3 / delta)]) > 10) {
+      warning("Average Illuminance.vector across the first three hours is higher than 10lx. Does the timeseries really start at habitual sleep onset?")
+    }
+    t <- seq(0, (length(Ieff) * delta) - delta, delta)
+  }
+  
   
   # Get circadian modulation
   Rmax <- nvR_circadianModulator(t)
