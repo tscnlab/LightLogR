@@ -118,19 +118,8 @@ centroidLE <- function(Light.vector,
   weights <- (df$Light / sum(df$Light, na.rm = na.rm))
   centroidLE <- sum(as.numeric(df$Time) * weights, na.rm = na.rm) %>% round()
   
-  # Convert to right time class
-  if(lubridate::is.POSIXct(Time.vector)){
-    centroidLE <- centroidLE %>% lubridate::as_datetime(tz = lubridate::tz(Time.vector))
-  }
-  if(hms::is_hms(Time.vector)) {
-    centroidLE <- centroidLE %>%hms::as_hms()
-  }
-  if(lubridate::is.duration(Time.vector)){
-    centroidLE <- centroidLE %>% lubridate::as.duration()
-  }
-  if(lubridate::is.difftime(Time.vector)){
-    centroidLE <- centroidLE %>% lubridate::as.difftime(unit = units(Time.vector))
-  }
+  # Convert to corresponding time scale
+  centroidLE <- centroidLE %>% convert_to_timescale(Time.vector)
   
   # Return data frame or numeric vector
   if (as.df) {

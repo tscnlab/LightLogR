@@ -157,6 +157,7 @@ Other metrics:
 \code{\link{nvRD_cumulative_response}()},
 \code{\link{nvRD}()},
 \code{\link{period_above_threshold}()},
+\code{\link{pulses_above_threshold}()},
 \code{\link{threshold_for_duration}()},
 \code{\link{timing_above_threshold}()}
 }

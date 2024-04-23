@@ -88,18 +88,7 @@ timing_above_threshold <- function(Light.vector,
   llit = t %>% dplyr::last()
   
   # Convert to corresponding time scale
-  if(lubridate::is.POSIXct(Time.vector)){
-    mlit <- mlit %>%lubridate::as_datetime(tz = lubridate::tz(Time.vector))
-  }
-  if(hms::is_hms(Time.vector)) {
-    mlit <- mlit %>% hms::as_hms()
-  }
-  if(hms::is.duration(Time.vector)) {
-    mlit <- mlit %>% lubridate::as.duration()
-  }
-  if(hms::is.difftime(Time.vector)) {
-    mlit <- mlit %>% lubridate::as.difftime(unit = units(Time.vector))
-  }
+  mlit <- mlit %>% convert_to_timescale(Time.vector)
   
   # Prepare output
   out <- list(
@@ -110,6 +99,9 @@ timing_above_threshold <- function(Light.vector,
 
   # Return data frame or list
   if (as.df) {
+    if(length(threshold) == 2){
+      comparison <- "within"
+    }
     threshold <- stringr::str_flatten(sort(threshold), collapse = "-")
     out <- tibble::as_tibble(out) %>%
       dplyr::rename_with(~paste(.x, "timing", comparison, threshold, sep = "_"))

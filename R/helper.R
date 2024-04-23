@@ -123,10 +123,19 @@ compare_threshold <- function(Light.vector,
 # Allows to concatenate periods of consecutive values that are interrupted 
 # by periods of `FALSE` values. 
 find_clusters <- function(x,
-                          min_length,
-                          max_interrupt = 0,
-                          prop_interrupt = 1,
+                          min.length,
+                          max.interrupt = 0,
+                          prop.interrupt = 1,
                           cluster_name = "cluster") {
+  
+  stopifnot(
+    "`x` must be logical" = is.logical(x),
+    "`min.length` must be larger than 0" = min.length > 0,
+    "`max.interrupt` must be larger than or equal to 0" = max.interrupt >= 0,
+    "`prop.interrupt` must be between 0 and 1" = 
+      prop.interrupt >= 0 & prop.interrupt <= 1
+  )
+  
   # Replace NA with FALSE
   x <- tidyr::replace_na(x, FALSE)
   
@@ -135,11 +144,11 @@ find_clusters <- function(x,
   end_indices <- which(x & !dplyr::lead(x, default = FALSE))
   ranges <- as.numeric(matrix(rbind(start_indices, end_indices), nrow = 2))
   
-  # Remove ranges < min_length
+  # Remove ranges < min.length
   intra_diff <- diff(ranges)[1:(length(ranges) - 1) %% 2 != 0] + 1
   exclude_ranges <- c(
-    which(intra_diff < min_length) * 2,
-    which(intra_diff < min_length) * 2 - 1
+    which(intra_diff < min.length) * 2,
+    which(intra_diff < min.length) * 2 - 1
   )
   if (length(exclude_ranges) > 0) {
     ranges <- ranges[-exclude_ranges]
@@ -155,11 +164,11 @@ find_clusters <- function(x,
   # Proportion inter-range difference and cumulative range sums
   interrupt_ratio <- inter_diff / intra_cumsum
   
-  # Combine ranges with inter-range difference <= max_interrupt &
-  # interrupt ratio <= prop_interrupt
+  # Combine ranges with inter-range difference <= max.interrupt &
+  # interrupt ratio <= prop.interrupt
   exclude_ranges <- c(
-    which(inter_diff <= max_interrupt & interrupt_ratio <= prop_interrupt) * 2,
-    which(inter_diff <= max_interrupt & interrupt_ratio <= prop_interrupt) * 2 + 1
+    which(inter_diff <= max.interrupt & interrupt_ratio <= prop.interrupt) * 2,
+    which(inter_diff <= max.interrupt & interrupt_ratio <= prop.interrupt) * 2 + 1
   )
   if (length(exclude_ranges) > 0) {
     ranges <- ranges[-exclude_ranges]
@@ -190,4 +199,21 @@ find_clusters <- function(x,
     dplyr::rename_with(~gsub("cluster", cluster_name, .x))
   
   return(intervals)
+}
+
+# Convert `x` to time scale of `t`
+convert_to_timescale <- function(x, t){
+  if(lubridate::is.POSIXct(t)){
+    x <- as.POSIXct(x, tz = lubridate::tz(t))
+  }
+  if(hms::is_hms(t)){
+    x <- hms::as_hms(x)
+  }
+  if(lubridate::is.duration(t)){
+    x <- lubridate::as.duration(x)
+  }
+  if(lubridate::is.difftime(t) & !hms::is_hms(t)){
+    x <- lubridate::as.difftime(x, unit = units(t))
+  }
+  return(x)
 }

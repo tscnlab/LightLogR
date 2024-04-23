@@ -103,6 +103,9 @@ duration_above_threshold <- function(Light.vector,
 
   # Return data frame or numeric value
   if (as.df) {
+    if(length(threshold) == 2){
+      comparison <- "within"
+    }
     threshold <- stringr::str_flatten(sort(threshold), collapse = "-")
     return(tibble::tibble("duration_{comparison}_{threshold}" := tat))
   } else {

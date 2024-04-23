@@ -62,6 +62,7 @@ Assumes regular 24h light data. Otherwise, results may not be
 meaningful. Looping the data is recommended for finding the darkest period.
 }
 \examples{
+# Dataset with light > 250lx between 06:00 and 18:00
 dataset1 <-
   tibble::tibble(
     Id = rep("A", 24),
@@ -75,6 +76,22 @@ dataset1 \%>\%
 dataset1 \%>\%
   dplyr::reframe(bright_dark_period(MEDI, Datetime, "darkest", "5 hours",
     loop = TRUE, as.df = TRUE))
+
+# Dataset with duration as Time.vector
+dataset2 <-
+  tibble::tibble(
+    Id = rep("A", 24),
+    Datetime = lubridate::dhours(0:23),
+    MEDI = c(rep(1, 6), rep(250, 13), rep(1, 5))
+  )
+
+dataset2 \%>\%
+  dplyr::reframe(bright_dark_period(MEDI, Datetime, "brightest", "10 hours",
+                                    as.df = TRUE))
+dataset2 \%>\%
+  dplyr::reframe(bright_dark_period(MEDI, Datetime, "darkest", "5 hours",
+                                    loop = TRUE, as.df = TRUE))
+
 }
 \references{
 Hartmeyer, S.L., Andersen, M. (2023). Towards a framework for light-dosimetry studies:
@@ -95,6 +112,7 @@ Other metrics:
 \code{\link{nvRD_cumulative_response}()},
 \code{\link{nvRD}()},
 \code{\link{period_above_threshold}()},
+\code{\link{pulses_above_threshold}()},
 \code{\link{threshold_for_duration}()},
 \code{\link{timing_above_threshold}()}
 }
