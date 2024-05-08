@@ -22,6 +22,8 @@
 #'   on the dataset.
 #' @param overwrite If `TRUE` (defaults to `FALSE`), the function will
 #'   overwrite the `State.colname` column if it already exists.
+#' @param Other.colnames.interval If you would like to add other columns from
+#'   the `State.interval.dataset` to the `dataset`, you can specify them here.
 #'
 #' @return One of
 #' * a `data.frame` object identical to `dataset` but with the state column added
@@ -157,9 +159,20 @@ interval2state <- function(dataset,
     compare_difftime.any(dataset, State.interval.dataset2)
   
   if(!rlang::is_true(are.intervals.smaller)) {
-    cat("Warning: The time differences between consecutive time points in the reference dataset are larger than in the dataset. This means multiple reference data connect to one dataset datum - only the last one prior to each datum will be used. Please use an aggregate function on the reference dataset to resolve this warning. \nThe following output shows what grouping is problematic and what 95% of time intervals in the Dataset compared to the Reference data is.\n\n")
-    utils::capture.output(are.intervals.smaller)[c(-1,-3)] %>% cat(sep = "\n")
+    warning_text <- 
+    
+    c("The time differences between consecutive time points in the reference dataset are larger than in the dataset. This means multiple reference data connect to one dataset datum - only the last one prior to each datum will be used. Please use an aggregate function on the reference dataset to resolve this warning. \nThe following output shows what grouping is problematic and what 95% of time intervals in the Dataset compared to the Reference data is.\n\n",
+    utils::capture.output(are.intervals.smaller)[c(-1,-3)] %>% paste0(collapse = "\n"))
+    warning(warning_text)
   }
+  
+  #select only the relevant columns from the State.interval.dataset
+  State.interval.dataset2 <-
+    State.interval.dataset2 %>%
+    dplyr::select( 
+                  {{ Id.colname.interval }},
+                  {{ Datetime.colname }},
+                  {{ State.colname }})
   
   # join the two datasets together
   dataset <- 
@@ -177,8 +190,13 @@ interval2state <- function(dataset,
   dataset <-
     dataset %>%
     dplyr::mutate(
-      group = cumsum(!is.na({{ State.colname }}) | {{ State.colname }} == "NaN")
+      group.1 = !is.na({{ State.colname }}),
+      group.2 = {{ State.colname }} == "NaN",
+      group.2 = dplyr::if_else(is.na(group.2), FALSE, group.2),
+      group = cumsum(group.1 | group.2)
+        # !is.na({{ State.colname }}) | {{ State.colname }} == "NaN")
       ) %>% 
+    dplyr::select(-group.1, -group.2) %>% 
     dplyr::group_by(group, .add = TRUE) %>% 
     tidyr::fill({{ State.colname }}) %>% 
     dplyr::ungroup(group) %>% 
