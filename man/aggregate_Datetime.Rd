@@ -10,9 +10,9 @@ aggregate_Datetime(
   unit = "none",
   type = c("round", "floor", "ceiling"),
   numeric.handler = mean,
-  character.handler = function(x) names(which.max(table(x))),
+  character.handler = function(x) names(which.max(table(x, useNA = "ifany"))),
   logical.handler = function(x) mean(x) >= 0.5,
-  factor.handler = function(x) factor(names(which.max(table(x)))),
+  factor.handler = function(x) factor(names(which.max(table(x, useNA = "ifany")))),
   ...
 )
 }

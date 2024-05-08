@@ -48,7 +48,7 @@ occasions, like leap years, or daylight savings. You can also provide a
 \code{character} scalar in the form of e.g. "1 day", which will be converted
 into a period.}
 
-\item{full.day}{A \code{logical} indicating wether the \code{start} param should be
+\item{full.day}{A \code{logical} indicating whether the \code{start} param should be
 rounded to a full day, when only the \code{length} argument is provided (Default
 is FALSE). This is useful, e.g., when the first observation in the dataset
 is slightly after midnight. If TRUE, it will count the length from midnight

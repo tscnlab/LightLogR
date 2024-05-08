@@ -37,9 +37,9 @@
 #' of the `dataset`, this `character` scalar will be used. **We discourage the
 #' use of this arguments when importing more than one file**
 #' * `locale`: The locale controls defaults that vary from place to place.
-#' * `dst_adjustment`: If a file crosses daylight savings time, but the device does not adjust timestamps accordingly, you can set this argument to `TRUE`, to apply this shift manually. It is selective, so it will only be done in files that cross between DST and standard time. Default is `FALSE`. Uses `dst_change_handler()` to do the adjustment. Look there for more infos. It is not equipped to handle two jumps in one file (so back and forth between DST and standard time), but will work fine if jums occur in separate files.
+#' * `dst_adjustment`: If a file crosses daylight savings time, but the device does not adjust time stamps accordingly, you can set this argument to `TRUE`, to apply this shift manually. It is selective, so it will only be done in files that cross between DST and standard time. Default is `FALSE`. Uses `dst_change_handler()` to do the adjustment. Look there for more infos. It is not equipped to handle two jumps in one file (so back and forth between DST and standard time), but will work fine if jums occur in separate files.
 #' * `auto.plot`: a logical on whether to call [gg_overview()] after import. Default is `TRUE`.
-#' * `...`: supply additional arguments to the [readr] import functions, like `na`. Might also be used to supply arguments to the specific import functions, like `column_names` for `Actiwatch_Spectrum` devices. Those devices will alway throw a helpful error message if you forget to supply the necessary arguments.
+#' * `...`: supply additional arguments to the [readr] import functions, like `na`. Might also be used to supply arguments to the specific import functions, like `column_names` for `Actiwatch_Spectrum` devices. Those devices will always throw a helpful error message if you forget to supply the necessary arguments.
 #'   If the `Id` column is already part of the `dataset` it will just use
 #'   this column. If the column is not present it will add this column and fill
 #'   it with the filename of the importfile (see param `auto.id`).
@@ -109,14 +109,12 @@
 #' dataset <- import$ActLumus(filepath, auto.plot = FALSE)
 #' dataset %>% gg_days()
 #' ```
-#'
 #' ```{r}
 #' dataset %>%
 #' dplyr::select(Datetime, TEMPERATURE, LIGHT, MEDI, Id) %>%
-#' dplyr::slice(1500:1505) %>%
-#' flextable::flextable() %>%
-#' flextable::autofit()
+#' dplyr::slice(1500:1505)
 #' ```
+
 
 import_Dataset <- function(device, ...) {
   
