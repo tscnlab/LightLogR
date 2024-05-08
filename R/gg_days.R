@@ -71,6 +71,7 @@ gg_days <- function(dataset,
                    subtitle = NULL,
                    interactive = FALSE,
                    facetting = TRUE,
+                   jco_color = FALSE,
                    ...) {
   
   # Initial Checks ----------------------------------------------------------
@@ -127,6 +128,16 @@ gg_days <- function(dataset,
     dots <- NULL
   }
   
+  #jco color palette
+  jco_color_scheme <- list()
+  if(jco_color) {
+    jco_color_scheme <- 
+      list(
+        ggsci::scale_color_jco(),
+        ggsci::scale_fill_jco()
+      )
+  }
+  
   # Plot Creation -----------------------------------------------------------
   
   Plot <- 
@@ -141,6 +152,7 @@ gg_days <- function(dataset,
       ), !!!dots )) +
     ribbon +
     # Scales --------------------------------------------------------------
+    jco_color_scheme +
     ggplot2::scale_y_continuous(
       trans = y.scale,
       breaks = y.axis.breaks,
