@@ -47,9 +47,6 @@ overwrite the \code{State.colname} column if it already exists.}
 
 \item{output.dataset}{should the output be a \code{data.frame} (Default \code{TRUE}) or
 a vector with \code{hms} (\code{FALSE}) times? Expects a \code{logical} scalar.}
-
-\item{Other.colnames.interval}{If you would like to add other columns from
-the \code{State.interval.dataset} to the \code{dataset}, you can specify them here.}
 }
 \value{
 One of
@@ -101,10 +98,12 @@ ggplot(dataset_with_states, aes(x = Datetime, y = MEDI, color = State)) +
  facet_wrap(~Id, ncol = 1)
 
 #import multiple State columns from the interval dataset
-#interval2state will only add a single State column to the dataset, which represents sleep/wake in our case
+#interval2state will only add a single State column to the dataset, 
+#which represents sleep/wake in our case
 dataset_with_states[8278:8283,]
 
-#if we want to add multiple columns we can either perfom the function multiple times with different states:
+#if we want to add multiple columns we can either perfom the function 
+#multiple times with different states:
 dataset_with_states2 <- 
 dataset_with_states \%>\%
 interval2state(State.interval.dataset = intervals, State.colname = Wear)
