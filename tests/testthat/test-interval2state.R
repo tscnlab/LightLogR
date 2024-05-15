@@ -20,7 +20,7 @@ test_that("interval2state works as expected", {
   
   #create a dataset with states
   data <-
-    sample.data.environment %>% dplyr::group_by(Id) %>%
+    sample.data.environment %>%
     interval2state(State.interval.dataset = intervals) %>% 
     dplyr::slice(6000, 28000) %>% dplyr::pull(State)
   
@@ -80,5 +80,15 @@ test_that("interval2state throws errors as expected", {
                               State.interval.dataset = sample.data.environment,
                               State.colname = Source,
                               Interval.colname = Datetime))
+  
+  expect_warning(interval2state(dataset = sample.data.environment %>%
+                                  dplyr::mutate(
+                                    Datetime = lubridate::with_tz(
+                                      Datetime, "Europe/Berlin")
+                                  ),
+                                State.interval.dataset = 
+                                  intervals %>% dplyr::group_by(Id)
+                                ),
+                 "The time zone of the dataset and the State.interval.dataset are not the same. This might lead to unexpected results or time shifts.")
   
 })

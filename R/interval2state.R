@@ -140,6 +140,12 @@ interval2state <- function(dataset,
       State.colname.defused %in% names(State.interval.dataset))) 
       warning("A `State` column with the given (or default) name is already part of the dataset. It is overwritten, because `overwrite = TRUE ` was set.")
   
+  #give a warning, if the time zone of the dataset and the State.interval.dataset are not the same
+  if(
+    !identical(lubridate::tz(dataset[[Datetime.colname.defused]]), 
+               lubridate::tz(State.interval.dataset[[Interval.colname.defused]] %>% 
+                             lubridate::int_start())))
+    warning("The time zone of the dataset and the State.interval.dataset are not the same. This might lead to unexpected results or time shifts.")
   
   # Manipulation ----------------------------------------------------------
   
