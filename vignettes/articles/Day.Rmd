@@ -274,7 +274,7 @@ The `geom_area` fills an area from 0 up to the given value. For some reason, how
 
 ```{r, fig.retina=2, fig.width=7, fig.height = 4, warning=FALSE}
 dataset.LL.partial  %>% 
-  cut_Datetime(unit = "0.5 hours") %>% #provide an interval for the boxplot
+  cut_Datetime(unit = "30 minutes") %>% #provide an interval for the boxplot
   gg_day(size = 0.25, facetting = FALSE, geom = "boxplot", group = Datetime.rounded) + #base plot
   solar.reference + brown.reference + scale.correction
 ```
