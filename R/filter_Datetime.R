@@ -32,7 +32,7 @@
 #'   after the first two days of measurement (see examples).
 #' @param tz Timezone of the start/end times. If `NULL` (the default), it will
 #'   take the timezone from the `Datetime.colname` column.
-#' @param full.day A `logical` indicating wether the `start` param should be
+#' @param full.day A `logical` indicating whether the `start` param should be
 #'   rounded to a full day, when only the `length` argument is provided (Default
 #'   is FALSE). This is useful, e.g., when the first observation in the dataset
 #'   is slightly after midnight. If TRUE, it will count the length from midnight

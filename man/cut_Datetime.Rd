@@ -19,7 +19,7 @@ cut_Datetime(
 by \link{LightLogR}, take care to choose a sensible variable for the
 \code{Datetime.colname}.}
 
-\item{unit}{Unit of binning. See \code{\link[lubridate:round_date]{lubridate::round_date()}} for examples.}
+\item{unit}{Unit of binning. See \code{\link[lubridate:round_date]{lubridate::round_date()}} for examples. The default is \code{"3 hours"}.}
 
 \item{type}{One of \code{"round"}(the default), \code{"ceiling"} or \code{"floor"}. Setting
 chooses the relevant function from \link{lubridate}.}

@@ -58,7 +58,7 @@ data <-
                      Value = 1)
  #as can be seen next, there is a gap in the data - this is necessary when
  #using a timezone with DST. 
- data \%>\% .$Datetime
+ data$Datetime
  #Let us say now, that the device did not adjust for the DST - thus the 03:00 
  #timestamp is actually 04:00 in local time. This can be corrected for by:
  data \%>\% dst_change_handler() \%>\% .$Datetime

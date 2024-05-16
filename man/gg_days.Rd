@@ -25,6 +25,7 @@ gg_days(
   subtitle = NULL,
   interactive = FALSE,
   facetting = TRUE,
+  jco_color = FALSE,
   ...
 )
 }
@@ -99,6 +100,9 @@ Defaults to \code{FALSE}.}
 
 \item{facetting}{Should an automated facet by grouping be applied? Default is
 \code{TRUE}.}
+
+\item{jco_color}{Should the \code{\link[ggsci:scale_jco]{ggsci::scale_color_jco()}} color palette be used?
+Defaults to \code{TRUE}.}
 
 \item{...}{Other options that get passed to the main geom function. Can be
 used to adjust to adjust size, linewidth, or linetype.}

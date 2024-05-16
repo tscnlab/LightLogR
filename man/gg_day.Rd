@@ -12,7 +12,7 @@ gg_day(
   y.axis = MEDI,
   aes_col = NULL,
   aes_fill = NULL,
-  group = NULL,
+  group = Id,
   geom = "point",
   scales = c("fixed", "free_x", "free_y", "free"),
   x.axis.breaks = hms::hms(hours = seq(0, 24, by = 3)),

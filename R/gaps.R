@@ -48,13 +48,8 @@ gapless_Datetimes <- function(dataset,
   # Function ----------------------------------------------------------
   
   #get the epochs based on the data
-  epochs <- dataset %>% dominant_epoch(Datetime.colname = {{ Datetime.colname }})
-  
-  #if the user specified an epoch, use that instead
-  if(epoch != "dominant.epoch") {
-    epochs <- 
-      epochs %>% dplyr::mutate(dominant.epoch = lubridate::as.duration(epoch))
-  }
+  epochs <- epoch_list(dataset, Datetime.colname = {{ Datetime.colname }},
+                     epoch = epoch)
   
   #create an expression for a sequence from the minimum datetime to the maximum
   #or, if full.days is TRUE, to the end of the day of the maximum datetime

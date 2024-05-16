@@ -58,9 +58,9 @@ without file extension.
 of the \code{dataset}, this \code{character} scalar will be used. \strong{We discourage the
 use of this arguments when importing more than one file}
 \item \code{locale}: The locale controls defaults that vary from place to place.
-\item \code{dst_adjustment}: If a file crosses daylight savings time, but the device does not adjust timestamps accordingly, you can set this argument to \code{TRUE}, to apply this shift manually. It is selective, so it will only be done in files that cross between DST and standard time. Default is \code{FALSE}. Uses \code{dst_change_handler()} to do the adjustment. Look there for more infos. It is not equipped to handle two jumps in one file (so back and forth between DST and standard time), but will work fine if jums occur in separate files.
+\item \code{dst_adjustment}: If a file crosses daylight savings time, but the device does not adjust time stamps accordingly, you can set this argument to \code{TRUE}, to apply this shift manually. It is selective, so it will only be done in files that cross between DST and standard time. Default is \code{FALSE}. Uses \code{dst_change_handler()} to do the adjustment. Look there for more infos. It is not equipped to handle two jumps in one file (so back and forth between DST and standard time), but will work fine if jums occur in separate files.
 \item \code{auto.plot}: a logical on whether to call \code{\link[=gg_overview]{gg_overview()}} after import. Default is \code{TRUE}.
-\item \code{...}: supply additional arguments to the \link{readr} import functions, like \code{na}. Might also be used to supply arguments to the specific import functions, like \code{column_names} for \code{Actiwatch_Spectrum} devices. Those devices will alway throw a helpful error message if you forget to supply the necessary arguments.
+\item \code{...}: supply additional arguments to the \link{readr} import functions, like \code{na}. Might also be used to supply arguments to the specific import functions, like \code{column_names} for \code{Actiwatch_Spectrum} devices. Those devices will always throw a helpful error message if you forget to supply the necessary arguments.
 If the \code{Id} column is already part of the \code{dataset} it will just use
 this column. If the column is not present it will add this column and fill
 it with the filename of the importfile (see param \code{auto.id}).
@@ -76,9 +76,9 @@ just work out of the box. To get an overview, you can simply call the
 is maintained.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{supported.devices
-#> [1] "Actiwatch_Spectrum" "ActLumus"           "DeLux"             
-#> [4] "LiDo"               "LYS"                "Speccy"            
-#> [7] "SpectraWear"
+#> [1] "Actiwatch_Spectrum" "ActLumus"           "ActTrust"          
+#> [4] "DeLux"              "LiDo"               "LYS"               
+#> [7] "Speccy"             "SpectraWear"
 }\if{html}{\out{</div>}}
 \subsection{ActLumus}{
 
@@ -178,54 +178,18 @@ dataset \%>\% gg_days()
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{dataset \%>\%
 dplyr::select(Datetime, TEMPERATURE, LIGHT, MEDI, Id) \%>\%
-dplyr::slice(1500:1505) \%>\%
-flextable::flextable() \%>\%
-flextable::autofit()
-}\if{html}{\out{</div>}}\if{html}{\out{
-<div class="tabwid"><style>.cl-75af9c1e\{\}.cl-75acc3f4\{font-family:'Helvetica';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;\}.cl-75ade798\{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;\}.cl-75ade7a2\{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;\}.cl-75adf008\{width:1.704in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;\}.cl-75adf012\{width:1.44in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;\}.cl-75adf013\{width:0.752in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;\}.cl-75adf01c\{width:3.734in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;\}.cl-75adf01d\{width:1.704in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;\}.cl-75adf026\{width:1.44in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;\}.cl-75adf027\{width:0.752in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;\}.cl-75adf028\{width:3.734in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;\}.cl-75adf030\{width:1.704in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;\}.cl-75adf031\{width:1.44in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;\}.cl-75adf032\{width:0.752in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;\}.cl-75adf033\{width:3.734in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;\}.tabwid \{
-  font-size: initial;
-  padding-bottom: 1em;
-\}
-}}
-
-
-.tabwid table{
-border-spacing:0px !important;
-border-collapse:collapse;
-line-height:1;
-margin-left:auto;
-margin-right:auto;
-border-width: 0;
-border-color: transparent;
-caption-side: top;
-}
-.tabwid-caption-bottom table{
-caption-side: bottom;
-}
-.tabwid_left table{
-margin-left:0;
-}
-.tabwid_right table{
-margin-right:0;
-}
-.tabwid td, .tabwid th {
-padding: 0;
-}
-.tabwid a {
-text-decoration: none;
-}
-.tabwid thead {
-background-color: transparent;
-}
-.tabwid tfoot {
-background-color: transparent;
-}
-.tabwid table tr {
-background-color: transparent;
-}
-.katex-display {
-margin: 0 0 !important;
-}\if{html}{\out{</style>}}\if{html}{\out{<table data-quarto-disable-processing='true' class='cl-75af9c1e'>}}\if{html}{\out{<thead>}}\if{html}{\out{<tr style="overflow-wrap:break-word;">}}\if{html}{\out{<th class="cl-75adf008">}}\if{html}{\out{<p class="cl-75ade798">}}\if{html}{\out{<span class="cl-75acc3f4">}}Datetime\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</th>}}\if{html}{\out{<th class="cl-75adf012">}}\if{html}{\out{<p class="cl-75ade798">}}\if{html}{\out{<span class="cl-75acc3f4">}}TEMPERATURE\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</th>}}\if{html}{\out{<th class="cl-75adf013">}}\if{html}{\out{<p class="cl-75ade798">}}\if{html}{\out{<span class="cl-75acc3f4">}}LIGHT\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</th>}}\if{html}{\out{<th class="cl-75adf013">}}\if{html}{\out{<p class="cl-75ade798">}}\if{html}{\out{<span class="cl-75acc3f4">}}MEDI\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</th>}}\if{html}{\out{<th class="cl-75adf01c">}}\if{html}{\out{<p class="cl-75ade7a2">}}\if{html}{\out{<span class="cl-75acc3f4">}}Id\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</th>}}\if{html}{\out{</tr>}}\if{html}{\out{</thead>}}\if{html}{\out{<tbody>}}\if{html}{\out{<tr style="overflow-wrap:break-word;">}}\if{html}{\out{<td class="cl-75adf01d">}}\if{html}{\out{<p class="cl-75ade798">}}\if{html}{\out{<span class="cl-75acc3f4">}}2023-08-28 12:57:44\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-75adf026">}}\if{html}{\out{<p class="cl-75ade798">}}\if{html}{\out{<span class="cl-75acc3f4">}}26.88\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-75adf027">}}\if{html}{\out{<p class="cl-75ade798">}}\if{html}{\out{<span class="cl-75acc3f4">}}211.74\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-75adf027">}}\if{html}{\out{<p class="cl-75ade798">}}\if{html}{\out{<span class="cl-75acc3f4">}}202.08\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-75adf028">}}\if{html}{\out{<p class="cl-75ade7a2">}}\if{html}{\out{<span class="cl-75acc3f4">}}205_actlumus_Log_1020_20230904101707532.txt\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{</tr>}}\if{html}{\out{<tr style="overflow-wrap:break-word;">}}\if{html}{\out{<td class="cl-75adf01d">}}\if{html}{\out{<p class="cl-75ade798">}}\if{html}{\out{<span class="cl-75acc3f4">}}2023-08-28 12:57:54\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-75adf026">}}\if{html}{\out{<p class="cl-75ade798">}}\if{html}{\out{<span class="cl-75acc3f4">}}26.88\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-75adf027">}}\if{html}{\out{<p class="cl-75ade798">}}\if{html}{\out{<span class="cl-75acc3f4">}}208.03\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-75adf027">}}\if{html}{\out{<p class="cl-75ade798">}}\if{html}{\out{<span class="cl-75acc3f4">}}198.66\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-75adf028">}}\if{html}{\out{<p class="cl-75ade7a2">}}\if{html}{\out{<span class="cl-75acc3f4">}}205_actlumus_Log_1020_20230904101707532.txt\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{</tr>}}\if{html}{\out{<tr style="overflow-wrap:break-word;">}}\if{html}{\out{<td class="cl-75adf01d">}}\if{html}{\out{<p class="cl-75ade798">}}\if{html}{\out{<span class="cl-75acc3f4">}}2023-08-28 12:58:04\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-75adf026">}}\if{html}{\out{<p class="cl-75ade798">}}\if{html}{\out{<span class="cl-75acc3f4">}}26.88\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-75adf027">}}\if{html}{\out{<p class="cl-75ade798">}}\if{html}{\out{<span class="cl-75acc3f4">}}204.85\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-75adf027">}}\if{html}{\out{<p class="cl-75ade798">}}\if{html}{\out{<span class="cl-75acc3f4">}}195.55\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-75adf028">}}\if{html}{\out{<p class="cl-75ade7a2">}}\if{html}{\out{<span class="cl-75acc3f4">}}205_actlumus_Log_1020_20230904101707532.txt\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{</tr>}}\if{html}{\out{<tr style="overflow-wrap:break-word;">}}\if{html}{\out{<td class="cl-75adf01d">}}\if{html}{\out{<p class="cl-75ade798">}}\if{html}{\out{<span class="cl-75acc3f4">}}2023-08-28 12:58:14\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-75adf026">}}\if{html}{\out{<p class="cl-75ade798">}}\if{html}{\out{<span class="cl-75acc3f4">}}26.81\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-75adf027">}}\if{html}{\out{<p class="cl-75ade798">}}\if{html}{\out{<span class="cl-75acc3f4">}}203.59\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-75adf027">}}\if{html}{\out{<p class="cl-75ade798">}}\if{html}{\out{<span class="cl-75acc3f4">}}194.36\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-75adf028">}}\if{html}{\out{<p class="cl-75ade7a2">}}\if{html}{\out{<span class="cl-75acc3f4">}}205_actlumus_Log_1020_20230904101707532.txt\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{</tr>}}\if{html}{\out{<tr style="overflow-wrap:break-word;">}}\if{html}{\out{<td class="cl-75adf01d">}}\if{html}{\out{<p class="cl-75ade798">}}\if{html}{\out{<span class="cl-75acc3f4">}}2023-08-28 12:58:24\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-75adf026">}}\if{html}{\out{<p class="cl-75ade798">}}\if{html}{\out{<span class="cl-75acc3f4">}}26.88\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-75adf027">}}\if{html}{\out{<p class="cl-75ade798">}}\if{html}{\out{<span class="cl-75acc3f4">}}203.44\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-75adf027">}}\if{html}{\out{<p class="cl-75ade798">}}\if{html}{\out{<span class="cl-75acc3f4">}}194.42\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-75adf028">}}\if{html}{\out{<p class="cl-75ade7a2">}}\if{html}{\out{<span class="cl-75acc3f4">}}205_actlumus_Log_1020_20230904101707532.txt\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{</tr>}}\if{html}{\out{<tr style="overflow-wrap:break-word;">}}\if{html}{\out{<td class="cl-75adf030">}}\if{html}{\out{<p class="cl-75ade798">}}\if{html}{\out{<span class="cl-75acc3f4">}}2023-08-28 12:58:34\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-75adf031">}}\if{html}{\out{<p class="cl-75ade798">}}\if{html}{\out{<span class="cl-75acc3f4">}}26.81\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-75adf032">}}\if{html}{\out{<p class="cl-75ade798">}}\if{html}{\out{<span class="cl-75acc3f4">}}204.31\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-75adf032">}}\if{html}{\out{<p class="cl-75ade798">}}\if{html}{\out{<span class="cl-75acc3f4">}}195.30\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-75adf033">}}\if{html}{\out{<p class="cl-75ade7a2">}}\if{html}{\out{<span class="cl-75acc3f4">}}205_actlumus_Log_1020_20230904101707532.txt\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{</tr>}}\if{html}{\out{</tbody>}}\if{html}{\out{</table>}}\if{html}{\out{</div>}}
+dplyr::slice(1500:1505)
+#> # A tibble: 6 x 5
+#> # Groups:   Id [1]
+#>   Datetime            TEMPERATURE LIGHT  MEDI Id                                
+#>   <dttm>                    <dbl> <dbl> <dbl> <fct>                             
+#> 1 2023-08-28 12:57:44        26.9  212.  202. 205_actlumus_Log_1020_20230904101~
+#> 2 2023-08-28 12:57:54        26.9  208.  199. 205_actlumus_Log_1020_20230904101~
+#> 3 2023-08-28 12:58:04        26.9  205.  196. 205_actlumus_Log_1020_20230904101~
+#> 4 2023-08-28 12:58:14        26.8  204.  194. 205_actlumus_Log_1020_20230904101~
+#> 5 2023-08-28 12:58:24        26.9  203.  194. 205_actlumus_Log_1020_20230904101~
+#> 6 2023-08-28 12:58:34        26.8  204.  195. 205_actlumus_Log_1020_20230904101~
+}\if{html}{\out{</div>}}
 }
 }
 

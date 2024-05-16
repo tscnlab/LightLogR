@@ -44,7 +44,7 @@
 #'                      Value = 1)
 #'  #as can be seen next, there is a gap in the data - this is necessary when
 #'  #using a timezone with DST. 
-#'  data %>% .$Datetime
+#'  data$Datetime
 #'  #Let us say now, that the device did not adjust for the DST - thus the 03:00 
 #'  #timestamp is actually 04:00 in local time. This can be corrected for by:
 #'  data %>% dst_change_handler() %>% .$Datetime
@@ -98,8 +98,21 @@ dst_change_handler <- function(dataset,
   
   #join the summary to the dataset to check affected groupings
   dataset <- 
-    dataset %>%
-    dplyr::left_join(dataset_summary, by = dplyr::group_vars(dataset))
+    #if there is no dst change, just return the dataset
+    if(dataset_summary %>% .[[1]] %>% length() == 0) {
+      dataset %>%
+        dplyr::mutate(dst_start = NA)
+    }
+  #if there is a dst change but no grouping, perform a cross join
+    else if (dplyr::group_vars(dataset) %>% length() == 0) {
+      dataset %>% 
+        dplyr::cross_join(dataset_summary)
+  #if there is a dst change and grouping, perform a left join based on the grouping
+    }
+    else {
+        dataset %>% dplyr::left_join(dataset_summary, by = dplyr::group_vars(dataset))
+    }
+    
   
   #change the Datetime in the affected ids depending on whether the change is from dst to non-dst or vice versa
   dataset <- 
@@ -127,13 +140,6 @@ dst_change_handler <- function(dataset,
   
 }  
 
-
-dst_change_text <- function(dataset, ...) {
-  
-  dataset <- dataset %>% dst_change_summary(dataset = dataset, ...)
-  
-  dataset
-}
 
 
 # dst_change_summary ------------------------------------------------------

@@ -1,6 +1,6 @@
 #' Add Brown et al. (2022) reference illuminance to a dataset
 #'
-#' Adds several columns to a light logger dataset. It requires column that
+#' Adds several columns to a light logger dataset. It requires a column that
 #' contains the Brown states, e.g. "daytime", "evening", and "night". From that
 #' the function will add a column with the recommended illuminance, a column
 #' that checks if the illuminance of the dataset is within the recommended
@@ -56,6 +56,7 @@ Brown2reference <- function(dataset,
   Brown.state.colname.defused <- colname.defused({{ Brown.state.colname }})
   Brown.rec.colname.str <- colname.defused({{ Brown.rec.colname }})
   Reference.label.column.str <- paste0(Brown.rec.colname.str, ".check")
+  Reference.difference.column.str <- paste0(Brown.rec.colname.str, ".difference")
   
   #give an error or warning if the reference column is present
   if(Brown.rec.colname.str %in% names(dataset) & !overwrite) 
@@ -94,7 +95,9 @@ Brown2reference <- function(dataset,
         Brown_check(
           value = {{ MEDI.colname }},
           state = {{ Brown.state.colname }},
-          ...)
+          ...),
+      !!Reference.difference.column.str :=
+        {{ MEDI.colname }} - {{ Brown.rec.colname }}
     )
     
   #add a column with the reference label

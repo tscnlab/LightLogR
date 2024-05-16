@@ -1,3 +1,11 @@
+# LightLogR 0.3.1
+
+* fixed bug in `interval2state()` that would dismiss the first state if it starts before the actual data
+
+* fixed a bug in `interval2state()` that would add other columns then the `State` column present in the interval dataset to the output dataset, but leave them empty. Added an example that shows how to add multiple columns to the output dataset correctly.
+
+* in `aggregate_Datetime()`, added the option to set the `dominant.epoch`, i.e., the most common interval, as the `unit` parameter, to effectively deal with irregular data. 
+
 # LightLogR 0.3.0
 
 * Added the functions `dst_change_summary()` and `dst_change_handler()` to detect and deal with Daylight Savings. The functionality is also integrated into the import functions, so that a user can automatically apply it during the import process.

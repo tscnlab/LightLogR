@@ -118,3 +118,21 @@ compare_threshold <- function(Light.vector,
   
   return(out)
 }
+
+# Create the list of epochs, which are either dominant or not
+epoch_list <- function(dataset = dataset, 
+                       Datetime.colname = Datetime, 
+                       epoch = "dominant.epoch") {
+  
+  #get the epochs based on the data
+  epochs <- dataset %>% dominant_epoch(Datetime.colname = {{ Datetime.colname }})
+  
+  #if the user specified an epoch, use that instead
+  if(epoch != "dominant.epoch") {
+    epochs <- 
+      epochs %>% dplyr::mutate(dominant.epoch = lubridate::as.duration(epoch))
+  }
+  
+  epochs
+}
+

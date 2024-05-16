@@ -33,6 +33,8 @@
 #' library(tibble)
 #' library(dplyr)
 #' library(lubridate)
+#' library(rlang)
+#' library(purrr)
 #' states <- tibble::tibble(Datetime = c("2023-08-15 6:00:00",
 #'                                       "2023-08-15 23:00:00",
 #'                                       "2023-08-16 6:00:00",
@@ -46,6 +48,8 @@
 #'                                       "2023-08-20 6:00:00",
 #'                                       "2023-08-20 22:00:00"),
 #'                          State = rep(c("wake", "sleep"), 6),
+#'                          Wear = rep(c("wear", "no wear"), 6),
+#'                          Performance = rep(c(100, 0), 6),
 #'                          Id = "Participant")
 #' intervals <- sc2interval(states)
 #'
@@ -54,13 +58,41 @@
 #' sample.data.environment %>%
 #' interval2state(State.interval.dataset = intervals)
 #'
-#' #visualize the states - note that the states are only added to the respective ID in the dataset?
+#' #visualize the states - note that the states are only added to the respective ID in the dataset
 #' library(ggplot2)
 #' ggplot(dataset_with_states, aes(x = Datetime, y = MEDI, color = State)) +
 #'  geom_point() +
 #'  facet_wrap(~Id, ncol = 1)
 #'
+#' #import multiple State columns from the interval dataset
+#' #interval2state will only add a single State column to the dataset, 
+#' #which represents sleep/wake in our case
+#' dataset_with_states[8278:8283,]
 #' 
+#' #if we want to add multiple columns we can either perfom the function 
+#' #multiple times with different states:
+#' dataset_with_states2 <- 
+#' dataset_with_states %>%
+#' interval2state(State.interval.dataset = intervals, State.colname = Wear)
+#' dataset_with_states[8278:8283,]
+#' 
+#' #or we can use `purrr::reduce` to add multiple columns at once
+#' dataset_with_states3 <-
+#' syms(c("State", "Wear", "Performance")) %>% 
+#' reduce(\(x,y) interval2state(x, State.interval.dataset = intervals, State.colname = !!y), 
+#' .init = sample.data.environment)
+#' 
+#' #Note: 
+#' # - the State.colnames have to be provided as symbols (`rlang::syms`)
+#' # - the reduce function requires a two argument function `\(x,y)`, where `x` 
+#' #   is the dataset to be continiously modified and `y` is the symbol of the
+#' #   State column name to be added
+#' # - the `!!` operator from `rlang` is used to exchange `y` with each symbol
+#' # - the `.init` argument is the initial dataset to be modified
+#' 
+#' #this results in all states being applied
+#' dataset_with_states2[8278:8283,]
+
 interval2state <- function(dataset,
                            State.interval.dataset,
                            Datetime.colname = Datetime,
@@ -108,6 +140,12 @@ interval2state <- function(dataset,
       State.colname.defused %in% names(State.interval.dataset))) 
       warning("A `State` column with the given (or default) name is already part of the dataset. It is overwritten, because `overwrite = TRUE ` was set.")
   
+  #give a warning, if the time zone of the dataset and the State.interval.dataset are not the same
+  if(
+    !identical(lubridate::tz(dataset[[Datetime.colname.defused]]), 
+               lubridate::tz(State.interval.dataset[[Interval.colname.defused]] %>% 
+                             lubridate::int_start())))
+    warning("The time zone of the dataset and the State.interval.dataset are not the same. This might lead to unexpected results or time shifts.")
   
   # Manipulation ----------------------------------------------------------
   
@@ -157,9 +195,20 @@ interval2state <- function(dataset,
     compare_difftime.any(dataset, State.interval.dataset2)
   
   if(!rlang::is_true(are.intervals.smaller)) {
-    cat("Warning: The time differences between consecutive time points in the reference dataset are larger than in the dataset. This means multiple reference data connect to one dataset datum - only the last one prior to each datum will be used. Please use an aggregate function on the reference dataset to resolve this warning. \nThe following output shows what grouping is problematic and what 95% of time intervals in the Dataset compared to the Reference data is.\n\n")
-    utils::capture.output(are.intervals.smaller)[c(-1,-3)] %>% cat(sep = "\n")
+    warning_text <- 
+    
+    c("The time differences between consecutive time points in the reference dataset are larger than in the dataset. This means multiple reference data connect to one dataset datum - only the last one prior to each datum will be used. Please use an aggregate function on the reference dataset to resolve this warning. \nThe following output shows what grouping is problematic and what 95% of time intervals in the Dataset compared to the Reference data is.\n\n",
+    utils::capture.output(are.intervals.smaller)[c(-1,-3)] %>% paste0(collapse = "\n"))
+    warning(warning_text)
   }
+  
+  #select only the relevant columns from the State.interval.dataset
+  State.interval.dataset2 <-
+    State.interval.dataset2 %>%
+    dplyr::select( 
+                  {{ Id.colname.interval }},
+                  {{ Datetime.colname }},
+                  {{ State.colname }})
   
   # join the two datasets together
   dataset <- 
@@ -177,8 +226,13 @@ interval2state <- function(dataset,
   dataset <-
     dataset %>%
     dplyr::mutate(
-      group = cumsum(!is.na({{ State.colname }}) | {{ State.colname }} == "NaN")
+      group.1 = !is.na({{ State.colname }}),
+      group.2 = {{ State.colname }} == "NaN",
+      group.2 = dplyr::if_else(is.na(group.2), FALSE, group.2),
+      group = cumsum(group.1 | group.2)
+        # !is.na({{ State.colname }}) | {{ State.colname }} == "NaN")
       ) %>% 
+    dplyr::select(-group.1, -group.2) %>% 
     dplyr::group_by(group, .add = TRUE) %>% 
     tidyr::fill({{ State.colname }}) %>% 
     dplyr::ungroup(group) %>% 

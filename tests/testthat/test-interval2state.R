@@ -19,13 +19,24 @@ test_that("interval2state works as expected", {
   intervals <- sc2interval(states)
   
   #create a dataset with states
-  states <-
-    sample.data.environment %>% dplyr::group_by(Id) %>%
+  data <-
+    sample.data.environment %>%
     interval2state(State.interval.dataset = intervals) %>% 
     dplyr::slice(6000, 28000) %>% dplyr::pull(State)
   
-  expect_equal(states,c(NA, "wake", "sleep"))
+  #test
+  expect_equal(data,c(NA, "wake", "sleep"))
   
+  #if a state starts before the first datapoint, it is still included in it
+  data2 <- 
+    suppressWarnings(
+      sample.data.environment %>% 
+        dplyr::group_by(Id) %>% 
+        dplyr::slice(6000, 28000) %>% 
+        interval2state(State.interval.dataset = intervals) %>% 
+        dplyr::pull(State)
+    )
+  expect_equal(data2,c(NA, "wake", "sleep"))
 })
 
 test_that("interval2state throws errors as expected", {
@@ -69,5 +80,15 @@ test_that("interval2state throws errors as expected", {
                               State.interval.dataset = sample.data.environment,
                               State.colname = Source,
                               Interval.colname = Datetime))
+  
+  expect_warning(interval2state(dataset = sample.data.environment %>%
+                                  dplyr::mutate(
+                                    Datetime = lubridate::with_tz(
+                                      Datetime, "Europe/Berlin")
+                                  ),
+                                State.interval.dataset = 
+                                  intervals %>% dplyr::group_by(Id)
+                                ),
+                 "The time zone of the dataset and the State.interval.dataset are not the same. This might lead to unexpected results or time shifts.")
   
 })
