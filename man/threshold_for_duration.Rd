@@ -10,6 +10,7 @@ threshold_for_duration(
   duration,
   comparison = c("above", "below"),
   epoch = "dominant.epoch",
+  na.rm = FALSE,
   as.df = FALSE
 )
 }
@@ -30,6 +31,9 @@ should be considered. Can be either \code{"above"} (the default) or \code{"below
 \link[lubridate]{duration} or a string. If it is a string, it needs to be
 either \code{"dominant.epoch"} (the default) for a guess based on the data, or a valid
 \link[lubridate]{duration} string, e.g., \code{"1 day"} or \code{"10 sec"}.}
+
+\item{na.rm}{Logical. Should missing values (NA) be removed for the calculation?
+Defaults to \code{FALSE}.}
 
 \item{as.df}{Logical. Should a data frame with be returned? If \code{TRUE}, a data
 frame with a single column named \verb{threshold_\{comparison\}_for_\{duration\}} will be returned.

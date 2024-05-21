@@ -16,6 +16,8 @@
 #'  \link[lubridate]{duration} or a string. If it is a string, it needs to be
 #'  either `"dominant.epoch"` (the default) for a guess based on the data, or a valid
 #'  \link[lubridate]{duration} string, e.g., `"1 day"` or `"10 sec"`.
+#' @param na.rm Logical. Should missing values (NA) be removed for the calculation?
+#'    Defaults to `FALSE`.
 #' @param as.df Logical. Should a data frame with be returned? If `TRUE`, a data
 #'    frame with a single column named `threshold_{comparison}_for_{duration}` will be returned.
 #'    Defaults to `FALSE`.
@@ -55,6 +57,7 @@ threshold_for_duration <- function(Light.vector,
                                    duration,
                                    comparison = c("above", "below"),
                                    epoch = "dominant.epoch",
+                                   na.rm = FALSE,
                                    as.df = FALSE) {
   
   
@@ -67,6 +70,8 @@ threshold_for_duration <- function(Light.vector,
     "`Time.vector` must be POSIXct, hms, duration, or difftime!" =
       lubridate::is.POSIXct(Time.vector) | hms::is_hms(Time.vector) | 
       lubridate::is.duration(Time.vector) | lubridate::is.difftime(Time.vector),
+    "`Light.vector` and `Time.vector` must be same length!" = 
+      length(Light.vector) == length(Time.vector),
     "`duration` must either be duration or a string!" = 
       lubridate::is.duration(duration) | is.character(duration),
     "`epoch` must either be a duration or a string" =
@@ -86,10 +91,19 @@ threshold_for_duration <- function(Light.vector,
   # Duration parameter as duration object
   duration <- lubridate::as.duration(duration)
   
+  if(na.rm){
+    Light.vector = Light.vector[!is.na(Light.vector)]
+  }
+  
   # Find threshold for given duration
   idx = floor(duration / epoch)
   sorted <- sort(Light.vector, decreasing = (comparison == "above"))
   threshold <- sorted[idx]
+  
+  # Return NA if missing values present
+  if(any(is.na(Light.vector))){
+    threshold <- as.double(NA)
+  }
   
   # Return data frame or numeric value
   if (as.df) {

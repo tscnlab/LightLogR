@@ -76,6 +76,8 @@ midpointCE <- function(Light.vector,
     "`Time.vector` must be POSIXct, hms, duration, or difftime!" =
       lubridate::is.POSIXct(Time.vector) | hms::is_hms(Time.vector) | 
       lubridate::is.duration(Time.vector) | lubridate::is.difftime(Time.vector),
+    "`Light.vector` and `Time.vector` must be same length!" = 
+      length(Light.vector) == length(Time.vector),
     "`na.rm` must be logical!" = is.logical(na.rm),
     "`as.df` must be logical!" = is.logical(as.df)
   )
@@ -87,7 +89,7 @@ midpointCE <- function(Light.vector,
   
   # If any value is NA, return NA
   if(any(is.na(Light.vector))){
-    midpointCE = NA
+    midpointCE = convert_to_timescale(NA, Time.vector)
   }
   else{
     # Find midpoint of CE

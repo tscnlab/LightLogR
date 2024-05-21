@@ -78,6 +78,8 @@ duration_above_threshold <- function(Light.vector,
     "`Time.vector` must be POSIXct, hms, duration, or difftime!" =
       lubridate::is.POSIXct(Time.vector) | hms::is_hms(Time.vector) | 
       lubridate::is.duration(Time.vector) | lubridate::is.difftime(Time.vector),
+    "`Light.vector` and `Time.vector` must be same length!" = 
+      length(Light.vector) == length(Time.vector),
     "`threshold` must be numeric!" = is.numeric(threshold),
     "`threshold` must be either one or two values!" = length(threshold) %in% c(1, 2),
     "`epoch` must either be a duration or a string" =

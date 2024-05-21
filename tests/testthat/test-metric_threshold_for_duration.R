@@ -13,7 +13,10 @@ test_that("Handling of missing values", {
   MEDI <- c(0,100,99,0,NA,101,100,0)
   datetime <- lubridate::as_datetime((1:8)*60)
   expect_equal(
-    threshold_for_duration(MEDI, datetime, lubridate::dminutes(3)), 100
+    threshold_for_duration(MEDI, datetime, lubridate::dminutes(3)), as.double(NA)
+  )
+  expect_equal(
+    threshold_for_duration(MEDI, datetime, lubridate::dminutes(3), na.rm = TRUE), 100
   )
 })
 

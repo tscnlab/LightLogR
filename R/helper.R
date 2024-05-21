@@ -204,7 +204,7 @@ find_clusters <- function(x,
 # Convert `x` to time scale of `t`
 convert_to_timescale <- function(x, t){
   if(lubridate::is.POSIXct(t)){
-    x <- as.POSIXct(x, tz = lubridate::tz(t))
+    x <- lubridate::as_datetime(x, tz = lubridate::tz(t))
   }
   if(hms::is_hms(t)){
     x <- hms::as_hms(x)

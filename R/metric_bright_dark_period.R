@@ -92,6 +92,8 @@ bright_dark_period <- function(Light.vector,
     "`Time.vector` must be POSIXct, hms, duration, or difftime!" =
       lubridate::is.POSIXct(Time.vector) | hms::is_hms(Time.vector) | 
       lubridate::is.duration(Time.vector) | lubridate::is.difftime(Time.vector),
+    "`Light.vector` and `Time.vector` must be same length!" = 
+      length(Light.vector) == length(Time.vector),
     "`epoch` must either be a duration or a string" =
       lubridate::is.duration(epoch) | is.character(epoch),
     "`timespan` must either be a duration or a string" =

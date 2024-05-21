@@ -80,6 +80,8 @@ barroso_lighting_metrics <- function(Light.vector,
     "`Time.vector` must be POSIXct, hms, duration, or difftime!" =
       lubridate::is.POSIXct(Time.vector) | hms::is_hms(Time.vector) | 
       lubridate::is.duration(Time.vector) | lubridate::is.difftime(Time.vector),
+    "`Light.vector` and `Time.vector` must be same length!" = 
+      length(Light.vector) == length(Time.vector),
     "`epoch` must either be a duration or a string" =
       lubridate::is.duration(epoch) | is.character(epoch),
     "`loop` must be logical!" = is.logical(loop),
@@ -98,9 +100,9 @@ barroso_lighting_metrics <- function(Light.vector,
   
   # Bright/dark thresholds
   bright_threshold <- 
-    threshold_for_duration(Light.vector, Time.vector, "6 h", "above", epoch)[1]
+    threshold_for_duration(Light.vector, Time.vector, "6 h", "above", epoch, na.rm = na.rm)[1]
   dark_threshold <- 
-    threshold_for_duration(Light.vector, Time.vector, "8 h", "below", epoch)[1]
+    threshold_for_duration(Light.vector, Time.vector, "8 h", "below", epoch, na.rm = na.rm)[1]
   
   # Bright/dark mean level
   bright_mean_level <- mean(Light.vector[Light.vector >= bright_threshold], trim = 0.2, na.rm = na.rm)
@@ -113,7 +115,8 @@ barroso_lighting_metrics <- function(Light.vector,
                                epoch = epoch, loop = loop, na.replace = na.rm)[1]
   
   # Circadian variation
-  circadian_variation <- stats::sd(Light.vector, na.rm = na.rm) / mean(Light.vector, na.rm=na.rm)
+  circadian_variation <- (stats::sd(Light.vector, na.rm = na.rm) / mean(Light.vector, na.rm=na.rm)) %>% 
+    round(2)
   
   # Prepare output
   out <- list(

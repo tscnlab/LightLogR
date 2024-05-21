@@ -54,6 +54,8 @@ interdaily_stability <- function(Light.vector,
   stopifnot(
     "`Light.vector` must be numeric!" = is.numeric(Light.vector),
     "`Datetime.vector` must be POSIXct!" = lubridate::is.POSIXct(Datetime.vector),
+    "`Light.vector` and `Datetime.vector` must be same length!" = 
+      length(Light.vector) == length(Datetime.vector),
     "`na.rm` must be logical!" = is.logical(na.rm),
     "`as.df` must be logical!" = is.logical(as.df)
   )

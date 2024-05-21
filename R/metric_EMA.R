@@ -59,6 +59,8 @@ exponential_moving_average <- function(Light.vector,
     "`Time.vector` must be POSIXct, hms, duration, or difftime!" =
       lubridate::is.POSIXct(Time.vector) | hms::is_hms(Time.vector) | 
       lubridate::is.duration(Time.vector) | lubridate::is.difftime(Time.vector),
+    "`Light.vector` and `Time.vector` must be same length!" = 
+      length(Light.vector) == length(Time.vector),
     "`decay` must either be a duration or a string" =
       lubridate::is.duration(decay) | is.character(decay),
     "`epoch` must either be a duration or a string" =

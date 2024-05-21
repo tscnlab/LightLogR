@@ -123,6 +123,8 @@ nvRD <- function(MEDI.vector,
     "`Time.vector` must be POSIXct, hms, duration, or difftime!" =
       lubridate::is.POSIXct(Time.vector) | hms::is_hms(Time.vector) | 
       lubridate::is.duration(Time.vector) | lubridate::is.difftime(Time.vector),
+    "`Light.vector` and `Time.vector` must be same length!" = 
+      length(Light.vector) == length(Time.vector),
     "`epoch` must either be a duration or a string" =
       lubridate::is.duration(epoch) | is.character(epoch)
   )
@@ -163,7 +165,7 @@ nvRD <- function(MEDI.vector,
   dFL1 <- ifelse(delta < 0.3, round(0.3 / delta), 1)
   
   # Filter LH
-  dFLH <- ifelse(delta < 0.7, round(0.7 / delta), 1)
+  dFLH <- ifelse(delta < 1.7, round(1.7 / delta), 1)
   
   # MODEL
   u <- nvR_filterSMA(dFL1, Ieff)
@@ -228,6 +230,8 @@ nvRD_cumulative_response <- function(nvRD,
     "`Time.vector` must be POSIXct, hms, duration, or difftime!" =
       lubridate::is.POSIXct(Time.vector) | hms::is_hms(Time.vector) | 
       lubridate::is.duration(Time.vector) | lubridate::is.difftime(Time.vector),
+    "`nvRD` and `Time.vector` must be same length!" = 
+      length(nvRD) == length(Time.vector),
     "`epoch` must either be a duration or a string" =
       lubridate::is.duration(epoch) | is.character(epoch),
     "`as.df` must be logical!" = is.logical(as.df)
@@ -394,6 +398,8 @@ nvRC <- function(MEDI.vector,
     "`Time.vector` must be POSIXct, hms, duration, or difftime!" =
       lubridate::is.POSIXct(Time.vector) | hms::is_hms(Time.vector) | 
       lubridate::is.duration(Time.vector) | lubridate::is.difftime(Time.vector),
+    "`Light.vector` and `Time.vector` must be same length!" = 
+      length(Light.vector) == length(Time.vector),
     "`epoch` must either be a duration or a string" =
       lubridate::is.duration(epoch) | is.character(epoch),
     "`sleep.onset` must be hms, duration, difftime, or NULL" = 
