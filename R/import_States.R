@@ -232,7 +232,7 @@ import_Statechanges <- function(filename,
   
   #give a summary about the imported data
   if(!silent) 
-    import.info(tmp = data, 
+    import.info(data = data, 
                 device = "Statechanges", 
                 tz = tz, 
                 Id.colname = {{ Id.newname }}, 

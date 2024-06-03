@@ -174,18 +174,18 @@ imports <- function(device,
         "n_max needs to be a positive numeric" = is.numeric(n_max)
       )
       #import the file
-      tmp <- rlang::eval_tidy(!!import.expr)
+      data <- rlang::eval_tidy(!!import.expr)
       
       #validate/manipulate the file
-      if(dim(tmp)[1] == 0) {
+      if(dim(data)[1] == 0) {
         stop("No data could be imported. Please check your file and settings")
       }
       
       #check if the id column is present, if not, add it
-      if(!id.colname.defused %in% names(tmp)) {
+      if(!id.colname.defused %in% names(data)) {
         switch(is.null(manual.id) %>% as.character(),
                "TRUE" =
-                 {tmp <- tmp %>%
+                 {data <- data %>%
                    dplyr::mutate(!!Id.colname :=
                                    basename(file.name) %>%
                                    tools::file_path_sans_ext() %>%
@@ -196,14 +196,14 @@ imports <- function(device,
                                      ),
                                  .before = 1)},
                "FALSE" =
-                 {tmp <- tmp %>%
+                 {data <- data %>%
                    dplyr::mutate(!!Id.colname := manual.id, .before = 1)}
         )
       }
       
       #add a filename
       #check if the id column is a factor, if not, make it one, and group by it
-      tmp <- tmp %>%
+      data <- data %>%
         dplyr::mutate(file.name = basename(file.name) %>%
                         tools::file_path_sans_ext(),
                       !!Id.colname := factor(!!Id.colname)) %>%
@@ -212,19 +212,26 @@ imports <- function(device,
       
       #if there are Datetimes with NA value, drop them
       na.count <- 0
-      if(any(is.na(tmp$Datetime))) {
-        na.count <- sum(is.na(tmp$Datetime))
-        tmp <- tmp %>% tidyr::drop_na(Datetime)
+      if(any(is.na(data$Datetime))) {
+        na.count <- sum(is.na(data$Datetime))
+        data <- data %>% tidyr::drop_na(Datetime)
+      }
+      
+      #if there is an Id with less than two observations, give a warning
+      if(any(table(data$Id) < 2)) {
+        stop("Some Ids have only one observation. This causes problems with functions in LightLogR that calculate time differences. Please remove these Ids from import: ", 
+             which(table(data$Id) < 2) %>% names()
+        )
       }
       
       #if dst_adjustment is TRUE, adjust the datetime column
       if(dst_adjustment) {
-        tmp <- tmp %>% dst_change_handler(filename.colname = file.name)
+        data <- data %>% dst_change_handler(filename.colname = file.name)
       }
       #give info about the file
       if(!silent) 
         import.info(
-          tmp = tmp, #the data 
+          data = data, #the data 
           device = !!device, #the type of device
           tz = tz, #the timezone
           Id.colname = Id, #the id column name
@@ -235,214 +242,20 @@ imports <- function(device,
       
       #if autoplot is TRUE, make a plot
       if(auto.plot) {
-        tmp %>% gg_overview() %>% print()
+        data %>% gg_overview() %>% print()
       }
       #return the file
-      tmp
+      data
       
     }),
     rlang::caller_env()
   )
 }
 
-ll_import_expr <- list(
-  #ActTrust 1 & 2
-  ActTrust = rlang::expr({
-    column_names <- c("DATE/TIME", "MS", "EVENT", "TEMPERATURE")
-    tmp <- 
-      purrr::map(
-        filename,
-        \(x) {
-          rows_to_skip <- detect_starting_row(x, 
-                                              locale = locale, 
-                                              column_names = column_names,
-                                              n_max = n_max)
-          suppressMessages(
-            readr::read_delim(
-              x,
-              skip = rows_to_skip,
-              delim = ";",
-              n_max = n_max,
-              col_types = paste0("c", rep("d", 20)),
-              id = "file.name",
-              locale = locale,
-              name_repair = "universal",
-              ...
-            )
-          )
-        }) %>% purrr::list_rbind()
-    tmp <-
-      tmp %>%
-      dplyr::rename(Datetime = DATE.TIME) %>%
-      dplyr::mutate(Datetime = Datetime %>% 
-                      lubridate::dmy_hms(tz = tz, quiet = TRUE))
-  }),
-  #SpectraWear
-  SpectraWear = rlang::expr({
-    tmp <-suppressMessages( 
-      readr::read_csv(filename,
-                      n_max = n_max,
-                      id = "file.name",
-                      locale = locale,
-                      name_repair = "universal",
-                      ...
-      ))
-    tmp <- tmp %>%
-      dplyr::rename(MEDI = Mel
-      ) %>% 
-      dplyr::mutate(Datetime =
-                      lubridate::dmy_hms(paste(Date, Time), tz = tz),
-                    Id = paste(.data$id, .data$ls, sep = ".")
-      )
-  }),
-  #Speccy
-  Speccy = rlang::expr({
-    tmp <-suppressMessages( 
-      readr::read_csv(filename,
-                      n_max = n_max,
-                      id = "file.name",
-                      locale = locale,
-                      name_repair = "universal",
-                      col_types = c("fccdddddddddddddddddd"),
-                      ...
-      ))
-    tmp <- tmp %>%
-      dplyr::rename(MEDI = Melanopic.EDI) %>% 
-      dplyr::mutate(Datetime =
-                      Datetime %>% lubridate::parse_date_time(
-                        orders =  c("%H:%M:%S %d/%m/%y", "%d/%m/%Y %H:%M"),
-                        tz = tz, exact = TRUE))
-  }),
-  #Intelligent Automation Inc DeLux
-  DeLux = rlang::expr({
-    tmp <-suppressMessages( 
-      readr::read_csv(filename,
-                      n_max = n_max,
-                      id = "file.name",
-                      locale = locale,
-                      name_repair = "universal",
-                      col_types = c("fccdddddddddddddddddd"),
-                      ...
-      ))
-    tmp <- tmp %>%
-      dplyr::rename(Datetime = Timestamp) %>%
-      dplyr::mutate(Datetime =
-                      Datetime %>% lubridate::ymd_hms(tz = tz))
-  }),
-  #LiDo
-  LiDo = rlang::expr({
-    tmp <- suppressMessages(
-      readr::read_delim(
-        filename,
-        delim = ";",
-        n_max = n_max,
-        id = "file.name",
-        locale = locale,
-        name_repair = "universal",
-        ...
-      )
-    )
-    tmp <- tmp %>%
-      dplyr::rename(Datetime = UTC.Timestamp,
-                    MEDI = Ev_mel_D65.in.lx) %>% 
-      dplyr::mutate(Datetime = 
-                      Datetime %>% 
-                      lubridate::dmy_hms() %>% 
-                      lubridate::with_tz(tzone = tz))
-  }),
-  #ActLumus
-  ActLumus = rlang::expr({
-    tmp <- suppressMessages( 
-      readr::read_delim(
-        filename,
-        skip = 32,
-        delim = ";",
-        n_max = n_max,
-        col_types = paste0("c", rep("d", 32)),
-        id = "file.name",
-        locale = locale,
-        name_repair = "universal",
-        ...
-      ))
-    tmp <- tmp %>%
-      dplyr::rename(Datetime = DATE.TIME,
-                    MEDI = MELANOPIC.EDI) %>%
-      dplyr::mutate(Datetime =
-                      Datetime %>% lubridate::dmy_hms(tz = tz))
-  }),
-  #LYS
-  LYS = rlang::expr({
-    tmp <-suppressMessages( 
-      readr::read_csv(filename,
-                      n_max = n_max,
-                      col_types = c("cfddddddddddd"),
-                      id = "file.name",
-                      locale = locale,
-                      name_repair = "universal",
-                      ...
-      ))
-    tmp <- tmp %>%
-      dplyr::rename(Datetime = timestamp,
-                    MEDI = mEDI) %>%
-      dplyr::mutate(Datetime =
-                      Datetime %>% lubridate::dmy_hms() %>% 
-                      lubridate::with_tz(tzone = tz))
-  }),
-  #Actiwatch Spectrum
-  Actiwatch_Spectrum = rlang::expr({
-    #separate the dots list in the column_names and the rest
-    dots <- rlang::list2(...)
-    column_names <- dots$column_names
-    if(is.null(column_names)) 
-      stop("Actiwatch Spectrum requires a vector of `column_names` in the order in which they appear in the file in order to properly detect the starting row")
-    dots$column_names <- NULL
-    
-    tmp <- 
-      purrr::map(
-        filename,
-        \(x) {
-          rows_to_skip <- detect_starting_row(x, 
-                                              locale = locale, 
-                                              column_names = column_names,
-                                              n_max = n_max)
-          df <- suppressMessages(do.call(
-            readr::read_csv,
-            append(list(
-              x, 
-              skip = rows_to_skip,
-              locale=locale,
-              id = "file.name",
-              show_col_types = FALSE,
-              col_types = c("iDtfdfccccfdf"),
-              name_repair = "universal"
-            ),
-            dots)))
-          
-          df %>% 
-            dplyr::select(!dplyr::starts_with("..."))
-          
-        }) %>% purrr::list_rbind()
-    tmp <- tmp %>%
-      tidyr::unite(col = "Datetime",
-                   tidyselect::where(lubridate::is.Date),
-                   tidyselect::where(hms::is_hms),
-                   remove = FALSE
-      ) %>% 
-      dplyr::mutate(
-        Datetime = lubridate::ymd_hms(Datetime),
-        dplyr::across(
-          dplyr::where(is.character) &
-            dplyr::where(~ any(stringr::str_detect(.x, ","), na.rm = TRUE)),
-          ~ stringr::str_replace(.x, ",", ".") %>%
-            as.numeric()
-        )
-      )
-  })
-  
-)
-
 # Import functions -------------------------------------------------------
 
+#source the import expressions
+source("R/import_expressions.R")
 
 #' Import Datasets from supported devices
 #'
@@ -479,7 +292,7 @@ import <- purrr::imap(ll_import_expr, \(x, idx) imports(idx,x))
 #' #change the import expression for the LYS device to add a message at the top
 #' ll_import_expr$LYS[[4]] <-
 #' rlang::expr({ cat("**This is a new import function**\n")
-#' tmp
+#' data
 #' })
 #' new_import <- import_adjustment(ll_import_expr)
 #' filepath <- system.file("extdata/sample_data_LYS.csv", package = "LightLogR")

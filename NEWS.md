@@ -1,3 +1,9 @@
+# LightLogR 0.3.2
+
+* added import functions for `nanoLambda`and `LightWatcher` devices
+
+* new Logo!
+
 # LightLogR 0.3.1
 
 * fixed bug in `interval2state()` that would dismiss the first state if it starts before the actual data

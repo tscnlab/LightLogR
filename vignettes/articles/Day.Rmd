@@ -189,10 +189,10 @@ Now we have a column in our light logger dataset that declares all the three sta
 
 ```{r}
 dataset.LL <- dataset.LL %>% Brown2reference(Brown.rec.colname = Reference.Brown)
-dataset.LL %>% select(!Reference.Brown.label) %>% tail() %>% gt()
+dataset.LL %>% select(!Reference.Brown.label, !Reference.Brown.difference) %>% tail() %>% gt()
 ```
 
-`Brown2reference()` added three columns, two of which are shown in the table above. A third column contains a text label about the type of reference, sth. we could also have added for the solar exposition. Now let´s have a quick look at the result in the plot overview
+`Brown2reference()` added four columns, two of which are shown in the table above. A third column contains a text label about the type of reference, sth. we could also have added for the solar exposition and the fourth column contains the difference between actual mel EDI and the recommendations. Now let´s have a quick look at the result in the plot overview
 
 ```{r, fig.retina=2, fig.width=7, fig.height = 10}
 dataset.LL %>% #dataset

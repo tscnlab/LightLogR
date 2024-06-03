@@ -74,7 +74,7 @@
 #' dataset_with_states2 <- 
 #' dataset_with_states %>%
 #' interval2state(State.interval.dataset = intervals, State.colname = Wear)
-#' dataset_with_states[8278:8283,]
+#' dataset_with_states2[8278:8283,]
 #' 
 #' #or we can use `purrr::reduce` to add multiple columns at once
 #' dataset_with_states3 <-
@@ -91,7 +91,7 @@
 #' # - the `.init` argument is the initial dataset to be modified
 #' 
 #' #this results in all states being applied
-#' dataset_with_states2[8278:8283,]
+#' dataset_with_states3[8278:8283,]
 
 interval2state <- function(dataset,
                            State.interval.dataset,
