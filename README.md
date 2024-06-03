@@ -6,7 +6,8 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/tscnlab/LightLogR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/tscnlab/LightLogR/actions/workflows/R-CMD-check.yaml)
-
+[![Test
+coverage](https://github.com/JZauner/LightLogR/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/JZauner/LightLogR/actions/workflows/test-coverage.yaml)
 <!-- badges: end -->
 
 Personalized luminous exposure data is progressively gaining importance
