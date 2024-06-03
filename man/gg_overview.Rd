@@ -21,8 +21,8 @@ by \link{LightLogR}, take care to choose a sensible variable for the \code{x.axi
 \code{"Datetime"} which is automatically correct for data imported with
 \link{LightLogR}. Expects a \code{symbol}. Needs to be part of the \code{dataset}.}
 
-\item{Id.colname}{The column name of the Id column (default is \code{Id}), needs to
-be in the \code{dataset}. This is also used as the y-axis variable and is the
+\item{Id.colname}{The column name of the Id column (default is \code{Id}), needs
+to be in the \code{dataset}. This is also used as the y-axis variable and is the
 minimum grouping variable.}
 
 \item{gap.data}{Optionally provide a \code{tibble} with \code{start} and \code{end}
@@ -30,7 +30,9 @@ minimum grouping variable.}
 \code{\link[=gap_finder]{gap_finder()}} to calculate implicit missing data. This might be
 computationally intensive for large datasets and many missing data. In
 these cases it can make sense to calculate those gaps beforehand and
-provide them to the function.}
+provide them to the function. If an empty \code{tibble} (\code{\link[tibble:tibble]{tibble::tibble()}}) is
+provided, the function will just plot the start and end dates of the
+dataset, which is computationally very fast at the cost of additional info.}
 
 \item{...}{Additional arguments given to the main \code{\link[ggplot2:aes]{ggplot2::aes()}} used for
 styling depending on data within the \code{dataset}}
