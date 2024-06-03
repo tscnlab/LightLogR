@@ -174,18 +174,18 @@ imports <- function(device,
         "n_max needs to be a positive numeric" = is.numeric(n_max)
       )
       #import the file
-      tmp <- rlang::eval_tidy(!!import.expr)
+      data <- rlang::eval_tidy(!!import.expr)
       
       #validate/manipulate the file
-      if(dim(tmp)[1] == 0) {
+      if(dim(data)[1] == 0) {
         stop("No data could be imported. Please check your file and settings")
       }
       
       #check if the id column is present, if not, add it
-      if(!id.colname.defused %in% names(tmp)) {
+      if(!id.colname.defused %in% names(data)) {
         switch(is.null(manual.id) %>% as.character(),
                "TRUE" =
-                 {tmp <- tmp %>%
+                 {data <- data %>%
                    dplyr::mutate(!!Id.colname :=
                                    basename(file.name) %>%
                                    tools::file_path_sans_ext() %>%
@@ -196,14 +196,14 @@ imports <- function(device,
                                      ),
                                  .before = 1)},
                "FALSE" =
-                 {tmp <- tmp %>%
+                 {data <- data %>%
                    dplyr::mutate(!!Id.colname := manual.id, .before = 1)}
         )
       }
       
       #add a filename
       #check if the id column is a factor, if not, make it one, and group by it
-      tmp <- tmp %>%
+      data <- data %>%
         dplyr::mutate(file.name = basename(file.name) %>%
                         tools::file_path_sans_ext(),
                       !!Id.colname := factor(!!Id.colname)) %>%
@@ -212,19 +212,26 @@ imports <- function(device,
       
       #if there are Datetimes with NA value, drop them
       na.count <- 0
-      if(any(is.na(tmp$Datetime))) {
-        na.count <- sum(is.na(tmp$Datetime))
-        tmp <- tmp %>% tidyr::drop_na(Datetime)
+      if(any(is.na(data$Datetime))) {
+        na.count <- sum(is.na(data$Datetime))
+        data <- data %>% tidyr::drop_na(Datetime)
+      }
+      
+      #if there is an Id with less than two observations, give a warning
+      if(any(table(data$Id) < 2)) {
+        stop("Some Ids have only one observation. This causes problems with functions in LightLogR that calculate time differences. Please remove these Ids from import: ", 
+             which(table(data$Id) < 2) %>% names()
+        )
       }
       
       #if dst_adjustment is TRUE, adjust the datetime column
       if(dst_adjustment) {
-        tmp <- tmp %>% dst_change_handler(filename.colname = file.name)
+        data <- data %>% dst_change_handler(filename.colname = file.name)
       }
       #give info about the file
       if(!silent) 
         import.info(
-          tmp = tmp, #the data 
+          data = data, #the data 
           device = !!device, #the type of device
           tz = tz, #the timezone
           Id.colname = Id, #the id column name
@@ -235,10 +242,10 @@ imports <- function(device,
       
       #if autoplot is TRUE, make a plot
       if(auto.plot) {
-        tmp %>% gg_overview() %>% print()
+        data %>% gg_overview() %>% print()
       }
       #return the file
-      tmp
+      data
       
     }),
     rlang::caller_env()
@@ -285,7 +292,7 @@ import <- purrr::imap(ll_import_expr, \(x, idx) imports(idx,x))
 #' #change the import expression for the LYS device to add a message at the top
 #' ll_import_expr$LYS[[4]] <-
 #' rlang::expr({ cat("**This is a new import function**\n")
-#' tmp
+#' data
 #' })
 #' new_import <- import_adjustment(ll_import_expr)
 #' filepath <- system.file("extdata/sample_data_LYS.csv", package = "LightLogR")

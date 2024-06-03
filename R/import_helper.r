@@ -1,5 +1,5 @@
 #This internal helper function prints basic information about a dataset and is used for import function
-import.info <- function(tmp, 
+import.info <- function(data, 
                         device, 
                         tz, 
                         Id.colname, 
@@ -8,10 +8,10 @@ import.info <- function(tmp,
                         filename,
                         na.count) {
   #give info about the file
-  min.time <- min(tmp$Datetime)
-  max.time <- max(tmp$Datetime)
+  min.time <- min(data$Datetime)
+  max.time <- max(data$Datetime)
   interval.time <- 
-    tmp %>% 
+    data %>% 
     dplyr::reframe(
       interval.time = diff(Datetime)
       ) %>% 
@@ -21,14 +21,14 @@ import.info <- function(tmp,
                   interval.time = interval.time %>% lubridate::as.duration())
 
   #number of Ids
-  n_ids <- tmp %>% dplyr::group_keys() %>% nrow()
+  n_ids <- data %>% dplyr::group_keys() %>% nrow()
   #number of files 
   n_files <- filename %>% unique() %>% length()
   
   #check for dst_adjustment
   if(dst_info) {
     dst_info <- 
-      tmp %>% dplyr::group_by(file.name, .add = TRUE) %>% dst_change_summary()
+      data %>% dplyr::group_by(file.name, .add = TRUE) %>% dst_change_summary()
   }
   
   #prepare dst info
@@ -58,10 +58,10 @@ import.info <- function(tmp,
   #print all infos
     cat(
     "\n",
-    "Successfully read in ", format(nrow(tmp), big.mark = "'"), 
+    "Successfully read in ", format(nrow(data), big.mark = "'"), 
     " observations across ", n_ids, " Ids from ",  n_files, " ", device, "-file(s).\n",
     "Timezone set is ", tz, ".\n", 
-    if(lubridate::tz(tmp$Datetime) != Sys.timezone()) {
+    if(lubridate::tz(data$Datetime) != Sys.timezone()) {
       paste0(
         "The system timezone is ",
         Sys.timezone(),

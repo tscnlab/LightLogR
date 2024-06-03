@@ -230,7 +230,54 @@ ll_import_expr <- list(
             as.numeric()
         )
       )
+  }),
+  #nanoLambda
+  nanoLambda = rlang::expr({
+
+    #create a helper function for nanoLambda
+    process_chunk <- function(chunk) {
+      chunk_data <- 
+        purrr::map(chunk, ~ stringr::str_split(.x, ", ", simplify = TRUE))
+      chunk_data <- chunk_data[-length(chunk_data)]
+      col_names <- chunk_data %>% purrr::map(\(x) x[[1]])
+      col_values <- chunk_data %>% purrr::map(\(x) x[-1])
+      names(col_values) <- col_names
+      col_values %>% 
+        purrr::map(~ if(length(.x) == 1) .x else list(as.numeric(.x))) %>% 
+        tibble::as_tibble()
+    }
+    
+    #read in the data
+    data <- 
+      purrr::map(
+        filename,
+        \(x) {
+          lines <- readr::read_lines(filename)
+          measurements <- sum(stringr::str_detect(lines,"File Name"))
+          chunks <- 
+            if(measurements == 1) {
+              list(lines)
+            } else split(
+              lines, 
+              ceiling(seq_along(lines)/(length(lines)/measurements)))
+          purrr::map(chunks, process_chunk) %>% 
+            purrr::list_rbind() %>% 
+            dplyr::rename_with(~ stringr::str_replace(., " ", "_")) %>% 
+            dplyr::rename(Datetime = Modify_Time) %>% 
+            dplyr::mutate(
+              Datetime = lubridate::ymd_hms(Datetime, tz = tz, quiet = TRUE),
+              dplyr::across(
+                            where(
+                              is.character) & 
+                              !tidyselect::any_of(
+                                c("File_Name", "Device_Name", "Device_Address",
+                                  "Sensor_ID", "Is_Saturate")), 
+                            as.numeric),
+                          file.name = filename
+            )
+        }) %>% purrr::list_rbind()
   })
+  
   
 )
 

@@ -37,7 +37,7 @@ identical(body(import$LYS), body(new_import$LYS))
 #change the import expression for the LYS device to add a message at the top
 ll_import_expr$LYS[[4]] <-
 rlang::expr({ cat("**This is a new import function**\n")
-tmp
+data
 })
 new_import <- import_adjustment(ll_import_expr)
 filepath <- system.file("extdata/sample_data_LYS.csv", package = "LightLogR")

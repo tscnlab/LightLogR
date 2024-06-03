@@ -6,7 +6,7 @@
 \alias{import}
 \title{Import a light logger dataset or related data}
 \format{
-An object of class \code{list} of length 9.
+An object of class \code{list} of length 10.
 }
 \usage{
 import_Dataset(device, ...)
@@ -76,9 +76,10 @@ just work out of the box. To get an overview, you can simply call the
 is maintained.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{supported.devices
-#> [1] "Actiwatch_Spectrum" "ActLumus"           "ActTrust"          
-#> [4] "DeLux"              "LiDo"               "LightWatcher"      
-#> [7] "LYS"                "Speccy"             "SpectraWear"
+#>  [1] "Actiwatch_Spectrum" "ActLumus"           "ActTrust"          
+#>  [4] "DeLux"              "LiDo"               "LightWatcher"      
+#>  [7] "LYS"                "nanoLambda"         "Speccy"            
+#> [10] "SpectraWear"
 }\if{html}{\out{</div>}}
 \subsection{ActLumus}{
 
