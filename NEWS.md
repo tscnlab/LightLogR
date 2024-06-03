@@ -1,3 +1,5 @@
+# LightLogR 0.3.2
+
 # LightLogR 0.3.1
 
 * fixed bug in `interval2state()` that would dismiss the first state if it starts before the actual data
