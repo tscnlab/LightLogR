@@ -16,7 +16,7 @@ participant's Id."><meta property="og:image" content="https://tscnlab.github.io/
     
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -198,17 +198,17 @@ a vector with <code>hms</code> (<code>FALSE</code>) times? Expects a <code>logic
 <span class="r-in"><span><span class="va">dataset_with_states2</span> <span class="op">&lt;-</span> </span></span>
 <span class="r-in"><span><span class="va">dataset_with_states</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span><span class="fu">interval2state</span><span class="op">(</span>State.interval.dataset <span class="op">=</span> <span class="va">intervals</span>, State.colname <span class="op">=</span> <span class="va">Wear</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">dataset_with_states</span><span class="op">[</span><span class="fl">8278</span><span class="op">:</span><span class="fl">8283</span>,<span class="op">]</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 4</span></span>
+<span class="r-in"><span><span class="va">dataset_with_states2</span><span class="op">[</span><span class="fl">8278</span><span class="op">:</span><span class="fl">8283</span>,<span class="op">]</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Groups:   Id [1]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Datetime             MEDI Id          State</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 2023-08-15 <span style="color: #949494;">22:59:31</span>  2.38 Participant wake </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 2023-08-15 <span style="color: #949494;">22:59:41</span>  2.34 Participant wake </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 2023-08-15 <span style="color: #949494;">22:59:51</span>  2.25 Participant wake </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 2023-08-15 <span style="color: #949494;">23:00:01</span>  1.95 Participant sleep</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 2023-08-15 <span style="color: #949494;">23:00:11</span>  2.6  Participant sleep</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> 2023-08-15 <span style="color: #949494;">23:00:21</span>  2.36 Participant sleep</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Datetime             MEDI Id          State Wear   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 2023-08-15 <span style="color: #949494;">22:59:31</span>  2.38 Participant wake  wear   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 2023-08-15 <span style="color: #949494;">22:59:41</span>  2.34 Participant wake  wear   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 2023-08-15 <span style="color: #949494;">22:59:51</span>  2.25 Participant wake  wear   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 2023-08-15 <span style="color: #949494;">23:00:01</span>  1.95 Participant sleep no wear</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 2023-08-15 <span style="color: #949494;">23:00:11</span>  2.6  Participant sleep no wear</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> 2023-08-15 <span style="color: #949494;">23:00:21</span>  2.36 Participant sleep no wear</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#or we can use `purrr::reduce` to add multiple columns at once</span></span></span>
 <span class="r-in"><span><span class="va">dataset_with_states3</span> <span class="op">&lt;-</span></span></span>
@@ -225,17 +225,17 @@ a vector with <code>hms</code> (<code>FALSE</code>) times? Expects a <code>logic
 <span class="r-in"><span><span class="co"># - the `.init` argument is the initial dataset to be modified</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#this results in all states being applied</span></span></span>
-<span class="r-in"><span><span class="va">dataset_with_states2</span><span class="op">[</span><span class="fl">8278</span><span class="op">:</span><span class="fl">8283</span>,<span class="op">]</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 5</span></span>
+<span class="r-in"><span><span class="va">dataset_with_states3</span><span class="op">[</span><span class="fl">8278</span><span class="op">:</span><span class="fl">8283</span>,<span class="op">]</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 6</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Groups:   Id [1]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Datetime             MEDI Id          State Wear   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 2023-08-15 <span style="color: #949494;">22:59:31</span>  2.38 Participant wake  wear   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 2023-08-15 <span style="color: #949494;">22:59:41</span>  2.34 Participant wake  wear   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 2023-08-15 <span style="color: #949494;">22:59:51</span>  2.25 Participant wake  wear   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 2023-08-15 <span style="color: #949494;">23:00:01</span>  1.95 Participant sleep no wear</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 2023-08-15 <span style="color: #949494;">23:00:11</span>  2.6  Participant sleep no wear</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> 2023-08-15 <span style="color: #949494;">23:00:21</span>  2.36 Participant sleep no wear</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Datetime             MEDI Id          State Wear    Performance</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 2023-08-15 <span style="color: #949494;">22:59:31</span>  2.38 Participant wake  wear            100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 2023-08-15 <span style="color: #949494;">22:59:41</span>  2.34 Participant wake  wear            100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 2023-08-15 <span style="color: #949494;">22:59:51</span>  2.25 Participant wake  wear            100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 2023-08-15 <span style="color: #949494;">23:00:01</span>  1.95 Participant sleep no wear           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 2023-08-15 <span style="color: #949494;">23:00:11</span>  2.6  Participant sleep no wear           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> 2023-08-15 <span style="color: #949494;">23:00:21</span>  2.36 Participant sleep no wear           0</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

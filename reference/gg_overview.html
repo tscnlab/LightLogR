@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,8 +81,8 @@ by <a href="LightLogR-package.html">LightLogR</a>, take care to choose a sensibl
 
 
 <dt>Id.colname</dt>
-<dd><p>The column name of the Id column (default is <code>Id</code>), needs to
-be in the <code>dataset</code>. This is also used as the y-axis variable and is the
+<dd><p>The column name of the Id column (default is <code>Id</code>), needs
+to be in the <code>dataset</code>. This is also used as the y-axis variable and is the
 minimum grouping variable.</p></dd>
 
 
@@ -92,7 +92,9 @@ minimum grouping variable.</p></dd>
 <code><a href="gap_finder.html">gap_finder()</a></code> to calculate implicit missing data. This might be
 computationally intensive for large datasets and many missing data. In
 these cases it can make sense to calculate those gaps beforehand and
-provide them to the function.</p></dd>
+provide them to the function. If an empty <code>tibble</code> (<code><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble::tibble()</a></code>) is
+provided, the function will just plot the start and end dates of the
+dataset, which is computationally very fast at the cost of additional info.</p></dd>
 
 
 <dt>...</dt>
