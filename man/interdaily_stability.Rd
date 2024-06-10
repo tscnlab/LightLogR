@@ -74,13 +74,10 @@ Other metrics:
 \code{\link{midpointCE}()},
 \code{\link{nvRC}()},
 \code{\link{nvRD}()},
-<<<<<<< HEAD
+\code{\link{nvRD_cumulative_response}()},
 \code{\link{period_above_threshold}()},
 \code{\link{pulses_above_threshold}()},
 \code{\link{threshold_for_duration}()},
-=======
-\code{\link{nvRD_cumulative_response}()},
->>>>>>> main
 \code{\link{timing_above_threshold}()}
 }
 \concept{metrics}

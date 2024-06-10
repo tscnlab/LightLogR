@@ -2,11 +2,7 @@
 % Please edit documentation in R/metric_duration_above_threshold.R
 \name{duration_above_threshold}
 \alias{duration_above_threshold}
-<<<<<<< HEAD
 \title{Duration above/below threshold or within threshold range}
-=======
-\title{Time above/below threshold or within threshold range}
->>>>>>> main
 \usage{
 duration_above_threshold(
   Light.vector,
@@ -98,10 +94,10 @@ Other metrics:
 \code{\link{midpointCE}()},
 \code{\link{nvRC}()},
 \code{\link{nvRD}()},
+\code{\link{nvRD_cumulative_response}()},
 \code{\link{period_above_threshold}()},
 \code{\link{pulses_above_threshold}()},
 \code{\link{threshold_for_duration}()},
-\code{\link{nvRD_cumulative_response}()},
 \code{\link{timing_above_threshold}()}
 }
 \concept{metrics}
