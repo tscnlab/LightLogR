@@ -1,3 +1,7 @@
+# LightLogR 0.3.3
+
+* New and updated metric functions. LightLogR now contains 16 metric families with 60 sub-metrics.
+
 # LightLogR 0.3.2
 
 * added import functions for `nanoLambda`and `LightWatcher` devices
