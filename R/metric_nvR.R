@@ -123,8 +123,8 @@ nvRD <- function(MEDI.vector,
     "`Time.vector` must be POSIXct, hms, duration, or difftime!" =
       lubridate::is.POSIXct(Time.vector) | hms::is_hms(Time.vector) | 
       lubridate::is.duration(Time.vector) | lubridate::is.difftime(Time.vector),
-    "`Light.vector` and `Time.vector` must be same length!" = 
-      length(Light.vector) == length(Time.vector),
+    "`MEDI.vector` and `Time.vector` must be same length!" = 
+      length(MEDI.vector) == length(Time.vector),
     "`epoch` must either be a duration or a string" =
       lubridate::is.duration(epoch) | is.character(epoch)
   )
@@ -398,8 +398,8 @@ nvRC <- function(MEDI.vector,
     "`Time.vector` must be POSIXct, hms, duration, or difftime!" =
       lubridate::is.POSIXct(Time.vector) | hms::is_hms(Time.vector) | 
       lubridate::is.duration(Time.vector) | lubridate::is.difftime(Time.vector),
-    "`Light.vector` and `Time.vector` must be same length!" = 
-      length(Light.vector) == length(Time.vector),
+    "`MEDI.vector` and `Time.vector` must be same length!" = 
+      length(MEDI.vector) == length(Time.vector),
     "`epoch` must either be a duration or a string" =
       lubridate::is.duration(epoch) | is.character(epoch),
     "`sleep.onset` must be hms, duration, difftime, or NULL" = 

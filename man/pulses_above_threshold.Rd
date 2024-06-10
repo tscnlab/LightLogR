@@ -48,6 +48,11 @@ calculated.}
 maximum proportion of the total number of interruptions. Defaults to \code{0.25}
 as in Wilson et al. (2018).}
 
+\item{epoch}{The epoch at which the data was sampled. Can be either a
+\link[lubridate]{duration} or a string. If it is a string, it needs to be
+either \code{"dominant.epoch"} (the default) for a guess based on the data, or a valid
+\link[lubridate]{duration} string, e.g., \code{"1 day"} or \code{"10 sec"}.}
+
 \item{return.indices}{Logical. Should the cluster indices be returned? Only works if
 \code{as.df} is \code{FALSE}. Defaults to \code{FALSE}.}
 

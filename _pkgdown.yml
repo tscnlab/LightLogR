@@ -76,6 +76,7 @@ reference:
     - centroidLE
     - disparity_index
     - duration_above_threshold
+    - exponential_moving_average
     - frequency_crossing_threshold
     - intradaily_variability
     - interdaily_stability
@@ -87,6 +88,7 @@ reference:
     - nvRD
     - nvRD_cumulative_response
     - period_above_threshold
+    - pulses_above_threshold
     - threshold_for_duration
     - timing_above_threshold
     

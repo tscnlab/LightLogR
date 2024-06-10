@@ -29,6 +29,10 @@
 #' @param prop.interrupt Numeric value between `0` and `1` specifying the
 #'    maximum proportion of the total number of interruptions. Defaults to `0.25` 
 #'    as in Wilson et al. (2018).
+#' @param epoch The epoch at which the data was sampled. Can be either a
+#'    \link[lubridate]{duration} or a string. If it is a string, it needs to be
+#'    either `"dominant.epoch"` (the default) for a guess based on the data, or a valid
+#'    \link[lubridate]{duration} string, e.g., `"1 day"` or `"10 sec"`.
 #' @param return.indices Logical. Should the cluster indices be returned? Only works if
 #'    `as.df` is `FALSE`. Defaults to `FALSE`.
 #' @param na.rm Logical. Should missing values be removed for the calculation of
@@ -149,7 +153,7 @@ pulses_above_threshold <- function(Light.vector,
     tibble::tibble(
       row_idx = 1:length(Light.vector), 
       light = Light.vector, 
-      time = Time.vector
+      time = as.numeric(Time.vector)
     ) %>% 
     dplyr::left_join(pulses, by = "row_idx") %>%
     dplyr::filter(is_pulse) %>%
