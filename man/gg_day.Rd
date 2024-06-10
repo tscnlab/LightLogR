@@ -12,9 +12,9 @@ gg_day(
   y.axis = MEDI,
   aes_col = NULL,
   aes_fill = NULL,
-  group = NULL,
+  group = Id,
   geom = "point",
-  scales = "fixed",
+  scales = c("fixed", "free_x", "free_y", "free"),
   x.axis.breaks = hms::hms(hours = seq(0, 24, by = 3)),
   y.axis.breaks = c(-10^(5:0), 0, 10^(0:5)),
   y.scale = "symlog",
@@ -78,7 +78,7 @@ activate the default behaviour of \link{ggplot2}, you need to put in
 \item Defaults to \code{"symlog"}, which is a logarithmic scale that can also handle negative values.
 \item \code{"log10"} would be a straight logarithmic scale, but cannot handle negative values.
 \item \code{"identity"} does nothing (continuous scaling).
-\item a transforming function, such as \code{\link[=symlog_trans]{symlog_trans()}} or \code{\link[scales:identity_trans]{scales::identity_trans()}}, which allow for more control.
+\item a transforming function, such as \code{\link[=symlog_trans]{symlog_trans()}} or \code{\link[scales:transform_identity]{scales::identity_trans()}}, which allow for more control.
 }}
 
 \item{y.scale.sc}{\code{logical} for whether scientific notation shall be used.

@@ -80,7 +80,7 @@ import_Statechanges <- function(filename,
                        path = NULL, 
                        sep = ",", 
                        dec = ".", 
-                       structure = "wide",
+                       structure = c("wide", "long"),
                        Datetime.format = "ymdHMS",
                        tz = "UTC",
                        State.colnames, # a vector
@@ -93,6 +93,9 @@ import_Statechanges <- function(filename,
                        silent = FALSE) {
   
   # Initial Checks ----------------------------------------------------------
+  
+  # Match input arguments
+  structure <- match.arg(structure)
   
   # Check inputs
   if(!is.character(filename)) {
@@ -112,9 +115,6 @@ import_Statechanges <- function(filename,
   }
   if(!is.logical(keep.all)) {
     stop("The specified keep.all must be a logical")
-  }
-  if(!structure %in% c("wide", "long")) {
-    stop("The specified structure must be either 'wide' or 'long'")
   }
   if(!is.character(Datetime.format)) {
     stop("The specified Datetime.format must be a character that works with lubridate::parse_date_time")
@@ -189,11 +189,29 @@ import_Statechanges <- function(filename,
                       lubridate::parse_date_time(Datetime,   
                                                  orders = Datetime.format, tz
                       ))
+  } else {
+    data <- data %>%  
+      dplyr::mutate(Datetime = 
+                      lubridate::force_tz(Datetime, tz = tz)
+                      )
   }
   
+  #make sure there were no parsing errors
+  if(any(is.na(data$Datetime))) {
+    stop("Some of the Datetime values could not be parsed! Check the Datetime.format parameter and the data. If you read in more than one file, make sure that the format is consistent across all files. If not, try `files %>% purrr::map(import_Statechanges, *arguments here* ) %>% dplyr::bind_rows()`")
+  }
+  
+  #create a factor from Id and arrange the data by Datetime
   data <- data %>%  
     dplyr::mutate({{ Id.newname }} := factor({{ Id.newname }})) %>% 
     dplyr::arrange(Datetime, .by_group = TRUE)
+  
+  #if there are Datetimes with NA value, drop them
+  na.count <- 0
+  if(any(is.na(data$Datetime))) {
+    na.count <- sum(is.na(data$Datetime))
+    data <- data %>% tidyr::drop_na(Datetime)
+  }
   
   # Return the Data ----------------------------------------------------------
   
@@ -208,11 +226,20 @@ import_Statechanges <- function(filename,
   #create a warning if consecutive states are the same
   if(any(dplyr::lag(data$State) == data$State, na.rm = TRUE)) {
     warning(
-      "There are consecutive states that are the same. This may be an error in the data."
+      "There are consecutive states that are the same. This may or may not be an error in the data."
       )
   }
   
-  if(!silent) import.info(data, "Statechanges", tz, {{ Id.newname }})
+  #give a summary about the imported data
+  if(!silent) 
+    import.info(data = data, 
+                device = "Statechanges", 
+                tz = tz, 
+                Id.colname = {{ Id.newname }}, 
+                dst_adjustment = FALSE, 
+                dst_info = FALSE, 
+                filename = filename, 
+                na.count = na.count)
   
   return(data)
 }

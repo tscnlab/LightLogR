@@ -10,7 +10,7 @@
 #' @param dataset A light logger dataset. Expects a `dataframe`. If not imported
 #'   by [LightLogR], take care to choose a sensible variable for the
 #'   `Datetime.colname`.
-#' @param unit Unit of binning. See [lubridate::round_date()] for examples.
+#' @param unit Unit of binning. See [lubridate::round_date()] for examples. The default is `"3 hours"`. 
 #' @param type One of `"round"`(the default), `"ceiling"` or `"floor"`. Setting
 #'   chooses the relevant function from [lubridate].
 #' @param Datetime.colname column name that contains the datetime. Defaults to
@@ -33,7 +33,7 @@
 
 cut_Datetime <- function(dataset,
                          unit = "3 hours",
-                         type = "round",
+                         type = c("round", "floor", "ceiling"),
                          Datetime.colname = Datetime,
                          New.colname = Datetime.rounded,
                          group_by = FALSE,
@@ -41,7 +41,9 @@ cut_Datetime <- function(dataset,
   
   # Initial Checks ----------------------------------------------------------
   
-  type.allowed <- c("round", "ceiling", "floor")
+  # Match input arguments
+  type <- match.arg(type)
+  
   Datetime.colname.defused <- 
     rlang::enexpr(Datetime.colname) %>% rlang::as_string()
   New.colname.defused <- 
@@ -49,10 +51,9 @@ cut_Datetime <- function(dataset,
   
   stopifnot(
     "dataset is not a dataframe" = is.data.frame(dataset),
-    "unit is not a character string" = is.character(unit),
     "unit is not a scalar" = length(unit) == 1,
-    "type must be a scalar character of either `round`, `ceiling` or `floor`" = 
-      type %in% type.allowed,
+    # "unit is not a character string or a duration" = 
+    #   lubridate::is.duration(unit) | is.character(unit),
     "Datetime.colname must be part of the dataset" = 
       Datetime.colname.defused %in% names(dataset),
     "Datetime.colname must be a Datetime" = 
@@ -65,13 +66,37 @@ cut_Datetime <- function(dataset,
   
   # Manipulation ----------------------------------------------------------
   
+  #create the epochs list
+  if(unit == "dominant.epoch") {
+  unit <- epoch_list(dataset, Datetime.colname = {{ Datetime.colname }})
+  }
+  else {
+    unit <- dataset %>% 
+      dplyr::summarize(
+        dominant.epoch = unit %>% lubridate::as.period(),
+        group.indices = dplyr::cur_group_id()
+      )
+  } 
+  
   #give the user the chance to use whatever function they want
   round_function_expr <- rlang::parse_expr(paste0("lubridate::", type, "_date"))
   
+  #perform the actual rounding
   dataset <- dataset %>% 
     dplyr::mutate(
+      group.indices2 = dplyr::cur_group_id(),
       {{ New.colname }} := 
-        {{ Datetime.colname }} %>% eval(round_function_expr)(unit = unit, ...))
+        {{ Datetime.colname }} %>% 
+        eval(round_function_expr)(
+          unit = unit %>% 
+                                    dplyr::filter(group.indices == 
+                                                    unique(group.indices2)) %>% 
+                                    .[["dominant.epoch"]] %>% 
+                                    lubridate::as.period(), 
+                                  ...
+                                  ),
+      .after = {{ Datetime.colname }}
+      )
   
   if(group_by) {
     dataset <- dataset %>% dplyr::group_by({{ New.colname }}, .add = TRUE)

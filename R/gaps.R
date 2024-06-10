@@ -48,14 +48,11 @@ gapless_Datetimes <- function(dataset,
   # Function ----------------------------------------------------------
   
   #get the epochs based on the data
-  epochs <- dataset %>% dominant_epoch(Datetime.colname = {{ Datetime.colname }})
+  epochs <- epoch_list(dataset, Datetime.colname = {{ Datetime.colname }},
+                     epoch = epoch)
   
-  #if the user specified an epoch, use that instead
-  if(epoch != "dominant.epoch") {
-    epochs <- 
-      epochs %>% dplyr::mutate(dominant.epoch = lubridate::as.duration(epoch))
-  }
-  
+  #create an expression for a sequence from the minimum datetime to the maximum
+  #or, if full.days is TRUE, to the end of the day of the maximum datetime
   expr_standard <- rlang::expr(
     seq(
       min({{ Datetime.colname }}),
@@ -69,6 +66,7 @@ gapless_Datetimes <- function(dataset,
     )
   )
   
+  #extend the above expression by the whole first day if full.days is TRUE
   expr_full_day <- rlang::expr(
     c(
       if(full.days) {
@@ -147,10 +145,13 @@ gapless_Datetimes <- function(dataset,
 gap_handler <- function(dataset, 
                         Datetime.colname = Datetime,
                         epoch = "dominant.epoch",
-                        behavior = "full_sequence",
+                        behavior = c("full_sequence", "regulars", "irregulars", "gaps"),
                         full.days = FALSE) {
   
   # Initial Checks ----------------------------------------------------------
+  
+  #Argument matching
+  behavior <- match.arg(behavior)
   
   stopifnot(
     "dataset is not a dataframe" = is.data.frame(dataset),
@@ -161,8 +162,6 @@ gap_handler <- function(dataset,
         dataset[[colname.defused({{ Datetime.colname }})]]),
     "epoch must either be a duration or a string" = 
       lubridate::is.duration(epoch) | is.character(epoch),
-    "behavior must be one of 'full_sequence', 'regulars', 'irregulars', 'gaps'" = 
-      behavior %in% c("full_sequence", "regulars", "irregulars", "gaps"),
     "full.days must be a logical" = is.logical(full.days)
   )
   

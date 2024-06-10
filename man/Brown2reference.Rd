@@ -44,7 +44,7 @@ A dataframe on the basis of the \code{dataset} that contains the added
 columns.
 }
 \description{
-Adds several columns to a light logger dataset. It requires column that
+Adds several columns to a light logger dataset. It requires a column that
 contains the Brown states, e.g. "daytime", "evening", and "night". From that
 the function will add a column with the recommended illuminance, a column
 that checks if the illuminance of the dataset is within the recommended

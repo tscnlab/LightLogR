@@ -1,18 +1,22 @@
 #' Plot an overview of dataset intervals with implicit missing data
 #'
+#'
+#'
 #' @inheritParams gg_day
 #' @param Datetime.colname column name that contains the datetime. Defaults to
 #'   `"Datetime"` which is automatically correct for data imported with
 #'   [LightLogR]. Expects a `symbol`. Needs to be part of the `dataset`.
-#' @param Id.colname The column name of the Id column (default is `Id`), needs to
-#'   be in the `dataset`. This is also used as the y-axis variable and is the
+#' @param Id.colname The column name of the Id column (default is `Id`), needs
+#'   to be in the `dataset`. This is also used as the y-axis variable and is the
 #'   minimum grouping variable.
 #' @param gap.data Optionally provide a `tibble` with `start` and `end`
 #'   `Datetimes` of gaps per group. If not provided, the function uses
 #'   [gap_finder()] to calculate implicit missing data. This might be
 #'   computationally intensive for large datasets and many missing data. In
 #'   these cases it can make sense to calculate those gaps beforehand and
-#'   provide them to the function.
+#'   provide them to the function. If an empty `tibble` ([tibble::tibble()]) is
+#'   provided, the function will just plot the start and end dates of the
+#'   dataset, which is computationally very fast at the cost of additional info.
 #' @param ... Additional arguments given to the main [ggplot2::aes()] used for
 #'   styling depending on data within the `dataset`
 #'
@@ -37,11 +41,11 @@ gg_overview <- function(dataset,
   
   stopifnot(
     "The given dataset is not a dataframe" = is.data.frame(dataset),
-    "The Datetime.colname is not in the dataset." = 
+    "The Datetime.colname is not in the dataset." =
       Datetime.colname.str %in% names(dataset),
-    "The Id.colname is not in the dataset." = 
+    "The Id.colname is not in the dataset." =
       Id.colname.str %in% names(dataset),
-    "The Datetime.colname is not a Datetime" = 
+    "The Datetime.colname is not a Datetime" =
       lubridate::is.POSIXct(dataset[[Datetime.colname.str]]),
     "interactive must be a logical" = is.logical(interactive)
   )
@@ -55,7 +59,9 @@ gg_overview <- function(dataset,
   if(is.null(gap.data)) {
     gap.data <- 
       dataset %>% 
-      gap_finder(gap.data = TRUE, silent = TRUE) %>% 
+      gap_finder(
+        Datetime.colname = {{ Datetime.colname }},
+        gap.data = TRUE, silent = TRUE) %>% 
       dplyr::group_by(gap.id, .add = TRUE) %>% 
       dplyr::filter(dplyr::n() > 1)
     
@@ -65,7 +71,7 @@ gg_overview <- function(dataset,
       gap.data <- 
         gap.data %>% 
         dplyr::summarize(
-          start = min({{ Datetime.colname}}), end = max({{ Datetime.colname}}))
+          start = min({{ Datetime.colname }}), end = max({{ Datetime.colname }}))
     }
   }
   

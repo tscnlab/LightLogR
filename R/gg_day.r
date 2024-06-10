@@ -108,9 +108,9 @@ gg_day <- function(dataset,
                    y.axis = MEDI,
                    aes_col = NULL,
                    aes_fill = NULL,
-                   group = NULL,
+                   group = Id,
                    geom = "point",
-                   scales = "fixed",
+                   scales = c("fixed", "free_x", "free_y", "free"),
                    x.axis.breaks = hms::hms(hours = seq(0, 24, by = 3)),
                    y.axis.breaks = c(-10^(5:0), 0, 10^(0:5)),
                    y.scale = "symlog",
@@ -127,6 +127,9 @@ gg_day <- function(dataset,
   
 # Initial Checks ----------------------------------------------------------
 
+  # Match input arguments
+  scales <- match.arg(scales)
+  
   x <- rlang::enexpr(x.axis) 
   y <- rlang::enexpr(y.axis)
   axis_columns <- (purrr::map_chr(c(x,y), deparse1))
@@ -136,8 +139,6 @@ gg_day <- function(dataset,
       rlang::as_string(x) %in% names(dataset),
     "The given column for X is not a Datetime" =
       lubridate::is.POSIXct(dataset[[rlang::as_string(x)]]),
-    "scales must be one of `fixed`, `free_x`, `free_y`, or `free`" = 
-      scales %in% c("free_y", "free_x", "fixed", "free"),
     "format.day must be a character. Please make shure it is of type `base::strptime`" = 
       is.character(format.day),
     "The X axis label must be a string" = is.character(x.axis.label),
@@ -148,6 +149,9 @@ gg_day <- function(dataset,
 
 # Data Preparation --------------------------------------------------------
 
+  #dots
+  dots <- rlang::list2(...)
+  
   #special case for geom = "ribbon"
   ribbon <- list()
   if(geom == "ribbon") {
@@ -210,19 +214,26 @@ gg_day <- function(dataset,
   #give the user the chance to use whatever geom they want
   geom_function_expr <- rlang::parse_expr(paste0("ggplot2::geom_", geom))
 
+  #set up the basic plot
+  if(geom == "blank") {
+    dots <- NULL
+  }
+  geom_function_expr <- rlang::expr({
+    (!!geom_function_expr)(
+      ggplot2::aes(
+        group = {{ group }},
+        col = {{ aes_col }},
+        fill ={{ aes_fill }}
+      ), !!!dots)
+  })
+  
 # Plot Creation -----------------------------------------------------------
   
   Plot <- 
     dataset %>% 
     #basic setup
     ggplot2::ggplot(ggplot2::aes(x=Time.data, y = !!y)) +
-    eval(geom_function_expr)(
-      ggplot2::aes(
-        x=Time.data, y = !!y,
-        group = {{ group }},
-        col = {{ aes_col }},
-        fill = {{ aes_fill }},
-        ), ...) +
+    eval(geom_function_expr) +
     ribbon +
     # Scales --------------------------------------------------------------
     jco_color_scheme+

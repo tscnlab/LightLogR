@@ -16,9 +16,8 @@ knitr::opts_chunk$set(
 # LightLogR <img src="man/figures/logo.png" align="right" height="139"/>
 
 <!-- badges: start -->
-
 [![R-CMD-check](https://github.com/tscnlab/LightLogR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/tscnlab/LightLogR/actions/workflows/R-CMD-check.yaml)
-
+[![Test coverage](https://github.com/JZauner/LightLogR/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/JZauner/LightLogR/actions/workflows/test-coverage.yaml)
 <!-- badges: end -->
 
 Personalized luminous exposure data is progressively gaining importance in various sectors, including research, occupational affairs, and fitness tracking. Data are collected through a proliferating selection of wearable loggers and dosimeters, varying in size, shape, functionality, and output format. Despite or maybe because of numerous use cases, the field lacks a unified framework for collecting, validating, and analyzing the accumulated data. This issue increases the time and expertise necessary to handle such data and also compromises the FAIRness (Findability, Accessibility, Interoperability, Reusability) of the results, especially in meta-analyses.
@@ -94,7 +93,7 @@ dataset %>% ungroup() %>% select(Datetime, lux, kelvin, MEDI) %>%
 .
 :::
 
-For more complex data, there is the useful `gg_overview()` function to get an immediate grasp of your data. See it here in action for a dataset with multiple participants. It also indicates where data is missing, based on the measurement epochs found in the data.
+For more complex data, there is the useful `gg_overview()` function to get an immediate grasp of your data. It was automatically called during import (set `auto.plot = FALSE` to suppress this), but really shines for datasets with multiple participants. It also indicates where data is missing, based on the measurement epochs found in the data.
 
 ```         
 LLdata %>% gg_overview()

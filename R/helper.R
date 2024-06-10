@@ -39,7 +39,7 @@ is.all.scalar <- function(...) {
 }
 
 #calculate the whether the nth quantile of time differences in one dataset is smaller or equal to the nth quantile of time differences in another dataset
-compare.difftime <- function(dataset1, dataset2, Datetime.colname = Datetime, n = 0.95) {
+compare_difftime <- function(dataset1, dataset2, Datetime.colname = Datetime, n = 0.95) {
   Quant1 <- nth.difftime(dataset1, {{ Datetime.colname }}, n = n)
   Quant2 <- nth.difftime(dataset2, {{ Datetime.colname }}, n = n)
   #do a full join with every column but Quantile
@@ -50,9 +50,9 @@ compare.difftime <- function(dataset1, dataset2, Datetime.colname = Datetime, n 
     )
 }
 
-#calculate whether any of the comparisons in compare.difftime is FALSE
-compare.difftime.any <- function(...) {
-  comparison <- compare.difftime(...) %>% 
+#calculate whether any of the comparisons in compare_difftime is FALSE
+compare_difftime.any <- function(...) {
+  comparison <- compare_difftime(...) %>% 
     dplyr::filter(comparison == FALSE) %>% 
     dplyr::rename(Dataset.Interval = Quant.x,
                   Reference.Interval = Quant.y) %>% 
@@ -216,4 +216,21 @@ convert_to_timescale <- function(x, t){
     x <- lubridate::as.difftime(x, unit = units(t))
   }
   return(x)
+}
+
+# Create the list of epochs, which are either dominant or not
+epoch_list <- function(dataset = dataset, 
+                       Datetime.colname = Datetime, 
+                       epoch = "dominant.epoch") {
+  
+  #get the epochs based on the data
+  epochs <- dataset %>% dominant_epoch(Datetime.colname = {{ Datetime.colname }})
+  
+  #if the user specified an epoch, use that instead
+  if(epoch != "dominant.epoch") {
+    epochs <- 
+      epochs %>% dplyr::mutate(dominant.epoch = lubridate::as.duration(epoch))
+  }
+  
+  epochs
 }

@@ -33,6 +33,9 @@
 #'   which is the weekday and date. See [base::strptime()] for more options.
 #' @param facetting Should an automated facet by grouping be applied? Default is
 #'   `TRUE`.
+#' @param scales For [ggplot2::facet_wrap()], should scales be `"fixed"`,
+#'   `"free"` or `"free"` in one dimension (`"free_x"` is the default). Expects
+#'   a `character`.
 #'
 #' @return A ggplot object
 #' @export
@@ -55,7 +58,7 @@ gg_days <- function(dataset,
                    aes_fill = NULL,
                    group = NULL,
                    geom = "line",
-                   scales = "free_x",
+                   scales = c("free_x", "free_y", "fixed", "free"),
                    x.axis.breaks = Datetime_breaks,
                    y.axis.breaks = c(-10^(5:0), 0, 10^(0:5)),
                    y.scale = "symlog",
@@ -68,9 +71,13 @@ gg_days <- function(dataset,
                    subtitle = NULL,
                    interactive = FALSE,
                    facetting = TRUE,
+                   jco_color = FALSE,
                    ...) {
   
   # Initial Checks ----------------------------------------------------------
+  
+  # Match input arguments
+  scales <- match.arg(scales)
   
   x <- rlang::enexpr(x.axis) 
   y <- rlang::enexpr(y.axis)
@@ -81,14 +88,15 @@ gg_days <- function(dataset,
       rlang::as_string(x) %in% names(dataset),
     "The given column for X is not a Datetime" =
       lubridate::is.POSIXct(dataset[[rlang::as_string(x)]]),
-    "scales must be one of `fixed`, `free_x`, `free_y`, or `free`" = 
-      scales %in% c("free_y", "free_x", "fixed", "free"),
     "The X axis label must be a string" = is.character(x.axis.label),
     "The Y axis label must be a string" = is.character(y.axis.label),
     "interactive must be a logical" = is.logical(interactive)
   )
   
   # Data Preparation --------------------------------------------------------
+  
+  #dots
+  dots <- rlang::list2(...)
   
   #special case for geom = "ribbon"
   ribbon <- list()
@@ -116,20 +124,35 @@ gg_days <- function(dataset,
   #give the user the chance to use whatever geom they want
   geom_function_expr <- rlang::parse_expr(paste0("ggplot2::geom_", geom))
   
+  if(geom == "blank") {
+    dots <- NULL
+  }
+  
+  #jco color palette
+  jco_color_scheme <- list()
+  if(jco_color) {
+    jco_color_scheme <- 
+      list(
+        ggsci::scale_color_jco(),
+        ggsci::scale_fill_jco()
+      )
+  }
+  
   # Plot Creation -----------------------------------------------------------
   
   Plot <- 
     dataset %>% 
     #basic setup
     ggplot2::ggplot(ggplot2::aes(x=!!x, y = !!y)) +
-    eval(geom_function_expr)(
-      ggplot2::aes(
+    rlang::inject(eval(geom_function_expr)(
+        ggplot2::aes(
         group = {{ group }},
         fill = {{ aes_fill }},
         col = {{ aes_col }},
-      ), ...) +
+      ), !!!dots )) +
     ribbon +
     # Scales --------------------------------------------------------------
+    jco_color_scheme +
     ggplot2::scale_y_continuous(
       trans = y.scale,
       breaks = y.axis.breaks,

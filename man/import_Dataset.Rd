@@ -6,7 +6,7 @@
 \alias{import}
 \title{Import a light logger dataset or related data}
 \format{
-An object of class \code{list} of length 7.
+An object of class \code{list} of length 10.
 }
 \usage{
 import_Dataset(device, ...)
@@ -58,7 +58,9 @@ without file extension.
 of the \code{dataset}, this \code{character} scalar will be used. \strong{We discourage the
 use of this arguments when importing more than one file}
 \item \code{locale}: The locale controls defaults that vary from place to place.
-\item \code{...}: supply additional arguments to the \link{readr} import functions, like \code{na}. Might also be used to supply arguments to the specific import functions, like \code{column_names} for \code{Actiwatch_Spectrum} devices. Those devices will alway throw a helpful error message if you forget to supply the necessary arguments.
+\item \code{dst_adjustment}: If a file crosses daylight savings time, but the device does not adjust time stamps accordingly, you can set this argument to \code{TRUE}, to apply this shift manually. It is selective, so it will only be done in files that cross between DST and standard time. Default is \code{FALSE}. Uses \code{dst_change_handler()} to do the adjustment. Look there for more infos. It is not equipped to handle two jumps in one file (so back and forth between DST and standard time), but will work fine if jums occur in separate files.
+\item \code{auto.plot}: a logical on whether to call \code{\link[=gg_overview]{gg_overview()}} after import. Default is \code{TRUE}.
+\item \code{...}: supply additional arguments to the \link{readr} import functions, like \code{na}. Might also be used to supply arguments to the specific import functions, like \code{column_names} for \code{Actiwatch_Spectrum} devices. Those devices will always throw a helpful error message if you forget to supply the necessary arguments.
 If the \code{Id} column is already part of the \code{dataset} it will just use
 this column. If the column is not present it will add this column and fill
 it with the filename of the importfile (see param \code{auto.id}).
@@ -74,9 +76,10 @@ just work out of the box. To get an overview, you can simply call the
 is maintained.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{supported.devices
-#> [1] "Actiwatch_Spectrum" "ActLumus"           "DeLux"             
-#> [4] "LiDo"               "LYS"                "Speccy"            
-#> [7] "SpectraWear"
+#>  [1] "Actiwatch_Spectrum" "ActLumus"           "ActTrust"          
+#>  [4] "DeLux"              "LiDo"               "LightWatcher"      
+#>  [7] "LYS"                "nanoLambda"         "Speccy"            
+#> [10] "SpectraWear"
 }\if{html}{\out{</div>}}
 \subsection{ActLumus}{
 
@@ -91,11 +94,36 @@ A sample file is provided with the package, it can be accessed
 through \code{system.file("extdata/sample_data_LYS.csv", package = "LightLogR")}. This sample file is a good example for an irregular dataset.
 }
 
-\subsection{Actiwatch_Spectrum:}{
+\subsection{Actiwatch_Spectrum}{
 
 \strong{Required Argument: \code{column_names}} A character vector containing column
 names in the order in which they appear in the file. This is necessary to
 find the starting point of actual data.
+}
+
+\subsection{ActTrust}{
+
+This function works for both ActTrust 1 and 2 devices
+}
+
+\subsection{Speccy}{
+
+.
+}
+
+\subsection{DeLux}{
+
+.
+}
+
+\subsection{LiDo}{
+
+.
+}
+
+\subsection{SpectraWear}{
+
+.
 }
 }
 
@@ -110,13 +138,16 @@ The import functions provide a basic overview of the data after import,
 such as the intervals between measurements or the start and end dates.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{filepath <- system.file("extdata/sample_data_LYS.csv", package = "LightLogR")
-dataset <- import_Dataset("LYS", filepath)
-#> Successfully read in 11422 observations from LYS-file
+dataset <- import_Dataset("LYS", filepath, auto.plot = FALSE)
+#> 
+#> Successfully read in 11'422 observations across 1 Ids from 1 LYS-file(s).
 #> Timezone set is UTC.
-#> The system timezone is Europe/Zurich. Please correct if necessary!
-#> Start: 2023-06-21 00:00:12
-#> End: 2023-06-22 23:59:48
+#> The system timezone is Europe/Berlin. Please correct if necessary!
+#> 
+#> First Observation: 2023-06-21 00:00:12
+#> Last Observation: 2023-06-22 23:59:48
 #> Timespan: 2 days
+#> 
 #> Observation intervals: 
 #>   Id              interval.time     n pct    
 #> 1 sample_data_LYS 15s           10015 87.689\%
@@ -128,68 +159,38 @@ dataset <- import_Dataset("LYS", filepath)
 Import functions can also be called directly:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{filepath <- system.file("extdata/205_actlumus_Log_1020_20230904101707532.txt.zip", package = "LightLogR")
-dataset <- import$ActLumus(filepath)
-#> Successfully read in 61016 observations from ActLumus-file
+dataset <- import$ActLumus(filepath, auto.plot = FALSE)
+#> 
+#> Successfully read in 61'016 observations across 1 Ids from 1 ActLumus-file(s).
 #> Timezone set is UTC.
-#> The system timezone is Europe/Zurich. Please correct if necessary!
-#> Start: 2023-08-28 08:47:54
-#> End: 2023-09-04 10:17:04
+#> The system timezone is Europe/Berlin. Please correct if necessary!
+#> 
+#> First Observation: 2023-08-28 08:47:54
+#> Last Observation: 2023-09-04 10:17:04
 #> Timespan: 7.1 days
+#> 
 #> Observation intervals: 
 #>   Id                                          interval.time     n pct  
 #> 1 205_actlumus_Log_1020_20230904101707532.txt 10s           61015 100\%
+dataset \%>\% gg_days()
 }\if{html}{\out{</div>}}
+
+\figure{unnamed-chunk-1-1.png}
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{dataset \%>\%
 dplyr::select(Datetime, TEMPERATURE, LIGHT, MEDI, Id) \%>\%
-dplyr::slice(1500:1505) \%>\%
-flextable::flextable() \%>\%
-flextable::autofit()
-}\if{html}{\out{</div>}}\if{html}{\out{
-<div class="tabwid"><style>.cl-c1917abc\{\}.cl-c18d9672\{font-family:'Helvetica';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;\}.cl-c18f391e\{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;\}.cl-c18f3928\{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;\}.cl-c18f4396\{width:1.704in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;\}.cl-c18f4397\{width:1.44in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;\}.cl-c18f43be\{width:0.752in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;\}.cl-c18f43bf\{width:3.734in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;\}.cl-c18f43c8\{width:1.704in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;\}.cl-c18f43d2\{width:1.44in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;\}.cl-c18f43d3\{width:0.752in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;\}.cl-c18f43dc\{width:3.734in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;\}.cl-c18f43dd\{width:1.704in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;\}.cl-c18f43e6\{width:1.44in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;\}.cl-c18f43e7\{width:0.752in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;\}.cl-c18f43f0\{width:3.734in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;\}.tabwid \{
-  font-size: initial;
-  padding-bottom: 1em;
-\}
-}}
-
-
-.tabwid table{
-border-spacing:0px !important;
-border-collapse:collapse;
-line-height:1;
-margin-left:auto;
-margin-right:auto;
-border-width: 0;
-border-color: transparent;
-caption-side: top;
-}
-.tabwid-caption-bottom table{
-caption-side: bottom;
-}
-.tabwid_left table{
-margin-left:0;
-}
-.tabwid_right table{
-margin-right:0;
-}
-.tabwid td, .tabwid th {
-padding: 0;
-}
-.tabwid a {
-text-decoration: none;
-}
-.tabwid thead {
-background-color: transparent;
-}
-.tabwid tfoot {
-background-color: transparent;
-}
-.tabwid table tr {
-background-color: transparent;
-}
-.katex-display {
-margin: 0 0 !important;
-}\if{html}{\out{</style>}}\if{html}{\out{<table data-quarto-disable-processing='true' class='cl-c1917abc'>}}\if{html}{\out{<thead>}}\if{html}{\out{<tr style="overflow-wrap:break-word;">}}\if{html}{\out{<th class="cl-c18f4396">}}\if{html}{\out{<p class="cl-c18f391e">}}\if{html}{\out{<span class="cl-c18d9672">}}Datetime\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</th>}}\if{html}{\out{<th class="cl-c18f4397">}}\if{html}{\out{<p class="cl-c18f391e">}}\if{html}{\out{<span class="cl-c18d9672">}}TEMPERATURE\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</th>}}\if{html}{\out{<th class="cl-c18f43be">}}\if{html}{\out{<p class="cl-c18f391e">}}\if{html}{\out{<span class="cl-c18d9672">}}LIGHT\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</th>}}\if{html}{\out{<th class="cl-c18f43be">}}\if{html}{\out{<p class="cl-c18f391e">}}\if{html}{\out{<span class="cl-c18d9672">}}MEDI\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</th>}}\if{html}{\out{<th class="cl-c18f43bf">}}\if{html}{\out{<p class="cl-c18f3928">}}\if{html}{\out{<span class="cl-c18d9672">}}Id\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</th>}}\if{html}{\out{</tr>}}\if{html}{\out{</thead>}}\if{html}{\out{<tbody>}}\if{html}{\out{<tr style="overflow-wrap:break-word;">}}\if{html}{\out{<td class="cl-c18f43c8">}}\if{html}{\out{<p class="cl-c18f391e">}}\if{html}{\out{<span class="cl-c18d9672">}}2023-08-28 12:57:44\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-c18f43d2">}}\if{html}{\out{<p class="cl-c18f391e">}}\if{html}{\out{<span class="cl-c18d9672">}}26.88\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-c18f43d3">}}\if{html}{\out{<p class="cl-c18f391e">}}\if{html}{\out{<span class="cl-c18d9672">}}211.74\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-c18f43d3">}}\if{html}{\out{<p class="cl-c18f391e">}}\if{html}{\out{<span class="cl-c18d9672">}}202.08\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-c18f43dc">}}\if{html}{\out{<p class="cl-c18f3928">}}\if{html}{\out{<span class="cl-c18d9672">}}205_actlumus_Log_1020_20230904101707532.txt\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{</tr>}}\if{html}{\out{<tr style="overflow-wrap:break-word;">}}\if{html}{\out{<td class="cl-c18f43c8">}}\if{html}{\out{<p class="cl-c18f391e">}}\if{html}{\out{<span class="cl-c18d9672">}}2023-08-28 12:57:54\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-c18f43d2">}}\if{html}{\out{<p class="cl-c18f391e">}}\if{html}{\out{<span class="cl-c18d9672">}}26.88\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-c18f43d3">}}\if{html}{\out{<p class="cl-c18f391e">}}\if{html}{\out{<span class="cl-c18d9672">}}208.03\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-c18f43d3">}}\if{html}{\out{<p class="cl-c18f391e">}}\if{html}{\out{<span class="cl-c18d9672">}}198.66\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-c18f43dc">}}\if{html}{\out{<p class="cl-c18f3928">}}\if{html}{\out{<span class="cl-c18d9672">}}205_actlumus_Log_1020_20230904101707532.txt\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{</tr>}}\if{html}{\out{<tr style="overflow-wrap:break-word;">}}\if{html}{\out{<td class="cl-c18f43c8">}}\if{html}{\out{<p class="cl-c18f391e">}}\if{html}{\out{<span class="cl-c18d9672">}}2023-08-28 12:58:04\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-c18f43d2">}}\if{html}{\out{<p class="cl-c18f391e">}}\if{html}{\out{<span class="cl-c18d9672">}}26.88\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-c18f43d3">}}\if{html}{\out{<p class="cl-c18f391e">}}\if{html}{\out{<span class="cl-c18d9672">}}204.85\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-c18f43d3">}}\if{html}{\out{<p class="cl-c18f391e">}}\if{html}{\out{<span class="cl-c18d9672">}}195.55\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-c18f43dc">}}\if{html}{\out{<p class="cl-c18f3928">}}\if{html}{\out{<span class="cl-c18d9672">}}205_actlumus_Log_1020_20230904101707532.txt\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{</tr>}}\if{html}{\out{<tr style="overflow-wrap:break-word;">}}\if{html}{\out{<td class="cl-c18f43c8">}}\if{html}{\out{<p class="cl-c18f391e">}}\if{html}{\out{<span class="cl-c18d9672">}}2023-08-28 12:58:14\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-c18f43d2">}}\if{html}{\out{<p class="cl-c18f391e">}}\if{html}{\out{<span class="cl-c18d9672">}}26.81\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-c18f43d3">}}\if{html}{\out{<p class="cl-c18f391e">}}\if{html}{\out{<span class="cl-c18d9672">}}203.59\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-c18f43d3">}}\if{html}{\out{<p class="cl-c18f391e">}}\if{html}{\out{<span class="cl-c18d9672">}}194.36\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-c18f43dc">}}\if{html}{\out{<p class="cl-c18f3928">}}\if{html}{\out{<span class="cl-c18d9672">}}205_actlumus_Log_1020_20230904101707532.txt\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{</tr>}}\if{html}{\out{<tr style="overflow-wrap:break-word;">}}\if{html}{\out{<td class="cl-c18f43c8">}}\if{html}{\out{<p class="cl-c18f391e">}}\if{html}{\out{<span class="cl-c18d9672">}}2023-08-28 12:58:24\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-c18f43d2">}}\if{html}{\out{<p class="cl-c18f391e">}}\if{html}{\out{<span class="cl-c18d9672">}}26.88\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-c18f43d3">}}\if{html}{\out{<p class="cl-c18f391e">}}\if{html}{\out{<span class="cl-c18d9672">}}203.44\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-c18f43d3">}}\if{html}{\out{<p class="cl-c18f391e">}}\if{html}{\out{<span class="cl-c18d9672">}}194.42\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-c18f43dc">}}\if{html}{\out{<p class="cl-c18f3928">}}\if{html}{\out{<span class="cl-c18d9672">}}205_actlumus_Log_1020_20230904101707532.txt\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{</tr>}}\if{html}{\out{<tr style="overflow-wrap:break-word;">}}\if{html}{\out{<td class="cl-c18f43dd">}}\if{html}{\out{<p class="cl-c18f391e">}}\if{html}{\out{<span class="cl-c18d9672">}}2023-08-28 12:58:34\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-c18f43e6">}}\if{html}{\out{<p class="cl-c18f391e">}}\if{html}{\out{<span class="cl-c18d9672">}}26.81\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-c18f43e7">}}\if{html}{\out{<p class="cl-c18f391e">}}\if{html}{\out{<span class="cl-c18d9672">}}204.31\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-c18f43e7">}}\if{html}{\out{<p class="cl-c18f391e">}}\if{html}{\out{<span class="cl-c18d9672">}}195.30\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-c18f43f0">}}\if{html}{\out{<p class="cl-c18f3928">}}\if{html}{\out{<span class="cl-c18d9672">}}205_actlumus_Log_1020_20230904101707532.txt\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{</tr>}}\if{html}{\out{</tbody>}}\if{html}{\out{</table>}}\if{html}{\out{</div>}}
+dplyr::slice(1500:1505)
+#> # A tibble: 6 x 5
+#> # Groups:   Id [1]
+#>   Datetime            TEMPERATURE LIGHT  MEDI Id                                
+#>   <dttm>                    <dbl> <dbl> <dbl> <fct>                             
+#> 1 2023-08-28 12:57:44        26.9  212.  202. 205_actlumus_Log_1020_20230904101~
+#> 2 2023-08-28 12:57:54        26.9  208.  199. 205_actlumus_Log_1020_20230904101~
+#> 3 2023-08-28 12:58:04        26.9  205.  196. 205_actlumus_Log_1020_20230904101~
+#> 4 2023-08-28 12:58:14        26.8  204.  194. 205_actlumus_Log_1020_20230904101~
+#> 5 2023-08-28 12:58:24        26.9  203.  194. 205_actlumus_Log_1020_20230904101~
+#> 6 2023-08-28 12:58:34        26.8  204.  195. 205_actlumus_Log_1020_20230904101~
+}\if{html}{\out{</div>}}
 }
 }
 

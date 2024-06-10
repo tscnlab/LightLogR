@@ -7,11 +7,12 @@
 aggregate_Datetime(
   dataset,
   Datetime.colname = Datetime,
-  unit = "none",
+  unit = "dominant.epoch",
+  type = c("round", "floor", "ceiling"),
   numeric.handler = mean,
-  character.handler = function(x) names(which.max(table(x))),
+  character.handler = function(x) names(which.max(table(x, useNA = "ifany"))),
   logical.handler = function(x) mean(x) >= 0.5,
-  factor.handler = function(x) factor(names(which.max(table(x)))),
+  factor.handler = function(x) factor(names(which.max(table(x, useNA = "ifany")))),
   ...
 )
 }
@@ -24,7 +25,10 @@ by \link{LightLogR}, take care to choose a sensible variable for the
 \code{"Datetime"} which is automatically correct for data imported with
 \link{LightLogR}. Expects a \code{symbol}. Needs to be part of the \code{dataset}.}
 
-\item{unit}{Unit of binning. See \code{\link[lubridate:round_date]{lubridate::round_date()}} for examples.}
+\item{unit}{Unit of binning. See \code{\link[lubridate:round_date]{lubridate::round_date()}} for examples. The default is \code{"dominant.epoch"}, which means everything will be aggregated to the most common interval. This is especially useful for slightly irregular data, but can be computationally expensive. \code{"none"} will not aggregate the data at all.}
+
+\item{type}{One of \code{"round"}(the default), \code{"ceiling"} or \code{"floor"}. Setting
+chooses the relevant function from \link{lubridate}.}
 
 \item{numeric.handler, character.handler, logical.handler, factor.handler}{functions that handle the respective data types. The default handlers calculate the \code{mean} for \code{numeric} and the \code{mode} for \code{character}, \code{factor} and \code{logical} types.}
 
@@ -34,7 +38,7 @@ by \link{LightLogR}, take care to choose a sensible variable for the
 A \code{tibble} with aggregated \code{Datetime} data. Usually the number of rows will be smaller than the input \code{dataset}. If the handler arguments capture all column types, the number of columns will be the same as in the input \code{dataset}.
 }
 \description{
-Condenses a \code{dataset} by aggregating the data to a given (shorter) interval \code{unit}. \code{\link[=aggregate_Datetime]{aggregate_Datetime()}} is opinionated in the sense that it sets default handlers for each data type of \code{numeric}, \code{character}, \code{logical}, and \code{factor}. These can be overwritten by the user. Columns that do not fall into one of these categories need to be handled individually by the user (\code{...} argument) or will be removed during aggregation.
+Condenses a \code{dataset} by aggregating the data to a given (shorter) interval \code{unit}. \code{\link[=aggregate_Datetime]{aggregate_Datetime()}} is opinionated in the sense that it sets default handlers for each data type of \code{numeric}, \code{character}, \code{logical}, and \code{factor}. These can be overwritten by the user. Columns that do not fall into one of these categories need to be handled individually by the user (\code{...} argument) or will be removed during aggregation. If no unit is specified the data will simply be aggregated to the most common interval (\code{dominant.epoch}), which is most often not an aggregation but a rounding.)
 }
 \examples{
 #dominant epoch without aggregation

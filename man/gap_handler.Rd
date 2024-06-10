@@ -8,7 +8,7 @@ gap_handler(
   dataset,
   Datetime.colname = Datetime,
   epoch = "dominant.epoch",
-  behavior = "full_sequence",
+  behavior = c("full_sequence", "regulars", "irregulars", "gaps"),
   full.days = FALSE
 )
 }

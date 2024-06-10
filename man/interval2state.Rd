@@ -66,6 +66,8 @@ participant's \code{Id}.
 library(tibble)
 library(dplyr)
 library(lubridate)
+library(rlang)
+library(purrr)
 states <- tibble::tibble(Datetime = c("2023-08-15 6:00:00",
                                       "2023-08-15 23:00:00",
                                       "2023-08-16 6:00:00",
@@ -79,6 +81,8 @@ states <- tibble::tibble(Datetime = c("2023-08-15 6:00:00",
                                       "2023-08-20 6:00:00",
                                       "2023-08-20 22:00:00"),
                          State = rep(c("wake", "sleep"), 6),
+                         Wear = rep(c("wear", "no wear"), 6),
+                         Performance = rep(c(100, 0), 6),
                          Id = "Participant")
 intervals <- sc2interval(states)
 
@@ -87,11 +91,38 @@ dataset_with_states <-
 sample.data.environment \%>\%
 interval2state(State.interval.dataset = intervals)
 
-#visualize the states - note that the states are only added to the respective ID in the dataset?
+#visualize the states - note that the states are only added to the respective ID in the dataset
 library(ggplot2)
 ggplot(dataset_with_states, aes(x = Datetime, y = MEDI, color = State)) +
  geom_point() +
  facet_wrap(~Id, ncol = 1)
 
+#import multiple State columns from the interval dataset
+#interval2state will only add a single State column to the dataset, 
+#which represents sleep/wake in our case
+dataset_with_states[8278:8283,]
 
+#if we want to add multiple columns we can either perfom the function 
+#multiple times with different states:
+dataset_with_states2 <- 
+dataset_with_states \%>\%
+interval2state(State.interval.dataset = intervals, State.colname = Wear)
+dataset_with_states2[8278:8283,]
+
+#or we can use `purrr::reduce` to add multiple columns at once
+dataset_with_states3 <-
+syms(c("State", "Wear", "Performance")) \%>\% 
+reduce(\(x,y) interval2state(x, State.interval.dataset = intervals, State.colname = !!y), 
+.init = sample.data.environment)
+
+#Note: 
+# - the State.colnames have to be provided as symbols (`rlang::syms`)
+# - the reduce function requires a two argument function `\(x,y)`, where `x` 
+#   is the dataset to be continiously modified and `y` is the symbol of the
+#   State column name to be added
+# - the `!!` operator from `rlang` is used to exchange `y` with each symbol
+# - the `.init` argument is the initial dataset to be modified
+
+#this results in all states being applied
+dataset_with_states3[8278:8283,]
 }

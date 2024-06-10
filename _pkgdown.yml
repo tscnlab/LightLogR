@@ -14,6 +14,7 @@ reference:
     - import_Dataset
     - import
     - import_Statechanges
+    - import_adjustment
   
   - title: Insight
     desc: >
@@ -25,6 +26,7 @@ reference:
     - dominant_epoch
     - gapless_Datetimes
     - gap_finder
+    - dst_change_summary
   
   - title: Validate & Process
     desc: >
@@ -41,6 +43,7 @@ reference:
     - filter_Date
     - filter_Time
     - join_datasets
+    - dst_change_handler
   
   - title: Expand
     desc: >
@@ -66,7 +69,7 @@ reference:
 
   - title: Metrics
     desc: >
-      This section includes functions to calculate light exposure metrics .
+      This section includes functions to calculate light exposure metrics.
     contents:
     - barroso_lighting_metrics
     - bright_dark_period
@@ -103,3 +106,4 @@ reference:
     contents:
     - sample.data.environment
     - supported.devices
+    - ll_import_expr
