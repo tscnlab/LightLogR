@@ -11,12 +11,13 @@ nvRD(MEDI.vector, Illuminance.vector, Time.vector, epoch = "dominant.epoch")
 
 \item{Illuminance.vector}{Numeric vector containing the Illuminance data.}
 
-\item{Time.vector}{Vector containing the time data. Can be numeric, HMS or POSIXct.}
+\item{Time.vector}{Vector containing the time data. Can be \link[base]{POSIXct}, \link[hms]{hms},
+\link[lubridate]{duration}, or \link[base]{difftime}.}
 
 \item{epoch}{The epoch at which the data was sampled. Can be either a
-\code{lubridate::duration()} or a string. If it is a string, it needs to be
+\link[lubridate]{duration} or a string. If it is a string, it needs to be
 either \code{"dominant.epoch"} (the default) for a guess based on the data, or a valid
-\code{lubridate::duration()} string, e.g., \code{"1 day"} or \code{"10 sec"}.}
+\link[lubridate]{duration} string, e.g., \code{"1 day"} or \code{"10 sec"}.}
 }
 \value{
 A numeric vector containing the nvRD data. The output has the same
@@ -125,11 +126,16 @@ Other metrics:
 \code{\link{centroidLE}()},
 \code{\link{disparity_index}()},
 \code{\link{duration_above_threshold}()},
+\code{\link{exponential_moving_average}()},
+\code{\link{frequency_crossing_threshold}()},
 \code{\link{interdaily_stability}()},
 \code{\link{intradaily_variability}()},
 \code{\link{midpointCE}()},
 \code{\link{nvRC}()},
 \code{\link{nvRD_cumulative_response}()},
+\code{\link{period_above_threshold}()},
+\code{\link{pulses_above_threshold}()},
+\code{\link{threshold_for_duration}()},
 \code{\link{timing_above_threshold}()}
 }
 \concept{metrics}

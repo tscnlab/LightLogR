@@ -7,16 +7,17 @@
 midpointCE(Light.vector, Time.vector, na.rm = FALSE, as.df = FALSE)
 }
 \arguments{
-\item{Light.vector}{Numeric vector containing the light data. Missing values are
-replaced with 0.}
+\item{Light.vector}{Numeric vector containing the light data.}
 
-\item{Time.vector}{Vector containing the time data. Can be numeric, HMS or POSIXct.}
+\item{Time.vector}{Vector containing the time data. Can be \link[base]{POSIXct}, \link[hms]{hms},
+\link[lubridate]{duration}, or \link[base]{difftime}.}
 
-\item{na.rm}{Logical. Should missing values be removed for the calculation?
+\item{na.rm}{Logical. Should missing values be removed for the calculation? If \code{TRUE},
+missing values will be replaced by zero. Defaults to \code{FALSE}.}
+
+\item{as.df}{Logical. Should the output be returned as a data frame? If \code{TRUE}, a data
+frame with a single column named \code{midpointCE} will be returned.
 Defaults to \code{FALSE}.}
-
-\item{as.df}{Logical. Should the output be returned as a data frame? Defaults
-to \code{FALSE}.}
 }
 \value{
 Single column data frame or vector.
@@ -26,7 +27,6 @@ This function calculates the timing corresponding to half of the cumulative
 light exposure within the given time series.
 }
 \examples{
-# Dataset with POSIXct time vector
 dataset1 <-
   tibble::tibble(
     Id = rep("A", 24),
@@ -50,11 +50,11 @@ dataset2 \%>\%
     "Midpoint of cmulative exposure" = midpointCE(MEDI, Time)
   )
 
-# Dataset with numeric time vector
+# Dataset with duration time vector
 dataset3 <-
   tibble::tibble(
     Id = rep("A", 24),
-    Hour = 0:23,
+    Hour = lubridate::duration(0:23, "hours"),
     MEDI = c(rep(1, 6), rep(250, 13), rep(1, 5))
   )
 dataset3 \%>\%
@@ -79,11 +79,16 @@ Other metrics:
 \code{\link{centroidLE}()},
 \code{\link{disparity_index}()},
 \code{\link{duration_above_threshold}()},
+\code{\link{exponential_moving_average}()},
+\code{\link{frequency_crossing_threshold}()},
 \code{\link{interdaily_stability}()},
 \code{\link{intradaily_variability}()},
 \code{\link{nvRC}()},
 \code{\link{nvRD}()},
 \code{\link{nvRD_cumulative_response}()},
+\code{\link{period_above_threshold}()},
+\code{\link{pulses_above_threshold}()},
+\code{\link{threshold_for_duration}()},
 \code{\link{timing_above_threshold}()}
 }
 \concept{metrics}

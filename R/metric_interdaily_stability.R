@@ -10,8 +10,9 @@
 #' @param Light.vector Numeric vector containing the light data.
 #' @param Datetime.vector Vector containing the time data. Must be POSIXct.
 #' @param na.rm Logical. Should missing values be removed? Defaults to `FALSE`.
-#' @param as.df Logical. Should the output be returned as a data frame? Defaults
-#'    to `FALSE`.
+#' @param as.df Logical. Should the output be returned as a data frame? If `TRUE`, a data
+#'    frame with a single column named `interdaily_stability` will be returned.
+#'    Defaults to `FALSE`.
 #'
 #' @return Numeric value or dataframe with column 'IS'.
 #' 
@@ -53,6 +54,8 @@ interdaily_stability <- function(Light.vector,
   stopifnot(
     "`Light.vector` must be numeric!" = is.numeric(Light.vector),
     "`Datetime.vector` must be POSIXct!" = lubridate::is.POSIXct(Datetime.vector),
+    "`Light.vector` and `Datetime.vector` must be same length!" = 
+      length(Light.vector) == length(Datetime.vector),
     "`na.rm` must be logical!" = is.logical(na.rm),
     "`as.df` must be logical!" = is.logical(as.df)
   )

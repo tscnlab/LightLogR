@@ -142,7 +142,7 @@ dataset <- import_Dataset("LYS", filepath, auto.plot = FALSE)
 #> 
 #> Successfully read in 11'422 observations across 1 Ids from 1 LYS-file(s).
 #> Timezone set is UTC.
-#> The system timezone is Europe/Berlin. Please correct if necessary!
+#> The system timezone is Europe/Zurich. Please correct if necessary!
 #> 
 #> First Observation: 2023-06-21 00:00:12
 #> Last Observation: 2023-06-22 23:59:48
@@ -163,7 +163,7 @@ dataset <- import$ActLumus(filepath, auto.plot = FALSE)
 #> 
 #> Successfully read in 61'016 observations across 1 Ids from 1 ActLumus-file(s).
 #> Timezone set is UTC.
-#> The system timezone is Europe/Berlin. Please correct if necessary!
+#> The system timezone is Europe/Zurich. Please correct if necessary!
 #> 
 #> First Observation: 2023-08-28 08:47:54
 #> Last Observation: 2023-09-04 10:17:04

@@ -18,8 +18,9 @@ interdaily_stability(
 
 \item{na.rm}{Logical. Should missing values be removed? Defaults to \code{FALSE}.}
 
-\item{as.df}{Logical. Should the output be returned as a data frame? Defaults
-to \code{FALSE}.}
+\item{as.df}{Logical. Should the output be returned as a data frame? If \code{TRUE}, a data
+frame with a single column named \code{interdaily_stability} will be returned.
+Defaults to \code{FALSE}.}
 }
 \value{
 Numeric value or dataframe with column 'IS'.
@@ -67,11 +68,16 @@ Other metrics:
 \code{\link{centroidLE}()},
 \code{\link{disparity_index}()},
 \code{\link{duration_above_threshold}()},
+\code{\link{exponential_moving_average}()},
+\code{\link{frequency_crossing_threshold}()},
 \code{\link{intradaily_variability}()},
 \code{\link{midpointCE}()},
 \code{\link{nvRC}()},
 \code{\link{nvRD}()},
 \code{\link{nvRD_cumulative_response}()},
+\code{\link{period_above_threshold}()},
+\code{\link{pulses_above_threshold}()},
+\code{\link{threshold_for_duration}()},
 \code{\link{timing_above_threshold}()}
 }
 \concept{metrics}

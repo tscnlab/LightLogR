@@ -2,7 +2,7 @@
 % Please edit documentation in R/metric_duration_above_threshold.R
 \name{duration_above_threshold}
 \alias{duration_above_threshold}
-\title{Time above/below threshold or within threshold range}
+\title{Duration above/below threshold or within threshold range}
 \usage{
 duration_above_threshold(
   Light.vector,
@@ -17,7 +17,8 @@ duration_above_threshold(
 \arguments{
 \item{Light.vector}{Numeric vector containing the light data.}
 
-\item{Time.vector}{Vector containing the time data. Can be numeric, HMS or POSIXct.}
+\item{Time.vector}{Vector containing the time data. Can be \link[base]{POSIXct}, \link[hms]{hms},
+\link[lubridate]{duration}, or \link[base]{difftime}.}
 
 \item{comparison}{String specifying whether the time above or below threshold
 should be calculated. Can be either \code{"above"} (the default) or \code{"below"}. If
@@ -28,27 +29,26 @@ threshold light level(s) to compare with. If a vector with two values is provide
 the time within the two thresholds will be calculated.}
 
 \item{epoch}{The epoch at which the data was sampled. Can be either a
-\code{lubridate::duration()} or a string. If it is a string, it needs to be
+\link[lubridate]{duration} or a string. If it is a string, it needs to be
 either \code{"dominant.epoch"} (the default) for a guess based on the data, or a valid
-\code{lubridate::duration()} string, e.g., \code{"1 day"} or \code{"10 sec"}.}
+\link[lubridate]{duration} string, e.g., \code{"1 day"} or \code{"10 sec"}.}
 
 \item{na.rm}{Logical. Should missing values (NA) be removed for the calculation?
 Defaults to \code{FALSE}.}
 
 \item{as.df}{Logical. Should a data frame with be returned? If \code{TRUE}, a data
-frame with a single column named \verb{TAT_\{threshold\}} will be returned.
+frame with a single column named \verb{duration_\{comparison\}_\{threshold\}} will be returned.
 Defaults to \code{FALSE}.}
 }
 \value{
-A duration object (see \code{\link[lubridate]{duration}}) as single value,
-or single column data frame.
+A \link[lubridate]{duration} object as single value, or single column data frame.
 }
 \description{
-This function calculates the time spent above/below a specified threshold
+This function calculates the duration spent above/below a specified threshold
 light level or within a specified range of light levels.
 }
 \examples{
-N <- 50
+N <- 60
 # Dataset with epoch = 1min
 dataset1 <-
   tibble::tibble(
@@ -87,12 +87,17 @@ Other metrics:
 \code{\link{bright_dark_period}()},
 \code{\link{centroidLE}()},
 \code{\link{disparity_index}()},
+\code{\link{exponential_moving_average}()},
+\code{\link{frequency_crossing_threshold}()},
 \code{\link{interdaily_stability}()},
 \code{\link{intradaily_variability}()},
 \code{\link{midpointCE}()},
 \code{\link{nvRC}()},
 \code{\link{nvRD}()},
 \code{\link{nvRD_cumulative_response}()},
+\code{\link{period_above_threshold}()},
+\code{\link{pulses_above_threshold}()},
+\code{\link{threshold_for_duration}()},
 \code{\link{timing_above_threshold}()}
 }
 \concept{metrics}

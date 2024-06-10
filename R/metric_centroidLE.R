@@ -4,16 +4,16 @@
 #' time vector weighted in proportion to the corresponding binned light intensity.
 #'
 #' @param Light.vector Numeric vector containing the light data.
-#' @param Time.vector Vector containing the time data. Can be numeric, HMS or POSIXct.
+#' @param Time.vector Vector containing the time data. Can be \link[base]{POSIXct}, \link[hms]{hms}, 
+#'    \link[lubridate]{duration}, or \link[base]{difftime}.
 #' @param bin.size Value specifying size of bins to average the light data over.
-#'    If `Time.vector` is of type POSIXct or HMS, `bin.size` must be either a 
-#'    `lubridate::duration()` or a `lubridate::duration()` string, e.g., 
-#'    `"1 day"` or `"10 sec"`. Otherwise, if `Time.vector` is numeric, `bin.size` 
-#'    must be also numeric. If nothing is provided, no binning will be performed.
+#'    Must be either a \link[lubridate]{duration} or a \link[lubridate]{duration} string, e.g., 
+#'    `"1 day"` or `"10 sec"`. If nothing is provided, no binning will be performed.
 #' @param na.rm Logical. Should missing values be removed for the calculation?
 #'    Defaults to `FALSE`.
-#' @param as.df Logical. Should the output be returned as a data frame? Defaults
-#'    to `FALSE`.
+#' @param as.df Logical. Should the output be returned as a data frame? If `TRUE`, a data
+#'    frame with a single column named `centroidLE` will be returned.
+#'    Defaults to `FALSE`.
 #'
 #' @return Single column data frame or vector.
 #' 
@@ -44,7 +44,7 @@
 #'     "Centroid of light exposure" = centroidLE(MEDI, Datetime, "2 hours")
 #'   )
 #' 
-#' # Dataset with HMS time vector
+#' # Dataset with hms time vector
 #' dataset2 <-
 #'   tibble::tibble(
 #'     Id = rep("A", 24),
@@ -56,16 +56,16 @@
 #'     "Centroid of light exposure" = centroidLE(MEDI, Time, "2 hours")
 #'   )
 #' 
-#' # Dataset with numeric time vector
+#' # Dataset with duration time vector
 #' dataset3 <-
 #'   tibble::tibble(
 #'     Id = rep("A", 24),
-#'     Hour = 0:23,
+#'     Hour = lubridate::duration(0:23, "hours"),
 #'     MEDI = c(rep(1, 6), rep(250, 13), rep(1, 5))
 #'   )
 #' dataset3 %>%
 #'   dplyr::reframe(
-#'     "Centroid of light exposure" = centroidLE(MEDI, Hour, 2)
+#'     "Centroid of light exposure" = centroidLE(MEDI, Hour, "2 hours")
 #'   )
 #' 
 centroidLE <- function(Light.vector,
@@ -77,28 +77,26 @@ centroidLE <- function(Light.vector,
   # Perform argument checks
   stopifnot(
     "`Light.vector` must be numeric!" = is.numeric(Light.vector),
-    "`Time.vector` must be numeric, HMS, or POSIXct" =
-      is.numeric(Time.vector) | hms::is_hms(Time.vector) | lubridate::is.POSIXct(Time.vector),
+    "`Time.vector` must be POSIXct, hms, duration, or difftime!" =
+      lubridate::is.POSIXct(Time.vector) | hms::is_hms(Time.vector) | 
+      lubridate::is.duration(Time.vector) | lubridate::is.difftime(Time.vector),
+    "`Light.vector` and `Time.vector` must be same length!" = 
+      length(Light.vector) == length(Time.vector),
     "`na.rm` must be logical!" = is.logical(na.rm),
     "`as.df` must be logical!" = is.logical(as.df)
   )
   if (!is.null(bin.size)) {
-    if (lubridate::is.POSIXct(Time.vector) | hms::is_hms(Time.vector)) {
-      stopifnot("`bin.size` must be a either a `lubridate::duration` object or `lubridate::duration` string, because `Time.vector` is HMS or POSIXct" = 
-                  !is.numeric(bin.size))
-      bin.size <- lubridate::duration(bin.size)
-      stopifnot("`bin.size` must be a either a `lubridate::duration` object or `lubridate::duration` string, because `Time.vector` is HMS or POSIXct" = 
-                  !is.na(bin.size) & lubridate::is.duration(bin.size))
-      bin.size <- lubridate::as.period(bin.size)
-    }
-    else {
-      stopifnot("`bin.size` must be numeric because `Time.vector` is numeric" = 
-                  is.numeric(bin.size))
-    }
+    stopifnot("`bin.size` must be a either a duration or a string" = 
+                lubridate::is.duration(bin.size) | is.character(bin.size))
+    bin.size <- lubridate::as.period(bin.size)
   }
   
   # Make tibble
   df <- tibble::tibble(Light = Light.vector, Time = Time.vector)
+  
+  if(na.rm){
+    df <- df %>% dplyr::filter(!is.na(Light))
+  }
   
   # Average into bins
   if(!is.null(bin.size)) {
@@ -115,25 +113,19 @@ centroidLE <- function(Light.vector,
         ) %>%
         dplyr::summarise(Light = mean(Light, na.rm = na.rm))
     }
-    if (is.numeric(Time.vector)) {
+    if (lubridate::is.duration(Time.vector) | lubridate::is.difftime(Time.vector)) {
       df <- df %>%
-        dplyr::group_by(Time = (Time - Time %% bin.size)) %>%
+        dplyr::group_by(Time = (as.numeric(Time) - as.numeric(Time) %% as.numeric(bin.size))) %>%
         dplyr::summarise(Light = mean(Light, na.rm = na.rm))
     }
   }
   
   # Calculate weighted mean
   weights <- (df$Light / sum(df$Light, na.rm = na.rm))
-  centroidLE <- sum(as.numeric(df$Time) * weights, na.rm = na.rm)
+  centroidLE <- sum(as.numeric(df$Time) * weights, na.rm = na.rm) %>% round()
   
-  # Convert to right time class
-  if(hms::is_hms(Time.vector)) {
-    centroidLE <- centroidLE %>% round() %>% hms::as_hms()
-  }
-  if(lubridate::is.POSIXct(Time.vector)){
-    centroidLE <- centroidLE %>% round() %>% 
-      lubridate::as_datetime(tz = lubridate::tz(Time.vector))
-  }
+  # Convert to corresponding time scale
+  centroidLE <- centroidLE %>% convert_to_timescale(Time.vector)
   
   # Return data frame or numeric vector
   if (as.df) {

@@ -1,10 +1,11 @@
-#' Time above/below threshold or within threshold range
+#' Duration above/below threshold or within threshold range
 #'
-#' This function calculates the time spent above/below a specified threshold
+#' This function calculates the duration spent above/below a specified threshold
 #' light level or within a specified range of light levels.
 #'
 #' @param Light.vector Numeric vector containing the light data.
-#' @param Time.vector Vector containing the time data. Can be numeric, HMS or POSIXct.
+#' @param Time.vector Vector containing the time data. Can be \link[base]{POSIXct}, \link[hms]{hms}, 
+#'    \link[lubridate]{duration}, or \link[base]{difftime}.
 #' @param comparison String specifying whether the time above or below threshold
 #'    should be calculated. Can be either `"above"` (the default) or `"below"`. If
 #'    two values are provided for `threshold`, this argument will be ignored.
@@ -12,17 +13,16 @@
 #'    threshold light level(s) to compare with. If a vector with two values is provided,
 #'    the time within the two thresholds will be calculated.
 #' @param epoch The epoch at which the data was sampled. Can be either a
-#'  `lubridate::duration()` or a string. If it is a string, it needs to be
+#'  \link[lubridate]{duration} or a string. If it is a string, it needs to be
 #'  either `"dominant.epoch"` (the default) for a guess based on the data, or a valid
-#'  `lubridate::duration()` string, e.g., `"1 day"` or `"10 sec"`.
+#'  \link[lubridate]{duration} string, e.g., `"1 day"` or `"10 sec"`.
 #' @param na.rm Logical. Should missing values (NA) be removed for the calculation?
 #'    Defaults to `FALSE`.
 #' @param as.df Logical. Should a data frame with be returned? If `TRUE`, a data
-#'    frame with a single column named `TAT_{threshold}` will be returned.
+#'    frame with a single column named `duration_{comparison}_{threshold}` will be returned.
 #'    Defaults to `FALSE`.
 #'
-#' @return A duration object (see \code{\link[lubridate]{duration}}) as single value,
-#'    or single column data frame.
+#' @return A \link[lubridate]{duration} object as single value, or single column data frame.
 #'    
 #' @references 
 #'   Hartmeyer, S.L., Andersen, M. (2023). Towards a framework for light-dosimetry studies:
@@ -34,7 +34,7 @@
 #' @family metrics
 #'
 #' @examples
-#' N <- 50
+#' N <- 60
 #' # Dataset with epoch = 1min
 #' dataset1 <-
 #'   tibble::tibble(
@@ -75,8 +75,11 @@ duration_above_threshold <- function(Light.vector,
   # Perform argument checks
   stopifnot(
     "`Light.vector` must be numeric!" = is.numeric(Light.vector),
-    "`Time.vector` must be numeric, HMS, or POSIXct" =
-      is.numeric(Time.vector) | hms::is_hms(Time.vector) | lubridate::is.POSIXct(Time.vector),
+    "`Time.vector` must be POSIXct, hms, duration, or difftime!" =
+      lubridate::is.POSIXct(Time.vector) | hms::is_hms(Time.vector) | 
+      lubridate::is.duration(Time.vector) | lubridate::is.difftime(Time.vector),
+    "`Light.vector` and `Time.vector` must be same length!" = 
+      length(Light.vector) == length(Time.vector),
     "`threshold` must be numeric!" = is.numeric(threshold),
     "`threshold` must be either one or two values!" = length(threshold) %in% c(1, 2),
     "`epoch` must either be a duration or a string" =
@@ -86,7 +89,7 @@ duration_above_threshold <- function(Light.vector,
   )
 
   # Get the epochs based on the data
-  if (epoch == "dominant.epoch") {
+  if (is.character(epoch) && epoch == "dominant.epoch") {
     epoch <- count_difftime(tibble::tibble(Datetime = Time.vector))$difftime[1]
   }
   # If the user specified an epoch, use that instead
@@ -102,6 +105,9 @@ duration_above_threshold <- function(Light.vector,
 
   # Return data frame or numeric value
   if (as.df) {
+    if(length(threshold) == 2){
+      comparison <- "within"
+    }
     threshold <- stringr::str_flatten(sort(threshold), collapse = "-")
     return(tibble::tibble("duration_{comparison}_{threshold}" := tat))
   } else {

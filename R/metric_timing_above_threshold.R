@@ -5,7 +5,8 @@
 #' time interval.
 #'
 #' @param Light.vector Numeric vector containing the light data.
-#' @param Time.vector Vector containing the time data. Can be numeric, HMS or POSIXct.
+#' @param Time.vector Vector containing the time data. Can be \link[base]{POSIXct}, 
+#'    \link[hms]{hms}, \link[lubridate]{duration}, or \link[base]{difftime}.
 #' @param comparison String specifying whether the time above or below threshold
 #'    should be calculated. Can be either `"above"` (the default) or `"below"`. If
 #'    two values are provided for `threshold`, this argument will be ignored.
@@ -15,7 +16,7 @@
 #'    calculated.
 #' @param na.rm Logical. Should missing values be removed for the calculation?
 #'    Defaults to `FALSE`.
-#' @param as.df Logical. Should a data frame with be returned? If `TRUE`, a data
+#' @param as.df Logical. Should a data frame be returned? If `TRUE`, a data
 #'    frame with three columns (MLiT, FLiT, LLiT) and the threshold (e.g., `MLiT_{threshold}`)
 #'    will be returned. Defaults to `FALSE`.
 #'
@@ -71,8 +72,11 @@ timing_above_threshold <- function(Light.vector,
   # Perform argument checks
   stopifnot(
     "`Light.vector` must be numeric!" = is.numeric(Light.vector),
-    "`Time.vector` must be numeric, HMS, or POSIXct" =
-      is.numeric(Time.vector) | hms::is_hms(Time.vector) | lubridate::is.POSIXct(Time.vector),
+    "`Time.vector` must be POSIXct, hms, duration, or difftime!" =
+      lubridate::is.POSIXct(Time.vector) | hms::is_hms(Time.vector) | 
+      lubridate::is.duration(Time.vector) | lubridate::is.difftime(Time.vector),
+    "`Light.vector` and `Time.vector` must be same length!" = 
+      length(Light.vector) == length(Time.vector),
     "`threshold` must be numeric!" = is.numeric(threshold),
     "`threshold` must be either one or two values!" = length(threshold) %in% c(1, 2),
     "`na.rm` must be logical!" = is.logical(na.rm),
@@ -85,14 +89,8 @@ timing_above_threshold <- function(Light.vector,
   flit = t %>% dplyr::first()
   llit = t %>% dplyr::last()
   
-  # Convert to HMS
-  if(hms::is_hms(Time.vector)) {
-    mlit <- mlit %>% hms::as_hms()
-  }
-  if(lubridate::is.POSIXct(Time.vector)){
-   mlit <- mlit %>% 
-    lubridate::as_datetime(tz = lubridate::tz(Time.vector))
-  }
+  # Convert to corresponding time scale
+  mlit <- mlit %>% convert_to_timescale(Time.vector)
   
   # Prepare output
   out <- list(
@@ -103,6 +101,9 @@ timing_above_threshold <- function(Light.vector,
 
   # Return data frame or list
   if (as.df) {
+    if(length(threshold) == 2){
+      comparison <- "within"
+    }
     threshold <- stringr::str_flatten(sort(threshold), collapse = "-")
     out <- tibble::as_tibble(out) %>%
       dplyr::rename_with(~paste(.x, "timing", comparison, threshold, sep = "_"))

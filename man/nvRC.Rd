@@ -17,12 +17,13 @@ nvRC(
 
 \item{Illuminance.vector}{Numeric vector containing the Illuminance data.}
 
-\item{Time.vector}{Vector containing the time data. Can be numeric, HMS or POSIXct.}
+\item{Time.vector}{Vector containing the time data. Can be \link[base]{POSIXct},
+\link[hms]{hms}, \link[lubridate]{duration}, or \link[base]{difftime}.}
 
 \item{epoch}{The epoch at which the data was sampled. Can be either a
-\code{lubridate::duration()} or a string. If it is a string, it needs to be
+\link[lubridate]{duration} or a string. If it is a string, it needs to be
 either \code{"dominant.epoch"} (the default) for a guess based on the data, or a valid
-\code{lubridate::duration()} string, e.g., \code{"1 day"} or \code{"10 sec"}.}
+\link[lubridate]{duration} string, e.g., \code{"1 day"} or \code{"10 sec"}.}
 
 \item{sleep.onset}{The time of habitual sleep onset. Can be HMS, numeric, or NULL.
 If NULL (the default), then the data is assumed to start at habitual sleep onset.
@@ -112,6 +113,7 @@ exposure, to determine the final output \eqn{r_{C}(t)}.
 responses.
 }
 \examples{
+
 dataset1 <-
   tibble::tibble(
     Id = rep("B", 60 * 48),
@@ -120,12 +122,20 @@ dataset1 <-
                     rep(0, 60*8), rep(sample(1:1000, 16, replace = TRUE), each = 60)),
     MEDI = Illuminance * rep(sample(0.5:1.5, 48, replace = TRUE), each = 60)
   )
-
+# Time.vector as POSIXct
 dataset1.nvRC <- dataset1 \%>\%
   dplyr::mutate(
     nvRC = nvRC(MEDI, Illuminance, Datetime, sleep.onset = hms::as_hms("22:00:00"))
   )
 
+# Time.vector as difftime
+dataset2 <- dataset1 \%>\% 
+  dplyr::mutate(Datetime = Datetime - lubridate::as_datetime(lubridate::dhours(22)))
+dataset2.nvRC <- dataset2 \%>\%
+  dplyr::mutate(
+    nvRC = nvRC(MEDI, Illuminance, Datetime, sleep.onset = lubridate::dhours(0))
+  )
+  
 }
 \references{
 Amundadottir, M.L. (2016). Light-driven model for identifying
@@ -139,11 +149,16 @@ Other metrics:
 \code{\link{centroidLE}()},
 \code{\link{disparity_index}()},
 \code{\link{duration_above_threshold}()},
+\code{\link{exponential_moving_average}()},
+\code{\link{frequency_crossing_threshold}()},
 \code{\link{interdaily_stability}()},
 \code{\link{intradaily_variability}()},
 \code{\link{midpointCE}()},
 \code{\link{nvRD}()},
 \code{\link{nvRD_cumulative_response}()},
+\code{\link{period_above_threshold}()},
+\code{\link{pulses_above_threshold}()},
+\code{\link{threshold_for_duration}()},
 \code{\link{timing_above_threshold}()}
 }
 \concept{metrics}

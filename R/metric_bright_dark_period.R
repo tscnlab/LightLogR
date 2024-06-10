@@ -7,16 +7,17 @@
 #' (i.e., no gaps) for correct results.
 #'
 #' @param Light.vector Numeric vector containing the light data.
-#' @param Time.vector Vector containing the time data. Can be HMS or POSIXct.
+#' @param Time.vector Vector containing the time data. Can be \link[base]{POSIXct}, 
+#'    \link[hms]{hms}, \link[lubridate]{duration}, or \link[base]{difftime}.
 #' @param period String indicating the type of period to look for. Can be either
 #'  `"brightest"`(the default) or `"darkest"`.
 #' @param timespan The timespan across which to calculate. Can be either a
-#'  `lubridate::duration()` or a `lubridate::duration()` string, e.g.,
+#'  \link[lubridate]{duration} or a \link[lubridate]{duration} string, e.g.,
 #'  `"1 day"` or `"10 sec"`.
 #' @param epoch The epoch at which the data was sampled. Can be either a
-#'  `lubridate::duration()` or a string. If it is a string, it needs to be
-#'  either `"dominant.epoch"` (the default) for a guess based on the data, or a valid
-#'  `lubridate::duration()` string, e.g., `"1 day"` or `"10 sec"`.
+#'    \link[lubridate]{duration} or a string. If it is a string, it needs to be
+#'    either `"dominant.epoch"` (the default) for a guess based on the data, or a valid
+#'    \link[lubridate]{duration} string, e.g., `"1 day"` or `"10 sec"`.
 #' @param loop Logical. Should the data be looped? If `TRUE`, a full copy of the data 
 #'    will be concatenated at the end of the data. Makes only sense for 24 h data.
 #'    Defaults to `FALSE`.
@@ -29,7 +30,7 @@
 #'    calculated brightest or darkest period, or if `as.df == TRUE` a data frame 
 #'    with columns named `{period}_{timespan}_{metric}`. The output type corresponds
 #'    to the type of `Time.vector`, e.g., if `Time.vector` is HMS, the timing metrics 
-#'    will be also HMS, and vice versa for POSIXct and numeric. 
+#'    will be also HMS, and vice versa for POSIXct.
 #'
 #' @details Assumes regular 24h light data. Otherwise, results may not be
 #'    meaningful. Looping the data is recommended for finding the darkest period.
@@ -44,7 +45,7 @@
 #' @family metrics
 #'
 #' @examples
-# Dataset with light > 250lx between 06:00 and 18:00
+#' # Dataset with light > 250lx between 06:00 and 18:00
 #' dataset1 <-
 #'   tibble::tibble(
 #'     Id = rep("A", 24),
@@ -58,7 +59,22 @@
 #' dataset1 %>%
 #'   dplyr::reframe(bright_dark_period(MEDI, Datetime, "darkest", "5 hours",
 #'     loop = TRUE, as.df = TRUE))
-
+#' 
+#' # Dataset with duration as Time.vector
+#' dataset2 <-
+#'   tibble::tibble(
+#'     Id = rep("A", 24),
+#'     Datetime = lubridate::dhours(0:23),
+#'     MEDI = c(rep(1, 6), rep(250, 13), rep(1, 5))
+#'   )
+#' 
+#' dataset2 %>%
+#'   dplyr::reframe(bright_dark_period(MEDI, Datetime, "brightest", "10 hours",
+#'                                     as.df = TRUE))
+#' dataset2 %>%
+#'   dplyr::reframe(bright_dark_period(MEDI, Datetime, "darkest", "5 hours",
+#'                                     loop = TRUE, as.df = TRUE))
+#' 
 bright_dark_period <- function(Light.vector,
                                Time.vector,
                                period = c("brightest", "darkest"),
@@ -73,8 +89,11 @@ bright_dark_period <- function(Light.vector,
   # Perform argument checks
   stopifnot(
     "`Light.vector` must be numeric!" = is.numeric(Light.vector),
-    "`Time.vector` must be POSIXct or HMS" = lubridate::is.POSIXct(Time.vector) | 
-      hms::is_hms(Time.vector),
+    "`Time.vector` must be POSIXct, hms, duration, or difftime!" =
+      lubridate::is.POSIXct(Time.vector) | hms::is_hms(Time.vector) | 
+      lubridate::is.duration(Time.vector) | lubridate::is.difftime(Time.vector),
+    "`Light.vector` and `Time.vector` must be same length!" = 
+      length(Light.vector) == length(Time.vector),
     "`epoch` must either be a duration or a string" =
       lubridate::is.duration(epoch) | is.character(epoch),
     "`timespan` must either be a duration or a string" =
@@ -89,7 +108,7 @@ bright_dark_period <- function(Light.vector,
   }
 
   # Get the epochs based on the data
-  if (epoch == "dominant.epoch") {
+  if (is.character(epoch) && epoch == "dominant.epoch") {
     epoch <- count_difftime(tibble::tibble(Datetime = Time.vector))$difftime[1]
   }
   # If the user specified an epoch, use that instead

@@ -71,10 +71,13 @@ reference:
     desc: >
       This section includes functions to calculate light exposure metrics.
     contents:
+    - barroso_lighting_metrics
     - bright_dark_period
     - centroidLE
     - disparity_index
     - duration_above_threshold
+    - exponential_moving_average
+    - frequency_crossing_threshold
     - intradaily_variability
     - interdaily_stability
     - midpointCE
@@ -84,7 +87,11 @@ reference:
     - nvRC_relativeAmplitudeError
     - nvRD
     - nvRD_cumulative_response
+    - period_above_threshold
+    - pulses_above_threshold
+    - threshold_for_duration
     - timing_above_threshold
+    
     
   - title: Helpers
     desc: >

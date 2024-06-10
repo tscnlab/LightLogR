@@ -6,8 +6,9 @@
 #'
 #' @param Light.vector Numeric vector containing the light data.
 #' @param na.rm Logical. Should missing values be removed? Defaults to FALSE
-#' @param as.df Logical. Should the output be returned as a data frame? Defaults
-#'    to FALSE
+#' @param as.df Logical. Should the output be returned as a data frame? If `TRUE`, a data
+#'    frame with a single column named `disparity_index` will be returned.
+#'    Defaults to `FALSE`.
 #'
 #' @return Single column data frame or vector.
 #' 
@@ -41,20 +42,31 @@ disparity_index <- function(Light.vector,
                             na.rm = FALSE,
                             as.df = FALSE) {
   
+  # Perform argument checks
+  stopifnot(
+    "`Light.vector` must be numeric!" = is.numeric(Light.vector),
+    "`na.rm` must be logical!" = is.logical(na.rm),
+    "`as.df` must be logical!" = is.logical(as.df)
+  )
+  
   # Remove NAs
   if (na.rm) {
     Light.vector <- Light.vector[!is.na(Light.vector)]
   }
   
-  if (length(Light.vector) == 1) {
-    di <- 0
-  } else {
-    # Calculate disparity index
-    fractions <- (Light.vector[2:length(Light.vector)] + 1) /
-      (Light.vector[1:length(Light.vector) - 1] + 1)
-    di <- 1 / (length(Light.vector) - 1) * sum(abs(log(fractions)))
+  if (any(is.na(Light.vector))){
+    di <- NA
   }
-  
+  else{
+    if (length(Light.vector) == 1) {
+      di <- 0
+    } else {
+      # Calculate disparity index
+      fractions <- (Light.vector[2:length(Light.vector)] + 1) /
+        (Light.vector[1:length(Light.vector) - 1] + 1)
+      di <- 1 / (length(Light.vector) - 1) * sum(abs(log(fractions)))
+    }
+  }
   # Return as data frame or numeric vector
   if (as.df) {
     return(tibble::tibble("disparity_index" = di))
