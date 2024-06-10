@@ -12,7 +12,7 @@ light exposure within the given time series."><meta property="og:image" content=
     
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,22 +66,23 @@ light exposure within the given time series.</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>Light.vector</dt>
-<dd><p>Numeric vector containing the light data. Missing values are
-replaced with 0.</p></dd>
+<dd><p>Numeric vector containing the light data.</p></dd>
 
 
 <dt>Time.vector</dt>
-<dd><p>Vector containing the time data. Can be numeric, HMS or POSIXct.</p></dd>
+<dd><p>Vector containing the time data. Can be <a href="https://rdrr.io/r/base/DateTimeClasses.html" class="external-link">POSIXct</a>, <a href="https://hms.tidyverse.org/reference/hms.html" class="external-link">hms</a>,
+<a href="https://lubridate.tidyverse.org/reference/duration.html" class="external-link">duration</a>, or <a href="https://rdrr.io/r/base/difftime.html" class="external-link">difftime</a>.</p></dd>
 
 
 <dt>na.rm</dt>
-<dd><p>Logical. Should missing values be removed for the calculation?
-Defaults to <code>FALSE</code>.</p></dd>
+<dd><p>Logical. Should missing values be removed for the calculation? If <code>TRUE</code>,
+missing values will be replaced by zero. Defaults to <code>FALSE</code>.</p></dd>
 
 
 <dt>as.df</dt>
-<dd><p>Logical. Should the output be returned as a data frame? Defaults
-to <code>FALSE</code>.</p></dd>
+<dd><p>Logical. Should the output be returned as a data frame? If <code>TRUE</code>, a data
+frame with a single column named <code>midpointCE</code> will be returned.
+Defaults to <code>FALSE</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -107,18 +108,22 @@ Quantification metrics. <em>Lighting Research &amp; Technology</em>.
 <code><a href="centroidLE.html">centroidLE</a>()</code>,
 <code><a href="disparity_index.html">disparity_index</a>()</code>,
 <code><a href="duration_above_threshold.html">duration_above_threshold</a>()</code>,
+<code><a href="exponential_moving_average.html">exponential_moving_average</a>()</code>,
+<code><a href="frequency_crossing_threshold.html">frequency_crossing_threshold</a>()</code>,
 <code><a href="interdaily_stability.html">interdaily_stability</a>()</code>,
 <code><a href="intradaily_variability.html">intradaily_variability</a>()</code>,
 <code><a href="nvRC.html">nvRC</a>()</code>,
 <code><a href="nvRD.html">nvRD</a>()</code>,
 <code><a href="nvRD_cumulative_response.html">nvRD_cumulative_response</a>()</code>,
+<code><a href="period_above_threshold.html">period_above_threshold</a>()</code>,
+<code><a href="pulses_above_threshold.html">pulses_above_threshold</a>()</code>,
+<code><a href="threshold_for_duration.html">threshold_for_duration</a>()</code>,
 <code><a href="timing_above_threshold.html">timing_above_threshold</a>()</code></p></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Dataset with POSIXct time vector</span></span></span>
-<span class="r-in"><span><span class="va">dataset1</span> <span class="op">&lt;-</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">dataset1</span> <span class="op">&lt;-</span></span></span>
 <span class="r-in"><span>  <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    Id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="fl">24</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    Datetime <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">as_datetime</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span> <span class="op">+</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/period.html" class="external-link">hours</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">23</span><span class="op">)</span>,</span></span>
@@ -149,11 +154,11 @@ Quantification metrics. <em>Lighting Research &amp; Technology</em>.
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;time&gt;</span>                          </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 11<span style="color: #949494;">:</span>00                           </span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Dataset with numeric time vector</span></span></span>
+<span class="r-in"><span><span class="co"># Dataset with duration time vector</span></span></span>
 <span class="r-in"><span><span class="va">dataset3</span> <span class="op">&lt;-</span></span></span>
 <span class="r-in"><span>  <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    Id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="fl">24</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    Hour <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">23</span>,</span></span>
+<span class="r-in"><span>    Hour <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/duration.html" class="external-link">duration</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">23</span>, <span class="st">"hours"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    MEDI <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">6</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">250</span>, <span class="fl">13</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">dataset3</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
@@ -162,8 +167,8 @@ Quantification metrics. <em>Lighting Research &amp; Technology</em>.
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 1</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   `Midpoint of cmulative exposure`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                              <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>                               11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;Duration&gt;</span>                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 39600s (~11 hours)              </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

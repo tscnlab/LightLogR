@@ -12,7 +12,7 @@ Fernández-Martínez et al. (2018)."><meta property="og:image" content="https://
     
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -74,8 +74,9 @@ Fernández-Martínez et al. (2018).</p>
 
 
 <dt>as.df</dt>
-<dd><p>Logical. Should the output be returned as a data frame? Defaults
-to FALSE</p></dd>
+<dd><p>Logical. Should the output be returned as a data frame? If <code>TRUE</code>, a data
+frame with a single column named <code>disparity_index</code> will be returned.
+Defaults to <code>FALSE</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -101,12 +102,17 @@ Quantification metrics. <em>Lighting Research &amp; Technology</em>.
 <code><a href="bright_dark_period.html">bright_dark_period</a>()</code>,
 <code><a href="centroidLE.html">centroidLE</a>()</code>,
 <code><a href="duration_above_threshold.html">duration_above_threshold</a>()</code>,
+<code><a href="exponential_moving_average.html">exponential_moving_average</a>()</code>,
+<code><a href="frequency_crossing_threshold.html">frequency_crossing_threshold</a>()</code>,
 <code><a href="interdaily_stability.html">interdaily_stability</a>()</code>,
 <code><a href="intradaily_variability.html">intradaily_variability</a>()</code>,
 <code><a href="midpointCE.html">midpointCE</a>()</code>,
 <code><a href="nvRC.html">nvRC</a>()</code>,
 <code><a href="nvRD.html">nvRD</a>()</code>,
 <code><a href="nvRD_cumulative_response.html">nvRD_cumulative_response</a>()</code>,
+<code><a href="period_above_threshold.html">period_above_threshold</a>()</code>,
+<code><a href="pulses_above_threshold.html">pulses_above_threshold</a>()</code>,
+<code><a href="threshold_for_duration.html">threshold_for_duration</a>()</code>,
 <code><a href="timing_above_threshold.html">timing_above_threshold</a>()</code></p></div>
     </div>
 
@@ -125,7 +131,7 @@ Quantification metrics. <em>Lighting Research &amp; Technology</em>.
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 1</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   `Disparity index`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>             0.815</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>              1.00</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

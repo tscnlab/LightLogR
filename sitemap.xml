@@ -43,6 +43,9 @@
     <loc>https://tscnlab.github.io/LightLogR/reference/aggregate_Datetime.html</loc>
   </url>
   <url>
+    <loc>https://tscnlab.github.io/LightLogR/reference/barroso_lighting_metrics.html</loc>
+  </url>
+  <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/bright_dark_period.html</loc>
   </url>
   <url>
@@ -76,6 +79,9 @@
     <loc>https://tscnlab.github.io/LightLogR/reference/duration_above_threshold.html</loc>
   </url>
   <url>
+    <loc>https://tscnlab.github.io/LightLogR/reference/exponential_moving_average.html</loc>
+  </url>
+  <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/filter_Datetime.html</loc>
   </url>
   <url>
@@ -83,6 +89,9 @@
   </url>
   <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/filter_Time.html</loc>
+  </url>
+  <url>
+    <loc>https://tscnlab.github.io/LightLogR/reference/frequency_crossing_threshold.html</loc>
   </url>
   <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/gap_finder.html</loc>
@@ -145,7 +154,13 @@
     <loc>https://tscnlab.github.io/LightLogR/reference/nvRD_cumulative_response.html</loc>
   </url>
   <url>
+    <loc>https://tscnlab.github.io/LightLogR/reference/period_above_threshold.html</loc>
+  </url>
+  <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/pipe.html</loc>
+  </url>
+  <url>
+    <loc>https://tscnlab.github.io/LightLogR/reference/pulses_above_threshold.html</loc>
   </url>
   <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/sample.data.environment.html</loc>
@@ -161,6 +176,9 @@
   </url>
   <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/symlog_trans.html</loc>
+  </url>
+  <url>
+    <loc>https://tscnlab.github.io/LightLogR/reference/threshold_for_duration.html</loc>
   </url>
   <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/timing_above_threshold.html</loc>
