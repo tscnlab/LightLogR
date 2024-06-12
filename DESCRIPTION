@@ -47,7 +47,6 @@ Imports:
     rlang,
     rsconnect,
     scales,
-    shiny,
     slider,
     stats,
     stringr,
