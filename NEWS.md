@@ -1,3 +1,7 @@
+# LightLogR 0.3.4
+
+* Backup to Zenodo, DOI and all
+
 # LightLogR 0.3.3
 
 * New and updated metric functions. LightLogR now contains 16 metric families with 60 sub-metrics.

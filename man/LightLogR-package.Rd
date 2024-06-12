@@ -15,6 +15,7 @@ Useful links:
 \itemize{
   \item \url{https://github.com/tscnlab/LightLogR}
   \item \url{https://tscnlab.github.io/LightLogR/}
+  \item \url{https://zenodo.org/doi/10.5281/zenodo.11562600}
   \item Report bugs at \url{https://github.com/tscnlab/LightLogR/issues}
 }
 

@@ -38,7 +38,8 @@
 #' These expressions are used to import and prepare data from specific devices.
 #' The list is made explicit, so that a user, requiring slight changes to the
 #' import functions, (e.g., because a timestamp is formatted differently) can
-#' modify or add to the list. The list can be turned into a fully functional import function through `import_adjustment‚()`.
+#' modify or add to the list. The list can be turned into a fully functional 
+#' import function through `import_adjustment()`.
 #'
 #' @format `ll_import_expr` A list, with specific expressions for each supported device
 #' \describe{
