@@ -58,6 +58,7 @@ Depends:
     R (>= 2.10)
 LazyData: true
 Suggests: 
+    covr,
     gt,
     knitr,
     patchwork,

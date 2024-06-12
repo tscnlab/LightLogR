@@ -13,3 +13,4 @@
 
 ^app\.R$
 ^vignettes/articles$
+^\.gitlab-ci\.yml$

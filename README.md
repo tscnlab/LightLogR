@@ -6,8 +6,7 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/tscnlab/LightLogR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/tscnlab/LightLogR/actions/workflows/R-CMD-check.yaml)
-[![Test
-coverage](https://github.com/JZauner/LightLogR/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/JZauner/LightLogR/actions/workflows/test-coverage.yaml)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.11562600.svg)](https://doi.org/10.5281/zenodo.11562600)
 <!-- badges: end -->
 
 Personalized luminous exposure data is progressively gaining importance

@@ -17,6 +17,7 @@ ll_import_expr
 These expressions are used to import and prepare data from specific devices.
 The list is made explicit, so that a user, requiring slight changes to the
 import functions, (e.g., because a timestamp is formatted differently) can
-modify or add to the list. The list can be turned into a fully functional import function through \verb{import_adjustment‚()}.
+modify or add to the list. The list can be turned into a fully functional
+import function through \code{import_adjustment()}.
 }
 \keyword{datasets}
