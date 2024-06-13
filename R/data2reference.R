@@ -8,7 +8,7 @@
 #' participant data is the reference for any other day. **This function needs to
 #' be carefully handled, when the reference data time intervals are shorter than
 #' the data time intervals. In that case, use `aggregate_Datetime()` on the
-#' reference data beforehand to lenghten the inteval.**
+#' reference data beforehand to lengthen the interval.**
 #'
 #' To use subsets of data, use the `filter.expression.reference` argument to
 #' specify the subsets of data. The `across.id` argument specifies whether the
