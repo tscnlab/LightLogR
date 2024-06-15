@@ -1,3 +1,5 @@
+# LightLogR 0.3.5
+
 # LightLogR 0.3.4
 
 * Backup to Zenodo, DOI and all
