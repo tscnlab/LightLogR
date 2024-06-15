@@ -81,7 +81,7 @@ all other participants, or that the first (second,...) day of every
 participant data is the reference for any other day. \strong{This function needs to
 be carefully handled, when the reference data time intervals are shorter than
 the data time intervals. In that case, use \code{aggregate_Datetime()} on the
-reference data beforehand to lenghten the inteval.}
+reference data beforehand to lengthen the interval.}
 }
 \details{
 To use subsets of data, use the \code{filter.expression.reference} argument to
