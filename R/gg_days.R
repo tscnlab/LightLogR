@@ -112,7 +112,7 @@ gg_days <- function(dataset,
             col = {{ aes_col }}
             ),
           outline.type = "upper",
-          ...
+          !!!dots
         )
       ))
     
@@ -181,7 +181,8 @@ gg_days <- function(dataset,
       panel.grid.minor.x = 
         ggplot2::element_line(color = "grey80", linewidth = 0.25),
       strip.text.y = ggplot2::element_text(face = "bold",),
-      strip.placement = "outside"
+      strip.placement = "outside",
+      plot.margin = ggplot2::margin(10, 20, 10, 10, "pt")
     ) +
     # Facetting ------------------------------------------------------------
   if(facetting) {

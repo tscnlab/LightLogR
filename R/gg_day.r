@@ -259,7 +259,8 @@ gg_day <- function(dataset,
         ggplot2::element_line(colour = "grey", linewidth = 0.25),
       # strip.background = ggplot2::element_blank(),
       strip.text.y = ggplot2::element_text(face = "bold",),
-      strip.placement = "outside"
+      strip.placement = "outside",
+      plot.margin = ggplot2::margin(10, 20, 10, 10, "pt")
     ) +
     # Facetting ------------------------------------------------------------
   if(facetting) {

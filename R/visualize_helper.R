@@ -33,7 +33,7 @@ Datetime_breaks <- function(x,
 #' Take a vector of `Datetimes` and return the start of the first and end of the
 #' last day of data. The `start` and the `length` can be adjusted by
 #' `durations`, like [lubridate::ddays()]. It is used in the [gg_days()]
-#' function to return a sensible axis. This function is a thin wrapper around
+#' function to return a sensible x-axis. This function is a thin wrapper around
 #' [lubridate::floor_date()] and [lubridate::ceiling_date()].
 #'
 #' @param x a vector of `Datetimes`
@@ -41,7 +41,8 @@ Datetime_breaks <- function(x,
 #'   shifts the start of the `Datetime` vector by this amount.
 #' @param length optional `duration` object, e.g. `lubridate::ddays(7)` that
 #'   shifts the end of the `Datetime` vector by this amount from the (adjusted)
-#'   start.
+#'   start. Depending on the data, you might have to subtract one day from the
+#'   desired length to get the correct axis-scaling if you start at midnight.
 #' @param unit a `character` scalar giving the unit of rounding in
 #'   [lubridate::floor_date()] and [lubridate::ceiling_date()]
 #' @param ... other arguments passed to [lubridate::floor_date()] and
