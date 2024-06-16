@@ -45,6 +45,7 @@ Datetime_breaks <- function(x,
 #'   desired length to get the correct axis-scaling if you start at midnight.
 #' @param unit a `character` scalar giving the unit of rounding in
 #'   [lubridate::floor_date()] and [lubridate::ceiling_date()]
+#' @param doubleplot a `logical` scalar indicating if used in [gg_doubleplot()]
 #' @param ... other arguments passed to [lubridate::floor_date()] and
 #'   [lubridate::ceiling_date()]
 #'
@@ -62,6 +63,7 @@ Datetime_limits <- function(x,
                             start = NULL,
                             length = NULL,
                             unit = "1 day",
+                            doubleplot = FALSE,
                             ...) {
   
   min_date <- x %>% lubridate::as_datetime() %>% min()
@@ -76,6 +78,12 @@ Datetime_limits <- function(x,
       y <- (min_date + length)
       y %>% lubridate::as_datetime()
     }
+  
+  if(doubleplot) {
+  if(identical(max_date, lubridate::ceiling_date(max_date, unit = unit, ...))) {
+    max_date <- max_date + lubridate::duration(unit)
+  }
+  }
   
   c(lubridate::floor_date(min_date, unit = unit, ...),
     lubridate::ceiling_date(max_date, unit = unit, ...))

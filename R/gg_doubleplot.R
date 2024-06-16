@@ -120,7 +120,7 @@ gg_doubleplot <- function(dataset,
     linewidth = linewidth, 
     x.axis.breaks = x.axis.breaks,
     x.axis.format = x.axis.format,
-    x.axis.limits = \(x) Datetime_limits(x, length = lubridate::ddays(1)),
+    x.axis.limits = \(x) Datetime_limits(x, length = lubridate::ddays(1), doubleplot = TRUE),
     ...
   ))
 }
