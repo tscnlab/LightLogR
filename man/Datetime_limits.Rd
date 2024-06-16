@@ -4,7 +4,14 @@
 \alias{Datetime_limits}
 \title{Find or set sensible limits for Datetime axis}
 \usage{
-Datetime_limits(x, start = NULL, length = NULL, unit = "1 day", ...)
+Datetime_limits(
+  x,
+  start = NULL,
+  length = NULL,
+  unit = "1 day",
+  doubleplot = FALSE,
+  ...
+)
 }
 \arguments{
 \item{x}{a vector of \code{Datetimes}}
@@ -19,6 +26,8 @@ desired length to get the correct axis-scaling if you start at midnight.}
 
 \item{unit}{a \code{character} scalar giving the unit of rounding in
 \code{\link[lubridate:round_date]{lubridate::floor_date()}} and \code{\link[lubridate:round_date]{lubridate::ceiling_date()}}}
+
+\item{doubleplot}{a \code{logical} scalar indicating if used in \code{\link[=gg_doubleplot]{gg_doubleplot()}}}
 
 \item{...}{other arguments passed to \code{\link[lubridate:round_date]{lubridate::floor_date()}} and
 \code{\link[lubridate:round_date]{lubridate::ceiling_date()}}}
