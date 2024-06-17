@@ -1,3 +1,9 @@
+# LightLogR 0.3.5
+
+* Added the function `aggregate_Date()` to aggregate long datasets to one day per group.
+
+* New function `gg_doubleplot()` for ... well, double plots.
+
 # LightLogR 0.3.4
 
 * Backup to Zenodo, DOI and all

@@ -119,7 +119,9 @@ gg_overview <- function(dataset,
     cowplot::theme_cowplot()+
     ggplot2::theme(
       panel.grid.major = ggplot2::element_line(colour = "grey98"), 
-      plot.caption = ggtext::element_markdown())
+      plot.caption = ggtext::element_markdown(),
+      plot.margin = ggplot2::margin(10, 20, 10, 10, "pt")
+      )
   
   # Return ----------------------------------------------------------
   if(interactive) {

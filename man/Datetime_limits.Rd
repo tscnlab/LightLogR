@@ -4,7 +4,14 @@
 \alias{Datetime_limits}
 \title{Find or set sensible limits for Datetime axis}
 \usage{
-Datetime_limits(x, start = NULL, length = NULL, unit = "1 day", ...)
+Datetime_limits(
+  x,
+  start = NULL,
+  length = NULL,
+  unit = "1 day",
+  doubleplot = FALSE,
+  ...
+)
 }
 \arguments{
 \item{x}{a vector of \code{Datetimes}}
@@ -14,10 +21,13 @@ shifts the start of the \code{Datetime} vector by this amount.}
 
 \item{length}{optional \code{duration} object, e.g. \code{lubridate::ddays(7)} that
 shifts the end of the \code{Datetime} vector by this amount from the (adjusted)
-start.}
+start. Depending on the data, you might have to subtract one day from the
+desired length to get the correct axis-scaling if you start at midnight.}
 
 \item{unit}{a \code{character} scalar giving the unit of rounding in
 \code{\link[lubridate:round_date]{lubridate::floor_date()}} and \code{\link[lubridate:round_date]{lubridate::ceiling_date()}}}
+
+\item{doubleplot}{a \code{logical} scalar indicating if used in \code{\link[=gg_doubleplot]{gg_doubleplot()}}}
 
 \item{...}{other arguments passed to \code{\link[lubridate:round_date]{lubridate::floor_date()}} and
 \code{\link[lubridate:round_date]{lubridate::ceiling_date()}}}
@@ -30,7 +40,7 @@ the input vector.
 Take a vector of \code{Datetimes} and return the start of the first and end of the
 last day of data. The \code{start} and the \code{length} can be adjusted by
 \code{durations}, like \code{\link[lubridate:duration]{lubridate::ddays()}}. It is used in the \code{\link[=gg_days]{gg_days()}}
-function to return a sensible axis. This function is a thin wrapper around
+function to return a sensible x-axis. This function is a thin wrapper around
 \code{\link[lubridate:round_date]{lubridate::floor_date()}} and \code{\link[lubridate:round_date]{lubridate::ceiling_date()}}.
 }
 \examples{

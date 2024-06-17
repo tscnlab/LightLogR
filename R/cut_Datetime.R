@@ -96,7 +96,8 @@ cut_Datetime <- function(dataset,
                                   ...
                                   ),
       .after = {{ Datetime.colname }}
-      )
+      ) %>% 
+    dplyr::select(-group.indices2)
   
   if(group_by) {
     dataset <- dataset %>% dplyr::group_by({{ New.colname }}, .add = TRUE)

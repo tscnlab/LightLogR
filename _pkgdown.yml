@@ -18,7 +18,7 @@ reference:
   
   - title: Insight
     desc: >
-      This section includes functions to gain more insight into light logger. 
+      This section includes functions to gain more insight into the data. 
       Functions in this section will not return a version of the input dataset, 
       but rather information based on it.
     contents:
@@ -28,7 +28,7 @@ reference:
     - gap_finder
     - dst_change_summary
   
-  - title: Validate & Process
+  - title: Process
     desc: >
       This section includes functions to process light logger data, e.g., to
       validate and clean data, to filter, cut or aggreagate data, or to join 
@@ -37,6 +37,7 @@ reference:
     - gap_handler
     - cut_Datetime
     - aggregate_Datetime
+    - aggregate_Date
     - create_Timedata
     - filter_Datetime
     - filter_Datetime_multiple
@@ -66,6 +67,7 @@ reference:
     - gg_overview
     - gg_day
     - gg_days
+    - gg_doubleplot
 
   - title: Metrics
     desc: >
