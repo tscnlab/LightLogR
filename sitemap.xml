@@ -40,6 +40,9 @@
     <loc>https://tscnlab.github.io/LightLogR/reference/LightLogR-package.html</loc>
   </url>
   <url>
+    <loc>https://tscnlab.github.io/LightLogR/reference/aggregate_Date.html</loc>
+  </url>
+  <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/aggregate_Datetime.html</loc>
   </url>
   <url>
@@ -107,6 +110,9 @@
   </url>
   <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/gg_days.html</loc>
+  </url>
+  <url>
+    <loc>https://tscnlab.github.io/LightLogR/reference/gg_doubleplot.html</loc>
   </url>
   <url>
     <loc>https://tscnlab.github.io/LightLogR/reference/gg_overview.html</loc>
