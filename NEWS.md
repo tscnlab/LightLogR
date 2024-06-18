@@ -1,5 +1,7 @@
 # LightLogR 0.3.6
 
+* `bright_dark_period()` now maintains the date when looping the data.
+
 * Added articles on `Import & Cleaning`, `Metrics`, and `Visualizations` to the website.
 
 * Added the option for more print rows of observation intervals during `import`.
