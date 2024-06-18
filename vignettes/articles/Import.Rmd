@@ -1,5 +1,5 @@
 ---
-title: "Import & Cleaning"
+title: "Import & cleaning"
 ---
 
 ```{r, include = FALSE}
