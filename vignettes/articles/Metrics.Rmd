@@ -149,7 +149,7 @@ Onset <- M10$darkest_10h_onset
 Offset <- M10$darkest_10h_offset
 
 data_Id201 %>% 
-  gg_day(aes_col = Datetime >= Onset | Datetime <= (Offset -days())) +
+  gg_day(aes_col = Datetime >= Onset | Datetime <= Offset) +
   guides(color = "none")
 ```
 
