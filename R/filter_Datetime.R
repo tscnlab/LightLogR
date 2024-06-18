@@ -37,6 +37,10 @@
 #'   is FALSE). This is useful, e.g., when the first observation in the dataset
 #'   is slightly after midnight. If TRUE, it will count the length from midnight
 #'   on to avoid empty days in plotting with [gg_day()].
+#' @param length_from_start A `logical` indicating whether the `length` argument
+#'   should be applied to the start (default, TRUE) or the end of the data
+#'   (FALSE). Only relevant if neither the `start` nor the `end` arguments are
+#'   provided.
 #' @param only_Id An expression of `ids` where the filtering should be applied
 #'   to. If `NULL` (the default), the filtering will be applied to all `ids`.
 #'   Based on the this expression, the dataset will be split in two and only
@@ -93,6 +97,7 @@ filter_Datetime <- function(dataset,
                             start = NULL, 
                             end = NULL, 
                             length = NULL,
+                            length_from_start = TRUE,
                             full.day = FALSE,
                             tz = NULL,
                             only_Id = NULL,
@@ -156,12 +161,22 @@ filter_Datetime <- function(dataset,
     start <- dataset[[Datetime.colname.defused]] %>% min()
   }
   
-  #calculate end time if length is given
+  
+  
+  #calculate end time if length is given & length_from_start is TRUE
   if(is.null(end) & !is.null(length)) {
+  if(length_from_start) {
     end <- switch (full.day %>% as.character(),
       "TRUE" = lubridate::as_date(start, tz = tz),
       "FALSE" = lubridate::as_datetime(start, tz = tz)
     )  + length
+  } else {
+    end <- dataset[[Datetime.colname.defused]] %>% max()
+    start <- switch (full.day %>% as.character(),
+                     "TRUE" = lubridate::as_date(end, tz = tz),
+                     "FALSE" = lubridate::as_datetime(end, tz = tz)
+    ) - length
+  }
   }
   
   #calculate end time if NULL
@@ -233,7 +248,10 @@ filter_Date <- function(...,
 #'   to be quoted with [quote()] or [rlang::expr()].
 #' @param filter_function The function to be used for filtering, either
 #'   `filter_Datetime` (the default) or `filter_Date`
-#' @param ... Additional arguments passed to the filter function
+#' @param ... Additional arguments passed to the filter function. If the
+#'   `length` argument is provided here instead of the `argument`, it has to be
+#'   written as a string, e.g., `length = "1 day"`, instead of `length =
+#'   lubridate::days(1)`.
 #'
 #' @return A dataframe with the filtered data
 #' @export
@@ -245,7 +263,7 @@ filter_Date <- function(...,
 #'  #compare the unfiltered dataset
 #'  sample.data.environment %>% gg_overview(Id.colname = Id)
 #'  #compare the unfiltered dataset
-#'  sample.data.environment %>% 
+#'  sample.data.environment %>%
 #'  filter_Datetime_multiple(arguments = arguments, filter_Date) %>%
 #'  gg_overview(Id.colname = Id)
 filter_Datetime_multiple <- function(dataset, 

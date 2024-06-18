@@ -64,6 +64,7 @@ use of this arguments when importing more than one file}
 If the \code{Id} column is already part of the \code{dataset} it will just use
 this column. If the column is not present it will add this column and fill
 it with the filename of the importfile (see param \code{auto.id}).
+\code{print_n} can be used if you want to see more rows from the observation intervals
 }
 }
 \section{Devices}{

@@ -11,6 +11,7 @@ filter_Datetime(
   start = NULL,
   end = NULL,
   length = NULL,
+  length_from_start = TRUE,
   full.day = FALSE,
   tz = NULL,
   only_Id = NULL,
@@ -47,6 +48,11 @@ whereas durations model physical processes. This matters on several
 occasions, like leap years, or daylight savings. You can also provide a
 \code{character} scalar in the form of e.g. "1 day", which will be converted
 into a period.}
+
+\item{length_from_start}{A \code{logical} indicating whether the \code{length} argument
+should be applied to the start (default, TRUE) or the end of the data
+(FALSE). Only relevant if neither the \code{start} nor the \code{end} arguments are
+provided.}
 
 \item{full.day}{A \code{logical} indicating whether the \code{start} param should be
 rounded to a full day, when only the \code{length} argument is provided (Default

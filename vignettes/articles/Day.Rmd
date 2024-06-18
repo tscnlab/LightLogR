@@ -1,5 +1,5 @@
 ---
-title: "What's in a Day?"
+title: "The whole game"
 ---
 
 ```{r, include = FALSE}

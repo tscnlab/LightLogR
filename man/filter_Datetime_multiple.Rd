@@ -22,7 +22,9 @@ to be quoted with \code{\link[=quote]{quote()}} or \code{\link[rlang:expr]{rlang
 \item{filter_function}{The function to be used for filtering, either
 \code{filter_Datetime} (the default) or \code{filter_Date}}
 
-\item{...}{Additional arguments passed to the filter function}
+\item{...}{Additional arguments passed to the filter function. If the
+\code{length} argument is provided here instead of the \code{argument}, it has to be
+written as a string, e.g., \code{length = "1 day"}, instead of \code{length = lubridate::days(1)}.}
 }
 \value{
 A dataframe with the filtered data
@@ -41,7 +43,7 @@ arguments <- list(
  #compare the unfiltered dataset
  sample.data.environment \%>\% gg_overview(Id.colname = Id)
  #compare the unfiltered dataset
- sample.data.environment \%>\% 
+ sample.data.environment \%>\%
  filter_Datetime_multiple(arguments = arguments, filter_Date) \%>\%
  gg_overview(Id.colname = Id)
 }

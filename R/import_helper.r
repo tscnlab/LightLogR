@@ -6,7 +6,8 @@ import.info <- function(data,
                         dst_adjustment,
                         dst_info = TRUE,
                         filename,
-                        na.count) {
+                        na.count,
+                        print_n = 10) {
   #give info about the file
   min.time <- min(data$Datetime)
   max.time <- max(data$Datetime)
@@ -72,7 +73,8 @@ import.info <- function(data,
     "Timespan: " , diff(c(min.time, max.time)) %>% format(digits = 2), "\n\n",
     "Observation intervals: \n",
     sep = "")
-  utils::capture.output(interval.time)[c(-1,-2,-4)] %>% cat(sep = "\n")
+  utils::capture.output(interval.time %>% print(n=print_n))[c(-1,-2,-4)] %>% 
+    cat(sep = "\n")
 }
 
 #This internal helper function looks for the starting row of an import file based on a vector of column names in order.

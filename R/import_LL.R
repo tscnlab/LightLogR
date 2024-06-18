@@ -43,6 +43,7 @@
 #'   If the `Id` column is already part of the `dataset` it will just use
 #'   this column. If the column is not present it will add this column and fill
 #'   it with the filename of the importfile (see param `auto.id`).
+#'   `print_n` can be used if you want to see more rows from the observation intervals
 #'
 #' @param ... Parameters that get handed down to the specific import functions
 #' @param device From what device do you want to import? For a few devices,
@@ -153,6 +154,7 @@ imports <- function(device,
       auto.plot = TRUE,
       locale = readr::default_locale(),
       silent = FALSE,
+      print_n = 10,
       ... =
     ),
     #function expression
@@ -237,7 +239,8 @@ imports <- function(device,
           Id.colname = Id, #the id column name
           dst_adjustment = dst_adjustment, #whether there is a dst adjustment
           filename = filename, #what the filename(s) is/are
-          na.count = na.count #how many NA values were dropped
+          na.count = na.count, #how many NA values were dropped
+          print_n = print_n #how many rows to print for observation intervals
           )
       
       #if autoplot is TRUE, make a plot
