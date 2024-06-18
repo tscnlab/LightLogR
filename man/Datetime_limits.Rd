@@ -9,7 +9,7 @@ Datetime_limits(
   start = NULL,
   length = NULL,
   unit = "1 day",
-  doubleplot = FALSE,
+  midnight.rollover = FALSE,
   ...
 )
 }
@@ -27,7 +27,7 @@ desired length to get the correct axis-scaling if you start at midnight.}
 \item{unit}{a \code{character} scalar giving the unit of rounding in
 \code{\link[lubridate:round_date]{lubridate::floor_date()}} and \code{\link[lubridate:round_date]{lubridate::ceiling_date()}}}
 
-\item{doubleplot}{a \code{logical} scalar indicating if used in \code{\link[=gg_doubleplot]{gg_doubleplot()}}}
+\item{midnight.rollover}{a \code{logical} scalar indicating whether to rollover in cases of exact matches of rounded values and input values. Helpful if some cases fall exactly on the rounded values and others don`t.}
 
 \item{...}{other arguments passed to \code{\link[lubridate:round_date]{lubridate::floor_date()}} and
 \code{\link[lubridate:round_date]{lubridate::ceiling_date()}}}

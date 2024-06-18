@@ -74,7 +74,7 @@ dataset1 \%>\%
   dplyr::reframe(bright_dark_period(MEDI, Datetime, "brightest", "10 hours",
     as.df = TRUE))
 dataset1 \%>\%
-  dplyr::reframe(bright_dark_period(MEDI, Datetime, "darkest", "5 hours",
+  dplyr::reframe(bright_dark_period(MEDI, Datetime, "darkest", "7 hours",
     loop = TRUE, as.df = TRUE))
 
 # Dataset with duration as Time.vector
