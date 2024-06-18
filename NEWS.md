@@ -1,3 +1,7 @@
+# LightLogR 0.3.6
+
+* `bright_dark_period()` now maintains the date when looping the data.
+
 # LightLogR 0.3.5
 
 * Added the function `aggregate_Date()` to aggregate long datasets to one day per group.
