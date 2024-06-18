@@ -57,7 +57,7 @@
 #'   dplyr::reframe(bright_dark_period(MEDI, Datetime, "brightest", "10 hours",
 #'     as.df = TRUE))
 #' dataset1 %>%
-#'   dplyr::reframe(bright_dark_period(MEDI, Datetime, "darkest", "5 hours",
+#'   dplyr::reframe(bright_dark_period(MEDI, Datetime, "darkest", "7 hours",
 #'     loop = TRUE, as.df = TRUE))
 #' 
 #' # Dataset with duration as Time.vector
@@ -125,8 +125,7 @@ bright_dark_period <- function(Light.vector,
   # Loop data
   if (loop) {
     Light.vector <- c(Light.vector, Light.vector)
-    span <- dplyr::last(Time.vector) - Time.vector[1]
-    Time.vector <- c(Time.vector, Time.vector + span + epoch)
+    Time.vector <- c(Time.vector, Time.vector)
   }
 
   # Calculate window size
