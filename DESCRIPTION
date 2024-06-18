@@ -58,6 +58,7 @@ Depends:
 LazyData: true
 Suggests: 
     covr,
+    gghighlight,
     gt,
     knitr,
     patchwork,
