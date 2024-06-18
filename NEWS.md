@@ -2,6 +2,8 @@
 
 * Added articles on `Import & Cleaning`, `Metrics`, and `Visualizations` to the website.
 
+* 
+
 # LightLogR 0.3.5
 
 * Added the function `aggregate_Date()` to aggregate long datasets to one day per group.
