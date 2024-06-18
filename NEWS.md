@@ -2,7 +2,9 @@
 
 * Added articles on `Import & Cleaning`, `Metrics`, and `Visualizations` to the website.
 
-* 
+* Added the option for more print rows of observation intervals during `import`.
+
+* Added the option to set a length for the dataset starting from the end in `filter_Datetime()` and family.
 
 # LightLogR 0.3.5
 
