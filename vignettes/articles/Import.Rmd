@@ -1,0 +1,142 @@
+---
+title: "Import & Cleaning"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This article focuses on the import from multiple files and participants, as well as the cleaning of the data. We need these packages
+
+```{r setup, message = FALSE}
+library(LightLogR)
+library(tidyverse)
+library(gghighlight)
+```
+
+# Importing Data
+
+The first step in every analysis is data import. We will work with data collected as part the Master Thesis *Insights into real-world human light exposure: relating self-report with eye-level light logging* by Carolina Guidolin (2023). The data is stored in 17 text files in the *data/* folder. You can access the data yourself through the [LightLogR GitHub repository](https://github.com/tscnlab/LightLogR/tree/main/vignettes/articles/data).
+
+```{r, files}
+path <- "data"
+files <- list.files(path, full.names = TRUE)
+#show how many files are listes
+length(files)
+```
+
+Next we require a time zone of data collection. If uncertain which time zones are valid, use the `OlsonNames()` function. Our data was collected in the "Europe/Berlin" time zone.
+
+```{r, tz}
+#first six time zones from OlsonNames()
+head(OlsonNames())
+
+#our time zone
+tz <- "Europe/Berlin"
+```
+
+Lastly, the participant Ids are stored in the file names. We will extract them and store them in a column called `Id`. The following code defines the pattern as a *regular expression*, which will extract the first three digits from the file name.
+
+```{r, Id pattern}
+pattern <- "^(\\d{3})"
+```
+
+Now we can import the data. Data were collected with the ActLumus device by Condor Instruments. The right way to specify this is through the `import` function.
+
+```{r, import}
+data <- import$ActLumus(files, tz = tz, auto.id = pattern, print_n=33)
+```
+
+# Data cleaning #1
+
+Before we can dive into the analysis part, we need to make sure we have a clean dataset. The import summary shows us two problems with the data:
+
+-   two files have data that crosses daylight saving time (DST) changes. Because the ActLumus device does not adjust for DST, we need to correct for this.
+-   Multiple Ids have single datapoints at the beginning of the dataset with gaps before actual data collection starts. These are test measurements to check equipment, but must be removed from the dataset.
+
+Let us first deal with the DST change. LightLogR has an in-built function to correct for this during import. We thus will re-import the data, but make the import silent as to not clutter the output.
+
+```{r, dst change}
+data <- 
+  import$ActLumus(files, tz = tz, auto.id = pattern, dst_adjustment = TRUE, 
+                  auto.plot = FALSE, silent = TRUE)
+```
+
+The second problem requires the filtering of certain Ids. The `filter_Datetime_multiple()` function is ideal for this. We can provide a length (1 week), starting from the end of data collection and backwards. The variable `arguments provide variable arguments to the filter function, they have to be provided in list form and expressions have to be quoted through`quote()`. Fixed arguments, like the length and`length_from_start\` are provided as named arguments and only have to be specified once, as they are the same for all Ids.
+
+```{r, start shift}
+data <- 
+  data %>% 
+  filter_Datetime_multiple(
+    arguments = list(
+      list(only_Id = quote(Id == 216)),
+      list(only_Id = quote(Id == 219)),
+      list(only_Id = quote(Id == 214)),
+      list(only_Id = quote(Id == 206))
+    ), length = "1 week", length_from_start = FALSE)
+
+```
+
+Let's have a look at the data again with the `gg_overview()` function.
+
+```{r, overview}
+data %>% gg_overview()
+```
+
+Looks much better now. Also, because there is no longer a hint about gaps in the lower right corner, we can be sure that all gaps have been removed. The function gap_finder() shows us, however, that there are still irregularities in the data and the function count_difftime() reveals where they are.
+
+```{r, irregularities}
+data %>% gap_finder()
+data %>% count_difftime() %>% print(n=22)
+```
+
+This means we have to look at and take care of the irregularities for the Ids 215, 218, and 221.
+
+# Data cleaning #2
+
+Let us first visualize where the irregularities are. We can use `gg_days()` for that.
+
+```{r}
+#create two columns to show the irregularities and gaps for relevant ids
+difftimes <- 
+  data %>% 
+  filter(Id %in% c(215, 218, 221)) %>%
+  mutate(difftime = difftime(lead(Datetime), Datetime, units = "secs"),
+                  end = Datetime + seconds(difftime))
+
+#visualize where those points are
+difftimes %>% 
+  gg_days(geom = "point", 
+          x.axis.breaks = ~Datetime_breaks(.x, by = "2 days" )
+  ) +
+  geom_rect(data = difftimes %>% filter(difftime !=10),
+            aes(xmin = Datetime, xmax = end, ymin = -Inf, ymax = Inf),
+            fill = "red", col = "red", linewidth = 0.2, alpha = 0.2) +
+    gghighlight(difftime != 10 | lag(difftime !=10))
+
+```
+
+All irregular data appear at the very beginning of the data collection. As we are interestet in one whole week of data, we can similarly apply a one week filter on these Ids and see if that removed the irregular data points.
+
+```{r}
+data <- 
+  data %>% 
+  filter_Datetime_multiple(
+    arguments = list(
+      list(only_Id = quote(Id == 215)),
+      list(only_Id = quote(Id == 218)),
+      list(only_Id = quote(Id == 221))
+    ), length = "1 week", length_from_start = FALSE)
+
+data %>% gap_finder()
+data %>% count_difftime() %>% print(n=17)
+```
+
+The data is now clean and we can proceed with the analysis. This dataset will be needed in other articles, so we will save it as an RDS file.
+
+```{r}
+# saveRDS(data, "cleaned_data/ll_data.rds")
+```
