@@ -238,7 +238,9 @@ gg_day <- function(dataset,
     # Scales --------------------------------------------------------------
     jco_color_scheme+
     ggplot2::scale_x_time(breaks = x.axis.breaks, 
-                          labels = scales::label_time(format = "%H:%M")) + 
+                          labels = scales::label_time(format = "%H:%M"),
+                          expand = c(0,0),
+                          limits = c(0,24*3600)) + 
     ggplot2::scale_y_continuous(
         trans = y.scale,
         breaks = y.axis.breaks,

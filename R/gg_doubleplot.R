@@ -58,7 +58,7 @@ gg_doubleplot <- function(dataset,
                           type = c("auto", "repeat", "next"),
                           geom = "ribbon",
                           alpha = 0.5,
-                          col = "#EFC000FF",
+                          col = "grey40",
                           fill = "#EFC000FF",
                           linewidth = 0.4,
                           x.axis.breaks.next = Datetime_breaks,
@@ -120,7 +120,10 @@ gg_doubleplot <- function(dataset,
     linewidth = linewidth, 
     x.axis.breaks = x.axis.breaks,
     x.axis.format = x.axis.format,
-    x.axis.limits = \(x) Datetime_limits(x, length = lubridate::ddays(1), doubleplot = TRUE),
+    x.axis.limits = 
+      \(x) Datetime_limits(
+        x, length = lubridate::ddays(1), midnight.rollover = TRUE
+        ),
     ...
   ))
 }

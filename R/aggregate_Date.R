@@ -77,7 +77,7 @@ aggregate_Date <- function(dataset,
                            date.handler = stats::median,
                            numeric.handler = 
                                  mean,
-                               character.handler = 
+                           character.handler = 
                                  \(x) names(which.max(table(x, useNA = "ifany"))),
                                logical.handler = 
                                  \(x) mean(x) >= 0.5,
@@ -117,7 +117,7 @@ aggregate_Date <- function(dataset,
     dataset %>% 
     create_Timedata(Datetime.colname = !!Datetime.colname.defused) %>% 
     dplyr::mutate(Date.data = lubridate::date(!!Datetime.colname.defused),
-                  Date.data = (!!date.handler)(unique(Date.data))) #set the date according to the date handler
+                  Date.data = (!!date.handler)(Date.data)) #set the date according to the date handler
   
   #group by Time.data
   dataset <- 
