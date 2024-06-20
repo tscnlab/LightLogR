@@ -10,7 +10,7 @@
 <!-- badges: end -->
 
 Personalized luminous exposure data is progressively gaining importance
-in various sectors, including research, occupational health, and
+in various sectors, including research, occupational affairs, and
 fitness tracking. Data are collected through a proliferating selection
 of wearable loggers and dosimeters, varying in size, shape,
 functionality, and output format. Despite or maybe because of numerous

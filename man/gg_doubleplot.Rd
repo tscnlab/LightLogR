@@ -10,7 +10,7 @@ gg_doubleplot(
   type = c("auto", "repeat", "next"),
   geom = "ribbon",
   alpha = 0.5,
-  col = "#EFC000FF",
+  col = "grey40",
   fill = "#EFC000FF",
   linewidth = 0.4,
   x.axis.breaks.next = Datetime_breaks,
