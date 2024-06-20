@@ -36,7 +36,10 @@ day, look to filter_Time()."><meta property="og:image" content="https://tscnlab.
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/Day.html">What's in a Day?</a>
+    <a class="dropdown-item" href="../articles/Day.html">The whole game</a>
+    <a class="dropdown-item" href="../articles/Import.html">Import &amp; cleaning</a>
+    <a class="dropdown-item" href="../articles/Metrics.html">Metrics</a>
+    <a class="dropdown-item" href="../articles/Visualizations.html">Visualizations</a>
   </div>
 </li>
 <li class="nav-item">
@@ -81,6 +84,7 @@ day, look to <code><a href="filter_Time.html">filter_Time()</a></code>.</p>
 <span>  start <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  end <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  length <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  length_from_start <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  full.day <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  tz <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  only_Id <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -124,6 +128,13 @@ whereas durations model physical processes. This matters on several
 occasions, like leap years, or daylight savings. You can also provide a
 <code>character</code> scalar in the form of e.g. "1 day", which will be converted
 into a period.</p></dd>
+
+
+<dt>length_from_start</dt>
+<dd><p>A <code>logical</code> indicating whether the <code>length</code> argument
+should be applied to the start (default, TRUE) or the end of the data
+(FALSE). Only relevant if neither the <code>start</code> nor the <code>end</code> arguments are
+provided.</p></dd>
 
 
 <dt>full.day</dt>

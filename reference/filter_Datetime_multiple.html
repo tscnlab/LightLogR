@@ -32,7 +32,10 @@ participants (see examples)"><meta property="og:image" content="https://tscnlab.
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/Day.html">What's in a Day?</a>
+    <a class="dropdown-item" href="../articles/Day.html">The whole game</a>
+    <a class="dropdown-item" href="../articles/Import.html">Import &amp; cleaning</a>
+    <a class="dropdown-item" href="../articles/Metrics.html">Metrics</a>
+    <a class="dropdown-item" href="../articles/Visualizations.html">Visualizations</a>
   </div>
 </li>
 <li class="nav-item">
@@ -96,7 +99,9 @@ to be quoted with <code><a href="https://rdrr.io/r/base/substitute.html" class="
 
 
 <dt>...</dt>
-<dd><p>Additional arguments passed to the filter function</p></dd>
+<dd><p>Additional arguments passed to the filter function. If the
+<code>length</code> argument is provided here instead of the <code>argument</code>, it has to be
+written as a string, e.g., <code>length = "1 day"</code>, instead of <code>length = lubridate::days(1)</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -115,7 +120,7 @@ to be quoted with <code><a href="https://rdrr.io/r/base/substitute.html" class="
 <span class="r-in"><span> <span class="va">sample.data.environment</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="gg_overview.html">gg_overview</a></span><span class="op">(</span>Id.colname <span class="op">=</span> <span class="va">Id</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="filter_Datetime_multiple-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span> <span class="co">#compare the unfiltered dataset</span></span></span>
-<span class="r-in"><span> <span class="va">sample.data.environment</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> </span></span>
+<span class="r-in"><span> <span class="va">sample.data.environment</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span> <span class="fu">filter_Datetime_multiple</span><span class="op">(</span>arguments <span class="op">=</span> <span class="va">arguments</span>, <span class="va">filter_Date</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span> <span class="fu"><a href="gg_overview.html">gg_overview</a></span><span class="op">(</span>Id.colname <span class="op">=</span> <span class="va">Id</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="filter_Datetime_multiple-2.png" alt="" width="700" height="433"></span>

@@ -32,7 +32,10 @@ or minimum mean light level. Note that the data need to be regularly spaced
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/Day.html">What's in a Day?</a>
+    <a class="dropdown-item" href="../articles/Day.html">The whole game</a>
+    <a class="dropdown-item" href="../articles/Import.html">Import &amp; cleaning</a>
+    <a class="dropdown-item" href="../articles/Metrics.html">Metrics</a>
+    <a class="dropdown-item" href="../articles/Visualizations.html">Visualizations</a>
   </div>
 </li>
 <li class="nav-item">
@@ -186,12 +189,12 @@ Quantification metrics. <em>Lighting Research &amp; Technology</em>.
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>                250 1970-01-01 <span style="color: #949494;">10:00:00</span>    1970-01-01 <span style="color: #949494;">06:00:00</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 1 more variable: brightest_10h_offset &lt;dttm&gt;</span></span>
 <span class="r-in"><span><span class="va">dataset1</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
-<span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/reframe.html" class="external-link">reframe</a></span><span class="op">(</span><span class="fu">bright_dark_period</span><span class="op">(</span><span class="va">MEDI</span>, <span class="va">Datetime</span>, <span class="st">"darkest"</span>, <span class="st">"5 hours"</span>,</span></span>
+<span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/reframe.html" class="external-link">reframe</a></span><span class="op">(</span><span class="fu">bright_dark_period</span><span class="op">(</span><span class="va">MEDI</span>, <span class="va">Datetime</span>, <span class="st">"darkest"</span>, <span class="st">"7 hours"</span>,</span></span>
 <span class="r-in"><span>    loop <span class="op">=</span> <span class="cn">TRUE</span>, as.df <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 4</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   darkest_5h_mean darkest_5h_midpoint darkest_5h_onset    darkest_5h_offset  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   darkest_7h_mean darkest_7h_midpoint darkest_7h_onset    darkest_7h_offset  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>               1 1970-01-01 <span style="color: #949494;">02:00:00</span> 1970-01-01 <span style="color: #949494;">00:00:00</span> 1970-01-01 <span style="color: #949494;">05:00:00</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>               1 1970-01-01 <span style="color: #949494;">22:00:00</span> 1970-01-01 <span style="color: #949494;">19:00:00</span> 1970-01-01 <span style="color: #949494;">02:00:00</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Dataset with duration as Time.vector</span></span></span>
 <span class="r-in"><span><span class="va">dataset2</span> <span class="op">&lt;-</span></span></span>

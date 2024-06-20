@@ -34,7 +34,10 @@ full list of arguments."><meta property="og:image" content="https://tscnlab.gith
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/Day.html">What's in a Day?</a>
+    <a class="dropdown-item" href="../articles/Day.html">The whole game</a>
+    <a class="dropdown-item" href="../articles/Import.html">Import &amp; cleaning</a>
+    <a class="dropdown-item" href="../articles/Metrics.html">Metrics</a>
+    <a class="dropdown-item" href="../articles/Visualizations.html">Visualizations</a>
   </div>
 </li>
 <li class="nav-item">
@@ -130,7 +133,8 @@ use of this arguments when importing more than one file</strong></p></li>
 <li><p><code>...</code>: supply additional arguments to the readr import functions, like <code>na</code>. Might also be used to supply arguments to the specific import functions, like <code>column_names</code> for <code>Actiwatch_Spectrum</code> devices. Those devices will always throw a helpful error message if you forget to supply the necessary arguments.
 If the <code>Id</code> column is already part of the <code>dataset</code> it will just use
 this column. If the column is not present it will add this column and fill
-it with the filename of the importfile (see param <code>auto.id</code>).</p></li>
+it with the filename of the importfile (see param <code>auto.id</code>).
+<code>print_n</code> can be used if you want to see more rows from the observation intervals</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="devices">Devices<a class="anchor" aria-label="anchor" href="#devices"></a></h2>
