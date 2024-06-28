@@ -1,6 +1,10 @@
-# LightLogR 0.3.7
+# LightLogR 0.3.7 "Astronomical dawn"
 
-# LightLogR 0.3.6 "Astronomical dawn"
+* Changes to the tutorial articles on the website
+
+* Integration of a community survey on the website and Github Readme.
+
+# LightLogR 0.3.6 
 
 * `bright_dark_period()` now maintains the date when looping the data.
 

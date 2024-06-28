@@ -54,7 +54,7 @@ data %>%
 # gg_day()
 
 ## Basics
-`gg_day()` compares days within a dataset. By default it will use the `date`. Let`s call it on a subset of our data. To distinguish between different Ids, we can set the `aes_col` argument to `Id`.
+`gg_day()` compares days within a dataset. By default it will use the `date`. Let's call it on a subset of our data. To distinguish between different Ids, we can set the `aes_col` argument to `Id`.
 
 ```{r, fig.width=7, fig.height = 10}
 data %>% 

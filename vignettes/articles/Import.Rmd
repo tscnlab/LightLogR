@@ -19,7 +19,7 @@ library(gghighlight)
 
 # Importing Data
 
-The first step in every analysis is data import. We will work with data collected as part the Master Thesis *Insights into real-world human light exposure: relating self-report with eye-level light logging* by Carolina Guidolin (2023). The data is stored in 17 text files in the *data/* folder. You can access the data yourself through the [LightLogR GitHub repository](https://github.com/tscnlab/LightLogR/tree/main/vignettes/articles/data).
+The first step in every analysis is data import. We will work with data collected as part of the Master Thesis *Insights into real-world human light exposure: relating self-report with eye-level light logging* by Carolina Guidolin (2023). The data is stored in 17 text files in the *data/* folder. You can access the data yourself through the [LightLogR GitHub repository](https://github.com/tscnlab/LightLogR/tree/main/vignettes/articles/data).
 
 ```{r, files}
 path <- "data"
@@ -65,7 +65,7 @@ data <-
                   auto.plot = FALSE, silent = TRUE)
 ```
 
-The second problem requires the filtering of certain Ids. The `filter_Datetime_multiple()` function is ideal for this. We can provide a length (1 week), starting from the end of data collection and backwards. The variable `arguments provide variable arguments to the filter function, they have to be provided in list form and expressions have to be quoted through`quote()`. Fixed arguments, like the length and`length_from_start\` are provided as named arguments and only have to be specified once, as they are the same for all Ids.
+The second problem requires the filtering of certain Ids. The `filter_Datetime_multiple()` function is ideal for this. We can provide a length (1 week), starting from the end of data collection and backwards. The variable `arguments` provide variable arguments to the filter function, they have to be provided in list form and expressions have to be quoted through`quote()`. Fixed arguments, like the length and`length_from_start\` are provided as named arguments and only have to be specified once, as they are the same for all Ids.
 
 ```{r, start shift}
 data <- 

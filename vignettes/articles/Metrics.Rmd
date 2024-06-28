@@ -36,7 +36,7 @@ data %>% gg_overview()
 
 There are a lot of metrics associated with personal light exposure. You can find the function reference to all of them in the appropriate [reference section](https://tscnlab.github.io/LightLogR/reference/index.html#metrics). There are a few important distinctions between metrics that are important to understand:
 
-* Some metrics require or work best with a specific time frame, usually one day, while others are calculated over an arbitrary length of time. For example, the function `interdaily_stability()` calculates a metric over multiple days, while a function like `midpointCE()` calculates the midpoint of the cumulative light exposure within the given time series - this is less useful for multiple days, where the midpoint is just a time point during these days. E.g., for two similar light exposure patterns across two days, the cumulative light exposure across those two days will be around midnight, which is not particularly informative. Much more sensible is the midpoint of the light exposure for each day. To enable this, data has to be grouped within days (or other relevant time frames, like sleep/wake-phase).
+* Some metrics require or work best with a specific time frame, usually one day, while others are calculated over an arbitrary length of time. For example, the function `interdaily_stability()` calculates a metric over multiple days, while a function like `midpointCE()` calculates the midpoint of the cumulative light exposure within the given time series - this is less useful for multiple days, where the midpoint is just a time point during these days. E.g., for two similar light exposure patterns across two days, the midpoint of cumulative light exposure across those two days will be around midnight, which is not particularly informative. Much more sensible is the midpoint of the light exposure for each day. To enable this, data has to be grouped within days (or other relevant time frames, like sleep/wake-phase).
 
 * Some metrics are submetrics within a family and have to be actively chosen through the arguments of the function. An example is `duration_above_threshold()` that, despite its name also provides the metrics `duration below threshold` and `duration within threshold`. Depending on its `comparison` argument, and whether one or two `threshold`s are provided, the function will calculate different metrics.
 
@@ -46,7 +46,7 @@ We will cover the practical considerations following from these aspects in the f
 
 # Metric calculation: basics
 
-All metric functions are by default agnostic to the type of data. They require vectors of light data and commonly also of datetimes. This means that the functions can be used outside of the LightLogR framework, if applied correctly. Let us try this with a simple example for a days worth of light data for one participant across two functions.
+All metric functions are by default agnostic to the type of data. They require vectors of numeric data (e.g., light data) and commonly also of datetimes. This means that the functions can be used outside of the LightLogR framework, if applied correctly. Let us try this with a simple example for a days worth of light data for one participant across two functions.
 
 ```{r, Id 201}
 data_Id201 <- data %>% filter(Id == 201 & date(Datetime) == "2023-08-15")
@@ -219,7 +219,7 @@ TAT_250 %>% head(12) %>% gt()
 
 ## Metric statistics
 
-With the dataframe `TAT_250`, we can easily calculate statistics for each participant. This can be done manually, e.g., with another call to `dplyr::summarize()`, or semi-automatic, e.g., with packages like `gtsummary`. In the following example, we will calculate the mean and standard deviation of the TAT 250 lx MEDI for each participant, formatted as `HH:SS` through a styling function.
+With the dataframe `TAT_250`, we can easily calculate statistics for each participant. This can be done manually, e.g., with another call to `dplyr::summarize()`, or semi-automatic, e.g., with packages like `gtsummary`. In the following example, we will calculate the mean and standard deviation of the TAT 250 lx MEDI for each participant, formatted as `HH:MM` through a styling function.
 
 ```{r}
 #styling formula for time
@@ -238,7 +238,7 @@ TAT_250 %>%
 
 # Metric calculation: batch
 
-In the final section, we will add more metrics to the analysis, including ones with multiple submetrics. Further, the let us imagine we wand to know how these metrics change from the first half of the experiment (August/September) to the second half (October/November). Finally, we will include a column `Time.data` to the data set, which will be used to calculate the metrics. This avoids 
+In the final section, we will add more metrics to the analysis, including ones with multiple sub-metrics. Further, we imagine we want to know how these metrics change from the first half of the experiment (August/September) to the second half (October/November). Finally, we will include a column `Time.data` in the data set, which will be used to calculate the metrics. This column format excludes the `day` information from the `Datetime` column, which avoids `date`-related issues when calculating the `mean` of the metrics. Finally, the `unnest()` call is used to flatten the table from the `dataframe` substructure that is created by `MLIT250` and `TAT250`.
 
 ```{r}
 data <- data %>% 
@@ -269,7 +269,7 @@ metrics %>% head() %>% gt()
 
 ```
 
-The operation above yields a dataframe with 6 metrics across 102 participant days (6 days for 17 participants). The grouping for `Month` did not add additional groups, as each participant day is already solely either in the `"Aug/Sep"` or `"Oct/Nov"` group. Next we will regroup the data by `Month` and look at a summary table similar to above, but for more metrics.
+The operation above yields a data frame with six metrics across 102 participant days (6 days for 17 participants). The grouping for `Month` did not add additional groups, as each participant day is already solely in the `"Aug/Sep"` or `"Oct/Nov"` group. Next, we will regroup the data by `Month` and look at a summary table similar to the above, but for more metrics.
 
 ```{r}
 metrics <- metrics %>% group_by(Month) %>% select(-Id, -wDay)
@@ -297,4 +297,4 @@ metrics %>%
               )
 ```
 
-And that is all you need to work with metrics in `LightLogR`. Be sure to look at the documentation for each function to understand the parameters and outputs, and at the [reference section](https://tscnlab.github.io/LightLogR/reference/index.html#metrics) to get an overview of all available metrics.
+And that is all you need to work with metrics in `LightLogR`. Be sure to look at the documentation for each function to understand the parameters and outputs and at the [reference section](https://tscnlab.github.io/LightLogR/reference/index.html#metrics) to get an overview of all available metrics.
