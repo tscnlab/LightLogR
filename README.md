@@ -37,13 +37,13 @@ package aims to provide tools for:
 
 - Generation of data and metadata files
 
-- Conversion of popular file formats
+- Conversion of common file formats
 
 - Validation of light logging data
 
 - Verification of crucial metadata
 
-- Calculation of common parameters
+- Calculation of common analysis parameters
 
 - Semi-automated analysis and visualization (both command-line and
   GUI-based)
@@ -61,9 +61,9 @@ generate images such as the one above.
 ## About the creation and funding of LightLogR
 
 **LightLogR** is developed by the [*Translational Sensory & Circadian
-Neuroscience*](https://www.tscnlab.org) lab, a joint group from the
-[Technical University of Munich](https://www.tum.de/en/) and the [Max
-Planck Institute for Biological
+Neuroscience Unit (MPS/TUM/TUMCREATE)*](https://www.tscnlab.org), a joint group based at the
+[Technical University of Munich](https://www.tum.de/en/), [TUMCREATE](https://www.tum-create.edu.sg/),
+the [Max Planck Institute for Biological
 Cybernetics](https://www.mpg.de/152075/biological-cybernetics).
 
 [*MeLiDos*](https://www.melidos.eu) is a joint,
