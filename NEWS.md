@@ -1,6 +1,6 @@
-# LightLogR 0.4.0
+# LightLogR 0.3.7
 
-# LightLogR 0.3.6
+# LightLogR 0.3.6 "Astronomical dawn"
 
 * `bright_dark_period()` now maintains the date when looping the data.
 
