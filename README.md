@@ -70,8 +70,7 @@ Planck Institute for Biological Neuroscience Unit
 (MPS/TUM/TUMCREATE)\*](https://www.tscnlab.org), a joint group based at
 the [Technical University of Munich](https://www.tum.de/en/),
 [TUMCREATE](https://www.tum-create.edu.sg/), the [Max Planck Institute
-for Biological
-Cybernetics](https://www.mpg.de/152075/biological-cybernetics).
+for Biological Cybernetics](https://www.mpg.de/152075/biological-cybernetics).
 
 [*MeLiDos*](https://www.melidos.eu) is a joint,
 [EURAMET](https://www.euramet.org)-funded project involving sixteen
