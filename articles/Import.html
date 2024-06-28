@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.7</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -101,7 +101,7 @@ packages</p>
 <h2 id="importing-data">Importing Data<a class="anchor" aria-label="anchor" href="#importing-data"></a>
 </h2>
 <p>The first step in every analysis is data import. We will work with
-data collected as part the Master Thesis <em>Insights into real-world
+data collected as part of the Master Thesis <em>Insights into real-world
 human light exposure: relating self-report with eye-level light
 logging</em> by Carolina Guidolin (2023). The data is stored in 17 text
 files in the <em>data/</em> folder. You can access the data yourself
@@ -212,10 +212,12 @@ data, but make the import silent as to not clutter the output.</p>
 <p>The second problem requires the filtering of certain Ids. The
 <code><a href="../reference/filter_Datetime_multiple.html">filter_Datetime_multiple()</a></code> function is ideal for this. We
 can provide a length (1 week), starting from the end of data collection
-and backwards. The variable
-<code>arguments provide variable arguments to the filter function, they have to be provided in list form and expressions have to be quoted through</code>quote()<code>. Fixed arguments, like the length and</code>length_from_start`
-are provided as named arguments and only have to be specified once, as
-they are the same for all Ids.</p>
+and backwards. The variable <code>arguments</code> provide variable
+arguments to the filter function, they have to be provided in list form
+and expressions have to be quoted through<code><a href="https://rdrr.io/r/base/substitute.html" class="external-link">quote()</a></code>. Fixed
+arguments, like the length and<code>length_from_start\</code> are
+provided as named arguments and only have to be specified once, as they
+are the same for all Ids.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="va">data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
