@@ -50,21 +50,27 @@ package aims to provide tools for:
 
 - Integration of data into a unified database for cross-study analyses
 
-##### Please note that LightLogR is work in progress! If you are interested in the project and want to know more, please send us an [email (johannes.zauner@tum.de)](mailto:johannes.zauner@tum.de)!
+##### Please note that LightLogR is work in progress! If you are interested in the project and want to know more, you can subscribe to the [LightLogR mailing list](https://lists.lrz.de/mailman/listinfo/lightlogr-users). If you find a bug, please open an issue on the [GitHub repository](https://github.com/tscnlab/LightLogR/issues).
+
+##### To maximaze LightLogRs utility, we want to hear from you! What features would you like to see, what are common issues you face when working with wearable data, and what kind of analysis are you performing? Let us now in the [LightLogR community survey](https://lists.lrz.de/mailman/listinfo/lightlogr-users)!
 
 Have a look at the **Example** section down below to get started, or
 dive into the
 [Articles](https://tscnlab.github.io/LightLogR/articles/index.html) to
 get more in depth information about how to work with the package and
-generate images such as the one above.
+generate images such as the one above, import data, visualization, and
+metric calculation.
 
 ## About the creation and funding of LightLogR
 
 **LightLogR** is developed by the [*Translational Sensory & Circadian
-Neuroscience Unit (MPS/TUM/TUMCREATE)*](https://www.tscnlab.org), a joint group based at the
-[Technical University of Munich](https://www.tum.de/en/), [TUMCREATE](https://www.tum-create.edu.sg/),
-the [Max Planck Institute for Biological
-Cybernetics](https://www.mpg.de/152075/biological-cybernetics).
+Neuroscience*](https://www.tscnlab.org) lab, a joint group from the
+[Technical University of Munich](https://www.tum.de/en/) and the [Max
+Planck Institute for Biological Neuroscience Unit
+(MPS/TUM/TUMCREATE)\*](https://www.tscnlab.org), a joint group based at
+the [Technical University of Munich](https://www.tum.de/en/),
+[TUMCREATE](https://www.tum-create.edu.sg/), the [Max Planck Institute
+for Biological Cybernetics](https://www.mpg.de/152075/biological-cybernetics).
 
 [*MeLiDos*](https://www.melidos.eu) is a joint,
 [EURAMET](https://www.euramet.org)-funded project involving sixteen
