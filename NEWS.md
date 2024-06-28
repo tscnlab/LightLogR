@@ -1,3 +1,5 @@
+# LightLogR 0.4.0
+
 # LightLogR 0.3.6
 
 * `bright_dark_period()` now maintains the date when looping the data.
