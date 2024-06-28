@@ -50,7 +50,7 @@ package aims to provide tools for:
 
 - Integration of data into a unified database for cross-study analyses
 
-##### Please note that LightLogR is work in progress! If you are interested in the project and want to know more, please send us an [email (johannes.zauner@tum.de)](mailto:johannes.zauner@tum.de)
+##### Please note that LightLogR is work in progress! If you are interested in the project and want to know more, please send us an [email (johannes.zauner@tum.de)](mailto:johannes.zauner@tum.de)!
 
 Have a look at the **Example** section down below to get started, or
 dive into the
