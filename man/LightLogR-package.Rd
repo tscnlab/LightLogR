@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-LightLogR helps to import, process, validate, and visualize personal light exposure measurement data from wearable devices. The package implements features such as the import of data and metadata files, conversion of common file formats, validation of light logging data, verification of crucial metadata, calculation of common parameters, and semi-automated analysis and visualization.
+Import, processing, validation, and visualization of personal light exposure measurement data from wearable devices. The package implements features such as the import of data and metadata files, conversion of common file formats, validation of light logging data, verification of crucial metadata, calculation of common parameters, and semi-automated analysis and visualization.
 }
 \seealso{
 Useful links:

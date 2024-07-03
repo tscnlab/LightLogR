@@ -20,11 +20,11 @@
 #'   Martín-Vide, J., & Peñuelas, J. (2018).
 #'   The consecutive disparity index, D: A measure of temporal variability in
 #'   ecological studies. \emph{Ecosphere}, 9(12), e02527.
-#'   \url{https://doi.org/10.1002/ecs2.2527}
+#'   \doi{10.1002/ecs2.2527}
 #'   
 #'   Hartmeyer, S.L., Andersen, M. (2023). Towards a framework for light-dosimetry studies:
 #'   Quantification metrics. \emph{Lighting Research & Technology}. 
-#'   \url{https://doi.org/10.1177/14771535231170500}
+#'   \doi{10.1177/14771535231170500}
 #'
 #' @examples
 #' dataset1 <-

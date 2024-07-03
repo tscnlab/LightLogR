@@ -67,11 +67,11 @@ dataset3 \%>\%
 Shochat, T., Santhi, N., Herer, P., Flavell, S. A., Skeldon, A. C.,
 & Dijk, D.-J. (2019). Sleep Timing in Late Autumn and Late Spring Associates
 With Light Exposure Rather Than Sun Time in College Students.
-\emph{Frontiers in Neuroscience}, 13. \url{https://doi.org/10.3389/fnins.2019.00882}
+\emph{Frontiers in Neuroscience}, 13. \doi{10.3389/fnins.2019.00882}
 
 Hartmeyer, S.L., Andersen, M. (2023). Towards a framework for light-dosimetry studies:
 Quantification metrics. \emph{Lighting Research & Technology}.
-\url{https://doi.org/10.1177/14771535231170500}
+\doi{10.1177/14771535231170500}
 }
 \seealso{
 Other metrics: 

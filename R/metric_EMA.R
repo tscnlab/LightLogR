@@ -30,11 +30,11 @@
 #' @references 
 #'    Price, L. L. A. (2014). On the Role of Exponential Smoothing in Circadian 
 #'    Dosimetry. \emph{Photochemistry and Photobiology}, 90(5), 1184-1192.
-#'    \url{https://doi.org/10.1111/php.12282}
+#'    \doi{10.1111/php.12282}
 #'    
 #'    Hartmeyer, S.L., Andersen, M. (2023). Towards a framework for light-dosimetry studies:
 #'    Quantification metrics. \emph{Lighting Research & Technology}. 
-#'    \url{https://doi.org/10.1177/14771535231170500}
+#'    \doi{10.1177/14771535231170500}
 #'
 #' @examples
 #' sample.data.environment.EMA = sample.data.environment %>%
