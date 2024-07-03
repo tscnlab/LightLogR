@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.8</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -92,13 +92,65 @@
     
 <p>This article focuses on the import from multiple files and
 participants, as well as the cleaning of the data. We need these
-packages</p>
+packages:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tscnlab/LightLogR" class="external-link">LightLogR</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://yutannihilation.github.io/gghighlight/" class="external-link">gghighlight</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
-<h2 id="importing-data">Importing Data<a class="anchor" aria-label="anchor" href="#importing-data"></a>
+<h2 id="from-which-devices-can-i-import-data">From which devices can I import data?<a class="anchor" aria-label="anchor" href="#from-which-devices-can-i-import-data"></a>
+</h2>
+<p>LightLogR aims to provide standard import routines for all devices
+used in research on personal light exposure. Currently, the following
+devices are supported:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">supported.devices</span></span>
+<span><span class="co">#&gt;  [1] "Actiwatch_Spectrum" "ActLumus"           "ActTrust"          </span></span>
+<span><span class="co">#&gt;  [4] "DeLux"              "LiDo"               "LightWatcher"      </span></span>
+<span><span class="co">#&gt;  [7] "LYS"                "nanoLambda"         "Speccy"            </span></span>
+<span><span class="co">#&gt; [10] "SpectraWear"</span></span></code></pre></div>
+<p>More Information on these devices can be found in the reference for
+<code><a href="../reference/import_Dataset.html">import_Dataset()</a></code>.</p>
+<div class="section level3">
+<h3 id="what-if-my-device-is-not-listed">What if my device is not listed?<a class="anchor" aria-label="anchor" href="#what-if-my-device-is-not-listed"></a>
+</h3>
+<p>If you are using a device that is currently not supported, please
+contact the developers. We are always looking to expand the range of
+supported devices. The easiest and most trackable way to get in contact
+is by opening a new issue on our <a href="https://github.com/tscnlab/LightLogR/issues" class="external-link">Github
+repository</a>. Please also provide a sample file of your data, so we
+can test the import function.</p>
+</div>
+<div class="section level3">
+<h3 id="what-if-my-device-is-listed-but-the-import-does-not-work-as-expected">What if my device is listed but the import does not work as
+expected?<a class="anchor" aria-label="anchor" href="#what-if-my-device-is-listed-but-the-import-does-not-work-as-expected"></a>
+</h3>
+<p>We regularly find that files exported from the same device model can
+differ in structure. This may be due to different settings, software or
+hardware updates. If you encounter problems with the import, please get
+in contact with us, e.g. by opening an issue on our <a href="https://github.com/tscnlab/LightLogR/issues" class="external-link">Github
+repository</a>. Please provide a sample file of your data.</p>
+</div>
+<div class="section level3">
+<h3 id="are-there-other-ways-to-import-data">Are there other ways to import data?<a class="anchor" aria-label="anchor" href="#are-there-other-ways-to-import-data"></a>
+</h3>
+<p>Yes. <code>LightLogR</code> simply requires a <code>data.frame</code>
+with a column containing <code>datetime</code> formatted data. Even a
+<code>light</code> data column is not strictly necessary, as
+<code>LightLogR</code> is optimized for, but not restricted to, light
+data. Further, an <code>Id</code> column is used in some functions to
+distinguish between different participants.</p>
+<p>To make life easier when using functions in <code>LightLogR</code>,
+the datetime column should be named <code>Datetime</code>, the id column
+<code>Id</code>, and, if present, the melanopic EDI light information
+<code>MEDI</code>.</p>
+<p>Lastly, you can modify or add import functions that build upon
+<code>LightLogR</code>s import functionality. See the last chapter in
+this article for more information on that.</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="importing-data">Importing data<a class="anchor" aria-label="anchor" href="#importing-data"></a>
 </h2>
 <p>The first step in every analysis is data import. We will work with
 data collected as part of the Master Thesis <em>Insights into real-world
@@ -107,7 +159,7 @@ logging</em> by Carolina Guidolin (2023). The data is stored in 17 text
 files in the <em>data/</em> folder. You can access the data yourself
 through the <a href="https://github.com/tscnlab/LightLogR/tree/main/vignettes/articles/data" class="external-link">LightLogR
 GitHub repository</a>.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">path</span> <span class="op">&lt;-</span> <span class="st">"data"</span></span>
 <span><span class="va">files</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">path</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#show how many files are listes</span></span>
@@ -116,12 +168,12 @@ GitHub repository</a>.</p>
 <p>Next we require a time zone of data collection. If uncertain which
 time zones are valid, use the <code><a href="https://rdrr.io/r/base/timezones.html" class="external-link">OlsonNames()</a></code> function. Our
 data was collected in the “Europe/Berlin” time zone.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#first six time zones from OlsonNames()</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/timezones.html" class="external-link">OlsonNames</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "Africa/Abidjan"     "Africa/Accra"       "Africa/Addis_Ababa"</span></span>
 <span><span class="co">#&gt; [4] "Africa/Algiers"     "Africa/Asmara"      "Africa/Asmera"</span></span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co">#our time zone</span></span>
 <span><span class="va">tz</span> <span class="op">&lt;-</span> <span class="st">"Europe/Berlin"</span></span></code></pre></div>
@@ -129,12 +181,12 @@ data was collected in the “Europe/Berlin” time zone.</p>
 extract them and store them in a column called <code>Id</code>. The
 following code defines the pattern as a <em>regular expression</em>,
 which will extract the first three digits from the file name.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pattern</span> <span class="op">&lt;-</span> <span class="st">"^(\\d{3})"</span></span></code></pre></div>
 <p>Now we can import the data. Data were collected with the ActLumus
 device by Condor Instruments. The right way to specify this is through
 the <code>import</code> function.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">import</span><span class="op">$</span><span class="fu">ActLumus</span><span class="op">(</span><span class="va">files</span>, tz <span class="op">=</span> <span class="va">tz</span>, auto.id <span class="op">=</span> <span class="va">pattern</span>, print_n<span class="op">=</span><span class="fl">33</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Successfully read in 1'034'650 observations across 17 Ids from 17 ActLumus-file(s).</span></span>
@@ -186,6 +238,34 @@ the <code>import</code> function.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">32</span> 222   10s                    <span style="text-decoration: underline;">61</span>890 100% </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">33</span> 222   3610s (~1 hours)           1 0%</span></span></code></pre></div>
 <p><img src="Import_files/figure-html/import-1.png" width="700"></p>
+<div class="section level3">
+<h3 id="my-import-is-slow--why-is-that-and-can-i-speed-it-up">My import is slow. Why is that and can I speed it up?<a class="anchor" aria-label="anchor" href="#my-import-is-slow--why-is-that-and-can-i-speed-it-up"></a>
+</h3>
+<p>There are several possibilities, why the import is slow. The most
+common reasons are:</p>
+<ul>
+<li>The data files are simply large. With short measurement intervals,
+many participants, and long measurement periods, files for a single
+study can easily reach several gigabytes. This takes some time to import
+and is ok.</li>
+<li>The data files contain many gaps. During import,
+<code>LightLogR</code> checks for and visualizes gaps in the data.
+Especially large datasets with small intervals contain many gaps, which
+can slow down the import process.</li>
+<li>The device model you are importing from has non-consistent data
+structures. Some devices have a varying number of rows before the actual
+data starts. This means a small portion of every file has to be read in
+and the correct starting row has to be found. This can slow down the
+import process if you have many files.</li>
+</ul>
+<p>If you are experiencing slow imports, you can try the following: -
+Only read in part of your datasets, or split your dataset into several
+peaces, that each gets loaded in separately. You can combine them
+afterwards with <code><a href="../reference/join_datasets.html">join_datasets()</a></code>. - If you have many gaps in
+your data, you can set <code>auto.plot = FALSE</code> in the import
+function. This will eliminate the call to <code><a href="../reference/gg_overview.html">gg_overview()</a></code>,
+which calculates and visualizes the gaps in the data.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="data-cleaning-1">Data cleaning #1<a class="anchor" aria-label="anchor" href="#data-cleaning-1"></a>
@@ -205,7 +285,7 @@ dataset.</li>
 <p>Let us first deal with the DST change. LightLogR has an in-built
 function to correct for this during import. We thus will re-import the
 data, but make the import silent as to not clutter the output.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="va">import</span><span class="op">$</span><span class="fu">ActLumus</span><span class="op">(</span><span class="va">files</span>, tz <span class="op">=</span> <span class="va">tz</span>, auto.id <span class="op">=</span> <span class="va">pattern</span>, dst_adjustment <span class="op">=</span> <span class="cn">TRUE</span>, </span>
 <span>                  auto.plot <span class="op">=</span> <span class="cn">FALSE</span>, silent <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
@@ -218,7 +298,7 @@ and expressions have to be quoted through<code><a href="https://rdrr.io/r/base/s
 arguments, like the length and<code>length_from_start\</code> are
 provided as named arguments and only have to be specified once, as they
 are the same for all Ids.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="va">data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/filter_Datetime_multiple.html">filter_Datetime_multiple</a></span><span class="op">(</span></span>
@@ -230,7 +310,7 @@ are the same for all Ids.</p>
 <span>    <span class="op">)</span>, length <span class="op">=</span> <span class="st">"1 week"</span>, length_from_start <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p>Let’s have a look at the data again with the
 <code><a href="../reference/gg_overview.html">gg_overview()</a></code> function.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/gg_overview.html">gg_overview</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Import_files/figure-html/overview-1.png" width="700"></p>
 <p>Looks much better now. Also, because there is no longer a hint about
@@ -238,10 +318,10 @@ gaps in the lower right corner, we can be sure that all gaps have been
 removed. The function gap_finder() shows us, however, that there are
 still irregularities in the data and the function count_difftime()
 reveals where they are.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/gap_finder.html">gap_finder</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Found 183580 gaps. 847054 Datetimes fall into the regular sequence.</span></span></code></pre></div>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/count_difftime.html">count_difftime</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span>n<span class="op">=</span><span class="fl">22</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 22 × 3</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Groups:   Id [17]</span></span></span>
@@ -277,7 +357,7 @@ the Ids 215, 218, and 221.</p>
 </h2>
 <p>Let us first visualize where the irregularities are. We can use
 <code><a href="../reference/gg_days.html">gg_days()</a></code> for that.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#create two columns to show the irregularities and gaps for relevant ids</span></span>
 <span><span class="va">difftimes</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="va">data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
@@ -294,12 +374,12 @@ the Ids 215, 218, and 221.</p>
 <span>            <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>xmin <span class="op">=</span> <span class="va">Datetime</span>, xmax <span class="op">=</span> <span class="va">end</span>, ymin <span class="op">=</span> <span class="op">-</span><span class="cn">Inf</span>, ymax <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span>,</span>
 <span>            fill <span class="op">=</span> <span class="st">"red"</span>, col <span class="op">=</span> <span class="st">"red"</span>, linewidth <span class="op">=</span> <span class="fl">0.2</span>, alpha <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://yutannihilation.github.io/gghighlight/reference/gghighlight.html" class="external-link">gghighlight</a></span><span class="op">(</span><span class="va">difftime</span> <span class="op">!=</span> <span class="fl">10</span> <span class="op">|</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html" class="external-link">lag</a></span><span class="op">(</span><span class="va">difftime</span> <span class="op">!=</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Import_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
+<p><img src="Import_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
 <p>All irregular data appear at the very beginning of the data
 collection. As we are interestet in one whole week of data, we can
 similarly apply a one week filter on these Ids and see if that removed
 the irregular data points.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="va">data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/filter_Datetime_multiple.html">filter_Datetime_multiple</a></span><span class="op">(</span></span>
@@ -311,7 +391,7 @@ the irregular data points.</p>
 <span></span>
 <span><span class="va">data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/gap_finder.html">gap_finder</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; No gaps found</span></span></code></pre></div>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/count_difftime.html">count_difftime</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span>n<span class="op">=</span><span class="fl">17</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 17 × 3</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Groups:   Id [17]</span></span></span>
@@ -337,8 +417,110 @@ the irregular data points.</p>
 <p>The data is now clean and we can proceed with the analysis. This
 dataset will be needed in other articles, so we will save it as an RDS
 file.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># saveRDS(data, "cleaned_data/ll_data.rds")</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="importing-data-miscellaneous">Importing data: Miscellaneous<a class="anchor" aria-label="anchor" href="#importing-data-miscellaneous"></a>
+</h2>
+<div class="section level3">
+<h3 id="other-import-arguments">Other import arguments<a class="anchor" aria-label="anchor" href="#other-import-arguments"></a>
+</h3>
+<p>Other potentially important arguments are the <code>locale</code>
+argument - this is useful if you have special characters in your data
+(e.g. German ü or ä) that are not recognized by the default locale. Look
+at <code><a href="https://readr.tidyverse.org/reference/locale.html" class="external-link">readr::default_locale()</a></code> for more information.</p>
+<p>The <code>...</code> argument is passed through to whichever import
+function is used for the data. For some devices, it is also used to
+provide additional information, such as <code>column_names</code> for
+the Actiwatch devices, that differ depending on the language setting of
+the device and software. Whether a device requires additional
+information can be found in the import documentation (see
+<code><a href="../reference/import_Dataset.html">import_Dataset()</a></code>).</p>
+</div>
+<div class="section level3">
+<h3 id="other-ways-to-call-import">Other ways to call import<a class="anchor" aria-label="anchor" href="#other-ways-to-call-import"></a>
+</h3>
+<p>Instead of using the import function as described above
+(<code>import$device()</code>), you can also use the function
+<code><a href="../reference/import_Dataset.html">import_Dataset()</a></code> and specify the device as a character
+string in the first argument. This might be useful if you want to import
+data programmatically from different devices, e.g., through a
+<code><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">purrr::map()</a></code> function. Only <code>supported.devices</code>
+will be accepted by the function.</p>
+<p>Here is an example:</p>
+<pre><code><span><span class="va">devices</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ActLumus"</span>, <span class="st">"Speccy"</span><span class="op">)</span></span>
+<span><span class="va">files_AL</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"path/to/ActLumus/file1.csv"</span>, <span class="st">"path/to/ActLumus/file2.csv"</span><span class="op">)</span></span>
+<span><span class="va">files_Sy</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"path/to/Speccy/file1.csv"</span>, <span class="st">"path/to/Speccy/file2.csv"</span><span class="op">)</span></span>
+<span><span class="va">tz</span> <span class="op">&lt;-</span> <span class="st">"Europe/Berlin"</span></span>
+<span></span>
+<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map2.html" class="external-link">map2</a></span><span class="op">(</span><span class="va">devices</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">files_AL</span>, <span class="va">files_Sy</span><span class="op">)</span>, <span class="va">import_Dataset</span>, tz <span class="op">=</span> <span class="va">tz</span><span class="op">)</span></span></code></pre>
+<p>This way, you will end with a list of two dataframes, one with the
+ActLumus data and one with the Speccy data.</p>
+</div>
+<div class="section level3">
+<h3 id="creating-your-own-import-function">Creating your own import function<a class="anchor" aria-label="anchor" href="#creating-your-own-import-function"></a>
+</h3>
+<p><strong>Note: This section is for advanced users only. You should be
+familiar with expressions in R and how to manipulate them.</strong></p>
+<p><code>LightLogR</code> comes with a number of custom import routines
+for different devices, that are then implemented into the main import
+function, which covers some general aspects and also creates the summary
+overview.</p>
+<p>If you would like to write your own custom import function,
+<code>LightLogR</code> has you covered. First, you can see what makes
+all the import functions tick by looking at the included data set
+<code>ll_import_expr</code>. This is a list of all the individual
+routines. Let’s have a look at the ActLumus routine</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ll_import_expr</span><span class="op">$</span><span class="va">ActLumus</span></span>
+<span><span class="co">#&gt; {</span></span>
+<span><span class="co">#&gt;     data &lt;- suppressMessages(readr::read_delim(filename, skip = 32, </span></span>
+<span><span class="co">#&gt;         delim = ";", n_max = n_max, col_types = paste0("c", paste0(rep("d", </span></span>
+<span><span class="co">#&gt;             32), collapse = "")), id = "file.name", locale = locale, </span></span>
+<span><span class="co">#&gt;         name_repair = "universal", ...))</span></span>
+<span><span class="co">#&gt;     data &lt;- data %&gt;% dplyr::rename(Datetime = DATE.TIME, MEDI = MELANOPIC.EDI) %&gt;% </span></span>
+<span><span class="co">#&gt;         dplyr::mutate(Datetime = Datetime %&gt;% lubridate::dmy_hms(tz = tz))</span></span>
+<span><span class="co">#&gt; }</span></span></code></pre></div>
+<p>We can see, it is rather simple, just a few lines of code. You can
+write your own expression and create an import function with it. The
+expression should create a <code>data</code> variable that contains the
+import script for the files. At the end of the expression, the
+<code>data</code> variable should contain the imported dataset and
+include a correctly formatted <code>Datetime</code> column, complete
+with the correct timezone.</p>
+<p>Here we will create a variation of the old routine, that just adds a
+short message:</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ll_import_expr</span><span class="op">$</span><span class="va">ActLumus_new</span> <span class="op">&lt;-</span> <span class="va">ll_import_expr</span><span class="op">$</span><span class="va">ActLumus</span></span>
+<span><span class="va">ll_import_expr</span><span class="op">$</span><span class="va">ActLumus_new</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> </span>
+<span>  <span class="fu">rlang</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/expr.html" class="external-link">expr</a></span><span class="op">(</span><span class="op">{</span> <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"**Congratulation, you made a new import function**\n"</span><span class="op">)</span></span>
+<span>  <span class="va">data</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span><span class="va">ll_import_expr</span><span class="op">$</span><span class="va">ActLumus_new</span></span>
+<span><span class="co">#&gt; {</span></span>
+<span><span class="co">#&gt;     data &lt;- suppressMessages(readr::read_delim(filename, skip = 32, </span></span>
+<span><span class="co">#&gt;         delim = ";", n_max = n_max, col_types = paste0("c", paste0(rep("d", </span></span>
+<span><span class="co">#&gt;             32), collapse = "")), id = "file.name", locale = locale, </span></span>
+<span><span class="co">#&gt;         name_repair = "universal", ...))</span></span>
+<span><span class="co">#&gt;     data &lt;- data %&gt;% dplyr::rename(Datetime = DATE.TIME, MEDI = MELANOPIC.EDI) %&gt;% </span></span>
+<span><span class="co">#&gt;         dplyr::mutate(Datetime = Datetime %&gt;% lubridate::dmy_hms(tz = tz))</span></span>
+<span><span class="co">#&gt;     {</span></span>
+<span><span class="co">#&gt;         cat("**Congratulation, you made a new import function**\n")</span></span>
+<span><span class="co">#&gt;         data</span></span>
+<span><span class="co">#&gt;     }</span></span>
+<span><span class="co">#&gt; }</span></span></code></pre></div>
+<p>We can now create a new import function with this expression. The
+function will be called <code>import$ActLumus_new()</code>.</p>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">import</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/import_adjustment.html">import_adjustment</a></span><span class="op">(</span><span class="va">ll_import_expr</span><span class="op">)</span></span></code></pre></div>
+<p>Let us now import a file of the previous dataset, setting the main
+summary and plotting function silent</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">import</span><span class="op">$</span><span class="fu">ActLumus_new</span><span class="op">(</span><span class="va">files</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, tz <span class="op">=</span> <span class="va">tz</span>, auto.id <span class="op">=</span> <span class="va">pattern</span>, </span>
+<span>                         auto.plot <span class="op">=</span> <span class="cn">FALSE</span>, silent <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; **Congratulation, you made a new import function**</span></span></code></pre></div>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

@@ -16,7 +16,7 @@ exposure signal to quantify the effective direct input to the non-visual system
     
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.8</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,15 +83,15 @@ exposure signal to quantify the effective direct input to the non-visual system
 
 
 <dt>Time.vector</dt>
-<dd><p>Vector containing the time data. Can be <a href="https://rdrr.io/r/base/DateTimeClasses.html" class="external-link">POSIXct</a>, <a href="https://hms.tidyverse.org/reference/hms.html" class="external-link">hms</a>,
-<a href="https://lubridate.tidyverse.org/reference/duration.html" class="external-link">duration</a>, or <a href="https://rdrr.io/r/base/difftime.html" class="external-link">difftime</a>.</p></dd>
+<dd><p>Vector containing the time data. Can be <code><a href="https://lubridate.tidyverse.org/reference/posix_utils.html" class="external-link">POSIXct()</a></code>,<code><a href="https://hms.tidyverse.org/reference/hms.html" class="external-link">hms::hms()</a></code>,
+<code><a href="https://lubridate.tidyverse.org/reference/duration.html" class="external-link">lubridate::duration()</a></code>, <code><a href="https://rdrr.io/r/base/difftime.html" class="external-link">difftime()</a></code>.</p></dd>
 
 
 <dt>epoch</dt>
 <dd><p>The epoch at which the data was sampled. Can be either a
-<a href="https://lubridate.tidyverse.org/reference/duration.html" class="external-link">duration</a> or a string. If it is a string, it needs to be
+<code><a href="https://lubridate.tidyverse.org/reference/duration.html" class="external-link">lubridate::duration()</a></code> or a string. If it is a string, it needs to be
 either <code>"dominant.epoch"</code> (the default) for a guess based on the data, or a valid
-<a href="https://lubridate.tidyverse.org/reference/duration.html" class="external-link">duration</a> string, e.g., <code>"1 day"</code> or <code>"10 sec"</code>.</p></dd>
+<code><a href="https://lubridate.tidyverse.org/reference/duration.html" class="external-link">lubridate::duration()</a></code> string, e.g., <code>"1 day"</code> or <code>"10 sec"</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -105,50 +105,13 @@ length as <code>Time.vector</code>.</p>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The timeseries is assumed to be regular. Missing values in the
 light data will be replaced by 0.</p>
-<p>The inputs to the model are discrete time samples of melanopic equivalent
-daylight (D65) illuminance (mEDI) \(E_{v,mel}^{D65}(t)\), transformed into
-the effective light stimulus \(I(t)\).</p>
-<p>$$I(t) = E_{v,mel}^{D65} * K_{mel,v}^{D65}/A_{mel},$$</p>
-<p>where \(K_{mel,v}^{D65} = 1.3262 / 1000\) is the melanopic normalization factor
-to convert melanopic EDI to melanopic Irradiance and \(A_{mel} = 97.07\) is the
-area of the melanopic sensitivity curve.</p>
-<p>The light stimulus \(I(t)\) is then passed through a linear filter \(L1\),
-which is associated with the temporal integration of the retina, to determine the
-output \(u(t)\).</p>
-<p>$$u(t) = \frac{1}{d_{1}}\sum_{i=0}^{d_{1}/\Delta t} I(t-1)\Delta t,$$</p>
-<p>where \(d_{1}\) is the length of filter \(L1\). The time step size
-\(\Delta t\) is the epoch at which the data was sampled.
-Then \(u(t)\) is transformed by a nonlinear function \(N(u)\), describing the
-intensity-response relationship to the light stimulus, to determine the
-output \(v(t)\).</p>
-<p>$$v(t) = N(u(t)) = \frac{1}{1+(\sigma(t)/u(t))^n}.$$</p>
-<p>The half-maximum constant \(\sigma\) adapts to prior light history
-$$
-   \begin{array}{ll}
-   \sigma(t)=\sigma_{0}/2, &amp; \qquad &amp; \forall u_{H}(t)&lt;0,\\
-   \sigma(t)=\sigma_{0}\times2^{u_{H}(t)-1}, &amp; \qquad &amp; \forall u_{H}(t)\geq 0. 
-   \end{array}
-   $$</p>
-<p>The prior history of light exposure is calculated using a moving window,
-filter \(LH\), to average the input</p>
-<p>$$u_{H}(t) = \frac{1}{d_{H}}\sum_{i=0}^{d_{H}/\Delta t} 
-   \log_{10}(E_{v}(t-i))\Delta t,$$</p>
-<p>where \(dH\) is the width of the filter \(LH\) in hours and \(E_{v}\)
-is the photopic illuminance.</p>
-<p>The signal \(v(t)\) is finally passed through a second filter \(L2\),
-which reflects the adaptation of the non-visual system to continuous light
-exposure, to determine the final output \(r_{D}(t)\).</p>
-<p>$$r_{D}(t)=\alpha \times v(t−1)+(1−\alpha) \times r_{D}(t−1),$$</p>   
-<p>where \(\alpha=2/(d2/\Delta t+1)\) and \(d2\) is the length of filter
-\(L2\) in hours. The model outputs are time-sampled relative non-visual
-responses.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p>Amundadottir, M.L. (2016). Light-driven model for identifying
 indicators of non-visual health potential in the built environment
 [Doctoral dissertation, EPFL]. EPFL infoscience.
-<a href="http://dx.doi.org/10.5075/epfl-thesis-7146" class="external-link">http://dx.doi.org/10.5075/epfl-thesis-7146</a></p>
+<a href="https://doi.org/10.5075/epfl-thesis-7146" class="external-link">doi:10.5075/epfl-thesis-7146</a></p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

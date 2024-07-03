@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.8</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -158,6 +158,13 @@ during that period.</p></li>
 aspects in the following sections. Further, every function documentation
 explicitly states whether different metrics are accessible through
 parameters, and which metrics are calculated by default.</p>
+<p><strong>Note: Most metrics require complete and regular data for a
+sensible output. While some metrics can handle missing data, it is
+generally advisable to clean the data before calculating metrics.
+LightLogR helps to identify gaps and irregularities and can also
+aggregate data to larger intervals, which can be acceptable for small
+gaps. In cases of larger gaps, dates or participants might have to be
+removed from analysis.</strong></p>
 </div>
 <div class="section level2">
 <h2 id="metric-calculation-basics">Metric calculation: basics<a class="anchor" aria-label="anchor" href="#metric-calculation-basics"></a>
