@@ -54,6 +54,6 @@ labels = function(x) format(x, scientific = FALSE, big.mark = " "))
 
 }
 \references{
-This function`s code is a straight copy from a post on stack overflow.
-https://stackoverflow.com/a/14674703
+This function`s code is a straight copy from a post on \href{https://stackoverflow.com/a/14674703}{stack overflow}.
+The author of the answer is \href{https://stackoverflow.com/users/1320535/julius-vainora}{Julius Vainora}, and the author of the question \href{https://stackoverflow.com/users/1212562/brian-b}{Brian B}
 }

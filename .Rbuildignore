@@ -14,3 +14,4 @@
 ^app\.R$
 ^vignettes/articles$
 ^\.gitlab-ci\.yml$
+^cran-comments\.md$
