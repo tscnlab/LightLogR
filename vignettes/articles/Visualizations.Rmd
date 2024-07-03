@@ -15,6 +15,7 @@ The following packages are needed for the analysis:
 ```{r setup, message = FALSE}
 library(LightLogR)
 library(tidyverse)
+library(patchwork)
 ```
 
 # Importing Data
@@ -113,7 +114,7 @@ data_subset %>%
 
 This is the companion function to `gg_day()`. Instead of using individual days, it will create a timeline of days across all Ids.
 
-```{r, fig.width=10}
+```{r, fig.width=12}
 data_subset2 <- 
 data %>% 
   filter(Id %in% c(205, 216, 219)) %>% #choosing 2 ids
@@ -122,19 +123,20 @@ data %>%
 data_subset2 %>%  gg_days()
 ```
 
-By default, `gg_days()` will always plot full days. Let us strip one participant of data for one day.
+By default, `gg_days()` will always plot full days. Let us strip one participant of data for three days.
 
-```{r, fig.width=10}
+```{r, fig.width=12}
 data_subset3 <- 
 data_subset2 %>% 
-  filter(!(Id == 205 & date(Datetime) == "2023-08-28"))
+  filter(!(Id == 205 & 
+             date(Datetime) %in% c("2023-08-28", "2023-08-29", "2023-08-30")))
 
 data_subset3 %>%  gg_days()
 ```
 
 You can see the plots are misaligned in their facets. We can correct for that by providing an exact number of days to the `x.axis.limits` argument. `Datetime_limits()` is a helper function from `LightLogR` and the documentation reveals more about its arguments.
 
-```{r, fig.width=10}
+```{r, fig.width=12}
 data_subset3 %>% 
   gg_days(
     x.axis.limits = 
@@ -175,7 +177,7 @@ data_subset <- data_subset %>% gap_handler(full.days = TRUE)
 
 The horizontal doubleplot is activated by default, if only one day is present within all provided groups, or it can be set explicitly by `type = "repeat"`. 
 
-```{r, fig.height=8}
+```{r, fig.height=10}
  data_subset %>% 
    gg_doubleplot(aes_fill = Id, jco_color = TRUE, type = "repeat")
 #identical:
@@ -189,7 +191,7 @@ Each plot line thus is the same day, plotted twice.
 
 The vertical doubleplot is activated by default if any group has more than one day. It can be set explicitly by `type = "next"`. 
 
-```{r,fig.height=8}
+```{r,fig.height=10}
 data_subset %>% 
   gg_doubleplot(aes_fill = Id, jco_color = TRUE)
 #identical:
@@ -219,17 +221,28 @@ data_two_groups <- data %>%
   ) %>% group_by(Month)
 ```
 
-Now we can aggregate the data to a single day per group and make a doubleplot from it.
+Now we can aggregate the data to a single day per group and make a doubleplot from it. With `aggregate_Date()` we condense a large dataset with 10-second intervals to a single day for two groups with a 15 minute interval. The day that is assigned by default is the median measurement day of the group.
 
 ```{r}
 data_two_groups %>% 
   aggregate_Date(unit = "15 mins") %>% 
   gg_doubleplot(aes_fill = Month, jco_color = TRUE) +
   guides(fill = "none")
+```
+
+We can further improve this plot. First, we overwrite the default behavior by setting a specific (arbitrary) date for both groups. By ungrouping the data afterwards, we can plot the two groups in a single row, making the two times easily comparable. Setting `facetting = FALSE` gets rid of the strip label, that otherwise would show the (arbitrary) date. 
+
+```{r}
+data_two_groups %>% 
+  aggregate_Date(unit = "15 mins", 
+                 date.handler = \(x) as_date("2023-09-15")
+                 ) %>% 
+  ungroup() %>% 
+  gg_doubleplot(aes_fill = Month, jco_color = TRUE, facetting = FALSE)
 
 ```
 
-With `aggregate_Date()` we condensed a large dataset with 10-second intervals to a single day for two groups with a 15 minute interval. The day that is assigned by default is the median measurement day of the group, it is shown to the as part of the strip label on the left. 
+We clearly see now, that daytime light exposure starts later and ends earlier, with lower daytime values overall. Conversely, nighttime light exposure is increased in the second half of the experiment (Oct/Nov). By using the `gg_doubleplot()` feature, the nighttime light pattern is clearly visible even accross midnight.
 
 # Interactivity
 
@@ -240,5 +253,67 @@ data_subset %>%
   gg_day(aes_col = Id, geom = "line",
          interactive = TRUE
          )
+```
+
+# Miscellaneous
+
+## Non-Light properties
+
+`LightLogR` is designed to work with light data, but it can also be used for other types of data. Simply define the y.axis argument in the plotting functions. In the following example, we will plot the activity data from the `data` dataset.
+
+For comparison, the light data is added in the background with a lower alpha value.
+
+```{r, fig.width=12}
+data_subset2 %>%
+  gg_days(y.axis = PIM, y.axis.label = "Activity (PIM)") +
+  geom_line(aes(y=MEDI), color = "red", alpha = 0.2)
+```
+
+## Scales
+
+By default, `LightLogR` uses a so-called `symlog` scale for visualizations. This scale is a combination of a linear and a logarithmic scale, which is useful for light data, as it allows to visualize very low and very high values in the same plot, including 0 and negative values. As light data is regularly zero, and exact values between 0 and 1 lux are usually not as relevant for devices measuring up to 10^5 lx, this scale is more useful compared to a linear or logarithmic scaling.
+
+The way `symlog` works is that there is a threshold up to which absolute values are kept linear, and beyond which they are transformed logarithmically. The default threshold is 1, which is a good choice for light data. However, this can be changed by setting the `threshold` argument in the plotting functions. See a full documentation of the `symlog` scale `symlog_trans()`.
+
+Here is an example to show how the transformation is particularly useful for differences that cross zero. We will use the single-day doubleplot data from above.
+
+```{r, fig.height = 6}
+#dataset from above
+data <- 
+data_two_groups %>% 
+  aggregate_Date(unit = "15 mins", 
+                 date.handler = \(x) as_date("2023-09-15")
+                 ) %>% 
+  ungroup()
+
+#original doubleplot from above
+original_db <- data %>% 
+  gg_doubleplot(aes_fill = Month, jco_color = TRUE, facetting = FALSE) +
+  guides(fill = "none")
+
+#difference doubleplot, showing the average difference between the to phases
+difference_db <- 
+data %>% 
+  select(Datetime, MEDI, Month) %>% 
+  pivot_wider(names_from = Month, values_from = MEDI) %>% 
+  gg_doubleplot(y.axis = `Oct/Nov`-`Aug/Sep`, facetting = FALSE,
+                y.axis.label = "difference (lx, MEDI)")
+
+#plotting
+original_db / difference_db
+
+```
+
+We can clearly see the difference in light exposure is crossing 0 several times. With the symlog scale no values are discarded, because they are outside the traditional range of a logarithmic scale. Should values below 1 lux be of interest, the parameters of the transformation can be adjusted.
+
+```{r}
+data %>% 
+  select(Datetime, MEDI, Month) %>% 
+  pivot_wider(names_from = Month, values_from = MEDI) %>% 
+  gg_doubleplot(y.axis = `Oct/Nov`-`Aug/Sep`, facetting = FALSE,
+                y.axis.label = "difference (lx, MEDI)",
+                y.scale = symlog_trans(thr = 0.001),
+                y.axis.breaks = c(-10^(-2:5), 0, 10^(5:-2))
+                )
 ```
 

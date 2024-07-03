@@ -11,8 +11,8 @@
 #' @return a transformation function that can be used in [ggplot] or [plotly] to scale positive and negative values on a log scale.
 #' @export
 #'
-#' @references This function`s code is a straight copy from a post on stack overflow.
-#' https://stackoverflow.com/a/14674703
+#' @references This function`s code is a straight copy from a post on [stack overflow](https://stackoverflow.com/a/14674703).
+#' The author of the answer is [Julius Vainora](https://stackoverflow.com/users/1320535/julius-vainora), and the author of the question [Brian B](https://stackoverflow.com/users/1212562/brian-b)
 #'
 #' @examples
 #' dataset <- 

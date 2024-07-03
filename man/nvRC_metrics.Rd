@@ -56,8 +56,8 @@ and the circadian response to a reference profile.
 \code{nvRC_relativeAmplitudeError()} calculates the relative amplitude error (RAE).
 It is expressed as
 
-\deqn{RAE(i,T)=r_{C,max}−r_{C,max}^{ref},}
- 
+\deqn{RAE(i,T)=r_{C,max}-r_{C,max}^{ref},}
+
 and quantifies the difference between the maximum response achieved in a period
 to the reference signal.
 }
@@ -98,5 +98,5 @@ nvRC_relativeAmplitudeError(dataset1$nvRC, dataset.reference$nvRC)
 Amundadottir, M.L. (2016). Light-driven model for identifying
 indicators of non-visual health potential in the built environment
 [Doctoral dissertation, EPFL]. EPFL infoscience.
-\url{http://dx.doi.org/10.5075/epfl-thesis-7146}
+\doi{10.5075/epfl-thesis-7146}
 }

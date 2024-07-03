@@ -19,11 +19,11 @@
 #' @references 
 #'    Alvarez, A. A., & Wildsoet, C. F. (2013). Quantifying light
 #'    exposure patterns in young adult students. \emph{Journal of Modern Optics},
-#'    60(14), 1200–1208. \url{https://doi.org/10.1080/09500340.2013.845700}
+#'    60(14), 1200–1208. \doi{10.1080/09500340.2013.845700}
 #'    
 #'   Hartmeyer, S.L., Andersen, M. (2023). Towards a framework for light-dosimetry studies:
 #'   Quantification metrics. \emph{Lighting Research & Technology}. 
-#'   \url{https://doi.org/10.1177/14771535231170500}
+#'   \doi{10.1177/14771535231170500}
 #'
 #' @examples
 # 

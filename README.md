@@ -94,7 +94,13 @@ held responsible for them.
 
 ## Installation
 
-You can install the development version of LightLogR from
+You can install LightLogR from [CRAN](https://CRAN.R-project.org) with:
+
+``` r
+install.packages("LightLogR")
+```
+
+You can install the latest development version of LightLogR from
 [GitHub](https://github.com/) with:
 
 ``` r
@@ -108,7 +114,7 @@ Here is a quick starter on how do use **LightLogR**.
 
 ``` r
 library(LightLogR)
-#these packages are just needed for the examples as shown.
+#these packages are needed for the examples as shown below.
 library(flextable)
 library(dplyr)
 library(ggplot2)

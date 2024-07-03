@@ -84,6 +84,9 @@ is maintained.
 }\if{html}{\out{</div>}}
 \subsection{ActLumus}{
 
+Manufacturer: Condor Instruments
+Model: ActLumus
+Implemented: 2023
 A sample file is provided with the package, it can be accessed through
 \code{system.file("extdata/205_actlumus_Log_1020_20230904101707532.txt.zip", package = "LightLogR")}. It does not need to be unzipped to be imported.
 This sample file is a good example for a regular dataset without gaps
@@ -91,12 +94,18 @@ This sample file is a good example for a regular dataset without gaps
 
 \subsection{LYS}{
 
+Manufacturer: LYS Technologies
+Model: LYS Button
+Implemented: 2023
 A sample file is provided with the package, it can be accessed
 through \code{system.file("extdata/sample_data_LYS.csv", package = "LightLogR")}. This sample file is a good example for an irregular dataset.
 }
 
 \subsection{Actiwatch_Spectrum}{
 
+Manufacturer: Philips Respironics
+Model: Actiwatch Spectrum
+Implemented: 2023
 \strong{Required Argument: \code{column_names}} A character vector containing column
 names in the order in which they appear in the file. This is necessary to
 find the starting point of actual data.
@@ -104,27 +113,52 @@ find the starting point of actual data.
 
 \subsection{ActTrust}{
 
+Manufacturer: Condor Instruments
+Model: ActTrust1, ActTrust2
+Implemented: 2024
 This function works for both ActTrust 1 and 2 devices
 }
 
 \subsection{Speccy}{
 
-.
+Manufacturer: Monash University
+Model: Speccy
+Implemented: 2024
 }
 
 \subsection{DeLux}{
 
-.
+Manufacturer: Intelligent Automation Inc
+Model: DeLux
+Implemented: 2023
 }
 
 \subsection{LiDo}{
 
-.
+Manufacturer: University of Lucerne
+Model: LiDo
+Implemented: 2023
 }
 
 \subsection{SpectraWear}{
 
-.
+Manufacturer:
+Model: SpectraWear
+Implemented: 2024
+}
+
+\subsection{NanoLambda}{
+
+Manufacturer: NanoLambda
+Model: XL-500 BLE
+Implemented: 2024
+}
+
+\subsection{LightWatcher}{
+
+Manufacturer: Object-Tracker
+Model: LightWatcher
+Implemented: 2024
 }
 }
 

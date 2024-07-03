@@ -1,3 +1,7 @@
+# LightLogR 0.3.8
+
+* Submission to CRAN
+
 # LightLogR 0.3.7 "Astronomical dawn"
 
 * Changes to the tutorial articles on the website
