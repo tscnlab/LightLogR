@@ -12,7 +12,7 @@
 #'   `Datetime.colname`.
 #' @param unit Unit of binning. See [lubridate::round_date()] for examples. The default is `"3 hours"`. 
 #' @param type One of `"round"`(the default), `"ceiling"` or `"floor"`. Setting
-#'   chooses the relevant function from [lubridate].
+#'   chooses the relevant function from \pkg{lubridate}.
 #' @param Datetime.colname column name that contains the datetime. Defaults to
 #'   `"Datetime"` which is automatically correct for data imported with
 #'   [LightLogR]. Expects a `symbol`. Needs to be part of the `dataset`.

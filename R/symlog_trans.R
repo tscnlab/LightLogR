@@ -8,7 +8,7 @@
 #' @param thr Threshold after which a logarithmic transformation is applied. If the absolute value is below this `threshold`, the value is not transformed. The default is 1.
 #' @param scale Scaling factor for logarithmically transformed values above the `threshold`. The default is 1.
 #'
-#' @return a transformation function that can be used in [ggplot] or [plotly] to scale positive and negative values on a log scale.
+#' @return a transformation function that can be used in \pkg{ggplot2} or \pkg{plotly} to scale positive and negative values on a log scale.
 #' @export
 #'
 #' @references This function`s code is a straight copy from a post on [stack overflow](https://stackoverflow.com/a/14674703).

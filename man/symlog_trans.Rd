@@ -14,7 +14,7 @@ symlog_trans(base = 10, thr = 1, scale = 1)
 \item{scale}{Scaling factor for logarithmically transformed values above the \code{threshold}. The default is 1.}
 }
 \value{
-a transformation function that can be used in \link{ggplot} or \link{plotly} to scale positive and negative values on a log scale.
+a transformation function that can be used in \pkg{ggplot2} or \pkg{plotly} to scale positive and negative values on a log scale.
 }
 \description{
 To create a plot with positive and negative (unscaled) values on a log-transformed axis, the values need to be scaled accordingly. R or \link{ggplot} do not have a built-in function for this, but the following function can be used to create a transformation function for this purpose. The function was coded based on a \href{https://stackoverflow.com/a/14674703}{post on stack overflow}. The \code{symlog} transformation is the standard transformation used e.g., in \code{\link[=gg_day]{gg_day()}}.

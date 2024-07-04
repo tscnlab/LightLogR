@@ -29,7 +29,7 @@ sleep_int2Brown(
 
 \item{Brown.day, Brown.evening, Brown.night}{The names of the Brown states that will be used. Defaults to \code{"day"}, \code{"evening"} and \code{"night"}.}
 
-\item{evening.length}{The length of the evening interval in seconds. Can also use \link{lubridate} duration or period objects. Defaults to 3 hours.}
+\item{evening.length}{The length of the evening interval in seconds. Can also use \pkg{lubridate} duration or period objects. Defaults to 3 hours.}
 
 \item{Brown.state.colname}{The name of the column with the newly created Brown states. Works as a simple renaming of the \code{Sleep.colname}.}
 
