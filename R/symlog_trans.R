@@ -1,6 +1,6 @@
 #' Scale positive and negative values on a log scale
 #' 
-#' To create a plot with positive and negative (unscaled) values on a log-transformed axis, the values need to be scaled accordingly. R or [ggplot] do not have a built-in function for this, but the following function can be used to create a transformation function for this purpose. The function was coded based on a [post on stack overflow](https://stackoverflow.com/a/14674703). The `symlog` transformation is the standard transformation used e.g., in [gg_day()].
+#' To create a plot with positive and negative (unscaled) values on a log-transformed axis, the values need to be scaled accordingly. R or \pkg{ggplot2} do not have a built-in function for this, but the following function can be used to create a transformation function for this purpose. The function was coded based on a [post on stack overflow](https://stackoverflow.com/a/14674703). The `symlog` transformation is the standard transformation used e.g., in [gg_day()].
 #' 
 #' The `symlog` transformation can be accessed either via the `trans = "symlog"` argument in a scaling function, or via `trans = symlog_trans()`. The latter allows setting the individual arguments.
 #'
