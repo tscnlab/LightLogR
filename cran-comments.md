@@ -1,3 +1,9 @@
+## Resubmission #1 (Version 0.3.8)
+
+This is a resubmission. In this version I have:
+
+* changed the \link{} targets only referring to packages and not to functions within other packages to \pkg{}.
+
 ## R CMD check results
 
 0 errors | 0 warnings | 1 note
