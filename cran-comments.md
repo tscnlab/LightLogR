@@ -1,3 +1,7 @@
+## Resubmission #2 (Version 0.3.8)
+
+This is a resubmission. In this version I removed the last erroneous link.
+
 ## Resubmission #1 (Version 0.3.8)
 
 This is a resubmission. In this version I have:

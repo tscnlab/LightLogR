@@ -29,7 +29,7 @@
 #'
 #' #the same plot, but with breaks and labels set manually                            
 #' dataset %>%                                     
-#' gg_day(aes_col = Id) +
+#' gg_day(aes_col = Id) +y
 #' ggplot2::scale_y_continuous(
 #' trans = "symlog", 
 #' breaks = c(-10^(5:0), 0, 10^(0:5)),
