@@ -1,3 +1,5 @@
+# LightLogR (development version)
+
 # LightLogR 0.3.8
 
 * Submission to CRAN
