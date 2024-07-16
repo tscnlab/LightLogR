@@ -1,3 +1,7 @@
+## Resubmission #3 (Version 0.3.8)
+
+This is a resubmission. In this version I corrected the error in a symlog_trans example.
+
 ## Resubmission #2 (Version 0.3.8)
 
 This is a resubmission. In this version I removed the last erroneous link.
