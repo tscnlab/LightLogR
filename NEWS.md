@@ -1,4 +1,20 @@
-# LightLogR (development version)
+# LightLogR 0.4.0 "Nautical dawn"
+
+* release on CRAN!
+
+* changed the `supported.devices` list to a function `supported_devices()` instead, so the documentation automatically updates with the list of supported devices. Similarly, `ll_import_expr` is now `ll_import_expr()`.
+
+* added support for the Meta `VEET` device for visual experience measurements
+
+* added support for the `Kronowise` device
+
+* added support for the MPI `melanopiQ Circadian Eye` (Prototype)
+
+* added support for the `GENEactive` device.
+
+* updated the landing page for the website with a list of supported devices and a table of metrics
+
+* small changes to documentation
 
 # LightLogR 0.3.8
 

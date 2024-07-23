@@ -7,43 +7,42 @@
 #' Imports a dataset and does the necessary transformations to get the right
 #' column formats. Unless specified otherwise, the function will set the
 #' timezone of the data to `UTC`. It will also enforce an `Id` to separate
-#' different datasets and will order/arrange the dataset within each `Id` by 
+#' different datasets and will order/arrange the dataset within each `Id` by
 #' Datetime. See the Details and Devices section for more information and the
 #' full list of arguments.
 #'
-#' @details 
-#' There are specific and a general import function. The general import function
-#' is described below, whereas the specific import functions take the form of
-#' `import$device()`. The general import function is a thin wrapper around the
-#' specific import functions. The specific import functions take the following
-#' arguments:
+#' @details There are specific and a general import function. The general import
+#'   function is described below, whereas the specific import functions take the
+#'   form of `import$device()`. The general import function is a thin wrapper
+#'   around the specific import functions. The specific import functions take
+#'   the following arguments:
 #'
 #' * `filename`: Filename(s) for the Dataset. Can also contain the filepath,
-#' but `path` must then be `NULL`. Expects a `character`. If the vector is
-#' longer than `1`, multiple files will be read in into one Tibble.
+#'   but `path` must then be `NULL`. Expects a `character`. If the vector is
+#'   longer than `1`, multiple files will be read in into one Tibble.
 #' * `path`: Optional path for the dataset(s). `NULL` is the default. Expects
-#' a `character`.
+#'   a `character`.
 #' * `n_max`: maximum number of lines to read. Default is `Inf`.
 #' * `tz`: Timezone of the data. `"UTC"` is the default. Expects a
-#' `character`. You can look up the supported timezones with [OlsonNames()].
+#'   `character`. You can look up the supported timezones with [OlsonNames()].
 #' * `Id.colname`: Lets you specify a column for the id of a dataset. Expects a
-#' symbol (Default is `Id`). This column will be used for grouping
-#' ([dplyr::group_by()]).
+#'   symbol (Default is `Id`). This column will be used for grouping
+#'   ([dplyr::group_by()]).
 #' * `auto.id`: If the `Id.colname` column is not part of the `dataset`, the `Id`
-#' can be automatically extracted from the filename. The argument expects a
-#' regular expression [regex] and will by default just give the whole filename
-#' without file extension.
+#'   can be automatically extracted from the filename. The argument expects a
+#'   regular expression [regex] and will by default just give the whole filename
+#'   without file extension.
 #' * `manual.id`: If this argument is not `NULL`, and no `Id` column is part
-#' of the `dataset`, this `character` scalar will be used. **We discourage the
-#' use of this arguments when importing more than one file**
+#'   of the `dataset`, this `character` scalar will be used. **We discourage the
+#'   use of this arguments when importing more than one file**
 #' * `locale`: The locale controls defaults that vary from place to place.
 #' * `dst_adjustment`: If a file crosses daylight savings time, but the device does not adjust time stamps accordingly, you can set this argument to `TRUE`, to apply this shift manually. It is selective, so it will only be done in files that cross between DST and standard time. Default is `FALSE`. Uses `dst_change_handler()` to do the adjustment. Look there for more infos. It is not equipped to handle two jumps in one file (so back and forth between DST and standard time), but will work fine if jums occur in separate files.
 #' * `auto.plot`: a logical on whether to call [gg_overview()] after import. Default is `TRUE`.
 #' * `...`: supply additional arguments to the \pkg{readr} import functions, like `na`. Might also be used to supply arguments to the specific import functions, like `column_names` for `Actiwatch_Spectrum` devices. Those devices will always throw a helpful error message if you forget to supply the necessary arguments.
-#'   If the `Id` column is already part of the `dataset` it will just use
-#'   this column. If the column is not present it will add this column and fill
-#'   it with the filename of the importfile (see param `auto.id`).
-#'   `print_n` can be used if you want to see more rows from the observation intervals
+#'   If the `Id` column is already part of the `dataset` it will just use this
+#'   column. If the column is not present it will add this column and fill it
+#'   with the filename of the importfile (see param `auto.id`).
+#' * `print_n` can be used if you want to see more rows from the observation intervals
 #'
 #' @param ... Parameters that get handed down to the specific import functions
 #' @param device From what device do you want to import? For a few devices,
@@ -54,68 +53,39 @@
 #' @return Tibble/Dataframe with a POSIXct column for the datetime
 #' @export
 #' @seealso [supported.devices]
-#' @section Devices: 
-#'   The set of import functions provide a convenient way to import light logger
-#'   data that is then perfectly formatted to add metadata, make visualizations
-#'   and analyses. There are a number of devices supported, where import should
-#'   just work out of the box. To get an overview, you can simply call the
-#'   `supported.devices` dataset. The list will grow continuously as the package
-#'   is maintained.
+#' @section Devices: The set of import functions provide a convenient way to
+#'   import light logger data that is then perfectly formatted to add metadata,
+#'   make visualizations and analyses. There are a number of devices supported,
+#'   where import should just work out of the box. To get an overview, you can
+#'   simply call the `supported.devices` dataset. The list will grow
+#'   continuously as the package is maintained.
 #' ```{r}
 #' supported.devices
 #' ```
-#' 
-#'   ## ActLumus 
-#'   Manufacturer: Condor Instruments
-#'   Model: ActLumus
-#'   Implemented: 2023
-#'   A sample file is provided with the package, it can be accessed through
+#'
+#'   ## ActLumus Manufacturer: Condor Instruments Model: ActLumus Implemented:
+#'   2023 A sample file is provided with the package, it can be accessed through
 #'   `system.file("extdata/205_actlumus_Log_1020_20230904101707532.txt.zip",
 #'   package = "LightLogR")`. It does not need to be unzipped to be imported.
-#'   This sample file is a good example for a regular dataset without gaps
-#'   ## LYS
-#'   Manufacturer: LYS Technologies
-#'   Model: LYS Button
-#'   Implemented: 2023
-#'   A sample file is provided with the package, it can be accessed
-#'   through `system.file("extdata/sample_data_LYS.csv", package =
-#'   "LightLogR")`. This sample file is a good example for an irregular dataset.
-#'   ## Actiwatch_Spectrum
-#'   Manufacturer: Philips Respironics
-#'   Model: Actiwatch Spectrum
-#'   Implemented: 2023
-#'   **Required Argument: `column_names`** A character vector containing column 
-#'   names in the order in which they appear in the file. This is necessary to 
-#'   find the starting point of actual data.
-#'   ## ActTrust
-#'   Manufacturer: Condor Instruments
-#'   Model: ActTrust1, ActTrust2
-#'   Implemented: 2024
-#'   This function works for both ActTrust 1 and 2 devices
-#'   ## Speccy
-#'   Manufacturer: Monash University
-#'   Model: Speccy
-#'   Implemented: 2024
-#'   ## DeLux
-#'   Manufacturer: Intelligent Automation Inc
-#'   Model: DeLux
-#'   Implemented: 2023
-#'   ## LiDo
-#'   Manufacturer: University of Lucerne
-#'   Model: LiDo
-#'   Implemented: 2023
-#'   ## SpectraWear
-#'   Manufacturer:
-#'   Model: SpectraWear
-#'   Implemented: 2024
-#'   ## NanoLambda
-#'   Manufacturer: NanoLambda
-#'   Model: XL-500 BLE
-#'   Implemented: 2024
-#'   ## LightWatcher
-#'   Manufacturer: Object-Tracker
-#'   Model: LightWatcher
-#'   Implemented: 2024
+#'   This sample file is a good example for a regular dataset without gaps ##
+#'   LYS Manufacturer: LYS Technologies Model: LYS Button Implemented: 2023 A
+#'   sample file is provided with the package, it can be accessed through
+#'   `system.file("extdata/sample_data_LYS.csv", package = "LightLogR")`. This
+#'   sample file is a good example for an irregular dataset. ##
+#'   Actiwatch_Spectrum Manufacturer: Philips Respironics Model: Actiwatch
+#'   Spectrum Implemented: 2023
+#'   **Required Argument: `column_names`** A character vector containing column
+#'   names in the order in which they appear in the file. This is necessary to
+#'   find the starting point of actual data. ## ActTrust Manufacturer: Condor
+#'   Instruments Model: ActTrust1, ActTrust2 Implemented: 2024 This function
+#'   works for both ActTrust 1 and 2 devices ## Speccy Manufacturer: Monash
+#'   University Model: Speccy Implemented: 2024 ## DeLux Manufacturer:
+#'   Intelligent Automation Inc Model: DeLux Implemented: 2023 ## LiDo
+#'   Manufacturer: University of Lucerne Model: LiDo Implemented: 2023 ##
+#'   SpectraWear Manufacturer: Model: SpectraWear Implemented: 2024 ##
+#'   NanoLambda Manufacturer: NanoLambda Model: XL-500 BLE Implemented: 2024 ##
+#'   LightWatcher Manufacturer: Object-Tracker Model: LightWatcher Implemented:
+#'   2024
 #'
 #' @section Examples:
 #'
