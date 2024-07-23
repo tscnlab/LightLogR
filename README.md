@@ -75,11 +75,17 @@ At present, these are the devices we support in LightLogR:
 
 - Actiwatch_Spectrum
 
+- Actiwatch_Spectrum_de
+
 - ActLumus
 
 - ActTrust
 
+- Circadian_Eye
+
 - DeLux
+
+- Kronowise
 
 - LiDo
 

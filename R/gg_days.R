@@ -86,8 +86,6 @@ gg_days <- function(dataset,
     "The given dataset is not a dataframe" = is.data.frame(dataset),
     "The given column for X is not in the Dataset. If you did not specify X, you are working with data not originating from LightLogR. Please specify an appropriate Datetime column" = 
       rlang::as_string(x) %in% names(dataset),
-    "The given column for Y is not in the Dataset. If you did not specify Y, there is no column for melanopic EDI (MEDI) in the dataset. Please specify the column you wish to visualize" = 
-      rlang::as_string(y) %in% names(dataset),
     "The given column for X is not a Datetime" =
       lubridate::is.POSIXct(dataset[[rlang::as_string(x)]]),
     "The X axis label must be a string" = is.character(x.axis.label),
