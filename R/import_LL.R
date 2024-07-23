@@ -162,12 +162,22 @@
 #'   
 #'   Manufacturer: Meta Reality Labs
 #'   
+#'   Model: VEET
+#'   
 #'   Implemented: July 2024
 #'   
 #'   **Required Argument: `modality`** A character scalar describing the 
 #'   modality to be imported from. Can be one of `"ALS"` (Ambient light sensor), 
 #'   `"IMU"` (Inertial Measurement Unit), `"INF"` (Information), 
 #'   `"PHO"` (Spectral Sensor), `"TOF"` (Time of Flight)
+#'   
+#'   ## Circadian_Eye
+#'   
+#'   Manufacturer: Max-Planck-Institute for Biological Cybernetics, Tübingen
+#'   
+#'   Model: melanopiQ Circadian Eye (Prototype)
+#'   
+#'   Implemented: July 2024
 #'
 #' @section Examples:
 #'
@@ -225,8 +235,8 @@ imports <- function(device,
     rlang::exprs(
       filename =, 
       path = NULL, 
-      n_max = Inf,
       tz = "UTC",
+      n_max = Inf,
       dst_adjustment = FALSE,
       Id.colname = Id,
       auto.id = ".*",

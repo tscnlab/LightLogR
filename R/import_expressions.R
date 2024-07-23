@@ -51,6 +51,26 @@ import_expr <- list(
                     Id = paste(.data$id, .data$ls, sep = ".")
       )
   }),
+  #Circadian Eye
+  Circadian_Eye = rlang::expr({
+    data <-suppressMessages( 
+      readr::read_csv(filename,
+                      n_max = n_max,
+                      id = "file.name",
+                      locale = locale,
+                      name_repair = "universal",
+                      col_types = 
+                        paste0(c(rep("d", 62), rep("c", 9)), collapse = ""),
+                      ...
+      ))
+    data <- data %>%
+      dplyr::rowwise() %>% 
+      dplyr::mutate(Datetime = lubridate::make_datetime(
+                        datetime_year, datetime_month, datetime_day, 
+                        datetime_hour, datetime_minute, datetime_second, tz = tz
+                        ), .before = 1
+                    )
+  }),
   #Speccy
   Speccy = rlang::expr({
     data <-suppressMessages( 
