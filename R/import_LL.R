@@ -88,8 +88,7 @@
 #'   `system.file("extdata/sample_data_LYS.csv", package = "LightLogR")`. This
 #'   sample file is a good example for an irregular dataset. 
 #'   
-#'   ## Actiwatch_Spectrum 
-#'   ## Actiwatch_Spectrum_de
+#'   ## Actiwatch_Spectrum & Actiwatch_Spectrum_de
 #'   
 #'   Manufacturer: Philips Respironics 
 #'   

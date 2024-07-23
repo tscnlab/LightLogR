@@ -12,7 +12,7 @@
 #' @export
 #' @seealso [import_Dataset], [import_Dataset]
 #' 
-#' @examples import_expr()[1]
+#' @examples ll_import_expr()[1]
 #' 
 ll_import_expr <- function() {
   import_expr

@@ -108,10 +108,7 @@ A sample file is provided with the package, it can be accessed through
 sample file is a good example for an irregular dataset.
 }
 
-\subsection{Actiwatch_Spectrum}{
-}
-
-\subsection{Actiwatch_Spectrum_de}{
+\subsection{Actiwatch_Spectrum & Actiwatch_Spectrum_de}{
 
 Manufacturer: Philips Respironics
 

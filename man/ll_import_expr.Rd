@@ -20,7 +20,7 @@ modify or add to the list. The list can be turned into a fully functional
 import function through \code{import_adjustment()}.
 }
 \examples{
-import_expr()[1]
+ll_import_expr()[1]
 
 }
 \seealso{
