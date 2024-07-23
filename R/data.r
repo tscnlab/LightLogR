@@ -18,31 +18,3 @@
 #' }
 #' @source <https://www.tscnlab.org>
 "sample.data.environment"
-
-
-#' A vector of all supported devices for import functions
-#'
-#' These are all supported devices where there is a dedicated import function.
-#' Import functions can be called either through [import_Dataset()] with the
-#' respective `device = "device"` argument, or directly, e.g.,
-#' `import$ActLumus()`.
-#'
-#' @format `supported.devices` A character vector, listing all supported devices
-#' \describe{
-#'   \item{suppored.devices}{strings}
-#' }
-"supported.devices"
-
-#' A list of the specific device import functions
-#'
-#' These expressions are used to import and prepare data from specific devices.
-#' The list is made explicit, so that a user, requiring slight changes to the
-#' import functions, (e.g., because a timestamp is formatted differently) can
-#' modify or add to the list. The list can be turned into a fully functional 
-#' import function through `import_adjustment()`.
-#'
-#' @format `ll_import_expr` A list, with specific expressions for each supported device
-#' \describe{
-#'   \item{ll_import_expr}{expressions}
-#' }
-"ll_import_expr"

@@ -35,7 +35,7 @@ especially useful for slightly irregular data, but can be computationally
 expensive.}
 
 \item{type}{One of \code{"round"}(the default), \code{"ceiling"} or \code{"floor"}. Setting
-chooses the relevant function from \link{lubridate}.}
+chooses the relevant function from \pkg{lubridate}.}
 
 \item{date.handler}{A function that calculates the aggregated day for each
 group. By default, this is set to \code{median}.}

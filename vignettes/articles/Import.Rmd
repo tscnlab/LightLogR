@@ -22,7 +22,7 @@ library(gghighlight)
 LightLogR aims to provide standard import routines for all devices used in research on personal light exposure. Currently, the following devices are supported:
 
 ```{r}
-supported.devices
+supported_devices()
 ```
 More Information on these devices can be found in the reference for 
 `import_Dataset()`.
@@ -189,7 +189,7 @@ The `...` argument is passed through to whichever import function is used for th
 
 ## Other ways to call import
 
-Instead of using the import function as described above (`import$device()`), you can also use the function `import_Dataset()` and specify the device as a character string in the first argument. This might be useful if you want to import data programmatically from different devices, e.g., through a `purrr::map()` function. Only `supported.devices` will be accepted by the function.
+Instead of using the import function as described above (`import$device()`), you can also use the function `import_Dataset()` and specify the device as a character string in the first argument. This might be useful if you want to import data programmatically from different devices, e.g., through a `purrr::map()` function. Only `supported_devices()` will be accepted by the function.
 
 Here is an example:
 
@@ -210,29 +210,30 @@ This way, you will end with a list of two dataframes, one with the ActLumus data
 
 `LightLogR` comes with a number of custom import routines for different devices, that are then implemented into the main import function, which covers some general aspects and also creates the summary overview.
 
-If you would like to write your own custom import function, `LightLogR` has you covered. First, you can see what makes all the import functions tick by looking at the included data set `ll_import_expr`. This is a list of all the individual routines. Let's have a look at the ActLumus routine
+If you would like to write your own custom import function, `LightLogR` has you covered. First, you can see what makes all the import functions tick by looking at the included data set `ll_import_expr()`. This is a list of all the individual routines. Let's have a look at the ActLumus routine
 
 ```{r}
-ll_import_expr$ActLumus
+ll_import_expr()$ActLumus
 ```
 We can see, it is rather simple, just a few lines of code. You can write your own expression and create an import function with it. The expression should create a `data` variable that contains the import script for the files. At the end of the expression, the `data` variable should contain the imported dataset and include a correctly formatted `Datetime` column, complete with the correct timezone.
 
 Here we will create a variation of the old routine, that just adds a short message:
 
 ```{r}
-ll_import_expr$ActLumus_new <- ll_import_expr$ActLumus
-ll_import_expr$ActLumus_new[[4]] <- 
+new_import_expr <- ll_import_expr()
+new_import_expr$ActLumus_new <- new_import_expr$ActLumus
+new_import_expr$ActLumus_new[[4]] <- 
   rlang::expr({ cat("**Congratulation, you made a new import function**\n")
   data
   })
-ll_import_expr$ActLumus_new
+new_import_expr$ActLumus_new
 
 ```
 
 We can now create a new import function with this expression. The function will be called `import$ActLumus_new()`.
 
 ```{r}
-import <- import_adjustment(ll_import_expr)
+import <- import_adjustment(new_import_expr)
 ```
 
 Let us now import a file of the previous dataset, setting the main summary and plotting function silent

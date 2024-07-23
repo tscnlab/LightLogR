@@ -6,7 +6,7 @@
 \alias{import}
 \title{Import a light logger dataset or related data}
 \format{
-An object of class \code{list} of length 10.
+An object of class \code{list} of length 14.
 }
 \usage{
 import_Dataset(device, ...)
@@ -16,7 +16,7 @@ import
 \arguments{
 \item{device}{From what device do you want to import? For a few devices,
 there is a sample data file that you can use to test the function (see the
-examples). See \link{supported.devices} for a list of supported devices and see
+examples). See \code{\link[=supported_devices]{supported_devices()}} for a list of supported devices and see
 below for more information on devices with specific requirements.}
 
 \item{...}{Parameters that get handed down to the specific import functions}
@@ -33,11 +33,11 @@ Datetime. See the Details and Devices section for more information and the
 full list of arguments.
 }
 \details{
-There are specific and a general import function. The general import function
-is described below, whereas the specific import functions take the form of
-\code{import$device()}. The general import function is a thin wrapper around the
-specific import functions. The specific import functions take the following
-arguments:
+There are specific and a general import function. The general import
+function is described below, whereas the specific import functions take the
+form of \code{import$device()}. The general import function is a thin wrapper
+around the specific import functions. The specific import functions take
+the following arguments:
 \itemize{
 \item \code{filename}: Filename(s) for the Dataset. Can also contain the filepath,
 but \code{path} must then be \code{NULL}. Expects a \code{character}. If the vector is
@@ -60,33 +60,36 @@ use of this arguments when importing more than one file}
 \item \code{locale}: The locale controls defaults that vary from place to place.
 \item \code{dst_adjustment}: If a file crosses daylight savings time, but the device does not adjust time stamps accordingly, you can set this argument to \code{TRUE}, to apply this shift manually. It is selective, so it will only be done in files that cross between DST and standard time. Default is \code{FALSE}. Uses \code{dst_change_handler()} to do the adjustment. Look there for more infos. It is not equipped to handle two jumps in one file (so back and forth between DST and standard time), but will work fine if jums occur in separate files.
 \item \code{auto.plot}: a logical on whether to call \code{\link[=gg_overview]{gg_overview()}} after import. Default is \code{TRUE}.
-\item \code{...}: supply additional arguments to the \link{readr} import functions, like \code{na}. Might also be used to supply arguments to the specific import functions, like \code{column_names} for \code{Actiwatch_Spectrum} devices. Those devices will always throw a helpful error message if you forget to supply the necessary arguments.
-If the \code{Id} column is already part of the \code{dataset} it will just use
-this column. If the column is not present it will add this column and fill
-it with the filename of the importfile (see param \code{auto.id}).
-\code{print_n} can be used if you want to see more rows from the observation intervals
+\item \code{...}: supply additional arguments to the \pkg{readr} import functions, like \code{na}. Might also be used to supply arguments to the specific import functions, like \code{column_names} for \code{Actiwatch_Spectrum} devices. Those devices will always throw a helpful error message if you forget to supply the necessary arguments.
+If the \code{Id} column is already part of the \code{dataset} it will just use this
+column. If the column is not present it will add this column and fill it
+with the filename of the importfile (see param \code{auto.id}).
+\item \code{print_n} can be used if you want to see more rows from the observation intervals
 }
 }
 \section{Devices}{
+ The set of import functions provide a convenient way to
+import light logger data that is then perfectly formatted to add metadata,
+make visualizations and analyses. There are a number of devices supported,
+where import should just work out of the box. To get an overview, you can
+simply call the \code{supported_devices()} dataset. The list will grow
+continuously as the package is maintained.
 
-The set of import functions provide a convenient way to import light logger
-data that is then perfectly formatted to add metadata, make visualizations
-and analyses. There are a number of devices supported, where import should
-just work out of the box. To get an overview, you can simply call the
-\code{supported.devices} dataset. The list will grow continuously as the package
-is maintained.
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{supported.devices
-#>  [1] "Actiwatch_Spectrum" "ActLumus"           "ActTrust"          
-#>  [4] "DeLux"              "LiDo"               "LightWatcher"      
-#>  [7] "LYS"                "nanoLambda"         "Speccy"            
-#> [10] "SpectraWear"
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{supported_devices()
+#>  [1] "ActLumus"              "ActTrust"              "Actiwatch_Spectrum"   
+#>  [4] "Actiwatch_Spectrum_de" "Circadian_Eye"         "DeLux"                
+#>  [7] "Kronowise"             "LYS"                   "LiDo"                 
+#> [10] "LightWatcher"          "Speccy"                "SpectraWear"          
+#> [13] "VEET"                  "nanoLambda"
 }\if{html}{\out{</div>}}
 \subsection{ActLumus}{
 
 Manufacturer: Condor Instruments
+
 Model: ActLumus
-Implemented: 2023
+
+Implemented: Sep 2023
+
 A sample file is provided with the package, it can be accessed through
 \code{system.file("extdata/205_actlumus_Log_1020_20230904101707532.txt.zip", package = "LightLogR")}. It does not need to be unzipped to be imported.
 This sample file is a good example for a regular dataset without gaps
@@ -95,70 +98,122 @@ This sample file is a good example for a regular dataset without gaps
 \subsection{LYS}{
 
 Manufacturer: LYS Technologies
+
 Model: LYS Button
-Implemented: 2023
-A sample file is provided with the package, it can be accessed
-through \code{system.file("extdata/sample_data_LYS.csv", package = "LightLogR")}. This sample file is a good example for an irregular dataset.
+
+Implemented: Sep 2023
+
+A sample file is provided with the package, it can be accessed through
+\code{system.file("extdata/sample_data_LYS.csv", package = "LightLogR")}. This
+sample file is a good example for an irregular dataset.
 }
 
-\subsection{Actiwatch_Spectrum}{
+\subsection{Actiwatch_Spectrum & Actiwatch_Spectrum_de}{
 
 Manufacturer: Philips Respironics
+
 Model: Actiwatch Spectrum
-Implemented: 2023
-\strong{Required Argument: \code{column_names}} A character vector containing column
-names in the order in which they appear in the file. This is necessary to
-find the starting point of actual data.
+
+Implemented: Nov 2023 / July 2024
+
+\strong{Important note:} The \code{Actiwatch_Spectrum} function is for an international/english formatting. The \code{Actiwatch_Spectrum_de} function is for a german formatting, which slightly differs in the datetime format, the column names, and the decimal separator.
 }
 
 \subsection{ActTrust}{
 
 Manufacturer: Condor Instruments
+
 Model: ActTrust1, ActTrust2
-Implemented: 2024
+
+Implemented: Mar 2024
+
 This function works for both ActTrust 1 and 2 devices
 }
 
 \subsection{Speccy}{
 
 Manufacturer: Monash University
+
 Model: Speccy
-Implemented: 2024
+
+Implemented: Feb 2024
 }
 
 \subsection{DeLux}{
 
 Manufacturer: Intelligent Automation Inc
+
 Model: DeLux
-Implemented: 2023
+
+Implemented: Dec 2023
 }
 
 \subsection{LiDo}{
 
 Manufacturer: University of Lucerne
+
 Model: LiDo
-Implemented: 2023
+
+Implemented: Nov 2023
 }
 
 \subsection{SpectraWear}{
 
-Manufacturer:
+Manufacturer: University of Manchester
+
 Model: SpectraWear
-Implemented: 2024
+
+Implemented: May 2024
 }
 
 \subsection{NanoLambda}{
 
 Manufacturer: NanoLambda
+
 Model: XL-500 BLE
-Implemented: 2024
+
+Implemented: May 2024
 }
 
 \subsection{LightWatcher}{
 
 Manufacturer: Object-Tracker
+
 Model: LightWatcher
-Implemented: 2024
+
+Implemented: June 2024
+}
+
+\subsection{VEET}{
+
+Manufacturer: Meta Reality Labs
+
+Model: VEET
+
+Implemented: July 2024
+
+\strong{Required Argument: \code{modality}} A character scalar describing the
+modality to be imported from. Can be one of \code{"ALS"} (Ambient light sensor),
+\code{"IMU"} (Inertial Measurement Unit), \code{"INF"} (Information),
+\code{"PHO"} (Spectral Sensor), \code{"TOF"} (Time of Flight)
+}
+
+\subsection{Circadian_Eye}{
+
+Manufacturer: Max-Planck-Institute for Biological Cybernetics, Tübingen
+
+Model: melanopiQ Circadian Eye (Prototype)
+
+Implemented: July 2024
+}
+
+\subsection{Kronowise}{
+
+Manufacturer: Kronohealth
+
+Model: Kronowise
+
+Implemented: July 2024
 }
 }
 
@@ -230,6 +285,6 @@ dplyr::slice(1500:1505)
 }
 
 \seealso{
-\link{supported.devices}
+\link{supported_devices}
 }
 \keyword{datasets}

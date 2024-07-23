@@ -53,7 +53,7 @@ data \code{\link[ggplot2:aes]{ggplot2::aes()}}}
 \item \code{"point"} for \code{\link[ggplot2:geom_point]{ggplot2::geom_point()}}
 \item \code{"line"}  for \code{\link[ggplot2:geom_path]{ggplot2::geom_line()}}
 \item \code{"ribbon"} for \code{\link[ggplot2:geom_ribbon]{ggplot2::geom_ribbon()}}
-\item as the value is just input into the \code{geom_} function from \link{ggplot2}, other variants work as well, but are not extensively tested.
+\item as the value is just input into the \code{geom_} function from \pkg{ggplot2}, other variants work as well, but are not extensively tested.
 }}
 
 \item{scales}{For \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}}, should scales be \code{"fixed"},
@@ -68,7 +68,7 @@ the first day.}
 \item{y.axis.breaks}{Where should breaks occur on the y.axis? Expects a
 \verb{numeric vector} with all the breaks or a function that calculates them
 based on the limits. If you want to activate the default behaviour of
-\link{ggplot2}, you need to put in \code{\link[ggplot2:waiver]{ggplot2::waiver()}}.}
+\pkg{ggplot2}, you need to put in \code{\link[ggplot2:waiver]{ggplot2::waiver()}}.}
 
 \item{y.scale}{How should the y-axis be scaled?
 \itemize{

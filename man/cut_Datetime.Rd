@@ -22,7 +22,7 @@ by \link{LightLogR}, take care to choose a sensible variable for the
 \item{unit}{Unit of binning. See \code{\link[lubridate:round_date]{lubridate::round_date()}} for examples. The default is \code{"3 hours"}.}
 
 \item{type}{One of \code{"round"}(the default), \code{"ceiling"} or \code{"floor"}. Setting
-chooses the relevant function from \link{lubridate}.}
+chooses the relevant function from \pkg{lubridate}.}
 
 \item{Datetime.colname}{column name that contains the datetime. Defaults to
 \code{"Datetime"} which is automatically correct for data imported with

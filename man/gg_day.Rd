@@ -62,7 +62,7 @@ data \code{\link[ggplot2:aes]{ggplot2::aes()}}}
 \item \code{"point"} for \code{\link[ggplot2:geom_point]{ggplot2::geom_point()}}
 \item \code{"line"}  for \code{\link[ggplot2:geom_path]{ggplot2::geom_line()}}
 \item \code{"ribbon"} for \code{\link[ggplot2:geom_ribbon]{ggplot2::geom_ribbon()}}
-\item as the value is just input into the \code{geom_} function from \link{ggplot2}, other variants work as well, but are not extensively tested.
+\item as the value is just input into the \code{geom_} function from \pkg{ggplot2}, other variants work as well, but are not extensively tested.
 }}
 
 \item{scales}{For \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}}, should scales be "fixed", "free"
@@ -70,7 +70,7 @@ or free in one dimension ("free_y" is the default). Expects a \code{character}.}
 
 \item{x.axis.breaks, y.axis.breaks}{Where should breaks occur on the x and
 y.axis? Expects a \verb{numeric vector} with all the breaks. If you want to
-activate the default behaviour of \link{ggplot2}, you need to put in
+activate the default behaviour of \pkg{ggplot2}, you need to put in
 \code{\link[ggplot2:waiver]{ggplot2::waiver()}}.}
 
 \item{y.scale}{How should the y-axis be scaled?

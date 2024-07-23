@@ -32,7 +32,7 @@ data, but can be computationally expensive. \code{"none"} will not aggregate the
 data at all.}
 
 \item{type}{One of \code{"round"}(the default), \code{"ceiling"} or \code{"floor"}. Setting
-chooses the relevant function from \link{lubridate}.}
+chooses the relevant function from \pkg{lubridate}.}
 
 \item{numeric.handler, character.handler, logical.handler, factor.handler}{functions that handle the respective data types. The default handlers
 calculate the \code{mean} for \code{numeric} and the \code{mode} for \code{character}, \code{factor}

@@ -3,7 +3,7 @@
 #' Filtering a dataset based on Dates or Datetimes may often be necessary prior
 #' to calcuation or visualization. The functions allow for a filtering based on
 #' simple `strings` or `Datetime` scalars, or by specifying a length. They also
-#' support prior [dplyr] grouping, which is useful, e.g., when you only want to
+#' support prior \pkg{dplyr} grouping, which is useful, e.g., when you only want to
 #' filter the first two days of measurement data for every participant,
 #' regardless of the actual date. If you want to filter based on times of the
 #' day, look to [filter_Time()].
@@ -18,10 +18,10 @@
 #' * If `length` is provided and one of start/end is not, the other will be calculated based on the given value.
 #' * If `length` is provided and both of start/end are NULL, the time from the
 #'   respective start is taken.
-#' @param length Either a Period or Duration from [lubridate]. E.g., `days(2) +
+#' @param length Either a Period or Duration from \pkg{lubridate}. E.g., `days(2) +
 #'   hours(12)` will give a period of 2.5 days, whereas `ddays(2) + dhours(12)`
 #'   will give a duration. For the difference between periods and durations look
-#'   at the documentation from [lubridate]. Basically, periods model clocktimes,
+#'   at the documentation from \pkg{lubridate}. Basically, periods model clocktimes,
 #'   whereas durations model physical processes. This matters on several
 #'   occasions, like leap years, or daylight savings. You can also provide a
 #'   `character` scalar in the form of e.g. "1 day", which will be converted
