@@ -1,13 +1,12 @@
 pandoc: 3.1.11
-pkgdown: 2.0.9
+pkgdown: 2.1.0
 pkgdown_sha: ~
 articles:
-  Day: Day.html
-  Import: Import.html
-  Metrics: Metrics.html
-  Visualizations: Visualizations.html
-last_built: 2024-07-03T18:52Z
+  articles/Day: Day.html
+  articles/Import: Import.html
+  articles/Metrics: Metrics.html
+  articles/Visualizations: Visualizations.html
+last_built: 2024-07-23T19:58Z
 urls:
   reference: https://tscnlab.github.io/LightLogR/reference
   article: https://tscnlab.github.io/LightLogR/articles
-

@@ -1,201 +1,69 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/404.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/articles/Day.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/articles/Import.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/articles/Metrics.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/articles/Visualizations.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/index.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/Brown2reference.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/Brown_check.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/Brown_rec.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/Datetime_breaks.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/Datetime_limits.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/LightLogR-package.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/aggregate_Date.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/aggregate_Datetime.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/barroso_lighting_metrics.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/bright_dark_period.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/centroidLE.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/count_difftime.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/create_Timedata.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/cut_Datetime.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/data2reference.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/disparity_index.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/dominant_epoch.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/dst_change_handler.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/dst_change_summary.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/duration_above_threshold.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/exponential_moving_average.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/filter_Datetime.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/filter_Datetime_multiple.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/filter_Time.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/frequency_crossing_threshold.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/gap_finder.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/gap_handler.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/gapless_Datetimes.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/gg_day.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/gg_days.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/gg_doubleplot.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/gg_overview.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/import_Dataset.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/import_Statechanges.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/import_adjustment.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/interdaily_stability.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/interval2state.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/intradaily_variability.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/join_datasets.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/ll_import_expr.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/midpointCE.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/nvRC.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/nvRC_metrics.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/nvRD.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/nvRD_cumulative_response.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/period_above_threshold.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/pipe.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/pulses_above_threshold.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/sample.data.environment.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/sc2interval.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/sleep_int2Brown.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/supported.devices.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/symlog_trans.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/threshold_for_duration.html</loc>
-  </url>
-  <url>
-    <loc>https://tscnlab.github.io/LightLogR/reference/timing_above_threshold.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://tscnlab.github.io/LightLogR/404.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/LICENSE.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/articles/Day.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/articles/Import.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/articles/Metrics.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/articles/Visualizations.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/articles/index.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/authors.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/index.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/news/index.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/Brown2reference.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/Brown_check.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/Brown_rec.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/Datetime_breaks.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/Datetime_limits.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/LightLogR-package.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/aggregate_Date.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/aggregate_Datetime.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/barroso_lighting_metrics.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/bright_dark_period.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/centroidLE.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/count_difftime.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/create_Timedata.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/cut_Datetime.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/data2reference.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/disparity_index.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/dominant_epoch.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/dst_change_handler.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/dst_change_summary.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/duration_above_threshold.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/exponential_moving_average.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/filter_Datetime.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/filter_Datetime_multiple.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/filter_Time.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/frequency_crossing_threshold.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/gap_finder.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/gap_handler.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/gapless_Datetimes.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/gg_day.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/gg_days.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/gg_doubleplot.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/gg_overview.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/import_Dataset.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/import_Statechanges.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/import_adjustment.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/index.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/interdaily_stability.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/interval2state.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/intradaily_variability.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/join_datasets.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/ll_import_expr.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/midpointCE.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/nvRC.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/nvRC_metrics.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/nvRD.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/nvRD_cumulative_response.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/period_above_threshold.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/pipe.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/pulses_above_threshold.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/sample.data.environment.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/sc2interval.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/sleep_int2Brown.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/supported_devices.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/symlog_trans.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/threshold_for_duration.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/timing_above_threshold.html</loc></url>
 </urlset>
+
