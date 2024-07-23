@@ -47,45 +47,127 @@
 #' @param ... Parameters that get handed down to the specific import functions
 #' @param device From what device do you want to import? For a few devices,
 #'   there is a sample data file that you can use to test the function (see the
-#'   examples). See [supported.devices] for a list of supported devices and see
+#'   examples). See [supported_devices()] for a list of supported devices and see
 #'   below for more information on devices with specific requirements.
 #' @importFrom rlang :=
 #' @return Tibble/Dataframe with a POSIXct column for the datetime
 #' @export
-#' @seealso [supported.devices]
+#' @seealso [supported_devices]
 #' @section Devices: The set of import functions provide a convenient way to
 #'   import light logger data that is then perfectly formatted to add metadata,
 #'   make visualizations and analyses. There are a number of devices supported,
 #'   where import should just work out of the box. To get an overview, you can
-#'   simply call the `supported.devices` dataset. The list will grow
+#'   simply call the `supported_devices()` dataset. The list will grow
 #'   continuously as the package is maintained.
 #' ```{r}
-#' supported.devices
+#' supported_devices()
 #' ```
 #'
-#'   ## ActLumus Manufacturer: Condor Instruments Model: ActLumus Implemented:
-#'   2023 A sample file is provided with the package, it can be accessed through
+#'   ## ActLumus 
+#'   
+#'   Manufacturer: Condor Instruments 
+#'   
+#'   Model: ActLumus 
+#'   
+#'   Implemented: Sep 2023 
+#'   
+#'   A sample file is provided with the package, it can be accessed through
 #'   `system.file("extdata/205_actlumus_Log_1020_20230904101707532.txt.zip",
 #'   package = "LightLogR")`. It does not need to be unzipped to be imported.
-#'   This sample file is a good example for a regular dataset without gaps ##
-#'   LYS Manufacturer: LYS Technologies Model: LYS Button Implemented: 2023 A
-#'   sample file is provided with the package, it can be accessed through
+#'   This sample file is a good example for a regular dataset without gaps 
+#'   
+#'   ## LYS 
+#'   
+#'   Manufacturer: LYS Technologies 
+#'   
+#'   Model: LYS Button 
+#'   
+#'   Implemented: Sep 2023 
+#'   
+#'   A sample file is provided with the package, it can be accessed through
 #'   `system.file("extdata/sample_data_LYS.csv", package = "LightLogR")`. This
-#'   sample file is a good example for an irregular dataset. ##
-#'   Actiwatch_Spectrum Manufacturer: Philips Respironics Model: Actiwatch
-#'   Spectrum Implemented: 2023
+#'   sample file is a good example for an irregular dataset. 
+#'   
+#'   ## Actiwatch_Spectrum 
+#'   
+#'   Manufacturer: Philips Respironics 
+#'   
+#'   Model: Actiwatch Spectrum 
+#'   
+#'   Implemented: Nov 2023
+#'   
 #'   **Required Argument: `column_names`** A character vector containing column
 #'   names in the order in which they appear in the file. This is necessary to
-#'   find the starting point of actual data. ## ActTrust Manufacturer: Condor
-#'   Instruments Model: ActTrust1, ActTrust2 Implemented: 2024 This function
-#'   works for both ActTrust 1 and 2 devices ## Speccy Manufacturer: Monash
-#'   University Model: Speccy Implemented: 2024 ## DeLux Manufacturer:
-#'   Intelligent Automation Inc Model: DeLux Implemented: 2023 ## LiDo
-#'   Manufacturer: University of Lucerne Model: LiDo Implemented: 2023 ##
-#'   SpectraWear Manufacturer: Model: SpectraWear Implemented: 2024 ##
-#'   NanoLambda Manufacturer: NanoLambda Model: XL-500 BLE Implemented: 2024 ##
-#'   LightWatcher Manufacturer: Object-Tracker Model: LightWatcher Implemented:
-#'   2024
+#'   find the starting point of actual data. 
+#'   
+#'   ## ActTrust 
+#'   
+#'   Manufacturer: Condor Instruments 
+#'   
+#'   Model: ActTrust1, ActTrust2 
+#'   
+#'   Implemented: Mar 2024 
+#'   
+#'   This function works for both ActTrust 1 and 2 devices 
+#'   
+#'   ## Speccy 
+#'   
+#'   Manufacturer: Monash University 
+#'   
+#'   Model: Speccy 
+#'   
+#'   Implemented: Feb 2024 
+#'   
+#'   ## DeLux 
+#'   
+#'   Manufacturer: Intelligent Automation Inc 
+#'   
+#'   Model: DeLux 
+#'   
+#'   Implemented: Dec 2023 
+#'   
+#'   ## LiDo
+#'   
+#'   Manufacturer: University of Lucerne 
+#'   
+#'   Model: LiDo 
+#'   
+#'   Implemented: Nov 2023 
+#'   
+#'   ## SpectraWear 
+#'   
+#'   Manufacturer: University of Manchester
+#'   
+#'   Model: SpectraWear 
+#'   
+#'   Implemented: May 2024 
+#'   
+#'   ## NanoLambda 
+#'   
+#'   Manufacturer: NanoLambda 
+#'   
+#'   Model: XL-500 BLE 
+#'   
+#'   Implemented: May 2024 
+#'   
+#'   ## LightWatcher 
+#'   
+#'   Manufacturer: Object-Tracker 
+#'   
+#'   Model: LightWatcher 
+#'   
+#'   Implemented: June 2024
+#'   
+#'   ## VEET
+#'   
+#'   Manufacturer: Meta Reality Labs
+#'   
+#'   Implemented: July 2024
+#'   
+#'   **Required Argument: `modality`** A character scalar describing the 
+#'   modality to be imported from. Can be one of `"ALS"` (Ambient light sensor), 
+#'   `"IMU"` (Inertial Measurement Unit), `"INF"` (Information), 
+#'   `"PHO"` (Spectral Sensor), `"TOF"` (Time of Flight)
 #'
 #' @section Examples:
 #'
@@ -120,7 +202,7 @@ import_Dataset <- function(device, ...) {
   #input control
   stopifnot(
     "device specification is not in the list of supported devices, see the documentation for more info" = 
-      device %in% supported.devices
+      device %in% supported_devices()
   )
   
   import_function_expr <- rlang::parse_expr(paste0("import$", device))
@@ -262,13 +344,13 @@ source("R/import_expressions.R")
 #'
 #' @rdname import_Dataset
 #' @export
-import <- purrr::imap(ll_import_expr, \(x, idx) imports(idx,x))
+import <- purrr::imap(import_expr, \(x, idx) imports(idx,x))
 
 
 #' Adjust device imports or make your own
 #'
 #' @param import_expr A named list of import expressions. The basis for
-#'   `LightLogR`'s import functions is the included dataset `ll_import_expr`. If
+#'   `LightLogR`'s import functions is the included dataset `ll_import_expr()`. If
 #'   this function were to be given that exact dataset, and bound to a variable
 #'   called `import`, it would be identical to the `import` function. See
 #'   `details`.
@@ -279,23 +361,24 @@ import <- purrr::imap(ll_import_expr, \(x, idx) imports(idx,x))
 #' the correct time zone. It has access to all arguments defined in the
 #' description of `import_Dataset()`. The `...` argument should be passed to
 #' whatever csv reader function is used, so that it works as expected. Look at
-#' `ll_import_expr$LYS` for a quite minimal example.
+#' `ll_import_expr()$LYS` for a quite minimal example.
 #'
 #' @return A list of import functions
 #' @export
 #'
 #' @examples
 #' #create a new import function for the LYS device, same as the old
-#' new_import <- import_adjustment(ll_import_expr)
+#' new_import <- import_adjustment(ll_import_expr())
 #' #the new one is identical to the old one in terms of the function body
 #' identical(body(import$LYS), body(new_import$LYS))
 #'
 #' #change the import expression for the LYS device to add a message at the top
-#' ll_import_expr$LYS[[4]] <-
+#' new_import_expr <- ll_import_expr()
+#' new_import_expr$LYS[[4]] <-
 #' rlang::expr({ cat("**This is a new import function**\n")
 #' data
 #' })
-#' new_import <- import_adjustment(ll_import_expr)
+#' new_import <- import_adjustment(new_import_expr)
 #' filepath <- system.file("extdata/sample_data_LYS.csv", package = "LightLogR")
 #' #Now, a message is printed when the import function is called
 #' new_import <- new_import$LYS(filepath)

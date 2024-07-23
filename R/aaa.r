@@ -7,7 +7,6 @@ empty_function <- function() {
 }
 
 .onLoad <- function(libname, pkgname) {
-  utils::globalVariables("supported.devices")
   utils::globalVariables(".")
 }
 
