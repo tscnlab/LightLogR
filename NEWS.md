@@ -10,8 +10,6 @@
 
 * added support for the MPI `melanopiQ Circadian Eye` (Prototype)
 
-* added support for the `GENEactive` device.
-
 * rewrote the import function for `Actiwatch_Spectrum`, as the sample file the original was based off, had specific formatting to German standards. Now, the German version can still be called through `Actiwatch_Spectrum_de`, wheras the main function refers to the english/international format.
 
 * updated the landing page for the website with a list of supported devices and a table of metrics
