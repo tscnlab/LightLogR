@@ -1,7 +1,7 @@
 #this file contains all the import expressions for the different devices
 #they are to be used with the `imports` or `import_adjustment` function to create a proper import function
 
-ll_import_expr <- list(
+import_expr <- list(
   #ActTrust 1 & 2
   ActTrust = rlang::expr({
     column_names <- c("DATE/TIME", "MS", "EVENT", "TEMPERATURE")
@@ -277,7 +277,7 @@ ll_import_expr <- list(
             )
         }) %>% purrr::list_rbind()
   }),
-  Veet = rlang::expr({
+  VEET = rlang::expr({
     #separate the dots list in the column_names and the rest
     dots <- rlang::list2(...)
     modality <- dots$modality
@@ -341,4 +341,4 @@ ll_import_expr <- list(
 )
 
 #order the list by their names
-ll_import_expr <- ll_import_expr[order(names(ll_import_expr))]
+import_expr <- import_expr[order(names(import_expr))]
