@@ -89,16 +89,15 @@
 #'   sample file is a good example for an irregular dataset. 
 #'   
 #'   ## Actiwatch_Spectrum 
+#'   ## Actiwatch_Spectrum_de
 #'   
 #'   Manufacturer: Philips Respironics 
 #'   
 #'   Model: Actiwatch Spectrum 
 #'   
-#'   Implemented: Nov 2023
+#'   Implemented: Nov 2023 / July 2024
 #'   
-#'   **Required Argument: `column_names`** A character vector containing column
-#'   names in the order in which they appear in the file. This is necessary to
-#'   find the starting point of actual data. 
+#'   **Important note:** The `Actiwatch_Spectrum` function is for an international/english formatting. The `Actiwatch_Spectrum_de` function is for a german formatting, which slightly differs in the datetime format, the column names, and the decimal separator.
 #'   
 #'   ## ActTrust 
 #'   
@@ -176,6 +175,14 @@
 #'   Manufacturer: Max-Planck-Institute for Biological Cybernetics, Tübingen
 #'   
 #'   Model: melanopiQ Circadian Eye (Prototype)
+#'   
+#'   Implemented: July 2024
+#'   
+#'   ## Kronowise
+#'   
+#'   Manufacturer: Kronohealth
+#'   
+#'   Model: Kronowise
 #'   
 #'   Implemented: July 2024
 #'

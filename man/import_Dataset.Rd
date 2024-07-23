@@ -6,7 +6,7 @@
 \alias{import}
 \title{Import a light logger dataset or related data}
 \format{
-An object of class \code{list} of length 11.
+An object of class \code{list} of length 14.
 }
 \usage{
 import_Dataset(device, ...)
@@ -76,10 +76,11 @@ simply call the \code{supported_devices()} dataset. The list will grow
 continuously as the package is maintained.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{supported_devices()
-#>  [1] "Actiwatch_Spectrum" "ActLumus"           "ActTrust"          
-#>  [4] "DeLux"              "LiDo"               "LightWatcher"      
-#>  [7] "LYS"                "nanoLambda"         "Speccy"            
-#> [10] "SpectraWear"        "VEET"
+#>  [1] "ActLumus"              "ActTrust"              "Actiwatch_Spectrum"   
+#>  [4] "Actiwatch_Spectrum_de" "Circadian_Eye"         "DeLux"                
+#>  [7] "Kronowise"             "LYS"                   "LiDo"                 
+#> [10] "LightWatcher"          "Speccy"                "SpectraWear"          
+#> [13] "VEET"                  "nanoLambda"
 }\if{html}{\out{</div>}}
 \subsection{ActLumus}{
 
@@ -108,16 +109,17 @@ sample file is a good example for an irregular dataset.
 }
 
 \subsection{Actiwatch_Spectrum}{
+}
+
+\subsection{Actiwatch_Spectrum_de}{
 
 Manufacturer: Philips Respironics
 
 Model: Actiwatch Spectrum
 
-Implemented: Nov 2023
+Implemented: Nov 2023 / July 2024
 
-\strong{Required Argument: \code{column_names}} A character vector containing column
-names in the order in which they appear in the file. This is necessary to
-find the starting point of actual data.
+\strong{Important note:} The \code{Actiwatch_Spectrum} function is for an international/english formatting. The \code{Actiwatch_Spectrum_de} function is for a german formatting, which slightly differs in the datetime format, the column names, and the decimal separator.
 }
 
 \subsection{ActTrust}{
@@ -189,12 +191,32 @@ Implemented: June 2024
 
 Manufacturer: Meta Reality Labs
 
+Model: VEET
+
 Implemented: July 2024
 
 \strong{Required Argument: \code{modality}} A character scalar describing the
 modality to be imported from. Can be one of \code{"ALS"} (Ambient light sensor),
 \code{"IMU"} (Inertial Measurement Unit), \code{"INF"} (Information),
 \code{"PHO"} (Spectral Sensor), \code{"TOF"} (Time of Flight)
+}
+
+\subsection{Circadian_Eye}{
+
+Manufacturer: Max-Planck-Institute for Biological Cybernetics, Tübingen
+
+Model: melanopiQ Circadian Eye (Prototype)
+
+Implemented: July 2024
+}
+
+\subsection{Kronowise}{
+
+Manufacturer: Kronohealth
+
+Model: Kronowise
+
+Implemented: July 2024
 }
 }
 

@@ -48,7 +48,7 @@ import_expr <- list(
       ) %>% 
       dplyr::mutate(Datetime =
                       lubridate::dmy_hms(paste(Date, Time), tz = tz),
-                    Id = paste(.data$id, .data$ls, sep = ".")
+                    Id = paste(.data$id, .data$ls, sep = "."), .before = 1
       )
   }),
   #Circadian Eye
@@ -70,6 +70,24 @@ import_expr <- list(
                         datetime_hour, datetime_minute, datetime_second, tz = tz
                         ), .before = 1
                     )
+  }),
+  #Kronowise
+  Kronowise = rlang::expr({
+    data <-suppressMessages( 
+      readr::read_delim(filename,
+                      n_max = n_max,
+                      delim = "\t",
+                      id = "file.name",
+                      locale = locale,
+                      name_repair = "universal",
+                      ...
+      ))
+    data <-
+      data %>%
+      dplyr::mutate(Datetime = lubridate::dmy_hms(DateTime, tz = tz
+      ), .before = 1
+      ) %>% 
+      dplyr::select(-DateTime)
   }),
   #Speccy
   Speccy = rlang::expr({
@@ -201,15 +219,9 @@ import_expr <- list(
                     Datetime = paste(Date, Time) %>% 
                       lubridate::ymd_hms(tz = tz, quiet = TRUE),.before = Nr)
   }),
-  #Actiwatch Spectrum
-  Actiwatch_Spectrum = rlang::expr({
-    #separate the dots list in the column_names and the rest
-    dots <- rlang::list2(...)
-    column_names <- dots$column_names
-    if(is.null(column_names)) 
-      stop("Actiwatch Spectrum requires a vector of `column_names` in the order in which they appear in the file in order to properly detect the starting row")
-    dots$column_names <- NULL
-    
+  #Actiwatch Spectrum - German file format
+  Actiwatch_Spectrum_de = rlang::expr({
+    column_names <- c("Zeile", "Datum", "Zeit", "Status")
     data <- 
       purrr::map(
         filename,
@@ -218,18 +230,18 @@ import_expr <- list(
                                               locale = locale, 
                                               column_names = column_names,
                                               n_max = 1000)
-          df <- suppressMessages(do.call(
-            readr::read_csv,
-            append(list(
+          df <- suppressMessages(
+            readr::read_csv(
               x, 
               skip = rows_to_skip,
               locale=locale,
               id = "file.name",
               show_col_types = FALSE,
               col_types = c("iDtfdfccccfdf"),
-              name_repair = "universal"
-            ),
-            dots)))
+              name_repair = "universal",
+              ...
+            )
+          )
           
           df %>% 
             dplyr::select(!dplyr::starts_with("..."))
@@ -237,12 +249,60 @@ import_expr <- list(
         }) %>% purrr::list_rbind()
     data <- data %>%
       tidyr::unite(col = "Datetime",
-                   tidyselect::where(lubridate::is.Date),
-                   tidyselect::where(hms::is_hms),
+                   3:4,
                    remove = FALSE
       ) %>% 
       dplyr::mutate(
-        Datetime = lubridate::ymd_hms(Datetime),
+        Datetime = 
+          lubridate::parse_date_time(
+            Datetime, orders = c("mdyHMS", "ymdHMS"), tz = tz),
+        dplyr::across(
+          dplyr::where(is.character) &
+            dplyr::where(~ any(stringr::str_detect(.x, ","), na.rm = TRUE)),
+          ~ stringr::str_replace(.x, ",", ".") %>%
+            as.numeric()
+        )
+      )
+  }),
+  #Actiwatch Spectrum - English file format
+  Actiwatch_Spectrum = rlang::expr({
+    column_names <- c("Line","Date","Time","Off Wrist","Activity","Marker",
+                      "White Light", "Red Light","Green Light","Blue Light",
+                      "Sleep Wake","Interval Status")
+    data <- 
+      purrr::map(
+        filename,
+        \(x) {
+          rows_to_skip <- detect_starting_row(x, 
+                                              locale = locale, 
+                                              column_names = column_names,
+                                              n_max = 1000)
+          df <- suppressMessages(
+            readr::read_csv(
+              x, 
+              skip = rows_to_skip,
+              locale=locale,
+              id = "file.name",
+              show_col_types = FALSE,
+              col_types = c("ictfdfddddff"),
+              name_repair = "universal",
+              ...
+            )
+          )
+          
+          df %>% 
+            dplyr::select(!dplyr::starts_with("..."))
+          
+        }) %>% purrr::list_rbind()
+    data <- data %>%
+      tidyr::unite(col = "Datetime",
+                   3:4,
+                   remove = FALSE
+      ) %>% 
+      dplyr::mutate(
+        Datetime = 
+          lubridate::parse_date_time(
+            Datetime, orders = c("mdyHMS", "ymdHMS"), tz = tz),
         dplyr::across(
           dplyr::where(is.character) &
             dplyr::where(~ any(stringr::str_detect(.x, ","), na.rm = TRUE)),
