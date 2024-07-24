@@ -81,11 +81,15 @@ data <- import$ActLumus(files, tz = tz, auto.id = pattern, print_n=33)
 There are several possibilities, why the import is slow. The most common reasons are:
 
 -   The data files are simply large. With short measurement intervals, many participants, and long measurement periods, files for a single study can easily reach several gigabytes. This takes some time to import and is ok.
+
 -   The data files contain many gaps. During import, `LightLogR` checks for and visualizes gaps in the data. Especially large datasets with small intervals contain many gaps, which can slow down the import process.
+
 -   The device model you are importing from has non-consistent data structures. Some devices have a varying number of rows before the actual data starts. This means a small portion of every file has to be read in and the correct starting row has to be found. This can slow down the import process if you have many files.
 
 If you are experiencing slow imports, you can try the following:
--   Only read in part of your datasets, or split your dataset into several peaces, that each gets loaded in separately. You can combine them afterwards with `join_datasets()`.
+
+-   Only read in part of your datasets, or split your dataset into several pieces, that each gets loaded in separately. You can combine them afterwards with `join_datasets()`.
+
 -   If you have many gaps in your data, you can set `auto.plot = FALSE` in the import function. This will eliminate the call to `gg_overview()`, which calculates and visualizes the gaps in the data.
 
 # Data cleaning #1
@@ -93,6 +97,7 @@ If you are experiencing slow imports, you can try the following:
 Before we can dive into the analysis part, we need to make sure we have a clean dataset. The import summary shows us two problems with the data:
 
 -   two files have data that crosses daylight saving time (DST) changes. Because the ActLumus device does not adjust for DST, we need to correct for this.
+
 -   Multiple Ids have single datapoints at the beginning of the dataset with gaps before actual data collection starts. These are test measurements to check equipment, but must be removed from the dataset.
 
 Let us first deal with the DST change. LightLogR has an in-built function to correct for this during import. We thus will re-import the data, but make the import silent as to not clutter the output.
