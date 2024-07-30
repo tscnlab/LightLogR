@@ -1,3 +1,5 @@
+# LightLogR 0.4.1
+
 # LightLogR 0.4.0 "Nautical dawn"
 
 * release on CRAN!
