@@ -60,7 +60,7 @@ To come:
 
 ##### Please note that LightLogR is work in progress! If you are interested in the project and want to know more, you can subscribe to the [LightLogR mailing list](https://lists.lrz.de/mailman/listinfo/lightlogr-users). If you find a bug, please open an issue on the [GitHub repository](https://github.com/tscnlab/LightLogR/issues).
 
-##### To maximize LightLogRs utility, we want to hear from you! What features would you like to see, what are common issues you face when working with wearable data, and what kind of analysis are you performing? Let us know in the [LightLogR community survey](https://de.surveymonkey.com/r/3LL9NKQ)!
+##### To maximize LightLogRs utility, we want to hear from you! What features would you like to see, what are common issues you face when working with wearable data, and what kind of analysis are you performing? Let us know in the [LightLogR community survey](https://de.surveymonkey.com/r/3LL9NKQ)! (open until 18 August 2024)!
 
 Have a look at the **Example** section down below to get started, or
 dive into the
