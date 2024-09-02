@@ -56,7 +56,7 @@ dataset1 \%>\%
 Amundadottir, M.L. (2016). Light-driven model for identifying
 indicators of non-visual health potential in the built environment
 [Doctoral dissertation, EPFL]. EPFL infoscience.
-\url{http://dx.doi.org/10.5075/epfl-thesis-7146}
+\doi{10.5075/epfl-thesis-7146}
 }
 \seealso{
 Other metrics: 

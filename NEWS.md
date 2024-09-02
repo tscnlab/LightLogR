@@ -1,6 +1,40 @@
-# LightLogR 0.3.6
+# LightLogR 0.4.0 "Nautical dawn"
+
+* release on CRAN!
+
+* changed the `supported.devices` list to a function `supported_devices()` instead, so the documentation automatically updates with the list of supported devices. Similarly, `ll_import_expr` is now `ll_import_expr()`.
+
+* added support for the Meta `VEET` device for visual experience measurements
+
+* added support for the `Kronowise` device
+
+* added support for the MPI `melanopiQ Circadian Eye` (Prototype)
+
+* rewrote the import function for `Actiwatch_Spectrum`, as the sample file the original was based off, had specific formatting to German standards. Now, the German version can still be called through `Actiwatch_Spectrum_de`, wheras the main function refers to the english/international format.
+
+* updated the landing page for the website with a list of supported devices and a table of metrics
+
+* small changes to documentation
+
+# LightLogR 0.3.8
+
+* Submission to CRAN
+
+# LightLogR 0.3.7 "Astronomical dawn"
+
+* Changes to the tutorial articles on the website
+
+* Integration of a community survey on the website and Github Readme.
+
+# LightLogR 0.3.6 
 
 * `bright_dark_period()` now maintains the date when looping the data.
+
+* Added articles on `Import & Cleaning`, `Metrics`, and `Visualizations` to the website.
+
+* Added the option for more print rows of observation intervals during `import`.
+
+* Added the option to set a length for the dataset starting from the end in `filter_Datetime()` and family.
 
 # LightLogR 0.3.5
 

@@ -60,7 +60,7 @@
 #'   function (see examples).
 #' @param x.axis.breaks,y.axis.breaks Where should breaks occur on the x and
 #'   y.axis? Expects a `numeric vector` with all the breaks. If you want to
-#'   activate the default behaviour of [ggplot2], you need to put in
+#'   activate the default behaviour of \pkg{ggplot2}, you need to put in
 #'   [ggplot2::waiver()].
 #' @param y.scale.sc `logical` for whether scientific notation shall be used.
 #'   Defaults to `FALSE`.
@@ -68,7 +68,7 @@
 #' * `"point"` for [ggplot2::geom_point()]
 #' * `"line"`  for [ggplot2::geom_line()]
 #' * `"ribbon"` for [ggplot2::geom_ribbon()]
-#' * as the value is just input into the `geom_` function from [ggplot2], other variants work as well, but are not extensively tested.
+#' * as the value is just input into the `geom_` function from \pkg{ggplot2}, other variants work as well, but are not extensively tested.
 #' @param group Optional column name that defines separate sets. Useful for
 #'   certain geoms like `boxplot`.Expects anything that works with the layer
 #'   data [ggplot2::aes()]
@@ -238,7 +238,9 @@ gg_day <- function(dataset,
     # Scales --------------------------------------------------------------
     jco_color_scheme+
     ggplot2::scale_x_time(breaks = x.axis.breaks, 
-                          labels = scales::label_time(format = "%H:%M")) + 
+                          labels = scales::label_time(format = "%H:%M"),
+                          expand = c(0,0),
+                          limits = c(0,24*3600)) + 
     ggplot2::scale_y_continuous(
         trans = y.scale,
         breaks = y.axis.breaks,

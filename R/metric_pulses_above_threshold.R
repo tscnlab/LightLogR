@@ -54,7 +54,7 @@
 #' @references Wilson, J., Reid, K. J., Braun, R. I., Abbott, S. M., & Zee, P. C.
 #'    (2018). Habitual light exposure relative to circadian timing in delayed
 #'    sleep-wake phase disorder. \emph{Sleep}, 41(11).
-#'    \url{https://doi.org/10.1093/sleep/zsy166}
+#'    \doi{10.1093/sleep/zsy166}
 #'
 #' @examples
 #' # Sample data

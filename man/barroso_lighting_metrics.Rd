@@ -80,9 +80,9 @@ dataset1 \%>\%
 \references{
 Barroso, A., Simons, K., & Jager, P. de. (2014). Metrics of circadian
 lighting for clinical investigations. \emph{Lighting Research & Technology},
-46(6), 637–649. \url{https://doi.org/10.1177/1477153513502664}
+46(6), 637–649. \doi{10.1177/1477153513502664}
 
 Hartmeyer, S.L., Andersen, M. (2023). Towards a framework for light-dosimetry studies:
 Quantification metrics. \emph{Lighting Research & Technology}.
-\url{https://doi.org/10.1177/14771535231170500}
+\doi{10.1177/14771535231170500}
 }

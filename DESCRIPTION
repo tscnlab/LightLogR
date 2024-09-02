@@ -1,6 +1,6 @@
 Package: LightLogR
-Title: Work With Data from Wearable Light Loggers and Optical Radiation Dosimeters
-Version: 0.3.6
+Title: Process Data from Wearable Light Loggers and Optical Radiation Dosimeters
+Version: 0.4.0
 Authors@R: c(
     person("Johannes", "Zauner", 
       email = "johannes.zauner@tum.de", role = c("aut", "cre"),
@@ -15,17 +15,11 @@ Authors@R: c(
     person("EURAMET", role = "fnd", comment = "European Association of National Metrology Institutes. Website: www.euramet.org. Grant Number: 22NRM05 MeLiDos. Grant Statement: The project (22NRM05 MeLiDos) has received funding from the European Partnership on Metrology, co-financed from the European Union’s Horizon Europe Research and Innovation Programme and by the Participating States."),    
     person("European Union", role = "fnd", comment = "Co-funded by the European Union. Views and opinions expressed are however those of the author(s) only and do not necessarily reflect those of the European Union or EURAMET. Neither the European Union nor the granting authority can be held responsible for them."),
     person("TSCN-Lab", comment = c(URL = "www.tscnlab.org"), role = "cph"))
-Description: LightLogR is a package under development as part of the MeLiDos 
-    project aimed at developing a standard workflow for wearable light logger 
-    data and optical radiation dosimeters. MeLiDos is a joint, EURAMET-funded 
-    project involving sixteen partners across Europe. Its primary contributions 
-    towards fostering FAIR data include the development of a common file format, 
-    robust metadata descriptors, and an accompanying open-source software 
-    ecosystem.
+Description: Import, processing, validation, and visualization of personal light exposure measurement data from wearable devices. The package implements features such as the import of data and metadata files, conversion of common file formats, validation of light logging data, verification of crucial metadata, calculation of common parameters, and semi-automated analysis and visualization.
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 URL: https://github.com/tscnlab/LightLogR,
     https://tscnlab.github.io/LightLogR/,
     https://zenodo.org/doi/10.5281/zenodo.11562600
@@ -58,11 +52,12 @@ Depends:
 LazyData: true
 Suggests: 
     covr,
+    gghighlight,
     gt,
+    gtsummary,
     knitr,
     patchwork,
     rmarkdown,
     testthat (>= 3.0.0),
     tidyverse
 Config/testthat/edition: 3
-VignetteBuilder: knitr

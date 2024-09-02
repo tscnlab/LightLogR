@@ -4,11 +4,11 @@
 \name{LightLogR-package}
 \alias{LightLogR}
 \alias{LightLogR-package}
-\title{LightLogR: Work With Data from Wearable Light Loggers and Optical Radiation Dosimeters}
+\title{LightLogR: Process Data from Wearable Light Loggers and Optical Radiation Dosimeters}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-LightLogR is a package under development as part of the MeLiDos project aimed at developing a standard workflow for wearable light logger data and optical radiation dosimeters. MeLiDos is a joint, EURAMET-funded project involving sixteen partners across Europe. Its primary contributions towards fostering FAIR data include the development of a common file format, robust metadata descriptors, and an accompanying open-source software ecosystem.
+Import, processing, validation, and visualization of personal light exposure measurement data from wearable devices. The package implements features such as the import of data and metadata files, conversion of common file formats, validation of light logging data, verification of crucial metadata, calculation of common parameters, and semi-automated analysis and visualization.
 }
 \seealso{
 Useful links:

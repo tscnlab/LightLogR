@@ -12,6 +12,6 @@ bibentry(
   url      = "https://github.com/tscnlab/LightLogR",
   doi      = "10.5281/zenodo.11562600",
   textVersion = paste(
-  "Zauner, J.; Hartmeyer, S.L.; Spitschan, M. (2023): LightLogR: Working With Wearable Light Logger Data. R Package, Available on https://github.com/tscnlab/LightLogR, doi:10.5281/zenodo.11562600"
+  "Zauner, J.; Hartmeyer, S.L.; Spitschan, M. (2023): LightLogR: Working With Wearable Light Logger Data. R Package, Available on https://github.com/tscnlab/LightLogR, doi:10.5281/zenodo.11562600, RRID:SCR_025408"
   )
 )

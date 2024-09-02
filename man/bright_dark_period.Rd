@@ -74,7 +74,7 @@ dataset1 \%>\%
   dplyr::reframe(bright_dark_period(MEDI, Datetime, "brightest", "10 hours",
     as.df = TRUE))
 dataset1 \%>\%
-  dplyr::reframe(bright_dark_period(MEDI, Datetime, "darkest", "5 hours",
+  dplyr::reframe(bright_dark_period(MEDI, Datetime, "darkest", "7 hours",
     loop = TRUE, as.df = TRUE))
 
 # Dataset with duration as Time.vector
@@ -96,7 +96,7 @@ dataset2 \%>\%
 \references{
 Hartmeyer, S.L., Andersen, M. (2023). Towards a framework for light-dosimetry studies:
 Quantification metrics. \emph{Lighting Research & Technology}.
-\url{https://doi.org/10.1177/14771535231170500}
+\doi{10.1177/14771535231170500}
 }
 \seealso{
 Other metrics: 

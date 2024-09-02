@@ -14,3 +14,6 @@
 ^app\.R$
 ^vignettes/articles$
 ^\.gitlab-ci\.yml$
+^cran-comments\.md$
+^LightLogR-manual\.tex$
+^CRAN-SUBMISSION$

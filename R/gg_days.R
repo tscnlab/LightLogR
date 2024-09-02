@@ -21,7 +21,7 @@
 #' @param y.axis.breaks Where should breaks occur on the y.axis? Expects a
 #'   `numeric vector` with all the breaks or a function that calculates them
 #'   based on the limits. If you want to activate the default behaviour of
-#'   [ggplot2], you need to put in [ggplot2::waiver()].
+#'   \pkg{ggplot2}, you need to put in [ggplot2::waiver()].
 #' @param x.axis.breaks The (major) breaks of the x-axis. Defaults to
 #'   [Datetime_breaks()]. The function has several options for adjustment. The
 #'   default setting place a major break every 12 hours, starting at 12:00 of

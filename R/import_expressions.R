@@ -1,7 +1,7 @@
 #this file contains all the import expressions for the different devices
 #they are to be used with the `imports` or `import_adjustment` function to create a proper import function
 
-ll_import_expr <- list(
+import_expr <- list(
   #ActTrust 1 & 2
   ActTrust = rlang::expr({
     column_names <- c("DATE/TIME", "MS", "EVENT", "TEMPERATURE")
@@ -48,8 +48,46 @@ ll_import_expr <- list(
       ) %>% 
       dplyr::mutate(Datetime =
                       lubridate::dmy_hms(paste(Date, Time), tz = tz),
-                    Id = paste(.data$id, .data$ls, sep = ".")
+                    Id = paste(.data$id, .data$ls, sep = "."), .before = 1
       )
+  }),
+  #Circadian Eye
+  Circadian_Eye = rlang::expr({
+    data <-suppressMessages( 
+      readr::read_csv(filename,
+                      n_max = n_max,
+                      id = "file.name",
+                      locale = locale,
+                      name_repair = "universal",
+                      col_types = 
+                        paste0(c(rep("d", 62), rep("c", 9)), collapse = ""),
+                      ...
+      ))
+    data <- data %>%
+      dplyr::rowwise() %>% 
+      dplyr::mutate(Datetime = lubridate::make_datetime(
+                        datetime_year, datetime_month, datetime_day, 
+                        datetime_hour, datetime_minute, datetime_second, tz = tz
+                        ), .before = 1
+                    )
+  }),
+  #Kronowise
+  Kronowise = rlang::expr({
+    data <-suppressMessages( 
+      readr::read_delim(filename,
+                      n_max = n_max,
+                      delim = "\t",
+                      id = "file.name",
+                      locale = locale,
+                      name_repair = "universal",
+                      ...
+      ))
+    data <-
+      data %>%
+      dplyr::mutate(Datetime = lubridate::dmy_hms(DateTime, tz = tz
+      ), .before = 1
+      ) %>% 
+      dplyr::select(-DateTime)
   }),
   #Speccy
   Speccy = rlang::expr({
@@ -181,15 +219,9 @@ ll_import_expr <- list(
                     Datetime = paste(Date, Time) %>% 
                       lubridate::ymd_hms(tz = tz, quiet = TRUE),.before = Nr)
   }),
-  #Actiwatch Spectrum
-  Actiwatch_Spectrum = rlang::expr({
-    #separate the dots list in the column_names and the rest
-    dots <- rlang::list2(...)
-    column_names <- dots$column_names
-    if(is.null(column_names)) 
-      stop("Actiwatch Spectrum requires a vector of `column_names` in the order in which they appear in the file in order to properly detect the starting row")
-    dots$column_names <- NULL
-    
+  #Actiwatch Spectrum - German file format
+  Actiwatch_Spectrum_de = rlang::expr({
+    column_names <- c("Zeile", "Datum", "Zeit", "Status")
     data <- 
       purrr::map(
         filename,
@@ -198,18 +230,18 @@ ll_import_expr <- list(
                                               locale = locale, 
                                               column_names = column_names,
                                               n_max = 1000)
-          df <- suppressMessages(do.call(
-            readr::read_csv,
-            append(list(
+          df <- suppressMessages(
+            readr::read_csv(
               x, 
               skip = rows_to_skip,
               locale=locale,
               id = "file.name",
               show_col_types = FALSE,
               col_types = c("iDtfdfccccfdf"),
-              name_repair = "universal"
-            ),
-            dots)))
+              name_repair = "universal",
+              ...
+            )
+          )
           
           df %>% 
             dplyr::select(!dplyr::starts_with("..."))
@@ -217,12 +249,60 @@ ll_import_expr <- list(
         }) %>% purrr::list_rbind()
     data <- data %>%
       tidyr::unite(col = "Datetime",
-                   tidyselect::where(lubridate::is.Date),
-                   tidyselect::where(hms::is_hms),
+                   3:4,
                    remove = FALSE
       ) %>% 
       dplyr::mutate(
-        Datetime = lubridate::ymd_hms(Datetime),
+        Datetime = 
+          lubridate::parse_date_time(
+            Datetime, orders = c("mdyHMS", "ymdHMS"), tz = tz),
+        dplyr::across(
+          dplyr::where(is.character) &
+            dplyr::where(~ any(stringr::str_detect(.x, ","), na.rm = TRUE)),
+          ~ stringr::str_replace(.x, ",", ".") %>%
+            as.numeric()
+        )
+      )
+  }),
+  #Actiwatch Spectrum - English file format
+  Actiwatch_Spectrum = rlang::expr({
+    column_names <- c("Line","Date","Time","Off Wrist","Activity","Marker",
+                      "White Light", "Red Light","Green Light","Blue Light",
+                      "Sleep Wake","Interval Status")
+    data <- 
+      purrr::map(
+        filename,
+        \(x) {
+          rows_to_skip <- detect_starting_row(x, 
+                                              locale = locale, 
+                                              column_names = column_names,
+                                              n_max = 1000)
+          df <- suppressMessages(
+            readr::read_csv(
+              x, 
+              skip = rows_to_skip,
+              locale=locale,
+              id = "file.name",
+              show_col_types = FALSE,
+              col_types = c("ictfdfddddff"),
+              name_repair = "universal",
+              ...
+            )
+          )
+          
+          df %>% 
+            dplyr::select(!dplyr::starts_with("..."))
+          
+        }) %>% purrr::list_rbind()
+    data <- data %>%
+      tidyr::unite(col = "Datetime",
+                   3:4,
+                   remove = FALSE
+      ) %>% 
+      dplyr::mutate(
+        Datetime = 
+          lubridate::parse_date_time(
+            Datetime, orders = c("mdyHMS", "ymdHMS"), tz = tz),
         dplyr::across(
           dplyr::where(is.character) &
             dplyr::where(~ any(stringr::str_detect(.x, ","), na.rm = TRUE)),
@@ -276,10 +356,69 @@ ll_import_expr <- list(
                           file.name = filename
             )
         }) %>% purrr::list_rbind()
-  })
-  
-  
+  }),
+  VEET = rlang::expr({
+    #separate the dots list in the column_names and the rest
+    dots <- rlang::list2(...)
+    modality <- dots$modality
+    dots$modality <- NULL
+    stopifnot(modality %in% c("ALS", "IMU", "INF", "PHO", "TOF"))
+    veet_names <- list(
+      ALS = c(time_stamp = TRUE, modality = FALSE, integration_time = TRUE, 
+              uvGain = TRUE, visGain = TRUE, irGain = TRUE, uvValue = TRUE, 
+              visValue = TRUE, irValue = TRUE, Flicker = TRUE, Lux = TRUE),
+      IMU = c(time_stamp = TRUE, modality = FALSE, ax = TRUE, ay = TRUE, 
+              az = TRUE, gx = TRUE, gy = TRUE, gz = TRUE, temp = TRUE),
+      INF = c(time_stamp = TRUE, modality = FALSE, product_name = FALSE, 
+              serial_number = FALSE, fw_version = FALSE, Researcher_ID = FALSE, 
+              Participant_ID = FALSE, Time_Zone_offset = TRUE, IMU_interval = TRUE, 
+              PHO_interval = TRUE, TOF_interval = TRUE, ALS_interval = TRUE, 
+              Temple_Config = FALSE, TOF_Iterations = TRUE, 
+              IMU_Cal_Table = TRUE, PHO_Cal_Table = TRUE, 
+              ToF_Cal_Table = TRUE, ALS_Cal_Table = TRUE, 
+              Unit_Timestamp = FALSE, Unit_Batt_Voltage = FALSE, 
+              Unit_Sensor_Interval = FALSE, Unit_IMU_Accel = FALSE, 
+              Unit_IMU_Gyro = FALSE, Unit_Pho_Cts = FALSE, Unit_Pho_Gain = FALSE, 
+              Unit_ToF = FALSE, Unit_ALS_Cts = FALSE, Unit_ALS_Gain = FALSE, 
+              Unit_ALS_Flicker = FALSE),
+      PHO = c(time_stamp = TRUE, modality = FALSE, integration_time = TRUE, 
+              Gain = TRUE, s415 = TRUE, s445 = TRUE, s480 = TRUE, s515 = TRUE, 
+              s555 = TRUE, s590 = TRUE, s630 = TRUE, s680 = TRUE, s940 = TRUE, 
+              Dark = TRUE, ClearL = TRUE, ClearR = TRUE),
+      TOF = stats::setNames(
+        c(TRUE, FALSE, rep(TRUE, 4 * 64)), 
+          c("time_stamp", "modality", 
+            paste0("conf1_", 0:63), 
+            paste0("conf2_", 0:63), 
+            paste0("dist1_", 0:63), 
+            paste0("dist2_", 0:63))
+        )
+    )
+    data <- 
+      purrr::map(filename, \(filename) {
+        pattern <- paste0("^(?:[^,]*,){1}\\b", modality, "\\b")
+        data <- 
+          readr::read_lines(file = filename, locale = locale, n_max = n_max)
+        data <- data[data %>% stringr::str_detect(pattern)]
+        data <- stringr::str_split(data, ",") %>% 
+          purrr::list_transpose() %>% list2DF()
+        names(data) <- names(veet_names[[modality]])
+        data <- data %>% 
+          dplyr::mutate(file.name = filename, .before = 1)
+        data
+      }) %>% purrr::list_rbind()
+    data <- data %>% 
+      dplyr::mutate(
+        dplyr::across(
+          tidyselect::all_of(
+            veet_names[[modality]][veet_names[[modality]]] %>% names()), 
+        as.numeric),
+        Datetime = lubridate::with_tz(
+          lubridate::as_datetime(time_stamp, tz = "UTC"), tz), .before = 1
+      )
+  }
+  )
 )
 
 #order the list by their names
-ll_import_expr <- ll_import_expr[order(names(ll_import_expr))]
+import_expr <- import_expr[order(names(import_expr))]

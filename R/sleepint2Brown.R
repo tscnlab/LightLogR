@@ -14,7 +14,7 @@
 #' @param Sleep.colname The name of the column with the sleep/wake states. Defaults to `State`.
 #' @param wake.state,sleep.state The names of the wake and sleep states in the `Sleep.colname`. Default to `"wake"` and `"sleep"`. Expected to be a `character` scalar and must be an exact match.
 #' @param Brown.day,Brown.evening,Brown.night The names of the Brown states that will be used. Defaults to `"day"`, `"evening"` and `"night"`.
-#' @param evening.length The length of the evening interval in seconds. Can also use [lubridate] duration or period objects. Defaults to 3 hours.
+#' @param evening.length The length of the evening interval in seconds. Can also use \pkg{lubridate} duration or period objects. Defaults to 3 hours.
 #' @param Brown.state.colname The name of the column with the newly created Brown states. Works as a simple renaming of the `Sleep.colname`.
 #' @param output.dataset Whether to return the whole `dataset` or a `vector` with the Brown states.
 #'

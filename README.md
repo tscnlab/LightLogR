@@ -7,10 +7,13 @@
 
 [![R-CMD-check](https://github.com/tscnlab/LightLogR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/tscnlab/LightLogR/actions/workflows/R-CMD-check.yaml)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.11562600.svg)](https://doi.org/10.5281/zenodo.11562600)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/LightLogR)](https://CRAN.R-project.org/package=LightLogR)
+
 <!-- badges: end -->
 
 Personalized luminous exposure data is progressively gaining importance
-in various sectors, including research, occupational health, and
+in various sectors, including research, occupational affairs, and
 fitness tracking. Data are collected through a proliferating selection
 of wearable loggers and dosimeters, varying in size, shape,
 functionality, and output format. Despite or maybe because of numerous
@@ -35,35 +38,126 @@ insights into personal light exposure</figcaption>
 [*MeLiDos*](https://www.melidos.eu) project to address these issues. The
 package aims to provide tools for:
 
-- Generation of data and metadata files
+- import from common measurement devices (see below for a list of
+  supported devices)
 
-- Conversion of popular file formats
+- Validation and processing of light logging data
 
-- Validation of light logging data
+- Visualization of light exposure data, both exploratory and publication
+  ready
 
-- Verification of crucial metadata
+- Calculation of common analysis parameters (see below for a list of
+  metrics)
 
-- Calculation of common parameters
+To come:
+
+- Import, creation, and verification of crucial metadata
 
 - Semi-automated analysis and visualization (both command-line and
   GUI-based)
 
 - Integration of data into a unified database for cross-study analyses
 
-##### Please note that LightLogR is work in progress! If you are interested in the project and want to know more, please give us a [message](mailto:johannes.zauner@tum.de)
+##### Please note that LightLogR is work in progress! If you are interested in the project and want to know more, you can subscribe to the [LightLogR mailing list](https://lists.lrz.de/mailman/listinfo/lightlogr-users). If you find a bug, please open an issue on the [GitHub repository](https://github.com/tscnlab/LightLogR/issues).
+
+##### To maximize LightLogRs utility, we want to hear from you! What features would you like to see, what are common issues you face when working with wearable data, and what kind of analysis are you performing? Let us know in the [LightLogR community survey](https://de.surveymonkey.com/r/3LL9NKQ)! (open until 18 August 2024)!
 
 Have a look at the **Example** section down below to get started, or
 dive into the
 [Articles](https://tscnlab.github.io/LightLogR/articles/index.html) to
 get more in depth information about how to work with the package and
-generate images such as the one above.
+generate images such as the one above, import data, visualization, and
+metric calculation.
+
+## Supported devices
+
+At present, these are the devices we support in LightLogR:
+
+- Actiwatch_Spectrum
+
+- Actiwatch_Spectrum_de
+
+- ActLumus
+
+- ActTrust
+
+- Circadian_Eye
+
+- DeLux
+
+- Kronowise
+
+- LiDo
+
+- LightWatcher
+
+- LYS
+
+- nanoLambda
+
+- Speccy
+
+- SpectraWear
+
+- VEET
+
+More Information on these devices can be found in the reference for
+`import_Dataset()`. If you want to know how to import data from these
+devices, have a look at our article on [Import &
+Cleaning](https://tscnlab.github.io/LightLogR/articles/Import.html).
+
+If you are using a device that is currently not supported, please
+contact the developers. We are always looking to expand the range of
+supported devices. The easiest and most trackable way to get in contact
+is by opening a new issue on our [Github
+repository](https://github.com/tscnlab/LightLogR/issues). Please also
+provide a sample file of your data, so we can test the import function.
+
+## Metrics
+
+LightLogR supports a wide range of metrics across different metric
+families. You can find the full documentation of metrics functions in
+the [reference
+section](https://tscnlab.github.io/LightLogR/reference/index.html#metrics).
+There is also an overview article on how to use
+[Metrics](https://tscnlab.github.io/LightLogR/articles/Metrics.html).
+
+| Metric Family                        | Submetrics     | Note                 | Documentation                                                                                    |
+|--------------------------------------|----------------|----------------------|--------------------------------------------------------------------------------------------------|
+| Barroso                              | 7              |                      | `barroso_lighting_metrics()`                                                                     |
+| Bright-dark period                   | 4x2            | bright / dark        | `bright_dark_period()`                                                                           |
+| Centroid of light exposure           | 1              |                      | `centroidLE()`                                                                                   |
+| Disparity index                      | 1              |                      | `disparity_index()`                                                                              |
+| Duration above threshold             | 3              | above, below, within | `duration_above_threshold()`                                                                     |
+| Exponential moving average (EMA)     | 1              |                      | `exponential_moving_average()`                                                                   |
+| Frequency crossing threshold         | 1              |                      | `frequency_crossing_threshold()`                                                                 |
+| Intradaily Variance (IV)             | 1              |                      | `intradaily_variability()`                                                                       |
+| Interdaily Stability (IS)            | 1              |                      | `interdaily_stability()`                                                                         |
+| Midpoint CE (Cumulative Exposure)    | 1              |                      | `midpointCE()`                                                                                   |
+| nvRC (Non-visual circadian response) | 4              |                      | `nvRC()`, `nvRC_circadianDisturbance()`, `nvRC_circadianBias()`, `nvRC_relativeAmplitudeError()` |
+| nvRD (Non-visual direct response)    | 2              |                      | `nvRD()`, `nvRD_cumulative_response()`                                                           |
+| Period above threshold               | 3              | above, below, within | `period_above_threshold()`                                                                       |
+| Pulses above threshold               | 7x3            | above, below, within | `pulses_above_threshold()`                                                                       |
+| Threshold for duration               | 2              | above, below         | `threshold_for_duration()`                                                                       |
+| Timing above threshold               | 3              | above, below, within | `timing_above_threshold()`                                                                       |
+| **Total:**                           |                |                      |                                                                                                  |
+| **17 families**                      | **61 metrics** |                      |                                                                                                  |
+
+If you would like to use a metric you don’t find represented in
+LightLogR, please contact the developers. The easiest and most trackable
+way to get in contact is by opening a new issue on our [Github
+repository](https://github.com/tscnlab/LightLogR/issues).
 
 ## About the creation and funding of LightLogR
 
 **LightLogR** is developed by the [*Translational Sensory & Circadian
 Neuroscience*](https://www.tscnlab.org) lab, a joint group from the
 [Technical University of Munich](https://www.tum.de/en/) and the [Max
-Planck Institute for Biological
+Planck Institute for Biological Neuroscience Unit
+(MPS/TUM/TUMCREATE)\*](https://www.tscnlab.org), a joint group based at
+the [Technical University of Munich](https://www.tum.de/en/),
+[TUMCREATE](https://www.tum-create.edu.sg/), the [Max Planck Institute
+for Biological
 Cybernetics](https://www.mpg.de/152075/biological-cybernetics).
 
 [*MeLiDos*](https://www.melidos.eu) is a joint,
@@ -87,7 +181,13 @@ held responsible for them.
 
 ## Installation
 
-You can install the development version of LightLogR from
+You can install LightLogR from [CRAN](https://CRAN.R-project.org) with:
+
+``` r
+install.packages("LightLogR")
+```
+
+You can install the latest development version of LightLogR from
 [GitHub](https://github.com/) with:
 
 ``` r
@@ -101,7 +201,7 @@ Here is a quick starter on how do use **LightLogR**.
 
 ``` r
 library(LightLogR)
-#these packages are just needed for the examples as shown.
+#these packages are needed for the examples as shown below.
 library(flextable)
 library(dplyr)
 library(ggplot2)

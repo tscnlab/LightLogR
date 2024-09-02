@@ -105,9 +105,8 @@ reference:
     
   - title: Datasets
     desc: >
-      This section includes datasets that are used in the examples of the 
-      documentation.
+      This section includes data that are used in LightLogR and in examples.
     contents:
     - sample.data.environment
-    - supported.devices
+    - supported_devices
     - ll_import_expr

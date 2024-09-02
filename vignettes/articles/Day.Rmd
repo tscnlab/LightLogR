@@ -1,5 +1,5 @@
 ---
-title: "What's in a Day?"
+title: "The whole game"
 ---
 
 ```{r, include = FALSE}
@@ -48,7 +48,7 @@ file.sleep <- "205_sleepdiary_all_20230904.csv"
 
 ### Participant Light Logger Data
 
-`LightLogR` provides convenient import functions for a range of supported devices (use the command `supported.devices` if you want to see what devices are supported at present). Because `LightLogR` knows how the files from these devices are structured, it needs very little input. In fact, the mere filepath would suffice. It is, however, a good idea to also provide the timezone argument `tz` to specify that these measurements were made in the `Europe/Berlin` timezone. This makes your data future-proof for when it is used in comparison with other geolocations.
+`LightLogR` provides convenient import functions for a range of supported devices (use the command `supported_devices()` if you want to see what devices are supported at present). Because `LightLogR` knows how the files from these devices are structured, it needs very little input. In fact, the mere filepath would suffice. It is, however, a good idea to also provide the timezone argument `tz` to specify that these measurements were made in the `Europe/Berlin` timezone. This makes your data future-proof for when it is used in comparison with other geolocations.
 
 Every light logger dataset needs an `Id` to connect or separate observations from the same or different participant/device/study/etc. If we don´t provide an `Id` to the import function (or the dataset doesn´t contain an `Id` column), the filename will be used as an `Id`. As this would be rather cumbersome in our case, we will use a `regex` to extract the first three digits from the filename, which serve this purpose here.
 

@@ -79,11 +79,11 @@ Phillips, A. J. K., Clerx, W. M., O’Brien, C. S., Sano, A., Barger,
 L. K., Picard, R. W., Lockley, S. W., Klerman, E. B., & Czeisler, C. A. (2017).
 Irregular sleep/wake patterns are associated with poorer academic performance
 and delayed circadian and sleep/wake timing. \emph{Scientific Reports},
-7(1), 3216. \url{https://doi.org/10.1038/s41598-017-03171-4}
+7(1), 3216. \doi{10.1038/s41598-017-03171-4}
 
 Hartmeyer, S.L., Andersen, M. (2023). Towards a framework for light-dosimetry studies:
 Quantification metrics. \emph{Lighting Research & Technology}.
-\url{https://doi.org/10.1177/14771535231170500}
+\doi{10.1177/14771535231170500}
 }
 \seealso{
 Other metrics: 

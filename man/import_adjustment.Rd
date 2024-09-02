@@ -8,7 +8,7 @@ import_adjustment(import_expr)
 }
 \arguments{
 \item{import_expr}{A named list of import expressions. The basis for
-\code{LightLogR}'s import functions is the included dataset \code{ll_import_expr}. If
+\code{LightLogR}'s import functions is the included dataset \code{ll_import_expr()}. If
 this function were to be given that exact dataset, and bound to a variable
 called \code{import}, it would be identical to the \code{import} function. See
 \code{details}.}
@@ -26,20 +26,21 @@ as expected, it must lead to a data frame containing a \code{Datetime} column wi
 the correct time zone. It has access to all arguments defined in the
 description of \code{import_Dataset()}. The \code{...} argument should be passed to
 whatever csv reader function is used, so that it works as expected. Look at
-\code{ll_import_expr$LYS} for a quite minimal example.
+\code{ll_import_expr()$LYS} for a quite minimal example.
 }
 \examples{
 #create a new import function for the LYS device, same as the old
-new_import <- import_adjustment(ll_import_expr)
+new_import <- import_adjustment(ll_import_expr())
 #the new one is identical to the old one in terms of the function body
 identical(body(import$LYS), body(new_import$LYS))
 
 #change the import expression for the LYS device to add a message at the top
-ll_import_expr$LYS[[4]] <-
+new_import_expr <- ll_import_expr()
+new_import_expr$LYS[[4]] <-
 rlang::expr({ cat("**This is a new import function**\n")
 data
 })
-new_import <- import_adjustment(ll_import_expr)
+new_import <- import_adjustment(new_import_expr)
 filepath <- system.file("extdata/sample_data_LYS.csv", package = "LightLogR")
 #Now, a message is printed when the import function is called
 new_import <- new_import$LYS(filepath)

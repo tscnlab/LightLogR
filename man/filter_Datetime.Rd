@@ -11,6 +11,7 @@ filter_Datetime(
   start = NULL,
   end = NULL,
   length = NULL,
+  length_from_start = TRUE,
   full.day = FALSE,
   tz = NULL,
   only_Id = NULL,
@@ -40,13 +41,18 @@ time positions for the filtered dataframe. If you only want to provide
 respective start is taken.
 }}
 
-\item{length}{Either a Period or Duration from \link{lubridate}. E.g., \code{days(2) + hours(12)} will give a period of 2.5 days, whereas \code{ddays(2) + dhours(12)}
+\item{length}{Either a Period or Duration from \pkg{lubridate}. E.g., \code{days(2) + hours(12)} will give a period of 2.5 days, whereas \code{ddays(2) + dhours(12)}
 will give a duration. For the difference between periods and durations look
-at the documentation from \link{lubridate}. Basically, periods model clocktimes,
+at the documentation from \pkg{lubridate}. Basically, periods model clocktimes,
 whereas durations model physical processes. This matters on several
 occasions, like leap years, or daylight savings. You can also provide a
 \code{character} scalar in the form of e.g. "1 day", which will be converted
 into a period.}
+
+\item{length_from_start}{A \code{logical} indicating whether the \code{length} argument
+should be applied to the start (default, TRUE) or the end of the data
+(FALSE). Only relevant if neither the \code{start} nor the \code{end} arguments are
+provided.}
 
 \item{full.day}{A \code{logical} indicating whether the \code{start} param should be
 rounded to a full day, when only the \code{length} argument is provided (Default
@@ -78,7 +84,7 @@ specified Dates/Times.
 Filtering a dataset based on Dates or Datetimes may often be necessary prior
 to calcuation or visualization. The functions allow for a filtering based on
 simple \code{strings} or \code{Datetime} scalars, or by specifying a length. They also
-support prior \link{dplyr} grouping, which is useful, e.g., when you only want to
+support prior \pkg{dplyr} grouping, which is useful, e.g., when you only want to
 filter the first two days of measurement data for every participant,
 regardless of the actual date. If you want to filter based on times of the
 day, look to \code{\link[=filter_Time]{filter_Time()}}.

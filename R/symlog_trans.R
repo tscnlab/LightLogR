@@ -1,6 +1,6 @@
 #' Scale positive and negative values on a log scale
 #' 
-#' To create a plot with positive and negative (unscaled) values on a log-transformed axis, the values need to be scaled accordingly. R or [ggplot] do not have a built-in function for this, but the following function can be used to create a transformation function for this purpose. The function was coded based on a [post on stack overflow](https://stackoverflow.com/a/14674703). The `symlog` transformation is the standard transformation used e.g., in [gg_day()].
+#' To create a plot with positive and negative (unscaled) values on a log-transformed axis, the values need to be scaled accordingly. R or \pkg{ggplot2} do not have a built-in function for this, but the following function can be used to create a transformation function for this purpose. The function was coded based on a [post on stack overflow](https://stackoverflow.com/a/14674703). The `symlog` transformation is the standard transformation used e.g., in [gg_day()].
 #' 
 #' The `symlog` transformation can be accessed either via the `trans = "symlog"` argument in a scaling function, or via `trans = symlog_trans()`. The latter allows setting the individual arguments.
 #'
@@ -8,11 +8,11 @@
 #' @param thr Threshold after which a logarithmic transformation is applied. If the absolute value is below this `threshold`, the value is not transformed. The default is 1.
 #' @param scale Scaling factor for logarithmically transformed values above the `threshold`. The default is 1.
 #'
-#' @return a transformation function that can be used in [ggplot] or [plotly] to scale positive and negative values on a log scale.
+#' @return a transformation function that can be used in \pkg{ggplot2} or \pkg{plotly} to scale positive and negative values on a log scale.
 #' @export
 #'
-#' @references This function`s code is a straight copy from a post on stack overflow.
-#' https://stackoverflow.com/a/14674703
+#' @references This function`s code is a straight copy from a post on [stack overflow](https://stackoverflow.com/a/14674703).
+#' The author of the answer is [Julius Vainora](https://stackoverflow.com/users/1320535/julius-vainora), and the author of the question [Brian B](https://stackoverflow.com/users/1212562/brian-b)
 #'
 #' @examples
 #' dataset <- 
