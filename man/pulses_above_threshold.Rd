@@ -9,8 +9,8 @@ pulses_above_threshold(
   Time.vector,
   comparison = c("above", "below"),
   threshold,
-  min.length = "8 mins",
-  max.interrupt = "2 mins",
+  min.length = "2 mins",
+  max.interrupt = "8 mins",
   prop.interrupt = 0.25,
   epoch = "dominant.epoch",
   return.indices = FALSE,
@@ -37,12 +37,12 @@ calculated.}
 \item{min.length}{The minimum length of a pulse. Can be either a
 \link[lubridate]{duration} or a string. If it is a string, it needs to be a valid
 \link[lubridate]{duration} string, e.g., \code{"1 day"} or \code{"10 sec"}. Defaults to
-\code{"8 mins"} as in Wilson et al. (2018).}
+\code{"2 mins"} as in Wilson et al. (2018).}
 
 \item{max.interrupt}{Maximum length of each episode of interruptions. Can be either a
 \link[lubridate]{duration} or a string. If it is a string, it needs to be a valid
 \link[lubridate]{duration} string, e.g., \code{"1 day"} or \code{"10 sec"}. Defaults to
-\code{"2 mins"} as in Wilson et al. (2018).}
+\code{"8 mins"} as in Wilson et al. (2018).}
 
 \item{prop.interrupt}{Numeric value between \code{0} and \code{1} specifying the
 maximum proportion of the total number of interruptions. Defaults to \code{0.25}

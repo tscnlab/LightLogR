@@ -21,11 +21,11 @@
 #' @param min.length The minimum length of a pulse. Can be either a
 #'  \link[lubridate]{duration} or a string. If it is a string, it needs to be a valid
 #'  \link[lubridate]{duration} string, e.g., `"1 day"` or `"10 sec"`. Defaults to 
-#'  `"8 mins"` as in Wilson et al. (2018).
+#'  `"2 mins"` as in Wilson et al. (2018).
 #' @param max.interrupt Maximum length of each episode of interruptions. Can be either a
 #'  \link[lubridate]{duration} or a string. If it is a string, it needs to be a valid
 #'  \link[lubridate]{duration} string, e.g., `"1 day"` or `"10 sec"`. Defaults to
-#'  `"2 mins"` as in Wilson et al. (2018).
+#'  `"8 mins"` as in Wilson et al. (2018).
 #' @param prop.interrupt Numeric value between `0` and `1` specifying the
 #'    maximum proportion of the total number of interruptions. Defaults to `0.25` 
 #'    as in Wilson et al. (2018).
@@ -85,8 +85,8 @@ pulses_above_threshold <- function(Light.vector,
                                    Time.vector,
                                    comparison = c("above", "below"),
                                    threshold,
-                                   min.length = "8 mins",
-                                   max.interrupt = "2 mins",
+                                   min.length = "2 mins",
+                                   max.interrupt = "8 mins",
                                    prop.interrupt = 0.25,
                                    epoch = "dominant.epoch",
                                    return.indices = FALSE,
