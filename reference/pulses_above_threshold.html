@@ -65,8 +65,8 @@ threshold.</p>
 <span>  <span class="va">Time.vector</span>,</span>
 <span>  comparison <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"above"</span>, <span class="st">"below"</span><span class="op">)</span>,</span>
 <span>  <span class="va">threshold</span>,</span>
-<span>  min.length <span class="op">=</span> <span class="st">"8 mins"</span>,</span>
-<span>  max.interrupt <span class="op">=</span> <span class="st">"2 mins"</span>,</span>
+<span>  min.length <span class="op">=</span> <span class="st">"2 mins"</span>,</span>
+<span>  max.interrupt <span class="op">=</span> <span class="st">"8 mins"</span>,</span>
 <span>  prop.interrupt <span class="op">=</span> <span class="fl">0.25</span>,</span>
 <span>  epoch <span class="op">=</span> <span class="st">"dominant.epoch"</span>,</span>
 <span>  return.indices <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -106,14 +106,14 @@ calculated.</p></dd>
 <dd><p>The minimum length of a pulse. Can be either a
 <a href="https://lubridate.tidyverse.org/reference/duration.html" class="external-link">duration</a> or a string. If it is a string, it needs to be a valid
 <a href="https://lubridate.tidyverse.org/reference/duration.html" class="external-link">duration</a> string, e.g., <code>"1 day"</code> or <code>"10 sec"</code>. Defaults to
-<code>"8 mins"</code> as in Wilson et al. (2018).</p></dd>
+<code>"2 mins"</code> as in Wilson et al. (2018).</p></dd>
 
 
 <dt id="arg-max-interrupt">max.interrupt<a class="anchor" aria-label="anchor" href="#arg-max-interrupt"></a></dt>
 <dd><p>Maximum length of each episode of interruptions. Can be either a
 <a href="https://lubridate.tidyverse.org/reference/duration.html" class="external-link">duration</a> or a string. If it is a string, it needs to be a valid
 <a href="https://lubridate.tidyverse.org/reference/duration.html" class="external-link">duration</a> string, e.g., <code>"1 day"</code> or <code>"10 sec"</code>. Defaults to
-<code>"2 mins"</code> as in Wilson et al. (2018).</p></dd>
+<code>"8 mins"</code> as in Wilson et al. (2018).</p></dd>
 
 
 <dt id="arg-prop-interrupt">prop.interrupt<a class="anchor" aria-label="anchor" href="#arg-prop-interrupt"></a></dt>
@@ -198,7 +198,7 @@ sleep-wake phase disorder. <em>Sleep</em>, 41(11).
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 8</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Id          n_pulses_above_250 mean_level_pulses_abov…¹ mean_duration_pulses…²</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;Duration&gt;</span>            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Participant                  8                    <span style="text-decoration: underline;">2</span>945. 3486s (~58.1 minutes) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Participant                 10                    <span style="text-decoration: underline;">1</span>579. 3149s (~52.48 minutes)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ abbreviated names: ¹​mean_level_pulses_above_250,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   ²​mean_duration_pulses_above_250</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 4 more variables: total_duration_pulses_above_250 &lt;Duration&gt;,</span></span>
@@ -211,7 +211,7 @@ sleep-wake phase disorder. <em>Sleep</em>, 41(11).
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 8</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Id          n_pulses_above_250 mean_level_pulses_abov…¹ mean_duration_pulses…²</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;Duration&gt;</span>            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Participant                  8                    <span style="text-decoration: underline;">2</span>945. 3486s (~58.1 minutes) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Participant                 10                    <span style="text-decoration: underline;">1</span>579. 3149s (~52.48 minutes)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ abbreviated names: ¹​mean_level_pulses_above_250,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   ²​mean_duration_pulses_above_250</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 4 more variables: total_duration_pulses_above_250 &lt;Duration&gt;,</span></span>
@@ -224,7 +224,7 @@ sleep-wake phase disorder. <em>Sleep</em>, 41(11).
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 8</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Id          n_pulses_below_250 mean_level_pulses_belo…¹ mean_duration_pulses…²</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;Duration&gt;</span>            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Participant                  3                     67.3 14897s (~4.14 hours)  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Participant                 13                     124. 3677s (~1.02 hours)   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ abbreviated names: ¹​mean_level_pulses_below_250,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   ²​mean_duration_pulses_below_250</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 4 more variables: total_duration_pulses_below_250 &lt;Duration&gt;,</span></span>
@@ -237,7 +237,7 @@ sleep-wake phase disorder. <em>Sleep</em>, 41(11).
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 8</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Id        n_pulses_within_250-…¹ mean_level_pulses_wi…² mean_duration_pulses…³</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;Duration&gt;</span>            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Particip…                      2                   409. 625s (~10.42 minutes) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Particip…                     11                   568. 449s (~7.48 minutes)  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ abbreviated names: ¹​`n_pulses_within_250-1000`,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   ²​`mean_level_pulses_within_250-1000`,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   ³​`mean_duration_pulses_within_250-1000`</span></span>
