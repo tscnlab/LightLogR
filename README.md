@@ -58,9 +58,7 @@ To come:
 
 - Integration of data into a unified database for cross-study analyses
 
-##### Please note that LightLogR is work in progress! If you are interested in the project and want to know more, you can subscribe to the [LightLogR mailing list](https://lists.lrz.de/mailman/listinfo/lightlogr-users). If you find a bug, please open an issue on the [GitHub repository](https://github.com/tscnlab/LightLogR/issues).
-
-##### To maximize LightLogRs utility, we want to hear from you! What features would you like to see, what are common issues you face when working with wearable data, and what kind of analysis are you performing? Let us know in the [LightLogR community survey](https://de.surveymonkey.com/r/3LL9NKQ)!
+##### Please note that LightLogR is work in progress! If you are interested in the project and want to know more, you can subscribe to the [LightLogR mailing list](https://lists.lrz.de/mailman/listinfo/lightlogr-users). If you find a bug or would like to see new or improved features, please open an issue on the [GitHub repository](https://github.com/tscnlab/LightLogR/issues).
 
 Have a look at the **Example** section down below to get started, or
 dive into the
@@ -260,6 +258,11 @@ missing, based on the measurement epochs found in the data.
 <img src="man/figures/gg_overview2.png" style="width:60.0%" />
 
 </div>
+
+*note:* the above example can not be executed through copy and paste, as
+it requires a large dataset not included in the package. It is
+available, however, in the article on [Import &
+cleaning](https://tscnlab.github.io/LightLogR/articles/Import.html).
 
 ### Visualize
 

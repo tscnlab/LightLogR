@@ -1,5 +1,7 @@
 # LightLogR 0.4.1
 
+* added support for GENEActiv devices, when data was preprocessed with the [`GGIR`](https://cran.r-project.org/web/packages/GGIR/vignettes/GGIR.html) package. The function `import$GENEActiv_GGIR()` takes the `GGIR` output and imports it with LightLogR naming schemes.
+
 # LightLogR 0.4.0 "Nautical dawn"
 
 * release on CRAN!

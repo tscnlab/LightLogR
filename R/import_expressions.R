@@ -417,7 +417,35 @@ import_expr <- list(
           lubridate::as_datetime(time_stamp, tz = "UTC"), tz), .before = 1
       )
   }
-  )
+  ),
+  #GENEActiv GGIR
+  GENEActiv_GGIR = rlang::expr({
+    data <- purrr::map(filename, \(x){
+      #define the subfolder structure
+      subfolder <- "/meta/basic"
+      full_path <- paste0(x, subfolder)
+      #get all the files from the subfolder
+      files <- list.files(full_path, pattern = ".RData$", full.names = TRUE)
+      #collect all the data from the files
+      data <- purrr::map(files, \(x) {
+        #create a new environment and load the data into
+        env <- new.env()
+        load(x, envir = env)
+        #collect the dataframe with the data
+        data <- env$M$metalong
+        #changes to the dataframe to make it compatible with LightLogR naming schemes
+        data <- 
+          data %>% 
+          dplyr::mutate(
+            file.name = x) %>% 
+          dplyr::mutate(
+            Datetime = lubridate::ymd_hms(timestamp) %>% 
+              lubridate::with_tz(tz), .before = 1)
+      }) %>% purrr::list_rbind()
+      #return the function with the data frame
+      return(data)
+    }) %>% purrr::list_rbind()
+  })
 )
 
 #order the list by their names

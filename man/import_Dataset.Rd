@@ -6,7 +6,7 @@
 \alias{import}
 \title{Import a light logger dataset or related data}
 \format{
-An object of class \code{list} of length 14.
+An object of class \code{list} of length 15.
 }
 \usage{
 import_Dataset(device, ...)
@@ -78,9 +78,9 @@ continuously as the package is maintained.
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{supported_devices()
 #>  [1] "ActLumus"              "ActTrust"              "Actiwatch_Spectrum"   
 #>  [4] "Actiwatch_Spectrum_de" "Circadian_Eye"         "DeLux"                
-#>  [7] "Kronowise"             "LYS"                   "LiDo"                 
-#> [10] "LightWatcher"          "Speccy"                "SpectraWear"          
-#> [13] "VEET"                  "nanoLambda"
+#>  [7] "GENEActiv_GGIR"        "Kronowise"             "LYS"                  
+#> [10] "LiDo"                  "LightWatcher"          "Speccy"               
+#> [13] "SpectraWear"           "VEET"                  "nanoLambda"
 }\if{html}{\out{</div>}}
 \subsection{ActLumus}{
 
@@ -214,6 +214,15 @@ Manufacturer: Kronohealth
 Model: Kronowise
 
 Implemented: July 2024
+}
+
+\subsection{GENEActiv with GGIR preprocessing}{
+
+Manufacturer: Activeinsights
+
+Model: GENEActiv
+
+\strong{Note:} This import function takes GENEActiv data that was preprocessed through the \href{https://cran.r-project.org/web/packages/GGIR/vignettes/GGIR.html}{GGIR} package. By default, \code{GGIR} aggregates light data into intervals of 15 minutes. This can be set by the \code{windows} argument in GGIR, which is set to 900 seconds by default. To import the preprocessed data with \code{LightLogR}, the \code{filename} argument requires a path to the parent directory of the GGIR output folders, specifically the \code{meta} folder, which contains the light exposure data. Multiple \code{filename}s can be specified, each of which needs to be a path to a different GGIR parent directory. GGIR exports can contain data from multiple participants, these will always be imported fully by providing the parent directory. Use the \code{pattern} argument to extract sensible \code{Id}s from the \emph{.RData} filenames within the \emph{meta/basic/} folder.
 }
 }
 
