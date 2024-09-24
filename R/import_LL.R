@@ -208,11 +208,13 @@
 #'   
 #'   LIMO exports `LIGHT` data and `IMU` (inertia measurements, also UV) in separate files. Both can be read in with this function, but not at the same time. Please decide what type of data you need and provide the respective filenames.
 #'   
-#'   ## OcuWear
+#'   ## OcuWEAR
 #'   
-#'   Manufacturer:
+#'   Manufacturer: Ocutune
 #'   
 #'   Implemented: September 2024
+#'   
+#'   OcuWEAR data contains spectral data. Due to the format of the data file, the spectrum is not directly part of the tibble, but rather a list column of tibbles within the imported data, containing a `Wavelength` (nm) and `Intensity` (mW/m^2) column.
 #'
 #' @section Examples:
 #'

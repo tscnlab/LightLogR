@@ -448,18 +448,38 @@ import_expr <- list(
   }),
   #OcuWEAR
   OcuWEAR = rlang::expr({
+    #import the data
+    data <- 
+      suppressWarnings(
     readr::read_csv(filename,
                     n_max = n_max,
                     id = "file.name",
                     locale = locale,
-                    name_repair = "universal",
+                    name_repair = "universal_quiet",
+                    show_col_types = FALSE,
                     ...)
+      )
+    #do some basic renaming
     data <- data %>% 
       dplyr::rename(Datetime = DateTime) %>% 
       dplyr::mutate(
-        MEDI = Melanopic,
+        MEDI = Melanopic, .after = Datetime,
         Datetime = Datetime %>% 
           lubridate::force_tz(tzone = tz)
+      )
+    #special handling of the Spectrum column to convert it to a list
+    data <- data %>%
+      dplyr::mutate(
+        Spectrum = Spectrum %>% 
+          stringr::str_remove_all("\\[|\\]") %>% 
+          stringr::str_split(", ") %>% 
+          purrr::map(\(x) x %>% 
+                       dplyr::case_when(
+                         is.na(.) ~ character(401), .default = .
+                       ) %>% as.numeric() %>% 
+                       tibble::enframe(name = "Wavelength", value = "Intensity") %>% 
+                       dplyr::mutate(Wavelength = Wavelength+379)
+          )
       )
   }),
   #MotionWatch8
