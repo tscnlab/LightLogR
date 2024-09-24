@@ -445,6 +445,76 @@ import_expr <- list(
       #return the function with the data frame
       return(data)
     }) %>% purrr::list_rbind()
+  }),
+  #OcuWEAR
+  OcuWEAR = rlang::expr({
+    readr::read_csv(filename,
+                    n_max = n_max,
+                    id = "file.name",
+                    locale = locale,
+                    name_repair = "universal",
+                    ...)
+    data <- data %>% 
+      dplyr::rename(Datetime = DateTime) %>% 
+      dplyr::mutate(
+        MEDI = Melanopic,
+        Datetime = Datetime %>% 
+          lubridate::force_tz(tzone = tz)
+      )
+  }),
+  #MotionWatch8
+  MotionWatch8 = rlang::expr({
+    column_names <- c("Date", "Time", "Activity", "Light")
+    data <- 
+      purrr::map(
+        filename,
+        \(x) {
+          rows_to_skip <- detect_starting_row(x, 
+                                              locale = locale, 
+                                              column_names = column_names,
+                                              n_max = 1000)
+          df <- suppressMessages(
+            readr::read_csv2(
+              x, 
+              skip = rows_to_skip,
+              locale=locale,
+              id = "file.name",
+              show_col_types = FALSE,
+              col_types = "ctid",
+              name_repair = "universal",
+              ...
+            )
+          )
+          
+          df <- df %>% 
+            dplyr::mutate(
+              Datetime = 
+                lubridate::parse_date_time(
+                  paste(Date, Time), orders = "dmyHMS", tz = tz
+                ),
+              .before = Date
+            )
+          
+        }) %>% purrr::list_rbind()
+    
+  }),
+  #LIMO
+  LIMO = rlang::expr({
+    data <- 
+      readr::read_csv(filename,
+                      n_max = n_max,
+                      skip = 1,
+                      id = "file.name",
+                      locale = locale,
+                      show_col_types = FALSE,
+                      name_repair = "universal_quiet",
+                      ...
+      )
+    data <- data %>% 
+      dplyr::rename(Datetime = date.time.iso.) %>% 
+      dplyr::mutate(
+        Datetime = lubridate::force_tz(Datetime, tz = tz)
+      )
   })
 )
 

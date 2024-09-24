@@ -226,6 +226,22 @@ Model: GENEActiv
 
 \strong{Note:} This import function takes GENEActiv data that was preprocessed through the \href{https://cran.r-project.org/web/packages/GGIR/vignettes/GGIR.html}{GGIR} package. By default, \code{GGIR} aggregates light data into intervals of 15 minutes. This can be set by the \code{windows} argument in GGIR, which is set to 900 seconds by default. To import the preprocessed data with \code{LightLogR}, the \code{filename} argument requires a path to the parent directory of the GGIR output folders, specifically the \code{meta} folder, which contains the light exposure data. Multiple \code{filename}s can be specified, each of which needs to be a path to a different GGIR parent directory. GGIR exports can contain data from multiple participants, these will always be imported fully by providing the parent directory. Use the \code{pattern} argument to extract sensible \code{Id}s from the \emph{.RData} filenames within the \emph{meta/basic/} folder.
 }
+
+\subsection{MotionWatch 8}{
+
+Manufacturer: CamNtech
+
+Implemented: September 2024
+}
+
+\subsection{LIMO}{
+
+Manufacturer:
+
+Implemented: September 2024
+
+LIMO exports \code{LIGHT} data and \code{IMU} (inertia measurements, also UV) in separate files. Both can be read in with this function, but not at the same time. Please decide what type of data you need and provide the respective filenames.
+}
 }
 
 \section{Examples}{

@@ -193,6 +193,26 @@
 #'   Model: GENEActiv
 #'   
 #'   **Note:** This import function takes GENEActiv data that was preprocessed through the [GGIR](https://cran.r-project.org/web/packages/GGIR/vignettes/GGIR.html) package. By default, `GGIR` aggregates light data into intervals of 15 minutes. This can be set by the `windows` argument in GGIR, which is set to 900 seconds by default. To import the preprocessed data with `LightLogR`, the `filename` argument requires a path to the parent directory of the GGIR output folders, specifically the `meta` folder, which contains the light exposure data. Multiple `filename`s can be specified, each of which needs to be a path to a different GGIR parent directory. GGIR exports can contain data from multiple participants, these will always be imported fully by providing the parent directory. Use the `pattern` argument to extract sensible `Id`s from the *.RData* filenames within the *meta/basic/* folder.
+#'   
+#'   ## MotionWatch 8
+#'   
+#'   Manufacturer: CamNtech
+#'   
+#'   Implemented: September 2024
+#'   
+#'   ## LIMO
+#'   
+#'   Manufacturer: 
+#'   
+#'   Implemented: September 2024
+#'   
+#'   LIMO exports `LIGHT` data and `IMU` (inertia measurements, also UV) in separate files. Both can be read in with this function, but not at the same time. Please decide what type of data you need and provide the respective filenames.
+#'   
+#'   ## OcuWear
+#'   
+#'   Manufacturer:
+#'   
+#'   Implemented: September 2024
 #'
 #' @section Examples:
 #'
