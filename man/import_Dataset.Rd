@@ -6,7 +6,7 @@
 \alias{import}
 \title{Import a light logger dataset or related data}
 \format{
-An object of class \code{list} of length 15.
+An object of class \code{list} of length 18.
 }
 \usage{
 import_Dataset(device, ...)
@@ -57,9 +57,10 @@ without file extension.
 \item \code{manual.id}: If this argument is not \code{NULL}, and no \code{Id} column is part
 of the \code{dataset}, this \code{character} scalar will be used. \strong{We discourage the
 use of this arguments when importing more than one file}
+\item \code{silent}: If set to \code{TRUE}, the function will not print a summary message of the import or plot the overview. Default is \code{FALSE}.
 \item \code{locale}: The locale controls defaults that vary from place to place.
-\item \code{dst_adjustment}: If a file crosses daylight savings time, but the device does not adjust time stamps accordingly, you can set this argument to \code{TRUE}, to apply this shift manually. It is selective, so it will only be done in files that cross between DST and standard time. Default is \code{FALSE}. Uses \code{dst_change_handler()} to do the adjustment. Look there for more infos. It is not equipped to handle two jumps in one file (so back and forth between DST and standard time), but will work fine if jums occur in separate files.
-\item \code{auto.plot}: a logical on whether to call \code{\link[=gg_overview]{gg_overview()}} after import. Default is \code{TRUE}.
+\item \code{dst_adjustment}: If a file crosses daylight savings time, but the device does not adjust time stamps accordingly, you can set this argument to \code{TRUE}, to apply this shift manually. It is selective, so it will only be done in files that cross between DST and standard time. Default is \code{FALSE}. Uses \code{\link[=dst_change_handler]{dst_change_handler()}} to do the adjustment. Look there for more infos. It is not equipped to handle two jumps in one file (so back and forth between DST and standard time), but will work fine if jums occur in separate files.
+\item \code{auto.plot}: a logical on whether to call \code{\link[=gg_overview]{gg_overview()}} after import. Default is \code{TRUE}. But is set to \code{FALSE} if the argument \code{silent} is set to \code{TRUE}.
 \item \code{...}: supply additional arguments to the \pkg{readr} import functions, like \code{na}. Might also be used to supply arguments to the specific import functions, like \code{column_names} for \code{Actiwatch_Spectrum} devices. Those devices will always throw a helpful error message if you forget to supply the necessary arguments.
 If the \code{Id} column is already part of the \code{dataset} it will just use this
 column. If the column is not present it will add this column and fill it
@@ -78,9 +79,10 @@ continuously as the package is maintained.
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{supported_devices()
 #>  [1] "ActLumus"              "ActTrust"              "Actiwatch_Spectrum"   
 #>  [4] "Actiwatch_Spectrum_de" "Circadian_Eye"         "DeLux"                
-#>  [7] "GENEActiv_GGIR"        "Kronowise"             "LYS"                  
-#> [10] "LiDo"                  "LightWatcher"          "Speccy"               
-#> [13] "SpectraWear"           "VEET"                  "nanoLambda"
+#>  [7] "GENEActiv_GGIR"        "Kronowise"             "LIMO"                 
+#> [10] "LYS"                   "LiDo"                  "LightWatcher"         
+#> [13] "MotionWatch8"          "OcuWEAR"               "Speccy"               
+#> [16] "SpectraWear"           "VEET"                  "nanoLambda"
 }\if{html}{\out{</div>}}
 \subsection{ActLumus}{
 
