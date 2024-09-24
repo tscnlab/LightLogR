@@ -2,11 +2,11 @@
 
 * added support for OcuWEAR devices
 
-* added support for MotionWatch 8 devices
+* added support for MotionWatch 8 devices #32
 
 * added support for LIMO devices
 
-* added support for GENEActiv devices, when data was preprocessed with the [`GGIR`](https://cran.r-project.org/web/packages/GGIR/vignettes/GGIR.html) package. The function `import$GENEActiv_GGIR()` takes the `GGIR` output and imports it with LightLogR naming schemes.
+* added support for GENEActiv devices, when data was preprocessed with the [`GGIR`](https://cran.r-project.org/web/packages/GGIR/vignettes/GGIR.html) package. The function `import$GENEActiv_GGIR()` takes the `GGIR` output and imports it with LightLogR naming schemes. #27
 
 # LightLogR 0.4.0 "Nautical dawn"
 

@@ -236,7 +236,7 @@ Implemented: September 2024
 
 \subsection{LIMO}{
 
-Manufacturer:
+Manufacturer: ENTPE
 
 Implemented: September 2024
 

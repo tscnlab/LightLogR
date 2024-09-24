@@ -202,7 +202,7 @@
 #'   
 #'   ## LIMO
 #'   
-#'   Manufacturer: 
+#'   Manufacturer: ENTPE
 #'   
 #'   Implemented: September 2024
 #'   
