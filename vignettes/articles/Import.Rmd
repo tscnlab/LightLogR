@@ -104,8 +104,7 @@ Let us first deal with the DST change. LightLogR has an in-built function to cor
 
 ```{r, dst change}
 data <- 
-  import$ActLumus(files, tz = tz, auto.id = pattern, dst_adjustment = TRUE, 
-                  auto.plot = FALSE, silent = TRUE)
+  import$ActLumus(files, tz = tz, auto.id = pattern, dst_adjustment = TRUE, silent = TRUE)
 ```
 
 The second problem requires the filtering of certain Ids. The `filter_Datetime_multiple()` function is ideal for this. We can provide a length (1 week), starting from the end of data collection and backwards. The variable `arguments` provide variable arguments to the filter function, they have to be provided in list form and expressions have to be quoted through`quote()`. Fixed arguments, like the length and`length_from_start\` are provided as named arguments and only have to be specified once, as they are the same for all Ids.
