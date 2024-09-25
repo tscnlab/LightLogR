@@ -35,9 +35,10 @@
 #' * `manual.id`: If this argument is not `NULL`, and no `Id` column is part
 #'   of the `dataset`, this `character` scalar will be used. **We discourage the
 #'   use of this arguments when importing more than one file**
+#' * `silent`: If set to `TRUE`, the function will not print a summary message of the import or plot the overview. Default is `FALSE`.
 #' * `locale`: The locale controls defaults that vary from place to place.
-#' * `dst_adjustment`: If a file crosses daylight savings time, but the device does not adjust time stamps accordingly, you can set this argument to `TRUE`, to apply this shift manually. It is selective, so it will only be done in files that cross between DST and standard time. Default is `FALSE`. Uses `dst_change_handler()` to do the adjustment. Look there for more infos. It is not equipped to handle two jumps in one file (so back and forth between DST and standard time), but will work fine if jums occur in separate files.
-#' * `auto.plot`: a logical on whether to call [gg_overview()] after import. Default is `TRUE`.
+#' * `dst_adjustment`: If a file crosses daylight savings time, but the device does not adjust time stamps accordingly, you can set this argument to `TRUE`, to apply this shift manually. It is selective, so it will only be done in files that cross between DST and standard time. Default is `FALSE`. Uses [dst_change_handler()] to do the adjustment. Look there for more infos. It is not equipped to handle two jumps in one file (so back and forth between DST and standard time), but will work fine if jums occur in separate files.
+#' * `auto.plot`: a logical on whether to call [gg_overview()] after import. Default is `TRUE`. But is set to `FALSE` if the argument `silent` is set to `TRUE`.
 #' * `...`: supply additional arguments to the \pkg{readr} import functions, like `na`. Might also be used to supply arguments to the specific import functions, like `column_names` for `Actiwatch_Spectrum` devices. Those devices will always throw a helpful error message if you forget to supply the necessary arguments.
 #'   If the `Id` column is already part of the `dataset` it will just use this
 #'   column. If the column is not present it will add this column and fill it
@@ -184,6 +185,36 @@
 #'   Model: Kronowise
 #'   
 #'   Implemented: July 2024
+#'   
+#'   ## GENEActiv with GGIR preprocessing
+#'   
+#'   Manufacturer: Activeinsights 
+#'   
+#'   Model: GENEActiv
+#'   
+#'   **Note:** This import function takes GENEActiv data that was preprocessed through the [GGIR](https://cran.r-project.org/web/packages/GGIR/vignettes/GGIR.html) package. By default, `GGIR` aggregates light data into intervals of 15 minutes. This can be set by the `windows` argument in GGIR, which is set to 900 seconds by default. To import the preprocessed data with `LightLogR`, the `filename` argument requires a path to the parent directory of the GGIR output folders, specifically the `meta` folder, which contains the light exposure data. Multiple `filename`s can be specified, each of which needs to be a path to a different GGIR parent directory. GGIR exports can contain data from multiple participants, these will always be imported fully by providing the parent directory. Use the `pattern` argument to extract sensible `Id`s from the *.RData* filenames within the *meta/basic/* folder.
+#'   
+#'   ## MotionWatch 8
+#'   
+#'   Manufacturer: CamNtech
+#'   
+#'   Implemented: September 2024
+#'   
+#'   ## LIMO
+#'   
+#'   Manufacturer: ENTPE
+#'   
+#'   Implemented: September 2024
+#'   
+#'   LIMO exports `LIGHT` data and `IMU` (inertia measurements, also UV) in separate files. Both can be read in with this function, but not at the same time. Please decide what type of data you need and provide the respective filenames.
+#'   
+#'   ## OcuWEAR
+#'   
+#'   Manufacturer: Ocutune
+#'   
+#'   Implemented: September 2024
+#'   
+#'   OcuWEAR data contains spectral data. Due to the format of the data file, the spectrum is not directly part of the tibble, but rather a list column of tibbles within the imported data, containing a `Wavelength` (nm) and `Intensity` (mW/m^2) column.
 #'
 #' @section Examples:
 #'
@@ -339,8 +370,8 @@ imports <- function(device,
           print_n = print_n #how many rows to print for observation intervals
           )
       
-      #if autoplot is TRUE, make a plot
-      if(auto.plot) {
+      #if autoplot is TRUE & silent is FALSE, make a plot
+      if(auto.plot & !silent) {
         data %>% gg_overview() %>% print()
       }
       #return the file
@@ -354,7 +385,7 @@ imports <- function(device,
 # Import functions -------------------------------------------------------
 
 #source the import expressions
-source("R/import_expressions.R")
+source("R/import_expressions.R", local = TRUE)
 
 #' Import Datasets from supported devices
 #'

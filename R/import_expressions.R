@@ -417,7 +417,125 @@ import_expr <- list(
           lubridate::as_datetime(time_stamp, tz = "UTC"), tz), .before = 1
       )
   }
-  )
+  ),
+  #GENEActiv GGIR
+  GENEActiv_GGIR = rlang::expr({
+    data <- purrr::map(filename, \(x){
+      #define the subfolder structure
+      subfolder <- "/meta/basic"
+      full_path <- paste0(x, subfolder)
+      #get all the files from the subfolder
+      files <- list.files(full_path, pattern = ".RData$", full.names = TRUE)
+      #collect all the data from the files
+      data <- purrr::map(files, \(x) {
+        #create a new environment and load the data into
+        env <- new.env()
+        load(x, envir = env)
+        #collect the dataframe with the data
+        data <- env$M$metalong
+        #changes to the dataframe to make it compatible with LightLogR naming schemes
+        data <- 
+          data %>% 
+          dplyr::mutate(
+            file.name = x) %>% 
+          dplyr::mutate(
+            Datetime = lubridate::ymd_hms(timestamp) %>% 
+              lubridate::with_tz(tz), .before = 1)
+      }) %>% purrr::list_rbind()
+      #return the function with the data frame
+      return(data)
+    }) %>% purrr::list_rbind()
+  }),
+  #OcuWEAR
+  OcuWEAR = rlang::expr({
+    #import the data
+    data <- 
+      suppressWarnings(
+    readr::read_csv(filename,
+                    n_max = n_max,
+                    id = "file.name",
+                    locale = locale,
+                    name_repair = "universal_quiet",
+                    show_col_types = FALSE,
+                    ...)
+      )
+    #do some basic renaming
+    data <- data %>% 
+      dplyr::rename(Datetime = DateTime) %>% 
+      dplyr::mutate(
+        MEDI = Melanopic, .after = Datetime,
+        Datetime = Datetime %>% 
+          lubridate::force_tz(tzone = tz)
+      )
+    #special handling of the Spectrum column to convert it to a list
+    data <- data %>%
+      dplyr::mutate(
+        Spectrum = Spectrum %>% 
+          stringr::str_remove_all("\\[|\\]") %>% 
+          stringr::str_split(", ") %>% 
+          purrr::map(\(x) x %>% 
+                       dplyr::case_when(
+                         is.na(.) ~ character(401), .default = .
+                       ) %>% as.numeric() %>% 
+                       tibble::enframe(name = "Wavelength", value = "Intensity") %>% 
+                       dplyr::mutate(Wavelength = Wavelength+379)
+          )
+      )
+  }),
+  #MotionWatch8
+  MotionWatch8 = rlang::expr({
+    column_names <- c("Date", "Time", "Activity", "Light")
+    data <- 
+      purrr::map(
+        filename,
+        \(x) {
+          rows_to_skip <- detect_starting_row(x, 
+                                              locale = locale, 
+                                              column_names = column_names,
+                                              n_max = 1000)
+          df <- suppressMessages(
+            readr::read_csv2(
+              x, 
+              skip = rows_to_skip,
+              locale=locale,
+              id = "file.name",
+              show_col_types = FALSE,
+              col_types = "ctid",
+              name_repair = "universal",
+              ...
+            )
+          )
+          
+          df <- df %>% 
+            dplyr::mutate(
+              Datetime = 
+                lubridate::parse_date_time(
+                  paste(Date, Time), orders = "dmyHMS", tz = tz
+                ),
+              .before = Date
+            )
+          
+        }) %>% purrr::list_rbind()
+    
+  }),
+  #LIMO
+  LIMO = rlang::expr({
+    data <- 
+      readr::read_csv(filename,
+                      n_max = n_max,
+                      skip = 1,
+                      id = "file.name",
+                      locale = locale,
+                      show_col_types = FALSE,
+                      name_repair = "universal_quiet",
+                      ...
+      )
+    data <- data %>% 
+      dplyr::rename(Datetime = date.time.iso.) %>% 
+      dplyr::mutate(
+        Datetime = lubridate::force_tz(Datetime, tz = tz)
+      )
+  })
 )
 
 #order the list by their names
