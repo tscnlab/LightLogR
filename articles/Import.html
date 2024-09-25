@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,9 +90,10 @@ devices are supported:</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/supported_devices.html">supported_devices</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  [1] "Actiwatch_Spectrum"    "Actiwatch_Spectrum_de" "ActLumus"             </span></span>
 <span><span class="co">#&gt;  [4] "ActTrust"              "Circadian_Eye"         "DeLux"                </span></span>
-<span><span class="co">#&gt;  [7] "Kronowise"             "LiDo"                  "LightWatcher"         </span></span>
-<span><span class="co">#&gt; [10] "LYS"                   "nanoLambda"            "Speccy"               </span></span>
-<span><span class="co">#&gt; [13] "SpectraWear"           "VEET"</span></span></code></pre></div>
+<span><span class="co">#&gt;  [7] "GENEActiv_GGIR"        "Kronowise"             "LiDo"                 </span></span>
+<span><span class="co">#&gt; [10] "LightWatcher"          "LIMO"                  "LYS"                  </span></span>
+<span><span class="co">#&gt; [13] "MotionWatch8"          "nanoLambda"            "OcuWEAR"              </span></span>
+<span><span class="co">#&gt; [16] "Speccy"                "SpectraWear"           "VEET"</span></span></code></pre></div>
 <p>More Information on these devices can be found in the reference for
 <code><a href="../reference/import_Dataset.html">import_Dataset()</a></code>.</p>
 <div class="section level3">
@@ -227,27 +228,30 @@ the <code>import</code> function.</p>
 <p>There are several possibilities, why the import is slow. The most
 common reasons are:</p>
 <ul>
-<li>The data files are simply large. With short measurement intervals,
-many participants, and long measurement periods, files for a single
-study can easily reach several gigabytes. This takes some time to import
-and is ok.</li>
-<li>The data files contain many gaps. During import,
+<li><p>The data files are simply large. With short measurement
+intervals, many participants, and long measurement periods, files for a
+single study can easily reach several gigabytes. This takes some time to
+import and is ok.</p></li>
+<li><p>The data files contain many gaps. During import,
 <code>LightLogR</code> checks for and visualizes gaps in the data.
 Especially large datasets with small intervals contain many gaps, which
-can slow down the import process.</li>
-<li>The device model you are importing from has non-consistent data
+can slow down the import process.</p></li>
+<li><p>The device model you are importing from has non-consistent data
 structures. Some devices have a varying number of rows before the actual
 data starts. This means a small portion of every file has to be read in
 and the correct starting row has to be found. This can slow down the
-import process if you have many files.</li>
+import process if you have many files.</p></li>
 </ul>
-<p>If you are experiencing slow imports, you can try the following: -
-Only read in part of your datasets, or split your dataset into several
-peaces, that each gets loaded in separately. You can combine them
-afterwards with <code><a href="../reference/join_datasets.html">join_datasets()</a></code>. - If you have many gaps in
-your data, you can set <code>auto.plot = FALSE</code> in the import
-function. This will eliminate the call to <code><a href="../reference/gg_overview.html">gg_overview()</a></code>,
-which calculates and visualizes the gaps in the data.</p>
+<p>If you are experiencing slow imports, you can try the following:</p>
+<ul>
+<li><p>Only read in part of your datasets, or split your dataset into
+several pieces, that each gets loaded in separately. You can combine
+them afterwards with <code><a href="../reference/join_datasets.html">join_datasets()</a></code>.</p></li>
+<li><p>If you have many gaps in your data, you can set
+<code>auto.plot = FALSE</code> in the import function. This will
+eliminate the call to <code><a href="../reference/gg_overview.html">gg_overview()</a></code>, which calculates and
+visualizes the gaps in the data.</p></li>
+</ul>
 </div>
 </div>
 <div class="section level2">
@@ -257,21 +261,20 @@ which calculates and visualizes the gaps in the data.</p>
 have a clean dataset. The import summary shows us two problems with the
 data:</p>
 <ul>
-<li>two files have data that crosses daylight saving time (DST) changes.
-Because the ActLumus device does not adjust for DST, we need to correct
-for this.</li>
-<li>Multiple Ids have single datapoints at the beginning of the dataset
-with gaps before actual data collection starts. These are test
+<li><p>two files have data that crosses daylight saving time (DST)
+changes. Because the ActLumus device does not adjust for DST, we need to
+correct for this.</p></li>
+<li><p>Multiple Ids have single datapoints at the beginning of the
+dataset with gaps before actual data collection starts. These are test
 measurements to check equipment, but must be removed from the
-dataset.</li>
+dataset.</p></li>
 </ul>
 <p>Let us first deal with the DST change. LightLogR has an in-built
 function to correct for this during import. We thus will re-import the
 data, but make the import silent as to not clutter the output.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> </span>
-<span>  <span class="va">import</span><span class="op">$</span><span class="fu">ActLumus</span><span class="op">(</span><span class="va">files</span>, tz <span class="op">=</span> <span class="va">tz</span>, auto.id <span class="op">=</span> <span class="va">pattern</span>, dst_adjustment <span class="op">=</span> <span class="cn">TRUE</span>, </span>
-<span>                  auto.plot <span class="op">=</span> <span class="cn">FALSE</span>, silent <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="va">import</span><span class="op">$</span><span class="fu">ActLumus</span><span class="op">(</span><span class="va">files</span>, tz <span class="op">=</span> <span class="va">tz</span>, auto.id <span class="op">=</span> <span class="va">pattern</span>, dst_adjustment <span class="op">=</span> <span class="cn">TRUE</span>, silent <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>The second problem requires the filtering of certain Ids. The
 <code><a href="../reference/filter_Datetime_multiple.html">filter_Datetime_multiple()</a></code> function is ideal for this. We
 can provide a length (1 week), starting from the end of data collection
