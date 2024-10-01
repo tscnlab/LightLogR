@@ -1,5 +1,7 @@
 name: Draft PDF
-on: [push]
+on: 
+  push:
+  workflow_dispatch:
 
 jobs:
   paper:
