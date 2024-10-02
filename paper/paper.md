@@ -76,12 +76,12 @@ Personalized luminous exposure data is progressively gaining importance
 across various domains, including research, occupational affairs, and
 lifestyle tracking. Data are collected through a proliferating selection
 of wearable light loggers and dosimeters, varying in size, shape,
-functionality, and output format [@hartmeyer2023]. Despite or potentially because of numerous
+functionality, and output format [@hartmeyer_towards_2023]. Despite or potentially because of numerous
 use cases, the field still lacks a unified framework for collecting,
-validating, and analyzing the accumulated data [@hartmeyer2023][@spitschan2022]. 
+validating, and analyzing the accumulated data [@hartmeyer_towards_2023][@spitschan_verification_2022]. 
 This issue increases the time and expertise necessary to handle such data and also compromises
 the FAIRness (Findability, Accessibility, Interoperability, Reusability)
-of the results, especially for meta-analyses [@deVries2024].
+of the results, especially for meta-analyses [@de_vries_recommendations_2024].
 
 `LightLogR` was designed to be used by researchers who deal with
 personal light exposure data collected from wearable devices. These data
