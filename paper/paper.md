@@ -39,8 +39,7 @@ affiliations:
     Translational Sensory & Circadian Neuroscience, Tübingen, Germany
   ror: 026nmvv73
   index: 2
-- name: Laboratory of Integrated Performance in Design, École Polytechnique Fédérale
-    de Lausanne, Lausanne, Switzerland
+- name: Laboratory of Integrated Performance in Design (LIPID), School of Architecture, Civil and Environmental Engineering (ENAC), École Polytechnique Fédérale de Lausanne (EPFL), Lausanne, Switzerland
   ror: 02s376052
   index: 3
 - name: "TUM Institute for Advanced Study (TUM-IAS), Technical University of Munich,
@@ -52,45 +51,44 @@ affiliations:
 
 # Summary
 
-The effects of light on human health and well-being are best studied
-with real-world and personal light exposure, measured through wearable
-devices. More research groups incorporate these kinds of data in their
-studies, and important connections between light and health outcomes are
-drawn and their relevance gauged. Yet with few or missing standards,
-guidelines, and frameworks, setting up measurements, analysing the data,
+Light plays an important role in human health and well-being, which
+necessitates the study of the effects of personal light exposure in real-world
+settings, measured by means of wearable devices. A growing number of studies incorporate 
+these kinds of data to assess associations between light and health outcomes. 
+Yet with few or missing standards, guidelines, and frameworks, setting up measurements, analysing the data,
 and comparing outcomes between studies is challenging, especially
 considering the significantly more complex time series data from
-wearables than single, spot measurements in past laboratory studies. In
-this paper, we introduce one building block to facilitate these efforts
+wearable sensors compared to controlled stimuli used in laboratory studies. In
+this paper, we introduce a novel resource to facilitate these research efforts
 in the form of an open-source, permissively licenced software package
-for R statistical software: `LightLogR`. As part of a developing
+for the statistical software R: `LightLogR`. As part of a developing
 software ecosystem, `LightLogR` is built with the challenges of current
-and future datasets in mind. The package standardizes many tasks when
-importing and processing personal light exposure data, provides deep and
-quick insights into the datasets through summary and visualization
-tools, and incorporates all major metrics used in the relevant
-literature, all while embracing the inherently hierarchical,
+and future datasets in mind. The package standardizes many tasks for
+importing and processing personal light exposure data, provides 
+quick as well as detailed insights into the datasets through summary and visualization
+tools, and incorporates major metrics used in the relevant
+literature, all while embracing an inherently hierarchical,
 participant-based data structure.
 
 # Statement of need
 
 Personalized luminous exposure data is progressively gaining importance
-in various sectors, including research, occupational affairs, and
-fitness tracking. Data are collected through a proliferating selection
-of wearable loggers and dosimeters, varying in size, shape,
-functionality, and output format. Despite or maybe because of numerous
-use cases, the field lacks a unified framework for collecting,
-validating, and analyzing the accumulated data. This issue increases the
-time and expertise necessary to handle such data and also compromises
+across various domains, including research, occupational affairs, and
+lifestyle tracking. Data are collected through a proliferating selection
+of wearable light loggers and dosimeters, varying in size, shape,
+functionality, and output format [@hartmeyer_towards_2023]. Despite or potentially because of numerous
+use cases, the field still lacks a unified framework for collecting,
+validating, and analyzing the accumulated data [@hartmeyer_towards_2023][@spitschan_verification_2022]. 
+This issue increases the time and expertise necessary to handle such data and also compromises
 the FAIRness (Findability, Accessibility, Interoperability, Reusability)
-of the results, especially in meta-analyses.
+of the results, especially for meta-analyses [@de_vries_recommendations_2024].
 
 `LightLogR` was designed to be used by researchers who deal with
 personal light exposure data collected from wearable devices. These data
 are of interest for various disciplines, including epidemiology,
-chronobiology, sleep research, and even lighting design. The package is
-intended to streamline the process of importing, processing, and
-analysing these data in a reproducible and transparent manner. Key
+chronobiology, and sleep research, as well as for post-occupancy evaluations in 
+architecture and lighting design. The package is intended to streamline the process of importing, 
+processing, and analysing these data in a reproducible and transparent manner. Key
 features include:
 
 -   a growing list of supported devices with pre-defined import
@@ -164,8 +162,7 @@ publication-ready results.
 
 : metrics available in version 0.4.1 \label{tab:two}
 
-LightLogR is already being used in several research projects and
-scientific publications across the scientific community, such as:
+LightLogR has and is already being used in several research projects across scientific domains, such as:
 
 -   cohort study to collect light exposure data across different
     geolocations [@Guidolin2024]
@@ -186,6 +183,7 @@ scientific publications across the scientific community, such as:
 -   observational study on the differences in light exposure and light
     exposure related behavior between Malaysia and Switzerland
     (preregistration in progress).
+-   observational study on light exposure, sleep, and circadian rhythms in hospital shift workers (publication in progress)
 
 # Funding Statement
 
