@@ -56,9 +56,9 @@ Light plays an important role in human health and well-being, which necessitates
 
 # Statement of need
 
-Personalized luminous exposure data is progressively gaining importance across various domains, including research, occupational affairs, and lifestyle tracking. Data are collected through a proliferating selection of wearable light loggers and dosimeters, varying in size, shape, functionality, and output format [@hartmeyer2023]. Despite or potentially because of numerous use cases, the field still lacks a unified framework for collecting, validating, and analyzing the accumulated data [@hartmeyer2023][@spitschan2022].  This issue increases the time and expertise necessary to handle such data and also compromises the FAIRness (findability, accessibility, interoperability, reusability) [@wilkinson2016] of the results, especially for meta-analyses [@devries2024].
+Personalized luminous exposure data is progressively gaining importance across various domains, including research, occupational affairs, and lifestyle tracking. Data are collected through a proliferating selection of wearable light loggers and dosimeters, varying in size, shape, functionality, and output format [@hartmeyer2023]. Despite or potentially because of numerous use cases, the field still lacks a unified framework for collecting, validating, and analyzing the accumulated data [@hartmeyer2023, @spitschan2022].  This issue increases the time and expertise necessary to handle such data and also compromises the FAIRness (findability, accessibility, interoperability, reusability) [@wilkinson2016] of the results, especially for meta-analyses [@devries2024].
 
- `LightLogR` was designed to be used by researchers who deal with personal light exposure data collected from wearable devices. These data are of interest for various disciplines, including epidemiology, chronobiology, and sleep research, as well as for post-occupancy evaluations in  architecture and lighting design. The package is intended to streamline the process of importing,  processing, and analysing these data in a reproducible and transparent manner. Key features include:
+ `LightLogR` was designed to be used by researchers who deal with personal light exposure data collected from wearable devices. These data are of interest for various disciplines, including chronobiology, sleep research, vision science and epidemiology, as well as for post-occupancy evaluations in  architecture and lighting design. The package is intended to streamline the process of importing,  processing, and analysing these data in a reproducible and transparent manner. Key features include:
 
 -   a growing list of supported devices with pre-defined import functions tailored to their data structure (17 at the time of writing, see \autoref{tab:one}),
 
@@ -68,7 +68,7 @@ Personalized luminous exposure data is progressively gaining importance across v
 
 -   a large and growing set of metrics that cover most if not all major approaches found in the literature (at the time of writing 61  metrics across 17 metric families, see \autoref{tab:two})), accessible via a consistent function interface.
 
-![Light logger data can powerfully convey insights into personal light exposure and health-related outcomes. `LightLogR` facilitates the import and combination of different data sources into one coherent data structure, as seen here by combining environmental daylight availability and personal light exposure with data from a sleep diary. The visualization functions in the package further allow tweaking to produce publication-ready results. \label{fig:one}](Day.png){width="80%"}
+![Light logger data can powerfully convey insights into personal light exposure and health-related outcomes. `LightLogR` facilitates the import and combination of different data sources into a coherent data structure, as seen here by combining environmental daylight availability and personal light exposure with data from a sleep diary. The visualization functions in the package further allow customization to produce publication-ready figures. \label{fig:one}](Day.png){width="80%"}
 
 | Device Name | Manufacturer |
 |----|----|
