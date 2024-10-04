@@ -66,7 +66,7 @@ Personalized luminous exposure data is progressively gaining importance across v
 
 -   preprocessing functions to combine different time series, aggregate and filter data, and find and deal with implicitly missing data,
 
--   visualization functions to quickly explore the data. These function are based on the popular `ggplot2` [@ggplot2] plotting package  and are designed to be easily customizable to construct publication-ready figures (see, e.g., \autoref{fig:one}),
+-   visualization functions to quickly explore the data. These function are based on the popular `ggplot2` [@wickham2016] plotting package  and are designed to be easily customizable to construct publication-ready figures (see, e.g., \autoref{fig:one}),
 
 -   a large and growing set of metrics that cover most if not all major approaches found in the literature (at the time of writing 61  metrics across 17 metric families, see \autoref{tab:two})), accessible via a consistent function interface.
 
