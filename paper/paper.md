@@ -58,7 +58,9 @@ Light plays an important role in human health and well-being, which necessitates
 
 Personalized luminous exposure data is progressively gaining importance across various domains, including research, occupational affairs, and lifestyle tracking. Data are collected through a proliferating selection of wearable light loggers and dosimeters, varying in size, shape, functionality, and output format [@hartmeyer2023]. Despite or potentially because of numerous use cases, the field still lacks a unified framework for collecting, validating, and analyzing the accumulated data [@hartmeyer2023; @spitschan2022].  This issue increases the time and expertise necessary to handle such data and also compromises the FAIRness (findability, accessibility, interoperability, reusability) [@wilkinson2016] of the results, especially for meta-analyses [@devries2024].
 
- `LightLogR` was designed to be used by researchers who deal with personal light exposure data collected from wearable devices. These data are of interest for various disciplines, including chronobiology, sleep research, vision science and epidemiology, as well as for post-occupancy evaluations in  architecture and lighting design. The package is intended to streamline the process of importing,  processing, and analysing these data in a reproducible and transparent manner. Key features include:
+`LightLogR` was designed to be used by researchers who deal with personal light exposure data collected from wearable devices. These data are of interest for various disciplines, including chronobiology, sleep research, vision science and epidemiology, as well as for post-occupancy evaluations in  architecture and lighting design. The package is intended to streamline the process of importing,  processing, and analysing these data in a reproducible and transparent manner.
+ 
+`LightLogR`'s key features include:
 
 -   a growing list of supported devices with pre-defined import functions tailored to their data structure (17 at the time of writing, see \autoref{tab:one}),
 
@@ -76,7 +78,7 @@ Personalized luminous exposure data is progressively gaining importance across v
 | ActLumus | Condor Instruments |
 | ActTrust | Condor Instruments |
 | DeLux | Intelligent Automation Inc. |
-| GENEActiv [^1] | Activeinsights |
+| GENEActiv[^1] | Activeinsights |
 | Kronowise | Kronohealth |
 | Lido | Lucerne University of Applied Sciences and Arts |
 | LightWatcher | Object-Tracker |
@@ -121,7 +123,7 @@ LightLogR is already being used in several research projects across scientific d
 
 -   an ongoing cohort study to collect light exposure data across different geolocations [@guidolin2024],
 -   an ongoing cohort study to collect year-long datasets of various types of environmental and behavioral data [@biller2024],
--   power analysis method for personal light exposure [@zauner2023],
+-   a novel power analysis method for personal light exposure data [@zauner2023],
 -   an intervention study on the effects of light on bipolar disorder [@roguski2024],
 -   an intervention study on exposure to bright light during afternoon to early evening on later evening melatonin release in adolescents [@lazar2024],
 -   an observational study on the wearing compliance of personal light exposure [@stefani2024],
