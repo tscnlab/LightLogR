@@ -76,19 +76,21 @@ Personalized luminous exposure data is progressively gaining importance across v
 | ActLumus | Condor Instruments |
 | ActTrust | Condor Instruments |
 | DeLux | Intelligent Automation Inc. |
-| GENEActiv (with GGIR preprocessing) | Activeinsights |
+| GENEActiv [^1] | Activeinsights |
 | Kronowise | Kronohealth |
 | Lido | Lucerne University of Applied Sciences and Arts |
 | LightWatcher | Object-Tracker |
 | LIMO | École nationale des travaux publics de l'État (ENTPE) |
 | LYS Button | LYS Technologies |
 | Motion Watch 8 | CamNtech |
-| melanopiQ Circadian Eye (Prototype) | Max Planck Institute for Biological Cybernetics |
+| melanopiQ Circadian Eye | Max Planck Institute for Biological Cybernetics |
 | XL-500 BLE | NanoLambda |
 | OcuWEAR | Ocutune |
 | Speccy | Monash University Malaysia |
 | SpectraWear | University of Manchester |
 | VEET | Meta Reality Labs |
+
+[^1]: Available after processing of the data using `GGIR` [@migueles2019].
 
 : Devices supported for import in version 0.4.1 \label{tab:one}
 
