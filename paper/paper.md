@@ -17,7 +17,7 @@ tags:
 - wearable sensors
 - wearables
 - "rstats-package"
-date: "04 October 2024"
+date: "07 October 2024"
 output: pdf_document
 authors:
 - name: Johannes Zauner
@@ -72,7 +72,7 @@ Personalized luminous exposure data is progressively gaining importance across v
 
 -   a large and growing set of metrics that cover most if not all major approaches found in the literature (at the time of writing 61  metrics across 17 metric families, see \autoref{tab:two})), accessible via a consistent function interface.
 
-![Light logger data can powerfully convey insights into personal light exposure and health-related outcomes. `LightLogR` facilitates the import and combination of different data sources into a coherent data structure, as seen here by combining environmental daylight availability and personal light exposure with data from a sleep diary. The visualization functions in the package further allow customization to produce publication-ready figures. This figure was created with the 'gg_day()' function. The creation process is part of a tutorial [@documentation] on several key functions in the package \label{fig:two}](Day.png){width="80%"}
+![Light logger data can powerfully convey insights into personal light exposure and health-related outcomes. `LightLogR` facilitates the import and combination of different data sources into a coherent data structure, as seen here by combining environmental daylight availability and personal light exposure with data from a sleep diary. The visualization functions in the package further allow customization to produce publication-ready figures. This figure was created with the 'gg_day()' function. The creation process is part of a tutorial [@tutorial] on several key functions in the package \label{fig:two}](Day.png){width="80%"}
 
 | Device Name | Manufacturer |
 |----|----|
