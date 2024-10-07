@@ -56,21 +56,23 @@ Light plays an important role in human health and well-being, which necessitates
 
 # Statement of need
 
+![LightLogR logo \label{fig:one}](logo.png){width="25%"}
+
 Personalized luminous exposure data is progressively gaining importance across various domains, including research, occupational affairs, and lifestyle tracking. Data are collected through a proliferating selection of wearable light loggers and dosimeters, varying in size, shape, functionality, and output format [@hartmeyer2023]. Despite or potentially because of numerous use cases, the field still lacks a unified framework for collecting, validating, and analyzing the accumulated data [@hartmeyer2023; @spitschan2022].  This issue increases the time and expertise necessary to handle such data and also compromises the FAIRness (findability, accessibility, interoperability, reusability) [@wilkinson2016] of the results, especially for meta-analyses [@devries2024].
 
-`LightLogR` was designed to be used by researchers who deal with personal light exposure data collected from wearable devices. These data are of interest for various disciplines, including chronobiology, sleep research, vision science and epidemiology, as well as for post-occupancy evaluations in  architecture and lighting design. The package is intended to streamline the process of importing,  processing, and analysing these data in a reproducible and transparent manner.
- 
+`LightLogR` (\autoref{fig:one}) was designed to be used by researchers who deal with personal light exposure data collected from wearable devices. These data are of interest for various disciplines, including chronobiology, sleep research, vision science and epidemiology, as well as for post-occupancy evaluations in  architecture and lighting design. The package is intended to streamline the process of importing,  processing, and analysing these data in a reproducible and transparent manner. The package is available on GitHub (@repo) and CRAN (@cran), has a dedicated website for documentation and tutorials (@documentation), and releases are archived on Zenodo (@zenodo).
+
 `LightLogR`'s key features include:
 
 -   a growing list of supported devices with pre-defined import functions tailored to their data structure (17 at the time of writing, see \autoref{tab:one}),
 
 -   preprocessing functions to combine different time series, aggregate and filter data, and find and deal with implicitly missing data,
 
--   visualization functions to quickly explore the data. These function are based on the popular `ggplot2` [@wickham2016] plotting package  and are designed to be easily customizable to construct publication-ready figures (see, e.g., \autoref{fig:one}),
+-   visualization functions to quickly explore the data. These function are based on the popular `ggplot2` [@wickham2016] plotting package and are designed to be easily customizable to construct publication-ready figures (see, \autoref{fig:two}),
 
 -   a large and growing set of metrics that cover most if not all major approaches found in the literature (at the time of writing 61  metrics across 17 metric families, see \autoref{tab:two})), accessible via a consistent function interface.
 
-![Light logger data can powerfully convey insights into personal light exposure and health-related outcomes. `LightLogR` facilitates the import and combination of different data sources into a coherent data structure, as seen here by combining environmental daylight availability and personal light exposure with data from a sleep diary. The visualization functions in the package further allow customization to produce publication-ready figures. \label{fig:one}](Day.png){width="80%"}
+![Light logger data can powerfully convey insights into personal light exposure and health-related outcomes. `LightLogR` facilitates the import and combination of different data sources into a coherent data structure, as seen here by combining environmental daylight availability and personal light exposure with data from a sleep diary. The visualization functions in the package further allow customization to produce publication-ready figures. This figure was created with the 'gg_day()' function. The creation process is part of a tutorial [@documentation] on several key functions in the package \label{fig:two}](Day.png){width="80%"}
 
 | Device Name | Manufacturer |
 |----|----|
@@ -133,9 +135,9 @@ LightLogR is already being used in several research projects across scientific d
 
 # Funding Statement
 
-The development of `LightLogR` is funded by MeLiDos, a joint, EURAMET-funded project involving sixteen partners across Europe, aimed at developing a metrology and a standard workflow for wearable light logger data and optical radiation dosimeters. Its primary contributions towards fostering FAIR data include the development of a common file format, robust metadata descriptors, and an accompanying open-source software ecosystem.
+The development of `LightLogR` is funded by MeLiDos, a joint, EURAMET-funded project involving sixteen partners across Europe, aimed at developing a metrology and a standard workflow for wearable light logger data and optical radiation dosimeters [@spitschan2024]. Its primary contributions towards fostering FAIR data include the development of a common file format, robust metadata descriptors, and an accompanying open-source software ecosystem.
 
-The project (22NRM05 MeLiDos) [@spitschan2024] has received funding from the European Partnership on Metrology, co-financed from the European Union’s Horizon Europe Research and Innovation Programme and by the Participating States. Views and opinions expressed are however those of the author(s) only and do not necessarily reflect those of the European Union or EURAMET. Neither the European Union nor the granting authority can be held responsible for them.
+The project (22NRM05 MeLiDos) has received funding from the European Partnership on Metrology, co-financed from the European Union’s Horizon Europe Research and Innovation Programme and by the Participating States. Views and opinions expressed are however those of the author(s) only and do not necessarily reflect those of the European Union or EURAMET. Neither the European Union nor the granting authority can be held responsible for them.
 
 # Acknowledgements
 
