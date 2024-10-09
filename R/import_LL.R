@@ -366,9 +366,9 @@ imports <- function(device,
       
       #if there are untreated duplicate rows, give a warning
       if(duplicates > 0 & !remove_duplicates) {
-        messages <- paste0(format(duplicates, big.mark = "'"), " rows in your dataset(s) are identical to at least one other row. This causes problems during analysis. Please set `remove_duplicates = TRUE` during import. \nIf you still want to import the data as is and it failed with an error, try setting `auto.plot = FALSE`. You may want to do this to find out which entries are duplicates. Use `{replace_with_data_object} %>% janitor::get_dupes(-file.name) on your imported dataset.\n")
-        cat(messages)
+        messages <- paste0(format(duplicates, big.mark = "'"), " rows in your dataset(s) are identical to at least one other row. This causes problems during analysis. Please set `remove_duplicates = TRUE` during import. Import will be stopped now and a dataframe with the duplicate rows returned \nIf you want to find out which entries are duplicates. Use `{replace_with_data_object} %>% janitor::get_dupes(-file.name) on your imported dataset.\n")
         warning(messages)
+        return(janitor::get_dupes(data, -file.name))
       }
       
       #if dst_adjustment is TRUE, adjust the datetime column
