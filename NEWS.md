@@ -1,3 +1,5 @@
+# LightLogR 0.4.2
+
 # LightLogR 0.4.1
 
 * added support for OcuWEAR devices
