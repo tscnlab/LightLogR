@@ -35,7 +35,8 @@
 #' * `manual.id`: If this argument is not `NULL`, and no `Id` column is part
 #'   of the `dataset`, this `character` scalar will be used. **We discourage the
 #'   use of this arguments when importing more than one file**
-#' * `silent`: If set to `TRUE`, the function will not print a summary message of the import or plot the overview. Default is `FALSE`.
+#' * `silent`: If set to `TRUE`, the function will not print a summary message 
+#'   of the import or plot the overview. Default is `FALSE`.
 #' * `locale`: The locale controls defaults that vary from place to place.
 #' * `dst_adjustment`: If a file crosses daylight savings time, but the device does not adjust time stamps accordingly, you can set this argument to `TRUE`, to apply this shift manually. It is selective, so it will only be done in files that cross between DST and standard time. Default is `FALSE`. Uses [dst_change_handler()] to do the adjustment. Look there for more infos. It is not equipped to handle two jumps in one file (so back and forth between DST and standard time), but will work fine if jums occur in separate files.
 #' * `auto.plot`: a logical on whether to call [gg_overview()] after import. Default is `TRUE`. But is set to `FALSE` if the argument `silent` is set to `TRUE`.
