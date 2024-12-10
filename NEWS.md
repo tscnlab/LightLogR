@@ -1,4 +1,8 @@
-* updated the license to MIT
+# LightLogR 0.4.2
+
+* updated the license to MIT: LightLogR is now permissively licensed
+
+* `import` functions will now give a warning message about identical observations in the provided data files, stop the import process and return a tibble with the duplicate rows. Through the `remove_duplicates` parameter, the user can decide to automatically remove these duplicates during import. **Note: identical observations refers to identical rows when disregarding the filename.**
 
 # LightLogR 0.4.1
 

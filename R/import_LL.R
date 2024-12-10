@@ -44,6 +44,7 @@
 #'   column. If the column is not present it will add this column and fill it
 #'   with the filename of the importfile (see param `auto.id`).
 #' * `print_n` can be used if you want to see more rows from the observation intervals
+#' * `remove_duplicates` can be used if identical observations are present within or across multiple files. The default is `FALSE`. The function keeps only unique observations (=rows) if set to' TRUE'. This is a convenience implementation of [dplyr::distinct()].
 #'
 #' @param ... Parameters that get handed down to the specific import functions
 #' @param device From what device do you want to import? For a few devices,
@@ -282,6 +283,7 @@ imports <- function(device,
       locale = readr::default_locale(),
       silent = FALSE,
       print_n = 10,
+      remove_duplicates = FALSE,
       ... =
     ),
     #function expression
@@ -351,6 +353,22 @@ imports <- function(device,
         stop("Some Ids have only one observation. This causes problems with functions in LightLogR that calculate time differences. Please remove these Ids from import: ", 
              which(table(data$Id) < 2) %>% names()
         )
+      }
+      
+      #if there are duplicate rows, remove them and print an info message
+      duplicates <- suppressMessages(janitor::get_dupes(data, -file.name) %>% nrow())
+      orig_rows <- data %>% nrow()
+      
+      if(duplicates > 0 & remove_duplicates) {
+        data <- data %>% dplyr::distinct(dplyr::pick(-file.name),.keep_all = TRUE)
+        cat(paste0(format(orig_rows - nrow(data), big.mark = "'"), " duplicate rows were removed during import.\n"))
+      }
+      
+      #if there are untreated duplicate rows, give a warning
+      if(duplicates > 0 & !remove_duplicates) {
+        messages <- paste0(format(duplicates, big.mark = "'"), " rows in your dataset(s) are identical to at least one other row. This causes problems during analysis. Please set `remove_duplicates = TRUE` during import. Import will be stopped now and a dataframe with the duplicate rows returned \nIf you want to find out which entries are duplicates. Use `{replace_with_data_object} %>% janitor::get_dupes(-file.name) on your imported dataset.\n")
+        warning(messages)
+        return(janitor::get_dupes(data, -file.name))
       }
       
       #if dst_adjustment is TRUE, adjust the datetime column
