@@ -1,3 +1,5 @@
+* updated the license to MIT
+
 # LightLogR 0.4.1
 
 * added support for OcuWEAR devices
