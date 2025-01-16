@@ -9,6 +9,7 @@
 ^data-raw$
 ^rsconnect$
 ^app.R$
+^paper$
 
 
 ^app\.R$
