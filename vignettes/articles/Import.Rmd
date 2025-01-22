@@ -48,6 +48,7 @@ Lastly, you can modify or add import functions that build upon `LightLogR`s impo
 The first step in every analysis is data import. We will work with data collected as part of the Master Thesis *Insights into real-world human light exposure: relating self-report with eye-level light logging* by Carolina Guidolin (2023). The data is stored in 17 text files in the *data/* folder. You can access the data yourself through the [LightLogR GitHub repository](https://github.com/tscnlab/LightLogR/tree/main/vignettes/articles/data).
 
 ```{r, files}
+#this assumes that you downloaded the files into a folder called "data" in the working directory
 path <- "data"
 files <- list.files(path, full.names = TRUE)
 #show how many files are listes
@@ -180,6 +181,8 @@ data %>% count_difftime() %>% print(n=17)
 The data is now clean and we can proceed with the analysis. This dataset will be needed in other articles, so we will save it as an RDS file.
 
 ```{r}
+#uncomment next lines to save the data
+# if (!dir.exists("cleaned_data")) dir.create("cleaned_data")
 # saveRDS(data, "cleaned_data/ll_data.rds")
 ```
 

@@ -23,7 +23,7 @@ This article guides you through the process of
 
 -   creating an appealing visualization with various styles to finish the task
 
-Let´s head right in by loading the package! We will also work a bit with data manipulation, display the odd table, and enroll the help of several plotting aids from the `ggplot2` package, so we will also need the `tidyverse` and the `gt` package. Later on, we want to combine plots, this is where `patchwork` will come in.
+Let´s head right in by loading the package! We will also work a bit with data manipulation, display the odd table, and enroll the help of several plotting aids from the `ggplot2` package, so we will also need the `tidyverse` and the `gt` package. Later on, we want to combine plots, this is where `patchwork` will come in. The `here` package is used to make sure that the paths to the data are correct.
 
 ```{r setup, message = FALSE}
 library(LightLogR)
@@ -561,6 +561,9 @@ Plot +
   annotate("text", x=x, y = 4000, label = "- Daylight Potential", 
            hjust = 0, col = "#0073C2DD")
 
+#create folder images if necessary
+if (!dir.exists("images")) dir.create("images")
+#save image
 ggplot2::ggsave("images/Day.png", width = 7, height = 4, dpi = 600)
 
 ```
