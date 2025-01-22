@@ -29,11 +29,11 @@ More Information on these devices can be found in the reference for
 
 ## What if my device is not listed?
 
-If you are using a device that is currently not supported, please contact the developers. We are always looking to expand the range of supported devices. The easiest and most trackable way to get in contact is by opening a new issue on our [Github repository](https://github.com/tscnlab/LightLogR/issues). Please also provide a sample file of your data, so we can test the import function.
+If you are using a device that is currently not supported, please contact the developers. We are always looking to expand the range of supported devices. The easiest and most trackable way to get in contact is by opening a new issue on our [Github repository](https://github.com/tscnlab/LightLogR/issues). Please see the [CONTRIBUTING](https://tscnlab.github.io/LightLogR/CONTRIBUTING.html) section for different ways to help and details about how this project handles them.
 
 ## What if my device is listed but the import does not work as expected?
 
-We regularly find that files exported from the same device model can differ in structure. This may be due to different settings, software or hardware updates. If you encounter problems with the import, please get in contact with us, e.g. by opening an issue on our [Github repository](https://github.com/tscnlab/LightLogR/issues). Please provide a sample file of your data.
+We regularly find that files exported from the same device model can differ in structure. This may be due to different settings, software or hardware updates. If you encounter problems with the import, please get in contact with us, e.g. by opening an issue on our [Github repository](https://github.com/tscnlab/LightLogR/issues). Please see the [CONTRIBUTING](https://tscnlab.github.io/LightLogR/CONTRIBUTING.html) section for different ways to help and details about how this project handles them.
 
 ## Are there other ways to import data?
 
