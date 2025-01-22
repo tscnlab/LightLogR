@@ -119,7 +119,8 @@ data <-
       list(only_Id = quote(Id == 219)),
       list(only_Id = quote(Id == 214)),
       list(only_Id = quote(Id == 206))
-    ), length = "1 week", length_from_start = FALSE)
+    ), 
+    length = "1 week", length_from_start = FALSE)
 
 ```
 
@@ -132,8 +133,12 @@ data %>% gg_overview()
 Looks much better now. Also, because there is no longer a hint about gaps in the lower right corner, we can be sure that all gaps have been removed. The function gap_finder() shows us, however, that there are still irregularities in the data and the function count_difftime() reveals where they are.
 
 ```{r, irregularities}
-data %>% gap_finder()
-data %>% count_difftime() %>% print(n=22)
+data %>% 
+  gap_finder()
+
+data %>% 
+  count_difftime() %>% 
+  print(n=22)
 ```
 
 This means we have to look at and take care of the irregularities for the Ids 215, 218, and 221.
@@ -158,7 +163,7 @@ difftimes %>%
   geom_rect(data = difftimes %>% filter(difftime !=10),
             aes(xmin = Datetime, xmax = end, ymin = -Inf, ymax = Inf),
             fill = "red", col = "red", linewidth = 0.2, alpha = 0.2) +
-    gghighlight(difftime != 10 | lag(difftime !=10))
+  gghighlight(difftime != 10 | lag(difftime !=10))
 
 ```
 
@@ -174,8 +179,12 @@ data <-
       list(only_Id = quote(Id == 221))
     ), length = "1 week", length_from_start = FALSE)
 
-data %>% gap_finder()
-data %>% count_difftime() %>% print(n=17)
+data %>% 
+  gap_finder()
+
+data %>% 
+  count_difftime() %>% 
+  print(n=17)
 ```
 
 The data is now clean and we can proceed with the analysis. This dataset will be needed in other articles, so we will save it as an RDS file.

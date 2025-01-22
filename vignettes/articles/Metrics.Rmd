@@ -52,8 +52,12 @@ We will cover the practical considerations following from these aspects in the f
 All metric functions are by default agnostic to the type of data. They require vectors of numeric data (e.g., light data) and commonly also of datetimes. This means that the functions can be used outside of the LightLogR framework, if applied correctly. Let us try this with a simple example for a days worth of light data for one participant across two functions.
 
 ```{r, Id 201}
-data_Id201 <- data %>% filter(Id == 201 & date(Datetime) == "2023-08-15")
-data_Id201 %>% gg_day()
+data_Id201 <- 
+  data %>% 
+    filter(Id == 201 & date(Datetime) == "2023-08-15")
+
+data_Id201 %>% 
+  gg_day()
 ```
 
 ## Time above threshold (TAT)
@@ -99,7 +103,8 @@ bright_dark_period(
   Light.vector = data_Id201$MEDI,
   Time.vector = data_Id201$Datetime,
   as.df = TRUE
-) %>% gt()
+) %>% 
+  gt()
 ```
 
 ### Looping
@@ -114,8 +119,8 @@ bright_dark_period(
   period = "darkest",
   timespan = "10 hours"
 )
-M10_wrong %>% gt()
 
+M10_wrong %>% gt()
 ```
 
 We also see that this makes little sense, if we visualize this portion. The yellow color indicates the darkest 10-hour period of the day.
@@ -142,6 +147,7 @@ bright_dark_period(
   timespan = "10 hours",
   loop = TRUE
 )
+
 M10 %>% gt()
 ```
 
@@ -165,7 +171,9 @@ More often than not, metrics are calculated for many participants over prolonged
 As we only want to calculate metrics for days with full data, we will exclude Mondays from the data set.
 
 ```{r}
-data <- data %>% dplyr::filter(weekdays(Datetime) != "Monday")
+data <- 
+  data %>% 
+  dplyr::filter(weekdays(Datetime) != "Monday")
 ```
 
 ## Summarize
@@ -180,7 +188,8 @@ data %>%
       Datetime.vector = Datetime
     )
   ) %>% 
-  head() %>% gt() 
+  head() %>% 
+  gt() 
 ```
 
 ## Grouping
@@ -195,7 +204,9 @@ data %>%
       Time.vector = Datetime,
       threshold = 250
     )
-  ) %>% head() %>% gt()
+  ) %>% 
+  head() %>% 
+  gt()
 ```
 
 Instead, we can calculate the TAT 250 lx MEDI for each participant **and day** of data. This is more informative, as it allows us to see how the metric changes over time. The final output is for the first two Ids.
@@ -216,7 +227,9 @@ data %>%
     ), .groups = "drop_last"
   )
 
-TAT_250 %>% head(12) %>% gt()
+TAT_250 %>% 
+  head(12) %>% 
+  gt()
 
 ```
 
@@ -227,7 +240,11 @@ With the dataframe `TAT_250`, we can easily calculate statistics for each partic
 ```{r}
 #styling formula for time
 style_time <- function(x, format = "%H:%M"){
-  x %>% as.numeric() %>%  hms::as_hms() %>% as.POSIXlt() %>% format(format)
+  x %>% 
+    as.numeric() %>%  
+    hms::as_hms() %>% 
+    as.POSIXlt() %>% 
+    format(format)
 }
 
 #Table output
@@ -268,14 +285,19 @@ metrics <-
   unnest(-Id)
 
 #first 6 rows
-metrics %>% head() %>% gt()
+metrics %>% 
+  head() %>% 
+  gt()
 
 ```
 
 The operation above yields a data frame with six metrics across 102 participant days (6 days for 17 participants). The grouping for `Month` did not add additional groups, as each participant day is already solely in the `"Aug/Sep"` or `"Oct/Nov"` group. Next, we will regroup the data by `Month` and look at a summary table similar to the above, but for more metrics.
 
 ```{r}
-metrics <- metrics %>% group_by(Month) %>% select(-Id, -wDay)
+metrics <- 
+  metrics %>% 
+  group_by(Month) %>% 
+  select(-Id, -wDay)
 
 #Table output
 metrics %>% 

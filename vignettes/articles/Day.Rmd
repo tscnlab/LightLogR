@@ -63,8 +63,10 @@ As you can see, the import is accompanied by a (hopefully) helpful message about
 Because we have no missing values that we would have to deal with first, this dataset is already good to go. If you, e.g., want to know the range of melanopic EDI (a measure of stimulus strength for the nonvisual system) for every day in the dataset, you can do that:
 
 ```{r}
-dataset.LL %>% group_by(Date = as_date(Datetime)) %>% 
-  summarize(range.MEDI = range(MEDI) %>% str_flatten(" - ")) %>% gt()
+dataset.LL %>% 
+  group_by(Date = as_date(Datetime)) %>% 
+  summarize(range.MEDI = range(MEDI) %>% str_flatten(" - ")) %>% 
+  gt()
 ```
 
 Same goes for visualization - it is always helpful to get a good look at data immediately after import. The `gg_day()` function creates a simple `ggplot` of the data, stacked vertically by Days. The function needs very little input beyond the dataset (in fact, it would even work without the `size` input, which just makes the default point size smaller, and the `interactive` command sends the output to `plotly` to facilitate data exploration). `gg_day()` features a lot of flexibility, and can be adapted and extended to fit various needs, as we will see shortly.
@@ -102,7 +104,9 @@ dataset.sleep <-
                       dec = ",",
                       tz = tz)
 
-dataset.sleep %>% head() %>% gt()
+dataset.sleep %>% 
+  head() %>% 
+  gt()
 ```
 
 Now that we have imported all of our data, we need to combine it sensibly, which we will get to in the next section.
@@ -123,13 +127,16 @@ With the `data2reference()` function, we will create this reference. This functi
 
 ```{r}
 dataset.LL <- 
-  dataset.LL %>% data2reference(Reference.data = dataset.env, across.id = TRUE)
+  dataset.LL %>% 
+    data2reference(Reference.data = dataset.env, across.id = TRUE)
 
 dataset.LL <- 
-  dataset.LL %>% select(Id, Datetime, MEDI, Reference)
+  dataset.LL %>% 
+    select(Id, Datetime, MEDI, Reference)
 
-dataset.LL %>% head() %>% gt()
-
+dataset.LL %>% 
+  head() %>% 
+  gt()
 ```
 
 For the sake of this example, we have also removed unnecessary data columns, which makes the further code examples simpler. We can already see in the table above that the reference at the start of the measurements is quite a bit higher than the luminous exposure at the participant´s light logger. We also see that the same reference value is applied to three participant values. This mirrors the fact that for every three measurements taken with the participant device, one measurement epoch for the environmental sensor passes.
@@ -138,7 +145,8 @@ To visualize this newly reached reference data, we can easily extend `gg_day()` 
 
 ```{r, fig.retina=2, fig.width=7, fig.height = 10}
 dataset.LL %>% 
-  gg_day(size = 0.25) + geom_line(aes(y=Reference), lty = 2, col = "red")
+  gg_day(size = 0.25) + 
+  geom_line(aes(y=Reference), lty = 2, col = "red")
 ```
 
 Here, a warning about missing values was added. This is simply due to the fact that not every data point on the x-axis has a corresponding y-axis-value. The two datasets largely align, but at the fringes, especially the last day, there is some non-overlap. When we perform calculations based on the light logger data and the reference, we have to keep in mind that only timesteps where *both* are present will give non `NA` results.
@@ -162,15 +170,25 @@ We can see that bedtime is an important factor when determining the timepoints t
 In our case the first entry is sleep, so we can safely assume, that on that day prior the participant was awake. We could take this into account through the `starting.state = "wake"` argument setting, but then it would be implied that the participant was awake from midnight on. As the first day of data is only partial anyways, we will disregard this. There are other arguments to `sc2interval()` to further refine the interval creation. Probably the most important is `length.restriction`, that sets the maximum length of an interval, the default being 24 hours. This avoids implausibly long intervals with one state that is highly likely caused by implicit missing data or misentries.
 
 ```{r}
-dataset.sleep <- dataset.sleep %>% sc2interval()
-dataset.sleep %>% head() %>% gt()
+dataset.sleep <- 
+  dataset.sleep %>% 
+  sc2interval()
+
+dataset.sleep %>% 
+  head() %>% 
+  gt()
 ```
 
 Now we can transform these sleep/wake intervals to intervals for the Brown recommendations. The `sleep_int2Brown()` function facilitates this.
 
 ```{r}
-Brown.intervals <- dataset.sleep %>% sleep_int2Brown()
-Brown.intervals %>% head() %>% gt()
+Brown.intervals <- 
+  dataset.sleep %>% 
+  sleep_int2Brown()
+
+Brown.intervals %>% 
+  head() %>% 
+  gt()
 ```
 
 We can see that the function fit a 3 hour interval in-between every sleep and wake phase, and also recoded the states. This data can now be applied to our light logger dataset. This is done through the `interval2state()` function[^2]. We already used this function unknowingly, because it (alongside `sc2interval()`) is under the hood of `data2reference()`, making sure that data in the reference set is spread out accordingly.
@@ -180,16 +198,26 @@ We can see that the function fit a 3 hour interval in-between every sleep and wa
 ```{r}
 dataset.LL <- 
   dataset.LL %>% 
-  interval2state(
-    State.interval.dataset = Brown.intervals, State.colname = State.Brown)
-dataset.LL %>% tail() %>% gt()
+    interval2state(
+      State.interval.dataset = Brown.intervals, State.colname = State.Brown
+      )
+
+dataset.LL %>% 
+  tail() %>% 
+  gt()
 ```
 
 Now we have a column in our light logger dataset that declares all the three state for the Brown et al. recommendation. With another function, `Brown2reference()`, we can in one swoop add the threshhold accompanied to these states and check whether our participant is within the recommendations or not. The only thing the function needs is a name where to put the recommended values - by default these would go to `Reference`, which is already used for the Solar exposition, which is why we put it in `Reference.Brown`.
 
 ```{r}
-dataset.LL <- dataset.LL %>% Brown2reference(Brown.rec.colname = Reference.Brown)
-dataset.LL %>% select(!Reference.Brown.label, !Reference.Brown.difference) %>% tail() %>% gt()
+dataset.LL <- 
+  dataset.LL %>% 
+    Brown2reference(Brown.rec.colname = Reference.Brown)
+
+dataset.LL %>% 
+  select(!Reference.Brown.label, !Reference.Brown.difference) %>% 
+  tail() %>% 
+  gt()
 ```
 
 `Brown2reference()` added four columns, two of which are shown in the table above. A third column contains a text label about the type of reference, sth. we could also have added for the solar exposition and the fourth column contains the difference between actual mel EDI and the recommendations. Now let´s have a quick look at the result in the plot overview
@@ -210,8 +238,8 @@ dataset.LL.partial <-
 dataset.LL %>% #dataset
   filter_Date(start = "2023-09-01", length = days(1)) #use only one day
 
-solar.reference <-   geom_line(aes(y=Reference), lty = 2, col = "red") #solar reference
-brown.reference <-   geom_line(aes(y=Reference.Brown), lty = 2, col = "blue") #Brown reference
+solar.reference <- geom_line(aes(y=Reference), lty = 2, col = "red") #solar reference
+brown.reference <- geom_line(aes(y=Reference.Brown), lty = 2, col = "blue") #Brown reference
 
 dataset.LL.partial  %>% 
   gg_day(size = 0.25, facetting = FALSE, y.scale = symlog_trans()) + #base plot
@@ -228,7 +256,8 @@ Firstly, though, let us slightly tweak the y-axis.
 ```{r}
 scale.correction <- coord_cartesian(
   xlim = c(0, 24.5*60*60), #make sure the x axis covers 24 hours (+a bit for the label)
-  expand = FALSE)  #set the axis limits exactly at ylim and xlim
+  expand = FALSE #set the axis limits exactly at ylim and xlim
+  )  
 ```
 
 ### Participants luminous exposure {.tabset .tabset-pills}
@@ -241,7 +270,9 @@ By default, `gg_day()` uses a point geom for the data display. We can, however, 
 dataset.LL.partial  %>% 
   gg_day(
     size = 0.25, geom = "point", facetting = FALSE) + #base plot
-  solar.reference + brown.reference + scale.correction
+  solar.reference + 
+  brown.reference + 
+  scale.correction
 ```
 
 This is the standard behavior of `gg_day()`. We would not have to specify the `geom = "point"` in this case, but being verbose should communicate that we specify this argument.
@@ -252,7 +283,9 @@ This is the standard behavior of `gg_day()`. We would not have to specify the `g
 dataset.LL.partial  %>% 
   gg_day(
     size = 0.25, facetting = FALSE, geom = "line") + #base plot
-  solar.reference + brown.reference + scale.correction
+  solar.reference + 
+  brown.reference + 
+  scale.correction
 ```
 
 The line geom shows changes in luminous exposure a bit better and might be a better choice in this case.
@@ -263,7 +296,9 @@ The line geom shows changes in luminous exposure a bit better and might be a bet
 dataset.LL.partial  %>% 
   gg_day(facetting = FALSE, geom = "ribbon", alpha = 0.25, size = 0.25,
          fill = "#EFC000", color = "#EFC000") + #base plot
-  solar.reference + brown.reference + scale.correction
+  solar.reference + 
+  brown.reference + 
+  scale.correction
 ```
 
 The `geom_area` fills an area from 0 up to the given value. For some reason, however, this is very slow and unfortunately doesn´t work nicely with purely logarithmic plots (where 10\^0 = 1, so it would start at 1[^3]). We can, however, disable any geom in `gg_day()` with `geom = "blank"` and instead add a `geom_ribbon` that can be force-based to zero with `ymin = 0`. Setting `geom = "ribbon"` does this automatically behind the scenes and is very fast.
@@ -276,7 +311,9 @@ The `geom_area` fills an area from 0 up to the given value. For some reason, how
 dataset.LL.partial  %>% 
   cut_Datetime(unit = "30 minutes") %>% #provide an interval for the boxplot
   gg_day(size = 0.25, facetting = FALSE, geom = "boxplot", group = Datetime.rounded) + #base plot
-  solar.reference + brown.reference + scale.correction
+  solar.reference + 
+  brown.reference + 
+  scale.correction
 ```
 
 To create a boxplot representation, we not only need to specify the geom but also what time interval we want the boxplot to span. Here the `cut_Datetime()` function from **LightLogR** comes to the rescue. It will round the datetimes to the desired interval, which then can be specified as the `group` argument of `gg_day()`. While this can be a nice representation, I don´t think it fits our goal for the overall figure in our specific case.
@@ -284,10 +321,13 @@ To create a boxplot representation, we not only need to specify the geom but als
 #### `geom_bin2d`
 
 ```{r, fig.retina=2, fig.width=7, fig.height = 4, warning=FALSE}
-dataset.LL.partial  %>% gg_day(
-  size = 0.25, facetting = FALSE, geom = "bin2d", 
-  jco_color = FALSE, bins = 24, aes_fill = stat(count)) + #base plot
-  solar.reference + brown.reference + scale.correction
+dataset.LL.partial  %>% 
+  gg_day(
+    size = 0.25, facetting = FALSE, geom = "bin2d", 
+    jco_color = FALSE, bins = 24, aes_fill = stat(count)) + #base plot
+  solar.reference + 
+  brown.reference + 
+  scale.correction
 ```
 
 The geom family of `hex`, `bin2d`, or `density_2d` is particularly well suited if you have many, possibly overlaying observations. It reduces complexity by cutting the x- and y-axis into bins and counts how many observations fall within this bin. By choosing 24 bins, we see dominant values for every hour of the day. The `jco_color = FALSE` argument is necessary to disable the default discrete color scheme of `gg_day()`, because a continuous scale is necessary for counts or densities. Finally, we have to use the `aes_fill = stat(count)` argument to color the bins according to the number of observations in the bin[^4].
@@ -316,43 +356,57 @@ With the new aggregate function, let us taste some variants:
 dataset.LL.partial  %>% 
   gg_day(facetting = FALSE, geom = "ribbon", alpha = 0.25, size = 0.25,
          fill = "#EFC000", color = "#EFC000") + #base plot
-  solar.reference + brown.reference + scale.correction
+  solar.reference +  
+  brown.reference + 
+  scale.correction
 ```
 
 #### 1 Minute
 
 ```{r, fig.retina=2, fig.width=7, fig.height = 4, warning=FALSE}
-dataset.LL.partial %>% aggregate_Datetime2(unit = "1 min")  %>% 
+dataset.LL.partial %>% 
+  aggregate_Datetime2(unit = "1 min")  %>% 
   gg_day(facetting = FALSE, geom = "ribbon", alpha = 0.25, size = 0.25,
          fill = "#EFC000", color = "#EFC000") + #base plot
-  solar.reference + brown.reference + scale.correction
+  solar.reference + 
+  brown.reference + 
+  scale.correction
 ```
 
 #### 5 Minutes
 
 ```{r, fig.retina=2, fig.width=7, fig.height = 4, warning=FALSE}
-dataset.LL.partial %>% aggregate_Datetime2(unit = "5 mins")  %>% 
+dataset.LL.partial %>% 
+  aggregate_Datetime2(unit = "5 mins")  %>% 
   gg_day(facetting = FALSE, geom = "ribbon", alpha = 0.25, size = 0.25,
          fill = "#EFC000", color = "#EFC000") + #base plot
-  solar.reference + brown.reference + scale.correction
+  solar.reference + 
+  brown.reference + 
+  scale.correction
 ```
 
 #### 30 Minutes
 
 ```{r, fig.retina=2, fig.width=7, fig.height = 4, warning=FALSE}
-dataset.LL.partial %>% aggregate_Datetime2(unit = "30 mins") %>% 
+dataset.LL.partial %>% 
+  aggregate_Datetime2(unit = "30 mins") %>% 
   gg_day(facetting = FALSE, geom = "ribbon", alpha = 0.25, size = 0.25,
          fill = "#EFC000", color = "#EFC000") + #base plot
-  solar.reference + brown.reference + scale.correction
+  solar.reference + 
+  brown.reference + 
+  scale.correction
 ```
 
 #### 1 Hour
 
 ```{r, fig.retina=2, fig.width=7, fig.height = 4, warning=FALSE}
-dataset.LL.partial %>% aggregate_Datetime2(unit = "1 hour")  %>% 
+dataset.LL.partial %>% 
+  aggregate_Datetime2(unit = "1 hour")  %>% 
   gg_day(facetting = FALSE, geom = "ribbon", alpha = 0.25, size = 0.25,
          fill = "#EFC000", color = "#EFC000") + #base plot
-  solar.reference + brown.reference + scale.correction
+  solar.reference + 
+  brown.reference + 
+  scale.correction
 ```
 
 ###  {.unnumbered}
@@ -361,10 +415,12 @@ dataset.LL.partial %>% aggregate_Datetime2(unit = "1 hour")  %>%
 
 ```{r, warning=FALSE}
 Plot <- 
-dataset.LL.partial %>% aggregate_Datetime2(unit = "5 mins")  %>% 
+dataset.LL.partial %>% 
+  aggregate_Datetime2(unit = "5 mins")  %>% 
   gg_day(facetting = FALSE, geom = "ribbon", alpha = 0.25, size = 0.25,
          fill = "#EFC000", color = "#EFC000") + #base plot
-  brown.reference + scale.correction
+  brown.reference + 
+  scale.correction
 ```
 
 ### Solar Potential {.tabset .tabset-pills}
@@ -395,7 +451,8 @@ This is a ribbon that shows the missed - and at night exceeded - potential due t
 #Note: This will become a function of its own in LightLogR at some point in the future
 
 Plot_upper <- 
-dataset.LL.partial %>% aggregate_Datetime2(unit = "5 mins") %>% 
+dataset.LL.partial %>% 
+  aggregate_Datetime2(unit = "5 mins") %>% 
   gg_day(facetting = FALSE, geom = "ribbon", alpha = 0.25, size = 0.4,
          fill = "#EFC000", color = "#EFC000") + #base plot
   geom_line(aes(y=Reference.Brown), lty = 2, col = "red") + #Brown reference
@@ -404,7 +461,8 @@ dataset.LL.partial %>% aggregate_Datetime2(unit = "5 mins") %>%
   scale.correction
 
 Plot_lower <- 
-dataset.LL.partial %>% aggregate_Datetime2(unit = "5 mins") %>% 
+dataset.LL.partial %>% 
+  aggregate_Datetime2(unit = "5 mins") %>% 
   gg_day(facetting = FALSE, geom = "blank", y.axis.label = "unrealized Potential") + #base plot
   geom_area(
     aes(y = Reference - MEDI, 
@@ -432,7 +490,8 @@ This plot requires a bit of preparation, but it focuses nicely on the unrealized
 Day.end <- as_datetime("2023-09-01 23:59:59", tz = tz)
 Plot <- 
 dataset.LL.partial %>% 
-  aggregate_Datetime2(unit = "5 mins") %>% filter_Datetime(end = Day.end) %>% 
+  aggregate_Datetime2(unit = "5 mins") %>% 
+  filter_Datetime(end = Day.end) %>% 
   gg_day(facetting = FALSE, geom = "blank", y.axis.breaks = c(0, 10^(0:5), 250)) + #base plot
     geom_ribbon(aes(ymin = MEDI, ymax=Reference), 
               alpha = 0.25, fill = "#0073C2FF",

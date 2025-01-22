@@ -39,7 +39,9 @@ As can be seen the dataset contains 17 ids with one weeks worth of data each, an
 
 ```{r}
 data %>%
-  filter(!(date(Datetime) %in% c("2023-08-16", "2023-08-17"))) %>% 
+  filter(
+    !(date(Datetime) %in% c("2023-08-16", "2023-08-17"))
+    ) %>% 
   gg_overview()
 ```
 
@@ -47,7 +49,9 @@ Calculating gaps in the data can be computationally expensive for large datasets
 
 ```{r}
 data %>%
-  filter(!(date(Datetime) %in% c("2023-08-16", "2023-08-17"))) %>% 
+  filter(
+    !(date(Datetime) %in% c("2023-08-16", "2023-08-17"))
+    ) %>% 
   gg_overview(gap.data = tibble())
 ```
 
@@ -83,7 +87,8 @@ Showing the days by date is the default behavior of `gg_day()`. It can also be g
 
 ```{r, fig.width=7, fig.height = 10}
 data %>% 
-  gg_day(aes_col = Id, size = 0.5, format.day = "%A") + scale_color_viridis_d()
+  gg_day(aes_col = Id, size = 0.5, format.day = "%A") + 
+  scale_color_viridis_d()
 ```
 
 ## Customizing geoms and miscellanea
@@ -97,12 +102,14 @@ data_subset <-
   aggregate_Datetime(unit = "15 mins") %>% #aggregating to 15 min intervals
   filter_Datetime(length = "3 days", full.day = TRUE) #restricting their length to 3 days
 
-data_subset %>%  gg_day(aes_col = Id)
+data_subset %>% 
+  gg_day(aes_col = Id)
 ```
 
 Now we can use a different geom.
 ```{r}
-data_subset %>%  gg_day(aes_col = Id, geom = "line")
+data_subset %>%
+  gg_day(aes_col = Id, geom = "line")
 ```
 
 Also a ribbon is possible.
@@ -121,7 +128,8 @@ data %>%
   filter(Id %in% c(205, 216, 219)) %>% #choosing 2 ids
   aggregate_Datetime(unit = "15 mins") #aggregating to 15 min intervals
 
-data_subset2 %>%  gg_days()
+data_subset2 %>%
+  gg_days()
 ```
 
 By default, `gg_days()` will always plot full days. Let us strip one participant of data for three days.
@@ -132,7 +140,8 @@ data_subset2 %>%
   filter(!(Id == 205 & 
              date(Datetime) %in% c("2023-08-28", "2023-08-29", "2023-08-30")))
 
-data_subset3 %>%  gg_days()
+data_subset3 %>%
+  gg_days()
 ```
 
 You can see the plots are misaligned in their facets. We can correct for that by providing an exact number of days to the `x.axis.limits` argument. `Datetime_limits()` is a helper function from `LightLogR` and the documentation reveals more about its arguments.
@@ -143,7 +152,6 @@ data_subset3 %>%
     x.axis.limits = 
       \(x) Datetime_limits(x, length = ddays(7), midnight.rollover = TRUE)
     )
-
 ```
 
 `gg_days()` has all of the customization options of `gg_day()`. Here we will customize the plot for a ribbon, different naming and breaks on the datetime axis.
@@ -159,7 +167,6 @@ data_subset3 %>%
     x.axis.format = "%H",
     ) +
   guides(color = "none", fill = "none")
-
 ```
 
 # gg_doubleplot()
@@ -171,7 +178,9 @@ data_subset3 %>%
 We will use a subset from the data used in `gg_day()` above: two Ids, aggregated to 15-minute intervals, and restricted to three days. Because the first day is only partly present for both Ids, we will use the `gap_handler()` function to fill in the implicitly missing data with NA. If we ignore this step, the doubleplot will be incorrect, as it will connect the last point of the first day (around midnight) with the first point of the second day (somewhen before noon), which is incorrect and also looks bad.
 
 ```{r}
-data_subset <- data_subset %>% gap_handler(full.days = TRUE)
+data_subset <- 
+  data_subset %>% 
+  gap_handler(full.days = TRUE)
 ```
 
 ## Horizontal doubleplot
@@ -182,8 +191,9 @@ The horizontal doubleplot is activated by default, if only one day is present wi
  data_subset %>% 
    gg_doubleplot(aes_fill = Id, jco_color = TRUE, type = "repeat")
 #identical:
-# data_subset %>% group_by(Date = date(Datetime), .add = TRUE) %>%
- # gg_doubleplot(aes_fill = Id, jco_color = TRUE)
+# data_subset %>% 
+#  group_by(Date = date(Datetime), .add = TRUE) %>%
+#  gg_doubleplot(aes_fill = Id, jco_color = TRUE)
 ```
 
 Each plot line thus is the same day, plotted twice.
@@ -204,7 +214,8 @@ Note that the second day in each row is the first day of the next row. This allo
 In both cases (horizontally and vertically) it is easy to condense the plots to a single line per day, by ungrouping the data structure (makes only sense if the datetimes are identical):
 
 ```{r, fig.height=5}
-data_subset %>% ungroup() %>% 
+data_subset %>% 
+  ungroup() %>% 
   gg_doubleplot(aes_fill = Id, jco_color = TRUE)
 ```
 
@@ -219,7 +230,8 @@ data_two_groups <- data %>%
   mutate(
     Month = case_when(month(Datetime) %in% 8:9 ~ "Aug/Sep",
                       month(Datetime) %in% 10:11 ~ "Oct/Nov")
-  ) %>% group_by(Month)
+  ) %>% 
+  group_by(Month)
 ```
 
 Now we can aggregate the data to a single day per group and make a doubleplot from it. With `aggregate_Date()` we condense a large dataset with 10-second intervals to a single day for two groups with a 15 minute interval. The day that is assigned by default is the median measurement day of the group.
@@ -240,7 +252,6 @@ data_two_groups %>%
                  ) %>% 
   ungroup() %>% 
   gg_doubleplot(aes_fill = Month, jco_color = TRUE, facetting = FALSE)
-
 ```
 
 We clearly see now, that daytime light exposure starts later and ends earlier, with lower daytime values overall. Conversely, nighttime light exposure is increased in the second half of the experiment (Oct/Nov). By using the `gg_doubleplot()` feature, the nighttime light pattern is clearly visible even accross midnight.
@@ -281,24 +292,25 @@ Here is an example to show how the transformation is particularly useful for dif
 ```{r, fig.height = 6}
 #dataset from above
 data <- 
-data_two_groups %>% 
-  aggregate_Date(unit = "15 mins", 
-                 date.handler = \(x) as_date("2023-09-15")
-                 ) %>% 
-  ungroup()
+  data_two_groups %>% 
+    aggregate_Date(unit = "15 mins", 
+                   date.handler = \(x) as_date("2023-09-15")
+                   ) %>% 
+    ungroup()
 
 #original doubleplot from above
-original_db <- data %>% 
-  gg_doubleplot(aes_fill = Month, jco_color = TRUE, facetting = FALSE) +
-  guides(fill = "none")
+original_db <- 
+  data %>% 
+    gg_doubleplot(aes_fill = Month, jco_color = TRUE, facetting = FALSE) +
+    guides(fill = "none")
 
 #difference doubleplot, showing the average difference between the to phases
 difference_db <- 
-data %>% 
-  select(Datetime, MEDI, Month) %>% 
-  pivot_wider(names_from = Month, values_from = MEDI) %>% 
-  gg_doubleplot(y.axis = `Oct/Nov`-`Aug/Sep`, facetting = FALSE,
-                y.axis.label = "difference (lx, MEDI)")
+  data %>% 
+    select(Datetime, MEDI, Month) %>% 
+    pivot_wider(names_from = Month, values_from = MEDI) %>% 
+    gg_doubleplot(y.axis = `Oct/Nov`-`Aug/Sep`, facetting = FALSE,
+                  y.axis.label = "difference (lx, MEDI)")
 
 #plotting
 original_db / difference_db
