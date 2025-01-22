@@ -31,7 +31,7 @@ All types of contributions are encouraged and valued. See the [Table of Contents
 ## Code of Conduct
 
 This project and everyone participating in it is governed by the
-[LightLogR Code of Conduct](https://github.com/tscnlab/LightLogR/blob//CODE_OF_CONDUCT.md).
+[LightLogR Code of Conduct](https://tscnlab.github.io/LightLogR/CODE_OF_CONDUCT.html).
 By participating, you are expected to uphold this code. Please report unacceptable behavior
 to the [lead developer](mailto:johannes.zauner@tum.de).
 
@@ -59,7 +59,7 @@ We are always looking to expand the range of supported devices. The easiest and 
 
 ## I want News about LightLogR
 
-If you are interested in the project and want to know more, you can subscribe to the [LightLogR mailing list](https://lists.lrz.de/mailman/listinfo/lightlogr-users).
+If you are interested in the project and want to know more, you can subscribe to the [LightLogR mailing list](https://lists.lrz.de/mailman/listinfo/lightlogr-users)
 
 ## I Want To Contribute
 
@@ -135,9 +135,34 @@ LightLogR is written in R, using the [devtools](https://devtools.r-lib.org) pack
 
 You can suggest changes or additions to the code via pull requests. Pull requests have to be reviewed and approved by at least one reviewer, and can then be merged into the main project branch. Please use the `main` branch as a basis for pull requests.
 
-### Improving The Documentation
+<!-- omit in toc -->
+#### Pull request process
 
-If you find errors, spelling mistakes, or missing information in the documentation, you can suggest improvements in the form of a pull request. Simply adjust the relevant lines of code in the repository and create a pull request with the changes. (Basic) Knowledge in [roxygen2](https://roxygen2.r-lib.org) and/or [pkgdown](https://pkgdown.r-lib.org) might be required.
+- We recommend that you create a Git branch for each pull request (PR).
+
+- New code should follow the [tidyverse style guide](http://style.tidyverse.org/). 
+
+- You can use the [styler](https://cran.r-project.org/package=styler) package to apply these styles, but please don’t restyle code that has nothing to do with your PR.
+
+- We use [roxygen2](https://roxygen2.r-lib.org), with [Markdown](https://roxygen2.r-lib.org/articles/rd-formatting.html) syntax, for documentation.
+
+- We use [testthat](https://cran.r-project.org/package=testthat). Contributions with test cases included are easier to accept.
+
+- For user-facing changes, add a bullet to the top of NEWS.md below the current development version header describing the changes made followed by your GitHub username, and links to relevant issue(s)/PR(s).
+
+<!-- omit in toc -->
+#### Fixing typos
+
+Small typos or grammatical errors in documentation may be edited directly using the GitHub web interface, so long as the changes are made in the source file.
+
+YES: you edit a roxygen comment in a .R file below R/.
+
+NO: you edit an .Rd file below man/.
+
+<!-- omit in toc -->
+#### Prerequisites
+
+Before you make a substantial pull request, you should always file an issue and make sure someone from the team agrees that it’s a problem. If you’ve found a bug, create an associated issue and illustrate the bug with a minimal reprex.
 
 ## Styleguides
 ### Commit Messages
@@ -150,3 +175,4 @@ You can join the project team simply by contributing to the package. This can ta
 <!-- omit in toc -->
 ## Attribution
 This guide is based on the [contributing.md](https://contributing.md/generator)!
+Parts of the guide were taken from the [pkgdown contributing.md](https://pkgdown.r-lib.org/CONTRIBUTING.html).
