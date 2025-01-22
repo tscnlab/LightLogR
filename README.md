@@ -411,3 +411,12 @@ Now, very few gaps are left (every time the the lagged epochs lead to a
 completely skipped regular epoch). The function can also be used to
 conveniently change the interval to arbitrary values, e.g., `"5 mins"`,
 or `"1 hour"`.
+
+# I Want To Contribute
+
+All types of contributions are encouraged and valued. See the
+[CONTRIBUTING](https://tscnlab.github.io/LightLogR/CONTRIBUTING.html)
+section for different ways to help and details about how this project
+handles them. This project and everyone participating in it is governed
+by the [LightLogR Code of
+Conduct](https://tscnlab.github.io/LightLogR/CODE_OF_CONDUCT.html).
