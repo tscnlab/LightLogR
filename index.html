@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -105,11 +105,15 @@ Light logger data can powerfully convey insights into personal light exposure
 <li><p>ActTrust</p></li>
 <li><p>Circadian_Eye</p></li>
 <li><p>DeLux</p></li>
+<li><p>GENEActiv_GGIR</p></li>
 <li><p>Kronowise</p></li>
 <li><p>LiDo</p></li>
 <li><p>LightWatcher</p></li>
+<li><p>LIMO</p></li>
 <li><p>LYS</p></li>
+<li><p>MotionWatch8</p></li>
 <li><p>nanoLambda</p></li>
+<li><p>OcuWEAR</p></li>
 <li><p>Speccy</p></li>
 <li><p>SpectraWear</p></li>
 <li><p>VEET</p></li>
@@ -123,10 +127,10 @@ Light logger data can powerfully convey insights into personal light exposure
 <p>LightLogR supports a wide range of metrics across different metric families. You can find the full documentation of metrics functions in the <a href="https://tscnlab.github.io/LightLogR/reference/index.html#metrics">reference section</a>. There is also an overview article on how to use <a href="https://tscnlab.github.io/LightLogR/articles/Metrics.html">Metrics</a>.</p>
 <table class="table">
 <colgroup>
-<col width="21%">
-<col width="9%">
-<col width="12%">
-<col width="56%">
+<col width="25%">
+<col width="25%">
+<col width="25%">
+<col width="25%">
 </colgroup>
 <thead><tr class="header">
 <th>Metric Family</th>
@@ -311,11 +315,14 @@ Light logger data can powerfully convey insights into personal light exposure
 <p>.</p>
 </div>
 <p>For more complex data, there is the useful <code><a href="reference/gg_overview.html">gg_overview()</a></code> function to get an immediate grasp of your data. It was automatically called during import (set <code>auto.plot = FALSE</code> to suppress this), but really shines for datasets with multiple participants. It also indicates where data is missing, based on the measurement epochs found in the data.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>LLdata <span class="sc">%&gt;%</span> <span class="fu">gg_overview</span>()</span></code></pre></div>
 <div style="text-align:center">
-<p><img src="reference/figures/gg_overview2.png" style="width:60.0%"></p>
+<figure><img src="reference/figures/gg_overview2.png" style="width:60.0%" alt="Example for gg_overview() from a large data collection effort over many months"><figcaption aria-hidden="true">
+Example for <code><a href="reference/gg_overview.html">gg_overview()</a></code> from a large data collection effort over many months
+</figcaption></figure>
 </div>
-<p><em>note:</em> the above example can not be executed through copy and paste, as it requires a large dataset not included in the package. It is available, however, in the article on <a href="https://tscnlab.github.io/LightLogR/articles/Import.html">Import &amp; cleaning</a>.</p>
+<p><em>note:</em> the above example image requires a large dataset not included in the package. It is available, however, in the article on <a href="https://tscnlab.github.io/LightLogR/articles/Import.html">Import &amp; cleaning</a>.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co">#example code, on how to use gg_overview():</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>dataset <span class="sc">%&gt;%</span> <span class="fu">gg_overview</span>()</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="visualize">Visualize<a class="anchor" aria-label="anchor" href="#visualize"></a>
@@ -392,6 +399,12 @@ Light logger data can powerfully convey insights into personal light exposure
 </div>
 </div>
 </div>
+<div class="section level1">
+<h1 id="i-want-to-contribute">I Want To Contribute<a class="anchor" aria-label="anchor" href="#i-want-to-contribute"></a>
+</h1>
+<p>All types of contributions are encouraged and valued. See the <a href="https://tscnlab.github.io/LightLogR/CONTRIBUTING.html">CONTRIBUTING</a> section for different ways to help and details about how this project handles them. This project and everyone participating in it is governed by the <a href="https://tscnlab.github.io/LightLogR/CODE_OF_CONDUCT.html">LightLogR Code of Conduct</a>.</p>
+</div>
+
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
@@ -409,6 +422,13 @@ Light logger data can powerfully convey insights into personal light exposure
 </ul>
 </div>
 
+<div class="community">
+<h2 data-toc-skip>Community</h2>
+<ul class="list-unstyled">
+<li><a href="CONTRIBUTING.html">Contributing guide</a></li>
+<li><a href="CODE_OF_CONDUCT.html">Code of conduct</a></li>
+</ul>
+</div>
 
 <div class="citation">
 <h2 data-toc-skip>Citation</h2>
