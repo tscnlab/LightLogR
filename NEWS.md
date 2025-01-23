@@ -1,3 +1,9 @@
+# LightLogR 0.4.3
+
+* implemented changes based on the [JOSS Reviews](https://github.com/openjournals/joss-reviews/issues/7601)
+
+* added a [Code of Conduct](https://tscnlab.github.io/LightLogR/CODE_OF_CONDUCT.html) and a [Contributing](https://tscnlab.github.io/LightLogR/CONTRIBUTING.html) file for the project
+
 # LightLogR 0.4.2
 
 * updated the license to MIT: LightLogR is now permissively licensed

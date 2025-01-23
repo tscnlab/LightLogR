@@ -83,15 +83,23 @@ At present, these are the devices we support in LightLogR:
 
 - DeLux
 
+- GENEActiv_GGIR
+
 - Kronowise
 
 - LiDo
 
 - LightWatcher
 
+- LIMO
+
 - LYS
 
+- MotionWatch8
+
 - nanoLambda
+
+- OcuWEAR
 
 - Speccy
 
@@ -120,26 +128,26 @@ section](https://tscnlab.github.io/LightLogR/reference/index.html#metrics).
 There is also an overview article on how to use
 [Metrics](https://tscnlab.github.io/LightLogR/articles/Metrics.html).
 
-| Metric Family                        | Submetrics     | Note                 | Documentation                                                                                    |
-|--------------------------------------|----------------|----------------------|--------------------------------------------------------------------------------------------------|
-| Barroso                              | 7              |                      | `barroso_lighting_metrics()`                                                                     |
-| Bright-dark period                   | 4x2            | bright / dark        | `bright_dark_period()`                                                                           |
-| Centroid of light exposure           | 1              |                      | `centroidLE()`                                                                                   |
-| Disparity index                      | 1              |                      | `disparity_index()`                                                                              |
-| Duration above threshold             | 3              | above, below, within | `duration_above_threshold()`                                                                     |
-| Exponential moving average (EMA)     | 1              |                      | `exponential_moving_average()`                                                                   |
-| Frequency crossing threshold         | 1              |                      | `frequency_crossing_threshold()`                                                                 |
-| Intradaily Variance (IV)             | 1              |                      | `intradaily_variability()`                                                                       |
-| Interdaily Stability (IS)            | 1              |                      | `interdaily_stability()`                                                                         |
-| Midpoint CE (Cumulative Exposure)    | 1              |                      | `midpointCE()`                                                                                   |
-| nvRC (Non-visual circadian response) | 4              |                      | `nvRC()`, `nvRC_circadianDisturbance()`, `nvRC_circadianBias()`, `nvRC_relativeAmplitudeError()` |
-| nvRD (Non-visual direct response)    | 2              |                      | `nvRD()`, `nvRD_cumulative_response()`                                                           |
-| Period above threshold               | 3              | above, below, within | `period_above_threshold()`                                                                       |
-| Pulses above threshold               | 7x3            | above, below, within | `pulses_above_threshold()`                                                                       |
-| Threshold for duration               | 2              | above, below         | `threshold_for_duration()`                                                                       |
-| Timing above threshold               | 3              | above, below, within | `timing_above_threshold()`                                                                       |
-| **Total:**                           |                |                      |                                                                                                  |
-| **17 families**                      | **61 metrics** |                      |                                                                                                  |
+| Metric Family | Submetrics | Note | Documentation |
+|----|----|----|----|
+| Barroso | 7 |  | `barroso_lighting_metrics()` |
+| Bright-dark period | 4x2 | bright / dark | `bright_dark_period()` |
+| Centroid of light exposure | 1 |  | `centroidLE()` |
+| Disparity index | 1 |  | `disparity_index()` |
+| Duration above threshold | 3 | above, below, within | `duration_above_threshold()` |
+| Exponential moving average (EMA) | 1 |  | `exponential_moving_average()` |
+| Frequency crossing threshold | 1 |  | `frequency_crossing_threshold()` |
+| Intradaily Variance (IV) | 1 |  | `intradaily_variability()` |
+| Interdaily Stability (IS) | 1 |  | `interdaily_stability()` |
+| Midpoint CE (Cumulative Exposure) | 1 |  | `midpointCE()` |
+| nvRC (Non-visual circadian response) | 4 |  | `nvRC()`, `nvRC_circadianDisturbance()`, `nvRC_circadianBias()`, `nvRC_relativeAmplitudeError()` |
+| nvRD (Non-visual direct response) | 2 |  | `nvRD()`, `nvRD_cumulative_response()` |
+| Period above threshold | 3 | above, below, within | `period_above_threshold()` |
+| Pulses above threshold | 7x3 | above, below, within | `pulses_above_threshold()` |
+| Threshold for duration | 2 | above, below | `threshold_for_duration()` |
+| Timing above threshold | 3 | above, below, within | `timing_above_threshold()` |
+| **Total:** |  |  |  |
+| **17 families** | **61 metrics** |  |  |
 
 If you would like to use a metric you don’t find represented in
 LightLogR, please contact the developers. The easiest and most trackable
@@ -251,18 +259,23 @@ import (set `auto.plot = FALSE` to suppress this), but really shines for
 datasets with multiple participants. It also indicates where data is
 missing, based on the measurement epochs found in the data.
 
-    LLdata %>% gg_overview()
-
 <div style="text-align:center">
 
-<img src="man/figures/gg_overview2.png" style="width:60.0%" />
+<figure>
+<img src="man/figures/gg_overview2.png" style="width:60.0%"
+alt="Example for gg_overview() from a large data collection effort over many months" />
+<figcaption aria-hidden="true">Example for <code>gg_overview()</code>
+from a large data collection effort over many months</figcaption>
+</figure>
 
 </div>
 
-*note:* the above example can not be executed through copy and paste, as
-it requires a large dataset not included in the package. It is
-available, however, in the article on [Import &
+*note:* the above example image requires a large dataset not included in
+the package. It is available, however, in the article on [Import &
 cleaning](https://tscnlab.github.io/LightLogR/articles/Import.html).
+
+    #example code, on how to use gg_overview():
+    dataset %>% gg_overview()
 
 ### Visualize
 
@@ -398,3 +411,12 @@ Now, very few gaps are left (every time the the lagged epochs lead to a
 completely skipped regular epoch). The function can also be used to
 conveniently change the interval to arbitrary values, e.g., `"5 mins"`,
 or `"1 hour"`.
+
+# I Want To Contribute
+
+All types of contributions are encouraged and valued. See the
+[CONTRIBUTING](https://tscnlab.github.io/LightLogR/CONTRIBUTING.html)
+section for different ways to help and details about how this project
+handles them. This project and everyone participating in it is governed
+by the [LightLogR Code of
+Conduct](https://tscnlab.github.io/LightLogR/CODE_OF_CONDUCT.html).
