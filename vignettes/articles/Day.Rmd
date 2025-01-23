@@ -32,6 +32,8 @@ library(gt)
 library(patchwork)
 ```
 
+> Please note that this article uses the base pipe operator `|>`. You need an R version equal to or greater than 4.1.0 to use it. If you are using an older version, you can replace it with the `magrittr` pipe operator `%>%`.
+
 ## Importing Data
 
 The data we need are part of the `LightLogR` package. They are unprocessed (after device export) data from light loggers (and a diary app for capturing sleep times). All data is anonymous, and we can access it through the following paths:

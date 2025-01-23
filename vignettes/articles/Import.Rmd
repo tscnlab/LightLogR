@@ -17,6 +17,8 @@ library(tidyverse)
 library(gghighlight)
 ```
 
+> Please note that this article uses the base pipe operator `|>`. You need an R version equal to or greater than 4.1.0 to use it. If you are using an older version, you can replace it with the `magrittr` pipe operator `%>%`.
+
 # From which devices can I import data?
 
 LightLogR aims to provide standard import routines for all devices used in research on personal light exposure. Currently, the following devices are supported:
@@ -112,7 +114,7 @@ The second problem requires the filtering of certain Ids. The `filter_Datetime_m
 
 ```{r, start shift}
 data <- 
-  data %>% 
+  data |> 
   filter_Datetime_multiple(
     arguments = list(
       list(only_Id = quote(Id == 216)),
@@ -127,17 +129,17 @@ data <-
 Let's have a look at the data again with the `gg_overview()` function.
 
 ```{r, overview}
-data %>% gg_overview()
+data |> gg_overview()
 ```
 
 Looks much better now. Also, because there is no longer a hint about gaps in the lower right corner, we can be sure that all gaps have been removed. The function gap_finder() shows us, however, that there are still irregularities in the data and the function count_difftime() reveals where they are.
 
 ```{r, irregularities}
-data %>% 
+data |> 
   gap_finder()
 
-data %>% 
-  count_difftime() %>% 
+data |> 
+  count_difftime() |> 
   print(n=22)
 ```
 
@@ -150,17 +152,17 @@ Let us first visualize where the irregularities are. We can use `gg_days()` for 
 ```{r}
 #create two columns to show the irregularities and gaps for relevant ids
 difftimes <- 
-  data %>% 
-  filter(Id %in% c(215, 218, 221)) %>%
+  data |> 
+  filter(Id %in% c(215, 218, 221)) |>
   mutate(difftime = difftime(lead(Datetime), Datetime, units = "secs"),
                   end = Datetime + seconds(difftime))
 
 #visualize where those points are
-difftimes %>% 
+difftimes |> 
   gg_days(geom = "point", 
           x.axis.breaks = ~Datetime_breaks(.x, by = "2 days" )
   ) +
-  geom_rect(data = difftimes %>% filter(difftime !=10),
+  geom_rect(data = difftimes |> filter(difftime !=10),
             aes(xmin = Datetime, xmax = end, ymin = -Inf, ymax = Inf),
             fill = "red", col = "red", linewidth = 0.2, alpha = 0.2) +
   gghighlight(difftime != 10 | lag(difftime !=10))
@@ -171,7 +173,7 @@ All irregular data appear at the very beginning of the data collection. As we ar
 
 ```{r}
 data <- 
-  data %>% 
+  data |> 
   filter_Datetime_multiple(
     arguments = list(
       list(only_Id = quote(Id == 215)),
@@ -179,11 +181,11 @@ data <-
       list(only_Id = quote(Id == 221))
     ), length = "1 week", length_from_start = FALSE)
 
-data %>% 
+data |> 
   gap_finder()
 
-data %>% 
-  count_difftime() %>% 
+data |> 
+  count_difftime() |> 
   print(n=17)
 ```
 
