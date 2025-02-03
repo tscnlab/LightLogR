@@ -23,9 +23,15 @@ test_that("photoperiod works", {
   #correct timezones
   expect_equal(testcase$tz, 
                c(tz, tz)
+               )  
+  #provide latitude and longitude
+  expect_equal(c(testcase$lat, testcase$lon),
+               rep(coordinates, 2)
                )
+  #provide solar angle
+  expect_equal(testcase$solar.angle, c(-6,-6))
   #correct total numbers of columns
-  expect_equal(length(testcase), 4)
+  expect_equal(length(testcase), 7)
 })
 
 
