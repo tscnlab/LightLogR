@@ -45,6 +45,7 @@ Imports:
     slider,
     stats,
     stringr,
+    suntools,
     tibble,
     tidyr,
     utils
