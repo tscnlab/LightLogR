@@ -4,6 +4,7 @@
 \alias{photoperiod}
 \alias{extract_photoperiod}
 \alias{add_photoperiod}
+\alias{solar_noon}
 \title{Calculate photoperiod and boundary times}
 \usage{
 photoperiod(coordinates, dates, tz, solarDep = 6)
@@ -22,6 +23,8 @@ add_photoperiod(
   solarDep = 6,
   overwrite = FALSE
 )
+
+solar_noon(coordinates, dates, tz)
 }
 \arguments{
 \item{coordinates}{A two element numeric vector representing the latitude and
@@ -72,6 +75,8 @@ the dataset.
 The input dataset with the added photoperiod information. The
 information is appended with the following columns: \code{dawn}, \code{dusk},
 \code{photoperiod}, and \code{photoperiod.state}.
+
+\code{\link[=solar_noon]{solar_noon()}} returns a \code{tibble} with the calculated solar noon
 }
 \description{
 A family of functions to extract and add photoperiod information.
@@ -93,6 +98,11 @@ dataset.
 Beyond the photoperiod information, it will categorize the
 \code{photoperiod.state} as \code{"day"} or \code{"night"}. If \code{overwrite} is set to \code{TRUE},
 the function will overwrite any columns with the same name.
+
+\code{\link[=solar_noon]{solar_noon()}} calculates the solar noon for a given location and date. The
+function is a convenience wrapper for \code{\link[suntools:solarnoon]{suntools::solarnoon()}}. The function
+has no companians like \code{\link[=extract_photoperiod]{extract_photoperiod()}} or \code{\link[=add_photoperiod]{add_photoperiod()}}, but
+will be extended, if there is sufficient interest.
 }
 \details{
 Please note that all functions of the \code{photoperiod} family work with one
@@ -147,5 +157,9 @@ added_photoperiod |>
    
    
  added_photoperiod |> dplyr::summarize(dawn = mean(dawn) |> hms::as_hms())
+
+ #solar_noon()
+ solar_noon(coordinates, dates, tz)
+
 }
 \concept{photoperiod}

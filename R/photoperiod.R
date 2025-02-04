@@ -302,4 +302,71 @@ add_photoperiod <- function(dataset,
   
   #return
   dataset
-  }
+}
+
+
+# solar_noon --------------------------------------------------------------
+
+#' Calculate solar noon
+#' 
+#' [solar_noon()] calculates the solar noon for a given location and date. The
+#' function is a convenience wrapper for [suntools::solarnoon()]. The function
+#' has no companians like [extract_photoperiod()] or [add_photoperiod()], but
+#' will be extended, if there is sufficient interest.
+#'
+#' @inheritParams photoperiod
+#'
+#' @returns [solar_noon()] returns a `tibble` with the calculated solar noon
+#' @export
+#'
+#' @family photoperiod
+#' @rdname photoperiod
+#'
+#' @examples
+#' 
+#'  #solar_noon()
+#'  solar_noon(coordinates, dates, tz)
+#' 
+solar_noon <- function(coordinates, dates, tz) {
+  
+  # Initial Checks ----------------------------------------------------------
+  
+  #check if coordinates is a sensible vector
+  stopifnot(
+    "coordinates must be a numeric vector" = is.numeric(coordinates),
+    "coordinates must have two elements" = length(coordinates) == 2,
+    "none of the coordinates can be NA" = !anyNA(coordinates),
+    "none of the coordinates can be NaN" = !anyNA(coordinates)
+  )
+  
+  #check if date is a sensible date
+  dates <- lubridate::as_date(dates)
+  stopifnot(
+    "date must not be NA or coerced to NA" = !is.na(dates),
+    "date must be a date" = lubridate::is.Date(dates)
+  )
+  
+  #check if tz is a sensible time zone
+  stopifnot(
+    "tz must be a character" = is.character(tz),
+    "tz must be a valid time zone" = tz %in% OlsonNames(),
+    "tz must be a scalar" = length(tz) == 1
+  )
+  
+  # Function ----------------------------------------------------------
+  
+    suntools::solarnoon(
+          crds = matrix(c(coordinates[2], coordinates[1]), nrow = 1),
+          dateTime = as.POSIXct(dates, tz = tz),
+          POSIXct.out = TRUE
+        ) |> 
+          dplyr::select(time) |>
+          dplyr::rename(solar.noon = time
+    ) |>  
+    dplyr::mutate(date = dates,
+                  tz = tz,
+                  lat = coordinates[1],
+                  lon = coordinates[2],
+                  .before = 1)
+}
+
