@@ -52,6 +52,10 @@ by \link{LightLogR}, take care to choose a sensible variable for the
 \code{"Datetime"} which is automatically correct for data imported with
 \link{LightLogR}. Expects a \code{symbol}. Needs to be part of the \code{dataset}. Must
 be of type \code{POSIXct}.}
+
+\item{overwrite}{Logical scalar. If \code{TRUE}, the function will overwrite any
+columns with the same name. If \code{FALSE} (default), the function will stop if any of
+the columns already exist in the dataset.}
 }
 \value{
 \code{\link[=photoperiod]{photoperiod()}} returns a \code{tibble} with the calculated times of dawn

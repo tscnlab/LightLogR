@@ -197,7 +197,9 @@ extract_photoperiod <- function(dataset,
 #' over the locations.
 #'
 #' @inheritParams extract_photoperiod
-#'
+#' @param overwrite Logical scalar. If `TRUE`, the function will overwrite any
+#'  columns with the same name. If `FALSE` (default), the function will stop if any of
+#'  the columns already exist in the dataset.
 #' @returns The input dataset with the added photoperiod information. The
 #'   information is appended with the following columns: `dawn`, `dusk`,
 #'   `photoperiod`, and `photoperiod.state`.
@@ -257,6 +259,11 @@ add_photoperiod <- function(dataset,
       "existing columns would be overwritten, consider setting `overwrite = TRUE`" = 
         !any(new_names %in% names(dataset))
       )
+  }
+  
+  if(overwrite) {
+    dataset <- 
+      dataset |> dplyr::select(-dplyr::any_of(new_names))
   }
   
   # Function ----------------------------------------------------------------
