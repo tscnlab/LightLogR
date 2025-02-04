@@ -27,7 +27,8 @@ by \link{LightLogR}, take care to choose a sensible variable for the
 
 \item{Datetime.colname}{column name that contains the datetime. Defaults to
 \code{"Datetime"} which is automatically correct for data imported with
-\link{LightLogR}. Expects a \code{symbol}. Needs to be part of the \code{dataset}.}
+\link{LightLogR}. Expects a \code{symbol}. Needs to be part of the \code{dataset}. Must
+be of type \code{POSIXct}.}
 
 \item{State.colname, Interval.colname}{Column names of the \code{State} and
 \code{Interval} in the \code{State.interval.dataset}. Expects a \code{symbol}. \code{State}

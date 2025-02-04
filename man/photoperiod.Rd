@@ -2,9 +2,26 @@
 % Please edit documentation in R/photoperiod.R
 \name{photoperiod}
 \alias{photoperiod}
-\title{Calculate boundary times of the photoperiod}
+\alias{extract_photoperiod}
+\alias{add_photoperiod}
+\title{Calculate photoperiod and boundary times}
 \usage{
 photoperiod(coordinates, dates, tz, solarDep = 6)
+
+extract_photoperiod(
+  dataset,
+  coordinates,
+  Datetime.colname = Datetime,
+  solarDep = 6
+)
+
+add_photoperiod(
+  dataset,
+  coordinates,
+  Datetime.colname = Datetime,
+  solarDep = 6,
+  overwrite = FALSE
+)
 }
 \arguments{
 \item{coordinates}{A two element numeric vector representing the latitude and
@@ -23,10 +40,20 @@ horizon. Default is 6, equalling \verb{Civil dawn/dusk}. Other common values are
 12 degrees for \verb{Nautical dawn/dusk}, 18 degrees for \verb{Astronomical dawn/dusk}, and 0 degrees for \code{Sunrise/Sunset}. Note that the output
 columns will always be named \code{dawn} and \code{dusk}, regardless of the
 \code{solarDep} value.}
+
+\item{dataset}{A light logger dataset. Expects a \code{dataframe}. If not imported
+by \link{LightLogR}, take care to choose a sensible variable for the
+\code{Datetime.colname}.}
+
+\item{Datetime.colname}{column name that contains the datetime. Defaults to
+\code{"Datetime"} which is automatically correct for data imported with
+\link{LightLogR}. Expects a \code{symbol}. Needs to be part of the \code{dataset}. Must
+be of type \code{POSIXct}.}
 }
 \value{
-A \code{tibble} with the calculated times of dawn and dusk for the given
-location and date. The tibble contains the following columns:
+\code{\link[=photoperiod]{photoperiod()}} returns a \code{tibble} with the calculated times of dawn
+and dusk for the given location and date, with the length equal to the
+\code{dates} input parameter . The tibble contains the following columns:
 \itemize{
 \item \code{date} with the date of the calculation, stored as class \code{Date}
 \item \code{tz} with the timezone of the output, stored as class \code{character}
@@ -35,17 +62,90 @@ as class \code{numeric}
 \item \code{solar.angle} with the negative solar depression angle, i.e. the sun
 elevation above the horizon. stored as class \code{numeric}
 \item \code{dawn} and \code{dusk} with the calculated datetimes, stored as class \code{POSIXct}
+\item \code{photoperiod} with the calculated photoperiod, stored as class \code{difftime}.
 }
+
+\code{\link[=extract_photoperiod]{extract_photoperiod()}} returns a \code{tibble} of the same structure as
+\code{\link[=photoperiod]{photoperiod()}}, but with a length equal to the number of unique dates in
+the dataset.
+
+The input dataset with the added photoperiod information. The
+information is appended with the following columns: \code{dawn}, \code{dusk},
+\code{photoperiod}, and \code{photoperiod.state}.
 }
 \description{
-Calculate boundary times of the photoperiod
+A family of functions to extract and add photoperiod information.
+\code{\link[=photoperiod]{photoperiod()}} creates a \code{tibble} with the calculated times of dawn and dusk
+for the given location and date. The function is a convenience wrapper for
+\code{\link[suntools:crepuscule]{suntools::crepuscule()}} to calculate the times of dawn and dusk. By default,
+civil dawn and dusk are calculated, but the function can be used to calculate
+other times by changing the \code{solarDep} parameter (e.g., 0 for sunrise/sunset,
+12 for nautical, and 18 for astronomical).
+
+Taking a light exposure dataset as input, \code{\link[=extract_photoperiod]{extract_photoperiod()}} calculates
+the photoperiods and their boundary times for each unique day in the dataset,
+given a location and boundary condition (i.e., the solar depression angle).
+Basically, this is a convenience wrapper for \code{\link[=photoperiod]{photoperiod()}} that takes a
+light logger dataset and extracts unique dates and the time zone from the
+dataset.
+
+\code{\link[=add_photoperiod]{add_photoperiod()}} adds photoperiod information to a light logger dataset.
+Beyond the photoperiod information, it will categorize the
+\code{photoperiod.state} as \code{"day"} or \code{"night"}. If \code{overwrite} is set to \code{TRUE},
+the function will overwrite any columns with the same name.
+}
+\details{
+Please note that all functions of the \code{photoperiod} family work with one
+coordinate pair at a time. If you have multiple locations (and multiple time
+zones), you need to run the function for each location separately. We suggest
+using a nested dataframe structure, and employ the \code{purrr} package to iterate
+over the locations.
 }
 \examples{
-  coordinates <- c(47.018711, 12.34256)
-  dates <- c("2023-06-01", "2025-08-23")
-  tz <- "Europe/Zurich"
-  #civil dawn/dusk
-  photoperiod(coordinates, dates, tz)
-  #sunrise/sunset
-  photoperiod(coordinates, dates, tz, solarDep = 0)
+ #example für Tübingen, Germany
+ coordinates <- c(48.521637, 9.057645)
+ dates <- c("2023-06-01", "2025-08-23")
+ tz <- "Europe/Berlin"
+ 
+ #civil dawn/dusk
+ photoperiod(coordinates, dates, tz)
+ #sunrise/sunset
+ photoperiod(coordinates, dates, tz, solarDep = 0)
+ #extract_photoperiod
+ sample.data.environment |> 
+   extract_photoperiod(coordinates)
+
+
+#add_photoperiod
+added_photoperiod <- 
+ sample.data.environment |> 
+ dplyr::mutate(Datetime = lubridate::force_tz(Datetime, tz)) |> 
+ add_photoperiod(coordinates)
+   
+added_photoperiod |> head()
+
+added_photoperiod |> 
+  filter_Date(length = "3 days") |>  
+  gg_days(aes_col = photoperiod.state,
+          group = dplyr::consecutive_id(photoperiod.state), 
+          jco_color = TRUE 
+          )
+
+added_photoperiod |> 
+  filter_Date(length = "3 days") |>
+  gg_day(aes_col = Id) +
+  ggplot2:: geom_rect(
+  data = \(x) x |> dplyr::ungroup(Id) |> dplyr::summarize(dawn = mean(dawn) |> hms::as_hms()),
+  ggplot2::aes(xmin = 0, xmax = dawn, ymin = -Inf, ymax = Inf),
+  alpha = 0.1
+  ) +
+  ggplot2:: geom_rect(
+  data = \(x) x |> dplyr::ungroup(Id) |> dplyr::summarize(dusk = mean(dusk) |> hms::as_hms()),
+  ggplot2::aes(xmin = dusk, xmax = 24*60*60, ymin = -Inf, ymax = Inf),
+  alpha = 0.1
+  )
+   
+   
+ added_photoperiod |> dplyr::summarize(dawn = mean(dawn) |> hms::as_hms())
 }
+\concept{photoperiod}

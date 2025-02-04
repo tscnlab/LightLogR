@@ -26,7 +26,8 @@ chooses the relevant function from \pkg{lubridate}.}
 
 \item{Datetime.colname}{column name that contains the datetime. Defaults to
 \code{"Datetime"} which is automatically correct for data imported with
-\link{LightLogR}. Expects a \code{symbol}. Needs to be part of the \code{dataset}.}
+\link{LightLogR}. Expects a \code{symbol}. Needs to be part of the \code{dataset}. Must
+be of type \code{POSIXct}.}
 
 \item{New.colname}{Column name for the added column in the \code{dataset}.}
 

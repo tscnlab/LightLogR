@@ -30,8 +30,12 @@ test_that("photoperiod works", {
                )
   #provide solar angle
   expect_equal(testcase$solar.angle, c(-6,-6))
+  #correct photoperiod calculation
+  expect_equal(testcase$photoperiod, 
+               difftime(testcase$dusk, testcase$dawn, units = "hours")
+               )
   #correct total numbers of columns
-  expect_equal(length(testcase), 7)
+  expect_equal(length(testcase), 8)
 })
 
 
@@ -54,3 +58,27 @@ test_that("photoperiod throws errors", {
       )
   )
 })
+
+test_that("extract_photoperiod works", {
+  coordinates <- c(20,20)
+  expect_equal(extract_photoperiod(sample.data.environment, coordinates) |> 
+                 nrow(),
+               6)
+  
+})
+
+test_that("add_photoperiod works", {
+  coordinates <- c(20,20)
+  new_names <- c("dusk", "dawn", "photoperiod", "photoperiod.state")
+  added_photoperiod <- 
+    add_photoperiod(sample.data.environment, coordinates)
+  expect_true(all(new_names %in% names(added_photoperiod)
+               ))
+  expect_equal(nrow(added_photoperiod), nrow(sample.data.environment))
+  expect_equal(length(added_photoperiod), length(sample.data.environment)+4)
+  expect_true(lubridate::is.POSIXct(added_photoperiod$dawn))
+  expect_true(lubridate::is.POSIXct(added_photoperiod$dusk))
+  expect_true(lubridate::is.difftime(added_photoperiod$photoperiod))
+})
+
+

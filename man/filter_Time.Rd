@@ -19,7 +19,8 @@ by \link{LightLogR}, take care to choose a sensible variable for the
 
 \item{Datetime.colname}{column name that contains the datetime. Defaults to
 \code{"Datetime"} which is automatically correct for data imported with
-\link{LightLogR}. Expects a \code{symbol}. Needs to be part of the \code{dataset}.}
+\link{LightLogR}. Expects a \code{symbol}. Needs to be part of the \code{dataset}. Must
+be of type \code{POSIXct}.}
 
 \item{start, end, length}{a \code{character} scalar in the form of \code{"hh-mm-ss"}
 giving the respective start, end, or length for the filtered dataframe. The
