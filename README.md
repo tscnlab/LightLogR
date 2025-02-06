@@ -312,7 +312,7 @@ of the dataset allows for a color separation.
 ``` r
 sample.data.environment %>% 
   gg_day(
-    start.date = "2023-08-18",
+    start.date = "2023-09-01",
     aes_col = Id,
     scales = "fixed",
     geom = "line") + theme(legend.position = "bottom")
@@ -347,7 +347,7 @@ The default interval for `cut_Datetime()` is 3 hours.
 sample.data.environment %>% 
   cut_Datetime() %>% 
   gg_day(
-    end.date = "2023-08-15",
+    end.date = "2023-08-29",
     aes_col = Id,
     scales = "fixed",
     geom = "boxplot",

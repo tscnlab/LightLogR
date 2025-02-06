@@ -177,7 +177,7 @@ The built-in dataset `sample.data.environment` shows a combined dataset of light
 ```{r, out.width= "70%", fig.align='center', fig.height = 6}
 sample.data.environment %>% 
   gg_day(
-    start.date = "2023-08-18",
+    start.date = "2023-09-01",
     aes_col = Id,
     scales = "fixed",
     geom = "line") + theme(legend.position = "bottom")
@@ -196,7 +196,7 @@ With the `cut_Datetime()` function, the data can further be broken up into arbit
 sample.data.environment %>% 
   cut_Datetime() %>% 
   gg_day(
-    end.date = "2023-08-15",
+    end.date = "2023-08-29",
     aes_col = Id,
     scales = "fixed",
     geom = "boxplot",

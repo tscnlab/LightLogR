@@ -13,6 +13,7 @@
 #' @importFrom rlang :=
 #' @examples
 #' sample.data.environment %>% create_Timedata()
+#' 
 create_Timedata <- function(dataset, 
                              Datetime.colname = Datetime,
                              Time.data = Time.data,

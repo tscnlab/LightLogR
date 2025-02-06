@@ -1,21 +1,28 @@
 test_that("interval2state works as expected", {
   #create a interval dataset
-  states <- tibble::tibble(Datetime = c("2023-08-15 6:00:00",
-                                        "2023-08-15 23:00:00",
-                                        "2023-08-16 6:00:00",
-                                        "2023-08-16 22:00:00",
-                                        "2023-08-17 6:30:00",
-                                        "2023-08-18 1:00:00",
-                                        "2023-08-18 6:00:00",
-                                        "2023-08-18 22:00:00",
-                                        "2023-08-19 6:00:00",
-                                        "2023-08-19 23:00:00",
-                                        "2023-08-20 6:00:00",
-                                        "2023-08-20 22:00:00"),
+  states <- tibble::tibble(Datetime = c("2023-08-29 6:00:00",
+                                        "2023-08-29 23:00:00",
+                                        "2023-08-30 6:00:00",
+                                        "2023-08-30 22:00:00",
+                                        "2023-08-31 6:30:00",
+                                        "2023-09-01 1:00:00",
+                                        "2023-09-01 6:00:00",
+                                        "2023-09-01 22:00:00",
+                                        "2023-09-02 6:00:00",
+                                        "2023-09-02 23:00:00",
+                                        "2023-09-03 6:00:00",
+                                        "2023-09-03 22:00:00"),
                            State = rep(c("wake", "sleep"), 6),
                            Id = 
                              rep(c("Participant", "Environment"), each = 6)) %>% 
     dplyr::group_by(Id)
+  
+  states <- 
+  states |> 
+    dplyr::mutate(Datetime = 
+                    lubridate::force_tz(
+                      lubridate::as_datetime(Datetime), tzone = "Europe/Berlin"))
+  
   intervals <- sc2interval(states)
   
   #create a dataset with states
@@ -41,18 +48,18 @@ test_that("interval2state works as expected", {
 
 test_that("interval2state throws errors as expected", {
   #create a interval dataset
-  states <- tibble::tibble(Datetime = c("2023-08-15 6:00:00",
-                                        "2023-08-15 23:00:00",
-                                        "2023-08-16 6:00:00",
-                                        "2023-08-16 22:00:00",
-                                        "2023-08-17 6:30:00",
-                                        "2023-08-18 1:00:00",
-                                        "2023-08-18 6:00:00",
-                                        "2023-08-18 22:00:00",
-                                        "2023-08-19 6:00:00",
-                                        "2023-08-19 23:00:00",
-                                        "2023-08-20 6:00:00",
-                                        "2023-08-20 22:00:00"),
+  states <- tibble::tibble(Datetime = c("2023-08-29 6:00:00",
+                                        "2023-08-29 23:00:00",
+                                        "2023-08-30 6:00:00",
+                                        "2023-08-30 22:00:00",
+                                        "2023-08-31 6:30:00",
+                                        "2023-09-01 1:00:00",
+                                        "2023-09-01 6:00:00",
+                                        "2023-09-01 22:00:00",
+                                        "2023-09-02 6:00:00",
+                                        "2023-09-02 23:00:00",
+                                        "2023-09-03 6:00:00",
+                                        "2023-09-03 22:00:00"),
                            State = rep(c("wake", "sleep"), 6),
                            Id = "Participant")
   intervals <- sc2interval(states)

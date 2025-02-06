@@ -212,7 +212,6 @@ extract_photoperiod <- function(dataset,
 #' #add_photoperiod
 #' added_photoperiod <- 
 #'  sample.data.environment |> 
-#'  dplyr::mutate(Datetime = lubridate::force_tz(Datetime, tz)) |> 
 #'  add_photoperiod(coordinates)
 #'    
 #' added_photoperiod |> head()

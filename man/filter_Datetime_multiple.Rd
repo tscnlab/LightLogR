@@ -38,8 +38,8 @@ participants (see examples)
 }
 \examples{
 arguments <- list(
- list(start = "2023-08-17", only_Id = quote(Id == "Participant")),
- list(end = "2023-08-17", only_Id = quote(Id == "Environment")))
+ list(start = "2023-08-31", only_Id = quote(Id == "Participant")),
+ list(end = "2023-08-31", only_Id = quote(Id == "Environment")))
  #compare the unfiltered dataset
  sample.data.environment \%>\% gg_overview(Id.colname = Id)
  #compare the unfiltered dataset

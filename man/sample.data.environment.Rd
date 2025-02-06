@@ -21,7 +21,7 @@ sample.data.environment
 \description{
 A subset of data from a study at the TSCN-Lab using the ActLumus light
 logger. This dataset contains personal light exposure information for one
-participant over the course of five full days. The dataset is measured with a
+participant over the course of six full days. The dataset is measured with a
 10 second epoch and is complete (no missing values). Additionally
 environmental light data was captured with a second light logger mounted
 horizontally at the TUM university roof, without any obstructions (besides a

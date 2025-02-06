@@ -100,17 +100,17 @@ range.unfiltered
 
 #setting the start of a dataset
 sample.data.environment \%>\%
-filter_Datetime(start = "2023-08-18 12:00:00") \%>\%
+filter_Datetime(start = "2023-08-31 12:00:00") \%>\%
 pull(Datetime) \%>\%
 range()
 
 #setting the end of a dataset
 sample.data.environment \%>\%
-filter_Datetime(end = "2023-08-18 12:00:00") \%>\% pull(Datetime) \%>\% range()
+filter_Datetime(end = "2023-08-31 12:00:00") \%>\% pull(Datetime) \%>\% range()
 
 #setting a period of a dataset
 sample.data.environment \%>\%
-filter_Datetime(end = "2023-08-18 12:00:00", length = days(2)) \%>\%
+filter_Datetime(end = "2023-08-31 12:00:00", length = days(2)) \%>\%
 pull(Datetime) \%>\% range()
 
 #setting only the period of a dataset
@@ -129,7 +129,8 @@ sample \%>\% summarize(Daterange = paste(min(Datetime), max(Datetime), sep = " -
 sample \%>\%
 filter_Datetime(filter.expr = Datetime > Datetime[1] + days(1)) \%>\%
 summarize(Daterange = paste(min(Datetime), max(Datetime), sep = " - "))
-sample.data.environment \%>\% filter_Date(end = "2023-08-17")
+
+sample.data.environment \%>\% filter_Date(end = "2023-08-31")
 }
 \seealso{
 Other filter: 

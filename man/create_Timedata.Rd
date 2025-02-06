@@ -36,4 +36,5 @@ Create a Time-of-Day column in the dataset
 }
 \examples{
 sample.data.environment \%>\% create_Timedata()
+
 }
