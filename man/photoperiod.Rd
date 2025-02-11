@@ -165,4 +165,17 @@ added_photoperiod |>
  solar_noon(coordinates, dates, tz)
 
 }
+\seealso{
+Other photoperiod: 
+\code{\link{gg_photoperiod}()}
+
+Other photoperiod: 
+\code{\link{gg_photoperiod}()}
+
+Other photoperiod: 
+\code{\link{gg_photoperiod}()}
+
+Other photoperiod: 
+\code{\link{gg_photoperiod}()}
+}
 \concept{photoperiod}

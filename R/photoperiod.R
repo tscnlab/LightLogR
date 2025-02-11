@@ -376,3 +376,229 @@ solar_noon <- function(coordinates, dates, tz) {
                   .before = 1)
 }
 
+# gg_photoperiod --------------------------------------------------------------
+
+#' Add photoperiods to gg_day() or gg_days() plots
+#'
+#' [gg_photoperiod()] is a helper function to add photoperiod information to
+#' plots generated with [gg_day()] or [gg_days()]. The function can either draw
+#' on the `dawn` and `dusk` columns of the dataset or use the `coordinates` and
+#' `solarDep` arguments to calculate the photoperiods. For better visibility,
+#' the 
+#'
+#' If used in combination with [gg_doubleplot()], with that function in the
+#' `type = "repeat"` setting (either manually set, or because there is only one
+#' day of data per group present), photoperiods need to be added separately
+#' through [add_photoperiod()], or the second photoperiod in each panel will be
+#' off by one day. See the examples for more information.
+#' 
+#' In general, if the photoperiod setup is more complex, it makes sense to add
+#' it prior to plotting and make sure the photoperiods are correct.
+#'
+#' @inheritParams photoperiod
+#' @param ggplot_obj A `ggplot` object generated with [gg_day()] or [gg_days()].
+#' @param coordinates A two element numeric vector representing the latitude and
+#'   longitude of the location. If `NULL`, the default, the function will look
+#'   for the `dawn` and `dusk` columns in the dataset. If those are not present,
+#'   (and in the `POSIXct` format), the function will stop with an error.
+#'   Further, if `NULL`, the `solarDep` argument will be ignored.
+#' @param alpha A numerical value between 0 and 1 representing the transparency
+#'   of the photoperiods. Default is 0.2.
+#' @param ... Additional arguments given to the [ggplot2::geom_rect()] used to
+#'   construct the photoperiod shading. Can be used to change the fill color or
+#'   other aesthetic properties.
+#' @param on.top Logical scalar. If `TRUE`, the photoperiods will be plotted on
+#'  top of the existing plot. If `FALSE`, the photoperiods will be plotted
+#'  underneath the existing plot. Default is `FALSE`.
+#'
+#' @returns a modified `ggplot` object with the photoperiods added.
+#' @export
+#' @family photoperiod
+#'
+#' @examples
+#' 
+#' #adding photoperiods to a ggplot
+#' sample.data.environment |> 
+#'   gg_days() |> 
+#'   gg_photoperiod(coordinates)
+#'   
+#' #adding photoperiods prior to plotting
+#' sample.data.environment |> 
+#'   add_photoperiod(coordinates, solarDep = 0) |> 
+#'   gg_days() |> 
+#'   gg_photoperiod()
+#'   
+#' #plotting photoperiods automatically works for both gg_day() and gg_days()
+#' sample.data.environment |> 
+#'   gg_day() |> 
+#'   gg_photoperiod(coordinates)
+#'   
+#' #plotting for gg_doubleplot mostly works fine
+#' sample.data.environment |> 
+#'   filter_Date(length = "2 days") |> 
+#'   gg_doubleplot() |> 
+#'   gg_photoperiod(coordinates)
+#' 
+#' #however, in cases where only one day of data per group is available, or the 
+#' #type = "repeat" setting is used, the photoperiods need to be added 
+#' #separately, otherwise the second day will be off by one day in each panel.
+#' The visual difference is subtle, and might not be visible at all.
+#' 
+#' #WRONG
+#' sample.data.environment |> 
+#'   filter_Date(length = "1 days") |> 
+#'   gg_doubleplot() |> 
+#'   gg_photoperiod(coordinates)
+#'   
+#' #CORRECT
+#' sample.data.environment |> 
+#'   filter_Date(length = "1 days") |> 
+#'   add_photoperiod(coordinates) |>
+#'   gg_doubleplot() |> 
+#'   gg_photoperiod()
+
+
+gg_photoperiod <- function(ggplot_obj, 
+                           coordinates = NULL, 
+                           alpha = 0.2,
+                           solarDep = 6,
+                           on.top = FALSE,
+                           ...) {
+  
+  # Initial Checks ----------------------------------------------------------
+  
+  #ggplot must be a ggplot object
+  stopifnot(
+    "ggplot_obj must be a ggplot object" = inherits(ggplot_obj, "gg")
+  )
+  
+  #coordinates must either be a length two numerical vector without NA/NaN, 
+  #or NULL
+  if(!is.null(coordinates)) {
+    stopifnot(
+      "coordinates must be a numeric vector" = is.numeric(coordinates),
+      "coordinates must have two elements" = length(coordinates) == 2,
+      "none of the coordinates can be NA" = !anyNA(coordinates),
+      "none of the coordinates can be NaN" = !anyNA(coordinates)
+    )
+  }
+  
+  #solarDep must be a number between 90 and -90
+  stopifnot(
+    "solarDep must be a number" = is.numeric(solarDep),
+    "solarDep must not be NA" = !is.na(solarDep),
+    "solarDep must be between 90 and -90" = solarDep <= 90 & solarDep >= -90,
+    "solarDep must be a scalar" = is.all.scalar(solarDep)
+  )
+  
+  #if coordinates is NULL, the ggplot data must have dawn and dusk columns
+  if(is.null(coordinates)) {
+    stopifnot(
+      "dawn column must be present in the ggplot data" = 
+        "dawn" %in% names(ggplot_obj$data),
+      "dusk column must be present in the ggplot data" = 
+        "dusk" %in% names(ggplot_obj$data),
+      "dawn column must be a POSIXct" = 
+        lubridate::is.POSIXct(ggplot_obj$data$dawn),
+      "dusk column must be a POSIXct" = 
+        lubridate::is.POSIXct(ggplot_obj$data$dusk)
+    )
+  }
+  
+  #determine whether the ggplot has a hms or a POSIXct x-axis
+  x_axis_type <- 
+    get_ggplot_axis_type(ggplot_obj, "x")
+  
+  # Function ----------------------------------------------------------
+  
+  #add photoperiods to the data if not present
+  if(!is.null(coordinates)) {
+    #calculate the photoperiods
+    ggplot_obj$data <- 
+      ggplot_obj$data |> 
+      add_photoperiod(coordinates, solarDep = solarDep, overwrite = TRUE)
+  }
+  
+  #if the y_axis_type is time
+  if(x_axis_type == "time") {
+    photoperiod_data <-
+      ggplot_obj$data |>
+      dplyr::group_by(date.grouper = lubridate::date(Datetime), .add = TRUE) |>
+      dplyr::summarize(dawn = mean(dawn, na.rm = TRUE),
+                       dusk = mean(dusk, na.rm = TRUE))
+
+    lubridate::date(photoperiod_data$dawn) <- photoperiod_data$date.grouper
+    lubridate::date(photoperiod_data$dusk) <- photoperiod_data$date.grouper
+
+    photoperiod_data <-
+      photoperiod_data |>
+      dplyr::mutate(
+        midnight.before = lubridate::floor_date(dawn, "day"),
+        midnight.after = lubridate::ceiling_date(dusk, "day")
+      )
+  }
+  
+  #if the x_axis_type is hms
+  if(x_axis_type == "hms") {
+    
+    photoperiod_data <- 
+      ggplot_obj$data |> 
+      dplyr::group_by(Day.data) |>
+      dplyr::summarize(dawn = mean(dawn, na.rm = TRUE),
+                       dusk = mean(dusk, na.rm = TRUE),
+                       midnight.before = lubridate::floor_date(dawn, "day"),
+                       midnight.after = lubridate::ceiling_date(dusk, "day")
+      )
+    
+    photoperiod_data <- 
+      photoperiod_data |> 
+      dplyr::mutate(
+        dawn = dawn |> hms::as_hms(),
+        dusk = dusk |> hms::as_hms(),
+        midnight.before = 0,
+        midnight.after = 24*3600
+      )
+  }
+  
+  #create the geoms for the photoperiods
+  photoperiod_geoms <- 
+    list(
+      ggplot2::geom_rect(
+        data = photoperiod_data,
+        ggplot2::aes(
+          xmin = midnight.before,
+          xmax = dawn,
+          ymin = -Inf,
+          ymax = Inf
+        ),
+        alpha = alpha,
+        ...
+      ),
+      ggplot2::geom_rect(
+        data = photoperiod_data,
+        ggplot2::aes(
+          xmin = dusk,
+          xmax = midnight.after,
+          ymin = -Inf,
+          ymax = Inf
+        ),
+        alpha = alpha,
+        ...
+      )
+    )
+  
+  #add the geoms to the ggplot
+  new_plot_obj <- ggplot_obj + photoperiod_geoms
+
+  if(on.top) {
+    return(new_plot_obj)
+  }
+  
+  #reorder the layers so that the new geoms are at the very bottom
+  new_plot_obj$layers <-
+    c(new_plot_obj$layers |> tail(2), new_plot_obj$layers |> head(-2))
+
+  #return
+  new_plot_obj
+  
+}

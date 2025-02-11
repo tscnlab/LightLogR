@@ -81,4 +81,22 @@ test_that("add_photoperiod works", {
   expect_true(lubridate::is.difftime(added_photoperiod$photoperiod))
 })
 
+test_that("gg_photoperiod works", {
+  coordinates <- c(20,20)
+  Plot <- sample.data.environment |> gg_day() |> gg_photoperiod(coordinates)
+  Plot2 <- sample.data.environment |> gg_days() |> gg_photoperiod(coordinates)
+  Plot3 <- sample.data.environment |> gg_doubleplot() |> gg_photoperiod(coordinates)
+  Plot4 <- sample.data.environment |> add_photoperiod(coordinates)|> gg_day() |> gg_photoperiod()
+  Plot5 <- sample.data.environment |> gg_doubleplot(type = "repeat") |> gg_photoperiod(coordinates)
+  Plot6 <- sample.data.environment |> add_photoperiod(coordinates) |> gg_doubleplot(type = "repeat") |> gg_photoperiod()
+  expect_snapshot(Plot$data)
+  expect_snapshot(Plot2$data)
+  expect_snapshot(Plot3$data)
+  expect_snapshot(Plot4$data)
+  expect_false(identical(Plot5$data, Plot6$data))
+})
 
+test_that("gg_photoperiod throws errors", {
+  coordinates <- c(20,20)
+  expect_error(sample.data.environment |> gg_day() |> gg_photoperiod())
+})
