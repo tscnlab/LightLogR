@@ -134,7 +134,6 @@ photoperiod <- function(coordinates, dates, tz, solarDep = 6) {
 #'   [photoperiod()], but with a length equal to the number of unique dates in
 #'   the dataset.
 #' @export
-#' @family photoperiod
 #' @rdname photoperiod
 #'
 #' @examples 
@@ -198,32 +197,31 @@ extract_photoperiod <- function(dataset,
 #'
 #' @inheritParams extract_photoperiod
 #' @param overwrite Logical scalar. If `TRUE`, the function will overwrite any
-#'  columns with the same name. If `FALSE` (default), the function will stop if any of
-#'  the columns already exist in the dataset.
-#' @returns The input dataset with the added photoperiod information. The
-#'   information is appended with the following columns: `dawn`, `dusk`,
-#'   `photoperiod`, and `photoperiod.state`.
+#'   columns with the same name. If `FALSE` (default), the function will stop if
+#'   any of the columns already exist in the dataset.
+#' @returns [add_photoperiod] returns the input dataset with the added
+#'   photoperiod information. The information is appended with the following
+#'   columns: `dawn`, `dusk`, `photoperiod`, and `photoperiod.state`.
 #' @export
-#' @family photoperiod
 #' @rdname photoperiod
 #'
 #' @examples
 #'
 #' #add_photoperiod
-#' added_photoperiod <- 
-#'  sample.data.environment |> 
+#' added_photoperiod <-
+#'  sample.data.environment |>
 #'  add_photoperiod(coordinates)
-#'    
+#'
 #' added_photoperiod |> head()
-#' 
-#' added_photoperiod |> 
-#'   filter_Date(length = "3 days") |>  
+#'
+#' added_photoperiod |>
+#'   filter_Date(length = "3 days") |>
 #'   gg_days(aes_col = photoperiod.state,
-#'           group = dplyr::consecutive_id(photoperiod.state), 
-#'           jco_color = TRUE 
+#'           group = dplyr::consecutive_id(photoperiod.state),
+#'           jco_color = TRUE
 #'           )
-#' 
-#' added_photoperiod |> 
+#'
+#' added_photoperiod |>
 #'   filter_Date(length = "3 days") |>
 #'   gg_day(aes_col = Id) +
 #'   ggplot2:: geom_rect(
@@ -236,8 +234,8 @@ extract_photoperiod <- function(dataset,
 #'   ggplot2::aes(xmin = dusk, xmax = 24*60*60, ymin = -Inf, ymax = Inf),
 #'   alpha = 0.1
 #'   )
-#'    
-#'    
+#'
+#'
 #'  added_photoperiod |> dplyr::summarize(dawn = mean(dawn) |> hms::as_hms())
 add_photoperiod <- function(dataset,
                                coordinates,
@@ -317,7 +315,7 @@ add_photoperiod <- function(dataset,
 #' 
 #' [solar_noon()] calculates the solar noon for a given location and date. The
 #' function is a convenience wrapper for [suntools::solarnoon()]. The function
-#' has no companians like [extract_photoperiod()] or [add_photoperiod()], but
+#' has no companions like [extract_photoperiod()] or [add_photoperiod()], but
 #' will be extended, if there is sufficient interest.
 #'
 #' @inheritParams photoperiod
@@ -325,7 +323,6 @@ add_photoperiod <- function(dataset,
 #' @returns [solar_noon()] returns a `tibble` with the calculated solar noon
 #' @export
 #'
-#' @family photoperiod
 #' @rdname photoperiod
 #'
 #' @examples
@@ -416,7 +413,7 @@ solar_noon <- function(coordinates, dates, tz) {
 #' @family photoperiod
 #'
 #' @examples
-#' 
+#' coordinates <- c(48.521637, 9.057645)
 #' #adding photoperiods to a ggplot
 #' sample.data.environment |> 
 #'   gg_days() |> 
@@ -441,8 +438,9 @@ solar_noon <- function(coordinates, dates, tz) {
 #' 
 #' #however, in cases where only one day of data per group is available, or the 
 #' #type = "repeat" setting is used, the photoperiods need to be added 
-#' #separately, otherwise the second day will be off by one day in each panel.
-#' The visual difference is subtle, and might not be visible at all.
+#' #separately. Otherwise the second day will be off by one day in each panel.
+#' #The visual difference is subtle, and might not be visible at all, as 
+#' #photoperiod only every changes by few minutes per day.
 #' 
 #' #WRONG
 #' sample.data.environment |> 
@@ -456,7 +454,6 @@ solar_noon <- function(coordinates, dates, tz) {
 #'   add_photoperiod(coordinates) |>
 #'   gg_doubleplot() |> 
 #'   gg_photoperiod()
-
 
 gg_photoperiod <- function(ggplot_obj, 
                            coordinates = NULL, 

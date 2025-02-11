@@ -61,7 +61,7 @@ In general, if the photoperiod setup is more complex, it makes sense to add
 it prior to plotting and make sure the photoperiods are correct.
 }
 \examples{
-
+coordinates <- c(48.521637, 9.057645)
 #adding photoperiods to a ggplot
 sample.data.environment |> 
   gg_days() |> 
@@ -86,8 +86,9 @@ sample.data.environment |>
 
 #however, in cases where only one day of data per group is available, or the 
 #type = "repeat" setting is used, the photoperiods need to be added 
-#separately, otherwise the second day will be off by one day in each panel.
-The visual difference is subtle, and might not be visible at all.
+#separately. Otherwise the second day will be off by one day in each panel.
+#The visual difference is subtle, and might not be visible at all, as 
+#photoperiod only every changes by few minutes per day.
 
 #WRONG
 sample.data.environment |> 

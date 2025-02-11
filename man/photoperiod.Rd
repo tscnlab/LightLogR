@@ -54,8 +54,8 @@ by \link{LightLogR}, take care to choose a sensible variable for the
 be of type \code{POSIXct}.}
 
 \item{overwrite}{Logical scalar. If \code{TRUE}, the function will overwrite any
-columns with the same name. If \code{FALSE} (default), the function will stop if any of
-the columns already exist in the dataset.}
+columns with the same name. If \code{FALSE} (default), the function will stop if
+any of the columns already exist in the dataset.}
 }
 \value{
 \code{\link[=photoperiod]{photoperiod()}} returns a \code{tibble} with the calculated times of dawn
@@ -76,9 +76,9 @@ elevation above the horizon. stored as class \code{numeric}
 \code{\link[=photoperiod]{photoperiod()}}, but with a length equal to the number of unique dates in
 the dataset.
 
-The input dataset with the added photoperiod information. The
-information is appended with the following columns: \code{dawn}, \code{dusk},
-\code{photoperiod}, and \code{photoperiod.state}.
+\link{add_photoperiod} returns the input dataset with the added
+photoperiod information. The information is appended with the following
+columns: \code{dawn}, \code{dusk}, \code{photoperiod}, and \code{photoperiod.state}.
 
 \code{\link[=solar_noon]{solar_noon()}} returns a \code{tibble} with the calculated solar noon
 }
@@ -105,7 +105,7 @@ the function will overwrite any columns with the same name.
 
 \code{\link[=solar_noon]{solar_noon()}} calculates the solar noon for a given location and date. The
 function is a convenience wrapper for \code{\link[suntools:solarnoon]{suntools::solarnoon()}}. The function
-has no companians like \code{\link[=extract_photoperiod]{extract_photoperiod()}} or \code{\link[=add_photoperiod]{add_photoperiod()}}, but
+has no companions like \code{\link[=extract_photoperiod]{extract_photoperiod()}} or \code{\link[=add_photoperiod]{add_photoperiod()}}, but
 will be extended, if there is sufficient interest.
 }
 \details{
@@ -131,20 +131,20 @@ over the locations.
 
 
 #add_photoperiod
-added_photoperiod <- 
- sample.data.environment |> 
+added_photoperiod <-
+ sample.data.environment |>
  add_photoperiod(coordinates)
-   
+
 added_photoperiod |> head()
 
-added_photoperiod |> 
-  filter_Date(length = "3 days") |>  
+added_photoperiod |>
+  filter_Date(length = "3 days") |>
   gg_days(aes_col = photoperiod.state,
-          group = dplyr::consecutive_id(photoperiod.state), 
-          jco_color = TRUE 
+          group = dplyr::consecutive_id(photoperiod.state),
+          jco_color = TRUE
           )
 
-added_photoperiod |> 
+added_photoperiod |>
   filter_Date(length = "3 days") |>
   gg_day(aes_col = Id) +
   ggplot2:: geom_rect(
@@ -157,8 +157,8 @@ added_photoperiod |>
   ggplot2::aes(xmin = dusk, xmax = 24*60*60, ymin = -Inf, ymax = Inf),
   alpha = 0.1
   )
-   
-   
+
+
  added_photoperiod |> dplyr::summarize(dawn = mean(dawn) |> hms::as_hms())
 
  #solar_noon()
@@ -166,15 +166,6 @@ added_photoperiod |>
 
 }
 \seealso{
-Other photoperiod: 
-\code{\link{gg_photoperiod}()}
-
-Other photoperiod: 
-\code{\link{gg_photoperiod}()}
-
-Other photoperiod: 
-\code{\link{gg_photoperiod}()}
-
 Other photoperiod: 
 \code{\link{gg_photoperiod}()}
 }
