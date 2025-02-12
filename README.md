@@ -9,6 +9,7 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.11562600.svg)](https://doi.org/10.5281/zenodo.11562600)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/LightLogR)](https://CRAN.R-project.org/package=LightLogR)
+[![status](https://joss.theoj.org/papers/3a1057dccd315b7eb8683c1b969402e2/status.svg)](https://joss.theoj.org/papers/3a1057dccd315b7eb8683c1b969402e2)
 
 <!-- badges: end -->
 
@@ -311,7 +312,7 @@ of the dataset allows for a color separation.
 ``` r
 sample.data.environment %>% 
   gg_day(
-    start.date = "2023-08-18",
+    start.date = "2023-09-01",
     aes_col = Id,
     scales = "fixed",
     geom = "line") + theme(legend.position = "bottom")
@@ -346,7 +347,7 @@ The default interval for `cut_Datetime()` is 3 hours.
 sample.data.environment %>% 
   cut_Datetime() %>% 
   gg_day(
-    end.date = "2023-08-15",
+    end.date = "2023-08-29",
     aes_col = Id,
     scales = "fixed",
     geom = "boxplot",

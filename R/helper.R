@@ -234,3 +234,14 @@ epoch_list <- function(dataset = dataset,
   
   epochs
 }
+
+# Determine the type of the axis of a ggplot
+get_ggplot_axis_type <- function(ggplot_obj, axis){
+  axis_type <- 
+    ggplot_obj |> 
+    ggplot2::ggplot_build() |>
+    purrr::pluck("layout", "panel_params", 1, axis, "scale")
+  
+    axis_type$get_transformation()[[1]]
+  
+}

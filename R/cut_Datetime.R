@@ -15,7 +15,8 @@
 #'   chooses the relevant function from \pkg{lubridate}.
 #' @param Datetime.colname column name that contains the datetime. Defaults to
 #'   `"Datetime"` which is automatically correct for data imported with
-#'   [LightLogR]. Expects a `symbol`. Needs to be part of the `dataset`.
+#'   [LightLogR]. Expects a `symbol`. Needs to be part of the `dataset`. Must
+#'   be of type `POSIXct`.
 #' @param New.colname Column name for the added column in the `dataset`.
 #' @param ... Parameter handed over to [lubridate::round_date()] and siblings
 #' @param group_by Should the data be grouped by the new column? Defaults to `FALSE`

@@ -1,6 +1,6 @@
 Package: LightLogR
 Title: Process Data from Wearable Light Loggers and Optical Radiation Dosimeters
-Version: 0.4.3
+Version: 0.5.0
 Authors@R: c(
     person("Johannes", "Zauner", 
       email = "johannes.zauner@tum.de", role = c("aut", "cre"),
@@ -45,6 +45,7 @@ Imports:
     slider,
     stats,
     stringr,
+    suntools,
     tibble,
     tidyr,
     utils
@@ -62,3 +63,4 @@ Suggests:
     testthat (>= 3.0.0),
     tidyverse
 Config/testthat/edition: 3
+Config/Needs/website: rmarkdown

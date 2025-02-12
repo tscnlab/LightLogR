@@ -18,7 +18,8 @@ by \link{LightLogR}, take care to choose a sensible variable for the
 
 \item{Datetime.colname}{column name that contains the datetime. Defaults to
 \code{"Datetime"} which is automatically correct for data imported with
-\link{LightLogR}. Expects a \code{symbol}. Needs to be part of the \code{dataset}.}
+\link{LightLogR}. Expects a \code{symbol}. Needs to be part of the \code{dataset}. Must
+be of type \code{POSIXct}.}
 
 \item{Time.data}{Name of the newly created column. Expects a \code{symbol}. The
 default(\code{Time.data}) works well with other functions in \link{LightLogR}.}
@@ -35,4 +36,5 @@ Create a Time-of-Day column in the dataset
 }
 \examples{
 sample.data.environment \%>\% create_Timedata()
+
 }
