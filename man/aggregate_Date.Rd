@@ -14,6 +14,7 @@ aggregate_Date(
   character.handler = function(x) names(which.max(table(x, useNA = "ifany"))),
   logical.handler = function(x) mean(x) >= 0.5,
   factor.handler = function(x) factor(names(which.max(table(x, useNA = "ifany")))),
+  datetime.handler = stats::median,
   ...
 )
 }
@@ -41,8 +42,8 @@ chooses the relevant function from \pkg{lubridate}.}
 \item{date.handler}{A function that calculates the aggregated day for each
 group. By default, this is set to \code{median}.}
 
-\item{numeric.handler, character.handler, logical.handler, factor.handler}{functions that handle the respective data types. The default handlers
-calculate the \code{mean} for \code{numeric} and the \code{mode} for \code{character}, \code{factor}
+\item{numeric.handler, character.handler, logical.handler, factor.handler, datetime.handler}{functions that handle the respective data types. The default handlers
+calculate the \code{mean} for \code{numeric} and \code{POSIXct} and the \code{mode} for \code{character}, \code{factor}
 and \code{logical} types.}
 
 \item{...}{arguments given over to \code{\link[dplyr:summarise]{dplyr::summarize()}} to handle columns
