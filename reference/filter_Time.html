@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,6 +21,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Day.html">The whole game</a></li>
     <li><a class="dropdown-item" href="../articles/Import.html">Import &amp; cleaning</a></li>
     <li><a class="dropdown-item" href="../articles/Metrics.html">Metrics</a></li>
+    <li><a class="dropdown-item" href="../articles/photoperiod.html">Photoperiod</a></li>
     <li><a class="dropdown-item" href="../articles/Visualizations.html">Visualizations</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -35,7 +36,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Filter Times in a dataset.</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/v0.4.3/R/filter_Time.R" class="external-link"><code>R/filter_Time.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/main/R/filter_Time.R" class="external-link"><code>R/filter_Time.R</code></a></small>
       <div class="d-none name"><code>filter_Time.Rd</code></div>
     </div>
 
@@ -67,7 +68,8 @@ by <a href="LightLogR-package.html">LightLogR</a>, take care to choose a sensibl
 <dt id="arg-datetime-colname">Datetime.colname<a class="anchor" aria-label="anchor" href="#arg-datetime-colname"></a></dt>
 <dd><p>column name that contains the datetime. Defaults to
 <code>"Datetime"</code> which is automatically correct for data imported with
-<a href="LightLogR-package.html">LightLogR</a>. Expects a <code>symbol</code>. Needs to be part of the <code>dataset</code>.</p></dd>
+<a href="LightLogR-package.html">LightLogR</a>. Expects a <code>symbol</code>. Needs to be part of the <code>dataset</code>. Must
+be of type <code>POSIXct</code>.</p></dd>
 
 
 <dt id="arg-start-end-length">start, end, length<a class="anchor" aria-label="anchor" href="#arg-start-end-length"></a></dt>
@@ -97,8 +99,8 @@ specified Times.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">sample.data.environment</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span><span class="fu">filter_Time</span><span class="op">(</span>start <span class="op">=</span> <span class="st">"4:00:34"</span>, length <span class="op">=</span> <span class="st">"12:00:00"</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">Time.data</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu">hms</span><span class="fu">::</span><span class="fu"><a href="https://hms.tidyverse.org/reference/hms.html" class="external-link">as_hms</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 04:00:41</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16:00:32</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 04:00:34</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16:00:34</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

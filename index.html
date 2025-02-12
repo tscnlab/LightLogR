@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,6 +45,7 @@
 <li><a class="dropdown-item" href="articles/Day.html">The whole game</a></li>
     <li><a class="dropdown-item" href="articles/Import.html">Import &amp; cleaning</a></li>
     <li><a class="dropdown-item" href="articles/Metrics.html">Metrics</a></li>
+    <li><a class="dropdown-item" href="articles/photoperiod.html">Photoperiod</a></li>
     <li><a class="dropdown-item" href="articles/Visualizations.html">Visualizations</a></li>
   </ul>
 </li>
@@ -345,7 +346,7 @@ Example for <code><a href="reference/gg_overview.html">gg_overview()</a></code> 
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sample.data.environment</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="reference/gg_day.html">gg_day</a></span><span class="op">(</span></span>
-<span>    start.date <span class="op">=</span> <span class="st">"2023-08-18"</span>,</span>
+<span>    start.date <span class="op">=</span> <span class="st">"2023-09-01"</span>,</span>
 <span>    aes_col <span class="op">=</span> <span class="va">Id</span>,</span>
 <span>    scales <span class="op">=</span> <span class="st">"fixed"</span>,</span>
 <span>    geom <span class="op">=</span> <span class="st">"line"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span>
@@ -361,7 +362,7 @@ Example for <code><a href="reference/gg_overview.html">gg_overview()</a></code> 
 <code class="sourceCode R"><span><span class="va">sample.data.environment</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="reference/cut_Datetime.html">cut_Datetime</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="reference/gg_day.html">gg_day</a></span><span class="op">(</span></span>
-<span>    end.date <span class="op">=</span> <span class="st">"2023-08-15"</span>,</span>
+<span>    end.date <span class="op">=</span> <span class="st">"2023-08-29"</span>,</span>
 <span>    aes_col <span class="op">=</span> <span class="va">Id</span>,</span>
 <span>    scales <span class="op">=</span> <span class="st">"fixed"</span>,</span>
 <span>    geom <span class="op">=</span> <span class="st">"boxplot"</span>,</span>
@@ -456,6 +457,7 @@ Example for <code><a href="reference/gg_overview.html">gg_overview()</a></code> 
 <li><a href="https://github.com/tscnlab/LightLogR/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/tscnlab/LightLogR/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://doi.org/10.5281/zenodo.11562600" class="external-link"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.11562600.svg" alt="DOI"></a></li>
 <li><a href="https://CRAN.R-project.org/package=LightLogR" class="external-link"><img src="https://www.r-pkg.org/badges/version/LightLogR" alt="CRAN status"></a></li>
+<li><a href="https://joss.theoj.org/papers/3a1057dccd315b7eb8683c1b969402e2" class="external-link"><img src="https://joss.theoj.org/papers/3a1057dccd315b7eb8683c1b969402e2/status.svg" alt="status"></a></li>
 </ul>
 </div>
 

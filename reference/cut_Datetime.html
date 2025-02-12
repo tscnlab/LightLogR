@@ -15,7 +15,7 @@ summary step.'><meta property="og:image" content="https://tscnlab.github.io/Ligh
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,6 +29,7 @@ summary step.'><meta property="og:image" content="https://tscnlab.github.io/Ligh
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Day.html">The whole game</a></li>
     <li><a class="dropdown-item" href="../articles/Import.html">Import &amp; cleaning</a></li>
     <li><a class="dropdown-item" href="../articles/Metrics.html">Metrics</a></li>
+    <li><a class="dropdown-item" href="../articles/photoperiod.html">Photoperiod</a></li>
     <li><a class="dropdown-item" href="../articles/Visualizations.html">Visualizations</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -43,7 +44,7 @@ summary step.'><meta property="og:image" content="https://tscnlab.github.io/Ligh
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Create Datetime bins for visualization and calculation</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/v0.4.3/R/cut_Datetime.R" class="external-link"><code>R/cut_Datetime.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/main/R/cut_Datetime.R" class="external-link"><code>R/cut_Datetime.R</code></a></small>
       <div class="d-none name"><code>cut_Datetime.Rd</code></div>
     </div>
 
@@ -90,7 +91,8 @@ chooses the relevant function from <span class="pkg">lubridate</span>.</p></dd>
 <dt id="arg-datetime-colname">Datetime.colname<a class="anchor" aria-label="anchor" href="#arg-datetime-colname"></a></dt>
 <dd><p>column name that contains the datetime. Defaults to
 <code>"Datetime"</code> which is automatically correct for data imported with
-<a href="LightLogR-package.html">LightLogR</a>. Expects a <code>symbol</code>. Needs to be part of the <code>dataset</code>.</p></dd>
+<a href="LightLogR-package.html">LightLogR</a>. Expects a <code>symbol</code>. Needs to be part of the <code>dataset</code>. Must
+be of type <code>POSIXct</code>.</p></dd>
 
 
 <dt id="arg-new-colname">New.colname<a class="anchor" aria-label="anchor" href="#arg-new-colname"></a></dt>
@@ -119,18 +121,18 @@ column of binned datetimes.</p>
 <span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_sample</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 10 × 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Groups:   Id [2]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Datetime            Datetime.rounded        MEDI Id         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2023-08-15 <span style="color: #949494;">01:30:02</span> 2023-08-15 <span style="color: #949494;">03:00:00</span>     0    Environment</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2023-08-19 <span style="color: #949494;">09:34:02</span> 2023-08-19 <span style="color: #949494;">09:00:00</span> <span style="text-decoration: underline;">43</span>415.   Environment</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2023-08-20 <span style="color: #949494;">18:00:02</span> 2023-08-20 <span style="color: #949494;">18:00:00</span> <span style="text-decoration: underline;">31</span>626.   Environment</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2023-08-17 <span style="color: #949494;">23:00:32</span> 2023-08-18 <span style="color: #949494;">00:00:00</span>     0    Environment</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2023-08-17 <span style="color: #949494;">16:49:02</span> 2023-08-17 <span style="color: #949494;">18:00:00</span> <span style="text-decoration: underline;">50</span>903.   Environment</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2023-08-18 <span style="color: #949494;">23:19:31</span> 2023-08-19 <span style="color: #949494;">00:00:00</span>     0    Participant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2023-08-15 <span style="color: #949494;">06:05:51</span> 2023-08-15 <span style="color: #949494;">06:00:00</span>     0.64 Participant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2023-08-15 <span style="color: #949494;">12:31:21</span> 2023-08-15 <span style="color: #949494;">12:00:00</span>  <span style="text-decoration: underline;">2</span>514.   Participant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2023-08-15 <span style="color: #949494;">14:02:01</span> 2023-08-15 <span style="color: #949494;">15:00:00</span>   213.   Participant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2023-08-20 <span style="color: #949494;">17:20:01</span> 2023-08-20 <span style="color: #949494;">18:00:00</span>   245.   Participant</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Id          Datetime            Datetime.rounded       MEDI</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> Environment 2023-08-29 <span style="color: #949494;">01:30:08</span> 2023-08-29 <span style="color: #949494;">03:00:00</span>     0  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> Environment 2023-09-02 <span style="color: #949494;">09:34:08</span> 2023-09-02 <span style="color: #949494;">09:00:00</span> <span style="text-decoration: underline;">50</span>373. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> Environment 2023-09-03 <span style="color: #949494;">18:00:08</span> 2023-09-03 <span style="color: #949494;">18:00:00</span> <span style="text-decoration: underline;">16</span>271. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> Environment 2023-08-31 <span style="color: #949494;">23:00:38</span> 2023-09-01 <span style="color: #949494;">00:00:00</span>     0  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> Environment 2023-08-31 <span style="color: #949494;">16:49:08</span> 2023-08-31 <span style="color: #949494;">18:00:00</span> <span style="text-decoration: underline;">31</span>367. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> Participant 2023-09-01 <span style="color: #949494;">23:19:34</span> 2023-09-02 <span style="color: #949494;">00:00:00</span>     0  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> Participant 2023-08-29 <span style="color: #949494;">06:05:54</span> 2023-08-29 <span style="color: #949494;">06:00:00</span>     0  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> Participant 2023-08-29 <span style="color: #949494;">12:31:24</span> 2023-08-29 <span style="color: #949494;">12:00:00</span>    45.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> Participant 2023-08-29 <span style="color: #949494;">14:02:04</span> 2023-08-29 <span style="color: #949494;">15:00:00</span>    17.6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> Participant 2023-09-03 <span style="color: #949494;">17:20:04</span> 2023-09-03 <span style="color: #949494;">18:00:00</span>  <span style="text-decoration: underline;">4</span>027. </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

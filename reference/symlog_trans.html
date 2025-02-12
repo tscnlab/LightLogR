@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,6 +21,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Day.html">The whole game</a></li>
     <li><a class="dropdown-item" href="../articles/Import.html">Import &amp; cleaning</a></li>
     <li><a class="dropdown-item" href="../articles/Metrics.html">Metrics</a></li>
+    <li><a class="dropdown-item" href="../articles/photoperiod.html">Photoperiod</a></li>
     <li><a class="dropdown-item" href="../articles/Visualizations.html">Visualizations</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -35,7 +36,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Scale positive and negative values on a log scale</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/v0.4.3/R/symlog_trans.R" class="external-link"><code>R/symlog_trans.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/main/R/symlog_trans.R" class="external-link"><code>R/symlog_trans.R</code></a></small>
       <div class="d-none name"><code>symlog_trans.Rd</code></div>
     </div>
 
@@ -82,7 +83,7 @@ The author of the answer is <a href="https://stackoverflow.com/users/1320535/jul
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">dataset</span> <span class="op">&lt;-</span> </span></span>
 <span class="r-in"><span><span class="va">sample.data.environment</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
-<span class="r-in"><span><span class="fu"><a href="filter_Datetime.html">filter_Date</a></span><span class="op">(</span>end <span class="op">=</span> <span class="st">"2023-08-15"</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> </span></span>
+<span class="r-in"><span><span class="fu"><a href="filter_Datetime.html">filter_Date</a></span><span class="op">(</span>end <span class="op">=</span> <span class="st">"2023-08-29"</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> </span></span>
 <span class="r-in"><span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>MEDI <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>                                     <span class="va">Id</span> <span class="op">==</span> <span class="st">"Environment"</span> <span class="op">~</span> <span class="op">-</span><span class="va">MEDI</span>,</span></span>
 <span class="r-in"><span>                                     .default <span class="op">=</span> <span class="va">MEDI</span><span class="op">)</span><span class="op">)</span></span></span>

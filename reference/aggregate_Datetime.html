@@ -21,7 +21,7 @@ data will simply be aggregated to the most common interval
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,6 +35,7 @@ data will simply be aggregated to the most common interval
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Day.html">The whole game</a></li>
     <li><a class="dropdown-item" href="../articles/Import.html">Import &amp; cleaning</a></li>
     <li><a class="dropdown-item" href="../articles/Metrics.html">Metrics</a></li>
+    <li><a class="dropdown-item" href="../articles/photoperiod.html">Photoperiod</a></li>
     <li><a class="dropdown-item" href="../articles/Visualizations.html">Visualizations</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -49,7 +50,7 @@ data will simply be aggregated to the most common interval
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Aggregate Datetime data</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/v0.4.3/R/aggregate_Datetime.R" class="external-link"><code>R/aggregate_Datetime.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/main/R/aggregate_Datetime.R" class="external-link"><code>R/aggregate_Datetime.R</code></a></small>
       <div class="d-none name"><code>aggregate_Datetime.Rd</code></div>
     </div>
 
@@ -75,6 +76,7 @@ data will simply be aggregated to the most common interval
 <span>  character.handler <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/which.min.html" class="external-link">which.max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">x</span>, useNA <span class="op">=</span> <span class="st">"ifany"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  logical.handler <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="fl">0.5</span>,</span>
 <span>  factor.handler <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/which.min.html" class="external-link">which.max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">x</span>, useNA <span class="op">=</span> <span class="st">"ifany"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  datetime.handler <span class="op">=</span> <span class="va">mean</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -92,7 +94,8 @@ by <a href="LightLogR-package.html">LightLogR</a>, take care to choose a sensibl
 <dt id="arg-datetime-colname">Datetime.colname<a class="anchor" aria-label="anchor" href="#arg-datetime-colname"></a></dt>
 <dd><p>column name that contains the datetime. Defaults to
 <code>"Datetime"</code> which is automatically correct for data imported with
-<a href="LightLogR-package.html">LightLogR</a>. Expects a <code>symbol</code>. Needs to be part of the <code>dataset</code>.</p></dd>
+<a href="LightLogR-package.html">LightLogR</a>. Expects a <code>symbol</code>. Needs to be part of the <code>dataset</code>. Must
+be of type <code>POSIXct</code>.</p></dd>
 
 
 <dt id="arg-unit">unit<a class="anchor" aria-label="anchor" href="#arg-unit"></a></dt>
@@ -108,9 +111,9 @@ data at all.</p></dd>
 chooses the relevant function from <span class="pkg">lubridate</span>.</p></dd>
 
 
-<dt id="arg-numeric-handler-character-handler-logical-handler-factor-handler">numeric.handler, character.handler, logical.handler, factor.handler<a class="anchor" aria-label="anchor" href="#arg-numeric-handler-character-handler-logical-handler-factor-handler"></a></dt>
+<dt id="arg-numeric-handler-character-handler-logical-handler-factor-handler-datetime-handler">numeric.handler, character.handler, logical.handler, factor.handler, datetime.handler<a class="anchor" aria-label="anchor" href="#arg-numeric-handler-character-handler-logical-handler-factor-handler-datetime-handler"></a></dt>
 <dd><p>functions that handle the respective data types. The default handlers
-calculate the <code>mean</code> for <code>numeric</code> and the <code>mode</code> for <code>character</code>, <code>factor</code>
+calculate the <code>mean</code> for <code>numeric</code> and <code>POSIXct</code> and the <code>mode</code> for <code>character</code>, <code>factor</code>
 and <code>logical</code> types.</p></dd>
 
 
@@ -134,7 +137,7 @@ input <code>dataset</code>.</p>
 <span class="r-in"><span> <span class="fu"><a href="dominant_epoch.html">dominant_epoch</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 × 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Id          dominant.epoch group.indices</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;Duration&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;Duration&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Environment 30s                        1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> Participant 10s                        2</span>
 <span class="r-in"><span></span></span>
@@ -144,7 +147,7 @@ input <code>dataset</code>.</p>
 <span class="r-in"><span> <span class="fu"><a href="dominant_epoch.html">dominant_epoch</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 × 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Id          dominant.epoch    group.indices</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;Duration&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;Duration&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Environment 300s (~5 minutes)             1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> Participant 300s (~5 minutes)             2</span>
 <span class="r-in"><span></span></span>
@@ -154,7 +157,7 @@ input <code>dataset</code>.</p>
 <span class="r-in"><span> <span class="fu"><a href="dominant_epoch.html">dominant_epoch</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 × 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Id          dominant.epoch   group.indices</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;Duration&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;Duration&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Environment 86400s (~1 days)             1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> Participant 86400s (~1 days)             2</span>
 </code></pre></div>

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,6 +21,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Day.html">The whole game</a></li>
     <li><a class="dropdown-item" href="../articles/Import.html">Import &amp; cleaning</a></li>
     <li><a class="dropdown-item" href="../articles/Metrics.html">Metrics</a></li>
+    <li><a class="dropdown-item" href="../articles/photoperiod.html">Photoperiod</a></li>
     <li><a class="dropdown-item" href="../articles/Visualizations.html">Visualizations</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -69,7 +70,7 @@
       </dl></div><div class="section level2">
       <h2 id="insight">Insight<a class="anchor" aria-label="anchor" href="#insight"></a></h2>
 
-      <div class="section-desc"><p>This section includes functions to gain more insight into the data. Functions in this section will not return a version of the input dataset, but rather information based on it.</p></div>
+      <div class="section-desc"><p>Functions to gain more insight into the data. Functions in this section will not return a version of the input dataset, but rather information based on it.</p></div>
 
 
     </div><div class="section level2">
@@ -107,10 +108,16 @@
 
         </dt>
         <dd>Get a summary of groups where a daylight saving time change occurs.</dd>
+      </dl><dl><dt>
+
+          <code><a href="photoperiod.html">photoperiod()</a></code> <code><a href="photoperiod.html">extract_photoperiod()</a></code> <code><a href="photoperiod.html">add_photoperiod()</a></code> <code><a href="photoperiod.html">solar_noon()</a></code>
+
+        </dt>
+        <dd>Calculate photoperiod and boundary times</dd>
       </dl></div><div class="section level2">
       <h2 id="process">Process<a class="anchor" aria-label="anchor" href="#process"></a></h2>
 
-      <div class="section-desc"><p>This section includes functions to process light logger data, e.g., to validate and clean data, to filter, cut or aggreagate data, or to join datasets. All of these functions will return a version of the input dataset.</p></div>
+      <div class="section-desc"><p>Functions to process light logger data, e.g., to validate and clean data, to filter, cut or aggreagate data, or to join datasets. All of these functions will return a version of the input dataset.</p></div>
 
 
     </div><div class="section level2">
@@ -209,6 +216,18 @@
         <dd>Adds a state column to a dataset from interval data</dd>
       </dl><dl><dt>
 
+          <code><a href="photoperiod.html">photoperiod()</a></code> <code><a href="photoperiod.html">extract_photoperiod()</a></code> <code><a href="photoperiod.html">add_photoperiod()</a></code> <code><a href="photoperiod.html">solar_noon()</a></code>
+
+        </dt>
+        <dd>Calculate photoperiod and boundary times</dd>
+      </dl><dl><dt>
+
+          <code><a href="number_states.html">number_states()</a></code>
+
+        </dt>
+        <dd>Number non-consecutive state occurrences</dd>
+      </dl><dl><dt>
+
           <code><a href="sleep_int2Brown.html">sleep_int2Brown()</a></code>
 
         </dt>
@@ -234,7 +253,7 @@
       </dl></div><div class="section level2">
       <h2 id="visualize">Visualize<a class="anchor" aria-label="anchor" href="#visualize"></a></h2>
 
-      <div class="section-desc"><p>This section includes functions to visualize light logger data, e.g., to plot light exposure or to plot sleep/wake data.</p></div>
+      <div class="section-desc"><p>Functions to visualize light logger data, e.g., to plot light exposure or to plot sleep/wake data.</p></div>
 
 
     </div><div class="section level2">
@@ -266,10 +285,16 @@
 
         </dt>
         <dd>Double Plots</dd>
+      </dl><dl><dt>
+
+          <code><a href="gg_photoperiod.html">gg_photoperiod()</a></code>
+
+        </dt>
+        <dd>Add photoperiods to gg_day() or gg_days() plots</dd>
       </dl></div><div class="section level2">
       <h2 id="metrics">Metrics<a class="anchor" aria-label="anchor" href="#metrics"></a></h2>
 
-      <div class="section-desc"><p>This section includes functions to calculate light exposure metrics.</p></div>
+      <div class="section-desc"><p>Functions to calculate light exposure metrics.</p></div>
 
 
     </div><div class="section level2">
@@ -386,9 +411,32 @@
         </dt>
         <dd>Mean/first/last timing above/below threshold.</dd>
       </dl></div><div class="section level2">
+      <h2 id="photoperiod">Photoperiod<a class="anchor" aria-label="anchor" href="#photoperiod"></a></h2>
+
+      <div class="section-desc"><p>Functions that deal with photoperiod aspects of a dataset</p></div>
+
+
+    </div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="photoperiod.html">photoperiod()</a></code> <code><a href="photoperiod.html">extract_photoperiod()</a></code> <code><a href="photoperiod.html">add_photoperiod()</a></code> <code><a href="photoperiod.html">solar_noon()</a></code>
+
+        </dt>
+        <dd>Calculate photoperiod and boundary times</dd>
+      </dl><dl><dt>
+
+          <code><a href="gg_photoperiod.html">gg_photoperiod()</a></code>
+
+        </dt>
+        <dd>Add photoperiods to gg_day() or gg_days() plots</dd>
+      </dl></div><div class="section level2">
       <h2 id="helpers">Helpers<a class="anchor" aria-label="anchor" href="#helpers"></a></h2>
 
-      <div class="section-desc"><p>This section includes helper functions that are used in the other sections.</p></div>
+      <div class="section-desc"><p>Helper functions that are used in the other sections.</p></div>
 
 
     </div><div class="section level2">
@@ -414,10 +462,16 @@
 
         </dt>
         <dd>Find or set sensible limits for Datetime axis</dd>
+      </dl><dl><dt>
+
+          <code><a href="photoperiod.html">photoperiod()</a></code> <code><a href="photoperiod.html">extract_photoperiod()</a></code> <code><a href="photoperiod.html">add_photoperiod()</a></code> <code><a href="photoperiod.html">solar_noon()</a></code>
+
+        </dt>
+        <dd>Calculate photoperiod and boundary times</dd>
       </dl></div><div class="section level2">
       <h2 id="datasets">Datasets<a class="anchor" aria-label="anchor" href="#datasets"></a></h2>
 
-      <div class="section-desc"><p>This section includes data that are used in LightLogR and in examples.</p></div>
+      <div class="section-desc"><p>Datasets that are used in LightLogR and in examples.</p></div>
 
 
     </div><div class="section level2">

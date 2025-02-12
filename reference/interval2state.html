@@ -13,7 +13,7 @@ participant's Id."><meta property="og:image" content="https://tscnlab.github.io/
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,6 +27,7 @@ participant's Id."><meta property="og:image" content="https://tscnlab.github.io/
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Day.html">The whole game</a></li>
     <li><a class="dropdown-item" href="../articles/Import.html">Import &amp; cleaning</a></li>
     <li><a class="dropdown-item" href="../articles/Metrics.html">Metrics</a></li>
+    <li><a class="dropdown-item" href="../articles/photoperiod.html">Photoperiod</a></li>
     <li><a class="dropdown-item" href="../articles/Visualizations.html">Visualizations</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -41,7 +42,7 @@ participant's Id."><meta property="og:image" content="https://tscnlab.github.io/
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Adds a state column to a dataset from interval data</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/v0.4.3/R/interval2state.R" class="external-link"><code>R/interval2state.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/main/R/interval2state.R" class="external-link"><code>R/interval2state.R</code></a></small>
       <div class="d-none name"><code>interval2state.Rd</code></div>
     </div>
 
@@ -86,7 +87,8 @@ by <a href="LightLogR-package.html">LightLogR</a>, take care to choose a sensibl
 <dt id="arg-datetime-colname">Datetime.colname<a class="anchor" aria-label="anchor" href="#arg-datetime-colname"></a></dt>
 <dd><p>column name that contains the datetime. Defaults to
 <code>"Datetime"</code> which is automatically correct for data imported with
-<a href="LightLogR-package.html">LightLogR</a>. Expects a <code>symbol</code>. Needs to be part of the <code>dataset</code>.</p></dd>
+<a href="LightLogR-package.html">LightLogR</a>. Expects a <code>symbol</code>. Needs to be part of the <code>dataset</code>. Must
+be of type <code>POSIXct</code>.</p></dd>
 
 
 <dt id="arg-state-colname-interval-colname">State.colname, Interval.colname<a class="anchor" aria-label="anchor" href="#arg-state-colname-interval-colname"></a></dt>
@@ -158,6 +160,7 @@ a vector with <code>hms</code> (<code>FALSE</code>) times? Expects a <code>logic
 <span class="r-in"><span><span class="va">dataset_with_states</span> <span class="op">&lt;-</span></span></span>
 <span class="r-in"><span><span class="va">sample.data.environment</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span><span class="fu">interval2state</span><span class="op">(</span>State.interval.dataset <span class="op">=</span> <span class="va">intervals</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The time zone of the dataset and the State.interval.dataset are not the same. This might lead to unexpected results or time shifts.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#visualize the states - note that the states are only added to the respective ID in the dataset</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></span>
@@ -172,37 +175,41 @@ a vector with <code>hms</code> (<code>FALSE</code>) times? Expects a <code>logic
 <span class="r-in"><span><span class="va">dataset_with_states</span><span class="op">[</span><span class="fl">8278</span><span class="op">:</span><span class="fl">8283</span>,<span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Groups:   Id [1]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Datetime             MEDI Id          State</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 2023-08-15 <span style="color: #949494;">22:59:31</span>  2.38 Participant wake </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 2023-08-15 <span style="color: #949494;">22:59:41</span>  2.34 Participant wake </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 2023-08-15 <span style="color: #949494;">22:59:51</span>  2.25 Participant wake </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 2023-08-15 <span style="color: #949494;">23:00:01</span>  1.95 Participant sleep</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 2023-08-15 <span style="color: #949494;">23:00:11</span>  2.6  Participant sleep</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> 2023-08-15 <span style="color: #949494;">23:00:21</span>  2.36 Participant sleep</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Id          Datetime             MEDI State</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Participant 2023-08-29 <span style="color: #949494;">22:59:34</span>  17.7 sleep</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> Participant 2023-08-29 <span style="color: #949494;">22:59:44</span>  18.1 sleep</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> Participant 2023-08-29 <span style="color: #949494;">22:59:54</span>  17.9 sleep</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> Participant 2023-08-29 <span style="color: #949494;">23:00:04</span>  17.2 sleep</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> Participant 2023-08-29 <span style="color: #949494;">23:00:14</span>  16.9 sleep</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> Participant 2023-08-29 <span style="color: #949494;">23:00:24</span>  13.7 sleep</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#if we want to add multiple columns we can either perfom the function </span></span></span>
 <span class="r-in"><span><span class="co">#multiple times with different states:</span></span></span>
 <span class="r-in"><span><span class="va">dataset_with_states2</span> <span class="op">&lt;-</span> </span></span>
 <span class="r-in"><span><span class="va">dataset_with_states</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span><span class="fu">interval2state</span><span class="op">(</span>State.interval.dataset <span class="op">=</span> <span class="va">intervals</span>, State.colname <span class="op">=</span> <span class="va">Wear</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The time zone of the dataset and the State.interval.dataset are not the same. This might lead to unexpected results or time shifts.</span>
 <span class="r-in"><span><span class="va">dataset_with_states2</span><span class="op">[</span><span class="fl">8278</span><span class="op">:</span><span class="fl">8283</span>,<span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Groups:   Id [1]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Datetime             MEDI Id          State Wear   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 2023-08-15 <span style="color: #949494;">22:59:31</span>  2.38 Participant wake  wear   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 2023-08-15 <span style="color: #949494;">22:59:41</span>  2.34 Participant wake  wear   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 2023-08-15 <span style="color: #949494;">22:59:51</span>  2.25 Participant wake  wear   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 2023-08-15 <span style="color: #949494;">23:00:01</span>  1.95 Participant sleep no wear</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 2023-08-15 <span style="color: #949494;">23:00:11</span>  2.6  Participant sleep no wear</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> 2023-08-15 <span style="color: #949494;">23:00:21</span>  2.36 Participant sleep no wear</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Id          Datetime             MEDI State Wear   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Participant 2023-08-29 <span style="color: #949494;">22:59:34</span>  17.7 sleep no wear</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> Participant 2023-08-29 <span style="color: #949494;">22:59:44</span>  18.1 sleep no wear</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> Participant 2023-08-29 <span style="color: #949494;">22:59:54</span>  17.9 sleep no wear</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> Participant 2023-08-29 <span style="color: #949494;">23:00:04</span>  17.2 sleep no wear</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> Participant 2023-08-29 <span style="color: #949494;">23:00:14</span>  16.9 sleep no wear</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> Participant 2023-08-29 <span style="color: #949494;">23:00:24</span>  13.7 sleep no wear</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#or we can use `purrr::reduce` to add multiple columns at once</span></span></span>
 <span class="r-in"><span><span class="va">dataset_with_states3</span> <span class="op">&lt;-</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rlang.r-lib.org/reference/sym.html" class="external-link">syms</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"State"</span>, <span class="st">"Wear"</span>, <span class="st">"Performance"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> </span></span>
 <span class="r-in"><span><span class="fu"><a href="https://purrr.tidyverse.org/reference/reduce.html" class="external-link">reduce</a></span><span class="op">(</span>\<span class="op">(</span><span class="va">x</span>,<span class="va">y</span><span class="op">)</span> <span class="fu">interval2state</span><span class="op">(</span><span class="va">x</span>, State.interval.dataset <span class="op">=</span> <span class="va">intervals</span>, State.colname <span class="op">=</span> <span class="op">!</span><span class="op">!</span><span class="va">y</span><span class="op">)</span>, </span></span>
 <span class="r-in"><span>.init <span class="op">=</span> <span class="va">sample.data.environment</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The time zone of the dataset and the State.interval.dataset are not the same. This might lead to unexpected results or time shifts.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The time zone of the dataset and the State.interval.dataset are not the same. This might lead to unexpected results or time shifts.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The time zone of the dataset and the State.interval.dataset are not the same. This might lead to unexpected results or time shifts.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#Note: </span></span></span>
 <span class="r-in"><span><span class="co"># - the State.colnames have to be provided as symbols (`rlang::syms`)</span></span></span>
@@ -216,14 +223,14 @@ a vector with <code>hms</code> (<code>FALSE</code>) times? Expects a <code>logic
 <span class="r-in"><span><span class="va">dataset_with_states3</span><span class="op">[</span><span class="fl">8278</span><span class="op">:</span><span class="fl">8283</span>,<span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 6</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Groups:   Id [1]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Datetime             MEDI Id          State Wear    Performance</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 2023-08-15 <span style="color: #949494;">22:59:31</span>  2.38 Participant wake  wear            100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 2023-08-15 <span style="color: #949494;">22:59:41</span>  2.34 Participant wake  wear            100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 2023-08-15 <span style="color: #949494;">22:59:51</span>  2.25 Participant wake  wear            100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 2023-08-15 <span style="color: #949494;">23:00:01</span>  1.95 Participant sleep no wear           0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 2023-08-15 <span style="color: #949494;">23:00:11</span>  2.6  Participant sleep no wear           0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> 2023-08-15 <span style="color: #949494;">23:00:21</span>  2.36 Participant sleep no wear           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Id          Datetime             MEDI State Wear    Performance</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Participant 2023-08-29 <span style="color: #949494;">22:59:34</span>  17.7 sleep no wear           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> Participant 2023-08-29 <span style="color: #949494;">22:59:44</span>  18.1 sleep no wear           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> Participant 2023-08-29 <span style="color: #949494;">22:59:54</span>  17.9 sleep no wear           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> Participant 2023-08-29 <span style="color: #949494;">23:00:04</span>  17.2 sleep no wear           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> Participant 2023-08-29 <span style="color: #949494;">23:00:14</span>  16.9 sleep no wear           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> Participant 2023-08-29 <span style="color: #949494;">23:00:24</span>  13.7 sleep no wear           0</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

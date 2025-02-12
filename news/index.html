@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,6 +21,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Day.html">The whole game</a></li>
     <li><a class="dropdown-item" href="../articles/Import.html">Import &amp; cleaning</a></li>
     <li><a class="dropdown-item" href="../articles/Metrics.html">Metrics</a></li>
+    <li><a class="dropdown-item" href="../articles/photoperiod.html">Photoperiod</a></li>
     <li><a class="dropdown-item" href="../articles/Visualizations.html">Visualizations</a></li>
   </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -35,9 +36,16 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/tscnlab/LightLogR/blob/v0.4.3/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/tscnlab/LightLogR/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.5.0" id="lightlogr-050-civil-dawn">LightLogR 0.5.0 “Civil dawn”<a class="anchor" aria-label="anchor" href="#lightlogr-050-civil-dawn"></a></h2>
+<ul><li><p>added a suite of functions to deal with photoperiod: <code><a href="../reference/photoperiod.html">photoperiod()</a></code> and <code><a href="../reference/photoperiod.html">solar_noon()</a></code> to calculate dusk, dawn, and noon times of the day. <code><a href="../reference/photoperiod.html">extract_photoperiod()</a></code> and <code><a href="../reference/photoperiod.html">add_photoperiod()</a></code> utilize datasets imported with <code>LightLogR</code> to calculate and deal with photoperiods in the context of your own datasets. <code><a href="../reference/gg_photoperiod.html">gg_photoperiod()</a></code> brings this functionality to the visualization tools of <code>LightLogR</code> in an easy and powerful way.</p></li>
+<li><p>added the function <code><a href="../reference/number_states.html">number_states()</a></code> that relabels states based on their non-consecutive appearance. This is especially useful when labelling photoperiod states, as the function will allow for an easy classifier of “day 1”, “day 2”, …, and “night 1”, “night 2”, …. These can be used to, e.g., calculate metrics for individual photoperiod sections throughout the observed time frame.</p></li>
+<li><p>added a tutorial on the new functions <a href="https://tscnlab.github.io/LightLogR/articles/photoperiod.html"><code>Photoperiod</code></a>. This also details how to calculate metrics based on photoperiod (<a href="https://github.com/tscnlab/LightLogR/issues/39" class="external-link">#39</a>).</p></li>
+<li><p>implemented further changes in the paper.md based on the <a href="https://github.com/openjournals/joss-reviews/issues/7601" class="external-link">JOSS Reviews</a></p></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.3" id="lightlogr-043">LightLogR 0.4.3<a class="anchor" aria-label="anchor" href="#lightlogr-043"></a></h2>
 <ul><li><p>implemented changes based on the <a href="https://github.com/openjournals/joss-reviews/issues/7601" class="external-link">JOSS Reviews</a></p></li>

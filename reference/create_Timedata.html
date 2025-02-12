@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,6 +21,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Day.html">The whole game</a></li>
     <li><a class="dropdown-item" href="../articles/Import.html">Import &amp; cleaning</a></li>
     <li><a class="dropdown-item" href="../articles/Metrics.html">Metrics</a></li>
+    <li><a class="dropdown-item" href="../articles/photoperiod.html">Photoperiod</a></li>
     <li><a class="dropdown-item" href="../articles/Visualizations.html">Visualizations</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -35,7 +36,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Create a Time-of-Day column in the dataset</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/v0.4.3/R/create_Timedata.R" class="external-link"><code>R/create_Timedata.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/main/R/create_Timedata.R" class="external-link"><code>R/create_Timedata.R</code></a></small>
       <div class="d-none name"><code>create_Timedata.Rd</code></div>
     </div>
 
@@ -66,7 +67,8 @@ by <a href="LightLogR-package.html">LightLogR</a>, take care to choose a sensibl
 <dt id="arg-datetime-colname">Datetime.colname<a class="anchor" aria-label="anchor" href="#arg-datetime-colname"></a></dt>
 <dd><p>column name that contains the datetime. Defaults to
 <code>"Datetime"</code> which is automatically correct for data imported with
-<a href="LightLogR-package.html">LightLogR</a>. Expects a <code>symbol</code>. Needs to be part of the <code>dataset</code>.</p></dd>
+<a href="LightLogR-package.html">LightLogR</a>. Expects a <code>symbol</code>. Needs to be part of the <code>dataset</code>. Must
+be of type <code>POSIXct</code>.</p></dd>
 
 
 <dt id="arg-time-data">Time.data<a class="anchor" aria-label="anchor" href="#arg-time-data"></a></dt>
@@ -90,19 +92,20 @@ column of Time-of-Day data, or a <code>vector</code> with the Time-of-Day-data</
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">sample.data.environment</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu">create_Timedata</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 69,120 × 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Groups:   Id [2]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Datetime             MEDI Id          Time.data</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;time&gt;</span>   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2023-08-15 <span style="color: #949494;">00:00:01</span>     0 Participant 00<span style="color: #949494;">'</span>01<span style="color: #949494;">"</span>   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2023-08-15 <span style="color: #949494;">00:00:11</span>     0 Participant 00<span style="color: #949494;">'</span>11<span style="color: #949494;">"</span>   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2023-08-15 <span style="color: #949494;">00:00:21</span>     0 Participant 00<span style="color: #949494;">'</span>21<span style="color: #949494;">"</span>   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2023-08-15 <span style="color: #949494;">00:00:31</span>     0 Participant 00<span style="color: #949494;">'</span>31<span style="color: #949494;">"</span>   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2023-08-15 <span style="color: #949494;">00:00:41</span>     0 Participant 00<span style="color: #949494;">'</span>41<span style="color: #949494;">"</span>   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2023-08-15 <span style="color: #949494;">00:00:51</span>     0 Participant 00<span style="color: #949494;">'</span>51<span style="color: #949494;">"</span>   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2023-08-15 <span style="color: #949494;">00:01:01</span>     0 Participant 01<span style="color: #949494;">'</span>01<span style="color: #949494;">"</span>   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2023-08-15 <span style="color: #949494;">00:01:11</span>     0 Participant 01<span style="color: #949494;">'</span>11<span style="color: #949494;">"</span>   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2023-08-15 <span style="color: #949494;">00:01:21</span>     0 Participant 01<span style="color: #949494;">'</span>21<span style="color: #949494;">"</span>   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2023-08-15 <span style="color: #949494;">00:01:31</span>     0 Participant 01<span style="color: #949494;">'</span>31<span style="color: #949494;">"</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Id          Datetime             MEDI Time.data</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;time&gt;</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> Participant 2023-08-29 <span style="color: #949494;">00:00:04</span>     0 00<span style="color: #949494;">'</span>04<span style="color: #949494;">"</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> Participant 2023-08-29 <span style="color: #949494;">00:00:14</span>     0 00<span style="color: #949494;">'</span>14<span style="color: #949494;">"</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> Participant 2023-08-29 <span style="color: #949494;">00:00:24</span>     0 00<span style="color: #949494;">'</span>24<span style="color: #949494;">"</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> Participant 2023-08-29 <span style="color: #949494;">00:00:34</span>     0 00<span style="color: #949494;">'</span>34<span style="color: #949494;">"</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> Participant 2023-08-29 <span style="color: #949494;">00:00:44</span>     0 00<span style="color: #949494;">'</span>44<span style="color: #949494;">"</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> Participant 2023-08-29 <span style="color: #949494;">00:00:54</span>     0 00<span style="color: #949494;">'</span>54<span style="color: #949494;">"</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> Participant 2023-08-29 <span style="color: #949494;">00:01:04</span>     0 01<span style="color: #949494;">'</span>04<span style="color: #949494;">"</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> Participant 2023-08-29 <span style="color: #949494;">00:01:14</span>     0 01<span style="color: #949494;">'</span>14<span style="color: #949494;">"</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> Participant 2023-08-29 <span style="color: #949494;">00:01:24</span>     0 01<span style="color: #949494;">'</span>24<span style="color: #949494;">"</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> Participant 2023-08-29 <span style="color: #949494;">00:01:34</span>     0 01<span style="color: #949494;">'</span>34<span style="color: #949494;">"</span>   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 69,110 more rows</span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

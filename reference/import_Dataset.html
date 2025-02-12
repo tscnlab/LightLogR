@@ -17,7 +17,7 @@ full list of arguments."><meta property="og:image" content="https://tscnlab.gith
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,6 +31,7 @@ full list of arguments."><meta property="og:image" content="https://tscnlab.gith
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Day.html">The whole game</a></li>
     <li><a class="dropdown-item" href="../articles/Import.html">Import &amp; cleaning</a></li>
     <li><a class="dropdown-item" href="../articles/Metrics.html">Metrics</a></li>
+    <li><a class="dropdown-item" href="../articles/photoperiod.html">Photoperiod</a></li>
     <li><a class="dropdown-item" href="../articles/Visualizations.html">Visualizations</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -45,7 +46,7 @@ full list of arguments."><meta property="og:image" content="https://tscnlab.gith
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Import a light logger dataset or related data</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/v0.4.3/R/import_LL.R" class="external-link"><code>R/import_LL.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/main/R/import_LL.R" class="external-link"><code>R/import_LL.R</code></a></small>
       <div class="d-none name"><code>import_Dataset.Rd</code></div>
     </div>
 
@@ -112,7 +113,8 @@ without file extension.</p></li>
 <li><p><code>manual.id</code>: If this argument is not <code>NULL</code>, and no <code>Id</code> column is part
 of the <code>dataset</code>, this <code>character</code> scalar will be used. <strong>We discourage the
 use of this arguments when importing more than one file</strong></p></li>
-<li><p><code>silent</code>: If set to <code>TRUE</code>, the function will not print a summary message of the import or plot the overview. Default is <code>FALSE</code>.</p></li>
+<li><p><code>silent</code>: If set to <code>TRUE</code>, the function will not print a summary message
+of the import or plot the overview. Default is <code>FALSE</code>.</p></li>
 <li><p><code>locale</code>: The locale controls defaults that vary from place to place.</p></li>
 <li><p><code>dst_adjustment</code>: If a file crosses daylight savings time, but the device does not adjust time stamps accordingly, you can set this argument to <code>TRUE</code>, to apply this shift manually. It is selective, so it will only be done in files that cross between DST and standard time. Default is <code>FALSE</code>. Uses <code><a href="dst_change_handler.html">dst_change_handler()</a></code> to do the adjustment. Look there for more infos. It is not equipped to handle two jumps in one file (so back and forth between DST and standard time), but will work fine if jums occur in separate files.</p></li>
 <li><p><code>auto.plot</code>: a logical on whether to call <code><a href="gg_overview.html">gg_overview()</a></code> after import. Default is <code>TRUE</code>. But is set to <code>FALSE</code> if the argument <code>silent</code> is set to <code>TRUE</code>.</p></li>
@@ -121,6 +123,7 @@ If the <code>Id</code> column is already part of the <code>dataset</code> it wil
 column. If the column is not present it will add this column and fill it
 with the filename of the importfile (see param <code>auto.id</code>).</p></li>
 <li><p><code>print_n</code> can be used if you want to see more rows from the observation intervals</p></li>
+<li><p><code>remove_duplicates</code> can be used if identical observations are present within or across multiple files. The default is <code>FALSE</code>. The function keeps only unique observations (=rows) if set to' TRUE'. This is a convenience implementation of <code><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">dplyr::distinct()</a></code>.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="devices">Devices<a class="anchor" aria-label="anchor" href="#devices"></a></h2>

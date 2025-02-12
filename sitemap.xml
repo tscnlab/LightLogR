@@ -9,6 +9,7 @@
 <url><loc>https://tscnlab.github.io/LightLogR/articles/Metrics.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/articles/Visualizations.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/articles/index.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/articles/photoperiod.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/authors.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/index.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/news/index.html</loc></url>
@@ -44,6 +45,7 @@
 <url><loc>https://tscnlab.github.io/LightLogR/reference/gg_days.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/gg_doubleplot.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/gg_overview.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/gg_photoperiod.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/import_Dataset.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/import_Statechanges.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/import_adjustment.html</loc></url>
@@ -54,11 +56,13 @@
 <url><loc>https://tscnlab.github.io/LightLogR/reference/join_datasets.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/ll_import_expr.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/midpointCE.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/number_states.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/nvRC.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/nvRC_metrics.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/nvRD.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/nvRD_cumulative_response.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/period_above_threshold.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/photoperiod.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/pipe.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/pulses_above_threshold.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/sample.data.environment.html</loc></url>

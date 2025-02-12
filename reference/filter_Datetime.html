@@ -19,7 +19,7 @@ day, look to filter_Time()."><meta property="og:image" content="https://tscnlab.
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,6 +33,7 @@ day, look to filter_Time()."><meta property="og:image" content="https://tscnlab.
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Day.html">The whole game</a></li>
     <li><a class="dropdown-item" href="../articles/Import.html">Import &amp; cleaning</a></li>
     <li><a class="dropdown-item" href="../articles/Metrics.html">Metrics</a></li>
+    <li><a class="dropdown-item" href="../articles/photoperiod.html">Photoperiod</a></li>
     <li><a class="dropdown-item" href="../articles/Visualizations.html">Visualizations</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -47,7 +48,7 @@ day, look to filter_Time()."><meta property="og:image" content="https://tscnlab.
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Filter Datetimes in a dataset.</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/v0.4.3/R/filter_Datetime.R" class="external-link"><code>R/filter_Datetime.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/main/R/filter_Datetime.R" class="external-link"><code>R/filter_Datetime.R</code></a></small>
       <div class="d-none name"><code>filter_Datetime.Rd</code></div>
     </div>
 
@@ -92,7 +93,8 @@ by <a href="LightLogR-package.html">LightLogR</a>, take care to choose a sensibl
 <dt id="arg-datetime-colname">Datetime.colname<a class="anchor" aria-label="anchor" href="#arg-datetime-colname"></a></dt>
 <dd><p>column name that contains the datetime. Defaults to
 <code>"Datetime"</code> which is automatically correct for data imported with
-<a href="LightLogR-package.html">LightLogR</a>. Expects a <code>symbol</code>. Needs to be part of the <code>dataset</code>.</p></dd>
+<a href="LightLogR-package.html">LightLogR</a>. Expects a <code>symbol</code>. Needs to be part of the <code>dataset</code>. Must
+be of type <code>POSIXct</code>.</p></dd>
 
 
 <dt id="arg-start-end">start, end<a class="anchor" aria-label="anchor" href="#arg-start-end"></a></dt>
@@ -177,31 +179,31 @@ specified Dates/Times.</p>
 <span class="r-in"><span><span class="co">#baseline</span></span></span>
 <span class="r-in"><span><span class="va">range.unfiltered</span> <span class="op">&lt;-</span> <span class="va">sample.data.environment</span><span class="op">$</span><span class="va">Datetime</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">range.unfiltered</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2023-08-15 00:00:01 UTC" "2023-08-20 23:59:51 UTC"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2023-08-29 00:00:04 CEST" "2023-09-03 23:59:54 CEST"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#setting the start of a dataset</span></span></span>
 <span class="r-in"><span><span class="va">sample.data.environment</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
-<span class="r-in"><span><span class="fu">filter_Datetime</span><span class="op">(</span>start <span class="op">=</span> <span class="st">"2023-08-18 12:00:00"</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+<span class="r-in"><span><span class="fu">filter_Datetime</span><span class="op">(</span>start <span class="op">=</span> <span class="st">"2023-08-31 12:00:00"</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">Datetime</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2023-08-18 12:00:01 UTC" "2023-08-20 23:59:41 UTC"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2023-08-31 12:00:04 CEST" "2023-09-03 23:59:44 CEST"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#setting the end of a dataset</span></span></span>
 <span class="r-in"><span><span class="va">sample.data.environment</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
-<span class="r-in"><span><span class="fu">filter_Datetime</span><span class="op">(</span>end <span class="op">=</span> <span class="st">"2023-08-18 12:00:00"</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">Datetime</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2023-08-15 00:00:01 UTC" "2023-08-18 11:59:51 UTC"</span>
+<span class="r-in"><span><span class="fu">filter_Datetime</span><span class="op">(</span>end <span class="op">=</span> <span class="st">"2023-08-31 12:00:00"</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">Datetime</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2023-08-29 00:00:04 CEST" "2023-08-31 11:59:54 CEST"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#setting a period of a dataset</span></span></span>
 <span class="r-in"><span><span class="va">sample.data.environment</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
-<span class="r-in"><span><span class="fu">filter_Datetime</span><span class="op">(</span>end <span class="op">=</span> <span class="st">"2023-08-18 12:00:00"</span>, length <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/period.html" class="external-link">days</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+<span class="r-in"><span><span class="fu">filter_Datetime</span><span class="op">(</span>end <span class="op">=</span> <span class="st">"2023-08-31 12:00:00"</span>, length <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/period.html" class="external-link">days</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">Datetime</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2023-08-16 12:00:01 UTC" "2023-08-18 11:59:51 UTC"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2023-08-29 12:00:04 CEST" "2023-08-31 11:59:54 CEST"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#setting only the period of a dataset</span></span></span>
 <span class="r-in"><span><span class="va">sample.data.environment</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span><span class="fu">filter_Datetime</span><span class="op">(</span>length <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/period.html" class="external-link">days</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">Datetime</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2023-08-15 00:00:01 UTC" "2023-08-16 23:59:51 UTC"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2023-08-29 00:00:04 CEST" "2023-08-30 23:59:54 CEST"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#advanced filtering based on grouping (second day of each group)</span></span></span>
 <span class="r-in"><span><span class="va">sample.data.environment</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
@@ -212,33 +214,34 @@ specified Dates/Times.</p>
 <span class="r-in"><span><span class="va">sample</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>Daterange <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">Datetime</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">Datetime</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">" - "</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 × 2</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Id          Daterange                                </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Environment 2023-08-16 00:00:02 - 2023-08-21 23:59:32</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> Participant 2023-08-15 00:00:01 - 2023-08-20 23:59:51</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Environment 2023-08-29 22:00:08 - 2023-09-04 21:59:38</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> Participant 2023-08-28 22:00:04 - 2023-09-03 21:59:54</span>
 <span class="r-in"><span><span class="co">#now we can use the `filter.expr` argument to filter from the second day of each group</span></span></span>
 <span class="r-in"><span><span class="va">sample</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span><span class="fu">filter_Datetime</span><span class="op">(</span>filter.expr <span class="op">=</span> <span class="va">Datetime</span> <span class="op">&gt;</span> <span class="va">Datetime</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/period.html" class="external-link">days</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>Daterange <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">Datetime</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">Datetime</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">" - "</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 × 2</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Id          Daterange                                </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Environment 2023-08-17 00:00:32 - 2023-08-21 23:59:02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> Participant 2023-08-16 00:00:11 - 2023-08-20 23:59:51</span>
-<span class="r-in"><span><span class="va">sample.data.environment</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu">filter_Date</span><span class="op">(</span>end <span class="op">=</span> <span class="st">"2023-08-17"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Environment 2023-08-30 22:00:38 - 2023-09-04 21:59:08</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> Participant 2023-08-29 22:00:14 - 2023-09-03 21:59:54</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">sample.data.environment</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu">filter_Date</span><span class="op">(</span>end <span class="op">=</span> <span class="st">"2023-08-31"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 34,560 × 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Groups:   Id [2]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Datetime             MEDI Id         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2023-08-15 <span style="color: #949494;">00:00:01</span>     0 Participant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2023-08-15 <span style="color: #949494;">00:00:11</span>     0 Participant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2023-08-15 <span style="color: #949494;">00:00:21</span>     0 Participant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2023-08-15 <span style="color: #949494;">00:00:31</span>     0 Participant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2023-08-15 <span style="color: #949494;">00:00:41</span>     0 Participant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2023-08-15 <span style="color: #949494;">00:00:51</span>     0 Participant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2023-08-15 <span style="color: #949494;">00:01:01</span>     0 Participant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2023-08-15 <span style="color: #949494;">00:01:11</span>     0 Participant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2023-08-15 <span style="color: #949494;">00:01:21</span>     0 Participant</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2023-08-15 <span style="color: #949494;">00:01:31</span>     0 Participant</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Id          Datetime             MEDI</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> Participant 2023-08-29 <span style="color: #949494;">00:00:04</span>     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> Participant 2023-08-29 <span style="color: #949494;">00:00:14</span>     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> Participant 2023-08-29 <span style="color: #949494;">00:00:24</span>     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> Participant 2023-08-29 <span style="color: #949494;">00:00:34</span>     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> Participant 2023-08-29 <span style="color: #949494;">00:00:44</span>     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> Participant 2023-08-29 <span style="color: #949494;">00:00:54</span>     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> Participant 2023-08-29 <span style="color: #949494;">00:01:04</span>     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> Participant 2023-08-29 <span style="color: #949494;">00:01:14</span>     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> Participant 2023-08-29 <span style="color: #949494;">00:01:24</span>     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> Participant 2023-08-29 <span style="color: #949494;">00:01:34</span>     0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 34,550 more rows</span></span>
 </code></pre></div>
     </div>
