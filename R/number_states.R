@@ -16,7 +16,7 @@
 #' Gaps in the data can lead to non-sensible outcomes, e.g. if there is no
 #' in-between state/observation between a day state at "18:00:00" and a day
 #' state at "6:00:00" - this would be counted as `day 1` still. In these cases,
-#' the [gap_filler()] function can be useful to a priori add observations.
+#' the [gap_handler()] function can be useful to a priori add observations.
 #'
 #' @param dataset A `data.frame` with a state column.
 #' @param state.colname Column name that contains the state. Expects a `symbol`.

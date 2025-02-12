@@ -38,7 +38,7 @@ as their own state.
 Gaps in the data can lead to non-sensible outcomes, e.g. if there is no
 in-between state/observation between a day state at "18:00:00" and a day
 state at "6:00:00" - this would be counted as \verb{day 1} still. In these cases,
-the \code{\link[=gap_filler]{gap_filler()}} function can be useful to a priori add observations.
+the \code{\link[=gap_handler]{gap_handler()}} function can be useful to a priori add observations.
 }
 \examples{
 dataset <- tibble::tibble(
