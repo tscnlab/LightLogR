@@ -593,7 +593,8 @@ gg_photoperiod <- function(ggplot_obj,
   
   #reorder the layers so that the new geoms are at the very bottom
   new_plot_obj$layers <-
-    c(new_plot_obj$layers |> tail(2), new_plot_obj$layers |> head(-2))
+    c(new_plot_obj$layers |> utils::tail(2), 
+      new_plot_obj$layers |> utils::head(-2))
 
   #return
   new_plot_obj
