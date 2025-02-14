@@ -17,7 +17,7 @@
 #' @examples
 #' dataset <- 
 #' sample.data.environment %>%
-#' filter_Date(end = "2023-08-15") %>% 
+#' filter_Date(end = "2023-08-29") %>% 
 #' dplyr::mutate(MEDI = dplyr::case_when(
 #'                                      Id == "Environment" ~ -MEDI,
 #'                                      .default = MEDI))

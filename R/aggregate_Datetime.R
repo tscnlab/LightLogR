@@ -10,9 +10,9 @@
 #' (`dominant.epoch`), which is most often not an aggregation but a rounding.)
 #'
 #' @inheritParams cut_Datetime
-#' @param numeric.handler,character.handler,logical.handler,factor.handler
+#' @param numeric.handler,character.handler,logical.handler,factor.handler,datetime.handler
 #'   functions that handle the respective data types. The default handlers
-#'   calculate the `mean` for `numeric` and the `mode` for `character`, `factor`
+#'   calculate the `mean` for `numeric` and `POSIXct` and the `mode` for `character`, `factor`
 #'   and `logical` types.
 #' @param unit Unit of binning. See [lubridate::round_date()] for examples. The
 #'   default is `"dominant.epoch"`, which means everything will be aggregated to
@@ -54,6 +54,7 @@ aggregate_Datetime <- function(dataset,
                                  \(x) mean(x) >= 0.5,
                                factor.handler = 
                                  \(x) factor(names(which.max(table(x, useNA = "ifany")))),
+                               datetime.handler = mean,
                                ...) {
   
   # Initial Checks ----------------------------------------------------------
@@ -75,7 +76,8 @@ aggregate_Datetime <- function(dataset,
     "numeric.handler must be a function" = is.function(numeric.handler),
     "character.handler must be a function" = is.function(character.handler),
     "logical.handler must be a function" = is.function(logical.handler),
-    "factor.handler must be a function" = is.function(factor.handler)
+    "factor.handler must be a function" = is.function(factor.handler),
+    "datetime.handler must be a function" = is.function(datetime.handler)
   )
 
   # Function ----------------------------------------------------------
@@ -94,7 +96,9 @@ aggregate_Datetime <- function(dataset,
       dplyr::across(dplyr::where(is.character), !!character.handler), #default: choose the dominant string
       dplyr::across(dplyr::where(is.logical), !!logical.handler), #default:  average a binary outcome
       dplyr::across(dplyr::where(is.factor), !!factor.handler), #default: choose the dominant factor
+      dplyr::across(dplyr::where(lubridate::is.POSIXct), !!datetime.handler), #default: choose the dominant factor
       .groups = "drop_last") %>% #remove the rounded Datetime group
+    dplyr::select(-{{ Datetime.colname }}) |> #remove the summarized Datetime column
     dplyr::rename(Datetime = Datetime.rounded) #remove the rounded Datetime column
   }
     

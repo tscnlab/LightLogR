@@ -18,7 +18,7 @@ reference:
   
   - title: Insight
     desc: >
-      This section includes functions to gain more insight into the data. 
+      Functions to gain more insight into the data. 
       Functions in this section will not return a version of the input dataset, 
       but rather information based on it.
     contents:
@@ -27,10 +27,11 @@ reference:
     - gapless_Datetimes
     - gap_finder
     - dst_change_summary
-  
+    - extract_photoperiod
+
   - title: Process
     desc: >
-      This section includes functions to process light logger data, e.g., to
+      Functions to process light logger data, e.g., to
       validate and clean data, to filter, cut or aggreagate data, or to join 
       datasets. All of these functions will return a version of the input dataset.
     contents:
@@ -54,6 +55,8 @@ reference:
     - data2reference
     - sc2interval
     - interval2state
+    - add_photoperiod
+    - number_states
     - sleep_int2Brown
     - Brown_check
     - Brown_rec
@@ -61,17 +64,18 @@ reference:
   
   - title: Visualize
     desc: >
-      This section includes functions to visualize light logger data, e.g., to
+      Functions to visualize light logger data, e.g., to
       plot light exposure or to plot sleep/wake data.
     contents:
     - gg_overview
     - gg_day
     - gg_days
     - gg_doubleplot
+    - gg_photoperiod
 
   - title: Metrics
     desc: >
-      This section includes functions to calculate light exposure metrics.
+      Functions to calculate light exposure metrics.
     contents:
     - barroso_lighting_metrics
     - bright_dark_period
@@ -94,18 +98,29 @@ reference:
     - threshold_for_duration
     - timing_above_threshold
     
+  - title: Photoperiod
+    desc: >
+      Functions that deal with photoperiod aspects of a dataset
+    contents:
+    - photoperiod
+    - extract_photoperiod
+    - add_photoperiod
+    - gg_photoperiod
+    - solar_noon
     
   - title: Helpers
     desc: >
-      This section includes helper functions that are used in the other sections.
+      Helper functions that are used in the other sections.
     contents:
     - symlog_trans
     - Datetime_breaks
     - Datetime_limits
+    - photoperiod
+    - solar_noon
     
   - title: Datasets
     desc: >
-      This section includes data that are used in LightLogR and in examples.
+      Datasets that are used in LightLogR and in examples.
     contents:
     - sample.data.environment
     - supported_devices

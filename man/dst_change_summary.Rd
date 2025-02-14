@@ -20,7 +20,7 @@ Get a summary of groups where a daylight saving time change occurs.
 \examples{
 sample.data.environment \%>\% 
   dplyr::mutate(Datetime = 
-  lubridate::with_tz(Datetime, "Europe/Berlin") + lubridate::dweeks(10)) \%>\%
+  Datetime + lubridate::dweeks(8)) \%>\%
   dst_change_summary()
 }
 \seealso{

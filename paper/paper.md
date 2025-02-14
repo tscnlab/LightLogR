@@ -17,7 +17,7 @@ tags:
 - wearable sensors
 - wearables
 - "rstats-package"
-date: "07 October 2024"
+date: "10 February 2025"
 output: pdf_document
 authors:
 - name: Johannes Zauner
@@ -35,7 +35,7 @@ editor_options:
   markdown:
     wrap: 72
 affiliations:
-- name: Technical University of Munich, TUM School of Medicine and Health, Department Health and Sports Sciences, Chronobiology & Health, Munich, Germany
+- name: Technical University of Munich, TUM School of Medicine and Health, Department Health and Sport Sciences, Chronobiology & Health, Munich, Germany
   index: 1
   ror: 02kkvpp62
 - name: Max Planck Institute for Biological Cybernetics, Max Planck Research Group Translational Sensory & Circadian Neuroscience, Tübingen, Germany
@@ -52,15 +52,15 @@ affiliations:
 
 # Summary
 
-Light plays an important role in human health and well-being, which necessitates the study of the effects of personal light exposure in real-world settings, measured by means of wearable devices. A growing number of studies incorporate these kinds of data to assess associations between light and health outcomes. Yet with few or missing standards, guidelines, and frameworks, setting up measurements, analysing the data, and comparing outcomes between studies is challenging, especially considering the significantly more complex time series data from wearable light loggers compared to controlled stimuli used in laboratory studies. In this paper, we introduce `LightLogR`, a novel resource to facilitate these research efforts in the form of an open-source, permissively MIT-licenced software package for the statistical software R. As part of a developing software ecosystem, `LightLogR` is built with common challenges of current and future datasets in mind. The package standardizes many tasks for importing and processing personal light exposure data, provides quick as well as detailed insights into the datasets through summary and visualization tools, and incorporates major metrics commonly used in the field (61 metrics across 17 metric families), while embracing an inherently hierarchical, participant-based data structure.
+Light plays an important role in human health and well-being, which necessitates the study of the effects of personal light exposure in real-world settings, measured by means of wearable devices. A growing number of studies incorporate these kinds of data to assess associations between light and health outcomes. Yet with few or missing standards, guidelines, and frameworks, it is challenging setting up measurements, analysing the data, and comparing outcomes between studies. Overall, time series data from wearable light loggers are significantly more complex compared to controlled stimuli used in laboratory studies. In this paper, we introduce `LightLogR`, a novel resource to facilitate these research efforts. The package for R statistical software is open-source and permissively MIT-licenced. As part of a developing software ecosystem, `LightLogR` is built with common challenges of current and future datasets in mind. The package standardizes many tasks for importing and processing personal light exposure data. It allows for quick as well as detailed insights into the datasets through summary and visualization tools. Furthermore, LightLogR incorporates major metrics commonly used in the field (61 metrics across 17 metric families), all while embracing an inherently hierarchical, participant-based data structure.
 
 ![LightLogR logo \label{fig:one}](logo.png){width="25%"}
 
 # Statement of need
 
-Personalized luminous exposure data is progressively gaining importance across various domains, including research, occupational affairs, and lifestyle tracking. Data are collected through a proliferating selection of wearable light loggers and dosimeters, varying in size, shape, functionality, and output format [@hartmeyer2023]. Despite or potentially because of numerous use cases, the field still lacks a unified framework for collecting, validating, and analyzing the accumulated data [@hartmeyer2023; @spitschan2022].  This issue increases the time and expertise necessary to handle such data and also compromises the FAIRness (findability, accessibility, interoperability, reusability) [@wilkinson2016] of the results, especially for meta-analyses [@devries2024].
+Personalized luminous exposure data are progressively gaining importance across various domains, including research, occupational affairs, and lifestyle tracking. Data are collected through a increasing selection of wearable light loggers and dosimeters, varying in size, shape, functionality, and output format [@hartmeyer2023]. Despite or potentially because of numerous use cases, the field still lacks a unified framework for collecting, validating, and analyzing the accumulated data [@hartmeyer2023; @spitschan2022].  This issue increases the time and expertise necessary to handle such data and also compromises the FAIRness (findability, accessibility, interoperability, reusability) [@wilkinson2016] of the results, especially for meta-analyses [@devries2024].
 
-`LightLogR` (\autoref{fig:one}) was designed to be used by researchers who deal with personal light exposure data collected from wearable devices. These data are of interest for various disciplines, including chronobiology, sleep research, vision science and epidemiology, as well as for post-occupancy evaluations in  architecture and lighting design. The package is intended to streamline the process of importing,  processing, and analysing these data in a reproducible and transparent manner. The package is available on GitHub (@repo) and CRAN (@cran), has a dedicated website for documentation and tutorials (@documentation), and releases are archived on Zenodo (@zenodo).
+`LightLogR` was designed to be used by researchers who deal with personal light exposure data collected from wearable devices (\autoref{fig:one}). These data are of interest for various disciplines, including chronobiology, sleep research, vision science and epidemiology, as well as for post-occupancy evaluations in  architecture and lighting design. The package is intended to streamline the process of importing,  processing, and analysing these data in a reproducible and transparent manner. The package is available on GitHub (@repo) and CRAN (@cran), has a dedicated website for documentation and tutorials (@documentation), and releases are archived on Zenodo (@zenodo).
 
 `LightLogR`'s key features include:
 
@@ -68,9 +68,9 @@ Personalized luminous exposure data is progressively gaining importance across v
 
 -   preprocessing functions to combine different time series, aggregate and filter data, and find and deal with implicitly missing data,
 
--   visualization functions to quickly explore the data. These function are based on the popular `ggplot2` [@wickham2016] plotting package and are designed to be easily customizable to construct publication-ready figures (see, \autoref{fig:two}),
+-   visualization functions to quickly explore the data. These functions are based on the popular `ggplot2` [@wickham2016] plotting package and are designed to be easily customizable to construct publication-ready figures (see, \autoref{fig:two}),
 
--   a large and growing set of metrics that cover most if not all major approaches found in the literature (at the time of writing 61  metrics across 17 metric families, see \autoref{tab:two})), accessible via a consistent function interface.
+-   a large and growing set of metrics that cover most if not all major approaches found in the literature (at the time of writing 61  metrics across 17 metric families, see \autoref{tab:two}) and [@hartmeyer2023]), accessible via a consistent function interface.
 
 ![Light logger data can powerfully convey insights into personal light exposure and health-related outcomes. `LightLogR` facilitates the import and combination of different data sources into a coherent data structure, as seen here by combining environmental daylight availability and personal light exposure with data from a sleep diary. The visualization functions in the package further allow customization to produce publication-ready figures. This figure was created with the 'gg_day()' function. The creation process is part of a tutorial [@tutorial] on several key functions in the package. \label{fig:two}](Day.png){width="80%"}
 
@@ -94,9 +94,9 @@ Personalized luminous exposure data is progressively gaining importance across v
 | SpectraWear | University of Manchester |
 | VEET | Meta Reality Labs |
 
-[^1]: Available after processing of the data using `GGIR` [@migueles2019].
+: Devices supported for import in version 0.5.0 \label{tab:one}
 
-: Devices supported for import in version 0.4.1 \label{tab:one}
+[^1]: Available after processing of the data using `GGIR` [@migueles2019].
 
 | Metric Family                        | Submetrics | Note                 | Documentation                                                                                     |
 |------------------|----------------|-----------------|---------------------|
@@ -119,18 +119,18 @@ Personalized luminous exposure data is progressively gaining importance across v
 | **Total:**                           |                   |                      |                                                                                                   |
 | **17 families**                      | **61 metrics**    |                      |                                                                                                   |
 
-: metrics available in version 0.4.1 \label{tab:two}
+: metrics available in version 0.5.0 \label{tab:two}
 
 LightLogR is already being used in several research projects across scientific domains, including:
 
 -   an ongoing cohort study to collect light exposure data across different geolocations [@guidolin2024],
 -   an ongoing cohort study to collect year-long datasets of various types of environmental and behavioral data [@biller2024],
--   a novel power analysis method for personal light exposure data [@zauner2023],
+-   a novel power analysis method for personal light exposure data [@zauner2024],
 -   an intervention study on the effects of light on bipolar disorder [@roguski2024],
 -   an intervention study on exposure to bright light during afternoon to early evening on later evening melatonin release in adolescents [@lazar2024],
 -   an observational study on the wearing compliance of personal light exposure [@stefani2024],
--   an observational study on the differences in light exposure and light exposure related behavior between Malaysia and Switzerland  (preregistration in progress),
--   an intervention study on sex and seasonal changes in human melatonin suppression and alerting response to moderate light (publication in progress),
+-   an observational study on the differences in light exposure and light exposure related behavior between Malaysia and Switzerland  [@biller2025],
+-   an intervention study on sex and seasonal changes in human melatonin suppression and alerting response to moderate light [@fazlali2024],
 -   an observational study on light exposure, sleep, and circadian rhythms in hospital shift workers (publication in progress).
 
 # Funding Statement

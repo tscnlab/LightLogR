@@ -1,3 +1,19 @@
+# LightLogR 0.5.0 "Civil dawn"
+
+* added a suite of functions to deal with photoperiod: `photoperiod()` and `solar_noon()` to calculate dusk, dawn, and noon times of the day. `extract_photoperiod()` and `add_photoperiod()` utilize datasets imported with `LightLogR` to calculate and deal with photoperiods in the context of your own datasets. `gg_photoperiod()` brings this functionality to the visualization tools of `LightLogR` in an easy and powerful way.
+
+* added the function `number_states()` that relabels states based on their non-consecutive appearance. This is especially useful when labelling photoperiod states, as the function will allow for an easy classifier of "day 1", "day 2", ..., and "night 1", "night 2", .... These can be used to, e.g., calculate metrics for individual photoperiod sections throughout the observed time frame.
+
+* added a tutorial on the new functions [`Photoperiod`](https://tscnlab.github.io/LightLogR/articles/photoperiod.html). This also details how to calculate metrics based on photoperiod (#39).
+
+* implemented further changes in the paper.md based on the [JOSS Reviews](https://github.com/openjournals/joss-reviews/issues/7601)
+
+# LightLogR 0.4.3
+
+* implemented changes based on the [JOSS Reviews](https://github.com/openjournals/joss-reviews/issues/7601)
+
+* added a [Code of Conduct](https://tscnlab.github.io/LightLogR/CODE_OF_CONDUCT.html) and a [Contributing](https://tscnlab.github.io/LightLogR/CONTRIBUTING.html) file for the project
+
 # LightLogR 0.4.2
 
 * updated the license to MIT: LightLogR is now permissively licensed

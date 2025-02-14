@@ -57,7 +57,8 @@ without file extension.
 \item \code{manual.id}: If this argument is not \code{NULL}, and no \code{Id} column is part
 of the \code{dataset}, this \code{character} scalar will be used. \strong{We discourage the
 use of this arguments when importing more than one file}
-\item \code{silent}: If set to \code{TRUE}, the function will not print a summary message of the import or plot the overview. Default is \code{FALSE}.
+\item \code{silent}: If set to \code{TRUE}, the function will not print a summary message
+of the import or plot the overview. Default is \code{FALSE}.
 \item \code{locale}: The locale controls defaults that vary from place to place.
 \item \code{dst_adjustment}: If a file crosses daylight savings time, but the device does not adjust time stamps accordingly, you can set this argument to \code{TRUE}, to apply this shift manually. It is selective, so it will only be done in files that cross between DST and standard time. Default is \code{FALSE}. Uses \code{\link[=dst_change_handler]{dst_change_handler()}} to do the adjustment. Look there for more infos. It is not equipped to handle two jumps in one file (so back and forth between DST and standard time), but will work fine if jums occur in separate files.
 \item \code{auto.plot}: a logical on whether to call \code{\link[=gg_overview]{gg_overview()}} after import. Default is \code{TRUE}. But is set to \code{FALSE} if the argument \code{silent} is set to \code{TRUE}.
@@ -66,6 +67,7 @@ If the \code{Id} column is already part of the \code{dataset} it will just use t
 column. If the column is not present it will add this column and fill it
 with the filename of the importfile (see param \code{auto.id}).
 \item \code{print_n} can be used if you want to see more rows from the observation intervals
+\item \code{remove_duplicates} can be used if identical observations are present within or across multiple files. The default is \code{FALSE}. The function keeps only unique observations (=rows) if set to' TRUE'. This is a convenience implementation of \code{\link[dplyr:distinct]{dplyr::distinct()}}.
 }
 }
 \section{Devices}{

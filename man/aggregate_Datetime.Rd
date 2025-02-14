@@ -13,6 +13,7 @@ aggregate_Datetime(
   character.handler = function(x) names(which.max(table(x, useNA = "ifany"))),
   logical.handler = function(x) mean(x) >= 0.5,
   factor.handler = function(x) factor(names(which.max(table(x, useNA = "ifany")))),
+  datetime.handler = mean,
   ...
 )
 }
@@ -23,7 +24,8 @@ by \link{LightLogR}, take care to choose a sensible variable for the
 
 \item{Datetime.colname}{column name that contains the datetime. Defaults to
 \code{"Datetime"} which is automatically correct for data imported with
-\link{LightLogR}. Expects a \code{symbol}. Needs to be part of the \code{dataset}.}
+\link{LightLogR}. Expects a \code{symbol}. Needs to be part of the \code{dataset}. Must
+be of type \code{POSIXct}.}
 
 \item{unit}{Unit of binning. See \code{\link[lubridate:round_date]{lubridate::round_date()}} for examples. The
 default is \code{"dominant.epoch"}, which means everything will be aggregated to
@@ -34,8 +36,8 @@ data at all.}
 \item{type}{One of \code{"round"}(the default), \code{"ceiling"} or \code{"floor"}. Setting
 chooses the relevant function from \pkg{lubridate}.}
 
-\item{numeric.handler, character.handler, logical.handler, factor.handler}{functions that handle the respective data types. The default handlers
-calculate the \code{mean} for \code{numeric} and the \code{mode} for \code{character}, \code{factor}
+\item{numeric.handler, character.handler, logical.handler, factor.handler, datetime.handler}{functions that handle the respective data types. The default handlers
+calculate the \code{mean} for \code{numeric} and \code{POSIXct} and the \code{mode} for \code{character}, \code{factor}
 and \code{logical} types.}
 
 \item{...}{arguments given over to \code{\link[dplyr:summarise]{dplyr::summarize()}} to handle columns
