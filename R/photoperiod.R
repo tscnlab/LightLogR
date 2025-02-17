@@ -68,10 +68,10 @@ photoperiod <- function(coordinates, dates, tz, solarDep = 6) {
   )
   
   #check if date is a sensible date
-  dates <- lubridate::as_date(dates)
+  dates2 <- lubridate::as_date(dates)
   stopifnot(
-    "date must not be NA or coerced to NA" = !is.na(dates),
-    "date must be a date" = lubridate::is.Date(dates)
+    "date must not be NA or coerced to NA" = !is.na(dates2),
+    "date must be a date" = lubridate::is.Date(dates2)
   )
   
   #check if tz is a sensible time zone
@@ -95,7 +95,7 @@ photoperiod <- function(coordinates, dates, tz, solarDep = 6) {
       \(x) {
         suntools::crepuscule(
           crds = matrix(c(coordinates[2], coordinates[1]), nrow = 1),
-          dateTime = as.POSIXct(dates, tz = tz),
+          dateTime = as.POSIXct(dates |> as.character(), tz = tz),
           solarDep = solarDep,
           direction = x,
           POSIXct.out = TRUE
@@ -105,7 +105,7 @@ photoperiod <- function(coordinates, dates, tz, solarDep = 6) {
       }
      ) |>  
     purrr::list_cbind() |>
-    dplyr::mutate(date = dates,
+    dplyr::mutate(date = dates |> lubridate::as_date(),
                   tz = tz,
                   lat = coordinates[1],
                   lon = coordinates[2],
@@ -508,7 +508,7 @@ gg_photoperiod <- function(ggplot_obj,
   
   # Function ----------------------------------------------------------
   
-  #add photoperiods to the data if not present
+  #add photoperiods to the data if coordinates are provided
   if(!is.null(coordinates)) {
     #calculate the photoperiods
     ggplot_obj$data <- 
@@ -518,20 +518,37 @@ gg_photoperiod <- function(ggplot_obj,
   
   #if the y_axis_type is time
   if(x_axis_type == "time") {
+    #create a table of photoperiods, by date
     photoperiod_data <-
       ggplot_obj$data |>
       dplyr::group_by(date.grouper = lubridate::date(Datetime), .add = TRUE) |>
       dplyr::summarize(dawn = mean(dawn, na.rm = TRUE),
                        dusk = mean(dusk, na.rm = TRUE))
 
-    lubridate::date(photoperiod_data$dawn) <- photoperiod_data$date.grouper
-    lubridate::date(photoperiod_data$dusk) <- photoperiod_data$date.grouper
-
+    # add midnight starts and ends. If dusk is before dawn (on a 24-hour scale),
+    # then only create a single rectangle
     photoperiod_data <-
       photoperiod_data |>
       dplyr::mutate(
-        midnight.before = lubridate::floor_date(dawn, "day"),
-        midnight.after = lubridate::ceiling_date(dusk, "day")
+        midnight.before = dplyr::case_when(
+          !is.na(dplyr::lag(dawn)) ~ dawn,
+          .default = 
+            lubridate::floor_date(dawn, "day")
+        ),
+        midnight.after = dplyr::case_when(
+          !is.na(dplyr::lead(dawn)) ~ dplyr::lead(dawn),
+          .default = 
+            lubridate::ceiling_date(date.grouper, "day")
+        )
+      ) |> 
+      dplyr::mutate(
+        dawn = dplyr::case_when(min(date.grouper) > lubridate::date(dawn) ~ NA,
+                                .default = dawn),
+        dusk = dplyr::case_when(max(date.grouper) < lubridate::date(dusk) ~ NA,
+                                .default = dusk),
+        midnight.before = dplyr::case_when(min(date.grouper) > 
+                                             lubridate::date(midnight.before) ~ NA,
+                                .default = midnight.before),
       )
   }
   
@@ -552,8 +569,8 @@ gg_photoperiod <- function(ggplot_obj,
       dplyr::mutate(
         dawn = dawn |> hms::as_hms(),
         dusk = dusk |> hms::as_hms(),
-        midnight.before = 0,
-        midnight.after = 24*3600
+        midnight.before = ifelse(dusk < dawn, dawn, 0),
+        midnight.after = ifelse(dusk < dawn, dawn, 24*3600)
       )
   }
   
@@ -561,7 +578,7 @@ gg_photoperiod <- function(ggplot_obj,
   photoperiod_geoms <- 
     list(
       ggplot2::geom_rect(
-        data = photoperiod_data,
+        data = photoperiod_data |> tidyr::drop_na(dawn, midnight.before),
         ggplot2::aes(
           xmin = midnight.before,
           xmax = dawn,
@@ -572,7 +589,7 @@ gg_photoperiod <- function(ggplot_obj,
         ...
       ),
       ggplot2::geom_rect(
-        data = photoperiod_data,
+        data = photoperiod_data |> tidyr::drop_na(dusk, midnight.after),
         ggplot2::aes(
           xmin = dusk,
           xmax = midnight.after,

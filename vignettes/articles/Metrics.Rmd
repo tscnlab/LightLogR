@@ -235,6 +235,36 @@ TAT_250 |>
 
 ```
 
+### Photoperiod
+
+Another useful grouping factor is photoperiod, to differentiate the day into `day` and `night`. `LightLogR` contains a family of functions to easily deal with photoperiod. Here is a minimal example.
+
+```{r}
+#specifying coordinates (latitude/longitude)
+coordinates <- c(48.521637, 9.057645)
+
+#adding photoperiod information
+data <- 
+  data |> 
+  add_photoperiod(coordinates)
+
+#calculating the metric
+mean_Exposure <- 
+data |> 
+  group_by(photoperiod.state, .add = TRUE) |> 
+  summarize(
+    mean_MEDI = mean(MEDI), .groups = "drop_last"
+  )
+
+#showing the first three participants
+mean_Exposure |> 
+  head(6) |> 
+  gt() |> 
+  fmt_number(mean_MEDI)
+```
+
+This easily gives us metrics based on daily photoperiod. Metric calculation can utilize photoperiod information in other ways, too. More information on dealing with photoperiods can be found in the article [Photoperiod](https://tscnlab.github.io/LightLogR/articles/photoperiod.html).
+
 ## Metric statistics
 
 With the dataframe `TAT_250`, we can easily calculate statistics for each participant. This can be done manually, e.g., with another call to `dplyr::summarize()`, or semi-automatic, e.g., with packages like `gtsummary`. In the following example, we will calculate the mean and standard deviation of the TAT 250 lx MEDI for each participant, formatted as `HH:MM` through a styling function.

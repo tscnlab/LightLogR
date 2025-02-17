@@ -1,3 +1,9 @@
+# LightLogR 0.5.1
+
+* refinement and cross-referencing in tutorials on photoperiod
+
+* fixing a bug in the *photoperiod* family of functions when using a timezone with a large offset to the coordinates where photoperiod is calculated and crosses a date.
+
 # LightLogR 0.5.0 "Civil dawn"
 
 * added a suite of functions to deal with photoperiod: `photoperiod()` and `solar_noon()` to calculate dusk, dawn, and noon times of the day. `extract_photoperiod()` and `add_photoperiod()` utilize datasets imported with `LightLogR` to calculate and deal with photoperiods in the context of your own datasets. `gg_photoperiod()` brings this functionality to the visualization tools of `LightLogR` in an easy and powerful way.
