@@ -258,6 +258,21 @@ data_two_groups |>
 
 We clearly see now, that daytime light exposure starts later and ends earlier, with lower daytime values overall. Conversely, nighttime light exposure is increased in the second half of the experiment (Oct/Nov). By using the `gg_doubleplot()` feature, the nighttime light pattern is clearly visible even accross midnight.
 
+# Photoperiod
+
+`LightLogR` contains a family of functions to calculate and work with photoperiods. This includes visualization, which is as easy as adding `gg_photoperiod()` to your choice of `gg_day()`, `gg_days()`, or `gg_doubleplot()`. Here is a minimal example:
+
+```{r, fig.width = 9}
+#specifying coordinates (latitude/longitude)
+coordinates <- c(48.521637, 9.057645)
+
+sample.data.environment |> 
+  gg_days() |> 
+  gg_photoperiod(coordinates) 
+```
+
+More information on dealing with photoperiods can be found in the article [Photoperiod](https://tscnlab.github.io/LightLogR/articles/photoperiod.html).
+
 # Interactivity
 
 All plotting functions have the inbuilt option to be displayed interactively. This is great for exploring the data. The `plotly` package is used for this. All `LightLogR` plotting functions have the `interactive` argument set to `FALSE` by default. Setting it to `TRUE` will create an interactive plot. 
