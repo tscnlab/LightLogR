@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,9 +36,14 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/tscnlab/LightLogR/blob/v0.5.0/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/tscnlab/LightLogR/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.5.1" id="lightlogr-051">LightLogR 0.5.1<a class="anchor" aria-label="anchor" href="#lightlogr-051"></a></h2>
+<ul><li><p>refinement and cross-referencing in tutorials on photoperiod</p></li>
+<li><p>fixing a bug in the <em>photoperiod</em> family of functions when using a timezone with a large offset to the coordinates where photoperiod is calculated and crosses a date.</p></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.5.0" id="lightlogr-050-civil-dawn">LightLogR 0.5.0 “Civil dawn”<a class="anchor" aria-label="anchor" href="#lightlogr-050-civil-dawn"></a></h2>
 <ul><li><p>added a suite of functions to deal with photoperiod: <code><a href="../reference/photoperiod.html">photoperiod()</a></code> and <code><a href="../reference/photoperiod.html">solar_noon()</a></code> to calculate dusk, dawn, and noon times of the day. <code><a href="../reference/photoperiod.html">extract_photoperiod()</a></code> and <code><a href="../reference/photoperiod.html">add_photoperiod()</a></code> utilize datasets imported with <code>LightLogR</code> to calculate and deal with photoperiods in the context of your own datasets. <code><a href="../reference/gg_photoperiod.html">gg_photoperiod()</a></code> brings this functionality to the visualization tools of <code>LightLogR</code> in an easy and powerful way.</p></li>
