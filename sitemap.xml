@@ -38,6 +38,7 @@
 <url><loc>https://tscnlab.github.io/LightLogR/reference/filter_Datetime_multiple.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/filter_Time.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/frequency_crossing_threshold.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/gain.ratio.tables.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/gap_finder.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/gap_handler.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/gapless_Datetimes.html</loc></url>
@@ -56,6 +57,7 @@
 <url><loc>https://tscnlab.github.io/LightLogR/reference/join_datasets.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/ll_import_expr.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/midpointCE.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/normalize_counts.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/number_states.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/nvRC.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/nvRC_metrics.html</loc></url>

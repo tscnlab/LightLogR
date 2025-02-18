@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,6 +39,12 @@
       <small>Source: <a href="https://github.com/tscnlab/LightLogR/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.5.2" id="lightlogr-052">LightLogR 0.5.2<a class="anchor" aria-label="anchor" href="#lightlogr-052"></a></h2>
+<ul><li><p>passed 300 unit tests for <code>LightLogR</code> 🎉</p></li>
+<li><p>added the low-level helper function <code><a href="../reference/normalize_counts.html">normalize_counts()</a></code> and the accompanying dataset <code>gain.ratio.tables</code> to facilitate calculating normalized sensor values when comparing across different sensors, e.g. to assess daylighting conditions based on UV, IR, and photopic sensing ranges. See documentation for more infos.</p></li>
+<li><p>Update to the import function of <code>GENEActiv</code> devices, based on input from the author of the GGIR package. The timezone <code>tz</code> argument in LightLogR now is just set on the timestamp provided by the GGIR export, instead of shifting the datetime. This requires the correct setting of <code>desiredtz</code>/<code>configtz</code> arguments in GGIR during preprocessing.</p></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.5.1" id="lightlogr-051">LightLogR 0.5.1<a class="anchor" aria-label="anchor" href="#lightlogr-051"></a></h2>
 <ul><li><p>refinement and cross-referencing in tutorials on photoperiod</p></li>
