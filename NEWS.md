@@ -1,5 +1,7 @@
 # LightLogR 0.5.2
 
+* Update to the import function of `GENEActiv` devices, based on input from the author of the GGIR package. The timezone `tz` argument in LightLogR now is just set on the timestamp provided by the GGIR export, instead of shifting the datetime. This requires the correct setting of `desiredtz`/`configtz` arguments in GGIR during preprocessing.
+
 # LightLogR 0.5.1
 
 * refinement and cross-referencing in tutorials on photoperiod

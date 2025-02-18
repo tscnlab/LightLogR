@@ -439,8 +439,7 @@ import_expr <- list(
           dplyr::mutate(
             file.name = x) %>% 
           dplyr::mutate(
-            Datetime = lubridate::ymd_hms(timestamp) %>% 
-              lubridate::with_tz(tz), .before = 1)
+            Datetime = lubridate::ymd_hms(timestamp, tz = tz), .before = 1)
       }) %>% purrr::list_rbind()
       #return the function with the data frame
       return(data)
