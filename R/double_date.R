@@ -31,7 +31,7 @@ repeat_date <- function(dataset,
  dataset2 <- 
    dataset %>% 
    dplyr::mutate(
-     {{ Datetime.colname }} := {{ Datetime.colname }} + lubridate::days(1)
+     dplyr::across(lubridate::is.POSIXct, \(x) x + lubridate::days(1))
      ) %>% 
    dplyr::ungroup(Date.data)
  

@@ -56,7 +56,7 @@ Every light logger dataset needs an `Id` to connect or separate observations fro
 
 ```{r}
 tz <- "Europe/Berlin"
-dataset.LL <- import$ActLumus(c(file.LL, file.env), path, auto.id = "^(\\d{3})", tz = tz)
+dataset.LL <- import$ActLumus(file.LL, path, auto.id = "^(\\d{3})", tz = tz)
 ```
 
 As you can see, the import is accompanied by a (hopefully) helpful message about the imported data. It contains the number ob measurements, the timezone, start- and enddate, the timespan, and all observation intervals. In this case, the measurements all follow a *10 second* epoch. We also get a plotted overview of the data. In our case, this is not particularly helpful, but quickly helps to assess how different datasets compare to one another on the timeline. We could deactivate this plot by setting `auto.plot = FALSE` during import, or create it separately with the `gg_overview()` function.

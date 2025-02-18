@@ -9,15 +9,25 @@ knitr::opts_chunk$set(
 )
 ```
 
+![](images/photoperiod.png)
+
 Photoperiod information such as dusk, dawn, sunrise, or sunset are highly relevant in the context of personal light exposure data. Compared to ambient environmental light levels, these data are usually not measured, but rather calculated, based on a participant's geographical location. Since the introduction of version `0.5.0 Civil dawn`, `LightLogR` aims to provide a simple yet powerful suite of functions to implement photoperiod information in visualizations, data processing, and metric calculation. This article showcases the extension of analysis pipelines when dealing with such data. 
 
 We start off by loading `LightLogR` and packages needed for this tutorial:
 
-```{r setup}
+```{r setup, message = FALSE}
 library(LightLogR)
 library(tidyverse)
 library(gt)
 library(gtsummary)
+
+#convenience functions for table display
+gt_tab <- function(dataset, caption) {
+  dataset |> 
+  gt() |> 
+  tab_style(cell_text(weight = "bold"), 
+            locations = cells_column_labels())
+}
 ```
 
 > Please note that this article uses the base pipe operator `|>`. You need an R version equal to or greater than 4.1.0 to use it. If you are using an older version, you can replace it with the `magrittr` pipe operator `%>%`.
@@ -27,11 +37,15 @@ library(gtsummary)
 We will use data imported and cleaned already in the article [Import & Cleaning](https://tscnlab.github.io/LightLogR/articles/Import.html).
 
 ```{r, import}
-#this assumes the data is in the cleaned_data folder in the working directory
+#this assumes the data is in the `cleaned_data` folder in the working directory
 data <- readRDS("cleaned_data/ll_data.rds")
 #to save computational time, we will only use a few columns from the data
 data <- data |> select(Id, Datetime, MEDI)
-data |> head(3) |> gt()
+```
+
+Here is are the first three lines of the data
+```{r, import2}
+data |> ungroup() |>  head(3) |> gt_tab()
 ```
 
 As can be seen by using `gg_overview()`, the dataset contains 17 ids with one weeks worth of data each, and one to three participants per week.
@@ -72,9 +86,13 @@ data |>
   add_photoperiod(coordinates) |> 
   #from here on out is just formatting
   head(3) |> 
-  gt(caption = "Photoperiod Information for the first three observations") |> 
+  gt_tab(caption = "Photoperiod Information for the first three observations") |> 
   fmt_duration("photoperiod") |> 
-  fmt_datetime(c("dawn", "dusk"))
+  fmt_datetime(c("dawn", "dusk")) |> 
+  tab_style(style = cell_text(color = "red"), 
+            locations = list(cells_body(dawn:photoperiod.state),
+                             cells_column_labels(dawn:photoperiod.state))
+  )
 ```
 
 The way `LightLogR` provides this information is not a singular number, but rather a set of values relevant for the photoperiod. `dawn` and `dusk` columns provide the start and end times of the photoperiod, respectively. `photoperiod` is the length of the photoperiod, defined by `dawn` and `dusk` times. Finally, the `photoperiod.state` defines whether the current observation (`Datetime`) is within (`day`) or outside (`night`) the relevant photoperiod.
@@ -86,8 +104,9 @@ data |>
   extract_photoperiod(coordinates) |> 
   #from here on out is just formatting
   head(3) |> 
-  gt(caption = "Photoperiod Information for the first three days") |> 
+  gt_tab(caption = "Photoperiod Information for the first three days") |> 
   fmt_duration("photoperiod") |> 
+  fmt_number(c(lat, lon)) |> 
   fmt_datetime(c("dawn", "dusk"))
 ```
 
@@ -99,8 +118,9 @@ timezone <- "Europe/Berlin"
 
 photoperiod(coordinates, dates, timezone) |> 
   #from here on out is just formatting
-  gt(caption = "Photoperiod information for winter and summer solstice") |> 
+  gt_tab(caption = "Photoperiod information for winter and summer solstice") |> 
   fmt_datetime(c("dawn", "dusk")) |> 
+  fmt_number(c(lat, lon)) |> 
   fmt_duration("photoperiod")
 ```
 
@@ -109,9 +129,14 @@ This provides a good opportunity to change the solar depression angle, showcasin
 ```{r solarDep}
 photoperiod(coordinates, dates, timezone, solarDep = 0) |> 
   #from here on out is just formatting
-  gt(caption = "Photoperiod information for sunrise/sunset") |> 
+  gt_tab(caption = "Photoperiod information for sunrise/sunset") |> 
   fmt_datetime(c("dawn", "dusk")) |> 
-  fmt_duration("photoperiod")
+  fmt_number(c(lat, lon)) |> 
+  fmt_duration("photoperiod") |> 
+  tab_style(style = cell_text(color = "red"),
+            locations = list(cells_body(solar.angle),
+                             cells_column_labels(solar.angle))
+  )
 ```
 
 To compare different settings, `purrr::map()` is your friend
@@ -126,7 +151,11 @@ solarDep |>
   select(solar.angle, dawn, dusk, photoperiod) |> 
   gt(caption = "Comparing different solar depression values for summer solstice") |> 
   fmt_datetime(c("dawn", "dusk")) |> 
-  fmt_duration("photoperiod")
+  fmt_duration("photoperiod") |> 
+  tab_style(style = cell_text(color = "red"),
+            locations = list(cells_body(solar.angle),
+                             cells_column_labels(solar.angle))
+  )
 ```
 
 # Visualizing photoperiod
@@ -150,7 +179,6 @@ data_partial |> gg_overview()
 data_partial |> 
   gg_day(aes_col = Id, geom = "line") |> 
   gg_photoperiod(coordinates)
-
 #this is identical to:
 # data_partial |> 
 #   add_photoperiod(coordinates) |> 
@@ -160,11 +188,10 @@ data_partial |>
 
 ## Integration with gg_days()
 
-```{r gg_days}
+```{r gg_days, fig.width = 7.5}
 data_partial |> 
   gg_days() |> 
   gg_photoperiod(coordinates)
-
 #this is identical to:
 # data_partial |> 
 #   add_photoperiod(coordinates) |> 
@@ -174,28 +201,27 @@ data_partial |>
 
 If photoperiod information is added prior to plotting, it can also be used for the main `geom`:
 
-```{r gg_days 2}
+```{r gg_days 2, fig.width = 7.5}
 data_partial |> 
   add_photoperiod(coordinates) |> 
   gg_days(
     aes_col = photoperiod.state, 
     group = consecutive_id(photoperiod.state),
     jco_color = TRUE) +
-  theme(legend.position = "bottom")
-
+  theme(legend.position = "bottom") +
+  labs(col = "State of the photoperiod")
 ```
 
 ## Integration with gg_doubleplot()
 
-Integration in `gg_doubleplot()` is similar to the other plotting functions. However, because `gg_doubleplot()` uses some trickery under the hood in cases where it repeats the same day twice (which is the case when only one day per group is present, or `type = "repeat"` is set), it is suggested that the photoperiod information is added prior to plotting. If not, the photoperiod for the repeated day will actually draw on the consecutive calender date. While only a minor difference of a few minutes, this is easily avoided.
+Integration in `gg_doubleplot()` is similar to the other plotting functions. However, because `gg_doubleplot()` uses some trickery under the hood in cases where it repeats the same day twice (which is the case when only one day per group is present, or `type = "repeat"` is set), we strongly suggest that the photoperiod information is added prior to plotting. If not, the photoperiod for the repeated day will actually draw on the consecutive calender date. While only a minor difference of a few minutes, this is easily avoided.
 
 ```{r gg_doubleplot}
 data_partial |> 
   filter_Date(length = "1 day") |> 
-  add_photoperiod(coordinates) |> 
+  add_photoperiod(coordinates) |>
   gg_doubleplot() |> 
   gg_photoperiod()
-
 #NOT the same as:
 # data_partial |> 
 #   filter_Date(length = "1 day") |> 
@@ -205,30 +231,48 @@ data_partial |>
 
 ## Combination with aggregate_Date()
 
-Adding photoperiod data to a dataset means it can be manipulated the same way any other column in the dataset. `aggregate_Date()` is a great way to condense multiple days of data collection into a single day. For this example, we will use the full dataset again to start off.
+Adding photoperiod data to a dataset means it can be manipulated the same way any other column in the dataset. `aggregate_Date()` is a great way to condense multiple days of data collection into a single day. For this example, we will use the full dataset again to start off. We suggest that photoperiods are added after `aggregate_Date()` is applied, as the aggregation of `datetimes` can be error prone. E.g., the mean of dusk `6:00:00 on 1 Feb`, and `6:01:00 on 2 Feb` would be `18:00:30 on 1 Feb`. While certainly correct from a numeric standpoint (as `datetimes` are stored in seconds from a reference), it does not make much sense for `dusk` or `dawn` values to be shifted in this sense. By applying the photoperiod information after aggregation, you can be sure they are based on the aggregated datetimes.
 
-```{r aggregate_Date, fig.height = 8}
+```{r aggregate_Date, fig.height = 6.5}
 data |> 
-  filter(Id %in% c(201, 205, 212, 216, 219, 222)) |> 
+  filter(Id %in% c(201, 212, 216, 222)) |> 
   aggregate_Date(unit = "5 mins") |>
   add_photoperiod(coordinates) |>
   gg_doubleplot() |> 
   gg_photoperiod(alpha = 0.9)
 ```
 
-## differences in solar depression angle
+## Differences in solar depression angle
 
 We can show the difference the solar depression angle makes by visualizing different variants. We use the `sample.data.environment` that comes with `LightLogR`. It contains ambient environmental illuminance values:
 
 ```{r sample data environment, fig.width = 9}
 sample.data.environment |> 
   gg_days() |> 
-  gg_photoperiod(coordinates)
+  gg_photoperiod(coordinates) 
+```
+
+```{r sample data environment2, echo = FALSE, include=FALSE}
+sample.data.environment |> 
+  aggregate_Datetime(unit = "15 mins") |> 
+  filter_Date(length = "6 days") |> 
+  data2reference(length.restriction.seconds = 3600, across.id = TRUE, filter.expression.reference = Id == "Environment") |> 
+  filter(Id == "Participant") |> 
+  ungroup() |> 
+  gg_days(geom = "ribbon", aes_fill = "2", jco_color = TRUE, col = "black", size = 0.2, facetting = FALSE, alpha = 0.5) |> 
+  gg_photoperiod(coordinates, alpha = 0.6) + 
+  geom_ribbon(aes(ymin = MEDI, ymax = Reference, fill = Id), alpha = 0.5) +
+  theme(legend.position = "bottom") + 
+  coord_cartesian(ylim = c(0, 10^5), expand = FALSE) +
+  guides(fill = "none") +
+  labs(subtitle = "Personal light exposure of a participant compared to environmental light levels in the context of photoperiod")
+
+ggsave("images/photoperiod.png", width = 10, height = 3.5)
 ```
 
 We use the `Environment` data from `Sat 09/02/23` to showcase this.
 
-```{r vis solar depression, fig.height = 6}
+```{r vis solar depression, fig.height = 6.2}
 #preparing a dataset with multiple solar depression angles:
 multiple_solarDep <-
   solarDep |>
@@ -249,17 +293,17 @@ multiple_solarDep |>
   gg_doubleplot(facetting = FALSE) |> 
   gg_photoperiod(alpha = 0.8) +
   facet_wrap(~solarDep, ncol = 1) +
-  labs(title = "Differences in photoperiod depending on solar depression angle")
+  labs(title = "Differences in photoperiod\ndepending on solar depression angle")
 ```
 
 The influence of solar depression angle can also be displayed in a single plot:
 
-```{r vis solar depression 2}
+```{r vis solar depression 2, fig.height = 4}
 #plotting in one facet:
 multiple_solarDep |> 
   gg_doubleplot(facetting = FALSE) |> 
   gg_photoperiod(alpha = 0.25) +
-  labs(title = "Differences in photoperiod depending on solar depression angle")
+  labs(title = "Differences in photoperiod\ndepending on solar depression angle")
 ```
 
 
@@ -281,7 +325,7 @@ We can group by photoperiod (within participants) to calculate metrics for dayti
 ```{r}
 data |> 
   group_by(photoperiod.state, .add = TRUE) |>  # setting .add = TRUE ensures prior grouping is kept
-  summarize(mean_MEDI = mean(MEDI)) |> 
+  summarize(mean_MEDI = mean(MEDI), .groups = "drop") |> 
   tbl_summary(by=photoperiod.state, 
               include = "mean_MEDI", 
               label = mean_MEDI ~ "mean mel EDI (lx)")
@@ -295,15 +339,16 @@ data |>
   group_by(Id, week = week(Datetime), photoperiod.state) |>
   summarize(mean_MEDI = mean(MEDI), .groups = "drop")
 
-per_week |> 
-  pivot_wider(names_from = week, values_from = mean_MEDI, names_prefix = "week ") |> 
-  tbl_summary(by=photoperiod.state, 
-              include = -Id, 
-              type = 
-                paste("week", 33:44) ~ "continuous", 
-              missing = "no"
-              ) |> 
-  modify_header(label = "**mean mel EDI (lx)**")
+#uncomment next lines for a tabular view
+# per_week |> 
+#   pivot_wider(names_from = week, values_from = mean_MEDI, names_prefix = "week ") |> 
+#   tbl_summary(by=photoperiod.state, 
+#               include = -Id, 
+#               type = 
+#                 paste("week", 33:44) ~ "continuous", 
+#               missing = "no"
+#               ) |> 
+#   modify_header(label = "**mean mel EDI (lx)**")
 
 per_week |> 
   ggplot(aes(x=factor(week), y = mean_MEDI)) +
@@ -312,7 +357,7 @@ per_week |>
   theme_minimal() +
   labs(x = "week", y = "mean mel EDI (lx)", fill = "Photoperiod") +
   theme(legend.position = "bottom")+
-  scale_fill_brewer(palette = 6)
+  scale_fill_manual(values = c("#FDFBD3", "#003153AA"))
 ```
 
 If one were to group by day (calender day), one disadvantage is that the `night` portion of each day is split into two. From midnight to dawn is part of the same bin as from dusk to midnight, when grouping by day. This differs from our common understanding, where a night on day 1 goes from dusk till dawn - and depending on the research question, one or the other might be required. `LightLogR` has the useful `number_states()` function for this case. It allows to these types of counting independent of the 24 hour day. Let us apply the function to our dataset.
@@ -344,7 +389,6 @@ per_day |>
               missing = "no"
               ) |> 
   modify_header(label = "**mean mel EDI (lx)**")
-
 per_day  |> 
   ggplot(aes(x=count, y = mean_MEDI)) +
   geom_boxplot(aes(fill = photoperiod.state)) +
@@ -352,7 +396,7 @@ per_day  |>
   theme_minimal() +
   labs(x = "day", y = "mean mel EDI (lx)", fill = "Photoperiod") +
   theme(legend.position = "bottom") +
-  scale_fill_brewer(palette = 6)
+  scale_fill_manual(values = c("#FDFBD3", "#003153AA"))
 ```
 
 This approach has the further benefit that it works regardless of *when* data collection started. It will always bin the first, second, and so forth daytime periods of all participants together, same as for nighttime.
@@ -361,7 +405,7 @@ This approach has the further benefit that it works regardless of *when* data co
 
 Sometimes the photoperiod as a whole is not of interest, but rather it is used as a point of reference to calculate a metric. One such example was requested as a `LightLogR` feature in issue [#39](https://github.com/tscnlab/LightLogR/issues/39). There, the intensity of daytime light exposure is defined as the mean illuminance between first morning light exposure of 50 lux and the time of civil dusk). Similarly, the mean intensity of evening light exposure is defined as the mean illuminance between civil dusk and the last light exposure of 50 lux. With the tools that `LightLogR` provides, this is easy. 
 
-We will go through the example for `intensity of daytime light exposure`, but it works the same way for evening light exposure. Because our datasets start in the middle of the first day, and end in the middle of the last day, we will remove those days from the further analysis:
+We will in our example on the `intensity of daytime light exposure`, but evening light exposure will be calculated alongside it. Because our datasets start in the middle of the first day, and end in the middle of the last day, we will remove those days from the further analysis:
 
 ```{r remove first and last days}
 data <- 
@@ -385,10 +429,17 @@ timing_light_exposure <-
   ) |>
   unnest(FLiT_50)
 
-timing_light_exposure |> head(4) |> gt()
+timing_light_exposure |> 
+  head(4) |> 
+  gt_tab() |> 
+  tab_style(style = cell_text(color = "red"), 
+            locations = list(cells_body(4),
+                             cells_column_labels(4))
+  )
+
 ```
 
-This step provided us with the first timing of light above 50 lux, and, incidentally, also the last timing of light above 50 lux, which we would need for the intensity of evening light. In the next step, we will add this information to our dataset. 
+This step provided us with the first timing of light above 50 lux, and, incidentally, also the last timing of light above 50 lux, which we need for the intensity of evening light. In the next step, we will add this information to our dataset. 
 
 ```{r join}
 data <-
@@ -397,11 +448,19 @@ data <-
 
 data |> 
   head(4) |> 
-  select(Id, Datetime, MEDI, first_timing_above_50, dusk) |> 
-  gt()
+  select(Id, MEDI, Datetime, dusk, first_timing_above_50) |> 
+  ungroup() |> 
+  gt_tab() |> 
+  fmt_datetime(dusk) |> 
+  cols_label(first_timing_above_50 = "First timing above 50 lux",
+             dusk = "Dusk") |> 
+  tab_style(style = cell_text(color = "red"), 
+            locations = list(cells_body(3:5),
+                             cells_column_labels(3:5))
+  )
 ```
 
-This provides us with an expanded dataset containing the light exposure time series, and information for dusk and first timing above 50 lux. By checking whether each observation is within the first timing of light and dusk, we prepare our data for the final step.
+This provides us with an expanded dataset containing the light exposure time series (`Datetime`), and information for `Dusk` and `First timing above 50 lux`. By checking whether each observation is within the first timing of light and dusk, we prepare our data for the final step.
 
 ```{r time frame}
 data <-
@@ -423,11 +482,32 @@ metric <-
   summarize(mean_MEDI = mean(MEDI), .groups = "drop") |>
   drop_na()
 
-metric |> head(9) |>  gt() |> fmt_number(mean_MEDI)
+metric |> 
+  head(9) |>  
+  gt_tab() |> 
+  fmt_number(mean_MEDI) |> 
+  tab_style(style = cell_fill(color = "#FDFBD3"),
+            locations = cells_body(rows = light.type == "daytime")
+  ) |> 
+  tab_style(style = list(cell_fill(color = "#003153AA"),
+                         cell_text(color = "white")),
+            locations = cells_body(rows = light.type == "evening")
+  ) |> 
+  cols_label(light.type = "Type", mean_MEDI = "mean MEDI (lux)")
+  
 ```
 
 
-You can see that not every day has a evening light intensity value. This is due to the way our calculation is set up - if a participant has no light exposure above 50 lux after dusk, there is no accompanying value. Also note that the value we are seeing for participant `202` on `2023-08-15` is about 8 lux, which is below 50 lux. Again, this is due to the way the calculation is set up. We calculate the last time a participant is above 50 lux after dusk. But they can very well be below 50 lux between dusk and that last time, yielding a lower average melanopic EDI value.
+You can see that not every day has a evening light intensity value. This is due to the way our calculation is set up - if a participant has no light exposure above 50 lux after dusk, there is no accompanying value. Also note that the value we are seeing for participant `202` on `2023-08-15` is about 8 lux, which is below 50 lux. Again, this is due to the way the calculation is set up. We calculate the last time a participant is above 50 lux after dusk. But they can very well be below 50 lux between dusk and that last time, yielding a lower average melanopic EDI value. In the final step, we aggregate this information across participants. We can see that there are 102 participant days for the daytime light condition, but only 75 participant days for the evening light condition.
+
+```{r intensity 2}
+metric |> 
+  tbl_summary(by = light.type, 
+              include = mean_MEDI, 
+              label = mean_MEDI ~ "mean mel EDI (lx)"
+              )
+```
+
 
 # Conclusion
 
