@@ -1,5 +1,9 @@
 # LightLogR 0.5.2
 
+* passed 300 unit tests for `LightLogR` 🎉
+
+* added the low-level helper function `normalize_counts()` and the accompanying dataset `gain.ratio.tables` to facilitate calculating normalized sensor values when comparing across different sensors, e.g. to assess daylighting conditions based on UV, IR, and photopic sensing ranges. See documentation for more infos.
+
 * Update to the import function of `GENEActiv` devices, based on input from the author of the GGIR package. The timezone `tz` argument in LightLogR now is just set on the timestamp provided by the GGIR export, instead of shifting the datetime. This requires the correct setting of `desiredtz`/`configtz` arguments in GGIR during preprocessing.
 
 # LightLogR 0.5.1
