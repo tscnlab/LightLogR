@@ -1,3 +1,5 @@
+# LightLogR 0.5.2
+
 # LightLogR 0.5.1
 
 * refinement and cross-referencing in tutorials on photoperiod
