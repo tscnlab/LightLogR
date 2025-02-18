@@ -117,11 +117,13 @@ reference:
     - Datetime_limits
     - photoperiod
     - solar_noon
+    - normalize_counts
     
   - title: Datasets
     desc: >
       Datasets that are used in LightLogR and in examples.
     contents:
     - sample.data.environment
+    - gain.ratio.tables
     - supported_devices
     - ll_import_expr
