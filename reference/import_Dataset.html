@@ -17,7 +17,7 @@ full list of arguments."><meta property="og:image" content="https://tscnlab.gith
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -274,7 +274,23 @@ modality to be imported from. Can be one of <code>"ALS"</code> (Ambient light se
 
 <p>Manufacturer: Activeinsights</p>
 <p>Model: GENEActiv</p>
-<p><strong>Note:</strong> This import function takes GENEActiv data that was preprocessed through the <a href="https://cran.r-project.org/web/packages/GGIR/vignettes/GGIR.html" class="external-link">GGIR</a> package. By default, <code>GGIR</code> aggregates light data into intervals of 15 minutes. This can be set by the <code>windowsizes</code> argument in GGIR, which is a three-value vector, where the second values is set to 900 seconds by default. To import the preprocessed data with <code>LightLogR</code>, the <code>filename</code> argument requires a path to the parent directory of the GGIR output folders, specifically the <code>meta</code> folder, which contains the light exposure data. Multiple <code>filename</code>s can be specified, each of which needs to be a path to a different GGIR parent directory. GGIR exports can contain data from multiple participants, these will always be imported fully by providing the parent directory. Use the <code>pattern</code> argument to extract sensible <code>Id</code>s from the <em>.RData</em> filenames within the <em>meta/basic/</em> folder. As per the author, <a href="https://accelting.com/" class="external-link">Dr. Vincent van Hees</a>, GGIR preprocessed data are always in local time, provided the <code>desiredtz</code>/<code>configtz</code> are properly set in GGIR. <code>LightLogR</code> still requires a timezone to be set, but will not timeshift the import data.</p>
+<p><strong>Note:</strong> This import function takes GENEActiv data that was preprocessed
+through the <a href="https://cran.r-project.org/package=GGIR" class="external-link">GGIR</a> package.
+By default, <code>GGIR</code> aggregates light data into intervals of 15 minutes. This
+can be set by the <code>windowsizes</code> argument in GGIR, which is a three-value
+vector, where the second values is set to 900 seconds by default. To import
+the preprocessed data with <code>LightLogR</code>, the <code>filename</code> argument requires a
+path to the parent directory of the GGIR output folders, specifically the
+<code>meta</code> folder, which contains the light exposure data. Multiple <code>filename</code>s
+can be specified, each of which needs to be a path to a different GGIR
+parent directory. GGIR exports can contain data from multiple participants,
+these will always be imported fully by providing the parent directory. Use
+the <code>pattern</code> argument to extract sensible <code>Id</code>s from the <em>.RData</em>
+filenames within the <em>meta/basic/</em> folder. As per the author,
+<a href="https://www.accelting.com" class="external-link">Dr. Vincent van Hees</a>, GGIR preprocessed data are
+always in local time, provided the <code>desiredtz</code>/<code>configtz</code> are properly set
+in GGIR. <code>LightLogR</code> still requires a timezone to be set, but will not
+timeshift the import data.</p>
 </div>
 
 <div class="section">
