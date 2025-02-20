@@ -194,7 +194,23 @@
 #'   
 #'   Model: GENEActiv
 #'   
-#'   **Note:** This import function takes GENEActiv data that was preprocessed through the [GGIR](https://cran.r-project.org/web/packages/GGIR/vignettes/GGIR.html) package. By default, `GGIR` aggregates light data into intervals of 15 minutes. This can be set by the `windowsizes` argument in GGIR, which is a three-value vector, where the second values is set to 900 seconds by default. To import the preprocessed data with `LightLogR`, the `filename` argument requires a path to the parent directory of the GGIR output folders, specifically the `meta` folder, which contains the light exposure data. Multiple `filename`s can be specified, each of which needs to be a path to a different GGIR parent directory. GGIR exports can contain data from multiple participants, these will always be imported fully by providing the parent directory. Use the `pattern` argument to extract sensible `Id`s from the *.RData* filenames within the *meta/basic/* folder. As per the author, [Dr. Vincent van Hees](https://accelting.com/), GGIR preprocessed data are always in local time, provided the `desiredtz`/`configtz` are properly set in GGIR. `LightLogR` still requires a timezone to be set, but will not timeshift the import data.
+#'   **Note:** This import function takes GENEActiv data that was preprocessed 
+#'   through the [GGIR]( https://cran.r-project.org/package=GGIR) package. 
+#'   By default, `GGIR` aggregates light data into intervals of 15 minutes. This
+#'   can be set by the `windowsizes` argument in GGIR, which is a three-value 
+#'   vector, where the second values is set to 900 seconds by default. To import
+#'   the preprocessed data with `LightLogR`, the `filename` argument requires a
+#'   path to the parent directory of the GGIR output folders, specifically the
+#'   `meta` folder, which contains the light exposure data. Multiple `filename`s
+#'   can be specified, each of which needs to be a path to a different GGIR 
+#'   parent directory. GGIR exports can contain data from multiple participants,
+#'   these will always be imported fully by providing the parent directory. Use
+#'   the `pattern` argument to extract sensible `Id`s from the *.RData* 
+#'   filenames within the *meta/basic/* folder. As per the author, 
+#'   [Dr. Vincent van Hees](https://www.accelting.com), GGIR preprocessed data are 
+#'   always in local time, provided the `desiredtz`/`configtz` are properly set
+#'   in GGIR. `LightLogR` still requires a timezone to be set, but will not
+#'   timeshift the import data.
 #'   
 #'   ## MotionWatch 8
 #'   

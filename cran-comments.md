@@ -1,3 +1,32 @@
+## Submission Version 0.5.3
+
+### R CMD check results
+
+0 errors ✔ | 0 warnings ✔ | 3 notes ✖
+
+* Note 1: Imports includes 22 non-default packages. 
+  This is correct and necessary
+
+* Note 2: unable to verify current time. 
+  Time server seems to be unavailable
+
+* Note 3: Found HTML validation problems. 
+  This note seems related to the testing environment and not the actual package.
+
+### Windevel results
+
+2 Notes
+
+* Note: Author field differs from that derived from Authors@R.
+  As far as I can tell, the only difference is that the Authors@R field has (ORCID: *Orcid URL*) behind the authors, where as the Author field has (*Orcid URL*). As this is automatically generated based on Description, I don't think I can influence that.
+
+* Note: Examples with CPU (user + system) or elapsed time > 10s
+                user system elapsed
+  gg_photoperiod 12.52   1.72   14.25
+  gg_doubleplot   9.45   1.39   10.85
+
+  These examples are expected to take a longer time, as they are plotting functions and several variants are shown in the examples.
+
 ## Resubmission #3 (Version 0.3.8)
 
 This is a resubmission. In this version I corrected the error in a symlog_trans example.
