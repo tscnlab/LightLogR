@@ -59,7 +59,7 @@ To come:
 
 - Integration of data into a unified database for cross-study analyses
 
-##### Please note that LightLogR is work in progress! If you are interested in the project and want to know more, you can subscribe to the [LightLogR mailing list](https://lists.lrz.de/mailman/listinfo/lightlogr-users). If you find a bug or would like to see new or improved features, please open an issue on the [GitHub repository](https://github.com/tscnlab/LightLogR/issues).
+##### Please note that LightLogR is work in progress! If you are interested in the project and want to know more, you can subscribe to the [LightLogR mailing list](https://www.tscnlab.org/software). If you find a bug or would like to see new or improved features, please open an issue on the [GitHub repository](https://github.com/tscnlab/LightLogR/issues).
 
 Have a look at the **Example** section down below to get started, or
 dive into the

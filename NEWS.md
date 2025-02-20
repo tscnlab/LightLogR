@@ -1,5 +1,7 @@
 # LightLogR 0.5.3
 
+* small cleanup changes for CRAN submission
+
 # LightLogR 0.5.2
 
 * passed 300 unit tests for `LightLogR` 🎉

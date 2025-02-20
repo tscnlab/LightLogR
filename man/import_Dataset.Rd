@@ -226,7 +226,23 @@ Manufacturer: Activeinsights
 
 Model: GENEActiv
 
-\strong{Note:} This import function takes GENEActiv data that was preprocessed through the \href{https://cran.r-project.org/web/packages/GGIR/vignettes/GGIR.html}{GGIR} package. By default, \code{GGIR} aggregates light data into intervals of 15 minutes. This can be set by the \code{windowsizes} argument in GGIR, which is a three-value vector, where the second values is set to 900 seconds by default. To import the preprocessed data with \code{LightLogR}, the \code{filename} argument requires a path to the parent directory of the GGIR output folders, specifically the \code{meta} folder, which contains the light exposure data. Multiple \code{filename}s can be specified, each of which needs to be a path to a different GGIR parent directory. GGIR exports can contain data from multiple participants, these will always be imported fully by providing the parent directory. Use the \code{pattern} argument to extract sensible \code{Id}s from the \emph{.RData} filenames within the \emph{meta/basic/} folder. As per the author, \href{https://accelting.com/}{Dr. Vincent van Hees}, GGIR preprocessed data are always in local time, provided the \code{desiredtz}/\code{configtz} are properly set in GGIR. \code{LightLogR} still requires a timezone to be set, but will not timeshift the import data.
+\strong{Note:} This import function takes GENEActiv data that was preprocessed
+through the \href{https://cran.r-project.org/package=GGIR}{GGIR} package.
+By default, \code{GGIR} aggregates light data into intervals of 15 minutes. This
+can be set by the \code{windowsizes} argument in GGIR, which is a three-value
+vector, where the second values is set to 900 seconds by default. To import
+the preprocessed data with \code{LightLogR}, the \code{filename} argument requires a
+path to the parent directory of the GGIR output folders, specifically the
+\code{meta} folder, which contains the light exposure data. Multiple \code{filename}s
+can be specified, each of which needs to be a path to a different GGIR
+parent directory. GGIR exports can contain data from multiple participants,
+these will always be imported fully by providing the parent directory. Use
+the \code{pattern} argument to extract sensible \code{Id}s from the \emph{.RData}
+filenames within the \emph{meta/basic/} folder. As per the author,
+\href{https://www.accelting.com}{Dr. Vincent van Hees}, GGIR preprocessed data are
+always in local time, provided the \code{desiredtz}/\code{configtz} are properly set
+in GGIR. \code{LightLogR} still requires a timezone to be set, but will not
+timeshift the import data.
 }
 
 \subsection{MotionWatch 8}{
