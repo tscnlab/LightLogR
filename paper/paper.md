@@ -124,12 +124,12 @@ Personalised luminous exposure data are progressively gaining importance across 
 LightLogR is already being used in several research projects across scientific domains, including:
 
 -   an ongoing cohort study to collect light exposure data across different geolocations [@guidolin2024],
--   an ongoing cohort study to collect year-long datasets of various types of environmental and behavioral data [@biller2024],
+-   an ongoing cohort study to collect year-long datasets of various types of environmental and behavioural data [@biller2024],
 -   a novel power analysis method for personal light exposure data [@zauner2024],
 -   an intervention study on the effects of light on bipolar disorder [@roguski2024],
 -   an intervention study on exposure to bright light during afternoon to early evening on later evening melatonin release in adolescents [@lazar2024],
 -   an observational study on the wearing compliance of personal light exposure [@stefani2024],
--   an observational study on the differences in light exposure and light exposure related behavior between Malaysia and Switzerland  [@biller2025],
+-   an observational study on the differences in light exposure and light exposure related behaviour between Malaysia and Switzerland  [@biller2025],
 -   an intervention study on sex and seasonal changes in human melatonin suppression and alerting response to moderate light [@fazlali2024],
 -   an observational study on light exposure, sleep, and circadian rhythms in hospital shift workers (publication in progress).
 
