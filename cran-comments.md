@@ -1,3 +1,7 @@
+## Resubmission #1 (Version 0.5.3)
+
+This is a resubmission. In this version I put some examples for gg_doubleplot and gg_photoperiod in /dontrun to avoid long runtime. I further rebuilt the package with the latest R-devel to correct the discrepancies with Authors@R and Author field.
+
 ## Submission Version 0.5.3
 
 ### R CMD check results
