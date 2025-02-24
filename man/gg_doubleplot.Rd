@@ -70,6 +70,8 @@ sample.data \%>\% gg_doubleplot()
 #repeat the same day in the plot
 sample.data \%>\% gg_doubleplot(type = "repeat")
 
+#more examples that are not executed for computation time:
+\donttest{
 #use the function with more than one Id
 sample.data.environment \%>\% 
 filter_Date(length = ddays(3)) \%>\% 
@@ -89,4 +91,5 @@ facet_wrap(~ Date.data, ncol = 1, scales = "free_x", strip.position = "left")
 sample.data.environment \%>\%
 aggregate_Date() \%>\%
 gg_doubleplot()
+}
 }

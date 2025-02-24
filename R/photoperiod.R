@@ -425,6 +425,8 @@ solar_noon <- function(coordinates, dates, tz) {
 #'   gg_days() |> 
 #'   gg_photoperiod()
 #'   
+#' #more examples that are not executed for computation time:
+#' \donttest{
 #' #plotting photoperiods automatically works for both gg_day() and gg_days()
 #' sample.data.environment |> 
 #'   gg_day() |> 
@@ -454,6 +456,7 @@ solar_noon <- function(coordinates, dates, tz) {
 #'   add_photoperiod(coordinates) |>
 #'   gg_doubleplot() |> 
 #'   gg_photoperiod()
+#'   }
 
 gg_photoperiod <- function(ggplot_obj, 
                            coordinates = NULL, 

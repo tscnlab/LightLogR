@@ -73,6 +73,8 @@ sample.data.environment |>
   gg_days() |> 
   gg_photoperiod()
   
+#more examples that are not executed for computation time:
+\donttest{
 #plotting photoperiods automatically works for both gg_day() and gg_days()
 sample.data.environment |> 
   gg_day() |> 
@@ -102,6 +104,7 @@ sample.data.environment |>
   add_photoperiod(coordinates) |>
   gg_doubleplot() |> 
   gg_photoperiod()
+  }
 }
 \seealso{
 Other photoperiod: 
