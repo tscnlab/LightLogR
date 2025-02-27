@@ -14,7 +14,9 @@ gg_photoperiod(
 )
 }
 \arguments{
-\item{ggplot_obj}{A \code{ggplot} object generated with \code{\link[=gg_day]{gg_day()}} or \code{\link[=gg_days]{gg_days()}}.}
+\item{ggplot_obj}{A \code{ggplot} object generated with \code{\link[=gg_day]{gg_day()}} or \code{\link[=gg_days]{gg_days()}}
+(or \code{\link[=gg_doubleplot]{gg_doubleplot()}}. The dataset used to create these \strong{must} have a
+\code{Datetime} column.}
 
 \item{coordinates}{A two element numeric vector representing the latitude and
 longitude of the location. If \code{NULL}, the default, the function will look
@@ -47,8 +49,8 @@ a modified \code{ggplot} object with the photoperiods added.
 \code{\link[=gg_photoperiod]{gg_photoperiod()}} is a helper function to add photoperiod information to
 plots generated with \code{\link[=gg_day]{gg_day()}} or \code{\link[=gg_days]{gg_days()}}. The function can either draw
 on the \code{dawn} and \code{dusk} columns of the dataset or use the \code{coordinates} and
-\code{solarDep} arguments to calculate the photoperiods. For better visibility,
-the
+\code{solarDep} arguments to calculate the photoperiods. The time series must be
+based on a column called \code{Datetime}.
 }
 \details{
 If used in combination with \code{\link[=gg_doubleplot]{gg_doubleplot()}}, with that function in the
@@ -63,46 +65,46 @@ it prior to plotting and make sure the photoperiods are correct.
 \examples{
 coordinates <- c(48.521637, 9.057645)
 #adding photoperiods to a ggplot
-sample.data.environment |> 
-  gg_days() |> 
+sample.data.environment |>
+  gg_days() |>
   gg_photoperiod(coordinates)
-  
+
 #adding photoperiods prior to plotting
-sample.data.environment |> 
-  add_photoperiod(coordinates, solarDep = 0) |> 
-  gg_days() |> 
+sample.data.environment |>
+  add_photoperiod(coordinates, solarDep = 0) |>
+  gg_days() |>
   gg_photoperiod()
-  
+
 #more examples that are not executed for computation time:
 \donttest{
 #plotting photoperiods automatically works for both gg_day() and gg_days()
-sample.data.environment |> 
-  gg_day() |> 
-  gg_photoperiod(coordinates)
-  
-#plotting for gg_doubleplot mostly works fine
-sample.data.environment |> 
-  filter_Date(length = "2 days") |> 
-  gg_doubleplot() |> 
+sample.data.environment |>
+  gg_day() |>
   gg_photoperiod(coordinates)
 
-#however, in cases where only one day of data per group is available, or the 
-#type = "repeat" setting is used, the photoperiods need to be added 
+#plotting for gg_doubleplot mostly works fine
+sample.data.environment |>
+  filter_Date(length = "2 days") |>
+  gg_doubleplot() |>
+  gg_photoperiod(coordinates)
+
+#however, in cases where only one day of data per group is available, or the
+#type = "repeat" setting is used, the photoperiods need to be added
 #separately. Otherwise the second day will be off by one day in each panel.
-#The visual difference is subtle, and might not be visible at all, as 
+#The visual difference is subtle, and might not be visible at all, as
 #photoperiod only every changes by few minutes per day.
 
 #WRONG
-sample.data.environment |> 
-  filter_Date(length = "1 days") |> 
-  gg_doubleplot() |> 
+sample.data.environment |>
+  filter_Date(length = "1 days") |>
+  gg_doubleplot() |>
   gg_photoperiod(coordinates)
-  
+
 #CORRECT
-sample.data.environment |> 
-  filter_Date(length = "1 days") |> 
+sample.data.environment |>
+  filter_Date(length = "1 days") |>
   add_photoperiod(coordinates) |>
-  gg_doubleplot() |> 
+  gg_doubleplot() |>
   gg_photoperiod()
   }
 }

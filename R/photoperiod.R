@@ -380,20 +380,22 @@ solar_noon <- function(coordinates, dates, tz) {
 #' [gg_photoperiod()] is a helper function to add photoperiod information to
 #' plots generated with [gg_day()] or [gg_days()]. The function can either draw
 #' on the `dawn` and `dusk` columns of the dataset or use the `coordinates` and
-#' `solarDep` arguments to calculate the photoperiods. For better visibility,
-#' the 
+#' `solarDep` arguments to calculate the photoperiods. The time series must be
+#' based on a column called `Datetime`.
 #'
 #' If used in combination with [gg_doubleplot()], with that function in the
 #' `type = "repeat"` setting (either manually set, or because there is only one
 #' day of data per group present), photoperiods need to be added separately
 #' through [add_photoperiod()], or the second photoperiod in each panel will be
 #' off by one day. See the examples for more information.
-#' 
+#'
 #' In general, if the photoperiod setup is more complex, it makes sense to add
 #' it prior to plotting and make sure the photoperiods are correct.
 #'
 #' @inheritParams photoperiod
-#' @param ggplot_obj A `ggplot` object generated with [gg_day()] or [gg_days()].
+#' @param ggplot_obj A `ggplot` object generated with [gg_day()] or [gg_days()]
+#'   (or [gg_doubleplot()]. The dataset used to create these **must** have a
+#'   `Datetime` column.
 #' @param coordinates A two element numeric vector representing the latitude and
 #'   longitude of the location. If `NULL`, the default, the function will look
 #'   for the `dawn` and `dusk` columns in the dataset. If those are not present,
@@ -405,8 +407,8 @@ solar_noon <- function(coordinates, dates, tz) {
 #'   construct the photoperiod shading. Can be used to change the fill color or
 #'   other aesthetic properties.
 #' @param on.top Logical scalar. If `TRUE`, the photoperiods will be plotted on
-#'  top of the existing plot. If `FALSE`, the photoperiods will be plotted
-#'  underneath the existing plot. Default is `FALSE`.
+#'   top of the existing plot. If `FALSE`, the photoperiods will be plotted
+#'   underneath the existing plot. Default is `FALSE`.
 #'
 #' @returns a modified `ggplot` object with the photoperiods added.
 #' @export
@@ -415,46 +417,46 @@ solar_noon <- function(coordinates, dates, tz) {
 #' @examples
 #' coordinates <- c(48.521637, 9.057645)
 #' #adding photoperiods to a ggplot
-#' sample.data.environment |> 
-#'   gg_days() |> 
+#' sample.data.environment |>
+#'   gg_days() |>
 #'   gg_photoperiod(coordinates)
-#'   
+#'
 #' #adding photoperiods prior to plotting
-#' sample.data.environment |> 
-#'   add_photoperiod(coordinates, solarDep = 0) |> 
-#'   gg_days() |> 
+#' sample.data.environment |>
+#'   add_photoperiod(coordinates, solarDep = 0) |>
+#'   gg_days() |>
 #'   gg_photoperiod()
-#'   
+#'
 #' #more examples that are not executed for computation time:
 #' \donttest{
 #' #plotting photoperiods automatically works for both gg_day() and gg_days()
-#' sample.data.environment |> 
-#'   gg_day() |> 
+#' sample.data.environment |>
+#'   gg_day() |>
 #'   gg_photoperiod(coordinates)
-#'   
+#'
 #' #plotting for gg_doubleplot mostly works fine
-#' sample.data.environment |> 
-#'   filter_Date(length = "2 days") |> 
-#'   gg_doubleplot() |> 
+#' sample.data.environment |>
+#'   filter_Date(length = "2 days") |>
+#'   gg_doubleplot() |>
 #'   gg_photoperiod(coordinates)
-#' 
-#' #however, in cases where only one day of data per group is available, or the 
-#' #type = "repeat" setting is used, the photoperiods need to be added 
+#'
+#' #however, in cases where only one day of data per group is available, or the
+#' #type = "repeat" setting is used, the photoperiods need to be added
 #' #separately. Otherwise the second day will be off by one day in each panel.
-#' #The visual difference is subtle, and might not be visible at all, as 
+#' #The visual difference is subtle, and might not be visible at all, as
 #' #photoperiod only every changes by few minutes per day.
-#' 
+#'
 #' #WRONG
-#' sample.data.environment |> 
-#'   filter_Date(length = "1 days") |> 
-#'   gg_doubleplot() |> 
+#' sample.data.environment |>
+#'   filter_Date(length = "1 days") |>
+#'   gg_doubleplot() |>
 #'   gg_photoperiod(coordinates)
-#'   
+#'
 #' #CORRECT
-#' sample.data.environment |> 
-#'   filter_Date(length = "1 days") |> 
+#' sample.data.environment |>
+#'   filter_Date(length = "1 days") |>
 #'   add_photoperiod(coordinates) |>
-#'   gg_doubleplot() |> 
+#'   gg_doubleplot() |>
 #'   gg_photoperiod()
 #'   }
 
@@ -586,7 +588,9 @@ gg_photoperiod <- function(ggplot_obj,
           xmin = midnight.before,
           xmax = dawn,
           ymin = -Inf,
-          ymax = Inf
+          ymax = Inf, 
+          y = NULL,
+          x = NULL
         ),
         alpha = alpha,
         ...
@@ -597,7 +601,9 @@ gg_photoperiod <- function(ggplot_obj,
           xmin = dusk,
           xmax = midnight.after,
           ymin = -Inf,
-          ymax = Inf
+          ymax = Inf,
+          y = NULL,
+          x = NULL
         ),
         alpha = alpha,
         ...

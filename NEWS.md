@@ -1,3 +1,7 @@
+# LightLogR 0.5.4
+
+* `gg_photoperiod()` does no longer throw an error when the main plots `y.axis` is not based on a `MEDI` column.
+
 # LightLogR 0.5.3
 
 * small cleanup changes for CRAN submission
