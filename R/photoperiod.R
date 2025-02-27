@@ -583,27 +583,25 @@ gg_photoperiod <- function(ggplot_obj,
   photoperiod_geoms <- 
     list(
       ggplot2::geom_rect(
+        inherit.aes = FALSE,
         data = photoperiod_data |> tidyr::drop_na(dawn, midnight.before),
         ggplot2::aes(
           xmin = midnight.before,
           xmax = dawn,
           ymin = -Inf,
           ymax = Inf, 
-          y = NULL,
-          x = NULL
         ),
         alpha = alpha,
         ...
       ),
       ggplot2::geom_rect(
+        inherit.aes = FALSE,
         data = photoperiod_data |> tidyr::drop_na(dusk, midnight.after),
         ggplot2::aes(
           xmin = dusk,
           xmax = midnight.after,
           ymin = -Inf,
           ymax = Inf,
-          y = NULL,
-          x = NULL
         ),
         alpha = alpha,
         ...
