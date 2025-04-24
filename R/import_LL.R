@@ -354,8 +354,8 @@ imports <- function(device,
       data <- data %>%
         dplyr::mutate(file.name = basename(file.name) %>%
                         tools::file_path_sans_ext(),
-                      !!Id.colname := factor(!!Id.colname)) %>%
-        dplyr::group_by(Id = !!Id.colname) %>%
+                      Id = factor(!!Id.colname), .before = 1) %>%
+        dplyr::group_by(Id) %>%
         dplyr::arrange(Datetime, .by_group = TRUE)
       
       #if there are Datetimes with NA value, drop them
