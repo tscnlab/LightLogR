@@ -35,11 +35,17 @@ import.info <- function(data,
   #prepare dst info
   if(rlang::is_true(nrow(dst_info) != 0)) {
     dst_info <- 
+      dst_info |> 
+      tidyr::unite(col = "Group", -file.name, -dst_start, sep = ", ") |> 
+      dplyr::mutate(Group = paste0("File: ", file.name, ", Group:", Group))
+    dst_info <- 
       paste0(
         "Observations in the following ", 
         dst_info$file.name %>% unique() %>% length(),
-        " file(s) cross to or from daylight savings time (DST): \n",
-        dst_info$file.name %>% unique() %>% paste0(collapse = "\n"), "\n")
+        " file(s) and ",
+        dst_info$Group %>% unique() %>% length(),
+        " Id(s) cross to or from daylight savings time (DST): \n",
+        dst_info$Group %>% paste0(collapse = "\n"), "\n")
     if(dst_adjustment) {
       dst_info <- paste0(dst_info, "The Datetime column was adjusted in these files. For more info on what that entails see `?dst_change_handler`.\n")
     } else {
