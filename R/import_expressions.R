@@ -534,6 +534,21 @@ import_expr <- list(
       dplyr::mutate(
         Datetime = lubridate::force_tz(Datetime, tz = tz)
       )
+  }),
+  #ClouClip
+  ClouClip = rlang::expr({
+    data <- 
+      readr::read_tsv(filename, 
+                      show_col_types = FALSE,
+                      n_max = n_max,
+                      locale = locale,
+                      id = "file.name",
+                      name_repair = "universal",
+                      ...
+                      )
+    data <- data |> 
+      dplyr::rename(Datetime = Date) |> 
+      dplyr::mutate(Datetime = lubridate::force_tz(Datetime, tz = tz))
   })
 )
 

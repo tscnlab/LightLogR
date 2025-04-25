@@ -234,6 +234,14 @@
 #'   
 #'   OcuWEAR data contains spectral data. Due to the format of the data file, the spectrum is not directly part of the tibble, but rather a list column of tibbles within the imported data, containing a `Wavelength` (nm) and `Intensity` (mW/m^2) column.
 #'
+#'   ## ClouClip
+#'   
+#'   Manufacturer: Clouclip
+#'   
+#'   Implemented: April 2025
+#'   
+#'   ClouClip export files have the ending `.xls`, but are no real Microsoft Excel files, rather they are tab-separated text files. LightLogR thus does not read them in with an excel import routine
+#'
 #' @section Examples:
 #'
 #'   ## Imports made easy
