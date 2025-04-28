@@ -109,7 +109,7 @@ compare_threshold <- function(Light.vector,
   }
   else{
     threshold <- sort(threshold)
-    out <- Light.vector >= threshold[1] & Light.vector <= threshold[2]
+    out <- Light.vector >= threshold[1] & Light.vector < threshold[2]
   }
   
   if(na.replace){
