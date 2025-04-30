@@ -31,8 +31,7 @@
 #'   \doi{10.1177/14771535231170500}
 #'
 #' @examples
-#'
-#' set.seed(1)
+#'set.seed(1)
 #' N <- 24 * 7
 #' # Calculate metric for seven 24 h days with two measurements per hour
 #' dataset1 <-
@@ -45,7 +44,6 @@
 #'   dplyr::summarise(
 #'     "Interdaily stability" = interdaily_stability(MEDI, Datetime)
 #'   )
-#'
 interdaily_stability <- function(Light.vector,
                                  Datetime.vector,
                                  na.rm = FALSE,
@@ -116,17 +114,29 @@ interdaily_stability <- function(Light.vector,
   }
 
   # Hourly averages for each day
-  total_hourly <- df %>%
+  hourly_data <- df %>%
     dplyr::group_by(Datetime = lubridate::floor_date(Datetime, unit = "1 hour")) %>%
     dplyr::summarise(Light = mean(Light))
+  
+  # N hourly data
+  n <- length(hourly_data$Light)
+  
+  # Overall variance
+  var_total <- sum((hourly_data$Light-mean(hourly_data$Light))^2) / n
 
   # Hourly average across all days
-  avg_hourly <- total_hourly %>%
+  avg_hourly <- hourly_data %>%
     dplyr::group_by(Hour = lubridate::hour(Datetime)) %>%
     dplyr::summarise(Light = mean(Light))
+  
+  # N per day
+  p <- length(avg_hourly$Light)
+  
+  # Variance across average day
+  var_avg_day <- sum((avg_hourly$Light-mean(hourly_data$Light))^2) / p
 
   # Variance across average day / variance across all days
-  is <- stats::var(avg_hourly$Light) / stats::var(total_hourly$Light)
+  is <- var_avg_day / var_total
 
   # Return data frame or numeric vector
   if (as.df) {
