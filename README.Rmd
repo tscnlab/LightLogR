@@ -18,6 +18,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/tscnlab/LightLogR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/tscnlab/LightLogR/actions/workflows/R-CMD-check.yaml) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.11562600.svg)](https://doi.org/10.5281/zenodo.11562600) [![CRAN status](https://www.r-pkg.org/badges/version/LightLogR)](https://CRAN.R-project.org/package=LightLogR)
+[![status](https://joss.theoj.org/papers/3a1057dccd315b7eb8683c1b969402e2/status.svg)](https://joss.theoj.org/papers/3a1057dccd315b7eb8683c1b969402e2)
 
 <!-- badges: end -->
 
@@ -46,9 +47,7 @@ To come:
 
 -   Integration of data into a unified database for cross-study analyses
 
-##### Please note that LightLogR is work in progress! If you are interested in the project and want to know more, you can subscribe to the [LightLogR mailing list](https://lists.lrz.de/mailman/listinfo/lightlogr-users). If you find a bug, please open an issue on the [GitHub repository](https://github.com/tscnlab/LightLogR/issues).
-
-##### To maximize LightLogRs utility, we want to hear from you! What features would you like to see, what are common issues you face when working with wearable data, and what kind of analysis are you performing? Let us know in the [LightLogR community survey](https://de.surveymonkey.com/r/3LL9NKQ)!
+##### Please note that LightLogR is work in progress! If you are interested in the project and want to know more, you can subscribe to the [LightLogR mailing list](https://www.tscnlab.org/software). If you find a bug or would like to see new or improved features, please open an issue on the [GitHub repository](https://github.com/tscnlab/LightLogR/issues).
 
 Have a look at the **Example** section down below to get started, or dive into the [Articles](https://tscnlab.github.io/LightLogR/articles/index.html) to get more in depth information about how to work with the package and generate images such as the one above, import data, visualization, and metric calculation.
 
@@ -144,13 +143,16 @@ dataset %>% ungroup() %>% select(Datetime, lux, kelvin, MEDI) %>%
 
 For more complex data, there is the useful `gg_overview()` function to get an immediate grasp of your data. It was automatically called during import (set `auto.plot = FALSE` to suppress this), but really shines for datasets with multiple participants. It also indicates where data is missing, based on the measurement epochs found in the data.
 
-```         
-LLdata %>% gg_overview()
-```
-
 ::: {style="text-align:center"}
-![](man/figures/gg_overview2.png){width="60%"}
+![Example for `gg_overview()` from a large data collection effort over many months](man/figures/gg_overview2.png){width="60%"}
 :::
+
+*note:* the above example image requires a large dataset not included in the package. It is available, however, in the article on [Import & cleaning](https://tscnlab.github.io/LightLogR/articles/Import.html).
+
+```
+#example code, on how to use gg_overview():
+dataset %>% gg_overview()
+```
 
 ### Visualize
 
@@ -175,7 +177,7 @@ The built-in dataset `sample.data.environment` shows a combined dataset of light
 ```{r, out.width= "70%", fig.align='center', fig.height = 6}
 sample.data.environment %>% 
   gg_day(
-    start.date = "2023-08-18",
+    start.date = "2023-09-01",
     aes_col = Id,
     scales = "fixed",
     geom = "line") + theme(legend.position = "bottom")
@@ -194,7 +196,7 @@ With the `cut_Datetime()` function, the data can further be broken up into arbit
 sample.data.environment %>% 
   cut_Datetime() %>% 
   gg_day(
-    end.date = "2023-08-15",
+    end.date = "2023-08-29",
     aes_col = Id,
     scales = "fixed",
     geom = "boxplot",
@@ -229,3 +231,9 @@ dataset %>% aggregate_Datetime(unit = "15 sec") %>% gap_finder()
 ```
 
 Now, very few gaps are left (every time the the lagged epochs lead to a completely skipped regular epoch). The function can also be used to conveniently change the interval to arbitrary values, e.g., `"5 mins"`, or `"1 hour"`.
+
+# I Want To Contribute
+
+All types of contributions are encouraged and valued. See the [CONTRIBUTING](https://tscnlab.github.io/LightLogR/CONTRIBUTING.html) section for different ways to help and details about how this project handles them.
+This project and everyone participating in it is governed by the
+[LightLogR Code of Conduct](https://tscnlab.github.io/LightLogR/CODE_OF_CONDUCT.html).

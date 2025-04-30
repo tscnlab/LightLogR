@@ -1,3 +1,53 @@
+# LightLogR 0.5.3
+
+* small cleanup changes for CRAN submission
+
+# LightLogR 0.5.2
+
+* passed 300 unit tests for `LightLogR` 🎉
+
+* `normalize_counts()` was added as a low-level helper function  and the accompanying dataset `gain.ratio.tables` to facilitate calculating normalized sensor values when comparing across different sensors, e.g. to assess daylighting conditions based on UV, IR, and photopic sensing ranges. See documentation for more infos.
+
+* Update to the import function of `GENEActiv` devices, based on input from the author of the GGIR package. The timezone `tz` argument in LightLogR now is just set on the timestamp provided by the GGIR export, instead of shifting the datetime. This requires the correct setting of `desiredtz`/`configtz` arguments in GGIR during preprocessing.
+
+# LightLogR 0.5.1
+
+* refinement and cross-referencing in tutorials on photoperiod
+
+* fixing a bug in the *photoperiod* family of functions when using a timezone with a large offset to the coordinates where photoperiod is calculated and crosses a date.
+
+# LightLogR 0.5.0 "Civil dawn"
+
+* added a suite of functions to deal with photoperiod: `photoperiod()` and `solar_noon()` to calculate dusk, dawn, and noon times of the day. `extract_photoperiod()` and `add_photoperiod()` utilize datasets imported with `LightLogR` to calculate and deal with photoperiods in the context of your own datasets. `gg_photoperiod()` brings this functionality to the visualization tools of `LightLogR` in an easy and powerful way.
+
+* added the function `number_states()` that relabels states based on their non-consecutive appearance. This is especially useful when labelling photoperiod states, as the function will allow for an easy classifier of "day 1", "day 2", ..., and "night 1", "night 2", .... These can be used to, e.g., calculate metrics for individual photoperiod sections throughout the observed time frame.
+
+* added a tutorial on the new functions [`Photoperiod`](https://tscnlab.github.io/LightLogR/articles/photoperiod.html). This also details how to calculate metrics based on photoperiod (#39).
+
+* implemented further changes in the paper.md based on the [JOSS Reviews](https://github.com/openjournals/joss-reviews/issues/7601)
+
+# LightLogR 0.4.3
+
+* implemented changes based on the [JOSS Reviews](https://github.com/openjournals/joss-reviews/issues/7601)
+
+* added a [Code of Conduct](https://tscnlab.github.io/LightLogR/CODE_OF_CONDUCT.html) and a [Contributing](https://tscnlab.github.io/LightLogR/CONTRIBUTING.html) file for the project
+
+# LightLogR 0.4.2
+
+* updated the license to MIT: LightLogR is now permissively licensed
+
+* `import` functions will now give a warning message about identical observations in the provided data files, stop the import process and return a tibble with the duplicate rows. Through the `remove_duplicates` parameter, the user can decide to automatically remove these duplicates during import. **Note: identical observations refers to identical rows when disregarding the filename.**
+
+# LightLogR 0.4.1
+
+* added support for OcuWEAR devices
+
+* added support for MotionWatch 8 devices #32
+
+* added support for LIMO devices
+
+* added support for GENEActiv devices, when data was preprocessed with the [`GGIR`]( https://cran.r-project.org/package=GGIR) package. The function `import$GENEActiv_GGIR()` takes the `GGIR` output and imports it with LightLogR naming schemes. #27
+
 # LightLogR 0.4.0 "Nautical dawn"
 
 * release on CRAN!

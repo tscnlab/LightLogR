@@ -1,6 +1,6 @@
 Package: LightLogR
 Title: Process Data from Wearable Light Loggers and Optical Radiation Dosimeters
-Version: 0.4.0
+Version: 0.5.3
 Authors@R: c(
     person("Johannes", "Zauner", 
       email = "johannes.zauner@tum.de", role = c("aut", "cre"),
@@ -16,7 +16,7 @@ Authors@R: c(
     person("European Union", role = "fnd", comment = "Co-funded by the European Union. Views and opinions expressed are however those of the author(s) only and do not necessarily reflect those of the European Union or EURAMET. Neither the European Union nor the granting authority can be held responsible for them."),
     person("TSCN-Lab", comment = c(URL = "www.tscnlab.org"), role = "cph"))
 Description: Import, processing, validation, and visualization of personal light exposure measurement data from wearable devices. The package implements features such as the import of data and metadata files, conversion of common file formats, validation of light logging data, verification of crucial metadata, calculation of common parameters, and semi-automated analysis and visualization.
-License: GPL (>= 3)
+License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
@@ -32,6 +32,7 @@ Imports:
     ggsci,
     ggtext,
     hms,
+    janitor,
     lubridate,
     magrittr,
     pkgload,
@@ -44,11 +45,12 @@ Imports:
     slider,
     stats,
     stringr,
+    suntools,
     tibble,
     tidyr,
     utils
 Depends: 
-    R (>= 2.10)
+    R (>= 4.3)
 LazyData: true
 Suggests: 
     covr,
@@ -61,3 +63,4 @@ Suggests:
     testthat (>= 3.0.0),
     tidyverse
 Config/testthat/edition: 3
+Config/Needs/website: rmarkdown

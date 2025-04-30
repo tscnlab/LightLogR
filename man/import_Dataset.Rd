@@ -6,7 +6,7 @@
 \alias{import}
 \title{Import a light logger dataset or related data}
 \format{
-An object of class \code{list} of length 14.
+An object of class \code{list} of length 18.
 }
 \usage{
 import_Dataset(device, ...)
@@ -57,14 +57,17 @@ without file extension.
 \item \code{manual.id}: If this argument is not \code{NULL}, and no \code{Id} column is part
 of the \code{dataset}, this \code{character} scalar will be used. \strong{We discourage the
 use of this arguments when importing more than one file}
+\item \code{silent}: If set to \code{TRUE}, the function will not print a summary message
+of the import or plot the overview. Default is \code{FALSE}.
 \item \code{locale}: The locale controls defaults that vary from place to place.
-\item \code{dst_adjustment}: If a file crosses daylight savings time, but the device does not adjust time stamps accordingly, you can set this argument to \code{TRUE}, to apply this shift manually. It is selective, so it will only be done in files that cross between DST and standard time. Default is \code{FALSE}. Uses \code{dst_change_handler()} to do the adjustment. Look there for more infos. It is not equipped to handle two jumps in one file (so back and forth between DST and standard time), but will work fine if jums occur in separate files.
-\item \code{auto.plot}: a logical on whether to call \code{\link[=gg_overview]{gg_overview()}} after import. Default is \code{TRUE}.
+\item \code{dst_adjustment}: If a file crosses daylight savings time, but the device does not adjust time stamps accordingly, you can set this argument to \code{TRUE}, to apply this shift manually. It is selective, so it will only be done in files that cross between DST and standard time. Default is \code{FALSE}. Uses \code{\link[=dst_change_handler]{dst_change_handler()}} to do the adjustment. Look there for more infos. It is not equipped to handle two jumps in one file (so back and forth between DST and standard time), but will work fine if jums occur in separate files.
+\item \code{auto.plot}: a logical on whether to call \code{\link[=gg_overview]{gg_overview()}} after import. Default is \code{TRUE}. But is set to \code{FALSE} if the argument \code{silent} is set to \code{TRUE}.
 \item \code{...}: supply additional arguments to the \pkg{readr} import functions, like \code{na}. Might also be used to supply arguments to the specific import functions, like \code{column_names} for \code{Actiwatch_Spectrum} devices. Those devices will always throw a helpful error message if you forget to supply the necessary arguments.
 If the \code{Id} column is already part of the \code{dataset} it will just use this
 column. If the column is not present it will add this column and fill it
 with the filename of the importfile (see param \code{auto.id}).
 \item \code{print_n} can be used if you want to see more rows from the observation intervals
+\item \code{remove_duplicates} can be used if identical observations are present within or across multiple files. The default is \code{FALSE}. The function keeps only unique observations (=rows) if set to' TRUE'. This is a convenience implementation of \code{\link[dplyr:distinct]{dplyr::distinct()}}.
 }
 }
 \section{Devices}{
@@ -78,9 +81,10 @@ continuously as the package is maintained.
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{supported_devices()
 #>  [1] "ActLumus"              "ActTrust"              "Actiwatch_Spectrum"   
 #>  [4] "Actiwatch_Spectrum_de" "Circadian_Eye"         "DeLux"                
-#>  [7] "Kronowise"             "LYS"                   "LiDo"                 
-#> [10] "LightWatcher"          "Speccy"                "SpectraWear"          
-#> [13] "VEET"                  "nanoLambda"
+#>  [7] "GENEActiv_GGIR"        "Kronowise"             "LIMO"                 
+#> [10] "LYS"                   "LiDo"                  "LightWatcher"         
+#> [13] "MotionWatch8"          "OcuWEAR"               "Speccy"               
+#> [16] "SpectraWear"           "VEET"                  "nanoLambda"
 }\if{html}{\out{</div>}}
 \subsection{ActLumus}{
 
@@ -214,6 +218,56 @@ Manufacturer: Kronohealth
 Model: Kronowise
 
 Implemented: July 2024
+}
+
+\subsection{GENEActiv with GGIR preprocessing}{
+
+Manufacturer: Activeinsights
+
+Model: GENEActiv
+
+\strong{Note:} This import function takes GENEActiv data that was preprocessed
+through the \href{https://cran.r-project.org/package=GGIR}{GGIR} package.
+By default, \code{GGIR} aggregates light data into intervals of 15 minutes. This
+can be set by the \code{windowsizes} argument in GGIR, which is a three-value
+vector, where the second values is set to 900 seconds by default. To import
+the preprocessed data with \code{LightLogR}, the \code{filename} argument requires a
+path to the parent directory of the GGIR output folders, specifically the
+\code{meta} folder, which contains the light exposure data. Multiple \code{filename}s
+can be specified, each of which needs to be a path to a different GGIR
+parent directory. GGIR exports can contain data from multiple participants,
+these will always be imported fully by providing the parent directory. Use
+the \code{pattern} argument to extract sensible \code{Id}s from the \emph{.RData}
+filenames within the \emph{meta/basic/} folder. As per the author,
+\href{https://www.accelting.com}{Dr. Vincent van Hees}, GGIR preprocessed data are
+always in local time, provided the \code{desiredtz}/\code{configtz} are properly set
+in GGIR. \code{LightLogR} still requires a timezone to be set, but will not
+timeshift the import data.
+}
+
+\subsection{MotionWatch 8}{
+
+Manufacturer: CamNtech
+
+Implemented: September 2024
+}
+
+\subsection{LIMO}{
+
+Manufacturer: ENTPE
+
+Implemented: September 2024
+
+LIMO exports \code{LIGHT} data and \code{IMU} (inertia measurements, also UV) in separate files. Both can be read in with this function, but not at the same time. Please decide what type of data you need and provide the respective filenames.
+}
+
+\subsection{OcuWEAR}{
+
+Manufacturer: Ocutune
+
+Implemented: September 2024
+
+OcuWEAR data contains spectral data. Due to the format of the data file, the spectrum is not directly part of the tibble, but rather a list column of tibbles within the imported data, containing a \code{Wavelength} (nm) and \code{Intensity} (mW/m^2) column.
 }
 }
 

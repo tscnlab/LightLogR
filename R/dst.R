@@ -157,7 +157,7 @@ dst_change_handler <- function(dataset,
 #' @examples
 #' sample.data.environment %>% 
 #'   dplyr::mutate(Datetime = 
-#'   lubridate::with_tz(Datetime, "Europe/Berlin") + lubridate::dweeks(10)) %>%
+#'   Datetime + lubridate::dweeks(8)) %>%
 #'   dst_change_summary()
 dst_change_summary <- function(dataset, Datetime.colname = Datetime) {
   #check if dataset is a dataframe

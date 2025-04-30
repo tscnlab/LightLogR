@@ -17,6 +17,8 @@ library(tidyverse)
 library(gghighlight)
 ```
 
+> Please note that this article uses the base pipe operator `|>`. You need an R version equal to or greater than 4.1.0 to use it. If you are using an older version, you can replace it with the `magrittr` pipe operator `%>%`.
+
 # From which devices can I import data?
 
 LightLogR aims to provide standard import routines for all devices used in research on personal light exposure. Currently, the following devices are supported:
@@ -29,11 +31,11 @@ More Information on these devices can be found in the reference for
 
 ## What if my device is not listed?
 
-If you are using a device that is currently not supported, please contact the developers. We are always looking to expand the range of supported devices. The easiest and most trackable way to get in contact is by opening a new issue on our [Github repository](https://github.com/tscnlab/LightLogR/issues). Please also provide a sample file of your data, so we can test the import function.
+If you are using a device that is currently not supported, please contact the developers. We are always looking to expand the range of supported devices. The easiest and most trackable way to get in contact is by opening a new issue on our [Github repository](https://github.com/tscnlab/LightLogR/issues). Please see the [CONTRIBUTING](https://tscnlab.github.io/LightLogR/CONTRIBUTING.html) section for different ways to help and details about how this project handles them.
 
 ## What if my device is listed but the import does not work as expected?
 
-We regularly find that files exported from the same device model can differ in structure. This may be due to different settings, software or hardware updates. If you encounter problems with the import, please get in contact with us, e.g. by opening an issue on our [Github repository](https://github.com/tscnlab/LightLogR/issues). Please provide a sample file of your data.
+We regularly find that files exported from the same device model can differ in structure. This may be due to different settings, software or hardware updates. If you encounter problems with the import, please get in contact with us, e.g. by opening an issue on our [Github repository](https://github.com/tscnlab/LightLogR/issues). Please see the [CONTRIBUTING](https://tscnlab.github.io/LightLogR/CONTRIBUTING.html) section for different ways to help and details about how this project handles them.
 
 ## Are there other ways to import data?
 
@@ -48,6 +50,7 @@ Lastly, you can modify or add import functions that build upon `LightLogR`s impo
 The first step in every analysis is data import. We will work with data collected as part of the Master Thesis *Insights into real-world human light exposure: relating self-report with eye-level light logging* by Carolina Guidolin (2023). The data is stored in 17 text files in the *data/* folder. You can access the data yourself through the [LightLogR GitHub repository](https://github.com/tscnlab/LightLogR/tree/main/vignettes/articles/data).
 
 ```{r, files}
+#this assumes that you downloaded the files into a folder called "data" in the working directory
 path <- "data"
 files <- list.files(path, full.names = TRUE)
 #show how many files are listes
@@ -81,11 +84,15 @@ data <- import$ActLumus(files, tz = tz, auto.id = pattern, print_n=33)
 There are several possibilities, why the import is slow. The most common reasons are:
 
 -   The data files are simply large. With short measurement intervals, many participants, and long measurement periods, files for a single study can easily reach several gigabytes. This takes some time to import and is ok.
+
 -   The data files contain many gaps. During import, `LightLogR` checks for and visualizes gaps in the data. Especially large datasets with small intervals contain many gaps, which can slow down the import process.
+
 -   The device model you are importing from has non-consistent data structures. Some devices have a varying number of rows before the actual data starts. This means a small portion of every file has to be read in and the correct starting row has to be found. This can slow down the import process if you have many files.
 
 If you are experiencing slow imports, you can try the following:
--   Only read in part of your datasets, or split your dataset into several peaces, that each gets loaded in separately. You can combine them afterwards with `join_datasets()`.
+
+-   Only read in part of your datasets, or split your dataset into several pieces, that each gets loaded in separately. You can combine them afterwards with `join_datasets()`.
+
 -   If you have many gaps in your data, you can set `auto.plot = FALSE` in the import function. This will eliminate the call to `gg_overview()`, which calculates and visualizes the gaps in the data.
 
 # Data cleaning #1
@@ -93,42 +100,47 @@ If you are experiencing slow imports, you can try the following:
 Before we can dive into the analysis part, we need to make sure we have a clean dataset. The import summary shows us two problems with the data:
 
 -   two files have data that crosses daylight saving time (DST) changes. Because the ActLumus device does not adjust for DST, we need to correct for this.
+
 -   Multiple Ids have single datapoints at the beginning of the dataset with gaps before actual data collection starts. These are test measurements to check equipment, but must be removed from the dataset.
 
 Let us first deal with the DST change. LightLogR has an in-built function to correct for this during import. We thus will re-import the data, but make the import silent as to not clutter the output.
 
 ```{r, dst change}
 data <- 
-  import$ActLumus(files, tz = tz, auto.id = pattern, dst_adjustment = TRUE, 
-                  auto.plot = FALSE, silent = TRUE)
+  import$ActLumus(files, tz = tz, auto.id = pattern, dst_adjustment = TRUE, silent = TRUE)
 ```
 
 The second problem requires the filtering of certain Ids. The `filter_Datetime_multiple()` function is ideal for this. We can provide a length (1 week), starting from the end of data collection and backwards. The variable `arguments` provide variable arguments to the filter function, they have to be provided in list form and expressions have to be quoted through`quote()`. Fixed arguments, like the length and`length_from_start\` are provided as named arguments and only have to be specified once, as they are the same for all Ids.
 
 ```{r, start shift}
 data <- 
-  data %>% 
+  data |> 
   filter_Datetime_multiple(
     arguments = list(
       list(only_Id = quote(Id == 216)),
       list(only_Id = quote(Id == 219)),
       list(only_Id = quote(Id == 214)),
       list(only_Id = quote(Id == 206))
-    ), length = "1 week", length_from_start = FALSE)
+    ), 
+    length = "1 week", length_from_start = FALSE)
 
 ```
 
 Let's have a look at the data again with the `gg_overview()` function.
 
 ```{r, overview}
-data %>% gg_overview()
+data |> gg_overview()
 ```
 
 Looks much better now. Also, because there is no longer a hint about gaps in the lower right corner, we can be sure that all gaps have been removed. The function gap_finder() shows us, however, that there are still irregularities in the data and the function count_difftime() reveals where they are.
 
 ```{r, irregularities}
-data %>% gap_finder()
-data %>% count_difftime() %>% print(n=22)
+data |> 
+  gap_finder()
+
+data |> 
+  count_difftime() |> 
+  print(n=22)
 ```
 
 This means we have to look at and take care of the irregularities for the Ids 215, 218, and 221.
@@ -140,20 +152,20 @@ Let us first visualize where the irregularities are. We can use `gg_days()` for 
 ```{r}
 #create two columns to show the irregularities and gaps for relevant ids
 difftimes <- 
-  data %>% 
-  filter(Id %in% c(215, 218, 221)) %>%
+  data |> 
+  filter(Id %in% c(215, 218, 221)) |>
   mutate(difftime = difftime(lead(Datetime), Datetime, units = "secs"),
                   end = Datetime + seconds(difftime))
 
 #visualize where those points are
-difftimes %>% 
+difftimes |> 
   gg_days(geom = "point", 
           x.axis.breaks = ~Datetime_breaks(.x, by = "2 days" )
   ) +
-  geom_rect(data = difftimes %>% filter(difftime !=10),
+  geom_rect(data = difftimes |> filter(difftime !=10),
             aes(xmin = Datetime, xmax = end, ymin = -Inf, ymax = Inf),
             fill = "red", col = "red", linewidth = 0.2, alpha = 0.2) +
-    gghighlight(difftime != 10 | lag(difftime !=10))
+  gghighlight(difftime != 10 | lag(difftime !=10))
 
 ```
 
@@ -161,7 +173,7 @@ All irregular data appear at the very beginning of the data collection. As we ar
 
 ```{r}
 data <- 
-  data %>% 
+  data |> 
   filter_Datetime_multiple(
     arguments = list(
       list(only_Id = quote(Id == 215)),
@@ -169,13 +181,19 @@ data <-
       list(only_Id = quote(Id == 221))
     ), length = "1 week", length_from_start = FALSE)
 
-data %>% gap_finder()
-data %>% count_difftime() %>% print(n=17)
+data |> 
+  gap_finder()
+
+data |> 
+  count_difftime() |> 
+  print(n=17)
 ```
 
 The data is now clean and we can proceed with the analysis. This dataset will be needed in other articles, so we will save it as an RDS file.
 
 ```{r}
+#uncomment next lines to save the data
+# if (!dir.exists("cleaned_data")) dir.create("cleaned_data")
 # saveRDS(data, "cleaned_data/ll_data.rds")
 ```
 

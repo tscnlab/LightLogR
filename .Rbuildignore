@@ -9,6 +9,7 @@
 ^data-raw$
 ^rsconnect$
 ^app.R$
+^paper$
 
 
 ^app\.R$
@@ -17,3 +18,4 @@
 ^cran-comments\.md$
 ^LightLogR-manual\.tex$
 ^CRAN-SUBMISSION$
+^CODE_OF_CONDUCT\.md$

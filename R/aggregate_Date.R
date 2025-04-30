@@ -79,10 +79,11 @@ aggregate_Date <- function(dataset,
                                  mean,
                            character.handler = 
                                  \(x) names(which.max(table(x, useNA = "ifany"))),
-                               logical.handler = 
+                           logical.handler = 
                                  \(x) mean(x) >= 0.5,
-                               factor.handler = 
+                           factor.handler = 
                                  \(x) factor(names(which.max(table(x, useNA = "ifany")))),
+                           datetime.handler = stats::median,
                                ...) {
   
   # Initial Checks ----------------------------------------------------------
@@ -98,6 +99,10 @@ aggregate_Date <- function(dataset,
   )
   
   # Function ----------------------------------------------------------
+  
+  #collect the timezone
+  timezone <- dataset |> dplyr::pull(!!Datetime.colname.defused) |> lubridate::tz()
+  
   #aggregate the datetime
     dataset <- 
       dataset  %>% 
@@ -108,6 +113,7 @@ aggregate_Date <- function(dataset,
                          character.handler = character.handler,
                          logical.handler = logical.handler,
                          factor.handler = factor.handler,
+                         datetime.handler = datetime.handler,
                          ...
                          )
 
@@ -129,6 +135,7 @@ aggregate_Date <- function(dataset,
   character.handler <- rlang::enexpr(character.handler)
   logical.handler <- rlang::enexpr(logical.handler)
   factor.handler <- rlang::enexpr(factor.handler)
+  datetime.handler <- rlang::enexpr(datetime.handler)
   
   dataset <- 
     dataset %>% 
@@ -139,6 +146,7 @@ aggregate_Date <- function(dataset,
       dplyr::across(dplyr::where(is.character), !!character.handler), #default: choose the dominant string
       dplyr::across(dplyr::where(is.logical), !!logical.handler), #default:  average a binary outcome
       dplyr::across(dplyr::where(is.factor), !!factor.handler), #default: choose the dominant factor
+      dplyr::across(dplyr::where(lubridate::is.POSIXct), !!datetime.handler), #default: choose the mean datetime
       #allow for additional functions
       .groups = "keep") %>% 
     dplyr::ungroup(Time.data) #remove the rounded Datetime group
@@ -147,7 +155,7 @@ aggregate_Date <- function(dataset,
   dataset <- 
     dataset %>% 
     dplyr::mutate(!!Datetime.colname.str := paste(Date.data, Time.data) %>% 
-                    lubridate::as_datetime(),
+                    lubridate::as_datetime(tz = timezone),
                   .after = Date.data) %>% 
     dplyr::select(-Date.data, -Time.data)
   

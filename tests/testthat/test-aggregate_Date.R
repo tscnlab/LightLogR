@@ -17,7 +17,7 @@ test_that("aggregate_Date works", {
   expect_equal(lubridate::date(dates_agg2$Datetime) %>% 
                  unique() %>% 
                  as.character(), 
-               "2023-08-20")
+               "2023-09-03")
   #changing the numeric unit works
   dates_agg3 <- aggregate_Date(dates, unit = "15 mins")
   expect_equal(dates_agg3 %>% 

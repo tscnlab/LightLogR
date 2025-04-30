@@ -145,7 +145,7 @@ this).
 plot <- gg_day(
 sample.data.environment,
 scales = "fixed",
-end.date = "2023-08-16",
+end.date = "2023-08-31",
 y.axis.label = "mEDI (lx)",
 aes_col = Id)
 plot
