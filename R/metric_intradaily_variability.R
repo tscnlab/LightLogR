@@ -114,16 +114,21 @@ intradaily_variability <- function(Light.vector,
   }
 
   # Hourly averages for each day
-  total_hourly <- df %>%
+  hourly_data <- df %>%
     dplyr::group_by(lubridate::floor_date(Datetime, unit = "1 hour")) %>%
     dplyr::summarise(Light = mean(Light))
+  
+  # N hourly data
+  n <- length(hourly_data$Light)
 
-  # Variance of consecutive hourly differences
-  var_hourly_diff <-
-    sum(diff(total_hourly$Light)^2) / (length(total_hourly$Light) - 1)
+  # Overall variance
+  var_total <- sum((hourly_data$Light-mean(hourly_data$Light))^2) / n
+  
+  # Sum of squares of consecutive hourly differences
+  var_hourly_diff <- sum(diff(hourly_data$Light)^2) / (n-1)
 
-  # Variance of consecutive differences / variance across all days
-  iv <- var_hourly_diff / stats::var(total_hourly$Light)
+  # Sum of squares of consecutive differences / variance across all days
+  iv <- var_hourly_diff / var_total
 
   # Return data frame or numeric vector
   if (as.df) {
