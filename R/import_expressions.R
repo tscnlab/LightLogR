@@ -548,7 +548,24 @@ import_expr <- list(
                       )
     data <- data |> 
       dplyr::rename(Datetime = Date) |> 
-      dplyr::mutate(Datetime = lubridate::force_tz(Datetime, tz = tz))
+      dplyr::mutate(Datetime = lubridate::force_tz(Datetime, tz = tz),
+                    dplyr::across(c(Lux, Dis),
+                                  \(x) {
+                                    dplyr::case_when(
+                                      x == -1 ~ "sleep_mode",
+                                      x == 204 ~ "out_of_range"
+                                    )
+                                  }, .names = "{.col}_status"),
+                    Lux = dplyr::case_when(
+                      Lux == -1 ~ NA,
+                      .default = Lux
+                    ),
+                    Dis = dplyr::case_when(
+                      Dis == -1 ~ NA,
+                      Dis == 204 ~ NA,
+                      .default = Lux
+                    ),
+                    )
   })
 )
 
