@@ -7,6 +7,7 @@
 interdaily_stability(
   Light.vector,
   Datetime.vector,
+  use.samplevar = FALSE,
   na.rm = FALSE,
   as.df = FALSE
 )
@@ -15,6 +16,10 @@ interdaily_stability(
 \item{Light.vector}{Numeric vector containing the light data.}
 
 \item{Datetime.vector}{Vector containing the time data. Must be POSIXct.}
+
+\item{use.samplevar}{Logical. Should the sample variance be used (divide by N-1)?
+By default (\code{FALSE}), the population variance (divide by N) is used, as described
+in Van Someren et al. (1999).}
 
 \item{na.rm}{Logical. Should missing values be removed? Defaults to \code{FALSE}.}
 
@@ -35,7 +40,6 @@ light levels. Ranges between 0 (Gaussian noise) and 1 (Perfect Stability).
 Note that this metric will always be 1 if the data contains only one 24 h day.
 }
 \examples{
-
 set.seed(1)
 N <- 24 * 7
 # Calculate metric for seven 24 h days with two measurements per hour
@@ -49,7 +53,6 @@ dataset1 \%>\%
   dplyr::summarise(
     "Interdaily stability" = interdaily_stability(MEDI, Datetime)
   )
-
 }
 \references{
 Van Someren, E. J. W., Swaab, D. F., Colenda, C. C., Cohen, W.,

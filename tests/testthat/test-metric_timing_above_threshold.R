@@ -1,4 +1,4 @@
-test_that("Calculation works", {
+test_that("Above threshold works", {
   MEDI = c(rep(1, 6), rep(250, 4), rep(500, 5), rep(750, 4), rep(1, 5))
   Datetime = lubridate::as_datetime(lubridate::dhours(0:23), tz = "UTC")
   expect_equal(
@@ -9,6 +9,11 @@ test_that("Calculation works", {
       "last" = lubridate::as_datetime(lubridate::dhours(18), tz = "UTC")
     )
   )
+})
+
+test_that("Below threshold works", {
+  MEDI = c(rep(1, 6), rep(250, 4), rep(500, 5), rep(750, 4), rep(1, 5))
+  Datetime = lubridate::as_datetime(lubridate::dhours(0:23), tz = "UTC")
   expect_equal(
     timing_above_threshold(MEDI, Datetime, comparison = "below", threshold = 250), 
     list(
@@ -17,6 +22,11 @@ test_that("Calculation works", {
       "last" = lubridate::as_datetime(lubridate::dhours(23), tz = "UTC")
     )
   )
+})
+
+test_that("Between thresholds works", {
+  MEDI = c(rep(1, 6), rep(250, 4), rep(400, 5), rep(750, 4), rep(1, 5))
+  Datetime = lubridate::as_datetime(lubridate::dhours(0:23), tz = "UTC")
   expect_equal(
     timing_above_threshold(MEDI, Datetime, threshold = c(250, 500)), 
     list(

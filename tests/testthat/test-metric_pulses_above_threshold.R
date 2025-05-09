@@ -53,12 +53,12 @@ test_that("calculation works", {
     pulses_above_threshold(MEDI,Time,"above",c(10,30),"1 mins", "1 mins", 0, as.df = TRUE),
     tibble::tibble(
       "n_pulses_within_10-30" = 1,
-      "mean_level_pulses_within_10-30" = 20,
-      "mean_duration_pulses_within_10-30" = lubridate::dminutes(3),
-      "total_duration_pulses_within_10-30" = lubridate::dminutes(3),
+      "mean_level_pulses_within_10-30" = 15,
+      "mean_duration_pulses_within_10-30" = lubridate::dminutes(2),
+      "total_duration_pulses_within_10-30" = lubridate::dminutes(2),
       "mean_onset_pulses_within_10-30" = lubridate::dminutes(1),
-      "mean_midpoint_pulses_within_10-30" = lubridate::dminutes(2),
-      "mean_offset_pulses_within_10-30" = lubridate::dminutes(3),
+      "mean_midpoint_pulses_within_10-30" = lubridate::dminutes(1.5),
+      "mean_offset_pulses_within_10-30" = lubridate::dminutes(2),
     )
   )
 })

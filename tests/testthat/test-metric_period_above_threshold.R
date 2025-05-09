@@ -9,7 +9,7 @@ test_that("Calculation works", {
     period_above_threshold(MEDI, datetime, "below", 10), lubridate::dminutes(5)
   )
   expect_equal(
-    period_above_threshold(MEDI, datetime, threshold = c(12,13)), lubridate::dminutes(2)
+    period_above_threshold(MEDI, datetime, threshold = c(11,13)), lubridate::dminutes(2)
   )
   expect_equal(
     period_above_threshold(MEDI, datetime, threshold = 10, loop = TRUE), lubridate::dminutes(7)

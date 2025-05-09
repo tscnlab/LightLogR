@@ -12,7 +12,7 @@ test_that("Calculation works", {
     duration_above_threshold(MEDI, datetime, "below", 100), lubridate::dminutes(7)
   )
   expect_equal(
-    duration_above_threshold(MEDI, datetime, threshold = c(0,99)), lubridate::dminutes(5)
+    duration_above_threshold(MEDI, datetime, threshold = c(0,100)), lubridate::dminutes(5)
   )
 })
 
