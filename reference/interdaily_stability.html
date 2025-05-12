@@ -13,7 +13,7 @@ light levels. Ranges between 0 (Gaussian noise) and 1 (Perfect Stability)."><met
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,6 +58,7 @@ light levels. Ranges between 0 (Gaussian noise) and 1 (Perfect Stability).</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">interdaily_stability</span><span class="op">(</span></span>
 <span>  <span class="va">Light.vector</span>,</span>
 <span>  <span class="va">Datetime.vector</span>,</span>
+<span>  use.samplevar <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  na.rm <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  as.df <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -73,6 +74,12 @@ light levels. Ranges between 0 (Gaussian noise) and 1 (Perfect Stability).</p>
 
 <dt id="arg-datetime-vector">Datetime.vector<a class="anchor" aria-label="anchor" href="#arg-datetime-vector"></a></dt>
 <dd><p>Vector containing the time data. Must be POSIXct.</p></dd>
+
+
+<dt id="arg-use-samplevar">use.samplevar<a class="anchor" aria-label="anchor" href="#arg-use-samplevar"></a></dt>
+<dd><p>Logical. Should the sample variance be used (divide by N-1)?
+By default (<code>FALSE</code>), the population variance (divide by N) is used, as described
+in Van Someren et al. (1999).</p></dd>
 
 
 <dt id="arg-na-rm">na.rm<a class="anchor" aria-label="anchor" href="#arg-na-rm"></a></dt>
@@ -126,8 +133,7 @@ Quantification metrics. <em>Lighting Research &amp; Technology</em>.
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">N</span> <span class="op">&lt;-</span> <span class="fl">24</span> <span class="op">*</span> <span class="fl">7</span></span></span>
 <span class="r-in"><span><span class="co"># Calculate metric for seven 24 h days with two measurements per hour</span></span></span>
 <span class="r-in"><span><span class="va">dataset1</span> <span class="op">&lt;-</span></span></span>
@@ -144,7 +150,6 @@ Quantification metrics. <em>Lighting Research &amp; Technology</em>.
 <span class="r-out co"><span class="r-pr">#&gt;</span>   `Interdaily stability`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>                  0.147</span>
-<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
