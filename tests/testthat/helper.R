@@ -1,0 +1,1 @@
+trunc_decimal = function(x, accuracy){base::trunc(x * 10^accuracy) / 10^accuracy}
