@@ -1,12 +1,30 @@
-* changed the behavior of all metric functions that calculate an in-between value (such as the duration of light between 250 and 1000 lux). Up until now, the function would use inclusive bounds on both sides, i.e. the value of 250 lux and 1000 lux would be included in the calculation. This is now changed to right exclusive bounds, i.e. the value of 250 lux will still be included in the calculation, whereas 1000 lux will not. While of little practical difference in a realistic dataset (where exact values matching the threshold are likely not present), it is relevant when calculating, e.g., the time spent in various levels of light or any other variable. The sum of those times should always add up to the total time. With inclusive bounds on both sides, the sum could theoretically be larger, with right exclusive bounds it cannot.
+# LightLogR 0.6.0
+
+* `spectral_reconstruction()`: New function to reconstruct a spectral power distribution (SPD) from sensor channels that provide (normalized) counts, and a calibration matrix. Examples for such devices include the the *ActLumus from Condor instruments*, or the *VEET from Meta Reality labs* (after normalization of counts, e.g., through `normalize_counts()`)
+
+* `alphaopic.action.spectra`: New dataset containing alphaopic action spectra (CIE S026) plus the photopic action spectrum in 1-nm wavelength steps.
+
+* `spectral_integration()`: New function to integrate over all or just parts of the spectrum, including the option to weigh the spectrum with an action spectrum (e.g., from `alphaopic.action.spectra`)
+
+* `durations()`: New function to calculate the groupwise duration of a dataset, based on datapoints, the dominant interval, and missing data
+
+* `mean_daily()`: New function to give a three-row summary of weekday, weekend, and mean daily values
+
+* New family `Cluster`: `extract_clusters()`, `add_clusters()`, `add_cluster_metric()`, `summarize_clusters()`. These are functions to find clusters of a user-specified condition and either summarize them of add them to a dataset.
 
 * Import support for the `ClouClip` device.
 
 * `import_Dataset()` no longer changes a pre-existing `Id` column (if it is not called `Id`). The function is also more informative for the daylight savings time handling in files with more than one Id.
 
+* `gg_photoperiod()` does no longer throw an error when the main plots `y.axis` is not based on a `MEDI` column.
+
 # LightLogR 0.5.4
 
-* `gg_photoperiod()` does no longer throw an error when the main plots `y.axis` is not based on a `MEDI` column.
+* changed the behavior of all metric functions that calculate an in-between value (such as the duration of light between 250 and 1000 lux). Up until now, the function would use inclusive bounds on both sides, i.e. the value of 250 lux and 1000 lux would be included in the calculation. This is now changed to right exclusive bounds, i.e. the value of 250 lux will still be included in the calculation, whereas 1000 lux will not. While of little practical difference in a realistic dataset (where exact values matching the threshold are likely not present), it is relevant when calculating, e.g., the time spent in various levels of light or any other variable. The sum of those times should always add up to the total time. With inclusive bounds on both sides, the sum could theoretically be larger, with right exclusive bounds it cannot.
+
+* Metrics `intradaily_variability()` and `interdaily_stability()` now use the population variance (divide by N), instead of the sample variance (divide by N-1). The legacy behavior can still be accessed by setting the argument `use.samplevar = TRUE`. #55
+
+* Metric IS now correctly uses the `overall mean` in relation to the variance, instead of the `mean of hourly averages across days`. #56
 
 # LightLogR 0.5.3
 
