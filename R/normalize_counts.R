@@ -22,6 +22,8 @@
 #'   and the order must conform to the order in `gain.columns`.
 #'
 #' @returns an extended dataset with new columns containing normalized counts
+#' @family Spectrum
+#' 
 #' @export
 #'
 #' @examples
