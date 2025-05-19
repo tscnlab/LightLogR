@@ -21,6 +21,8 @@
 #' - "long": List of tibbles (wavelength, irradiance)
 #' - "wide": Dataframe with wavelength columns and one row per spectrum
 #'
+#' @family Spectrum
+#'
 #' @export
 #'
 #' @examples
