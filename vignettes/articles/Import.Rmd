@@ -95,7 +95,7 @@ If you are experiencing slow imports, you can try the following:
 
 -   If you have many gaps in your data, you can set `auto.plot = FALSE` in the import function. This will eliminate the call to `gg_overview()`, which calculates and visualizes the gaps in the data.
 
-# Data cleaning #1
+# Finding and handling gaps and irregular data
 
 Before we can dive into the analysis part, we need to make sure we have a clean dataset. The import summary shows us two problems with the data:
 
@@ -132,67 +132,67 @@ Let's have a look at the data again with the `gg_overview()` function.
 data |> gg_overview()
 ```
 
-Looks much better now. Also, because there is no longer a hint about gaps in the lower right corner, we can be sure that all gaps have been removed. The function gap_finder() shows us, however, that there are still irregularities in the data and the function count_difftime() reveals where they are.
+Looks much better now. Also, because there is no longer a hint about gaps in the lower right corner, we can be sure that all gaps have been removed. The function `has_irregulars()` shows us, however, that there are still irregularities in the data and the function `gap_table()` reveals where they are.
 
 ```{r, irregularities}
 data |> 
-  gap_finder()
+  has_irregulars()
+```
+
+Having irregular data in a dataset can be very problematic, as it messes up many functions that require constant spacing of observations. Also, it can seriously slow down computational performance. Let us first check out where the irregular data happen, with the function `gap_table()`. It is important to set `include.implicit.gaps = FALSE`, or it will be computationally very costly
+
+```{r, irregularities2}
+data |> 
+  gap_table(include.implicit.gaps = FALSE)
+```
+
+This means we have to look at and take care of the irregularities for the Ids 215, 218, and 221. Let us first visualize where the irregularities are. We can use `gg_gaps()` for that. We will use `include.implicit.gaps = FALSE` again to save computational cost, and also `group.by.days = TRUE`, wich will give us results by day.
+
+```{r}
+data |> gg_gaps(include.implicit.gaps = FALSE, group.by.days = TRUE, show.irregulars = TRUE)
+```
+
+The first instances seem fine, but then right after the start all data appear shifted. As the first half of the day is missing anyways, this is likely not a day we will be using. This is also the case with all the other participants, anyways, which we can show by selecting a sample and extract the gaps they have. 
+
+```{r}
+data |> 
+  filter(Id %in% 208:210) |> 
+  gg_gaps(MEDI, x.axis.format = "%a")
 
 data |> 
-  count_difftime() |> 
-  print(n=22)
-```
-
-This means we have to look at and take care of the irregularities for the Ids 215, 218, and 221.
-
-# Data cleaning #2
-
-Let us first visualize where the irregularities are. We can use `gg_days()` for that.
-
-```{r}
-#create two columns to show the irregularities and gaps for relevant ids
-difftimes <- 
-  data |> 
-  filter(Id %in% c(215, 218, 221)) |>
-  mutate(difftime = difftime(lead(Datetime), Datetime, units = "secs"),
-                  end = Datetime + seconds(difftime))
-
-#visualize where those points are
-difftimes |> 
-  gg_days(geom = "point", 
-          x.axis.breaks = ~Datetime_breaks(.x, by = "2 days" )
-  ) +
-  geom_rect(data = difftimes |> filter(difftime !=10),
-            aes(xmin = Datetime, xmax = end, ymin = -Inf, ymax = Inf),
-            fill = "red", col = "red", linewidth = 0.2, alpha = 0.2) +
-  gghighlight(difftime != 10 | lag(difftime !=10))
+  filter(Id %in% 208:210) |> 
+  extract_gaps()
 
 ```
 
-All irregular data appear at the very beginning of the data collection. As we are interestet in one whole week of data, we can similarly apply a one week filter on these Ids and see if that removed the irregular data points.
+We can remove these partial days via `remove_partial_data()`. We want to make sure to apply this filter `by.date`, as it otherwise would outright remove participants, but we want to simply remove single days. Before we remove these days we can check which days are going to be removed.
 
 ```{r}
+
+data |> 
+  remove_partial_data(
+    handle.gaps = TRUE, MEDI, by.date = TRUE, threshold.missing = "2 hours",
+    show.result = TRUE
+    ) |> 
+  filter(marked.for.removal)
+
 data <- 
   data |> 
-  filter_Datetime_multiple(
-    arguments = list(
-      list(only_Id = quote(Id == 215)),
-      list(only_Id = quote(Id == 218)),
-      list(only_Id = quote(Id == 221))
-    ), length = "1 week", length_from_start = FALSE)
+    remove_partial_data(
+      handle.gaps = TRUE, MEDI, by.date = TRUE, threshold.missing = "2 hours"
+      )
+```
+34 days were removed. As we have 17 participants, that equals the first and last day of data collection, which are correctly identified as only partly available.
 
-data |> 
-  gap_finder()
-
-data |> 
-  count_difftime() |> 
-  print(n=17)
+```{r}
+data |> has_gaps()
+data |> has_irregulars()
 ```
 
 The data is now clean and we can proceed with the analysis. This dataset will be needed in other articles, so we will save it as an RDS file.
 
 ```{r}
-#uncomment next lines to save the data
+# uncomment next lines to save the data
 # if (!dir.exists("cleaned_data")) dir.create("cleaned_data")
 # saveRDS(data, "cleaned_data/ll_data.rds")
 ```
