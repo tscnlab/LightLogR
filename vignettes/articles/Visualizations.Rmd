@@ -127,7 +127,7 @@ This is the companion function to `gg_day()`. Instead of using individual days, 
 ```{r, fig.width=12}
 data_subset2 <- 
 data |> 
-  filter(Id %in% c(205, 216, 219)) |> #choosing 2 ids
+  filter(Id %in% c(205, 216, 219)) |> #choosing 3 ids
   aggregate_Datetime(unit = "15 mins") #aggregating to 15 min intervals
 
 data_subset2 |>
@@ -140,7 +140,7 @@ By default, `gg_days()` will always plot full days. Let us strip one participant
 data_subset3 <- 
 data_subset2 |> 
   filter(!(Id == 205 & 
-             date(Datetime) %in% c("2023-08-28", "2023-08-29", "2023-08-30")))
+             date(Datetime) %in% c("2023-08-29", "2023-08-30", "2023-08-31")))
 
 data_subset3 |>
   gg_days()
@@ -152,7 +152,7 @@ You can see the plots are misaligned in their facets. We can correct for that by
 data_subset3 |> 
   gg_days(
     x.axis.limits = 
-      \(x) Datetime_limits(x, length = ddays(7), midnight.rollover = TRUE)
+      \(x) Datetime_limits(x, length = ddays(5), midnight.rollover = TRUE)
     )
 ```
 
@@ -163,17 +163,44 @@ data_subset3 |>
   gg_days(
     geom = "ribbon", aes_col = Id, aes_fill = Id, alpha = 0.5, jco_color = TRUE,
     x.axis.limits = 
-      \(x) Datetime_limits(x, length = ddays(7), midnight.rollover = TRUE),
+      \(x) Datetime_limits(x, length = ddays(5), midnight.rollover = TRUE),
     x.axis.breaks = 
       \(x) Datetime_breaks(x, by = "6 hours", shift = 0),
     x.axis.format = "%H",
     ) +
   guides(color = "none", fill = "none")
 ```
+# gg_heatmap()
+
+`gg_heatmap()` is a simple but handy feature to get an overview over large time periods across groups. (For some unknown reason, it tends to produce a warning about uneven horizontal intervals, which can be safely ignored)
+
+```{r, fig.height = 12, warning = FALSE}
+data |> gg_heatmap()
+```
+
+The function does not have a ton of individualization, but there are some options:
+
+```{r, fig.width = 12, fig.height = 4, warning = FALSE}
+data |> 
+  filter(Id %in% c(204, 216, 218)) |> #choosing 3 ids
+  gg_heatmap(fill.limits = c(0,NA)) #sets the upper limit to the max value#
+
+data |> 
+  filter(Id %in% c(204, 216, 218)) |> #choosing 3 ids
+  gg_heatmap(unit = "5 mins") #changes the binning
+```
+
+Importantly, it has a handy doubleplot feature, either showing the `next`, or the `same` day repeated
+
+```{r, fig.width = 16, fig.height = 4, warning = FALSE}
+data |> 
+  filter(Id %in% c(204, 216, 218))|> 
+  gg_heatmap(doubleplot = "next", fill.limits = c(0, NA))
+```
 
 # gg_doubleplot()
 
-`gg_doubleplot()` repeats days within a plot, either horizontally or vertically. Doubleplots are generally useful to visualize patterns that center around midnight (horizontally) or that deviate from 24-hour rhythms (vertically). 
+A more generalized implementation of doubleplots is realized with `gg_doubleplot()`: it repeats days within a plot, either horizontally or vertically. Doubleplots are generally useful to visualize patterns that center around midnight (horizontally) or that deviate from 24-hour rhythms (vertically). 
 
 ## Preparation
 
@@ -273,9 +300,166 @@ sample.data.environment |>
 
 More information on dealing with photoperiods can be found in the article [Photoperiod](https://tscnlab.github.io/LightLogR/articles/photoperiod.html).
 
+# gg_state()
+
+`gg_state()` is another great add on plotting function that works similarly to `gg_photoperiod()` in that it is called on top of an existing plot. Let us start by filtering the larger dataset down to that participant.
+
+## Preparation
+
+```{r}
+#filter the dataset
+data_205 <-
+  data |> filter(Id == "205") |> 
+  aggregate_Datetime(unit = "5 mins", type = "floor")
+```
+
+Next we are importing sleep data for a participant (Id = 205), which is included in `LightLogR`:
+
+```{r}
+#the the path to the sleep data
+path <- system.file("extdata", 
+              package = "LightLogR")
+file.sleep <- "205_sleepdiary_all_20230904.csv"
+#import sleep/wake data
+dataset.sleep <- 
+  import_Statechanges(file.sleep, path, 
+                      Datetime.format = "dmyHM",
+                      State.colnames = c("sleep", "offset"),
+                      State.encoding = c("sleep", "wake"),
+                      Id.colname = record_id,
+                      sep = ";",
+                      dec = ",",
+                      tz = "Europe/Berlin")
+```
+
+Next, we add the sleep/wake data to the dataset. While we are at it, we also add the Brown et al. 2022 recommendations for healthy light, which can be extracted from sleep/wake data.
+
+```{r}
+data_205 <-
+  data_205 |>
+  interval2state(dataset.sleep |> sc2interval()) |> #add sleep/wake-data
+  interval2state(
+    dataset.sleep |> sc2interval() |> sleep_int2Brown(), 
+    State.colname = State.Brown) #add Brown et al. 2022 states
+```
+
+## With gg_days()
+
+Adding the sleep-wake information to a base plot.
+
+```{r, fig.width = 9}
+data_205 |> gg_days() |> gg_state(State, aes_fill = State)
+```
+
+We can also only highlight sleep phases, either by setting `wake` instances to `NA`, or, by converting it to a logical column. Notice that a conditional fill is no longer necessary.
+
+```{r, fig.width = 8}
+data_205 |> 
+  mutate(State = ifelse(State == "sleep", TRUE, FALSE)) |> 
+  gg_days() |> 
+  gg_state(State)
+```
+
+## With gg_day()
+
+`gg_state()` automatically detects whether it is called from `gg_day()` or `gg_days()`, so it just works out of the box.
+
+```{r, fig.height = 8}
+data_205 |> 
+  gg_day(geom = "line") |> 
+  gg_state(State.Brown, aes_fill = State.Brown) +
+  labs(fill = "Brown states")
+```
+
+We can even go a step beyond, and show at which times the participant complied with these recommendations. We will employ the helper function `Brown2reference()` that creates additional columns, including one that tests whether a light exposure level is within the required range (`Reference.check`). When we select this column for `gg_state()`, we can color by the `State.Brown` same as above, but get the selection of when this recommendation was actually met. 
+
+```{r, fig.height = 8}
+data_205 |> 
+  Brown2reference() |>
+  group_by(State.Brown, .add = TRUE) |> 
+  gg_day(geom = "line") |> 
+  gg_state(Reference.check, aes_fill = State.Brown) +
+  labs(fill = "Brown states")
+  
+```
+
+## With gg_doubleplot()
+ 
+`gg_state()` should mostly work fine with `gg_doubleplot()` out of the gate
+
+```{r, fig.height = 8}
+data_205 |> 
+  mutate(State = ifelse(State == "sleep", TRUE, FALSE)) |> 
+  gg_doubleplot() |> 
+  gg_state(State)
+```
+
+## Combination with other add-on functionality
+
+State plotting can be combined with other add-on plotting functions, like other states, photoperiods, or even gaps. However it can quickly become confusing if there are overlapping states, like sleep and nighttime:
+
+```{r, fig.height = 8}
+data_205 |> 
+  mutate(State = ifelse(State == "sleep", TRUE, FALSE)) |> 
+  gg_doubleplot() |> 
+  gg_state(State, aes_fil = State, aes_col =State, alpha = 0.1) |> 
+  gg_photoperiod(c(48.5,9)) +
+  labs(colour ="Sleep", fill = "Sleep")
+```
+
+In these cases it might be more useful to color the ribbon according to the state or the photoperiod.
+
+### Emphasis ond photoperiod with sleep/wake
+
+```{r, fig.height = 8}
+data_205 |> 
+  mutate(State = ifelse(State == "sleep", TRUE, FALSE)) |> 
+  add_photoperiod(c(48.5,9)) |> 
+  gg_doubleplot(aes_fill = photoperiod.state, group = consecutive_id(photoperiod.state)) |> 
+  gg_state(State) +
+  labs(fill = "Photoperiod")
+```
+
+### Emphasis on sleep/wake with photoperiod
+
+```{r, fig.height = 8}
+data_205 |> 
+  gg_doubleplot(aes_fill = State, group = consecutive_id(State)) |> 
+  gg_photoperiod(c(48.5,9)) +
+  labs(fill = "Sleep")
+```
+
+# gg_gaps()
+
+`gg_gaps()` visualizes gaps and optionally also irregular data. It is easy to use, but can be computationally expensive, if there are lots of irregular data and/or gaps. Calling it on good data does produce a plot
+
+```{r}
+data |> gg_gaps()
+```
+
+We can create a dataset with explicit and implicit gaps and irregular data, where all zero values are replaced with `NA`, observations above 1000 lx are missing, and the last day has a slightly delayed sequence.
+
+```{r, fig.width = 8}
+bad_dataset <-
+data_205 |>
+   mutate(Datetime = if_else(date(Datetime) == max(date(Datetime)),
+                             Datetime, Datetime + 1), #creates irregular data for the last day
+          MEDI = na_if(MEDI, 0) #creates explicit gaps
+          ) |>
+  filter(MEDI <1000) #creates implicit gaps
+
+bad_dataset |> gg_gaps(MEDI)
+```
+By default, `gg_gaps()` only shows missing values. Setting `show.irregulars = TRUE` also adds the irregular data to the plot
+
+```{r, fig.width = 8}
+bad_dataset |> gg_gaps(MEDI, show.irregulars = TRUE)
+```
+
+
 # Interactivity
 
-All plotting functions have the inbuilt option to be displayed interactively. This is great for exploring the data. The `plotly` package is used for this. All `LightLogR` plotting functions have the `interactive` argument set to `FALSE` by default. Setting it to `TRUE` will create an interactive plot. 
+`gg_day()` and `gg_days()` have the inbuilt option to be displayed interactively. This is great for exploring the data. The `plotly` package is used for this. They have the `interactive` argument set to `FALSE` by default. Setting it to `TRUE` will create an interactive plot. 
 
 ```{r}
 data_subset |>  
