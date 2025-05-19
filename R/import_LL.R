@@ -240,7 +240,7 @@
 #'   
 #'   Implemented: April 2025
 #'   
-#'   ClouClip export files have the ending `.xls`, but are no real Microsoft Excel files, rather they are tab-separated text files. LightLogR thus does not read them in with an excel import routine
+#'   ClouClip export files have the ending `.xls`, but are no real Microsoft Excel files, rather they are tab-separated text files. LightLogR thus does not read them in with an excel import routine. The measurement columns `Lux` and `Dis` contain sentinel values. `-1` (`Dis` and `Lux`) indicates sleep mode, whereas `204` (only `Dis`) indicates an out of range measurement. These values will be set to `NA`, and an additional column is added that translates these status codes. The columns carry the name `{.col}_status`.
 #'
 #' @section Examples:
 #'
