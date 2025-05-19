@@ -67,6 +67,7 @@ https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3001571
 \seealso{
 Other Brown: 
 \code{\link{Brown_check}()},
+\code{\link{Brown_cut}()},
 \code{\link{Brown_rec}()},
 \code{\link{sleep_int2Brown}()}
 }

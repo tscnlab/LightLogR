@@ -277,7 +277,7 @@ Manufacturer: Clouclip
 
 Implemented: April 2025
 
-ClouClip export files have the ending \code{.xls}, but are no real Microsoft Excel files, rather they are tab-separated text files. LightLogR thus does not read them in with an excel import routine
+ClouClip export files have the ending \code{.xls}, but are no real Microsoft Excel files, rather they are tab-separated text files. LightLogR thus does not read them in with an excel import routine. The measurement columns \code{Lux} and \code{Dis} contain sentinel values. \code{-1} (\code{Dis} and \code{Lux}) indicates sleep mode, whereas \code{204} (only \code{Dis}) indicates an out of range measurement. These values will be set to \code{NA}, and an additional column is added that translates these status codes. The columns carry the name \verb{\{.col\}_status}.
 }
 }
 

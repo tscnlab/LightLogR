@@ -4,7 +4,12 @@
 \alias{number_states}
 \title{Number non-consecutive state occurrences}
 \usage{
-number_states(dataset, state.colname, colname.extension = ".count")
+number_states(
+  dataset,
+  state.colname,
+  colname.extension = ".count",
+  use.original.state = TRUE
+)
 }
 \arguments{
 \item{dataset}{A \code{data.frame} with a state column.}
@@ -15,10 +20,14 @@ Needs to be part of the \code{dataset}. Can be of any type, but \code{character}
 
 \item{colname.extension}{The extension that is added to the state name to
 create the new column. Defaults to \code{".count"}.}
+
+\item{use.original.state}{Logical, whether the original state should be part
+of the output column.}
 }
 \value{
 The input \code{dataset} with an additional column that counts the
-occurrences of each state. The new column will of type \code{character}
+occurrences of each state. The new column will of type \code{character} if
+\code{use.original.state = TRUE} and \code{integer} otherwise.
 }
 \description{
 \code{\link[=number_states]{number_states()}} creates a new column in a dataset that takes a state column
@@ -47,14 +56,15 @@ dataset <- tibble::tibble(
  "night", "night", "day", "night")
  )
 number_states(dataset, state)
+number_states(dataset, state, use.original.state = FALSE)
 
 #example with photoperiods, calculating the mean values for each day and night
 coordinates <- c(48.52, 9.06)
-sample.data.environment |> 
-  add_photoperiod(coordinates) |> 
-  number_states(photoperiod.state) |> 
-  dplyr::group_by(photoperiod.state.count, .add = TRUE) |> 
-  dplyr::summarize(mean_MEDI = mean(MEDI)) |> 
+sample.data.environment |>
+  add_photoperiod(coordinates) |>
+  number_states(photoperiod.state) |>
+  dplyr::group_by(photoperiod.state.count, .add = TRUE) |>
+  dplyr::summarize(mean_MEDI = mean(MEDI)) |>
   tail(13)
 
 }

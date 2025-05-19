@@ -63,3 +63,9 @@ df |>
   dplyr::mutate(
       Spectrum = spectral_reconstruction(dplyr::pick(R:B), calib, "wide"))
 }
+\seealso{
+Other Spectrum: 
+\code{\link{normalize_counts}()},
+\code{\link{spectral_integration}()}
+}
+\concept{Spectrum}

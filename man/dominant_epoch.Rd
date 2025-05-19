@@ -42,8 +42,11 @@ dominant_epoch()
 }
 \seealso{
 Other regularize: 
+\code{\link{extract_gaps}()},
 \code{\link{gap_finder}()},
 \code{\link{gap_handler}()},
-\code{\link{gapless_Datetimes}()}
+\code{\link{gapless_Datetimes}()},
+\code{\link{has_gaps}()},
+\code{\link{has_irregulars}()}
 }
 \concept{regularize}

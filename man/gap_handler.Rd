@@ -20,11 +20,15 @@ gap_handler(
 
 \item{epoch}{The epoch to use for the gapless sequence. Can be either a
 \code{lubridate::duration()} or a string. If it is a string, it needs to be
-either '"dominant.epoch"' (the default) for a guess based on the data or a valid \code{lubridate::duration()} string, e.g., \code{"1 day"} or \code{"10 sec"}.}
+either '"dominant.epoch"' (the default) for a guess based on the data or a
+valid \code{lubridate::duration()} string, e.g., \code{"1 day"} or \code{"10 sec"}.}
 
-\item{behavior}{The behavior of the join of the \code{dataset} with the \code{gapless} sequence. Can be one of \code{"full_sequence"} (the default), \code{"regulars"}, \code{"irregulars"}, or \code{"gaps"}. See @return for details.}
+\item{behavior}{The behavior of the join of the \code{dataset} with the \code{gapless}
+sequence. Can be one of \code{"full_sequence"} (the default), \code{"regulars"},
+\code{"irregulars"}, or \code{"gaps"}. See @return for details.}
 
-\item{full.days}{If \code{TRUE}, the gapless sequence will include the whole first and last day where there is data.}
+\item{full.days}{If \code{TRUE}, the gapless sequence will include the whole first
+and last day where there is data.}
 }
 \value{
 A modified \code{tibble} similar to \code{dataset} but with handling of implicit gaps, depending on the \code{behavior} argument:
@@ -36,7 +40,18 @@ A modified \code{tibble} similar to \code{dataset} but with handling of implicit
 }
 }
 \description{
-Datasets from light loggers often have implicit gaps. These gaps are implicit in the sense that consecutive timestamps (\code{Datetimes}) might not follow a regular epoch/interval. This function fills these implicit gaps by creating a gapless sequence of \code{Datetimes} and joining it to the dataset. The gapless sequence is determined by the minimum and maximum \code{Datetime} in the dataset (per group) and an epoch. The epoch can either be guessed from the dataset or specified by the user. A sequence of gapless \code{Datetimes} can be created with the \code{\link[=gapless_Datetimes]{gapless_Datetimes()}} function, whereas the dominant epoch in the data can be checked with the \code{\link[=dominant_epoch]{dominant_epoch()}} function. The \code{behaviour} argument specifies how the data is combined. By default, the data is joined with a full join, which means that all rows from the gapless sequence are kept, even if there is no matching row in the dataset.
+Datasets from light loggers often have implicit gaps. These gaps are implicit
+in the sense that consecutive timestamps (\code{Datetimes}) might not follow a
+regular epoch/interval. This function fills these implicit gaps by creating a
+gapless sequence of \code{Datetimes} and joining it to the dataset. The gapless
+sequence is determined by the minimum and maximum \code{Datetime} in the dataset
+(per group) and an epoch. The epoch can either be guessed from the dataset or
+specified by the user. A sequence of gapless \code{Datetimes} can be created with
+the \code{\link[=gapless_Datetimes]{gapless_Datetimes()}} function, whereas the dominant epoch in the data
+can be checked with the \code{\link[=dominant_epoch]{dominant_epoch()}} function. The \code{behaviour} argument
+specifies how the data is combined. By default, the data is joined with a
+full join, which means that all rows from the gapless sequence are kept, even
+if there is no matching row in the dataset.
 }
 \examples{
 dataset <-
@@ -61,7 +76,10 @@ dataset \%>\% gap_handler(epoch = "1 day", behavior = "regulars")
 \seealso{
 Other regularize: 
 \code{\link{dominant_epoch}()},
+\code{\link{extract_gaps}()},
 \code{\link{gap_finder}()},
-\code{\link{gapless_Datetimes}()}
+\code{\link{gapless_Datetimes}()},
+\code{\link{has_gaps}()},
+\code{\link{has_irregulars}()}
 }
 \concept{regularize}

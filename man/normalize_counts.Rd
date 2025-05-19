@@ -50,3 +50,9 @@ count.columns = c("uvValue", "visValue", "irValue")
 example.table |>
 normalize_counts(gain.columns, count.columns, gain.ratio.tables$TSL2585)
 }
+\seealso{
+Other Spectrum: 
+\code{\link{spectral_integration}()},
+\code{\link{spectral_reconstruction}()}
+}
+\concept{Spectrum}
