@@ -24,10 +24,18 @@ reference:
     contents:
     - count_difftime
     - dominant_epoch
+    - durations
     - gapless_Datetimes
     - gap_finder
+    - gap_table
     - dst_change_summary
     - extract_photoperiod
+    - extract_clusters
+    - extract_states
+    - extract_metric
+    - extract_gaps
+    - has_gaps
+    - has_irregulars
 
   - title: Process
     desc: >
@@ -36,6 +44,7 @@ reference:
       datasets. All of these functions will return a version of the input dataset.
     contents:
     - gap_handler
+    - remove_partial_data
     - cut_Datetime
     - aggregate_Datetime
     - aggregate_Date
@@ -56,11 +65,14 @@ reference:
     - sc2interval
     - interval2state
     - add_photoperiod
+    - add_clusters
     - number_states
     - sleep_int2Brown
     - Brown_check
     - Brown_rec
     - Brown2reference
+    - Brown_cut
+    - spectral_reconstruction
   
   - title: Visualize
     desc: >
@@ -70,8 +82,11 @@ reference:
     - gg_overview
     - gg_day
     - gg_days
+    - gg_heatmap
     - gg_doubleplot
     - gg_photoperiod
+    - gg_state
+    - gg_gaps
 
   - title: Metrics
     desc: >
@@ -97,6 +112,7 @@ reference:
     - pulses_above_threshold
     - threshold_for_duration
     - timing_above_threshold
+    - spectral_integration
     
   - title: Photoperiod
     desc: >
@@ -112,18 +128,26 @@ reference:
     desc: >
       Helper functions that are used in the other sections.
     contents:
+    - mean_daily
+    - mean_daily_metric
     - symlog_trans
+    - reverse2_trans
     - Datetime_breaks
     - Datetime_limits
     - photoperiod
     - solar_noon
+    - spectral_reconstruction
     - normalize_counts
+    - summarize_numeric
+    - log_zero_inflated
+    - mean_daily
     
   - title: Datasets
     desc: >
       Datasets that are used in LightLogR and in examples.
     contents:
     - sample.data.environment
+    - alphaopic.action.spectra
     - gain.ratio.tables
     - supported_devices
     - ll_import_expr

@@ -1,10 +1,4 @@
-# LightLogR 0.9.0
-
-# LightLogR 0.8.0
-
-# LightLogR 0.7.0
-
-# LightLogR 0.9.0
+# LightLogR 0.9.0 `Sunrise`
 
 This is a huge update for `LightLogR`, bringing many new features and nineteen new functions
 
@@ -67,6 +61,8 @@ This is a huge update for `LightLogR`, bringing many new features and nineteen n
 * `import_Dataset()` no longer changes a pre-existing `Id` column (if it is not called `Id`). The function is also more informative for the daylight savings time handling in files with more than one Id.
 
 * `gg_photoperiod()` does no longer throw an error when the main plots `y.axis` is not based on a `MEDI` column.
+
+* `gapless_Datetimes()` now ignores groups with only a single measurement, instead of throwing an error. This function is the basis for all calculations regarding gaps.
 
 
 # LightLogR 0.5.4
