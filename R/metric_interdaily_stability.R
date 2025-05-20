@@ -9,6 +9,9 @@
 #'
 #' @param Light.vector Numeric vector containing the light data.
 #' @param Datetime.vector Vector containing the time data. Must be POSIXct.
+#' @param use.samplevar Logical. Should the sample variance be used (divide by N-1)? 
+#'    By default (`FALSE`), the population variance (divide by N) is used, as described
+#'    in Van Someren et al. (1999).
 #' @param na.rm Logical. Should missing values be removed? Defaults to `FALSE`.
 #' @param as.df Logical. Should the output be returned as a data frame? If `TRUE`, a data
 #'    frame with a single column named `interdaily_stability` will be returned.
@@ -31,8 +34,7 @@
 #'   \doi{10.1177/14771535231170500}
 #'
 #' @examples
-#'
-#' set.seed(1)
+#'set.seed(1)
 #' N <- 24 * 7
 #' # Calculate metric for seven 24 h days with two measurements per hour
 #' dataset1 <-
@@ -45,17 +47,19 @@
 #'   dplyr::summarise(
 #'     "Interdaily stability" = interdaily_stability(MEDI, Datetime)
 #'   )
-#'
 interdaily_stability <- function(Light.vector,
                                  Datetime.vector,
+                                 use.samplevar = FALSE,
                                  na.rm = FALSE,
-                                 as.df = FALSE) {
+                                 as.df = FALSE
+                                 ) {
   # Initial checks
   stopifnot(
     "`Light.vector` must be numeric!" = is.numeric(Light.vector),
     "`Datetime.vector` must be POSIXct!" = lubridate::is.POSIXct(Datetime.vector),
     "`Light.vector` and `Datetime.vector` must be same length!" = 
       length(Light.vector) == length(Datetime.vector),
+    "`use.samplevar` must be logical!" = is.logical(use.samplevar),
     "`na.rm` must be logical!" = is.logical(na.rm),
     "`as.df` must be logical!" = is.logical(as.df)
   )
@@ -114,19 +118,34 @@ interdaily_stability <- function(Light.vector,
   if (na.rm) {
     df <- df %>% tidyr::drop_na(Light)
   }
+  
+  # Subtract 1 if `use.samplevar == TRUE`
+  c = as.numeric(use.samplevar)
 
   # Hourly averages for each day
-  total_hourly <- df %>%
+  hourly_data <- df %>%
     dplyr::group_by(Datetime = lubridate::floor_date(Datetime, unit = "1 hour")) %>%
     dplyr::summarise(Light = mean(Light))
+  
+  # N hourly data
+  n <- length(hourly_data$Light)
+  
+  # Overall variance
+  var_total <- sum((hourly_data$Light-mean(hourly_data$Light))^2) / (n-c)
 
   # Hourly average across all days
-  avg_hourly <- total_hourly %>%
+  avg_hourly <- hourly_data %>%
     dplyr::group_by(Hour = lubridate::hour(Datetime)) %>%
     dplyr::summarise(Light = mean(Light))
+  
+  # N per day
+  p <- length(avg_hourly$Light)
+  
+  # Variance across average day
+  var_avg_day <- sum((avg_hourly$Light-mean(hourly_data$Light))^2) / (p-c)
 
   # Variance across average day / variance across all days
-  is <- stats::var(avg_hourly$Light) / stats::var(total_hourly$Light)
+  is <- var_avg_day / var_total
 
   # Return data frame or numeric vector
   if (as.df) {

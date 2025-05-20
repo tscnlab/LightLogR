@@ -7,6 +7,7 @@
 intradaily_variability(
   Light.vector,
   Datetime.vector,
+  use.samplevar = FALSE,
   na.rm = FALSE,
   as.df = FALSE
 )
@@ -15,6 +16,10 @@ intradaily_variability(
 \item{Light.vector}{Numeric vector containing the light data.}
 
 \item{Datetime.vector}{Vector containing the time data. Must be POSIXct.}
+
+\item{use.samplevar}{Logical. Should the sample variance be used (divide by N-1)?
+By default (\code{FALSE}), the population variance (divide by N) is used, as described
+in Van Someren et al. (1999).}
 
 \item{na.rm}{Logical. Should missing values be removed? Defaults to \code{FALSE}.}
 
