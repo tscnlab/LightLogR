@@ -1,6 +1,6 @@
 #' Integrate spectral irradiance with optional weighting
 #'
-#'#' Integrates of a given spectrum, optionally over only a portion of the
+#' Integrates over a given spectrum, optionally over only a portion of the
 #' spectrum, optionally with a weighing function. Can be used to calculate
 #' spectral contributions in certain wavelength ranges, or to calculate
 #' (alphaopically equivalent daylight) illuminance.
@@ -9,6 +9,17 @@
 #' step-widths in the spectrum. If an action spectrum is used, values of the
 #' action spectrum at the spectral wavelenghts are interpolated with
 #' [stats::approx()].
+#' 
+#' The used efficacies for for the auto-weighting are:
+#' - photopic: 683.0015478 
+#' - melanopic: 1/0.0013262
+#' - rhodopic: 1/0.0014497
+#' - l_cone_opic: 1/0.0016289
+#' - m_cone_opic: 1/0.0014558
+#' - s_cone_opic: 1/0.0008173
+#' 
+#' This requires input values in W/(m^2) for the spectrum. If it is provided in
+#' other units, the result has to be rescaled afterwards.
 #'
 #' @param spectrum Tibble with spectral data (1st col: wavelength, 2nd col: SPD values)
 #' @param wavelength.range Optional integration bounds (length-2 numeric)
@@ -52,7 +63,8 @@
 spectral_integration <- function(spectrum,
                                  wavelength.range = NULL,
                                  action.spectrum = NULL,
-                                 general.weight = 1) {
+                                 general.weight = 1
+                                 ) {
   
   # Validate spectrum structure
   if (ncol(spectrum) < 2) stop("Spectrum must have at least 2 columns")
