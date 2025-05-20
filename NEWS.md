@@ -1,6 +1,6 @@
 # LightLogR 0.9.0 `Sunrise`
 
-This is a huge update for `LightLogR`, bringing many new features and twenty new functions
+This is a huge update for `LightLogR`, bringing many new features and twenty-two new functions
 
 ## New functions & datasets
 
@@ -26,7 +26,7 @@ This is a huge update for `LightLogR`, bringing many new features and twenty new
 
 * `durations()`: calculate the groupwise duration of a dataset, based on datapoints, the dominant interval, and missing data
 
-* `mean_daily()`: give a three-row summary of weekday, weekend, and mean daily (numeric) values
+* `mean_daily()` and `mean_daily_metric()`: give a three-row summary of weekday, weekend, and mean daily (numeric) values. `mean_daily_metric()` skips the prior metric calculation for duration-based metrics, and directly calculates the mean daily value.
 
 * `extract_clusters()`, `add_clusters()`: find clusters of a user-specified condition and either summarize them or add them to a dataset.
 
@@ -34,11 +34,11 @@ This is a huge update for `LightLogR`, bringing many new features and twenty new
 
 * `extract_metric()`: add a calculation to extracted data, such as from `extract_state()` or `extract_clusters()`.
 
-* `summarize_numeric()`: calculate means across numeric values, ideal to summarize results from `extract_state()`, `extract_gaps()`, or `extract_clusters`.
+* `summarize_numeric()`/`summarise_numeric()`: calculate means across numeric values, ideal to summarize results from `extract_state()`, `extract_gaps()`, or `extract_clusters`.
 
 * `Brown_cut()`: divide light exposure variables into sections ≤1lx, ≤10lx, and ≥250lx according to Brown et al. 2022
 
-* `log_zero_inflated()`: apply a logarithmic transformation after adding a small value to a vector so as to provide zero values in logarithmic transformation, which is especially important for light exposure.
+* `log_zero_inflated()` and `exp_zero_inflated(): apply or reverse a logarithmic transformation after adding a small value to a vector so as to provide zero values in logarithmic transformation, which is especially important for light exposure.
 
 ### Visualizations
 

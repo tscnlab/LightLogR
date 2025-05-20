@@ -66,6 +66,7 @@ reference:
     - interval2state
     - add_photoperiod
     - add_clusters
+    - add_states
     - number_states
     - sleep_int2Brown
     - Brown_check
@@ -138,9 +139,12 @@ reference:
     - solar_noon
     - spectral_reconstruction
     - normalize_counts
-    - summarize_numeric
-    - log_zero_inflated
     - mean_daily
+    - mean_daily_metric
+    - summarize_numeric
+    - summarise_numeric
+    - log_zero_inflated
+    - exp_zero_inflated
     
   - title: Datasets
     desc: >
