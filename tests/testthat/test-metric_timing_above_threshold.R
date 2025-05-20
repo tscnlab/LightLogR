@@ -30,9 +30,9 @@ test_that("Between thresholds works", {
   expect_equal(
     timing_above_threshold(MEDI, Datetime, threshold = c(250, 500)), 
     list(
-      "mean" = lubridate::as_datetime(lubridate::dhours(7.5), tz = "UTC"),
+      "mean" = lubridate::as_datetime(lubridate::dhours(10), tz = "UTC"),
       "first" = lubridate::as_datetime(lubridate::dhours(6), tz = "UTC"),
-      "last" = lubridate::as_datetime(lubridate::dhours(9), tz = "UTC")
+      "last" = lubridate::as_datetime(lubridate::dhours(14), tz = "UTC")
     )
   )
 })
