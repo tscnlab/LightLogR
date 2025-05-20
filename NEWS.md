@@ -1,6 +1,6 @@
 # LightLogR 0.9.0 `Sunrise`
 
-This is a huge update for `LightLogR`, bringing many new features and nineteen new functions
+This is a huge update for `LightLogR`, bringing many new features and twenty new functions
 
 ## New functions & datasets
 
@@ -28,9 +28,9 @@ This is a huge update for `LightLogR`, bringing many new features and nineteen n
 
 * `mean_daily()`: give a three-row summary of weekday, weekend, and mean daily (numeric) values
 
-* `extract_clusters()`, `add_clusters()`: find clusters of a user-specified condition and either summarize them of add them to a dataset.
+* `extract_clusters()`, `add_clusters()`: find clusters of a user-specified condition and either summarize them or add them to a dataset.
 
-* `extract_states()`: provides a summary of every state in the dataset.
+* `extract_states()`, `add_states()`: provides a summary of every state in the dataset or add them to a dataset.
 
 * `extract_metric()`: add a calculation to extracted data, such as from `extract_state()` or `extract_clusters()`.
 
