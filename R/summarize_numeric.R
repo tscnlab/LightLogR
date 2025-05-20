@@ -35,7 +35,7 @@ summarize_numeric <- function(
     durations.dec = 0) {
   
   total <- list(NULL)
-  if(add.total.duration) {
+  if(add.total.duration & "duration" %in% names(data)) {
     total <- list(
       total_duration = rlang::expr(sum(duration, na.rm = na.rm) |> lubridate::as.duration())
     )
