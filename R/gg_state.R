@@ -121,7 +121,7 @@ gg_state <- function(ggplot_obj,
                      midnight.after =
                        max(Datetime) |> lubridate::ceiling_date("day")
       ) |> 
-      dplyr::filter(!is.na({{ State.colname }}))
+      tidyr::drop_na({{ State.colname }})
     
     state_data <-
       state_data |>
@@ -140,7 +140,7 @@ gg_state <- function(ggplot_obj,
       ggplot_obj$data |>
       dplyr::group_by(Day.data, .add = TRUE) |>
       extract_states({{ State.colname }}) |> 
-      dplyr::filter(!is.na({{ State.colname }}))
+      tidyr::drop_na({{ State.colname }})
     
     state_data <-
       state_data |>
