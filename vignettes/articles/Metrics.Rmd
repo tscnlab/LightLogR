@@ -39,15 +39,22 @@ data |> gg_overview()
 
 There are a lot of metrics associated with personal light exposure. You can find the function reference to all of them in the appropriate [reference section](https://tscnlab.github.io/LightLogR/reference/index.html#metrics). There are a few important distinctions between metrics that are important to understand:
 
-* Some metrics require or work best with a specific time frame, usually one day, while others are calculated over an arbitrary length of time. For example, the function `interdaily_stability()` calculates a metric over multiple days, while a function like `midpointCE()` calculates the midpoint of the cumulative light exposure within the given time series - this is less useful for multiple days, where the midpoint is just a time point during these days. E.g., for two similar light exposure patterns across two days, the midpoint of cumulative light exposure across those two days will be around midnight, which is not particularly informative. Much more sensible is the midpoint of the light exposure for each day. To enable this, data has to be grouped within days (or other relevant time frames, like sleep/wake-phase).
+-   Some metrics require or work best with a specific time frame, usually one day, while others are calculated over an arbitrary length of time. For example, the function `interdaily_stability()` calculates a metric over multiple days, while a function like `midpointCE()` calculates the midpoint of the cumulative light exposure within the given time series - this is less useful for multiple days, where the midpoint is just a time point during these days. E.g., for two similar light exposure patterns across two days, the midpoint of cumulative light exposure across those two days will be around midnight, which is not particularly informative. Much more sensible is the midpoint of the light exposure for each day. To enable this, data has to be grouped within days (or other relevant time frames, like sleep/wake-phase).
 
-* Some metrics are submetrics within a family and have to be actively chosen through the arguments of the function. An example is `duration_above_threshold()` that, despite its name also provides the metrics `duration below threshold` and `duration within threshold`. Depending on its `comparison` argument, and whether one or two `threshold`s are provided, the function will calculate different metrics.
+-   Some metrics are submetrics within a family and have to be actively chosen through the arguments of the function. An example is `duration_above_threshold()` that, despite its name also provides the metrics `duration below threshold` and `duration within threshold`. Depending on its `comparison` argument, and whether one or two `threshold`s are provided, the function will calculate different metrics.
 
-* Some metric functions calculate multiple submetrics at once, like `bright_dark_period()`. As stated above, this type of function contains metrics accessible through a function argument, `period` in this case, which allows to specify whether the brightest or darkest periods of the day are required. Independent of this, the function will calculate multiple submetrics at once, which are the `onset`, `midpoint`, and `offset` of the respective period, and also the `mean` light level during that period.
+-   Some metric functions calculate multiple submetrics at once, like `bright_dark_period()`. As stated above, this type of function contains metrics accessible through a function argument, `period` in this case, which allows to specify whether the brightest or darkest periods of the day are required. Independent of this, the function will calculate multiple submetrics at once, which are the `onset`, `midpoint`, and `offset` of the respective period, and also the `mean` light level during that period.
 
 We will cover the practical considerations following from these aspects in the following sections. Further, every function documentation explicitly states whether different metrics are accessible through parameters, and which metrics are calculated by default.
 
 **Note: Most metrics require complete and regular data for a sensible output. While some metrics can handle missing data, it is generally advisable to clean the data before calculating metrics. LightLogR helps to identify gaps and irregularities and can also aggregate data to larger intervals, which can be acceptable for small gaps. In cases of larger gaps, dates or participants might have to be removed from analysis.**
+
+# To log or not to log (transform)
+
+Light exposure data (e.g., Illuminance, or melanopic EDI) is not normally distributed (see #. By their nature, their values are often highly skewed, and also overdispersed. Additionally, the data tend to show an excess of zero values (so called zero-inflation). The paper *How to deal with darkness: Modelling and visualization of zero-inflated personal light exposure data on a logarithmic scale* by [Zauner et al. (2025)](https://www.biorxiv.org/content/10.1101/2024.12.30.630669v1.full) explores ways to deal with this.
+
+For simplicity, this article will just use the untransformed melanopic EDI values to teach the basics on how metric functions work in `LightLogR`. However,
+we generally recommend to use `log_zero_inflated()` whenever there are means calculated in light exposure, which is a simple way to deal with zero-values. See the article [Log transformation](https://tscnlab.github.io/LightLogR/articles/log.html) for more information on this. The function `log_zero_inflated()` is used to log-transform the data, while `exp_zero_inflated()` is used to back-transform the data.
 
 # Metric calculation: basics
 
@@ -97,8 +104,7 @@ duration_above_threshold(
 
 ## Brightest 10 hours of the day (L10)
 
-The second example metric yields multiple submetrics at once. The function `bright_dark_period()` calculates the brightest and darkest periods of the day. By default, it calculates the brightest 10 hour period of the day. By setting `as_df = TRUE`, the function will return a data frame we can pipe to `gt()` for a nice output
-
+The second example metric yields multiple submetrics at once. The function `bright_dark_period()` calculates the brightest and darkest periods of the day. By default, it calculates the brightest 10 hour period of the day. By setting `as_df = TRUE`, the function will return a data frame we can pipe to `gt()` for a better output
 
 ```{r, L10}
 bright_dark_period(
@@ -106,12 +112,13 @@ bright_dark_period(
   Time.vector = data_Id201$Datetime,
   as.df = TRUE
 ) |> 
-  gt()
+  gt() |> tab_header("M10")
 ```
 
 ### Looping
 
 Calculating the darkest period of the day is tricky, as it likely traverses midnight. In the following code we can see that the darkest 10-hour period of day begins at midnight and ends at 10 am, which would be very coincidental. (Note that commonly, the darkest 5-hour period is calculated. We deviate from this to make this point.)
+
 ```{r, M10_wrong}
 M10_wrong <- 
 bright_dark_period(
@@ -122,19 +129,20 @@ bright_dark_period(
   timespan = "10 hours"
 )
 
-M10_wrong |> gt()
+M10_wrong |> gt() |> tab_header("M10 without looping")
 ```
 
-We also see that this makes little sense, if we visualize this portion. The yellow color indicates the darkest 10-hour period of the day.
+We also see that this makes little sense, if we visualize this portion. The blue color indicates the darkest 10-hour period of the day.
 
 ```{r, M10_wrong_plot}
-Onset <- M10_wrong$darkest_10h_onset
-Offset <- M10_wrong$darkest_10h_offset
-
 data_Id201 |> 
-  gg_day(aes_col = Datetime >= Onset & Datetime <= Offset) +
-  guides(color = "none")
-
+  mutate(State = ifelse(
+    Datetime >= M10_wrong$darkest_10h_onset & 
+      Datetime <= M10_wrong$darkest_10h_offset, "M10", NA
+  )) |>
+  gg_day() |> 
+  gg_state(State, aes_fill = State) +
+  guides(fill = "none")
 ```
 
 To solve this, `bright_dark_period()` and some other functions have the option to `loop` the day.
@@ -156,27 +164,21 @@ M10 |> gt()
 This is more plausible, and can also be visualized easily.
 
 ```{r, M10_plot}
-Onset <- M10$darkest_10h_onset
-Offset <- M10$darkest_10h_offset
-
 data_Id201 |> 
-  gg_day(aes_col = Datetime >= Onset | Datetime <= Offset) +
-  guides(color = "none")
+  mutate(State = ifelse(
+    Datetime >= M10$darkest_10h_onset | 
+      Datetime <= M10$darkest_10h_offset, "M10", NA
+  )) |>
+  gg_day() |> 
+  gg_state(State, aes_fill = State) +
+  guides(fill = "none")
 ```
 
 # Metric calculation: advanced
 
 More often than not, metrics are calculated for many participants over prolonged periods of time. In this case, the singular calculation as shown above is inefficient. The `dplyr` family of `dplyr::summarize()` and `dplyr::reframe()` make this much easier.
 
-## Preparation
-
-As we only want to calculate metrics for days with full data, we will exclude Mondays from the data set.
-
-```{r}
-data <- 
-  data |> 
-  dplyr::filter(weekdays(Datetime) != "Monday")
-```
+Be sure to have the data prepared in a way that metric functions can be applied correctly. **This is the responsibility of the user**, as many functions will provide an output, as long as the input vectors are of the correct type and length. In our case we already prepared the data correctly in the [Import & Cleaning](https://tscnlab.github.io/LightLogR/articles/Import.html) article. The data is already grouped by `Id`, and has no gaps or irregular data
 
 ## Summarize
 
@@ -196,7 +198,7 @@ data |>
 
 ## Grouping
 
-By default, data imported with `LightLogR` is grouped by `Id`, which represents individual participants. When using the `dplyr` family of functions, grouping is essential, as it specifies the subgroups of data for which the metrics are calculated. In the following example, we will calculate the TAT 250 lx MEDI for all participants in the data set. We only show the first 6 participants, as it becomes readily apparent that time above threshold for 6 days might not be the most informative parametrization of the metric. 
+By default, data imported with `LightLogR` is grouped by `Id`, which represents individual participants. When using the `dplyr` family of functions, grouping is essential, as it specifies the subgroups of data for which the metrics are calculated. In the following example, we will calculate the TAT 250 lx MEDI for all participants in the data set. We only show the first 6 participants, as it becomes readily apparent that time above threshold for 6 days might not be the most informative parametrization of the metric.
 
 ```{r}
 data |> 
@@ -263,6 +265,17 @@ mean_Exposure |>
   fmt_number(mean_MEDI)
 ```
 
+Same as above, we can summarize the data further:
+
+```{r}
+mean_Exposure |> 
+  group_by(photoperiod.state) |> 
+  summarize_numeric(prefix = ""
+  ) |> 
+  gt() |> 
+  fmt_number(mean_MEDI)
+```
+
 This easily gives us metrics based on daily photoperiod. Metric calculation can utilize photoperiod information in other ways, too. More information on dealing with photoperiods can be found in the article [Photoperiod](https://tscnlab.github.io/LightLogR/articles/photoperiod.html).
 
 ## Metric statistics
@@ -288,6 +301,67 @@ TAT_250 |>
               )
 ```
 
+### mean_daily()
+
+The function `mean_daily()` is a helper to summarize daily data further. It takes summary results that either contain a date or a weekday column and calculates the mean of the metric for weekdays, weekends, and, the mean day (based on *(5 x weekdays + 2 x weekends) / 7*).
+
+```{r}
+#mean daily calculation
+TAT_250_daily <-
+mean_daily(
+  TAT_250,
+  Weekend.type = wDay
+  )
+
+TAT_250_daily |> 
+  head(6) |> 
+  gt()
+```
+
+There is a variant of `mean_daily()` called `mean_daily_metric()`, which is a convenience function to combine the calculation of a single-return-value, duration-based metric with the mean daily calculation. We can use it to calculate `TAT250` from scratch
+
+```{r}
+data |> 
+  mean_daily_metric(
+    metric = "TAT250",
+    Variable = MEDI,
+    threshold = 250
+  ) |> 
+  head() |> 
+  gt()
+```
+
+The function has limited options to change the `metric_type`. In this case, we change the function to the longest continuous period above threshold.
+
+```{r}
+data |> 
+  mean_daily_metric(
+    metric = "PAT250",
+    Variable = MEDI,
+    metric_type = period_above_threshold,
+    threshold = 250
+  ) |> 
+  head() |> 
+  gt()
+```
+
+
+### summarize_numeric()/summarise_numeric()
+
+We can even summarize the data further with `summarize_numeric()`, which takes a dataset and calculates the average of numeric columns, as well as the number of episodes in the group. This makes no sense within participants, where it would just average `Weekday`, `Weekend`, and `Mean daily`. If we regroup the data, however, we can gain usefull insights.
+
+```{r}
+TAT_250_daily |> 
+  group_by(wDay) |> 
+  summarize_numeric(
+  ) |> 
+  gt() |> 
+  fmt_duration(mean_average_TAT_250, 
+               input_units = "seconds", duration_style = "colon-sep")
+```
+
+We can see that our participants have slightly more time above 250 lx on weekdays, compared to weekends (03:45 vs. 02:58, respectively)
+
 # Metric calculation: batch
 
 In the final section, we will add more metrics to the analysis, including ones with multiple sub-metrics. Further, we imagine we want to know how these metrics change from the first half of the experiment (August/September) to the second half (October/November). Finally, we will include a column `Time.data` in the data set, which will be used to calculate the metrics. This column format excludes the `day` information from the `Datetime` column, which avoids `date`-related issues when calculating the `mean` of the metrics. Finally, the `unnest()` call is used to flatten the table from the `dataframe` substructure that is created by `MLIT250` and `TAT250`.
@@ -309,7 +383,7 @@ metrics <-
     TAT250 = 
       duration_above_threshold(MEDI, Time.data, threshold = 250, as.df = TRUE),
     average_MEDI = 
-      mean(MEDI),
+      MEDI |> log_zero_inflated() |>  mean() |> exp_zero_inflated(), #calculate zero inflated log transformed mean
     light_exposure = 
       sum(MEDI)/360, # 10 second epochs means 360 epochs in one hour. dividing by 360 gives the light exposure in lx·h
     .groups = "drop_last"
@@ -323,7 +397,51 @@ metrics |>
 
 ```
 
-The operation above yields a data frame with six metrics across 102 participant days (6 days for 17 participants). The grouping for `Month` did not add additional groups, as each participant day is already solely in the `"Aug/Sep"` or `"Oct/Nov"` group. Next, we will regroup the data by `Month` and look at a summary table similar to the above, but for more metrics.
+The operation above yields a data frame with six metrics across 102 participant days (6 days for 17 participants). The grouping for `Month` did not add additional groups, as each participant day is already solely in the `"Aug/Sep"` or `"Oct/Nov"` group. 
+
+## Summarize metrics
+
+We can summarize the data different ways.
+
+Within `LightLogR`, we can use the `mean_daily()` and `summarize_numeric()` functions:
+
+```{r}
+#calculating weekday, weekend, and mean daily summaries for each group
+metrics |> 
+   #calculate weekday, weekend, and mean daily summaries for each group:
+  mean_daily(wDay, prefix = "", filter.empty = TRUE) |> #remove empty rows
+  group_by(Month, wDay) |>  #regroup so that we can summarize across Participants
+  summarize_numeric(prefix = "") |> 
+  gt() |> 
+  fmt_number(c(average_MEDI, light_exposure))
+```
+
+The number of episodes shows us that there were 11 values in Aug/Sep, and 6 in Oct/Nov - except for Weekends, which have 7. This is because one participant crosses Sep/Oct. Checking this participants data shows that only the last day is in October, which is a Sunday - thus being part of the weekend.
+
+```{r}
+data |> 
+  filter(Id == 214) |> 
+  pull(Datetime) |> 
+  date() |> 
+  unique()
+```
+
+We can wrangle the same data differently, to get averages across all days
+
+```{r}
+#calculating weekday daily summaries for each group
+metrics |> 
+  summarize_numeric(prefix = "") |> #summarize across participants
+  summarize_numeric(prefix = "") |> #summarize by month
+  gt() |> 
+  fmt_number(c(average_MEDI, light_exposure))
+```
+
+This shows us 11 participants for the Aug/Sep timeframe and 7 for the Oct/Nov timeframe. This is in line with the summary above, which showed us one participant crossed the timeframes. Of course, filtering the data at some inbetween step to ensure there are a minimum amount of data points in each category makes sense, which we have left out here for brevity.
+
+## Using gtsummary
+
+This section repeats the summary, but by using the popular `{gtsummary}` package.
 
 ```{r}
 metrics <- 

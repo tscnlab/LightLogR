@@ -170,11 +170,12 @@ data_subset3 |>
     ) +
   guides(color = "none", fill = "none")
 ```
+
 # gg_heatmap()
 
 `gg_heatmap()` is a simple but handy feature to get an overview over large time periods across groups. (For some unknown reason, it tends to produce a warning about uneven horizontal intervals, which can be safely ignored)
 
-```{r, fig.height = 12, warning = FALSE}
+```{r, fig.height = 12, fig.width = 20, warning = FALSE}
 data |> gg_heatmap()
 ```
 
@@ -197,6 +198,19 @@ data |>
   filter(Id %in% c(204, 216, 218))|> 
   gg_heatmap(doubleplot = "next", fill.limits = c(0, NA))
 ```
+
+Finally, we can use heatmaps to produce an Actigram-like plot.
+
+```{r, fig.width = 16, fig.height = 4, warning = FALSE}
+data |> 
+  filter(Id %in% c(204, 216, 218))|> 
+  gg_heatmap(Variable.colname = MEDI >= 50, 
+             doubleplot = "next", 
+             fill.limits = c(0, NA), 
+             fill.remove = TRUE, fill.title = ">50lx MEDI") + 
+  scale_fill_manual(values = c("TRUE" = "black", "FALSE" = "#00000000"))
+```
+
 
 # gg_doubleplot()
 
