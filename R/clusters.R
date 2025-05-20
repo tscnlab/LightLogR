@@ -230,7 +230,10 @@ add_clusters <- function(
     handle.gaps = handle.gaps
   )
   
-  if(nrow(episodes) == 0) return(data)
+  if(nrow(episodes) == 0) {
+    message(paste0("No clusters of condition: ", deparse(Variable)," found"))
+    return(data)
+  }
   
   groups <- dplyr::groups(data)
   
