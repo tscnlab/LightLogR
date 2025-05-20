@@ -30,7 +30,7 @@
 #'   extract_states(photoperiod.state)
 #' states |> head(2)
 #' states |> tail(2)
-#' states |> summarize_numeric(c(state.count, epoch))
+#' states |> summarize_numeric(c("state.count", "epoch"))
 extract_states <- function(data,
                            State.colname,
                            State.expression = NULL,
@@ -130,6 +130,18 @@ extract_states <- function(data,
 #' @export
 #'
 #' @examples
+#' states <-
+#' sample.data.environment |>
+#'   extract_states(Daylight, MEDI > 1000)
+#'
+#' states |> head(2)
+#' 
+#' #add states to a dataset and plot them
+#' sample.data.environment |> 
+#'  add_states(states) |> 
+#'  gg_days() |> 
+#'  gg_state(Daylight)
+
 add_states <- function(dataset,
                        States.dataset,
                        Datetime.colname = Datetime,
