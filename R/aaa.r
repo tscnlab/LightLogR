@@ -1,4 +1,4 @@
-max_date <- is.irregular <- NULL
+.weight <- .date <- max_date <- is.irregular <- NULL
 marked.for.removal <- wavelength <- total_duration_n <- Group <- is.cluster <- NULL
 gap <- episodes <- total_duration <- total <- interval <- gaps <- NULL
 state <- epoch <- state.count <- .variable <- dominant.epoch <- type <- NULL
