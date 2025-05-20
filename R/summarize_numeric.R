@@ -3,13 +3,15 @@
 #' @description 
 #' This simple helper function was created to summarize episodes of gaps, clusters, or states, focusing on numeric variables.
 #' It calculates mean values for all numeric columns and handles Duration objects appropriately.
+#' 
+#' Despite its name, the function actually summarizes all double columns, which is more inclusive compared to just numeric columns.
 #'
 #' @param data A dataframe containing numeric data, typically from [extract_clusters()] or [extract_gaps()].
-#' @param remove This/These columns will be removed from the summary.
+#' @param remove Character vector of columns removed from the summary.
 #' @param prefix A prefix to add to the column names of summarized metrics. Defaults to "mean_".
 #' @param na.rm Whether to remove NA values when calculating means. Defaults to TRUE.
 #' @param add.total.duration Logical, whether the total duration for a given group should be calculated. Only relevant if a column `duration` is part of the input data.
-#' @param durations.dec Numeric of number of decimals for the mean calculation of durations. Defaults to 0.
+#' @param durations.dec Numeric of number of decimals for the mean calculation of durations and times. Defaults to 0.
 #'
 #' @return A dataframe containing the summarized metrics.
 #' 
@@ -25,7 +27,7 @@
 #' #input to summarize_numeric
 #' dataset
 #' #output of summarize_numeric (removing state.count and epoch from the summary)
-#' dataset |> summarize_numeric(c(state.count, epoch))
+#' dataset |> summarize_numeric(c("state.count", "epoch"))
 summarize_numeric <- function(
     data,
     remove = NULL,
@@ -44,13 +46,15 @@ summarize_numeric <- function(
   
   data <- 
   data |>
-    dplyr::select(-{{ remove}}) |> 
+    dplyr::select(-dplyr::any_of(remove)) |> 
     dplyr::summarize(
       dplyr::across(
-        dplyr::where(is.numeric),
+        dplyr::where(\(x) is.double(x) | is.numeric(x)),
         \(x) if(inherits(x, "Duration")) {
           lubridate::duration(mean(x, na.rm = na.rm)) |>
             round(durations.dec)
+        } else if (inherits(x, "hms")) {
+          hms::as_hms(mean(x, na.rm = na.rm) |> round(durations.dec)) 
         } else {
           mean(x, na.rm = na.rm)
         },
@@ -72,3 +76,7 @@ summarize_numeric <- function(
   # } else data
   
 }
+
+#' @rdname summarize_numeric
+#' @export
+summarise_numeric <- summarize_numeric
