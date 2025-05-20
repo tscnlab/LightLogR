@@ -29,7 +29,7 @@ spectral_integration(
 Numeric integrated value
 }
 \description{
-#' Integrates of a given spectrum, optionally over only a portion of the
+Integrates over a given spectrum, optionally over only a portion of the
 spectrum, optionally with a weighing function. Can be used to calculate
 spectral contributions in certain wavelength ranges, or to calculate
 (alphaopically equivalent daylight) illuminance.
@@ -39,6 +39,19 @@ The function uses trapezoidal integration and recognizes differing
 step-widths in the spectrum. If an action spectrum is used, values of the
 action spectrum at the spectral wavelenghts are interpolated with
 \code{\link[stats:approxfun]{stats::approx()}}.
+
+The used efficacies for for the auto-weighting are:
+\itemize{
+\item photopic: 683.0015478
+\item melanopic: 1/0.0013262
+\item rhodopic: 1/0.0014497
+\item l_cone_opic: 1/0.0016289
+\item m_cone_opic: 1/0.0014558
+\item s_cone_opic: 1/0.0008173
+}
+
+This requires input values in W/(m^2) for the spectrum. If it is provided in
+other units, the result has to be rescaled afterwards.
 }
 \examples{
 # creating an equal energy spectrum of value 1

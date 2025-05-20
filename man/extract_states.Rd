@@ -55,5 +55,5 @@ sample.data.environment |>
   extract_states(photoperiod.state)
 states |> head(2)
 states |> tail(2)
-states |> summarize_numeric(c(state.count, epoch))
+states |> summarize_numeric(c("state.count", "epoch"))
 }

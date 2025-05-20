@@ -9,7 +9,8 @@ mean_daily(
   Weekend.type = Day,
   na.rm = TRUE,
   calculate.from.Date = NULL,
-  prefix = "average_"
+  prefix = "average_",
+  filter.empty = FALSE
 )
 }
 \arguments{
@@ -27,6 +28,8 @@ dates from which to calculate the Weekend.type. If provided, Weekend.type
 will be generated from this column.}
 
 \item{prefix}{String that is the prefix on summarized values}
+
+\item{filter.empty}{Filter out empty rows. Default is FALSE}
 }
 \value{
 A dataframe with three rows representing average weekday, weekend,
@@ -39,6 +42,14 @@ The basis is a dataframe that contains metrics per weekday, or per date (with
 \code{calculate.from.Date = Datetime}). The function requires a column specifying
 the day of the week as a factor (with Monday as the weekstart), or it can
 calculate this from a date column if provided.
+}
+\details{
+Summary values for type \code{POSIXct} are calculated as the mean, which can be
+nonsensical at times (e.g., the mean of Day1 18:00 and Day2 18:00, is Day2
+6:00, which can be the desired result, but if the focus is on time, rather
+then on datetime, it is recommended that values are converted to times via
+\code{\link[hms:hms]{hms::as_hms()}} before applying the function (the mean of 18:00 and 18:00 is
+still 18:00, not 6:00).
 }
 \examples{
 # Create sample data

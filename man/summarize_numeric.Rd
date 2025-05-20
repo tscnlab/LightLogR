@@ -2,9 +2,19 @@
 % Please edit documentation in R/summarize_numeric.R
 \name{summarize_numeric}
 \alias{summarize_numeric}
+\alias{summarise_numeric}
 \title{Summarize numeric columns in dataframes to means}
 \usage{
 summarize_numeric(
+  data,
+  remove = NULL,
+  prefix = "mean_",
+  na.rm = TRUE,
+  add.total.duration = TRUE,
+  durations.dec = 0
+)
+
+summarise_numeric(
   data,
   remove = NULL,
   prefix = "mean_",
@@ -16,7 +26,7 @@ summarize_numeric(
 \arguments{
 \item{data}{A dataframe containing numeric data, typically from \code{\link[=extract_clusters]{extract_clusters()}} or \code{\link[=extract_gaps]{extract_gaps()}}.}
 
-\item{remove}{This/These columns will be removed from the summary.}
+\item{remove}{Character vector of columns removed from the summary.}
 
 \item{prefix}{A prefix to add to the column names of summarized metrics. Defaults to "mean_".}
 
@@ -24,7 +34,7 @@ summarize_numeric(
 
 \item{add.total.duration}{Logical, whether the total duration for a given group should be calculated. Only relevant if a column \code{duration} is part of the input data.}
 
-\item{durations.dec}{Numeric of number of decimals for the mean calculation of durations. Defaults to 0.}
+\item{durations.dec}{Numeric of number of decimals for the mean calculation of durations and times. Defaults to 0.}
 }
 \value{
 A dataframe containing the summarized metrics.
@@ -32,6 +42,8 @@ A dataframe containing the summarized metrics.
 \description{
 This simple helper function was created to summarize episodes of gaps, clusters, or states, focusing on numeric variables.
 It calculates mean values for all numeric columns and handles Duration objects appropriately.
+
+Despite its name, the function actually summarizes all double columns, which is more inclusive compared to just numeric columns.
 }
 \examples{
 # Extract clusters and summarize them
@@ -43,5 +55,5 @@ extract_clusters(MEDI > 1000)
 #input to summarize_numeric
 dataset
 #output of summarize_numeric (removing state.count and epoch from the summary)
-dataset |> summarize_numeric(c(state.count, epoch))
+dataset |> summarize_numeric(c("state.count", "epoch"))
 }

@@ -7,11 +7,12 @@
 mean_daily_metric(
   data,
   metric,
-  variable,
+  Variable,
   Weekend.type = Day,
   Datetime.colname = Datetime,
   metric_type = duration_above_threshold,
   prefix = "average_",
+  filter.empty = FALSE,
   ...
 )
 }
@@ -21,7 +22,7 @@ mean_daily_metric(
 \item{metric}{The name of the metric column to create in the output. Expects
 a \code{character}}
 
-\item{variable}{The variable column to analyze. Expects a \code{symbol}. Needs to
+\item{Variable}{The variable column to analyze. Expects a \code{symbol}. Needs to
 be part of the dataset.}
 
 \item{Weekend.type}{A (new) column in the dataframe that specifies the day of
@@ -34,6 +35,8 @@ the week as a factor}
 \code{\link[=duration_above_threshold]{duration_above_threshold()}}}
 
 \item{prefix}{String that is the prefix on summarized values}
+
+\item{filter.empty}{Filter out empty rows. Default is FALSE}
 
 \item{...}{Additional arguments passed to the metric function}
 }
@@ -53,11 +56,11 @@ filepath <- system.file("extdata/sample_data_LYS.csv", package = "LightLogR")
 dataset <- import$LYS(filepath, silent = TRUE)
 
 # Calculate mean daily duration above threshold. As the data only contains
-# data for two days, Weekend and Mean daily will throw errors
+# data for two days, Weekend and Mean daily will throw NA
 dataset |> 
 mean_daily_metric(
   metric = "duration_above_100lux",
-  variable = lux,
+  Variable = lux,
   threshold = 100
 )
 
@@ -65,7 +68,7 @@ mean_daily_metric(
 sample.data.environment |> 
   mean_daily_metric(
   metric = "duration_above_250lux",
-  variable = MEDI,
+  Variable = MEDI,
   threshold = 250)
 
 }

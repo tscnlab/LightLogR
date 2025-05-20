@@ -15,6 +15,8 @@ aggregate_Date(
   logical.handler = function(x) mean(x) >= 0.5,
   factor.handler = function(x) factor(names(which.max(table(x, useNA = "ifany")))),
   datetime.handler = stats::median,
+  duration.handler = function(x) lubridate::duration(mean(x)),
+  time.handler = function(x) hms::as_hms(mean(x)),
   ...
 )
 }
@@ -42,9 +44,9 @@ chooses the relevant function from \pkg{lubridate}.}
 \item{date.handler}{A function that calculates the aggregated day for each
 group. By default, this is set to \code{median}.}
 
-\item{numeric.handler, character.handler, logical.handler, factor.handler, datetime.handler}{functions that handle the respective data types. The default handlers
-calculate the \code{mean} for \code{numeric} and \code{POSIXct} and the \code{mode} for \code{character}, \code{factor}
-and \code{logical} types.}
+\item{numeric.handler, character.handler, logical.handler, factor.handler, datetime.handler, duration.handler, time.handler}{functions that handle the respective data types. The default handlers
+calculate the \code{mean} or \code{median} for \code{numeric}, \code{POSIXct}, \code{duration}, and
+\code{hms}, and the \code{mode} for \code{character}, \code{factor} and \code{logical} types.}
 
 \item{...}{arguments given over to \code{\link[dplyr:summarise]{dplyr::summarize()}} to handle columns
 that do not fall into one of the categories above.}
@@ -66,6 +68,14 @@ is specified the data will simply be aggregated to the most common interval
 for summary plots that show an average day.
 }
 \details{
+Summary values for type \code{POSIXct} are calculated as the median, because the
+mean can be nonsensical at times (e.g., the mean of Day1 18:00 and Day2
+18:00, is Day2 6:00, which can be the desired result, but if the focus is on
+time, rather then on datetime, it is recommended that values are converted to
+times via \code{\link[hms:hms]{hms::as_hms()}} before applying the function (the mean of 18:00 and
+18:00 is still 18:00, not 6:00). Using the median as a default handler
+ensures a more sensible datetime.
+
 \code{\link[=aggregate_Date]{aggregate_Date()}} splits the \code{Datetime} column into a \code{Date.data}
 and a \code{Time.data} column. It will create subgroups for each \code{Time.data}
 present in a group and aggregate each group into a single day, then remove

@@ -2,14 +2,17 @@
 % Please edit documentation in R/normalise.R
 \name{log_zero_inflated}
 \alias{log_zero_inflated}
+\alias{exp_zero_inflated}
 \title{Add a defined number to a numeric and log transform it}
 \usage{
-log_zero_inflated(x, add = 0.1, base = 10)
+log_zero_inflated(x, offset = 0.1, base = 10)
+
+exp_zero_inflated(x, offset = 0.1, base = 10)
 }
 \arguments{
 \item{x}{A numeric vector}
 
-\item{add}{the amount to add to \code{x}, by default \code{0.1}}
+\item{offset}{the amount to add to \code{x}, by default \code{0.1}}
 
 \item{base}{The logarithmic base, by default \code{10}}
 }
@@ -20,6 +23,8 @@ a transformed numeric vector
 Frequently, light exposure data need to be log-transformed. Because light
 exposure data frequently also contain many zero-values, adding a small value
 avoids losing those observations. Must be applied with care and reported.
+
+\code{\link[=exp_zero_inflated]{exp_zero_inflated()}} is the reverse function to \code{\link[=log_zero_inflated]{log_zero_inflated()}}.
 }
 \examples{
 c(0, 1, 10, 100, 1000, 10000) |> log_zero_inflated()
@@ -34,6 +39,10 @@ sample.data.environment |>
                                     threshold = log_zero_inflated(250)
                                     )
                    )
+                   
+
+#Calling exp_zero_inflated on data transformed with log_zero_inflated yields to the original result
+c(0, 1, 10, 100, 1000, 10000) |> log_zero_inflated() |> exp_zero_inflated()
 }
 \references{
 Johannes Zauner, Carolina Guidolin, Manuel Spitschan (2025) How to deal with darkness: Modelling and visualization of zero-inflated personal light exposure data on a logarithmic scale. bioRxiv. doi: https://doi.org/10.1101/2024.12.30.630669

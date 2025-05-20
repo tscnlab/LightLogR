@@ -6,7 +6,7 @@
 \usage{
 remove_partial_data(
   dataset,
-  Variable.colname,
+  Variable.colname = Datetime,
   threshold.missing = 0.2,
   by.date = FALSE,
   Datetime.colname = Datetime,
@@ -21,7 +21,8 @@ Datetime.colname and Variable.colname.}
 
 \item{Variable.colname}{Column name that contains the variable for which to
 assess sufficient datapoints. Expects a symbol. Needs to be part of the
-dataset.}
+dataset. Default is \code{Datetime}, which makes only sense in the presence of
+single data point groups that need to be removed.}
 
 \item{threshold.missing}{either
 \itemize{
@@ -30,7 +31,8 @@ dataset.}
 }}
 
 \item{by.date}{Logical. Should the data be (additionally) grouped by day?
-Defaults to \code{FALSE}. Additional grouping is not persitant beyond the function call.}
+Defaults to \code{FALSE}. Additional grouping is not persitant beyond the
+function call.}
 
 \item{Datetime.colname}{Column name that contains the datetime. Defaults to
 "Datetime" which is automatically correct for data imported with LightLogR.
@@ -49,7 +51,8 @@ groups that did not have sufficient data
 }
 \description{
 This function removes groups from a dataframe that do not have sufficient
-data points. Groups of one data point will automatically be removed.
+data points. Groups of one data point will automatically be removed. Single
+data points are common after using \code{\link[=aggregate_Datetime]{aggregate_Datetime()}}.
 }
 \examples{
 #create sample data with gaps
@@ -68,12 +71,12 @@ gapped_data |> remove_partial_data(MEDI, handle.gaps = TRUE) |> dplyr::count(Id)
 #for comparison
 gapped_data |> dplyr::count(Id)
 #If the threshold is set differently, e.g., to 2 days allowed missing, results vary
-gapped_data |> 
-  remove_partial_data(MEDI, handle.gaps = TRUE, threshold.missing = "2 days") |> 
+gapped_data |>
+  remove_partial_data(MEDI, handle.gaps = TRUE, threshold.missing = "2 days") |>
   dplyr::count(Id)
 
 #The removal can be automatically switched to daily detections within groups
-gapped_data |> 
- remove_partial_data(MEDI, handle.gaps = TRUE, by.date = TRUE, show.result = TRUE) |> 
+gapped_data |>
+ remove_partial_data(MEDI, handle.gaps = TRUE, by.date = TRUE, show.result = TRUE) |>
  head()
 }
