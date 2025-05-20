@@ -7,6 +7,13 @@
 #' the day of the week as a factor (with Monday as the weekstart), or it can
 #' calculate this from a date column if provided.
 #'
+#' Summary values for type `POSIXct` are calculated as the mean, which can be
+#' nonsensical at times (e.g., the mean of Day1 18:00 and Day2 18:00, is Day2
+#' 6:00, which can be the desired result, but if the focus is on time, rather
+#' then on datetime, it is recommended that values are converted to times via
+#' [hms::as_hms()] before applying the function (the mean of 18:00 and 18:00 is
+#' still 18:00, not 6:00).
+#'
 #' @param data A dataframe containing the metrics to summarize
 #' @param Weekend.type A column in the dataframe that specifies the day of the
 #'   week as a factor, where weekstart is Monday (so weekends are 6 and 7 in
@@ -17,6 +24,7 @@
 #'   dates from which to calculate the Weekend.type. If provided, Weekend.type
 #'   will be generated from this column.
 #' @param prefix String that is the prefix on summarized values
+#' @param filter.empty Filter out empty rows. Default is FALSE
 #'
 #' @return A dataframe with three rows representing average weekday, weekend,
 #'   and mean daily values of all numeric columns
@@ -47,7 +55,8 @@ mean_daily <- function(data,
                        Weekend.type = Day,
                        na.rm = TRUE,
                        calculate.from.Date = NULL,
-                       prefix = "average_") {
+                       prefix = "average_",
+                       filter.empty = FALSE) {
   
   # Input validation
   if (!is.data.frame(data)) {
@@ -85,15 +94,27 @@ mean_daily <- function(data,
                                                          "Weekend",
                                                          "Weekday") |> factor(levels = c("Weekday", "Weekend")), 
                     .add = TRUE, .drop = FALSE) |>
-    dplyr::summarize(dplyr::across(dplyr::where(is.numeric),
+    dplyr::summarize(dplyr::across(dplyr::where(\(x) is.double(x) | is.numeric(x)),
                                    \(x) if(inherits(x, "Duration")) {
                                      lubridate::duration(mean(x, na.rm = na.rm)) |> 
                                        round(0)
+                                   } else if (inherits(x, "hms")) {
+                                     hms::as_hms(mean(x, na.rm = na.rm) |> round(0))
                                    } else {
                                      mean(x, na.rm = na.rm)
                                    },
-                                   .names = "{prefix}{.col}"),
-                     .groups = "drop_last")
+                                   .names = "{prefix}{.col}"), 
+                     .groups = "drop_last") 
+    # dplyr::filter(
+    #   all(
+    #     !is.na(
+    #       dplyr::pick(
+    #         !dplyr::matches(
+    #           c(dplyr::group_vars(data), colname.defused({{ Weekend.type }})))
+    #         )
+    #       )
+    #     )
+    #   )
   
   if(nrow(weekday_type) == 0) {
     stop(call. = FALSE, "No weekday or weekend information present")
@@ -111,25 +132,49 @@ mean_daily <- function(data,
   mean_daily <-
     weekday_type |>
     dplyr::mutate(
-      dplyr::across(-{{ Weekend.type }},
-                    \(x) dplyr::case_when({{ Weekend.type }} == "Weekday" ~ x*5,
-                                          {{ Weekend.type }} == "Weekend" ~ x*2))) |>
+      # dplyr::across(-{{ Weekend.type }},
+      #               \(x) dplyr::case_when({{ Weekend.type }} == "Weekday" ~ x*5,
+      #                                     {{ Weekend.type }} == "Weekend" ~ x*2))
+      .weight = dplyr::case_when(
+        {{ Weekend.type }} == "Weekday" ~ 5,
+        {{ Weekend.type }} == "Weekend" ~ 2
+      )
+      )|>
     dplyr::summarize(
-      dplyr::across(-{{ Weekend.type }},
+      dplyr::across(-c({{ Weekend.type }}, dplyr::where(lubridate::is.Date)),
                     \(x) if(inherits(x, "Duration")) {
-                      lubridate::duration(sum(x)/7) |> round(0)
+                      lubridate::duration(sum(x*.weight)/7) |> round(0)
+                    } else if (inherits(x, "hms")) {
+                      hms::as_hms((sum(x*.weight)/7) |> round(0)) 
                     } else {
-                      sum(x)/7
+                      sum(x*.weight)/7
                     }),
       .groups = "keep"
     ) |>
+    dplyr::select(-.weight) |>
     dplyr::mutate({{ Weekend.type }} := "Mean daily", .before = -1)
+    # dplyr::filter(
+    #   !dplyr::if_all(-{{ Weekend.type }}, is.na)
+    # )
   
   # Combine results
+  weekday_type <- 
   weekday_type |> 
     dplyr::bind_rows(mean_daily) |> 
     dplyr::arrange({{ Weekend.type }}, .by_group = TRUE)
+  
+  #filter out empty rows
+  if(filter.empty){
+    weekday_type |>
+      dplyr::filter(
+        !dplyr::if_all(-{{ Weekend.type }}, is.na)
+      )
+  } else {
+    # Return the result
+    return(weekday_type)
+  }
 }
+
 
 #' Calculate mean daily metrics from Time Series
 #'
@@ -142,7 +187,7 @@ mean_daily <- function(data,
 #' @param data A dataframe containing light logger data imported with LightLogR
 #' @param metric The name of the metric column to create in the output. Expects
 #'   a `character`
-#' @param variable The variable column to analyze. Expects a `symbol`. Needs to
+#' @param Variable The variable column to analyze. Expects a `symbol`. Needs to
 #'   be part of the dataset.
 #' @param Weekend.type A (new) column in the dataframe that specifies the day of
 #'   the week as a factor
@@ -161,11 +206,11 @@ mean_daily <- function(data,
 #' dataset <- import$LYS(filepath, silent = TRUE)
 #'
 #' # Calculate mean daily duration above threshold. As the data only contains
-#' # data for two days, Weekend and Mean daily will throw errors
+#' # data for two days, Weekend and Mean daily will throw NA
 #' dataset |> 
 #' mean_daily_metric(
 #'   metric = "duration_above_100lux",
-#'   variable = lux,
+#'   Variable = lux,
 #'   threshold = 100
 #' )
 #' 
@@ -173,17 +218,18 @@ mean_daily <- function(data,
 #' sample.data.environment |> 
 #'   mean_daily_metric(
 #'   metric = "duration_above_250lux",
-#'   variable = MEDI,
+#'   Variable = MEDI,
 #'   threshold = 250)
 #'
 #' @export
 mean_daily_metric <- function(data,
                               metric,
-                              variable,
+                              Variable,
                               Weekend.type = Day,
                               Datetime.colname = Datetime,
                               metric_type = duration_above_threshold,
                               prefix = "average_",
+                              filter.empty = FALSE,
                               ...) {
   
   # Input validation
@@ -194,7 +240,7 @@ mean_daily_metric <- function(data,
   dt_quo <- rlang::enquo(Datetime.colname)
   dt_name <- rlang::as_name(dt_quo)
   
-  var_quo <- rlang::enquo(variable)
+  var_quo <- rlang::enquo(Variable)
   var_name <- rlang::as_name(var_quo)
   
   if (!(dt_name %in% names(data))) {
@@ -220,7 +266,7 @@ mean_daily_metric <- function(data,
                     .add = TRUE) |>
     dplyr::summarize(
       {{ metric }} := 
-        (!!metric_type)({{ variable }},
+        (!!metric_type)({{ Variable }},
                         Time.vector = {{ Datetime.colname }},
                         ...),
       .groups = "drop_last"
@@ -230,6 +276,7 @@ mean_daily_metric <- function(data,
   mean_daily(
     weekday,
     Weekend.type = {{ Weekend.type }},
-    prefix = prefix
+    prefix = prefix,
+    filter.empty = filter.empty
   )
 }
