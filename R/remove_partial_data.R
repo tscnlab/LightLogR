@@ -1,7 +1,8 @@
 #' Remove groups that have too few data points
 #'
 #' This function removes groups from a dataframe that do not have sufficient
-#' data points. Groups of one data point will automatically be removed.
+#' data points. Groups of one data point will automatically be removed. Single
+#' data points are common after using [aggregate_Datetime()].
 #'
 #' @param dataset A light logger dataset. Expects a dataframe. If not imported
 #'   by LightLogR, take care to choose sensible variables for the
@@ -11,7 +12,8 @@
 #'   Expects a symbol. Needs to be part of the dataset. Must be of type POSIXct.
 #' @param Variable.colname Column name that contains the variable for which to
 #'   assess sufficient datapoints. Expects a symbol. Needs to be part of the
-#'   dataset.
+#'   dataset. Default is `Datetime`, which makes only sense in the presence of
+#'   single data point groups that need to be removed.
 #' @param threshold.missing either
 #'   - percentage of missing data, before that group gets removed. Expects a numeric scalar.
 #'   - duration of missing data, before that group gets removed. Expects either a [lubridate::duration()] or a character that can be converted to one, e.g., "30 mins".
@@ -21,7 +23,8 @@
 #' @param show.result Logical, whether the output of the function is summary of
 #'   the data (TRUE), or the reduced dataset (FALSE, the default)
 #' @param by.date Logical. Should the data be (additionally) grouped by day?
-#'   Defaults to `FALSE`. Additional grouping is not persitant beyond the function call.
+#'   Defaults to `FALSE`. Additional grouping is not persitant beyond the
+#'   function call.
 #'
 #' @return if `show.result = FALSE`(default), a reduced dataframe without the
 #'   groups that did not have sufficient data
@@ -45,18 +48,18 @@
 #' #for comparison
 #' gapped_data |> dplyr::count(Id)
 #' #If the threshold is set differently, e.g., to 2 days allowed missing, results vary
-#' gapped_data |> 
-#'   remove_partial_data(MEDI, handle.gaps = TRUE, threshold.missing = "2 days") |> 
+#' gapped_data |>
+#'   remove_partial_data(MEDI, handle.gaps = TRUE, threshold.missing = "2 days") |>
 #'   dplyr::count(Id)
-#' 
+#'
 #' #The removal can be automatically switched to daily detections within groups
-#' gapped_data |> 
-#'  remove_partial_data(MEDI, handle.gaps = TRUE, by.date = TRUE, show.result = TRUE) |> 
+#' gapped_data |>
+#'  remove_partial_data(MEDI, handle.gaps = TRUE, by.date = TRUE, show.result = TRUE) |>
 #'  head()
 
 remove_partial_data <- function(
     dataset,
-    Variable.colname,
+    Variable.colname = Datetime,
     threshold.missing = 0.2,
     by.date = FALSE,
     Datetime.colname = Datetime,
@@ -120,8 +123,8 @@ remove_partial_data <- function(
       dataset |> 
       gap_handler(full.days = TRUE, Datetime.colname = {{ Datetime.colname }})
   } else {
-    if(has_gaps(dataset)) warning("This dataset has implicit gaps. Please make sure to convert them to explicit gaps or that you really know what you are doing")
-    if(has_irregulars(dataset)) warning("This dataset has irregular data. Please make sure to regularize the data or that you really know what you are doing")
+    if(has_gaps(dataset)) message("This dataset has implicit gaps. Please make sure to convert them to explicit gaps or that you really know what you are doing")
+    if(has_irregulars(dataset)) message("This dataset has irregular or singular data. Singular data will automatically be removed. If you are uncertain about irregular data, you can check them with `gap_finder`, `gap_table`, and `gg_gaps`.")
     data <- dataset
   }
   
