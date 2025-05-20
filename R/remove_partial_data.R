@@ -191,9 +191,15 @@ remove_partial_data <- function(
   }
   
   # Filter the original dataset to keep only the groups not marked for removal
+  dataset <- 
   dataset |>
     dplyr::semi_join(groups_to_keep |> 
                        dplyr::select(dplyr::all_of(group_cols)), by = group_cols) |> 
     dplyr::group_by(!!!groups)
+  
+  # If by.date is TRUE, remove the temporary date grouping
+  if (by.date) {
+    dataset |> dplyr::select(-.date)
+  } else dataset
   
 }
