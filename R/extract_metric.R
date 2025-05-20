@@ -75,12 +75,24 @@ extract_metric <- function(
       dplyr::select(-start, -end)
   }
   
-  data |>
-    dplyr::filter(!is.na({{ identifying.colname }})) |>
-    dplyr::group_by({{ identifying.colname }}, .add = TRUE) |>
-    dplyr::summarize(
-      ...,
-      .groups = "drop_last"
-    ) |>
-    dplyr::right_join(extracted_data, by =  c(dplyr::group_vars(data), cc.name))
+  extracted_data |> 
+    dplyr::left_join(
+      data |>
+        dplyr::filter(!is.na({{ identifying.colname }})) |>
+        dplyr::group_by({{ identifying.colname }}, .add = TRUE) |>
+        dplyr::summarize(
+          ...,
+          .groups = "drop_last"
+        ), 
+      by = c(dplyr::group_vars(data), cc.name)
+    )
+  
+  # data |>
+  #   dplyr::filter(!is.na({{ identifying.colname }})) |>
+  #   dplyr::group_by({{ identifying.colname }}, .add = TRUE) |>
+  #   dplyr::summarize(
+  #     ...,
+  #     .groups = "drop_last"
+  #   ) |>
+  #   dplyr::right_join(extracted_data, by =  c(dplyr::group_vars(data), cc.name))
 }
