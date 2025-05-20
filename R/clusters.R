@@ -231,7 +231,7 @@ add_clusters <- function(
   )
   
   if(nrow(episodes) == 0) {
-    message(paste0("No clusters of condition: ", deparse(Variable)," found"))
+  #   message(paste0("No clusters of condition: ", toString({{ Variable }})," found"))
     return(data)
   }
   
