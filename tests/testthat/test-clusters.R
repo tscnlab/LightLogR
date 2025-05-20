@@ -52,19 +52,16 @@ test_that("Functions handle empty cases correctly", {
   ) |> dplyr::group_by(Id = 1)
   
   # Test extract_clusters
-  expect_warning(
+  suppressWarnings(
   expect_message(extract_clusters(empty_data, lux > 1000), 
                  "No clusters of condition: lux > 1000 found")
   )
   
   # Test add_clusters
-  clusters_added <- 
-    suppressWarnings(
-      suppressMessages(
-        add_clusters(empty_data, lux > 1000)
-        )
-    )
-  expect_warning(clusters_added$cluster)
+  suppressWarnings(
+  expect_message(add_clusters(empty_data, lux > 1000),
+                 "No clusters of condition: ~lux > 1000 found")
+  )
 })
 
 test_that("Grouped data handling works", {

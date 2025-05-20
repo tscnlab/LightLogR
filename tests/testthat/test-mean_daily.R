@@ -128,7 +128,7 @@ test_that("mean_daily_metric calculates metrics correctly", {
   result <- mean_daily_metric(
     data = sample_data,
     metric = "above_100",
-    variable = lux,
+    Variable = lux,
     metric_type = mock_duration_above_threshold,
     threshold = 100
   )
@@ -140,12 +140,12 @@ test_that("mean_daily_metric calculates metrics correctly", {
 
 test_that("mean_daily_metric provides informative error for invalid inputs", {
   # Not a dataframe
-  expect_error(mean_daily_metric(c(1, 2, 3), metric = "test", variable = lux), 
+  expect_error(mean_daily_metric(c(1, 2, 3), metric = "test", Variable = lux), 
                "must be a dataframe")
   
   # Missing Datetime column
   sample_data <- data.frame(lux = c(250, 300))
-  expect_error(mean_daily_metric(sample_data, metric = "test", variable = lux), 
+  expect_error(mean_daily_metric(sample_data, metric = "test", Variable = lux), 
                "not found in the input data")
   
   # metric_type not a function
@@ -153,7 +153,7 @@ test_that("mean_daily_metric provides informative error for invalid inputs", {
     Datetime = seq(as.POSIXct("2023-05-01"), as.POSIXct("2023-05-02"), by = "day"),
     lux = c(250, 300)
   )
-  expect_error(mean_daily_metric(sample_data, metric = "test", variable = lux, 
+  expect_error(mean_daily_metric(sample_data, metric = "test", Variable = lux, 
                                  metric_type = "not_a_function"), 
                "must be a function")
 })
@@ -174,7 +174,7 @@ test_that("mean_daily_metric works with different metric types", {
   result <- mean_daily_metric(
     data = sample_data,
     metric = "average_lux",
-    variable = lux,
+    Variable = lux,
     metric_type = mock_metric_function
   )
   
@@ -183,9 +183,6 @@ test_that("mean_daily_metric works with different metric types", {
 })
 
 test_that("mean_daily_metric handles grouped data", {
-  # Skip if LightLogR functions aren't available
-  skip_if_not_installed("LightLogR")
-  
   # Mock a simple metric function
   mock_metric_function <- function(Light.vector, Time.vector, ...) {
     mean(Light.vector)
@@ -203,7 +200,7 @@ test_that("mean_daily_metric handles grouped data", {
   result <- mean_daily_metric(
     data = grouped_data,
     metric = "average_lux",
-    variable = lux,
+    Variable = lux,
     metric_type = mock_metric_function
   )
   
@@ -227,7 +224,7 @@ test_that("mean_daily_metric passes additional arguments to metric function", {
   result1 <- mean_daily_metric(
     data = sample_data,
     metric = "count",
-    variable = lux,
+    Variable = lux,
     metric_type = mock_metric_with_args,
     threshold = 300,
     multiplier = 1
@@ -236,7 +233,7 @@ test_that("mean_daily_metric passes additional arguments to metric function", {
   result2 <- mean_daily_metric(
     data = sample_data,
     metric = "count",
-    variable = lux,
+    Variable = lux,
     metric_type = mock_metric_with_args,
     threshold = 300,
     multiplier = 2
