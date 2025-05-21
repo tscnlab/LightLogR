@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,8 +40,11 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/Day.html">The whole game</a></li>
     <li><a class="dropdown-item" href="../articles/Import.html">Import &amp; cleaning</a></li>
+    <li><a class="dropdown-item" href="../articles/log.html">Log transformation</a></li>
     <li><a class="dropdown-item" href="../articles/Metrics.html">Metrics</a></li>
     <li><a class="dropdown-item" href="../articles/photoperiod.html">Photoperiod</a></li>
+    <li><a class="dropdown-item" href="../articles/spectrum.html">Light Spectrum</a></li>
+    <li><a class="dropdown-item" href="../articles/states.html">Durations, States and Clusters</a></li>
     <li><a class="dropdown-item" href="../articles/Visualizations.html">Visualizations</a></li>
   </ul>
 </li>
@@ -67,7 +70,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Import &amp; cleaning</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/v0.5.4/vignettes/articles/Import.Rmd" class="external-link"><code>vignettes/articles/Import.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/main/vignettes/articles/Import.Rmd" class="external-link"><code>vignettes/articles/Import.Rmd</code></a></small>
       <div class="d-none name"><code>Import.Rmd</code></div>
     </div>
 
@@ -95,11 +98,12 @@ devices are supported:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/supported_devices.html">supported_devices</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  [1] "Actiwatch_Spectrum"    "Actiwatch_Spectrum_de" "ActLumus"             </span></span>
-<span><span class="co">#&gt;  [4] "ActTrust"              "Circadian_Eye"         "DeLux"                </span></span>
-<span><span class="co">#&gt;  [7] "GENEActiv_GGIR"        "Kronowise"             "LiDo"                 </span></span>
-<span><span class="co">#&gt; [10] "LightWatcher"          "LIMO"                  "LYS"                  </span></span>
-<span><span class="co">#&gt; [13] "MotionWatch8"          "nanoLambda"            "OcuWEAR"              </span></span>
-<span><span class="co">#&gt; [16] "Speccy"                "SpectraWear"           "VEET"</span></span></code></pre></div>
+<span><span class="co">#&gt;  [4] "ActTrust"              "Circadian_Eye"         "ClouClip"             </span></span>
+<span><span class="co">#&gt;  [7] "DeLux"                 "GENEActiv_GGIR"        "Kronowise"            </span></span>
+<span><span class="co">#&gt; [10] "LiDo"                  "LightWatcher"          "LIMO"                 </span></span>
+<span><span class="co">#&gt; [13] "LYS"                   "MotionWatch8"          "nanoLambda"           </span></span>
+<span><span class="co">#&gt; [16] "OcuWEAR"               "Speccy"                "SpectraWear"          </span></span>
+<span><span class="co">#&gt; [19] "VEET"</span></span></code></pre></div>
 <p>More Information on these devices can be found in the reference for
 <code><a href="../reference/import_Dataset.html">import_Dataset()</a></code>.</p>
 <div class="section level3">
@@ -186,9 +190,9 @@ the <code>import</code> function.</p>
 <span><span class="co">#&gt; Successfully read in 1'034'650 observations across 17 Ids from 17 ActLumus-file(s).</span></span>
 <span><span class="co">#&gt; Timezone set is Europe/Berlin.</span></span>
 <span><span class="co">#&gt; The system timezone is UTC. Please correct if necessary!</span></span>
-<span><span class="co">#&gt; Observations in the following 2 file(s) cross to or from daylight savings time (DST): </span></span>
-<span><span class="co">#&gt; 221_actlumus_Log_1607_20231030121531432</span></span>
-<span><span class="co">#&gt; 222_actlumus_Log_1020_20231030140039534</span></span>
+<span><span class="co">#&gt; Observations in the following 2 file(s) and 2 Id(s) cross to or from daylight savings time (DST): </span></span>
+<span><span class="co">#&gt; File: 221_actlumus_Log_1607_20231030121531432, Group:221</span></span>
+<span><span class="co">#&gt; File: 222_actlumus_Log_1020_20231030140039534, Group:222</span></span>
 <span><span class="co">#&gt; Please make sure that the timestamps in the source files correctly reflect these changes from DST&lt;&gt;ST. </span></span>
 <span><span class="co">#&gt; To adjust datetimes after a jump, set `dst_adjustment = TRUE` or see `?dst_change_handler` for manual adjustment.</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -265,7 +269,7 @@ visualizes the gaps in the data.</p></li>
 </div>
 </div>
 <div class="section level2">
-<h2 id="data-cleaning-1">Data cleaning #1<a class="anchor" aria-label="anchor" href="#data-cleaning-1"></a>
+<h2 id="finding-and-handling-gaps-and-irregular-data">Finding and handling gaps and irregular data<a class="anchor" aria-label="anchor" href="#finding-and-handling-gaps-and-irregular-data"></a>
 </h2>
 <p>Before we can dive into the analysis part, we need to make sure we
 have a clean dataset. The import summary shows us two problems with the
@@ -312,116 +316,976 @@ are the same for all Ids.</p>
 <p><img src="Import_files/figure-html/overview-1.png" width="700"></p>
 <p>Looks much better now. Also, because there is no longer a hint about
 gaps in the lower right corner, we can be sure that all gaps have been
-removed. The function gap_finder() shows us, however, that there are
-still irregularities in the data and the function count_difftime()
-reveals where they are.</p>
+removed. The function <code><a href="../reference/has_irregulars.html">has_irregulars()</a></code> shows us, however,
+that there are still irregularities in the data and the function
+<code><a href="../reference/gap_table.html">gap_table()</a></code> reveals where they are.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="../reference/gap_finder.html">gap_finder</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Found 183580 gaps. 847054 Datetimes fall into the regular sequence.</span></span>
-<span></span>
-<span><span class="va">data</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="../reference/count_difftime.html">count_difftime</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span>n<span class="op">=</span><span class="fl">22</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 22 × 3</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Groups:   Id [17]</span></span></span>
-<span><span class="co">#&gt;    Id    difftime       n</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;Duration&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 221   10s        <span style="text-decoration: underline;">62</span>341</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 204   10s        <span style="text-decoration: underline;">61</span>980</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 222   10s        <span style="text-decoration: underline;">61</span>891</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 205   10s        <span style="text-decoration: underline;">61</span>015</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 218   10s        <span style="text-decoration: underline;">60</span>929</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 215   10s        <span style="text-decoration: underline;">60</span>707</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 210   10s        <span style="text-decoration: underline;">60</span>701</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 206   10s        <span style="text-decoration: underline;">60</span>479</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 214   10s        <span style="text-decoration: underline;">60</span>479</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 216   10s        <span style="text-decoration: underline;">60</span>479</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> 219   10s        <span style="text-decoration: underline;">60</span>479</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> 209   10s        <span style="text-decoration: underline;">60</span>084</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> 201   10s        <span style="text-decoration: underline;">60</span>042</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">14</span> 202   10s        <span style="text-decoration: underline;">59</span>957</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">15</span> 208   10s        <span style="text-decoration: underline;">59</span>853</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">16</span> 213   10s        <span style="text-decoration: underline;">59</span>720</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">17</span> 212   10s        <span style="text-decoration: underline;">59</span>478</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">18</span> 215   7s             1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">19</span> 218   8s             1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">20</span> 218   11s            1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">21</span> 221   9s             1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">22</span> 221   19s            1</span></span></code></pre></div>
-<p>This means we have to look at and take care of the irregularities for
-the Ids 215, 218, and 221.</p>
-</div>
-<div class="section level2">
-<h2 id="data-cleaning-2">Data cleaning #2<a class="anchor" aria-label="anchor" href="#data-cleaning-2"></a>
-</h2>
-<p>Let us first visualize where the irregularities are. We can use
-<code><a href="../reference/gg_days.html">gg_days()</a></code> for that.</p>
+<span>  <span class="fu"><a href="../reference/has_irregulars.html">has_irregulars</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
+<p>Having irregular data in a dataset can be very problematic, as it
+messes up many functions that require constant spacing of observations.
+Also, it can seriously slow down computational performance. Let us first
+check out where the irregular data happen, with the function
+<code><a href="../reference/gap_table.html">gap_table()</a></code>. It is important to set
+<code>include.implicit.gaps = FALSE</code>, or it will be
+computationally very costly</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#create two columns to show the irregularities and gaps for relevant ids</span></span>
-<span><span class="va">difftimes</span> <span class="op">&lt;-</span> </span>
-<span>  <span class="va">data</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">215</span>, <span class="fl">218</span>, <span class="fl">221</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>difftime <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/difftime.html" class="external-link">difftime</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html" class="external-link">lead</a></span><span class="op">(</span><span class="va">Datetime</span><span class="op">)</span>, <span class="va">Datetime</span>, units <span class="op">=</span> <span class="st">"secs"</span><span class="op">)</span>,</span>
-<span>                  end <span class="op">=</span> <span class="va">Datetime</span> <span class="op">+</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/period.html" class="external-link">seconds</a></span><span class="op">(</span><span class="va">difftime</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">#visualize where those points are</span></span>
-<span><span class="va">difftimes</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="../reference/gg_days.html">gg_days</a></span><span class="op">(</span>geom <span class="op">=</span> <span class="st">"point"</span>, </span>
-<span>          x.axis.breaks <span class="op">=</span> <span class="op">~</span><span class="fu"><a href="../reference/Datetime_breaks.html">Datetime_breaks</a></span><span class="op">(</span><span class="va">.x</span>, by <span class="op">=</span> <span class="st">"2 days"</span> <span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_rect</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">difftimes</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">difftime</span> <span class="op">!=</span><span class="fl">10</span><span class="op">)</span>,</span>
-<span>            <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>xmin <span class="op">=</span> <span class="va">Datetime</span>, xmax <span class="op">=</span> <span class="va">end</span>, ymin <span class="op">=</span> <span class="op">-</span><span class="cn">Inf</span>, ymax <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span>,</span>
-<span>            fill <span class="op">=</span> <span class="st">"red"</span>, col <span class="op">=</span> <span class="st">"red"</span>, linewidth <span class="op">=</span> <span class="fl">0.2</span>, alpha <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://yutannihilation.github.io/gghighlight/reference/gghighlight.html" class="external-link">gghighlight</a></span><span class="op">(</span><span class="va">difftime</span> <span class="op">!=</span> <span class="fl">10</span> <span class="op">|</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html" class="external-link">lag</a></span><span class="op">(</span><span class="va">difftime</span> <span class="op">!=</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Import_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
-<p>All irregular data appear at the very beginning of the data
-collection. As we are interestet in one whole week of data, we can
-similarly apply a one week filter on these Ids and see if that removed
-the irregular data points.</p>
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/gap_table.html">gap_table</a></span><span class="op">(</span>include.implicit.gaps <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: There are implicit gaps in the dataset that will not be part of the</span></span>
+<span><span class="co">#&gt; extracted summary, due to `include.implicit.gaps = FALSE`.</span></span>
+<span><span class="co">#&gt; No gaps found</span></span></code></pre></div>
+<div id="dfieexombw" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#dfieexombw table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#dfieexombw thead, #dfieexombw tbody, #dfieexombw tfoot, #dfieexombw tr, #dfieexombw td, #dfieexombw th {
+  border-style: none;
+}
+
+#dfieexombw p {
+  margin: 0;
+  padding: 0;
+}
+
+#dfieexombw .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#dfieexombw .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#dfieexombw .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#dfieexombw .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#dfieexombw .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#dfieexombw .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#dfieexombw .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#dfieexombw .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#dfieexombw .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#dfieexombw .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#dfieexombw .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#dfieexombw .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#dfieexombw .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#dfieexombw .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#dfieexombw .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#dfieexombw .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#dfieexombw .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#dfieexombw .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#dfieexombw .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dfieexombw .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#dfieexombw .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#dfieexombw .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#dfieexombw .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dfieexombw .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#dfieexombw .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#dfieexombw .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#dfieexombw .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dfieexombw .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#dfieexombw .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#dfieexombw .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#dfieexombw .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#dfieexombw .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#dfieexombw .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dfieexombw .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#dfieexombw .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dfieexombw .gt_left {
+  text-align: left;
+}
+
+#dfieexombw .gt_center {
+  text-align: center;
+}
+
+#dfieexombw .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#dfieexombw .gt_font_normal {
+  font-weight: normal;
+}
+
+#dfieexombw .gt_font_bold {
+  font-weight: bold;
+}
+
+#dfieexombw .gt_font_italic {
+  font-style: italic;
+}
+
+#dfieexombw .gt_super {
+  font-size: 65%;
+}
+
+#dfieexombw .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#dfieexombw .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#dfieexombw .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#dfieexombw .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#dfieexombw .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#dfieexombw .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#dfieexombw .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#dfieexombw .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#dfieexombw div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading">
+<td colspan="14" class="gt_heading gt_title gt_font_normal" style>Summary of available and missing data</td>
+    </tr>
+<tr class="gt_heading">
+<td colspan="14" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style>Variable: melanopic EDI</td>
+    </tr>
+<tr class="gt_col_headings gt_spanner_row">
+<th rowspan="1" colspan="1" scope="col"></th>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="7" style="font-weight: bold; font-weight: bold;" scope="colgroup" id="data_spanner">
+        <div class="gt_column_spanner">Data</div>
+      </th>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="6" style="font-weight: bold; font-weight: bold;" scope="colgroup" id="missing_spanner">
+        <div class="gt_column_spanner">Missing</div>
+      </th>
+    </tr>
+<tr class="gt_col_headings gt_spanner_row">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="2" colspan="1" scope="col" id="a::stub"></th>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="3" style="font-weight: bold;" scope="colgroup" id="Regular">
+        <div class="gt_column_spanner">Regular</div>
+      </th>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="1" style="font-weight: bold;" scope="col" id="irregular_spanner">
+        <div class="gt_column_spanner">Irregular</div>
+      </th>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="2" style="font-weight: bold;" scope="colgroup" id="Range">
+        <div class="gt_column_spanner">Range</div>
+      </th>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="1" style="font-weight: bold;" scope="col" id="interval_spanner">
+        <div class="gt_column_spanner">Interval</div>
+      </th>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="6" style="font-weight: bold;" scope="colgroup" id="gap_spanner">
+        <div class="gt_column_spanner">Gaps</div>
+      </th>
+    </tr>
+<tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="available_data">Time</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="available_data_pct">%</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="available_data_n">n<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span>
+</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="number_irregulars">n<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>2,1</sup></span>
+</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="total_duration">Time</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="total_duration_n">n<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span>
+</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="interval">Time</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="number_gaps">N</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="mean_gap_duration">ø</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="mean_gap_duration_n">øn<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span>
+</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="missing_data">Time</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="missing_data_pct">%</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="missing_data_n">n<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span>
+</th>
+    </tr>
+</thead>
+<tbody class="gt_table_body">
+<tr>
+<th id="grand_summary_stub_1" scope="row" class="gt_row gt_left gt_stub gt_grand_summary_row gt_grand_summary_row gt_last_grand_summary_row_top" style="background-color: #E5E5E5;"><span class="gt_from_md"><strong>Overall</strong></span></th>
+<td headers="grand_summary_stub_1 available_data" class="gt_row gt_center gt_grand_summary_row gt_grand_summary_row gt_last_grand_summary_row_top" style="background-color: #E5E5E5;">17w 6h 52m 40s</td>
+<td headers="grand_summary_stub_1 available_data_pct" class="gt_row gt_right gt_grand_summary_row gt_grand_summary_row gt_last_grand_summary_row_top" style="background-color: #E5E5E5;">100.0%<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>3</sup></span>
+</td>
+<td headers="grand_summary_stub_1 available_data_n" class="gt_row gt_right gt_grand_summary_row gt_grand_summary_row gt_last_grand_summary_row_top" style="background-color: #E5E5E5;">1,030,636</td>
+<td headers="grand_summary_stub_1 number_irregulars" class="gt_row gt_right gt_grand_summary_row gt_grand_summary_row gt_last_grand_summary_row_top" style="background-color: #E5E5E5; border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">183,582</td>
+<td headers="grand_summary_stub_1 total_duration" class="gt_row gt_center gt_grand_summary_row gt_grand_summary_row gt_last_grand_summary_row_top" style="background-color: #E5E5E5; border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">17w 6h 52m 40s</td>
+<td headers="grand_summary_stub_1 total_duration_n" class="gt_row gt_right gt_grand_summary_row gt_grand_summary_row gt_last_grand_summary_row_top" style="background-color: #E5E5E5;">1,030,636</td>
+<td headers="grand_summary_stub_1 interval" class="gt_row gt_center gt_grand_summary_row gt_grand_summary_row gt_last_grand_summary_row_top" style="background-color: #E5E5E5; border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">10</td>
+<td headers="grand_summary_stub_1 number_gaps" class="gt_row gt_right gt_grand_summary_row gt_grand_summary_row gt_last_grand_summary_row_top" style="background-color: #E5E5E5; border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">0</td>
+<td headers="grand_summary_stub_1 mean_gap_duration" class="gt_row gt_right gt_grand_summary_row gt_grand_summary_row gt_last_grand_summary_row_top" style="background-color: #E5E5E5;">0s</td>
+<td headers="grand_summary_stub_1 mean_gap_duration_n" class="gt_row gt_right gt_grand_summary_row gt_grand_summary_row gt_last_grand_summary_row_top" style="background-color: #E5E5E5;">0</td>
+<td headers="grand_summary_stub_1 missing_data" class="gt_row gt_center gt_grand_summary_row gt_grand_summary_row gt_last_grand_summary_row_top" style="background-color: #E5E5E5;">0s</td>
+<td headers="grand_summary_stub_1 missing_data_pct" class="gt_row gt_right gt_grand_summary_row gt_grand_summary_row gt_last_grand_summary_row_top" style="background-color: #E5E5E5;">0.0%<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>3</sup></span>
+</td>
+<td headers="grand_summary_stub_1 missing_data_n" class="gt_row gt_right gt_grand_summary_row gt_grand_summary_row gt_last_grand_summary_row_top" style="background-color: #E5E5E5;">0</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="14" class="gt_group_heading" scope="colgroup" id="201">201</th>
+    </tr>
+<tr class="gt_row_group_first">
+<th id="stub_1_1" scope="row" class="gt_row gt_left gt_stub"></th>
+<td headers="201 stub_1_1 available_data" class="gt_row gt_center">6d 22h 47m 10s</td>
+<td headers="201 stub_1_1 available_data_pct" class="gt_row gt_right">100.0%</td>
+<td headers="201 stub_1_1 available_data_n" class="gt_row gt_right">60,043</td>
+<td headers="201 stub_1_1 number_irregulars" class="gt_row gt_right" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">0</td>
+<td headers="201 stub_1_1 total_duration" class="gt_row gt_center" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">6d 22h 47m 10s</td>
+<td headers="201 stub_1_1 total_duration_n" class="gt_row gt_right">60,043</td>
+<td headers="201 stub_1_1 interval" class="gt_row gt_center" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">10s</td>
+<td headers="201 stub_1_1 number_gaps" class="gt_row gt_right" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">0</td>
+<td headers="201 stub_1_1 mean_gap_duration" class="gt_row gt_right">0s</td>
+<td headers="201 stub_1_1 mean_gap_duration_n" class="gt_row gt_right">0</td>
+<td headers="201 stub_1_1 missing_data" class="gt_row gt_center">0s</td>
+<td headers="201 stub_1_1 missing_data_pct" class="gt_row gt_right">0.0%</td>
+<td headers="201 stub_1_1 missing_data_n" class="gt_row gt_right">0</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="14" class="gt_group_heading" scope="colgroup" id="202">202</th>
+    </tr>
+<tr class="gt_row_group_first">
+<th id="stub_1_2" scope="row" class="gt_row gt_left gt_stub"></th>
+<td headers="202 stub_1_2 available_data" class="gt_row gt_center">6d 22h 33m</td>
+<td headers="202 stub_1_2 available_data_pct" class="gt_row gt_right">100.0%</td>
+<td headers="202 stub_1_2 available_data_n" class="gt_row gt_right">59,958</td>
+<td headers="202 stub_1_2 number_irregulars" class="gt_row gt_right" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">0</td>
+<td headers="202 stub_1_2 total_duration" class="gt_row gt_center" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">6d 22h 33m</td>
+<td headers="202 stub_1_2 total_duration_n" class="gt_row gt_right">59,958</td>
+<td headers="202 stub_1_2 interval" class="gt_row gt_center" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">10s</td>
+<td headers="202 stub_1_2 number_gaps" class="gt_row gt_right" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">0</td>
+<td headers="202 stub_1_2 mean_gap_duration" class="gt_row gt_right">0s</td>
+<td headers="202 stub_1_2 mean_gap_duration_n" class="gt_row gt_right">0</td>
+<td headers="202 stub_1_2 missing_data" class="gt_row gt_center">0s</td>
+<td headers="202 stub_1_2 missing_data_pct" class="gt_row gt_right">0.0%</td>
+<td headers="202 stub_1_2 missing_data_n" class="gt_row gt_right">0</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="14" class="gt_group_heading" scope="colgroup" id="204">204</th>
+    </tr>
+<tr class="gt_row_group_first">
+<th id="stub_1_3" scope="row" class="gt_row gt_left gt_stub"></th>
+<td headers="204 stub_1_3 available_data" class="gt_row gt_center">1w 4h 10m 10s</td>
+<td headers="204 stub_1_3 available_data_pct" class="gt_row gt_right">100.0%</td>
+<td headers="204 stub_1_3 available_data_n" class="gt_row gt_right">61,981</td>
+<td headers="204 stub_1_3 number_irregulars" class="gt_row gt_right" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">0</td>
+<td headers="204 stub_1_3 total_duration" class="gt_row gt_center" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">1w 4h 10m 10s</td>
+<td headers="204 stub_1_3 total_duration_n" class="gt_row gt_right">61,981</td>
+<td headers="204 stub_1_3 interval" class="gt_row gt_center" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">10s</td>
+<td headers="204 stub_1_3 number_gaps" class="gt_row gt_right" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">0</td>
+<td headers="204 stub_1_3 mean_gap_duration" class="gt_row gt_right">0s</td>
+<td headers="204 stub_1_3 mean_gap_duration_n" class="gt_row gt_right">0</td>
+<td headers="204 stub_1_3 missing_data" class="gt_row gt_center">0s</td>
+<td headers="204 stub_1_3 missing_data_pct" class="gt_row gt_right">0.0%</td>
+<td headers="204 stub_1_3 missing_data_n" class="gt_row gt_right">0</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="14" class="gt_group_heading" scope="colgroup" id="205">205</th>
+    </tr>
+<tr class="gt_row_group_first">
+<th id="stub_1_4" scope="row" class="gt_row gt_left gt_stub"></th>
+<td headers="205 stub_1_4 available_data" class="gt_row gt_center">1w 1h 29m 20s</td>
+<td headers="205 stub_1_4 available_data_pct" class="gt_row gt_right">100.0%</td>
+<td headers="205 stub_1_4 available_data_n" class="gt_row gt_right">61,016</td>
+<td headers="205 stub_1_4 number_irregulars" class="gt_row gt_right" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">0</td>
+<td headers="205 stub_1_4 total_duration" class="gt_row gt_center" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">1w 1h 29m 20s</td>
+<td headers="205 stub_1_4 total_duration_n" class="gt_row gt_right">61,016</td>
+<td headers="205 stub_1_4 interval" class="gt_row gt_center" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">10s</td>
+<td headers="205 stub_1_4 number_gaps" class="gt_row gt_right" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">0</td>
+<td headers="205 stub_1_4 mean_gap_duration" class="gt_row gt_right">0s</td>
+<td headers="205 stub_1_4 mean_gap_duration_n" class="gt_row gt_right">0</td>
+<td headers="205 stub_1_4 missing_data" class="gt_row gt_center">0s</td>
+<td headers="205 stub_1_4 missing_data_pct" class="gt_row gt_right">0.0%</td>
+<td headers="205 stub_1_4 missing_data_n" class="gt_row gt_right">0</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="14" class="gt_group_heading" scope="colgroup" id="206">206</th>
+    </tr>
+<tr class="gt_row_group_first">
+<th id="stub_1_5" scope="row" class="gt_row gt_left gt_stub"></th>
+<td headers="206 stub_1_5 available_data" class="gt_row gt_center">1w</td>
+<td headers="206 stub_1_5 available_data_pct" class="gt_row gt_right">100.0%</td>
+<td headers="206 stub_1_5 available_data_n" class="gt_row gt_right">60,480</td>
+<td headers="206 stub_1_5 number_irregulars" class="gt_row gt_right" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">0</td>
+<td headers="206 stub_1_5 total_duration" class="gt_row gt_center" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">1w</td>
+<td headers="206 stub_1_5 total_duration_n" class="gt_row gt_right">60,480</td>
+<td headers="206 stub_1_5 interval" class="gt_row gt_center" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">10s</td>
+<td headers="206 stub_1_5 number_gaps" class="gt_row gt_right" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">0</td>
+<td headers="206 stub_1_5 mean_gap_duration" class="gt_row gt_right">0s</td>
+<td headers="206 stub_1_5 mean_gap_duration_n" class="gt_row gt_right">0</td>
+<td headers="206 stub_1_5 missing_data" class="gt_row gt_center">0s</td>
+<td headers="206 stub_1_5 missing_data_pct" class="gt_row gt_right">0.0%</td>
+<td headers="206 stub_1_5 missing_data_n" class="gt_row gt_right">0</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="14" class="gt_group_heading" scope="colgroup" id="208">208</th>
+    </tr>
+<tr class="gt_row_group_first">
+<th id="stub_1_6" scope="row" class="gt_row gt_left gt_stub"></th>
+<td headers="208 stub_1_6 available_data" class="gt_row gt_center">6d 22h 15m 40s</td>
+<td headers="208 stub_1_6 available_data_pct" class="gt_row gt_right">100.0%</td>
+<td headers="208 stub_1_6 available_data_n" class="gt_row gt_right">59,854</td>
+<td headers="208 stub_1_6 number_irregulars" class="gt_row gt_right" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">0</td>
+<td headers="208 stub_1_6 total_duration" class="gt_row gt_center" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">6d 22h 15m 40s</td>
+<td headers="208 stub_1_6 total_duration_n" class="gt_row gt_right">59,854</td>
+<td headers="208 stub_1_6 interval" class="gt_row gt_center" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">10s</td>
+<td headers="208 stub_1_6 number_gaps" class="gt_row gt_right" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">0</td>
+<td headers="208 stub_1_6 mean_gap_duration" class="gt_row gt_right">0s</td>
+<td headers="208 stub_1_6 mean_gap_duration_n" class="gt_row gt_right">0</td>
+<td headers="208 stub_1_6 missing_data" class="gt_row gt_center">0s</td>
+<td headers="208 stub_1_6 missing_data_pct" class="gt_row gt_right">0.0%</td>
+<td headers="208 stub_1_6 missing_data_n" class="gt_row gt_right">0</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="14" class="gt_group_heading" scope="colgroup" id="209">209</th>
+    </tr>
+<tr class="gt_row_group_first">
+<th id="stub_1_7" scope="row" class="gt_row gt_left gt_stub"></th>
+<td headers="209 stub_1_7 available_data" class="gt_row gt_center">6d 22h 54m 10s</td>
+<td headers="209 stub_1_7 available_data_pct" class="gt_row gt_right">100.0%</td>
+<td headers="209 stub_1_7 available_data_n" class="gt_row gt_right">60,085</td>
+<td headers="209 stub_1_7 number_irregulars" class="gt_row gt_right" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">0</td>
+<td headers="209 stub_1_7 total_duration" class="gt_row gt_center" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">6d 22h 54m 10s</td>
+<td headers="209 stub_1_7 total_duration_n" class="gt_row gt_right">60,085</td>
+<td headers="209 stub_1_7 interval" class="gt_row gt_center" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">10s</td>
+<td headers="209 stub_1_7 number_gaps" class="gt_row gt_right" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">0</td>
+<td headers="209 stub_1_7 mean_gap_duration" class="gt_row gt_right">0s</td>
+<td headers="209 stub_1_7 mean_gap_duration_n" class="gt_row gt_right">0</td>
+<td headers="209 stub_1_7 missing_data" class="gt_row gt_center">0s</td>
+<td headers="209 stub_1_7 missing_data_pct" class="gt_row gt_right">0.0%</td>
+<td headers="209 stub_1_7 missing_data_n" class="gt_row gt_right">0</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="14" class="gt_group_heading" scope="colgroup" id="210">210</th>
+    </tr>
+<tr class="gt_row_group_first">
+<th id="stub_1_8" scope="row" class="gt_row gt_left gt_stub"></th>
+<td headers="210 stub_1_8 available_data" class="gt_row gt_center">1w 37m</td>
+<td headers="210 stub_1_8 available_data_pct" class="gt_row gt_right">100.0%</td>
+<td headers="210 stub_1_8 available_data_n" class="gt_row gt_right">60,702</td>
+<td headers="210 stub_1_8 number_irregulars" class="gt_row gt_right" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">0</td>
+<td headers="210 stub_1_8 total_duration" class="gt_row gt_center" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">1w 37m</td>
+<td headers="210 stub_1_8 total_duration_n" class="gt_row gt_right">60,702</td>
+<td headers="210 stub_1_8 interval" class="gt_row gt_center" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">10s</td>
+<td headers="210 stub_1_8 number_gaps" class="gt_row gt_right" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">0</td>
+<td headers="210 stub_1_8 mean_gap_duration" class="gt_row gt_right">0s</td>
+<td headers="210 stub_1_8 mean_gap_duration_n" class="gt_row gt_right">0</td>
+<td headers="210 stub_1_8 missing_data" class="gt_row gt_center">0s</td>
+<td headers="210 stub_1_8 missing_data_pct" class="gt_row gt_right">0.0%</td>
+<td headers="210 stub_1_8 missing_data_n" class="gt_row gt_right">0</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="14" class="gt_group_heading" scope="colgroup" id="212">212</th>
+    </tr>
+<tr class="gt_row_group_first">
+<th id="stub_1_9" scope="row" class="gt_row gt_left gt_stub"></th>
+<td headers="212 stub_1_9 available_data" class="gt_row gt_center">6d 21h 13m 10s</td>
+<td headers="212 stub_1_9 available_data_pct" class="gt_row gt_right">100.0%</td>
+<td headers="212 stub_1_9 available_data_n" class="gt_row gt_right">59,479</td>
+<td headers="212 stub_1_9 number_irregulars" class="gt_row gt_right" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">0</td>
+<td headers="212 stub_1_9 total_duration" class="gt_row gt_center" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">6d 21h 13m 10s</td>
+<td headers="212 stub_1_9 total_duration_n" class="gt_row gt_right">59,479</td>
+<td headers="212 stub_1_9 interval" class="gt_row gt_center" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">10s</td>
+<td headers="212 stub_1_9 number_gaps" class="gt_row gt_right" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">0</td>
+<td headers="212 stub_1_9 mean_gap_duration" class="gt_row gt_right">0s</td>
+<td headers="212 stub_1_9 mean_gap_duration_n" class="gt_row gt_right">0</td>
+<td headers="212 stub_1_9 missing_data" class="gt_row gt_center">0s</td>
+<td headers="212 stub_1_9 missing_data_pct" class="gt_row gt_right">0.0%</td>
+<td headers="212 stub_1_9 missing_data_n" class="gt_row gt_right">0</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="14" class="gt_group_heading" scope="colgroup" id="213">213</th>
+    </tr>
+<tr class="gt_row_group_first">
+<th id="stub_1_10" scope="row" class="gt_row gt_left gt_stub"></th>
+<td headers="213 stub_1_10 available_data" class="gt_row gt_center">6d 21h 53m 30s</td>
+<td headers="213 stub_1_10 available_data_pct" class="gt_row gt_right">100.0%</td>
+<td headers="213 stub_1_10 available_data_n" class="gt_row gt_right">59,721</td>
+<td headers="213 stub_1_10 number_irregulars" class="gt_row gt_right" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">0</td>
+<td headers="213 stub_1_10 total_duration" class="gt_row gt_center" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">6d 21h 53m 30s</td>
+<td headers="213 stub_1_10 total_duration_n" class="gt_row gt_right">59,721</td>
+<td headers="213 stub_1_10 interval" class="gt_row gt_center" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">10s</td>
+<td headers="213 stub_1_10 number_gaps" class="gt_row gt_right" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">0</td>
+<td headers="213 stub_1_10 mean_gap_duration" class="gt_row gt_right">0s</td>
+<td headers="213 stub_1_10 mean_gap_duration_n" class="gt_row gt_right">0</td>
+<td headers="213 stub_1_10 missing_data" class="gt_row gt_center">0s</td>
+<td headers="213 stub_1_10 missing_data_pct" class="gt_row gt_right">0.0%</td>
+<td headers="213 stub_1_10 missing_data_n" class="gt_row gt_right">0</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="14" class="gt_group_heading" scope="colgroup" id="214">214</th>
+    </tr>
+<tr class="gt_row_group_first">
+<th id="stub_1_11" scope="row" class="gt_row gt_left gt_stub"></th>
+<td headers="214 stub_1_11 available_data" class="gt_row gt_center">1w</td>
+<td headers="214 stub_1_11 available_data_pct" class="gt_row gt_right">100.0%</td>
+<td headers="214 stub_1_11 available_data_n" class="gt_row gt_right">60,480</td>
+<td headers="214 stub_1_11 number_irregulars" class="gt_row gt_right" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">0</td>
+<td headers="214 stub_1_11 total_duration" class="gt_row gt_center" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">1w</td>
+<td headers="214 stub_1_11 total_duration_n" class="gt_row gt_right">60,480</td>
+<td headers="214 stub_1_11 interval" class="gt_row gt_center" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">10s</td>
+<td headers="214 stub_1_11 number_gaps" class="gt_row gt_right" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">0</td>
+<td headers="214 stub_1_11 mean_gap_duration" class="gt_row gt_right">0s</td>
+<td headers="214 stub_1_11 mean_gap_duration_n" class="gt_row gt_right">0</td>
+<td headers="214 stub_1_11 missing_data" class="gt_row gt_center">0s</td>
+<td headers="214 stub_1_11 missing_data_pct" class="gt_row gt_right">0.0%</td>
+<td headers="214 stub_1_11 missing_data_n" class="gt_row gt_right">0</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="14" class="gt_group_heading" scope="colgroup" id="215">215</th>
+    </tr>
+<tr class="gt_row_group_first">
+<th id="stub_1_12" scope="row" class="gt_row gt_left gt_stub"></th>
+<td headers="215 stub_1_12 available_data" class="gt_row gt_center">1w 38m 10s</td>
+<td headers="215 stub_1_12 available_data_pct" class="gt_row gt_right">100.0%</td>
+<td headers="215 stub_1_12 available_data_n" class="gt_row gt_right">60,709</td>
+<td headers="215 stub_1_12 number_irregulars" class="gt_row gt_right" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">60562</td>
+<td headers="215 stub_1_12 total_duration" class="gt_row gt_center" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">1w 38m 10s</td>
+<td headers="215 stub_1_12 total_duration_n" class="gt_row gt_right">60,709</td>
+<td headers="215 stub_1_12 interval" class="gt_row gt_center" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">10s</td>
+<td headers="215 stub_1_12 number_gaps" class="gt_row gt_right" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">0</td>
+<td headers="215 stub_1_12 mean_gap_duration" class="gt_row gt_right">0s</td>
+<td headers="215 stub_1_12 mean_gap_duration_n" class="gt_row gt_right">0</td>
+<td headers="215 stub_1_12 missing_data" class="gt_row gt_center">0s</td>
+<td headers="215 stub_1_12 missing_data_pct" class="gt_row gt_right">0.0%</td>
+<td headers="215 stub_1_12 missing_data_n" class="gt_row gt_right">0</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="14" class="gt_group_heading" scope="colgroup" id="216">216</th>
+    </tr>
+<tr class="gt_row_group_first">
+<th id="stub_1_13" scope="row" class="gt_row gt_left gt_stub"></th>
+<td headers="216 stub_1_13 available_data" class="gt_row gt_center">1w</td>
+<td headers="216 stub_1_13 available_data_pct" class="gt_row gt_right">100.0%</td>
+<td headers="216 stub_1_13 available_data_n" class="gt_row gt_right">60,480</td>
+<td headers="216 stub_1_13 number_irregulars" class="gt_row gt_right" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">0</td>
+<td headers="216 stub_1_13 total_duration" class="gt_row gt_center" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">1w</td>
+<td headers="216 stub_1_13 total_duration_n" class="gt_row gt_right">60,480</td>
+<td headers="216 stub_1_13 interval" class="gt_row gt_center" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">10s</td>
+<td headers="216 stub_1_13 number_gaps" class="gt_row gt_right" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">0</td>
+<td headers="216 stub_1_13 mean_gap_duration" class="gt_row gt_right">0s</td>
+<td headers="216 stub_1_13 mean_gap_duration_n" class="gt_row gt_right">0</td>
+<td headers="216 stub_1_13 missing_data" class="gt_row gt_center">0s</td>
+<td headers="216 stub_1_13 missing_data_pct" class="gt_row gt_right">0.0%</td>
+<td headers="216 stub_1_13 missing_data_n" class="gt_row gt_right">0</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="14" class="gt_group_heading" scope="colgroup" id="218">218</th>
+    </tr>
+<tr class="gt_row_group_first">
+<th id="stub_1_14" scope="row" class="gt_row gt_left gt_stub"></th>
+<td headers="218 stub_1_14 available_data" class="gt_row gt_center">1w 1h 15m 20s</td>
+<td headers="218 stub_1_14 available_data_pct" class="gt_row gt_right">100.0%</td>
+<td headers="218 stub_1_14 available_data_n" class="gt_row gt_right">60,932</td>
+<td headers="218 stub_1_14 number_irregulars" class="gt_row gt_right" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">60829</td>
+<td headers="218 stub_1_14 total_duration" class="gt_row gt_center" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">1w 1h 15m 20s</td>
+<td headers="218 stub_1_14 total_duration_n" class="gt_row gt_right">60,932</td>
+<td headers="218 stub_1_14 interval" class="gt_row gt_center" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">10s</td>
+<td headers="218 stub_1_14 number_gaps" class="gt_row gt_right" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">0</td>
+<td headers="218 stub_1_14 mean_gap_duration" class="gt_row gt_right">0s</td>
+<td headers="218 stub_1_14 mean_gap_duration_n" class="gt_row gt_right">0</td>
+<td headers="218 stub_1_14 missing_data" class="gt_row gt_center">0s</td>
+<td headers="218 stub_1_14 missing_data_pct" class="gt_row gt_right">0.0%</td>
+<td headers="218 stub_1_14 missing_data_n" class="gt_row gt_right">0</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="14" class="gt_group_heading" scope="colgroup" id="219">219</th>
+    </tr>
+<tr class="gt_row_group_first">
+<th id="stub_1_15" scope="row" class="gt_row gt_left gt_stub"></th>
+<td headers="219 stub_1_15 available_data" class="gt_row gt_center">1w</td>
+<td headers="219 stub_1_15 available_data_pct" class="gt_row gt_right">100.0%</td>
+<td headers="219 stub_1_15 available_data_n" class="gt_row gt_right">60,480</td>
+<td headers="219 stub_1_15 number_irregulars" class="gt_row gt_right" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">0</td>
+<td headers="219 stub_1_15 total_duration" class="gt_row gt_center" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">1w</td>
+<td headers="219 stub_1_15 total_duration_n" class="gt_row gt_right">60,480</td>
+<td headers="219 stub_1_15 interval" class="gt_row gt_center" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">10s</td>
+<td headers="219 stub_1_15 number_gaps" class="gt_row gt_right" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">0</td>
+<td headers="219 stub_1_15 mean_gap_duration" class="gt_row gt_right">0s</td>
+<td headers="219 stub_1_15 mean_gap_duration_n" class="gt_row gt_right">0</td>
+<td headers="219 stub_1_15 missing_data" class="gt_row gt_center">0s</td>
+<td headers="219 stub_1_15 missing_data_pct" class="gt_row gt_right">0.0%</td>
+<td headers="219 stub_1_15 missing_data_n" class="gt_row gt_right">0</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="14" class="gt_group_heading" scope="colgroup" id="221">221</th>
+    </tr>
+<tr class="gt_row_group_first">
+<th id="stub_1_16" scope="row" class="gt_row gt_left gt_stub"></th>
+<td headers="221 stub_1_16 available_data" class="gt_row gt_center">1w 5h 10m 40s</td>
+<td headers="221 stub_1_16 available_data_pct" class="gt_row gt_right">100.0%</td>
+<td headers="221 stub_1_16 available_data_n" class="gt_row gt_right">62,344</td>
+<td headers="221 stub_1_16 number_irregulars" class="gt_row gt_right" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">62191</td>
+<td headers="221 stub_1_16 total_duration" class="gt_row gt_center" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">1w 5h 10m 40s</td>
+<td headers="221 stub_1_16 total_duration_n" class="gt_row gt_right">62,344</td>
+<td headers="221 stub_1_16 interval" class="gt_row gt_center" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">10s</td>
+<td headers="221 stub_1_16 number_gaps" class="gt_row gt_right" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">0</td>
+<td headers="221 stub_1_16 mean_gap_duration" class="gt_row gt_right">0s</td>
+<td headers="221 stub_1_16 mean_gap_duration_n" class="gt_row gt_right">0</td>
+<td headers="221 stub_1_16 missing_data" class="gt_row gt_center">0s</td>
+<td headers="221 stub_1_16 missing_data_pct" class="gt_row gt_right">0.0%</td>
+<td headers="221 stub_1_16 missing_data_n" class="gt_row gt_right">0</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="14" class="gt_group_heading" scope="colgroup" id="222">222</th>
+    </tr>
+<tr class="gt_row_group_first">
+<th id="stub_1_17" scope="row" class="gt_row gt_left gt_stub"></th>
+<td headers="222 stub_1_17 available_data" class="gt_row gt_center">1w 3h 55m 20s</td>
+<td headers="222 stub_1_17 available_data_pct" class="gt_row gt_right">100.0%</td>
+<td headers="222 stub_1_17 available_data_n" class="gt_row gt_right">61,892</td>
+<td headers="222 stub_1_17 number_irregulars" class="gt_row gt_right" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">0</td>
+<td headers="222 stub_1_17 total_duration" class="gt_row gt_center" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">1w 3h 55m 20s</td>
+<td headers="222 stub_1_17 total_duration_n" class="gt_row gt_right">61,892</td>
+<td headers="222 stub_1_17 interval" class="gt_row gt_center" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">10s</td>
+<td headers="222 stub_1_17 number_gaps" class="gt_row gt_right" style="border-left-width: 1px; border-left-style: solid; border-left-color: grey80;">0</td>
+<td headers="222 stub_1_17 mean_gap_duration" class="gt_row gt_right">0s</td>
+<td headers="222 stub_1_17 mean_gap_duration_n" class="gt_row gt_right">0</td>
+<td headers="222 stub_1_17 missing_data" class="gt_row gt_center">0s</td>
+<td headers="222 stub_1_17 missing_data_pct" class="gt_row gt_right">0.0%</td>
+<td headers="222 stub_1_17 missing_data_n" class="gt_row gt_right">0</td>
+</tr>
+</tbody>
+<tfoot class="gt_footnotes">
+<tr>
+<td class="gt_footnote" colspan="14">
+<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span> Number of (missing or actual) observations</td>
+    </tr>
+<tr>
+<td class="gt_footnote" colspan="14">
+<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>2</sup></span> If n &gt; 0: it is possible that the other summary statistics are affected, as they are calculated based on the most prominent interval.</td>
+    </tr>
+<tr>
+<td class="gt_footnote" colspan="14">
+<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>3</sup></span> Based on times, not necessarily number of observations</td>
+    </tr>
+</tfoot>
+</table>
+</div>
+<p>This means we have to look at and take care of the irregularities for
+the Ids 215, 218, and 221. Let us first visualize where the
+irregularities are. We can use <code><a href="../reference/gg_gaps.html">gg_gaps()</a></code> for that. We will
+use <code>include.implicit.gaps = FALSE</code> again to save
+computational cost, and also <code>group.by.days = TRUE</code>, wich
+will give us results by day.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> </span>
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/gg_gaps.html">gg_gaps</a></span><span class="op">(</span>include.implicit.gaps <span class="op">=</span> <span class="cn">FALSE</span>, group.by.days <span class="op">=</span> <span class="cn">TRUE</span>, show.irregulars <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Import_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
+<p>The first instances seem fine, but then right after the start all
+data appear shifted. As the first half of the day is missing anyways,
+this is likely not a day we will be using. This is also the case with
+all the other participants, anyways, which we can show by selecting a
+sample and extract the gaps they have.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fl">208</span><span class="op">:</span><span class="fl">210</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/gg_gaps.html">gg_gaps</a></span><span class="op">(</span><span class="va">MEDI</span>, x.axis.format <span class="op">=</span> <span class="st">"%a"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: Removed 8386 rows containing missing values or values outside the scale range</span></span>
+<span><span class="co">#&gt; (`geom_line()`).</span></span></code></pre></div>
+<p><img src="Import_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="va">data</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fl">208</span><span class="op">:</span><span class="fl">210</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/extract_gaps.html">extract_gaps</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 6</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Groups:   Id [3]</span></span></span>
+<span><span class="co">#&gt;   Id    gap.id epoch      start               end                </span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;Duration&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>             </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 208        1 10s        2023-09-04 <span style="color: #949494;">00:00:04</span> 2023-09-04 <span style="color: #949494;">11:01:44</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 208        2 10s        2023-09-11 <span style="color: #949494;">09:17:24</span> 2023-09-12 <span style="color: #949494;">00:00:04</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 209        1 10s        2023-09-03 <span style="color: #949494;">23:59:57</span> 2023-09-04 <span style="color: #949494;">11:03:17</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 209        2 10s        2023-09-11 <span style="color: #949494;">09:57:27</span> 2023-09-11 <span style="color: #949494;">23:59:57</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 210        1 10s        2023-09-04 <span style="color: #949494;">00:00:00</span> 2023-09-04 <span style="color: #949494;">11:07:00</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> 210        2 10s        2023-09-11 <span style="color: #949494;">11:44:00</span> 2023-09-12 <span style="color: #949494;">00:00:00</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1 more variable: duration &lt;Duration&gt;</span></span></span></code></pre></div>
+<p>We can remove these partial days via
+<code><a href="../reference/remove_partial_data.html">remove_partial_data()</a></code>. We want to make sure to apply this
+filter <code>by.date</code>, as it otherwise would outright remove
+participants, but we want to simply remove single days. Before we remove
+these days we can check which days are going to be removed.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="va">data</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/remove_partial_data.html">remove_partial_data</a></span><span class="op">(</span></span>
+<span>    handle.gaps <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">MEDI</span>, by.date <span class="op">=</span> <span class="cn">TRUE</span>, threshold.missing <span class="op">=</span> <span class="st">"2 hours"</span>,</span>
+<span>    show.result <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>    <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">marked.for.removal</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 34 × 9</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Groups:   Id, .date [34]</span></span></span>
+<span><span class="co">#&gt;    marked.for.removal Id    .date      duration             </span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;Duration&gt;</span>           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> TRUE               201   2023-08-14 47080s (~13.08 hours)</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> TRUE               201   2023-08-21 34950s (~9.71 hours) </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> TRUE               202   2023-08-14 46970s (~13.05 hours)</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> TRUE               202   2023-08-21 34210s (~9.5 hours)  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> TRUE               204   2023-08-14 45030s (~12.51 hours)</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> TRUE               204   2023-08-21 56380s (~15.66 hours)</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> TRUE               205   2023-08-28 54730s (~15.2 hours) </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> TRUE               205   2023-09-04 37030s (~10.29 hours)</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> TRUE               206   2023-08-28 51680s (~14.36 hours)</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> TRUE               206   2023-09-04 34720s (~9.64 hours) </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 24 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 5 more variables: missing &lt;Duration&gt;, total &lt;Duration&gt;, missing_pct &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   threshold &lt;Duration&gt;, interval &lt;Duration&gt;</span></span></span>
+<span></span>
+<span><span class="va">data</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="va">data</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="../reference/filter_Datetime_multiple.html">filter_Datetime_multiple</a></span><span class="op">(</span></span>
-<span>    arguments <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>only_Id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/substitute.html" class="external-link">quote</a></span><span class="op">(</span><span class="va">Id</span> <span class="op">==</span> <span class="fl">215</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>      <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>only_Id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/substitute.html" class="external-link">quote</a></span><span class="op">(</span><span class="va">Id</span> <span class="op">==</span> <span class="fl">218</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>      <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>only_Id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/substitute.html" class="external-link">quote</a></span><span class="op">(</span><span class="va">Id</span> <span class="op">==</span> <span class="fl">221</span><span class="op">)</span><span class="op">)</span></span>
-<span>    <span class="op">)</span>, length <span class="op">=</span> <span class="st">"1 week"</span>, length_from_start <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">data</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="../reference/gap_finder.html">gap_finder</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; No gaps found</span></span>
-<span></span>
-<span><span class="va">data</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="../reference/count_difftime.html">count_difftime</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span>n<span class="op">=</span><span class="fl">17</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 17 × 3</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Groups:   Id [17]</span></span></span>
-<span><span class="co">#&gt;    Id    difftime       n</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;Duration&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 204   10s        <span style="text-decoration: underline;">61</span>980</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 222   10s        <span style="text-decoration: underline;">61</span>891</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 205   10s        <span style="text-decoration: underline;">61</span>015</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 221   10s        <span style="text-decoration: underline;">60</span>839</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 210   10s        <span style="text-decoration: underline;">60</span>701</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 206   10s        <span style="text-decoration: underline;">60</span>479</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 214   10s        <span style="text-decoration: underline;">60</span>479</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 215   10s        <span style="text-decoration: underline;">60</span>479</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 216   10s        <span style="text-decoration: underline;">60</span>479</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 218   10s        <span style="text-decoration: underline;">60</span>479</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> 219   10s        <span style="text-decoration: underline;">60</span>479</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> 209   10s        <span style="text-decoration: underline;">60</span>084</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> 201   10s        <span style="text-decoration: underline;">60</span>042</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">14</span> 202   10s        <span style="text-decoration: underline;">59</span>957</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">15</span> 208   10s        <span style="text-decoration: underline;">59</span>853</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">16</span> 213   10s        <span style="text-decoration: underline;">59</span>720</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">17</span> 212   10s        <span style="text-decoration: underline;">59</span>478</span></span></code></pre></div>
+<span>    <span class="fu"><a href="../reference/remove_partial_data.html">remove_partial_data</a></span><span class="op">(</span></span>
+<span>      handle.gaps <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">MEDI</span>, by.date <span class="op">=</span> <span class="cn">TRUE</span>, threshold.missing <span class="op">=</span> <span class="st">"2 hours"</span></span>
+<span>      <span class="op">)</span></span></code></pre></div>
+<p>34 days were removed. As we have 17 participants, that equals the
+first and last day of data collection, which are correctly identified as
+only partly available.</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/has_gaps.html">has_gaps</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] FALSE</span></span>
+<span><span class="va">data</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/has_irregulars.html">has_irregulars</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] FALSE</span></span></code></pre></div>
 <p>The data is now clean and we can proceed with the analysis. This
 dataset will be needed in other articles, so we will save it as an RDS
 file.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#uncomment next lines to save the data</span></span>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># uncomment next lines to save the data</span></span>
 <span><span class="co"># if (!dir.exists("cleaned_data")) dir.create("cleaned_data")</span></span>
 <span><span class="co"># saveRDS(data, "cleaned_data/ll_data.rds")</span></span></code></pre></div>
 </div>
@@ -477,7 +1341,7 @@ overview.</p>
 all the import functions tick by looking at the included data set
 <code><a href="../reference/ll_import_expr.html">ll_import_expr()</a></code>. This is a list of all the individual
 routines. Let’s have a look at the ActLumus routine</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/ll_import_expr.html">ll_import_expr</a></span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">ActLumus</span></span>
 <span><span class="co">#&gt; {</span></span>
 <span><span class="co">#&gt;     data &lt;- suppressMessages(readr::read_delim(filename, skip = 32, </span></span>
@@ -496,7 +1360,7 @@ include a correctly formatted <code>Datetime</code> column, complete
 with the correct timezone.</p>
 <p>Here we will create a variation of the old routine, that just adds a
 short message:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">new_import_expr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ll_import_expr.html">ll_import_expr</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">new_import_expr</span><span class="op">$</span><span class="va">ActLumus_new</span> <span class="op">&lt;-</span> <span class="va">new_import_expr</span><span class="op">$</span><span class="va">ActLumus</span></span>
 <span><span class="va">new_import_expr</span><span class="op">$</span><span class="va">ActLumus_new</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> </span>
@@ -518,11 +1382,11 @@ short message:</p>
 <span><span class="co">#&gt; }</span></span></code></pre></div>
 <p>We can now create a new import function with this expression. The
 function will be called <code>import$ActLumus_new()</code>.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">import</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/import_adjustment.html">import_adjustment</a></span><span class="op">(</span><span class="va">new_import_expr</span><span class="op">)</span></span></code></pre></div>
 <p>Let us now import a file of the previous dataset, setting the main
 summary and plotting function silent</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">import</span><span class="op">$</span><span class="fu">ActLumus_new</span><span class="op">(</span><span class="va">files</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, tz <span class="op">=</span> <span class="va">tz</span>, auto.id <span class="op">=</span> <span class="va">pattern</span>, </span>
 <span>                         auto.plot <span class="op">=</span> <span class="cn">FALSE</span>, silent <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; **Congratulation, you made a new import function**</span></span></code></pre></div>

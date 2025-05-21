@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -20,8 +20,11 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Day.html">The whole game</a></li>
     <li><a class="dropdown-item" href="../articles/Import.html">Import &amp; cleaning</a></li>
+    <li><a class="dropdown-item" href="../articles/log.html">Log transformation</a></li>
     <li><a class="dropdown-item" href="../articles/Metrics.html">Metrics</a></li>
     <li><a class="dropdown-item" href="../articles/photoperiod.html">Photoperiod</a></li>
+    <li><a class="dropdown-item" href="../articles/spectrum.html">Light Spectrum</a></li>
+    <li><a class="dropdown-item" href="../articles/states.html">Durations, States and Clusters</a></li>
     <li><a class="dropdown-item" href="../articles/Visualizations.html">Visualizations</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -92,6 +95,12 @@
         <dd>Determine the dominant epoch/interval of a dataset</dd>
       </dl><dl><dt>
 
+          <code><a href="durations.html">durations()</a></code>
+
+        </dt>
+        <dd>Calculate duration of data in each group</dd>
+      </dl><dl><dt>
+
           <code><a href="gapless_Datetimes.html">gapless_Datetimes()</a></code>
 
         </dt>
@@ -104,6 +113,12 @@
         <dd>Check for and output gaps in a dataset</dd>
       </dl><dl><dt>
 
+          <code><a href="gap_table.html">gap_table()</a></code>
+
+        </dt>
+        <dd>Tabular summary of data and gaps in all groups</dd>
+      </dl><dl><dt>
+
           <code><a href="dst_change_summary.html">dst_change_summary()</a></code>
 
         </dt>
@@ -114,6 +129,42 @@
 
         </dt>
         <dd>Calculate photoperiod and boundary times</dd>
+      </dl><dl><dt>
+
+          <code><a href="extract_clusters.html">extract_clusters()</a></code> <code><a href="extract_clusters.html">add_clusters()</a></code>
+
+        </dt>
+        <dd>Find and extract clusters from a dataset</dd>
+      </dl><dl><dt>
+
+          <code><a href="extract_states.html">extract_states()</a></code>
+
+        </dt>
+        <dd>Extract summaries of states</dd>
+      </dl><dl><dt>
+
+          <code><a href="extract_metric.html">extract_metric()</a></code>
+
+        </dt>
+        <dd>Add metrics to extracted sSummary</dd>
+      </dl><dl><dt>
+
+          <code><a href="extract_gaps.html">extract_gaps()</a></code>
+
+        </dt>
+        <dd>Extract gap episodes from the data</dd>
+      </dl><dl><dt>
+
+          <code><a href="has_gaps.html">has_gaps()</a></code>
+
+        </dt>
+        <dd>Does a dataset have implicit gaps</dd>
+      </dl><dl><dt>
+
+          <code><a href="has_irregulars.html">has_irregulars()</a></code>
+
+        </dt>
+        <dd>Does a dataset have irregular data</dd>
       </dl></div><div class="section level2">
       <h2 id="process">Process<a class="anchor" aria-label="anchor" href="#process"></a></h2>
 
@@ -131,6 +182,12 @@
 
         </dt>
         <dd>Fill implicit gaps in a light logger dataset</dd>
+      </dl><dl><dt>
+
+          <code><a href="remove_partial_data.html">remove_partial_data()</a></code>
+
+        </dt>
+        <dd>Remove groups that have too few data points</dd>
       </dl><dl><dt>
 
           <code><a href="cut_Datetime.html">cut_Datetime()</a></code>
@@ -222,6 +279,18 @@
         <dd>Calculate photoperiod and boundary times</dd>
       </dl><dl><dt>
 
+          <code><a href="extract_clusters.html">extract_clusters()</a></code> <code><a href="extract_clusters.html">add_clusters()</a></code>
+
+        </dt>
+        <dd>Find and extract clusters from a dataset</dd>
+      </dl><dl><dt>
+
+          <code><a href="add_states.html">add_states()</a></code>
+
+        </dt>
+        <dd>Add states to a dataset based on groups and start/end times</dd>
+      </dl><dl><dt>
+
           <code><a href="number_states.html">number_states()</a></code>
 
         </dt>
@@ -250,6 +319,18 @@
 
         </dt>
         <dd>Add Brown et al. (2022) reference illuminance to a dataset</dd>
+      </dl><dl><dt>
+
+          <code><a href="Brown_cut.html">Brown_cut()</a></code>
+
+        </dt>
+        <dd>Create a state column that cuts light levels into sections by Brown et al. (2022)</dd>
+      </dl><dl><dt>
+
+          <code><a href="spectral_reconstruction.html">spectral_reconstruction()</a></code>
+
+        </dt>
+        <dd>Reconstruct spectral irradiance from sensor counts</dd>
       </dl></div><div class="section level2">
       <h2 id="visualize">Visualize<a class="anchor" aria-label="anchor" href="#visualize"></a></h2>
 
@@ -281,6 +362,12 @@
         <dd>Create a simple datetime plot of light logger data, faceted by group</dd>
       </dl><dl><dt>
 
+          <code><a href="gg_heatmap.html">gg_heatmap()</a></code>
+
+        </dt>
+        <dd>Plot a heatmap across days and times of day</dd>
+      </dl><dl><dt>
+
           <code><a href="gg_doubleplot.html">gg_doubleplot()</a></code>
 
         </dt>
@@ -291,6 +378,18 @@
 
         </dt>
         <dd>Add photoperiods to gg_day() or gg_days() plots</dd>
+      </dl><dl><dt>
+
+          <code><a href="gg_state.html">gg_state()</a></code>
+
+        </dt>
+        <dd>Add states to gg_day() or gg_days() plots</dd>
+      </dl><dl><dt>
+
+          <code><a href="gg_gaps.html">gg_gaps()</a></code>
+
+        </dt>
+        <dd>Visualize gaps and irregular data</dd>
       </dl></div><div class="section level2">
       <h2 id="metrics">Metrics<a class="anchor" aria-label="anchor" href="#metrics"></a></h2>
 
@@ -410,6 +509,12 @@
 
         </dt>
         <dd>Mean/first/last timing above/below threshold.</dd>
+      </dl><dl><dt>
+
+          <code><a href="spectral_integration.html">spectral_integration()</a></code>
+
+        </dt>
+        <dd>Integrate spectral irradiance with optional weighting</dd>
       </dl></div><div class="section level2">
       <h2 id="photoperiod">Photoperiod<a class="anchor" aria-label="anchor" href="#photoperiod"></a></h2>
 
@@ -446,10 +551,28 @@
 
       <dl><dt>
 
+          <code><a href="mean_daily.html">mean_daily()</a></code>
+
+        </dt>
+        <dd>Calculate mean daily metrics from daily summary</dd>
+      </dl><dl><dt>
+
+          <code><a href="mean_daily_metric.html">mean_daily_metric()</a></code>
+
+        </dt>
+        <dd>Calculate mean daily metrics from Time Series</dd>
+      </dl><dl><dt>
+
           <code><a href="symlog_trans.html">symlog_trans()</a></code>
 
         </dt>
         <dd>Scale positive and negative values on a log scale</dd>
+      </dl><dl><dt>
+
+          <code><a href="reverse2_trans.html">reverse2_trans()</a></code>
+
+        </dt>
+        <dd>Create a reverse transformation function specifically for date scales</dd>
       </dl><dl><dt>
 
           <code><a href="Datetime_breaks.html">Datetime_breaks()</a></code>
@@ -470,10 +593,28 @@
         <dd>Calculate photoperiod and boundary times</dd>
       </dl><dl><dt>
 
+          <code><a href="spectral_reconstruction.html">spectral_reconstruction()</a></code>
+
+        </dt>
+        <dd>Reconstruct spectral irradiance from sensor counts</dd>
+      </dl><dl><dt>
+
           <code><a href="normalize_counts.html">normalize_counts()</a></code>
 
         </dt>
         <dd>Normalize counts between sensor outputs</dd>
+      </dl><dl><dt>
+
+          <code><a href="summarize_numeric.html">summarize_numeric()</a></code> <code><a href="summarize_numeric.html">summarise_numeric()</a></code>
+
+        </dt>
+        <dd>Summarize numeric columns in dataframes to means</dd>
+      </dl><dl><dt>
+
+          <code><a href="log_zero_inflated.html">log_zero_inflated()</a></code> <code><a href="log_zero_inflated.html">exp_zero_inflated()</a></code>
+
+        </dt>
+        <dd>Add a defined number to a numeric and log transform it</dd>
       </dl></div><div class="section level2">
       <h2 id="datasets">Datasets<a class="anchor" aria-label="anchor" href="#datasets"></a></h2>
 
@@ -491,6 +632,12 @@
 
         </dt>
         <dd>Sample of wearable data combined with environmental data</dd>
+      </dl><dl><dt>
+
+          <code><a href="alphaopic.action.spectra.html">alphaopic.action.spectra</a></code>
+
+        </dt>
+        <dd>Alphaopic (+ photopic) action spectra</dd>
       </dl><dl><dt>
 
           <code><a href="gain.ratio.tables.html">gain.ratio.tables</a></code>

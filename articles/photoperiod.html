@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,8 +40,11 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/Day.html">The whole game</a></li>
     <li><a class="dropdown-item" href="../articles/Import.html">Import &amp; cleaning</a></li>
+    <li><a class="dropdown-item" href="../articles/log.html">Log transformation</a></li>
     <li><a class="dropdown-item" href="../articles/Metrics.html">Metrics</a></li>
     <li><a class="dropdown-item" href="../articles/photoperiod.html">Photoperiod</a></li>
+    <li><a class="dropdown-item" href="../articles/spectrum.html">Light Spectrum</a></li>
+    <li><a class="dropdown-item" href="../articles/states.html">Durations, States and Clusters</a></li>
     <li><a class="dropdown-item" href="../articles/Visualizations.html">Visualizations</a></li>
   </ul>
 </li>
@@ -67,7 +70,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Photoperiod</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/v0.5.4/vignettes/articles/photoperiod.Rmd" class="external-link"><code>vignettes/articles/photoperiod.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/main/vignettes/articles/photoperiod.Rmd" class="external-link"><code>vignettes/articles/photoperiod.Rmd</code></a></small>
       <div class="d-none name"><code>photoperiod.Rmd</code></div>
     </div>
 
@@ -576,18 +579,18 @@ the <code>magrittr</code> pipe operator <code>%&gt;%</code>.</p>
 <tbody class="gt_table_body">
 <tr>
 <td headers="Id" class="gt_row gt_center">201</td>
-<td headers="Datetime" class="gt_row gt_right">2023-08-14 10:55:21</td>
-<td headers="MEDI" class="gt_row gt_right">716.99</td>
+<td headers="Datetime" class="gt_row gt_right">2023-08-15 00:00:01</td>
+<td headers="MEDI" class="gt_row gt_right">0</td>
 </tr>
 <tr>
 <td headers="Id" class="gt_row gt_center">201</td>
-<td headers="Datetime" class="gt_row gt_right">2023-08-14 10:55:31</td>
-<td headers="MEDI" class="gt_row gt_right">721.91</td>
+<td headers="Datetime" class="gt_row gt_right">2023-08-15 00:00:11</td>
+<td headers="MEDI" class="gt_row gt_right">0</td>
 </tr>
 <tr>
 <td headers="Id" class="gt_row gt_center">201</td>
-<td headers="Datetime" class="gt_row gt_right">2023-08-14 10:55:41</td>
-<td headers="MEDI" class="gt_row gt_right">653.15</td>
+<td headers="Datetime" class="gt_row gt_right">2023-08-15 00:00:21</td>
+<td headers="MEDI" class="gt_row gt_right">0</td>
 </tr>
 </tbody>
 </table>
@@ -1125,28 +1128,28 @@ all the necessary information.</p>
 <th colspan="6" class="gt_group_heading" scope="colgroup" id="201">201</th>
     </tr>
 <tr class="gt_row_group_first">
-<td headers="201  Datetime" class="gt_row gt_right">2023-08-14 10:55:21</td>
-<td headers="201  MEDI" class="gt_row gt_right">716.99</td>
-<td headers="201  dawn" class="gt_row gt_right" style="color: #FF0000;">2023-08-14 05:40:27</td>
-<td headers="201  dusk" class="gt_row gt_right" style="color: #FF0000;">2023-08-14 21:15:32</td>
-<td headers="201  photoperiod" class="gt_row gt_center" style="color: #FF0000;">15h 35m 4s</td>
-<td headers="201  photoperiod.state" class="gt_row gt_left" style="color: #FF0000;">day</td>
+<td headers="201  Datetime" class="gt_row gt_right">2023-08-15 00:00:01</td>
+<td headers="201  MEDI" class="gt_row gt_right">0</td>
+<td headers="201  dawn" class="gt_row gt_right" style="color: #FF0000;">2023-08-15 05:41:59</td>
+<td headers="201  dusk" class="gt_row gt_right" style="color: #FF0000;">2023-08-15 21:13:36</td>
+<td headers="201  photoperiod" class="gt_row gt_center" style="color: #FF0000;">15h 31m 36s</td>
+<td headers="201  photoperiod.state" class="gt_row gt_left" style="color: #FF0000;">night</td>
 </tr>
 <tr>
-<td headers="201  Datetime" class="gt_row gt_right">2023-08-14 10:55:31</td>
-<td headers="201  MEDI" class="gt_row gt_right">721.91</td>
-<td headers="201  dawn" class="gt_row gt_right" style="color: #FF0000;">2023-08-14 05:40:27</td>
-<td headers="201  dusk" class="gt_row gt_right" style="color: #FF0000;">2023-08-14 21:15:32</td>
-<td headers="201  photoperiod" class="gt_row gt_center" style="color: #FF0000;">15h 35m 4s</td>
-<td headers="201  photoperiod.state" class="gt_row gt_left" style="color: #FF0000;">day</td>
+<td headers="201  Datetime" class="gt_row gt_right">2023-08-15 00:00:11</td>
+<td headers="201  MEDI" class="gt_row gt_right">0</td>
+<td headers="201  dawn" class="gt_row gt_right" style="color: #FF0000;">2023-08-15 05:41:59</td>
+<td headers="201  dusk" class="gt_row gt_right" style="color: #FF0000;">2023-08-15 21:13:36</td>
+<td headers="201  photoperiod" class="gt_row gt_center" style="color: #FF0000;">15h 31m 36s</td>
+<td headers="201  photoperiod.state" class="gt_row gt_left" style="color: #FF0000;">night</td>
 </tr>
 <tr>
-<td headers="201  Datetime" class="gt_row gt_right">2023-08-14 10:55:41</td>
-<td headers="201  MEDI" class="gt_row gt_right">653.15</td>
-<td headers="201  dawn" class="gt_row gt_right" style="color: #FF0000;">2023-08-14 05:40:27</td>
-<td headers="201  dusk" class="gt_row gt_right" style="color: #FF0000;">2023-08-14 21:15:32</td>
-<td headers="201  photoperiod" class="gt_row gt_center" style="color: #FF0000;">15h 35m 4s</td>
-<td headers="201  photoperiod.state" class="gt_row gt_left" style="color: #FF0000;">day</td>
+<td headers="201  Datetime" class="gt_row gt_right">2023-08-15 00:00:21</td>
+<td headers="201  MEDI" class="gt_row gt_right">0</td>
+<td headers="201  dawn" class="gt_row gt_right" style="color: #FF0000;">2023-08-15 05:41:59</td>
+<td headers="201  dusk" class="gt_row gt_right" style="color: #FF0000;">2023-08-15 21:13:36</td>
+<td headers="201  photoperiod" class="gt_row gt_center" style="color: #FF0000;">15h 31m 36s</td>
+<td headers="201  photoperiod.state" class="gt_row gt_left" style="color: #FF0000;">night</td>
 </tr>
 </tbody>
 </table>
@@ -1637,16 +1640,6 @@ days:</p>
     </tr></thead>
 <tbody class="gt_table_body">
 <tr>
-<td headers="date" class="gt_row gt_right">2023-08-14</td>
-<td headers="tz" class="gt_row gt_left">Europe/Berlin</td>
-<td headers="lat" class="gt_row gt_right">48.52</td>
-<td headers="lon" class="gt_row gt_right">9.06</td>
-<td headers="solar.angle" class="gt_row gt_right">-6</td>
-<td headers="dawn" class="gt_row gt_right">2023-08-14 05:40:27</td>
-<td headers="dusk" class="gt_row gt_right">2023-08-14 21:15:32</td>
-<td headers="photoperiod" class="gt_row gt_center">15h 35m 4s</td>
-</tr>
-<tr>
 <td headers="date" class="gt_row gt_right">2023-08-15</td>
 <td headers="tz" class="gt_row gt_left">Europe/Berlin</td>
 <td headers="lat" class="gt_row gt_right">48.52</td>
@@ -1665,6 +1658,16 @@ days:</p>
 <td headers="dawn" class="gt_row gt_right">2023-08-16 05:43:32</td>
 <td headers="dusk" class="gt_row gt_right">2023-08-16 21:11:40</td>
 <td headers="photoperiod" class="gt_row gt_center">15h 28m 8s</td>
+</tr>
+<tr>
+<td headers="date" class="gt_row gt_right">2023-08-17</td>
+<td headers="tz" class="gt_row gt_left">Europe/Berlin</td>
+<td headers="lat" class="gt_row gt_right">48.52</td>
+<td headers="lon" class="gt_row gt_right">9.06</td>
+<td headers="solar.angle" class="gt_row gt_right">-6</td>
+<td headers="dawn" class="gt_row gt_right">2023-08-17 05:45:04</td>
+<td headers="dusk" class="gt_row gt_right">2023-08-17 21:09:42</td>
+<td headers="photoperiod" class="gt_row gt_center">15h 24m 38s</td>
 </tr>
 </tbody>
 </table>
@@ -3817,8 +3820,8 @@ N = 17</span><span class="gt_footnote_marks" style="white-space:nowrap;font-styl
     </tr></thead>
 <tbody class="gt_table_body"><tr>
 <td headers="label" class="gt_row gt_left">mean mel EDI (lx)</td>
-<td headers="stat_1" class="gt_row gt_center">727 (298, 1,036)</td>
-<td headers="stat_2" class="gt_row gt_center">7 (5, 8)</td>
+<td headers="stat_1" class="gt_row gt_center">707 (317, 1,035)</td>
+<td headers="stat_2" class="gt_row gt_center">6 (5, 8)</td>
 </tr></tbody>
 <tfoot class="gt_footnotes"><tr>
 <td class="gt_footnote" colspan="3">
@@ -3871,7 +3874,7 @@ apply the function to our dataset.</p>
 <span>  <span class="fu"><a href="../reference/number_states.html">number_states</a></span><span class="op">(</span><span class="va">photoperiod.state</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">data</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">photoperiod.state.count</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "day 1"   "night 1" "day 2"   "night 2" "day 3"   "night 3"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "night 1" "day 1"   "night 2" "day 2"   "night 3" "day 3"</span></span></code></pre></div>
 <p>The function creates a new column that divides our dataset into
 individual days and nights, which can be used for grouping.</p>
 <blockquote>
@@ -4358,43 +4361,38 @@ N = 17</span><span class="gt_footnote_marks" style="white-space:nowrap;font-styl
 <tbody class="gt_table_body">
 <tr>
 <td headers="label" class="gt_row gt_left">day 1</td>
-<td headers="stat_1" class="gt_row gt_center">571 (312, 1,094)</td>
-<td headers="stat_2" class="gt_row gt_center">7 (3, 12)</td>
+<td headers="stat_1" class="gt_row gt_center">615 (203, 979)</td>
+<td headers="stat_2" class="gt_row gt_center">0 (0, 2)</td>
 </tr>
 <tr>
 <td headers="label" class="gt_row gt_left">day 2</td>
-<td headers="stat_1" class="gt_row gt_center">615 (203, 979)</td>
+<td headers="stat_1" class="gt_row gt_center">493 (395, 862)</td>
 <td headers="stat_2" class="gt_row gt_center">4 (4, 5)</td>
 </tr>
 <tr>
 <td headers="label" class="gt_row gt_left">day 3</td>
-<td headers="stat_1" class="gt_row gt_center">493 (395, 862)</td>
+<td headers="stat_1" class="gt_row gt_center">280 (97, 673)</td>
 <td headers="stat_2" class="gt_row gt_center">6 (3, 7)</td>
 </tr>
 <tr>
 <td headers="label" class="gt_row gt_left">day 4</td>
-<td headers="stat_1" class="gt_row gt_center">280 (97, 673)</td>
+<td headers="stat_1" class="gt_row gt_center">562 (350, 1,232)</td>
 <td headers="stat_2" class="gt_row gt_center">6 (3, 9)</td>
 </tr>
 <tr>
 <td headers="label" class="gt_row gt_left">day 5</td>
-<td headers="stat_1" class="gt_row gt_center">562 (350, 1,232)</td>
+<td headers="stat_1" class="gt_row gt_center">580 (190, 1,257)</td>
 <td headers="stat_2" class="gt_row gt_center">6 (4, 12)</td>
 </tr>
 <tr>
 <td headers="label" class="gt_row gt_left">day 6</td>
-<td headers="stat_1" class="gt_row gt_center">580 (190, 1,257)</td>
+<td headers="stat_1" class="gt_row gt_center">405 (288, 939)</td>
 <td headers="stat_2" class="gt_row gt_center">5 (3, 7)</td>
 </tr>
 <tr>
 <td headers="label" class="gt_row gt_left">day 7</td>
-<td headers="stat_1" class="gt_row gt_center">405 (288, 939)</td>
-<td headers="stat_2" class="gt_row gt_center">4 (4, 8)</td>
-</tr>
-<tr>
-<td headers="label" class="gt_row gt_left">day 8</td>
-<td headers="stat_1" class="gt_row gt_center">286 (180, 826)</td>
-<td headers="stat_2" class="gt_row gt_center">NA (NA, NA)</td>
+<td headers="stat_1" class="gt_row gt_center">NA (NA, NA)</td>
+<td headers="stat_2" class="gt_row gt_center">11 (8, 15)</td>
 </tr>
 </tbody>
 <tfoot class="gt_footnotes"><tr>
@@ -4412,7 +4410,11 @@ N = 17</span><span class="gt_footnote_marks" style="white-space:nowrap;font-styl
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"day"</span>, y <span class="op">=</span> <span class="st">"mean mel EDI (lx)"</span>, fill <span class="op">=</span> <span class="st">"Photoperiod"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#FDFBD3"</span>, <span class="st">"#003153AA"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#FDFBD3"</span>, <span class="st">"#003153AA"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in scale_y_log10(): <span style="color: #00BB00;">log-10</span> transformation introduced</span></span>
+<span><span class="co">#&gt; infinite values.</span></span>
+<span><span class="co">#&gt; Warning: Removed 7 rows containing non-finite outside the scale range</span></span>
+<span><span class="co">#&gt; (`stat_boxplot()`).</span></span></code></pre></div>
 <p><img src="photoperiod_files/figure-html/grouping%202-1.png" width="700"></p>
 <p>This approach has the further benefit that it works regardless of
 <em>when</em> data collection started. It will always bin the first,
@@ -4924,13 +4926,6 @@ the <code><a href="../reference/timing_above_threshold.html">timing_above_thresh
 <tbody class="gt_table_body">
 <tr>
 <td headers="Id" class="gt_row gt_center">201</td>
-<td headers="Day" class="gt_row gt_right">2023-08-15</td>
-<td headers="mean_timing_above_50" class="gt_row gt_right">2023-08-15 13:39:19</td>
-<td headers="first_timing_above_50" class="gt_row gt_right" style="color: #FF0000;">2023-08-15 06:53:21</td>
-<td headers="last_timing_above_50" class="gt_row gt_right">2023-08-15 20:25:51</td>
-</tr>
-<tr>
-<td headers="Id" class="gt_row gt_center">201</td>
 <td headers="Day" class="gt_row gt_right">2023-08-16</td>
 <td headers="mean_timing_above_50" class="gt_row gt_right">2023-08-16 12:57:39</td>
 <td headers="first_timing_above_50" class="gt_row gt_right" style="color: #FF0000;">2023-08-16 07:02:51</td>
@@ -4949,6 +4944,13 @@ the <code><a href="../reference/timing_above_threshold.html">timing_above_thresh
 <td headers="mean_timing_above_50" class="gt_row gt_right">2023-08-18 12:50:59</td>
 <td headers="first_timing_above_50" class="gt_row gt_right" style="color: #FF0000;">2023-08-18 07:01:41</td>
 <td headers="last_timing_above_50" class="gt_row gt_right">2023-08-18 20:02:31</td>
+</tr>
+<tr>
+<td headers="Id" class="gt_row gt_center">201</td>
+<td headers="Day" class="gt_row gt_right">2023-08-19</td>
+<td headers="mean_timing_above_50" class="gt_row gt_right">2023-08-19 13:12:59</td>
+<td headers="first_timing_above_50" class="gt_row gt_right" style="color: #FF0000;">2023-08-19 06:46:11</td>
+<td headers="last_timing_above_50" class="gt_row gt_right">2023-08-19 20:43:51</td>
 </tr>
 </tbody>
 </table>
@@ -5435,30 +5437,30 @@ this information to our dataset.</p>
 <tr>
 <td headers="Id" class="gt_row gt_center">201</td>
 <td headers="MEDI" class="gt_row gt_right">0</td>
-<td headers="Datetime" class="gt_row gt_right" style="color: #FF0000;">2023-08-15 00:00:01</td>
-<td headers="dusk" class="gt_row gt_right" style="color: #FF0000;">2023-08-15 21:13:36</td>
-<td headers="first_timing_above_50" class="gt_row gt_right" style="color: #FF0000;">2023-08-15 06:53:21</td>
+<td headers="Datetime" class="gt_row gt_right" style="color: #FF0000;">2023-08-16 00:00:01</td>
+<td headers="dusk" class="gt_row gt_right" style="color: #FF0000;">2023-08-16 21:11:40</td>
+<td headers="first_timing_above_50" class="gt_row gt_right" style="color: #FF0000;">2023-08-16 07:02:51</td>
 </tr>
 <tr>
 <td headers="Id" class="gt_row gt_center">201</td>
 <td headers="MEDI" class="gt_row gt_right">0</td>
-<td headers="Datetime" class="gt_row gt_right" style="color: #FF0000;">2023-08-15 00:00:11</td>
-<td headers="dusk" class="gt_row gt_right" style="color: #FF0000;">2023-08-15 21:13:36</td>
-<td headers="first_timing_above_50" class="gt_row gt_right" style="color: #FF0000;">2023-08-15 06:53:21</td>
+<td headers="Datetime" class="gt_row gt_right" style="color: #FF0000;">2023-08-16 00:00:11</td>
+<td headers="dusk" class="gt_row gt_right" style="color: #FF0000;">2023-08-16 21:11:40</td>
+<td headers="first_timing_above_50" class="gt_row gt_right" style="color: #FF0000;">2023-08-16 07:02:51</td>
 </tr>
 <tr>
 <td headers="Id" class="gt_row gt_center">201</td>
 <td headers="MEDI" class="gt_row gt_right">0</td>
-<td headers="Datetime" class="gt_row gt_right" style="color: #FF0000;">2023-08-15 00:00:21</td>
-<td headers="dusk" class="gt_row gt_right" style="color: #FF0000;">2023-08-15 21:13:36</td>
-<td headers="first_timing_above_50" class="gt_row gt_right" style="color: #FF0000;">2023-08-15 06:53:21</td>
+<td headers="Datetime" class="gt_row gt_right" style="color: #FF0000;">2023-08-16 00:00:21</td>
+<td headers="dusk" class="gt_row gt_right" style="color: #FF0000;">2023-08-16 21:11:40</td>
+<td headers="first_timing_above_50" class="gt_row gt_right" style="color: #FF0000;">2023-08-16 07:02:51</td>
 </tr>
 <tr>
 <td headers="Id" class="gt_row gt_center">201</td>
 <td headers="MEDI" class="gt_row gt_right">0</td>
-<td headers="Datetime" class="gt_row gt_right" style="color: #FF0000;">2023-08-15 00:00:31</td>
-<td headers="dusk" class="gt_row gt_right" style="color: #FF0000;">2023-08-15 21:13:36</td>
-<td headers="first_timing_above_50" class="gt_row gt_right" style="color: #FF0000;">2023-08-15 06:53:21</td>
+<td headers="Datetime" class="gt_row gt_right" style="color: #FF0000;">2023-08-16 00:00:31</td>
+<td headers="dusk" class="gt_row gt_right" style="color: #FF0000;">2023-08-16 21:11:40</td>
+<td headers="first_timing_above_50" class="gt_row gt_right" style="color: #FF0000;">2023-08-16 07:02:51</td>
 </tr>
 </tbody>
 </table>
@@ -5958,12 +5960,6 @@ each state, per <strong>participant and day</strong>.</p>
 <tbody class="gt_table_body">
 <tr>
 <td headers="Id" class="gt_row gt_center" style="background-color: #FDFBD3;">201</td>
-<td headers="Day" class="gt_row gt_right" style="background-color: #FDFBD3;">2023-08-15</td>
-<td headers="light.type" class="gt_row gt_left" style="background-color: #FDFBD3;">daytime</td>
-<td headers="mean_MEDI" class="gt_row gt_right" style="background-color: #FDFBD3;">1,830.91</td>
-</tr>
-<tr>
-<td headers="Id" class="gt_row gt_center" style="background-color: #FDFBD3;">201</td>
 <td headers="Day" class="gt_row gt_right" style="background-color: #FDFBD3;">2023-08-16</td>
 <td headers="light.type" class="gt_row gt_left" style="background-color: #FDFBD3;">daytime</td>
 <td headers="mean_MEDI" class="gt_row gt_right" style="background-color: #FDFBD3;">1,310.01</td>
@@ -5987,28 +5983,34 @@ each state, per <strong>participant and day</strong>.</p>
 <td headers="mean_MEDI" class="gt_row gt_right" style="background-color: #FDFBD3;">935.96</td>
 </tr>
 <tr>
-<td headers="Id" class="gt_row gt_center" style="background-color: #FDFBD3;">201</td>
-<td headers="Day" class="gt_row gt_right" style="background-color: #FDFBD3;">2023-08-20</td>
-<td headers="light.type" class="gt_row gt_left" style="background-color: #FDFBD3;">daytime</td>
-<td headers="mean_MEDI" class="gt_row gt_right" style="background-color: #FDFBD3;">211.38</td>
-</tr>
-<tr>
-<td headers="Id" class="gt_row gt_center" style="background-color: #FDFBD3;">202</td>
-<td headers="Day" class="gt_row gt_right" style="background-color: #FDFBD3;">2023-08-15</td>
-<td headers="light.type" class="gt_row gt_left" style="background-color: #FDFBD3;">daytime</td>
-<td headers="mean_MEDI" class="gt_row gt_right" style="background-color: #FDFBD3;">1,132.31</td>
-</tr>
-<tr>
-<td headers="Id" class="gt_row gt_center" style="background-color: rgba(0,49,83,0.67); color: #FFFFFF;">202</td>
-<td headers="Day" class="gt_row gt_right" style="background-color: rgba(0,49,83,0.67); color: #FFFFFF;">2023-08-15</td>
-<td headers="light.type" class="gt_row gt_left" style="background-color: rgba(0,49,83,0.67); color: #FFFFFF;">evening</td>
-<td headers="mean_MEDI" class="gt_row gt_right" style="background-color: rgba(0,49,83,0.67); color: #FFFFFF;">8.06</td>
-</tr>
-<tr>
 <td headers="Id" class="gt_row gt_center" style="background-color: #FDFBD3;">202</td>
 <td headers="Day" class="gt_row gt_right" style="background-color: #FDFBD3;">2023-08-16</td>
 <td headers="light.type" class="gt_row gt_left" style="background-color: #FDFBD3;">daytime</td>
 <td headers="mean_MEDI" class="gt_row gt_right" style="background-color: #FDFBD3;">553.03</td>
+</tr>
+<tr>
+<td headers="Id" class="gt_row gt_center" style="background-color: #FDFBD3;">202</td>
+<td headers="Day" class="gt_row gt_right" style="background-color: #FDFBD3;">2023-08-17</td>
+<td headers="light.type" class="gt_row gt_left" style="background-color: #FDFBD3;">daytime</td>
+<td headers="mean_MEDI" class="gt_row gt_right" style="background-color: #FDFBD3;">14.44</td>
+</tr>
+<tr>
+<td headers="Id" class="gt_row gt_center" style="background-color: #FDFBD3;">202</td>
+<td headers="Day" class="gt_row gt_right" style="background-color: #FDFBD3;">2023-08-18</td>
+<td headers="light.type" class="gt_row gt_left" style="background-color: #FDFBD3;">daytime</td>
+<td headers="mean_MEDI" class="gt_row gt_right" style="background-color: #FDFBD3;">40.34</td>
+</tr>
+<tr>
+<td headers="Id" class="gt_row gt_center" style="background-color: rgba(0,49,83,0.67); color: #FFFFFF;">202</td>
+<td headers="Day" class="gt_row gt_right" style="background-color: rgba(0,49,83,0.67); color: #FFFFFF;">2023-08-18</td>
+<td headers="light.type" class="gt_row gt_left" style="background-color: rgba(0,49,83,0.67); color: #FFFFFF;">evening</td>
+<td headers="mean_MEDI" class="gt_row gt_right" style="background-color: rgba(0,49,83,0.67); color: #FFFFFF;">26.80</td>
+</tr>
+<tr>
+<td headers="Id" class="gt_row gt_center" style="background-color: #FDFBD3;">202</td>
+<td headers="Day" class="gt_row gt_right" style="background-color: #FDFBD3;">2023-08-19</td>
+<td headers="light.type" class="gt_row gt_left" style="background-color: #FDFBD3;">daytime</td>
+<td headers="mean_MEDI" class="gt_row gt_right" style="background-color: #FDFBD3;">349.87</td>
 </tr>
 </tbody>
 </table>
@@ -6485,17 +6487,17 @@ participant days for the evening light condition.</p>
 <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="label"><span class="gt_from_md"><strong>Characteristic</strong></span></th>
       <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="stat_1">
 <span class="gt_from_md"><strong>daytime</strong><br>
-N = 102</span><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span>
+N = 68</span><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span>
 </th>
       <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="stat_2">
 <span class="gt_from_md"><strong>evening</strong><br>
-N = 75</span><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span>
+N = 49</span><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span>
 </th>
     </tr></thead>
 <tbody class="gt_table_body"><tr>
 <td headers="label" class="gt_row gt_left">mean mel EDI (lx)</td>
-<td headers="stat_1" class="gt_row gt_center">518 (213, 1,141)</td>
-<td headers="stat_2" class="gt_row gt_center">17 (8, 27)</td>
+<td headers="stat_1" class="gt_row gt_center">538 (232, 1,140)</td>
+<td headers="stat_2" class="gt_row gt_center">20 (12, 31)</td>
 </tr></tbody>
 <tfoot class="gt_footnotes"><tr>
 <td class="gt_footnote" colspan="3">

@@ -11,7 +11,7 @@ gap_handler() internally."><meta property="og:image" content="https://tscnlab.gi
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,8 +24,11 @@ gap_handler() internally."><meta property="og:image" content="https://tscnlab.gi
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Day.html">The whole game</a></li>
     <li><a class="dropdown-item" href="../articles/Import.html">Import &amp; cleaning</a></li>
+    <li><a class="dropdown-item" href="../articles/log.html">Log transformation</a></li>
     <li><a class="dropdown-item" href="../articles/Metrics.html">Metrics</a></li>
     <li><a class="dropdown-item" href="../articles/photoperiod.html">Photoperiod</a></li>
+    <li><a class="dropdown-item" href="../articles/spectrum.html">Light Spectrum</a></li>
+    <li><a class="dropdown-item" href="../articles/states.html">Durations, States and Clusters</a></li>
     <li><a class="dropdown-item" href="../articles/Visualizations.html">Visualizations</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -40,7 +43,7 @@ gap_handler() internally."><meta property="og:image" content="https://tscnlab.gi
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Check for and output gaps in a dataset</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/v0.5.4/R/gaps.R" class="external-link"><code>R/gaps.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/main/R/gaps.R" class="external-link"><code>R/gaps.R</code></a></small>
       <div class="d-none name"><code>gap_finder.Rd</code></div>
     </div>
 
@@ -78,7 +81,8 @@ short summary, and can optionally return the gaps as a <code>tibble</code>. Uses
 <dt id="arg-epoch">epoch<a class="anchor" aria-label="anchor" href="#arg-epoch"></a></dt>
 <dd><p>The epoch to use for the gapless sequence. Can be either a
 <code><a href="https://lubridate.tidyverse.org/reference/duration.html" class="external-link">lubridate::duration()</a></code> or a string. If it is a string, it needs to be
-either '"dominant.epoch"' (the default) for a guess based on the data or a valid <code><a href="https://lubridate.tidyverse.org/reference/duration.html" class="external-link">lubridate::duration()</a></code> string, e.g., <code>"1 day"</code> or <code>"10 sec"</code>.</p></dd>
+either '"dominant.epoch"' (the default) for a guess based on the data or a
+valid <code><a href="https://lubridate.tidyverse.org/reference/duration.html" class="external-link">lubridate::duration()</a></code> string, e.g., <code>"1 day"</code> or <code>"10 sec"</code>.</p></dd>
 
 
 <dt id="arg-gap-data">gap.data<a class="anchor" aria-label="anchor" href="#arg-gap-data"></a></dt>
@@ -92,7 +96,8 @@ the gaps in the dataset. Default is <code>FALSE</code>. Only used for unit tests
 
 
 <dt id="arg-full-days">full.days<a class="anchor" aria-label="anchor" href="#arg-full-days"></a></dt>
-<dd><p>If <code>TRUE</code>, the gapless sequence will include the whole first and last day where there is data.</p></dd>
+<dd><p>If <code>TRUE</code>, the gapless sequence will include the whole first
+and last day where there is data.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -113,8 +118,11 @@ number of gaps between measurement data.</p>
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other regularize:
 <code><a href="dominant_epoch.html">dominant_epoch</a>()</code>,
+<code><a href="extract_gaps.html">extract_gaps</a>()</code>,
 <code><a href="gap_handler.html">gap_handler</a>()</code>,
-<code><a href="gapless_Datetimes.html">gapless_Datetimes</a>()</code></p></div>
+<code><a href="gapless_Datetimes.html">gapless_Datetimes</a>()</code>,
+<code><a href="has_gaps.html">has_gaps</a>()</code>,
+<code><a href="has_irregulars.html">has_irregulars</a>()</code></p></div>
     </div>
 
     <div class="section level2">
@@ -147,7 +155,7 @@ number of gaps between measurement data.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 × 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Groups:   Id [1]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   gap.id Datetime            Id   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>      1 1970-01-01 <span style="color: #949494;">12:00:01</span> A    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>      1 1970-01-02 <span style="color: #949494;">00:00:01</span> A    </span>
 <span class="r-in"><span></span></span>

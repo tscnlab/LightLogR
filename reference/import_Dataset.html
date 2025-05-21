@@ -17,7 +17,7 @@ full list of arguments."><meta property="og:image" content="https://tscnlab.gith
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -30,8 +30,11 @@ full list of arguments."><meta property="og:image" content="https://tscnlab.gith
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Day.html">The whole game</a></li>
     <li><a class="dropdown-item" href="../articles/Import.html">Import &amp; cleaning</a></li>
+    <li><a class="dropdown-item" href="../articles/log.html">Log transformation</a></li>
     <li><a class="dropdown-item" href="../articles/Metrics.html">Metrics</a></li>
     <li><a class="dropdown-item" href="../articles/photoperiod.html">Photoperiod</a></li>
+    <li><a class="dropdown-item" href="../articles/spectrum.html">Light Spectrum</a></li>
+    <li><a class="dropdown-item" href="../articles/states.html">Durations, States and Clusters</a></li>
     <li><a class="dropdown-item" href="../articles/Visualizations.html">Visualizations</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -46,7 +49,7 @@ full list of arguments."><meta property="og:image" content="https://tscnlab.gith
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Import a light logger dataset or related data</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/v0.5.4/R/import_LL.R" class="external-link"><code>R/import_LL.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/main/R/import_LL.R" class="external-link"><code>R/import_LL.R</code></a></small>
       <div class="d-none name"><code>import_Dataset.Rd</code></div>
     </div>
 
@@ -68,7 +71,7 @@ full list of arguments.</p>
 
     <div class="section level2">
     <h2 id="format">Format<a class="anchor" aria-label="anchor" href="#format"></a></h2>
-    <p>An object of class <code>list</code> of length 18.</p>
+    <p>An object of class <code>list</code> of length 19.</p>
     </div>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
@@ -135,11 +138,12 @@ simply call the <code><a href="supported_devices.html">supported_devices()</a></
 continuously as the package is maintained.</p>
 <p></p><div class="sourceCode r"><pre><code><span><span class="fu"><a href="../reference/supported_devices.html">supported_devices</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  [1] "ActLumus"              "ActTrust"              "Actiwatch_Spectrum"</span></span>
-<span><span class="co">#&gt;  [4] "Actiwatch_Spectrum_de" "Circadian_Eye"         "DeLux"</span></span>
-<span><span class="co">#&gt;  [7] "GENEActiv_GGIR"        "Kronowise"             "LIMO"</span></span>
-<span><span class="co">#&gt; [10] "LYS"                   "LiDo"                  "LightWatcher"</span></span>
-<span><span class="co">#&gt; [13] "MotionWatch8"          "OcuWEAR"               "Speccy"</span></span>
-<span><span class="co">#&gt; [16] "SpectraWear"           "VEET"                  "nanoLambda"</span></span></code></pre><p></p></div><div class="section">
+<span><span class="co">#&gt;  [4] "Actiwatch_Spectrum_de" "Circadian_Eye"         "ClouClip"</span></span>
+<span><span class="co">#&gt;  [7] "DeLux"                 "GENEActiv_GGIR"        "Kronowise"</span></span>
+<span><span class="co">#&gt; [10] "LIMO"                  "LYS"                   "LiDo"</span></span>
+<span><span class="co">#&gt; [13] "LightWatcher"          "MotionWatch8"          "OcuWEAR"</span></span>
+<span><span class="co">#&gt; [16] "Speccy"                "SpectraWear"           "VEET"</span></span>
+<span><span class="co">#&gt; [19] "nanoLambda"</span></span></code></pre><p></p></div><div class="section">
 <h3 id="actlumus">ActLumus<a class="anchor" aria-label="anchor" href="#actlumus"></a></h3>
 
 
@@ -317,6 +321,15 @@ timeshift the import data.</p>
 <p>Manufacturer: Ocutune</p>
 <p>Implemented: September 2024</p>
 <p>OcuWEAR data contains spectral data. Due to the format of the data file, the spectrum is not directly part of the tibble, but rather a list column of tibbles within the imported data, containing a <code>Wavelength</code> (nm) and <code>Intensity</code> (mW/m^2) column.</p>
+</div>
+
+<div class="section">
+<h3 id="clouclip">ClouClip<a class="anchor" aria-label="anchor" href="#clouclip"></a></h3>
+
+
+<p>Manufacturer: Clouclip</p>
+<p>Implemented: April 2025</p>
+<p>ClouClip export files have the ending <code>.xls</code>, but are no real Microsoft Excel files, rather they are tab-separated text files. LightLogR thus does not read them in with an excel import routine. The measurement columns <code>Lux</code> and <code>Dis</code> contain sentinel values. <code>-1</code> (<code>Dis</code> and <code>Lux</code>) indicates sleep mode, whereas <code>204</code> (only <code>Dis</code>) indicates an out of range measurement. These values will be set to <code>NA</code>, and an additional column is added that translates these status codes. The columns carry the name <code>{.col}_status</code>.</p>
 </div>
 
     </div>

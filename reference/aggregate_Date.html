@@ -23,7 +23,7 @@ for summary plots that show an average day."><meta property="og:image" content="
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,8 +36,11 @@ for summary plots that show an average day."><meta property="og:image" content="
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Day.html">The whole game</a></li>
     <li><a class="dropdown-item" href="../articles/Import.html">Import &amp; cleaning</a></li>
+    <li><a class="dropdown-item" href="../articles/log.html">Log transformation</a></li>
     <li><a class="dropdown-item" href="../articles/Metrics.html">Metrics</a></li>
     <li><a class="dropdown-item" href="../articles/photoperiod.html">Photoperiod</a></li>
+    <li><a class="dropdown-item" href="../articles/spectrum.html">Light Spectrum</a></li>
+    <li><a class="dropdown-item" href="../articles/states.html">Durations, States and Clusters</a></li>
     <li><a class="dropdown-item" href="../articles/Visualizations.html">Visualizations</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -52,7 +55,7 @@ for summary plots that show an average day."><meta property="og:image" content="
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Aggregate dates to a single day</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/v0.5.4/R/aggregate_Date.R" class="external-link"><code>R/aggregate_Date.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/main/R/aggregate_Date.R" class="external-link"><code>R/aggregate_Date.R</code></a></small>
       <div class="d-none name"><code>aggregate_Date.Rd</code></div>
     </div>
 
@@ -81,6 +84,8 @@ for summary plots that show an average day.</p>
 <span>  logical.handler <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="fl">0.5</span>,</span>
 <span>  factor.handler <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/which.min.html" class="external-link">which.max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">x</span>, useNA <span class="op">=</span> <span class="st">"ifany"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  datetime.handler <span class="op">=</span> <span class="fu">stats</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span>,</span>
+<span>  duration.handler <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/duration.html" class="external-link">duration</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  time.handler <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu">hms</span><span class="fu">::</span><span class="fu"><a href="https://hms.tidyverse.org/reference/hms.html" class="external-link">as_hms</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -122,10 +127,10 @@ chooses the relevant function from <span class="pkg">lubridate</span>.</p></dd>
 group. By default, this is set to <code>median</code>.</p></dd>
 
 
-<dt id="arg-numeric-handler-character-handler-logical-handler-factor-handler-datetime-handler">numeric.handler, character.handler, logical.handler, factor.handler, datetime.handler<a class="anchor" aria-label="anchor" href="#arg-numeric-handler-character-handler-logical-handler-factor-handler-datetime-handler"></a></dt>
+<dt id="arg-numeric-handler-character-handler-logical-handler-factor-handler-datetime-handler-duration-handler-time-handler">numeric.handler, character.handler, logical.handler, factor.handler, datetime.handler, duration.handler, time.handler<a class="anchor" aria-label="anchor" href="#arg-numeric-handler-character-handler-logical-handler-factor-handler-datetime-handler-duration-handler-time-handler"></a></dt>
 <dd><p>functions that handle the respective data types. The default handlers
-calculate the <code>mean</code> for <code>numeric</code> and <code>POSIXct</code> and the <code>mode</code> for <code>character</code>, <code>factor</code>
-and <code>logical</code> types.</p></dd>
+calculate the <code>mean</code> or <code>median</code> for <code>numeric</code>, <code>POSIXct</code>, <code>duration</code>, and
+<code>hms</code>, and the <code>mode</code> for <code>character</code>, <code>factor</code> and <code>logical</code> types.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -141,7 +146,14 @@ columns will be the same as in the input <code>dataset</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p><code>aggregate_Date()</code> splits the <code>Datetime</code> column into a <code>Date.data</code>
+    <p>Summary values for type <code>POSIXct</code> are calculated as the median, because the
+mean can be nonsensical at times (e.g., the mean of Day1 18:00 and Day2
+18:00, is Day2 6:00, which can be the desired result, but if the focus is on
+time, rather then on datetime, it is recommended that values are converted to
+times via <code><a href="https://hms.tidyverse.org/reference/hms.html" class="external-link">hms::as_hms()</a></code> before applying the function (the mean of 18:00 and
+18:00 is still 18:00, not 6:00). Using the median as a default handler
+ensures a more sensible datetime.</p>
+<p><code>aggregate_Date()</code> splits the <code>Datetime</code> column into a <code>Date.data</code>
 and a <code>Time.data</code> column. It will create subgroups for each <code>Time.data</code>
 present in a group and aggregate each group into a single day, then remove
 the sub grouping.</p>

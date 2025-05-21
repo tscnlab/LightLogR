@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -20,8 +20,11 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Day.html">The whole game</a></li>
     <li><a class="dropdown-item" href="../articles/Import.html">Import &amp; cleaning</a></li>
+    <li><a class="dropdown-item" href="../articles/log.html">Log transformation</a></li>
     <li><a class="dropdown-item" href="../articles/Metrics.html">Metrics</a></li>
     <li><a class="dropdown-item" href="../articles/photoperiod.html">Photoperiod</a></li>
+    <li><a class="dropdown-item" href="../articles/spectrum.html">Light Spectrum</a></li>
+    <li><a class="dropdown-item" href="../articles/states.html">Durations, States and Clusters</a></li>
     <li><a class="dropdown-item" href="../articles/Visualizations.html">Visualizations</a></li>
   </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -36,9 +39,65 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/tscnlab/LightLogR/blob/v0.5.4/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/tscnlab/LightLogR/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.9.0" id="lightlogr-090-sunrise">LightLogR 0.9.0 <code>Sunrise</code>
+<a class="anchor" aria-label="anchor" href="#lightlogr-090-sunrise"></a></h2>
+<p>This is a huge update for <code>LightLogR</code>, bringing many new features and twenty-two new functions</p>
+<div class="section level3">
+<h3 id="new-functions--datasets-0-9-0">New functions &amp; datasets<a class="anchor" aria-label="anchor" href="#new-functions--datasets-0-9-0"></a></h3>
+<div class="section level4">
+<h4 id="light-spectrum-0-9-0">Light spectrum<a class="anchor" aria-label="anchor" href="#light-spectrum-0-9-0"></a></h4>
+<ul><li><p><code><a href="../reference/spectral_reconstruction.html">spectral_reconstruction()</a></code>:reconstruct a spectral power distribution (SPD) from sensor channels that provide (normalized) counts, and a calibration matrix. Examples for such devices include the the <em>ActLumus from Condor instruments</em>, or the <em>VEET from Meta Reality labs</em> (after normalization of counts, e.g., through <code><a href="../reference/normalize_counts.html">normalize_counts()</a></code>)</p></li>
+<li><p><code>alphaopic.action.spectra</code>: New dataset containing alphaopic action spectra (CIE S026) plus the photopic action spectrum in 1-nm wavelength steps.</p></li>
+<li><p><code><a href="../reference/spectral_integration.html">spectral_integration()</a></code>: integrate over all or just parts of the spectrum, including the option to weigh the spectrum with an action spectrum (e.g., from <code>alphaopic.action.spectra</code>)</p></li>
+</ul></div>
+<div class="section level4">
+<h4 id="missing-data-0-9-0">Missing data<a class="anchor" aria-label="anchor" href="#missing-data-0-9-0"></a></h4>
+<ul><li><p><code><a href="../reference/remove_partial_data.html">remove_partial_data()</a></code>: remove groups with a below than user-specified amount of data</p></li>
+<li><p><code><a href="../reference/extract_gaps.html">extract_gaps()</a></code>: provides a start and end times, as well as durations for all gaps in the dataset.</p></li>
+<li><p><code><a href="../reference/has_gaps.html">has_gaps()</a></code>, <code><a href="../reference/has_irregulars.html">has_irregulars()</a></code>; provide a logical feedback on whether a dataset has (implicit) gaps or irregular data.</p></li>
+<li><p><code><a href="../reference/gap_table.html">gap_table()</a></code> provides a comprehensive summary of available and missing data.</p></li>
+</ul></div>
+<div class="section level4">
+<h4 id="metrics-and-summaries-0-9-0">Metrics and summaries<a class="anchor" aria-label="anchor" href="#metrics-and-summaries-0-9-0"></a></h4>
+<ul><li><p><code><a href="../reference/durations.html">durations()</a></code>: calculate the groupwise duration of a dataset, based on datapoints, the dominant interval, and missing data</p></li>
+<li><p><code><a href="../reference/mean_daily.html">mean_daily()</a></code> and <code><a href="../reference/mean_daily_metric.html">mean_daily_metric()</a></code>: give a three-row summary of weekday, weekend, and mean daily (numeric) values. <code><a href="../reference/mean_daily_metric.html">mean_daily_metric()</a></code> skips the prior metric calculation for duration-based metrics, and directly calculates the mean daily value.</p></li>
+<li><p><code><a href="../reference/extract_clusters.html">extract_clusters()</a></code>, <code><a href="../reference/extract_clusters.html">add_clusters()</a></code>: find clusters of a user-specified condition and either summarize them or add them to a dataset.</p></li>
+<li><p><code><a href="../reference/extract_states.html">extract_states()</a></code>, <code><a href="../reference/add_states.html">add_states()</a></code>: provides a summary of every state in the dataset or add them to a dataset.</p></li>
+<li><p><code><a href="../reference/extract_metric.html">extract_metric()</a></code>: add a calculation to extracted data, such as from <code>extract_state()</code> or <code><a href="../reference/extract_clusters.html">extract_clusters()</a></code>.</p></li>
+<li><p><code><a href="../reference/summarize_numeric.html">summarize_numeric()</a></code>/<code><a href="../reference/summarize_numeric.html">summarise_numeric()</a></code>: calculate means across numeric values, ideal to summarize results from <code>extract_state()</code>, <code><a href="../reference/extract_gaps.html">extract_gaps()</a></code>, or <code>extract_clusters</code>.</p></li>
+<li><p><code><a href="../reference/Brown_cut.html">Brown_cut()</a></code>: divide light exposure variables into sections ≤1lx, ≤10lx, and ≥250lx according to Brown et al. 2022</p></li>
+<li><p><code><a href="../reference/log_zero_inflated.html">log_zero_inflated()</a></code> and `exp_zero_inflated(): apply or reverse a logarithmic transformation after adding a small value to a vector so as to provide zero values in logarithmic transformation, which is especially important for light exposure.</p></li>
+</ul></div>
+<div class="section level4">
+<h4 id="visualizations-0-9-0">Visualizations<a class="anchor" aria-label="anchor" href="#visualizations-0-9-0"></a></h4>
+<ul><li><p><code><a href="../reference/gg_gaps.html">gg_gaps()</a></code>: visualize gaps and shows instances of irregular data.</p></li>
+<li><p><code><a href="../reference/gg_state.html">gg_state()</a></code>: is an addon-function to <code><a href="../reference/gg_day.html">gg_day()</a></code> or <code><a href="../reference/gg_days.html">gg_days()</a></code>, which adds a state or cluster indicator to the plot</p></li>
+<li><p><code><a href="../reference/gg_heatmap.html">gg_heatmap()</a></code>: visualize a condensed version of time series patterns, optionally as double plots.</p></li>
+</ul></div>
+</div>
+<div class="section level3">
+<h3 id="misc-and-housekeeping-0-9-0">Misc and Housekeeping<a class="anchor" aria-label="anchor" href="#misc-and-housekeeping-0-9-0"></a></h3>
+<ul><li><p>Import support for the <code>ClouClip</code> device.</p></li>
+<li><p><code><a href="../reference/number_states.html">number_states()</a></code> added the option to just output a count number without the original state</p></li>
+<li><p><code><a href="../reference/gg_days.html">gg_days()</a></code>: <code>jco_color = TRUE</code> is now the default</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-9-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-9-0"></a></h3>
+<ul><li><p><code><a href="../reference/import_Dataset.html">import_Dataset()</a></code> no longer changes a pre-existing <code>Id</code> column (if it is not called <code>Id</code>). The function is also more informative for the daylight savings time handling in files with more than one Id.</p></li>
+<li><p><code><a href="../reference/gg_photoperiod.html">gg_photoperiod()</a></code> does no longer throw an error when the main plots <code>y.axis</code> is not based on a <code>MEDI</code> column.</p></li>
+<li><p><code><a href="../reference/gapless_Datetimes.html">gapless_Datetimes()</a></code> now ignores groups with only a single measurement, instead of throwing an error. This function is the basis for all calculations regarding gaps.</p></li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.5.4" id="lightlogr-054">LightLogR 0.5.4<a class="anchor" aria-label="anchor" href="#lightlogr-054"></a></h2>
+<ul><li><p>changed the behavior of all metric functions that calculate an in-between value (such as the duration of light between 250 and 1000 lux). Up until now, the function would use inclusive bounds on both sides, i.e. the value of 250 lux and 1000 lux would be included in the calculation. This is now changed to right exclusive bounds, i.e. the value of 250 lux will still be included in the calculation, whereas 1000 lux will not. While of little practical difference in a realistic dataset (where exact values matching the threshold are likely not present), it is relevant when calculating, e.g., the time spent in various levels of light or any other variable. The sum of those times should always add up to the total time. With inclusive bounds on both sides, the sum could theoretically be larger, with right exclusive bounds it cannot.</p></li>
+<li><p>Metrics <code><a href="../reference/intradaily_variability.html">intradaily_variability()</a></code> and <code><a href="../reference/interdaily_stability.html">interdaily_stability()</a></code> now use the population variance (divide by N), instead of the sample variance (divide by N-1). The legacy behavior can still be accessed by setting the argument <code>use.samplevar = TRUE</code>. <a href="https://github.com/tscnlab/LightLogR/issues/55" class="external-link">#55</a></p></li>
+<li><p>Metric IS now correctly uses the <code>overall mean</code> in relation to the variance, instead of the <code>mean of hourly averages across days</code>. <a href="https://github.com/tscnlab/LightLogR/issues/56" class="external-link">#56</a></p></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.5.3" id="lightlogr-053">LightLogR 0.5.3<a class="anchor" aria-label="anchor" href="#lightlogr-053"></a></h2><p class="text-muted">CRAN release: 2025-02-24</p>
 <ul><li>small cleanup changes for CRAN submission</li>

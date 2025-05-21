@@ -23,7 +23,7 @@ gain.ratio.table dataset from LightLogR."><meta property="og:image" content="htt
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,8 +36,11 @@ gain.ratio.table dataset from LightLogR."><meta property="og:image" content="htt
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Day.html">The whole game</a></li>
     <li><a class="dropdown-item" href="../articles/Import.html">Import &amp; cleaning</a></li>
+    <li><a class="dropdown-item" href="../articles/log.html">Log transformation</a></li>
     <li><a class="dropdown-item" href="../articles/Metrics.html">Metrics</a></li>
     <li><a class="dropdown-item" href="../articles/photoperiod.html">Photoperiod</a></li>
+    <li><a class="dropdown-item" href="../articles/spectrum.html">Light Spectrum</a></li>
+    <li><a class="dropdown-item" href="../articles/states.html">Durations, States and Clusters</a></li>
     <li><a class="dropdown-item" href="../articles/Visualizations.html">Visualizations</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -52,7 +55,7 @@ gain.ratio.table dataset from LightLogR."><meta property="og:image" content="htt
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Normalize counts between sensor outputs</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/v0.5.4/R/normalize_counts.R" class="external-link"><code>R/normalize_counts.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/main/R/normalize_counts.R" class="external-link"><code>R/normalize_counts.R</code></a></small>
       <div class="d-none name"><code>normalize_counts.Rd</code></div>
     </div>
 
@@ -82,11 +85,14 @@ their own gain ratiotable, or use a table provided for a sensor in the
 
 
 <dt id="arg-gain-columns">gain.columns<a class="anchor" aria-label="anchor" href="#arg-gain-columns"></a></dt>
-<dd><p>a <code>character</code> vector of columns in the <code>dataset</code> containing a gain setting. Columns must not repeat.</p></dd>
+<dd><p>a <code>character</code> vector of columns in the <code>dataset</code>
+containing a gain setting. Columns must not repeat.</p></dd>
 
 
 <dt id="arg-count-columns">count.columns<a class="anchor" aria-label="anchor" href="#arg-count-columns"></a></dt>
-<dd><p>a <code>character</code> vector of columns in the <code>dataset</code> containing raw count data. Must be of the same length as <code>gain.columns</code>, and the order must conform to the order in <code>gain.columns</code>.</p></dd>
+<dd><p>a <code>character</code> vector of columns in the <code>dataset</code>
+containing raw count data. Must be of the same length as <code>gain.columns</code>,
+and the order must conform to the order in <code>gain.columns</code>.</p></dd>
 
 
 <dt id="arg-gain-ratio-table">gain.ratio.table<a class="anchor" aria-label="anchor" href="#arg-gain-ratio-table"></a></dt>
@@ -99,10 +105,16 @@ their own gain ratiotable, or use a table provided for a sensor in the
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>an extended dataset with new columns containing normalized counts</p>
     </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p>Other Spectrum:
+<code><a href="spectral_integration.html">spectral_integration</a>()</code>,
+<code><a href="spectral_reconstruction.html">spectral_reconstruction</a>()</code></p></div>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">example.table</span> <span class="op">&lt;-</span> </span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">example.table</span> <span class="op">&lt;-</span></span></span>
 <span class="r-in"><span><span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>uvGain <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4096</span>, <span class="fl">1024</span>, <span class="fl">2</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>visGain <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4096</span>, <span class="fl">4096</span>, <span class="fl">4096</span><span class="op">)</span>,</span></span>
@@ -114,7 +126,7 @@ their own gain ratiotable, or use a table provided for a sensor in the
 <span class="r-in"><span><span class="va">gain.columns</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"uvGain"</span>, <span class="st">"visGain"</span>, <span class="st">"irGain"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">count.columns</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"uvValue"</span>, <span class="st">"visValue"</span>, <span class="st">"irValue"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">example.table</span> <span class="op">|&gt;</span> </span></span>
+<span class="r-in"><span><span class="va">example.table</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span><span class="fu">normalize_counts</span><span class="op">(</span><span class="va">gain.columns</span>, <span class="va">count.columns</span>, <span class="va">gain.ratio.tables</span><span class="op">$</span><span class="va">TSL2585</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 9</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   uvGain visGain irGain uvValue visValue irValue uvValue.normalized</span>

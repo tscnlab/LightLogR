@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,8 +40,11 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/Day.html">The whole game</a></li>
     <li><a class="dropdown-item" href="../articles/Import.html">Import &amp; cleaning</a></li>
+    <li><a class="dropdown-item" href="../articles/log.html">Log transformation</a></li>
     <li><a class="dropdown-item" href="../articles/Metrics.html">Metrics</a></li>
     <li><a class="dropdown-item" href="../articles/photoperiod.html">Photoperiod</a></li>
+    <li><a class="dropdown-item" href="../articles/spectrum.html">Light Spectrum</a></li>
+    <li><a class="dropdown-item" href="../articles/states.html">Durations, States and Clusters</a></li>
     <li><a class="dropdown-item" href="../articles/Visualizations.html">Visualizations</a></li>
   </ul>
 </li>
@@ -67,7 +70,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Metrics</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/v0.5.4/vignettes/articles/Metrics.Rmd" class="external-link"><code>vignettes/articles/Metrics.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/main/vignettes/articles/Metrics.Rmd" class="external-link"><code>vignettes/articles/Metrics.Rmd</code></a></small>
       <div class="d-none name"><code>Metrics.Rmd</code></div>
     </div>
 
@@ -157,6 +160,28 @@ gaps. In cases of larger gaps, dates or participants might have to be
 removed from analysis.</strong></p>
 </div>
 <div class="section level2">
+<h2 id="to-log-or-not-to-log-transform">To log or not to log (transform)<a class="anchor" aria-label="anchor" href="#to-log-or-not-to-log-transform"></a>
+</h2>
+<p>Light exposure data (e.g., Illuminance, or melanopic EDI) is not
+normally distributed (see #. By their nature, their values are often
+highly skewed, and also overdispersed. Additionally, the data tend to
+show an excess of zero values (so called zero-inflation). The paper
+<em>How to deal with darkness: Modelling and visualization of
+zero-inflated personal light exposure data on a logarithmic scale</em>
+by <a href="https://www.biorxiv.org/content/10.1101/2024.12.30.630669v1.full" class="external-link">Zauner
+et al. (2025)</a> explores ways to deal with this.</p>
+<p>For simplicity, this article will just use the untransformed
+melanopic EDI values to teach the basics on how metric functions work in
+<code>LightLogR</code>. However, we generally recommend to use
+<code><a href="../reference/log_zero_inflated.html">log_zero_inflated()</a></code> whenever there are means calculated in
+light exposure, which is a simple way to deal with zero-values. See the
+article <a href="https://tscnlab.github.io/LightLogR/articles/log.html">Log
+transformation</a> for more information on this. The function
+<code><a href="../reference/log_zero_inflated.html">log_zero_inflated()</a></code> is used to log-transform the data,
+while <code><a href="../reference/log_zero_inflated.html">exp_zero_inflated()</a></code> is used to back-transform the
+data.</p>
+</div>
+<div class="section level2">
 <h2 id="metric-calculation-basics">Metric calculation: basics<a class="anchor" aria-label="anchor" href="#metric-calculation-basics"></a>
 </h2>
 <p>All metric functions are by default agnostic to the type of data.
@@ -214,14 +239,14 @@ function <code><a href="../reference/bright_dark_period.html">bright_dark_period
 darkest periods of the day. By default, it calculates the brightest 10
 hour period of the day. By setting <code>as_df = TRUE</code>, the
 function will return a data frame we can pipe to <code><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt()</a></code> for a
-nice output</p>
+better output</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/bright_dark_period.html">bright_dark_period</a></span><span class="op">(</span></span>
 <span>  Light.vector <span class="op">=</span> <span class="va">data_Id201</span><span class="op">$</span><span class="va">MEDI</span>,</span>
 <span>  Time.vector <span class="op">=</span> <span class="va">data_Id201</span><span class="op">$</span><span class="va">Datetime</span>,</span>
 <span>  as.df <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://gt.rstudio.com/reference/tab_header.html" class="external-link">tab_header</a></span><span class="op">(</span><span class="st">"M10"</span><span class="op">)</span></span></code></pre></div>
 <div id="mwlefoodfi" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#mwlefoodfi table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -672,12 +697,17 @@ nice output</p>
 }
 </style>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-<thead><tr class="gt_col_headings">
+<thead>
+<tr class="gt_heading">
+<td colspan="4" class="gt_heading gt_title gt_font_normal gt_bottom_border" style>M10</td>
+    </tr>
+<tr class="gt_col_headings">
 <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="brightest_10h_mean">brightest_10h_mean</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="brightest_10h_midpoint">brightest_10h_midpoint</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="brightest_10h_onset">brightest_10h_onset</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="brightest_10h_offset">brightest_10h_offset</th>
-    </tr></thead>
+    </tr>
+</thead>
 <tbody class="gt_table_body"><tr>
 <td headers="brightest_10h_mean" class="gt_row gt_right">2506.202</td>
 <td headers="brightest_10h_midpoint" class="gt_row gt_right">2023-08-15 13:42:01</td>
@@ -704,7 +734,7 @@ calculated. We deviate from this to make this point.)</p>
 <span>  timespan <span class="op">=</span> <span class="st">"10 hours"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">M10_wrong</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">M10_wrong</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://gt.rstudio.com/reference/tab_header.html" class="external-link">tab_header</a></span><span class="op">(</span><span class="st">"M10 without looping"</span><span class="op">)</span></span></code></pre></div>
 <div id="eexombwkke" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#eexombwkke table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -1155,12 +1185,17 @@ calculated. We deviate from this to make this point.)</p>
 }
 </style>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-<thead><tr class="gt_col_headings">
+<thead>
+<tr class="gt_heading">
+<td colspan="4" class="gt_heading gt_title gt_font_normal gt_bottom_border" style>M10 without looping</td>
+    </tr>
+<tr class="gt_col_headings">
 <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="darkest_10h_mean">darkest_10h_mean</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="darkest_10h_midpoint">darkest_10h_midpoint</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="darkest_10h_onset">darkest_10h_onset</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="darkest_10h_offset">darkest_10h_offset</th>
-    </tr></thead>
+    </tr>
+</thead>
 <tbody class="gt_table_body"><tr>
 <td headers="darkest_10h_mean" class="gt_row gt_right">305.2523</td>
 <td headers="darkest_10h_midpoint" class="gt_row gt_right">2023-08-15 04:59:51</td>
@@ -1170,15 +1205,17 @@ calculated. We deviate from this to make this point.)</p>
 </table>
 </div>
 <p>We also see that this makes little sense, if we visualize this
-portion. The yellow color indicates the darkest 10-hour period of the
+portion. The blue color indicates the darkest 10-hour period of the
 day.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">Onset</span> <span class="op">&lt;-</span> <span class="va">M10_wrong</span><span class="op">$</span><span class="va">darkest_10h_onset</span></span>
-<span><span class="va">Offset</span> <span class="op">&lt;-</span> <span class="va">M10_wrong</span><span class="op">$</span><span class="va">darkest_10h_offset</span></span>
-<span></span>
-<span><span class="va">data_Id201</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="../reference/gg_day.html">gg_day</a></span><span class="op">(</span>aes_col <span class="op">=</span> <span class="va">Datetime</span> <span class="op">&gt;=</span> <span class="va">Onset</span> <span class="op">&amp;</span> <span class="va">Datetime</span> <span class="op">&lt;=</span> <span class="va">Offset</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">data_Id201</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>State <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span></span>
+<span>    <span class="va">Datetime</span> <span class="op">&gt;=</span> <span class="va">M10_wrong</span><span class="op">$</span><span class="va">darkest_10h_onset</span> <span class="op">&amp;</span> </span>
+<span>      <span class="va">Datetime</span> <span class="op">&lt;=</span> <span class="va">M10_wrong</span><span class="op">$</span><span class="va">darkest_10h_offset</span>, <span class="st">"M10"</span>, <span class="cn">NA</span></span>
+<span>  <span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/gg_day.html">gg_day</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/gg_state.html">gg_state</a></span><span class="op">(</span><span class="va">State</span>, aes_fill <span class="op">=</span> <span class="va">State</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Metrics_files/figure-html/M10_wrong_plot-1.png" width="700"></p>
 <p>To solve this, <code><a href="../reference/bright_dark_period.html">bright_dark_period()</a></code> and some other
 functions have the option to <code>loop</code> the day.</p>
@@ -1660,12 +1697,14 @@ functions have the option to <code>loop</code> the day.</p>
 </div>
 <p>This is more plausible, and can also be visualized easily.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">Onset</span> <span class="op">&lt;-</span> <span class="va">M10</span><span class="op">$</span><span class="va">darkest_10h_onset</span></span>
-<span><span class="va">Offset</span> <span class="op">&lt;-</span> <span class="va">M10</span><span class="op">$</span><span class="va">darkest_10h_offset</span></span>
-<span></span>
-<span><span class="va">data_Id201</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="../reference/gg_day.html">gg_day</a></span><span class="op">(</span>aes_col <span class="op">=</span> <span class="va">Datetime</span> <span class="op">&gt;=</span> <span class="va">Onset</span> <span class="op">|</span> <span class="va">Datetime</span> <span class="op">&lt;=</span> <span class="va">Offset</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">data_Id201</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>State <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span></span>
+<span>    <span class="va">Datetime</span> <span class="op">&gt;=</span> <span class="va">M10</span><span class="op">$</span><span class="va">darkest_10h_onset</span> <span class="op">|</span> </span>
+<span>      <span class="va">Datetime</span> <span class="op">&lt;=</span> <span class="va">M10</span><span class="op">$</span><span class="va">darkest_10h_offset</span>, <span class="st">"M10"</span>, <span class="cn">NA</span></span>
+<span>  <span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/gg_day.html">gg_day</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/gg_state.html">gg_state</a></span><span class="op">(</span><span class="va">State</span>, aes_fill <span class="op">=</span> <span class="va">State</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Metrics_files/figure-html/M10_plot-1.png" width="700"></p>
 </div>
 </div>
@@ -1678,16 +1717,13 @@ over prolonged periods of time. In this case, the singular calculation
 as shown above is inefficient. The <code>dplyr</code> family of
 <code><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">dplyr::summarize()</a></code> and <code><a href="https://dplyr.tidyverse.org/reference/reframe.html" class="external-link">dplyr::reframe()</a></code> make
 this much easier.</p>
-<div class="section level3">
-<h3 id="preparation">Preparation<a class="anchor" aria-label="anchor" href="#preparation"></a>
-</h3>
-<p>As we only want to calculate metrics for days with full data, we will
-exclude Mondays from the data set.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> </span>
-<span>  <span class="va">data</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/weekday.POSIXt.html" class="external-link">weekdays</a></span><span class="op">(</span><span class="va">Datetime</span><span class="op">)</span> <span class="op">!=</span> <span class="st">"Monday"</span><span class="op">)</span></span></code></pre></div>
-</div>
+<p>Be sure to have the data prepared in a way that metric functions can
+be applied correctly. <strong>This is the responsibility of the
+user</strong>, as many functions will provide an output, as long as the
+input vectors are of the correct type and length. In our case we already
+prepared the data correctly in the <a href="https://tscnlab.github.io/LightLogR/articles/Import.html">Import
+&amp; Cleaning</a> article. The data is already grouped by
+<code>Id</code>, and has no gaps or irregular data</p>
 <div class="section level3">
 <h3 id="summarize">Summarize<a class="anchor" aria-label="anchor" href="#summarize"></a>
 </h3>
@@ -1698,7 +1734,7 @@ set, giving us the variability of the 24h light exposure patterns across
 the full 6 days of data compared to their average, ranging between 0
 (Gaussian noise) and 1 (Perfect stability). For brevity, only the first
 6 Ids will be shown.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span></span>
 <span>    IS <span class="op">=</span> <span class="fu"><a href="../reference/interdaily_stability.html">interdaily_stability</a></span><span class="op">(</span></span>
@@ -2202,7 +2238,7 @@ the following example, we will calculate the TAT 250 lx MEDI for all
 participants in the data set. We only show the first 6 participants, as
 it becomes readily apparent that time above threshold for 6 days might
 not be the most informative parametrization of the metric.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span></span>
 <span>    TAT_250 <span class="op">=</span> <span class="fu"><a href="../reference/duration_above_threshold.html">duration_above_threshold</a></span><span class="op">(</span></span>
@@ -2699,7 +2735,7 @@ not be the most informative parametrization of the metric.</p>
 <strong>and day</strong> of data. This is more informative, as it allows
 us to see how the metric changes over time. The final output is for the
 first two Ids.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#create a new column in the data set with the weekday</span></span>
 <span><span class="va">data</span><span class="op">$</span><span class="va">wDay</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/day.html" class="external-link">wday</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">Datetime</span>, label <span class="op">=</span> <span class="cn">TRUE</span>, week_start <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span></span>
@@ -3237,7 +3273,7 @@ first two Ids.</p>
 day into <code>day</code> and <code>night</code>. <code>LightLogR</code>
 contains a family of functions to easily deal with photoperiod. Here is
 a minimal example.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#specifying coordinates (latitude/longitude)</span></span>
 <span><span class="va">coordinates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">48.521637</span>, <span class="fl">9.057645</span><span class="op">)</span></span>
 <span></span>
@@ -3750,38 +3786,14 @@ a minimal example.</p>
 </tbody>
 </table>
 </div>
-<p>This easily gives us metrics based on daily photoperiod. Metric
-calculation can utilize photoperiod information in other ways, too. More
-information on dealing with photoperiods can be found in the article <a href="https://tscnlab.github.io/LightLogR/articles/photoperiod.html">Photoperiod</a>.</p>
-</div>
-</div>
-<div class="section level3">
-<h3 id="metric-statistics">Metric statistics<a class="anchor" aria-label="anchor" href="#metric-statistics"></a>
-</h3>
-<p>With the dataframe <code>TAT_250</code>, we can easily calculate
-statistics for each participant. This can be done manually, e.g., with
-another call to <code><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">dplyr::summarize()</a></code>, or semi-automatic,
-e.g., with packages like <code>gtsummary</code>. In the following
-example, we will calculate the mean and standard deviation of the TAT
-250 lx MEDI for each participant, formatted as <code>HH:MM</code>
-through a styling function.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#styling formula for time</span></span>
-<span><span class="va">style_time</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">format</span> <span class="op">=</span> <span class="st">"%H:%M"</span><span class="op">)</span><span class="op">{</span></span>
-<span>  <span class="va">x</span> <span class="op">|&gt;</span> </span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span>  </span>
-<span>    <span class="fu">hms</span><span class="fu">::</span><span class="fu"><a href="https://hms.tidyverse.org/reference/hms.html" class="external-link">as_hms</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXlt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="va">format</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="co">#Table output</span></span>
-<span><span class="va">TAT_250</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html" class="external-link">tbl_summary</a></span><span class="op">(</span>by <span class="op">=</span> <span class="va">Id</span>, include <span class="op">=</span> <span class="op">-</span><span class="va">wDay</span>, </span>
-<span>              statistic <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">TAT_250</span> <span class="op">~</span> <span class="st">"{mean} ({sd})"</span><span class="op">)</span>, </span>
-<span>              digits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">TAT_250</span> <span class="op">~</span> <span class="va">style_time</span><span class="op">)</span>,</span>
-<span>              label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>TAT_250 <span class="op">=</span> <span class="st">"Time above 250 lx mel EDI"</span><span class="op">)</span></span>
-<span>              <span class="op">)</span></span></code></pre></div>
+<p>Same as above, we can summarize the data further:</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mean_Exposure</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">photoperiod.state</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/summarize_numeric.html">summarize_numeric</a></span><span class="op">(</span>prefix <span class="op">=</span> <span class="st">""</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_number.html" class="external-link">fmt_number</a></span><span class="op">(</span><span class="va">mean_MEDI</span><span class="op">)</span></span></code></pre></div>
 <div id="fvsybhaagl" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#fvsybhaagl table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -4233,6 +4245,507 @@ through a styling function.</p>
 </style>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead><tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="photoperiod.state">photoperiod.state</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="mean_MEDI">mean_MEDI</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="episodes">episodes</th>
+    </tr></thead>
+<tbody class="gt_table_body">
+<tr>
+<td headers="photoperiod.state" class="gt_row gt_left">day</td>
+<td headers="mean_MEDI" class="gt_row gt_right">727.29</td>
+<td headers="episodes" class="gt_row gt_right">17</td>
+</tr>
+<tr>
+<td headers="photoperiod.state" class="gt_row gt_left">night</td>
+<td headers="mean_MEDI" class="gt_row gt_right">6.61</td>
+<td headers="episodes" class="gt_row gt_right">17</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>This easily gives us metrics based on daily photoperiod. Metric
+calculation can utilize photoperiod information in other ways, too. More
+information on dealing with photoperiods can be found in the article <a href="https://tscnlab.github.io/LightLogR/articles/photoperiod.html">Photoperiod</a>.</p>
+</div>
+</div>
+<div class="section level3">
+<h3 id="metric-statistics">Metric statistics<a class="anchor" aria-label="anchor" href="#metric-statistics"></a>
+</h3>
+<p>With the dataframe <code>TAT_250</code>, we can easily calculate
+statistics for each participant. This can be done manually, e.g., with
+another call to <code><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">dplyr::summarize()</a></code>, or semi-automatic,
+e.g., with packages like <code>gtsummary</code>. In the following
+example, we will calculate the mean and standard deviation of the TAT
+250 lx MEDI for each participant, formatted as <code>HH:MM</code>
+through a styling function.</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#styling formula for time</span></span>
+<span><span class="va">style_time</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">format</span> <span class="op">=</span> <span class="st">"%H:%M"</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="va">x</span> <span class="op">|&gt;</span> </span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span>  </span>
+<span>    <span class="fu">hms</span><span class="fu">::</span><span class="fu"><a href="https://hms.tidyverse.org/reference/hms.html" class="external-link">as_hms</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXlt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="va">format</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co">#Table output</span></span>
+<span><span class="va">TAT_250</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html" class="external-link">tbl_summary</a></span><span class="op">(</span>by <span class="op">=</span> <span class="va">Id</span>, include <span class="op">=</span> <span class="op">-</span><span class="va">wDay</span>, </span>
+<span>              statistic <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">TAT_250</span> <span class="op">~</span> <span class="st">"{mean} ({sd})"</span><span class="op">)</span>, </span>
+<span>              digits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">TAT_250</span> <span class="op">~</span> <span class="va">style_time</span><span class="op">)</span>,</span>
+<span>              label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>TAT_250 <span class="op">=</span> <span class="st">"Time above 250 lx mel EDI"</span><span class="op">)</span></span>
+<span>              <span class="op">)</span></span></code></pre></div>
+<div id="vijbfglzvn" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#vijbfglzvn table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#vijbfglzvn thead, #vijbfglzvn tbody, #vijbfglzvn tfoot, #vijbfglzvn tr, #vijbfglzvn td, #vijbfglzvn th {
+  border-style: none;
+}
+
+#vijbfglzvn p {
+  margin: 0;
+  padding: 0;
+}
+
+#vijbfglzvn .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#vijbfglzvn .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#vijbfglzvn .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#vijbfglzvn .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#vijbfglzvn .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#vijbfglzvn .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vijbfglzvn .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#vijbfglzvn .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#vijbfglzvn .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#vijbfglzvn .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#vijbfglzvn .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#vijbfglzvn .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#vijbfglzvn .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#vijbfglzvn .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#vijbfglzvn .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#vijbfglzvn .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#vijbfglzvn .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#vijbfglzvn .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#vijbfglzvn .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vijbfglzvn .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#vijbfglzvn .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#vijbfglzvn .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#vijbfglzvn .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vijbfglzvn .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#vijbfglzvn .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#vijbfglzvn .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vijbfglzvn .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vijbfglzvn .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#vijbfglzvn .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vijbfglzvn .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#vijbfglzvn .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vijbfglzvn .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#vijbfglzvn .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vijbfglzvn .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#vijbfglzvn .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vijbfglzvn .gt_left {
+  text-align: left;
+}
+
+#vijbfglzvn .gt_center {
+  text-align: center;
+}
+
+#vijbfglzvn .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#vijbfglzvn .gt_font_normal {
+  font-weight: normal;
+}
+
+#vijbfglzvn .gt_font_bold {
+  font-weight: bold;
+}
+
+#vijbfglzvn .gt_font_italic {
+  font-style: italic;
+}
+
+#vijbfglzvn .gt_super {
+  font-size: 65%;
+}
+
+#vijbfglzvn .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#vijbfglzvn .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#vijbfglzvn .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#vijbfglzvn .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#vijbfglzvn .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#vijbfglzvn .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#vijbfglzvn .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#vijbfglzvn .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#vijbfglzvn div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead><tr class="gt_col_headings">
 <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="label"><span class="gt_from_md"><strong>Characteristic</strong></span></th>
       <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="stat_1">
 <span class="gt_from_md"><strong>201</strong><br>
@@ -4330,605 +4843,25 @@ N = 6</span><span class="gt_footnote_marks" style="white-space:nowrap;font-style
     </tr></tfoot>
 </table>
 </div>
-</div>
-</div>
-<div class="section level2">
-<h2 id="metric-calculation-batch">Metric calculation: batch<a class="anchor" aria-label="anchor" href="#metric-calculation-batch"></a>
-</h2>
-<p>In the final section, we will add more metrics to the analysis,
-including ones with multiple sub-metrics. Further, we imagine we want to
-know how these metrics change from the first half of the experiment
-(August/September) to the second half (October/November). Finally, we
-will include a column <code>Time.data</code> in the data set, which will
-be used to calculate the metrics. This column format excludes the
-<code>day</code> information from the <code>Datetime</code> column,
-which avoids <code>date</code>-related issues when calculating the
-<code>mean</code> of the metrics. Finally, the <code><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest()</a></code>
-call is used to flatten the table from the <code>dataframe</code>
-substructure that is created by <code>MLIT250</code> and
-<code>TAT250</code>.</p>
+<div class="section level4">
+<h4 id="mean_daily">mean_daily()<a class="anchor" aria-label="anchor" href="#mean_daily"></a>
+</h4>
+<p>The function <code><a href="../reference/mean_daily.html">mean_daily()</a></code> is a helper to summarize daily
+data further. It takes summary results that either contain a date or a
+weekday column and calculates the mean of the metric for weekdays,
+weekends, and, the mean day (based on <em>(5 x weekdays + 2 x weekends)
+/ 7</em>).</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
-<span>    Month <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/month.html" class="external-link">month</a></span><span class="op">(</span><span class="va">Datetime</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fl">8</span><span class="op">:</span><span class="fl">9</span> <span class="op">~</span> <span class="st">"Aug/Sep"</span>,</span>
-<span>                      <span class="fu"><a href="https://lubridate.tidyverse.org/reference/month.html" class="external-link">month</a></span><span class="op">(</span><span class="va">Datetime</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fl">10</span><span class="op">:</span><span class="fl">11</span> <span class="op">~</span> <span class="st">"Oct/Nov"</span><span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="../reference/create_Timedata.html">create_Timedata</a></span><span class="op">(</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co">#mean daily calculation</span></span>
+<span><span class="va">TAT_250_daily</span> <span class="op">&lt;-</span></span>
+<span><span class="fu"><a href="../reference/mean_daily.html">mean_daily</a></span><span class="op">(</span></span>
+<span>  <span class="va">TAT_250</span>,</span>
+<span>  Weekend.type <span class="op">=</span> <span class="va">wDay</span></span>
+<span>  <span class="op">)</span></span>
 <span></span>
-<span><span class="va">metrics</span> <span class="op">&lt;-</span> </span>
-<span>  <span class="va">data</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Month</span>, <span class="va">Id</span>, <span class="va">wDay</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span></span>
-<span>    MLIT250 <span class="op">=</span> </span>
-<span>      <span class="fu"><a href="../reference/timing_above_threshold.html">timing_above_threshold</a></span><span class="op">(</span><span class="va">MEDI</span>, <span class="va">Time.data</span>, threshold <span class="op">=</span> <span class="fl">250</span>, as.df <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
-<span>    TAT250 <span class="op">=</span> </span>
-<span>      <span class="fu"><a href="../reference/duration_above_threshold.html">duration_above_threshold</a></span><span class="op">(</span><span class="va">MEDI</span>, <span class="va">Time.data</span>, threshold <span class="op">=</span> <span class="fl">250</span>, as.df <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
-<span>    average_MEDI <span class="op">=</span> </span>
-<span>      <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">MEDI</span><span class="op">)</span>,</span>
-<span>    light_exposure <span class="op">=</span> </span>
-<span>      <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">MEDI</span><span class="op">)</span><span class="op">/</span><span class="fl">360</span>, <span class="co"># 10 second epochs means 360 epochs in one hour. dividing by 360 gives the light exposure in lx·h</span></span>
-<span>    .groups <span class="op">=</span> <span class="st">"drop_last"</span></span>
-<span>    <span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="op">-</span><span class="va">Id</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">#first 6 rows</span></span>
-<span><span class="va">metrics</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span><span class="va">TAT_250_daily</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">6</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div id="rookxgzuhz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#rookxgzuhz table {
-  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-#rookxgzuhz thead, #rookxgzuhz tbody, #rookxgzuhz tfoot, #rookxgzuhz tr, #rookxgzuhz td, #rookxgzuhz th {
-  border-style: none;
-}
-
-#rookxgzuhz p {
-  margin: 0;
-  padding: 0;
-}
-
-#rookxgzuhz .gt_table {
-  display: table;
-  border-collapse: collapse;
-  line-height: normal;
-  margin-left: auto;
-  margin-right: auto;
-  color: #333333;
-  font-size: 16px;
-  font-weight: normal;
-  font-style: normal;
-  background-color: #FFFFFF;
-  width: auto;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #A8A8A8;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #A8A8A8;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-}
-
-#rookxgzuhz .gt_caption {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-#rookxgzuhz .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#rookxgzuhz .gt_subtitle {
-  color: #333333;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 3px;
-  padding-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#rookxgzuhz .gt_heading {
-  background-color: #FFFFFF;
-  text-align: center;
-  border-bottom-color: #FFFFFF;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#rookxgzuhz .gt_bottom_border {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#rookxgzuhz .gt_col_headings {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#rookxgzuhz .gt_col_heading {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  padding-left: 5px;
-  padding-right: 5px;
-  overflow-x: hidden;
-}
-
-#rookxgzuhz .gt_column_spanner_outer {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-#rookxgzuhz .gt_column_spanner_outer:first-child {
-  padding-left: 0;
-}
-
-#rookxgzuhz .gt_column_spanner_outer:last-child {
-  padding-right: 0;
-}
-
-#rookxgzuhz .gt_column_spanner {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  overflow-x: hidden;
-  display: inline-block;
-  width: 100%;
-}
-
-#rookxgzuhz .gt_spanner_row {
-  border-bottom-style: hidden;
-}
-
-#rookxgzuhz .gt_group_heading {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  text-align: left;
-}
-
-#rookxgzuhz .gt_empty_group_heading {
-  padding: 0.5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: middle;
-}
-
-#rookxgzuhz .gt_from_md > :first-child {
-  margin-top: 0;
-}
-
-#rookxgzuhz .gt_from_md > :last-child {
-  margin-bottom: 0;
-}
-
-#rookxgzuhz .gt_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  margin: 10px;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  overflow-x: hidden;
-}
-
-#rookxgzuhz .gt_stub {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#rookxgzuhz .gt_stub_row_group {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-  vertical-align: top;
-}
-
-#rookxgzuhz .gt_row_group_first td {
-  border-top-width: 2px;
-}
-
-#rookxgzuhz .gt_row_group_first th {
-  border-top-width: 2px;
-}
-
-#rookxgzuhz .gt_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#rookxgzuhz .gt_first_summary_row {
-  border-top-style: solid;
-  border-top-color: #D3D3D3;
-}
-
-#rookxgzuhz .gt_first_summary_row.thick {
-  border-top-width: 2px;
-}
-
-#rookxgzuhz .gt_last_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#rookxgzuhz .gt_grand_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#rookxgzuhz .gt_first_grand_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: double;
-  border-top-width: 6px;
-  border-top-color: #D3D3D3;
-}
-
-#rookxgzuhz .gt_last_grand_summary_row_top {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: double;
-  border-bottom-width: 6px;
-  border-bottom-color: #D3D3D3;
-}
-
-#rookxgzuhz .gt_striped {
-  background-color: rgba(128, 128, 128, 0.05);
-}
-
-#rookxgzuhz .gt_table_body {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#rookxgzuhz .gt_footnotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#rookxgzuhz .gt_footnote {
-  margin: 0px;
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#rookxgzuhz .gt_sourcenotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#rookxgzuhz .gt_sourcenote {
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#rookxgzuhz .gt_left {
-  text-align: left;
-}
-
-#rookxgzuhz .gt_center {
-  text-align: center;
-}
-
-#rookxgzuhz .gt_right {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-#rookxgzuhz .gt_font_normal {
-  font-weight: normal;
-}
-
-#rookxgzuhz .gt_font_bold {
-  font-weight: bold;
-}
-
-#rookxgzuhz .gt_font_italic {
-  font-style: italic;
-}
-
-#rookxgzuhz .gt_super {
-  font-size: 65%;
-}
-
-#rookxgzuhz .gt_footnote_marks {
-  font-size: 75%;
-  vertical-align: 0.4em;
-  position: initial;
-}
-
-#rookxgzuhz .gt_asterisk {
-  font-size: 100%;
-  vertical-align: 0;
-}
-
-#rookxgzuhz .gt_indent_1 {
-  text-indent: 5px;
-}
-
-#rookxgzuhz .gt_indent_2 {
-  text-indent: 10px;
-}
-
-#rookxgzuhz .gt_indent_3 {
-  text-indent: 15px;
-}
-
-#rookxgzuhz .gt_indent_4 {
-  text-indent: 20px;
-}
-
-#rookxgzuhz .gt_indent_5 {
-  text-indent: 25px;
-}
-
-#rookxgzuhz .katex-display {
-  display: inline-flex !important;
-  margin-bottom: 0.75em !important;
-}
-
-#rookxgzuhz div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
-  height: 0px !important;
-}
-</style>
-<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-<thead><tr class="gt_col_headings">
-<th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="wDay">wDay</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="mean_timing_above_250">mean_timing_above_250</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="first_timing_above_250">first_timing_above_250</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="last_timing_above_250">last_timing_above_250</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="duration_above_250">duration_above_250</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="average_MEDI">average_MEDI</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="light_exposure">light_exposure</th>
-    </tr></thead>
-<tbody class="gt_table_body">
-<tr class="gt_group_heading_row">
-<th colspan="7" class="gt_group_heading" scope="colgroup" id="Aug/Sep - 201">Aug/Sep - 201</th>
-    </tr>
-<tr class="gt_row_group_first">
-<td headers="Aug/Sep - 201  wDay" class="gt_row gt_center">Tue</td>
-<td headers="Aug/Sep - 201  mean_timing_above_250" class="gt_row gt_center">13:55:49</td>
-<td headers="Aug/Sep - 201  first_timing_above_250" class="gt_row gt_center">07:48:01</td>
-<td headers="Aug/Sep - 201  last_timing_above_250" class="gt_row gt_center">19:43:41</td>
-<td headers="Aug/Sep - 201  duration_above_250" class="gt_row gt_center">34500s (~9.58 hours)</td>
-<td headers="Aug/Sep - 201  average_MEDI" class="gt_row gt_right">1094.7256</td>
-<td headers="Aug/Sep - 201  light_exposure" class="gt_row gt_right">26273.415</td>
-</tr>
-<tr>
-<td headers="Aug/Sep - 201  wDay" class="gt_row gt_center">Wed</td>
-<td headers="Aug/Sep - 201  mean_timing_above_250" class="gt_row gt_center">12:53:04</td>
-<td headers="Aug/Sep - 201  first_timing_above_250" class="gt_row gt_center">07:03:01</td>
-<td headers="Aug/Sep - 201  last_timing_above_250" class="gt_row gt_center">19:46:41</td>
-<td headers="Aug/Sep - 201  duration_above_250" class="gt_row gt_center">32780s (~9.11 hours)</td>
-<td headers="Aug/Sep - 201  average_MEDI" class="gt_row gt_right">772.7199</td>
-<td headers="Aug/Sep - 201  light_exposure" class="gt_row gt_right">18545.278</td>
-</tr>
-<tr>
-<td headers="Aug/Sep - 201  wDay" class="gt_row gt_center">Thu</td>
-<td headers="Aug/Sep - 201  mean_timing_above_250" class="gt_row gt_center">14:25:57</td>
-<td headers="Aug/Sep - 201  first_timing_above_250" class="gt_row gt_center">08:41:11</td>
-<td headers="Aug/Sep - 201  last_timing_above_250" class="gt_row gt_center">19:27:11</td>
-<td headers="Aug/Sep - 201  duration_above_250" class="gt_row gt_center">21820s (~6.06 hours)</td>
-<td headers="Aug/Sep - 201  average_MEDI" class="gt_row gt_right">263.1571</td>
-<td headers="Aug/Sep - 201  light_exposure" class="gt_row gt_right">6315.771</td>
-</tr>
-<tr>
-<td headers="Aug/Sep - 201  wDay" class="gt_row gt_center">Fri</td>
-<td headers="Aug/Sep - 201  mean_timing_above_250" class="gt_row gt_center">13:12:42</td>
-<td headers="Aug/Sep - 201  first_timing_above_250" class="gt_row gt_center">07:14:41</td>
-<td headers="Aug/Sep - 201  last_timing_above_250" class="gt_row gt_center">18:51:21</td>
-<td headers="Aug/Sep - 201  duration_above_250" class="gt_row gt_center">31670s (~8.8 hours)</td>
-<td headers="Aug/Sep - 201  average_MEDI" class="gt_row gt_right">829.2784</td>
-<td headers="Aug/Sep - 201  light_exposure" class="gt_row gt_right">19902.681</td>
-</tr>
-<tr>
-<td headers="Aug/Sep - 201  wDay" class="gt_row gt_center">Sat</td>
-<td headers="Aug/Sep - 201  mean_timing_above_250" class="gt_row gt_center">11:29:02</td>
-<td headers="Aug/Sep - 201  first_timing_above_250" class="gt_row gt_center">07:08:41</td>
-<td headers="Aug/Sep - 201  last_timing_above_250" class="gt_row gt_center">20:40:41</td>
-<td headers="Aug/Sep - 201  duration_above_250" class="gt_row gt_center">15010s (~4.17 hours)</td>
-<td headers="Aug/Sep - 201  average_MEDI" class="gt_row gt_right">559.5345</td>
-<td headers="Aug/Sep - 201  light_exposure" class="gt_row gt_right">13428.829</td>
-</tr>
-<tr>
-<td headers="Aug/Sep - 201  wDay" class="gt_row gt_center">Sun</td>
-<td headers="Aug/Sep - 201  mean_timing_above_250" class="gt_row gt_center">12:46:28</td>
-<td headers="Aug/Sep - 201  first_timing_above_250" class="gt_row gt_center">07:23:01</td>
-<td headers="Aug/Sep - 201  last_timing_above_250" class="gt_row gt_center">19:12:21</td>
-<td headers="Aug/Sep - 201  duration_above_250" class="gt_row gt_center">24400s (~6.78 hours)</td>
-<td headers="Aug/Sep - 201  average_MEDI" class="gt_row gt_right">183.3234</td>
-<td headers="Aug/Sep - 201  light_exposure" class="gt_row gt_right">4399.761</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>The operation above yields a data frame with six metrics across 102
-participant days (6 days for 17 participants). The grouping for
-<code>Month</code> did not add additional groups, as each participant
-day is already solely in the <code>"Aug/Sep"</code> or
-<code>"Oct/Nov"</code> group. Next, we will regroup the data by
-<code>Month</code> and look at a summary table similar to the above, but
-for more metrics.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">metrics</span> <span class="op">&lt;-</span> </span>
-<span>  <span class="va">metrics</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Month</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">Id</span>, <span class="op">-</span><span class="va">wDay</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">#Table output</span></span>
-<span><span class="va">metrics</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html" class="external-link">tbl_summary</a></span><span class="op">(</span>by <span class="op">=</span> <span class="va">Month</span>,</span>
-<span>              statistic <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://www.danieldsjoberg.com/gtsummary/reference/select_helpers.html" class="external-link">all_continuous</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="st">"{mean} (±{sd})"</span><span class="op">)</span>,</span>
-<span>              digits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>                <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>                  <span class="va">mean_timing_above_250</span>, <span class="va">first_timing_above_250</span>, </span>
-<span>                  <span class="va">last_timing_above_250</span>, <span class="va">duration_above_250</span></span>
-<span>                  <span class="op">)</span> <span class="op">~</span> <span class="va">style_time</span><span class="op">)</span>,</span>
-<span>              label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>                mean_timing_above_250 <span class="op">=</span> </span>
-<span>                  <span class="st">"mean timing above 250 lx mel EDI (HH:MM)"</span>,</span>
-<span>                first_timing_above_250 <span class="op">=</span> </span>
-<span>                  <span class="st">"first time above 250 lx mel EDI (HH:MM)"</span>,</span>
-<span>                last_timing_above_250 <span class="op">=</span> </span>
-<span>                  <span class="st">"last time above 250 lx mel EDI (HH:MM)"</span>,</span>
-<span>                duration_above_250 <span class="op">=</span> <span class="st">"duration above 250 lx mel EDI (HH:MM)"</span>,</span>
-<span>                average_MEDI <span class="op">=</span> <span class="st">"average mel EDI (lx)"</span>,</span>
-<span>                light_exposure <span class="op">=</span> <span class="st">"light exposure (lx·h)"</span></span>
-<span>                <span class="op">)</span></span>
-<span>              <span class="op">)</span></span></code></pre></div>
 <div id="oepsdaymbw" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#oepsdaymbw table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -5380,6 +5313,3654 @@ for more metrics.</p>
 </style>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead><tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="wDay">wDay</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="average_TAT_250">average_TAT_250</th>
+    </tr></thead>
+<tbody class="gt_table_body">
+<tr class="gt_group_heading_row">
+<th colspan="2" class="gt_group_heading" scope="colgroup" id="201">201</th>
+    </tr>
+<tr class="gt_row_group_first">
+<td headers="201  wDay" class="gt_row gt_left">Mean daily</td>
+<td headers="201  average_TAT_250" class="gt_row gt_center">27196s (~7.55 hours)</td>
+</tr>
+<tr>
+<td headers="201  wDay" class="gt_row gt_left">Weekday</td>
+<td headers="201  average_TAT_250" class="gt_row gt_center">30192s (~8.39 hours)</td>
+</tr>
+<tr>
+<td headers="201  wDay" class="gt_row gt_left">Weekend</td>
+<td headers="201  average_TAT_250" class="gt_row gt_center">19705s (~5.47 hours)</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="2" class="gt_group_heading" scope="colgroup" id="202">202</th>
+    </tr>
+<tr class="gt_row_group_first">
+<td headers="202  wDay" class="gt_row gt_left">Mean daily</td>
+<td headers="202  average_TAT_250" class="gt_row gt_center">5213s (~1.45 hours)</td>
+</tr>
+<tr>
+<td headers="202  wDay" class="gt_row gt_left">Weekday</td>
+<td headers="202  average_TAT_250" class="gt_row gt_center">6522s (~1.81 hours)</td>
+</tr>
+<tr>
+<td headers="202  wDay" class="gt_row gt_left">Weekend</td>
+<td headers="202  average_TAT_250" class="gt_row gt_center">1940s (~32.33 minutes)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>There is a variant of <code><a href="../reference/mean_daily.html">mean_daily()</a></code> called
+<code><a href="../reference/mean_daily_metric.html">mean_daily_metric()</a></code>, which is a convenience function to
+combine the calculation of a single-return-value, duration-based metric
+with the mean daily calculation. We can use it to calculate
+<code>TAT250</code> from scratch</p>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/mean_daily_metric.html">mean_daily_metric</a></span><span class="op">(</span></span>
+<span>    metric <span class="op">=</span> <span class="st">"TAT250"</span>,</span>
+<span>    Variable <span class="op">=</span> <span class="va">MEDI</span>,</span>
+<span>    threshold <span class="op">=</span> <span class="fl">250</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div id="mszxcqaipj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#mszxcqaipj table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#mszxcqaipj thead, #mszxcqaipj tbody, #mszxcqaipj tfoot, #mszxcqaipj tr, #mszxcqaipj td, #mszxcqaipj th {
+  border-style: none;
+}
+
+#mszxcqaipj p {
+  margin: 0;
+  padding: 0;
+}
+
+#mszxcqaipj .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#mszxcqaipj .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#mszxcqaipj .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#mszxcqaipj .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#mszxcqaipj .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#mszxcqaipj .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mszxcqaipj .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#mszxcqaipj .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#mszxcqaipj .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#mszxcqaipj .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#mszxcqaipj .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#mszxcqaipj .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#mszxcqaipj .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#mszxcqaipj .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#mszxcqaipj .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#mszxcqaipj .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#mszxcqaipj .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#mszxcqaipj .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#mszxcqaipj .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mszxcqaipj .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#mszxcqaipj .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#mszxcqaipj .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#mszxcqaipj .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mszxcqaipj .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#mszxcqaipj .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#mszxcqaipj .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mszxcqaipj .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mszxcqaipj .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#mszxcqaipj .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mszxcqaipj .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#mszxcqaipj .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mszxcqaipj .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#mszxcqaipj .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mszxcqaipj .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#mszxcqaipj .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mszxcqaipj .gt_left {
+  text-align: left;
+}
+
+#mszxcqaipj .gt_center {
+  text-align: center;
+}
+
+#mszxcqaipj .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#mszxcqaipj .gt_font_normal {
+  font-weight: normal;
+}
+
+#mszxcqaipj .gt_font_bold {
+  font-weight: bold;
+}
+
+#mszxcqaipj .gt_font_italic {
+  font-style: italic;
+}
+
+#mszxcqaipj .gt_super {
+  font-size: 65%;
+}
+
+#mszxcqaipj .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#mszxcqaipj .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#mszxcqaipj .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#mszxcqaipj .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#mszxcqaipj .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#mszxcqaipj .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#mszxcqaipj .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#mszxcqaipj .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#mszxcqaipj div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead><tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Day">Day</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="average_TAT250">average_TAT250</th>
+    </tr></thead>
+<tbody class="gt_table_body">
+<tr class="gt_group_heading_row">
+<th colspan="2" class="gt_group_heading" scope="colgroup" id="201">201</th>
+    </tr>
+<tr class="gt_row_group_first">
+<td headers="201  Day" class="gt_row gt_left">Mean daily</td>
+<td headers="201  average_TAT250" class="gt_row gt_center">27196s (~7.55 hours)</td>
+</tr>
+<tr>
+<td headers="201  Day" class="gt_row gt_left">Weekday</td>
+<td headers="201  average_TAT250" class="gt_row gt_center">30192s (~8.39 hours)</td>
+</tr>
+<tr>
+<td headers="201  Day" class="gt_row gt_left">Weekend</td>
+<td headers="201  average_TAT250" class="gt_row gt_center">19705s (~5.47 hours)</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="2" class="gt_group_heading" scope="colgroup" id="202">202</th>
+    </tr>
+<tr class="gt_row_group_first">
+<td headers="202  Day" class="gt_row gt_left">Mean daily</td>
+<td headers="202  average_TAT250" class="gt_row gt_center">5213s (~1.45 hours)</td>
+</tr>
+<tr>
+<td headers="202  Day" class="gt_row gt_left">Weekday</td>
+<td headers="202  average_TAT250" class="gt_row gt_center">6522s (~1.81 hours)</td>
+</tr>
+<tr>
+<td headers="202  Day" class="gt_row gt_left">Weekend</td>
+<td headers="202  average_TAT250" class="gt_row gt_center">1940s (~32.33 minutes)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The function has limited options to change the
+<code>metric_type</code>. In this case, we change the function to the
+longest continuous period above threshold.</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/mean_daily_metric.html">mean_daily_metric</a></span><span class="op">(</span></span>
+<span>    metric <span class="op">=</span> <span class="st">"PAT250"</span>,</span>
+<span>    Variable <span class="op">=</span> <span class="va">MEDI</span>,</span>
+<span>    metric_type <span class="op">=</span> <span class="va">period_above_threshold</span>,</span>
+<span>    threshold <span class="op">=</span> <span class="fl">250</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div id="jkurjxbtel" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#jkurjxbtel table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#jkurjxbtel thead, #jkurjxbtel tbody, #jkurjxbtel tfoot, #jkurjxbtel tr, #jkurjxbtel td, #jkurjxbtel th {
+  border-style: none;
+}
+
+#jkurjxbtel p {
+  margin: 0;
+  padding: 0;
+}
+
+#jkurjxbtel .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#jkurjxbtel .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#jkurjxbtel .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#jkurjxbtel .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#jkurjxbtel .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#jkurjxbtel .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#jkurjxbtel .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#jkurjxbtel .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#jkurjxbtel .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#jkurjxbtel .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#jkurjxbtel .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#jkurjxbtel .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#jkurjxbtel .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#jkurjxbtel .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#jkurjxbtel .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#jkurjxbtel .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#jkurjxbtel .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#jkurjxbtel .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#jkurjxbtel .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#jkurjxbtel .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#jkurjxbtel .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#jkurjxbtel .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#jkurjxbtel .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#jkurjxbtel .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#jkurjxbtel .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#jkurjxbtel .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#jkurjxbtel .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#jkurjxbtel .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#jkurjxbtel .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#jkurjxbtel .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#jkurjxbtel .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#jkurjxbtel .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#jkurjxbtel .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#jkurjxbtel .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#jkurjxbtel .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#jkurjxbtel .gt_left {
+  text-align: left;
+}
+
+#jkurjxbtel .gt_center {
+  text-align: center;
+}
+
+#jkurjxbtel .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#jkurjxbtel .gt_font_normal {
+  font-weight: normal;
+}
+
+#jkurjxbtel .gt_font_bold {
+  font-weight: bold;
+}
+
+#jkurjxbtel .gt_font_italic {
+  font-style: italic;
+}
+
+#jkurjxbtel .gt_super {
+  font-size: 65%;
+}
+
+#jkurjxbtel .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#jkurjxbtel .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#jkurjxbtel .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#jkurjxbtel .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#jkurjxbtel .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#jkurjxbtel .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#jkurjxbtel .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#jkurjxbtel .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#jkurjxbtel div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead><tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Day">Day</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="average_PAT250">average_PAT250</th>
+    </tr></thead>
+<tbody class="gt_table_body">
+<tr class="gt_group_heading_row">
+<th colspan="2" class="gt_group_heading" scope="colgroup" id="201">201</th>
+    </tr>
+<tr class="gt_row_group_first">
+<td headers="201  Day" class="gt_row gt_left">Mean daily</td>
+<td headers="201  average_PAT250" class="gt_row gt_center">6313s (~1.75 hours)</td>
+</tr>
+<tr>
+<td headers="201  Day" class="gt_row gt_left">Weekday</td>
+<td headers="201  average_PAT250" class="gt_row gt_center">6898s (~1.92 hours)</td>
+</tr>
+<tr>
+<td headers="201  Day" class="gt_row gt_left">Weekend</td>
+<td headers="201  average_PAT250" class="gt_row gt_center">4850s (~1.35 hours)</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="2" class="gt_group_heading" scope="colgroup" id="202">202</th>
+    </tr>
+<tr class="gt_row_group_first">
+<td headers="202  Day" class="gt_row gt_left">Mean daily</td>
+<td headers="202  average_PAT250" class="gt_row gt_center">1224s (~20.4 minutes)</td>
+</tr>
+<tr>
+<td headers="202  Day" class="gt_row gt_left">Weekday</td>
+<td headers="202  average_PAT250" class="gt_row gt_center">1440s (~24 minutes)</td>
+</tr>
+<tr>
+<td headers="202  Day" class="gt_row gt_left">Weekend</td>
+<td headers="202  average_PAT250" class="gt_row gt_center">685s (~11.42 minutes)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section level4">
+<h4 id="summarize_numericsummarise_numeric">summarize_numeric()/summarise_numeric()<a class="anchor" aria-label="anchor" href="#summarize_numericsummarise_numeric"></a>
+</h4>
+<p>We can even summarize the data further with
+<code><a href="../reference/summarize_numeric.html">summarize_numeric()</a></code>, which takes a dataset and calculates
+the average of numeric columns, as well as the number of episodes in the
+group. This makes no sense within participants, where it would just
+average <code>Weekday</code>, <code>Weekend</code>, and
+<code>Mean daily</code>. If we regroup the data, however, we can gain
+usefull insights.</p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">TAT_250_daily</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">wDay</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/summarize_numeric.html">summarize_numeric</a></span><span class="op">(</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_duration.html" class="external-link">fmt_duration</a></span><span class="op">(</span><span class="va">mean_average_TAT_250</span>, </span>
+<span>               input_units <span class="op">=</span> <span class="st">"seconds"</span>, duration_style <span class="op">=</span> <span class="st">"colon-sep"</span><span class="op">)</span></span></code></pre></div>
+<div id="lwmttdsuvu" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#lwmttdsuvu table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#lwmttdsuvu thead, #lwmttdsuvu tbody, #lwmttdsuvu tfoot, #lwmttdsuvu tr, #lwmttdsuvu td, #lwmttdsuvu th {
+  border-style: none;
+}
+
+#lwmttdsuvu p {
+  margin: 0;
+  padding: 0;
+}
+
+#lwmttdsuvu .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#lwmttdsuvu .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#lwmttdsuvu .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#lwmttdsuvu .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#lwmttdsuvu .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#lwmttdsuvu .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#lwmttdsuvu .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#lwmttdsuvu .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#lwmttdsuvu .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#lwmttdsuvu .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#lwmttdsuvu .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#lwmttdsuvu .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#lwmttdsuvu .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#lwmttdsuvu .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#lwmttdsuvu .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#lwmttdsuvu .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#lwmttdsuvu .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#lwmttdsuvu .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#lwmttdsuvu .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#lwmttdsuvu .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#lwmttdsuvu .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#lwmttdsuvu .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#lwmttdsuvu .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#lwmttdsuvu .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#lwmttdsuvu .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#lwmttdsuvu .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#lwmttdsuvu .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#lwmttdsuvu .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#lwmttdsuvu .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#lwmttdsuvu .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#lwmttdsuvu .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#lwmttdsuvu .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#lwmttdsuvu .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#lwmttdsuvu .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#lwmttdsuvu .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#lwmttdsuvu .gt_left {
+  text-align: left;
+}
+
+#lwmttdsuvu .gt_center {
+  text-align: center;
+}
+
+#lwmttdsuvu .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#lwmttdsuvu .gt_font_normal {
+  font-weight: normal;
+}
+
+#lwmttdsuvu .gt_font_bold {
+  font-weight: bold;
+}
+
+#lwmttdsuvu .gt_font_italic {
+  font-style: italic;
+}
+
+#lwmttdsuvu .gt_super {
+  font-size: 65%;
+}
+
+#lwmttdsuvu .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#lwmttdsuvu .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#lwmttdsuvu .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#lwmttdsuvu .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#lwmttdsuvu .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#lwmttdsuvu .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#lwmttdsuvu .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#lwmttdsuvu .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#lwmttdsuvu div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead><tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="wDay">wDay</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="mean_average_TAT_250">mean_average_TAT_250</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="episodes">episodes</th>
+    </tr></thead>
+<tbody class="gt_table_body">
+<tr>
+<td headers="wDay" class="gt_row gt_left">Mean daily</td>
+<td headers="mean_average_TAT_250" class="gt_row gt_center">03:32:10</td>
+<td headers="episodes" class="gt_row gt_right">17</td>
+</tr>
+<tr>
+<td headers="wDay" class="gt_row gt_left">Weekday</td>
+<td headers="mean_average_TAT_250" class="gt_row gt_center">03:45:37</td>
+<td headers="episodes" class="gt_row gt_right">17</td>
+</tr>
+<tr>
+<td headers="wDay" class="gt_row gt_left">Weekend</td>
+<td headers="mean_average_TAT_250" class="gt_row gt_center">02:58:35</td>
+<td headers="episodes" class="gt_row gt_right">17</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>We can see that our participants have slightly more time above 250 lx
+on weekdays, compared to weekends (03:45 vs. 02:58, respectively)</p>
+</div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="metric-calculation-batch">Metric calculation: batch<a class="anchor" aria-label="anchor" href="#metric-calculation-batch"></a>
+</h2>
+<p>In the final section, we will add more metrics to the analysis,
+including ones with multiple sub-metrics. Further, we imagine we want to
+know how these metrics change from the first half of the experiment
+(August/September) to the second half (October/November). Finally, we
+will include a column <code>Time.data</code> in the data set, which will
+be used to calculate the metrics. This column format excludes the
+<code>day</code> information from the <code>Datetime</code> column,
+which avoids <code>date</code>-related issues when calculating the
+<code>mean</code> of the metrics. Finally, the <code><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest()</a></code>
+call is used to flatten the table from the <code>dataframe</code>
+substructure that is created by <code>MLIT250</code> and
+<code>TAT250</code>.</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    Month <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/month.html" class="external-link">month</a></span><span class="op">(</span><span class="va">Datetime</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fl">8</span><span class="op">:</span><span class="fl">9</span> <span class="op">~</span> <span class="st">"Aug/Sep"</span>,</span>
+<span>                      <span class="fu"><a href="https://lubridate.tidyverse.org/reference/month.html" class="external-link">month</a></span><span class="op">(</span><span class="va">Datetime</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fl">10</span><span class="op">:</span><span class="fl">11</span> <span class="op">~</span> <span class="st">"Oct/Nov"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/create_Timedata.html">create_Timedata</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">metrics</span> <span class="op">&lt;-</span> </span>
+<span>  <span class="va">data</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Month</span>, <span class="va">Id</span>, <span class="va">wDay</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span></span>
+<span>    MLIT250 <span class="op">=</span> </span>
+<span>      <span class="fu"><a href="../reference/timing_above_threshold.html">timing_above_threshold</a></span><span class="op">(</span><span class="va">MEDI</span>, <span class="va">Time.data</span>, threshold <span class="op">=</span> <span class="fl">250</span>, as.df <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    TAT250 <span class="op">=</span> </span>
+<span>      <span class="fu"><a href="../reference/duration_above_threshold.html">duration_above_threshold</a></span><span class="op">(</span><span class="va">MEDI</span>, <span class="va">Time.data</span>, threshold <span class="op">=</span> <span class="fl">250</span>, as.df <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    average_MEDI <span class="op">=</span> </span>
+<span>      <span class="va">MEDI</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/log_zero_inflated.html">log_zero_inflated</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span>  <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/log_zero_inflated.html">exp_zero_inflated</a></span><span class="op">(</span><span class="op">)</span>, <span class="co">#calculate zero inflated log transformed mean</span></span>
+<span>    light_exposure <span class="op">=</span> </span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">MEDI</span><span class="op">)</span><span class="op">/</span><span class="fl">360</span>, <span class="co"># 10 second epochs means 360 epochs in one hour. dividing by 360 gives the light exposure in lx·h</span></span>
+<span>    .groups <span class="op">=</span> <span class="st">"drop_last"</span></span>
+<span>    <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="op">-</span><span class="va">Id</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#first 6 rows</span></span>
+<span><span class="va">metrics</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div id="psnntyufgg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#psnntyufgg table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#psnntyufgg thead, #psnntyufgg tbody, #psnntyufgg tfoot, #psnntyufgg tr, #psnntyufgg td, #psnntyufgg th {
+  border-style: none;
+}
+
+#psnntyufgg p {
+  margin: 0;
+  padding: 0;
+}
+
+#psnntyufgg .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#psnntyufgg .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#psnntyufgg .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#psnntyufgg .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#psnntyufgg .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#psnntyufgg .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#psnntyufgg .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#psnntyufgg .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#psnntyufgg .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#psnntyufgg .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#psnntyufgg .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#psnntyufgg .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#psnntyufgg .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#psnntyufgg .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#psnntyufgg .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#psnntyufgg .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#psnntyufgg .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#psnntyufgg .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#psnntyufgg .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#psnntyufgg .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#psnntyufgg .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#psnntyufgg .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#psnntyufgg .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#psnntyufgg .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#psnntyufgg .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#psnntyufgg .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#psnntyufgg .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#psnntyufgg .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#psnntyufgg .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#psnntyufgg .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#psnntyufgg .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#psnntyufgg .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#psnntyufgg .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#psnntyufgg .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#psnntyufgg .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#psnntyufgg .gt_left {
+  text-align: left;
+}
+
+#psnntyufgg .gt_center {
+  text-align: center;
+}
+
+#psnntyufgg .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#psnntyufgg .gt_font_normal {
+  font-weight: normal;
+}
+
+#psnntyufgg .gt_font_bold {
+  font-weight: bold;
+}
+
+#psnntyufgg .gt_font_italic {
+  font-style: italic;
+}
+
+#psnntyufgg .gt_super {
+  font-size: 65%;
+}
+
+#psnntyufgg .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#psnntyufgg .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#psnntyufgg .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#psnntyufgg .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#psnntyufgg .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#psnntyufgg .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#psnntyufgg .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#psnntyufgg .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#psnntyufgg div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead><tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="wDay">wDay</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="mean_timing_above_250">mean_timing_above_250</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="first_timing_above_250">first_timing_above_250</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="last_timing_above_250">last_timing_above_250</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="duration_above_250">duration_above_250</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="average_MEDI">average_MEDI</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="light_exposure">light_exposure</th>
+    </tr></thead>
+<tbody class="gt_table_body">
+<tr class="gt_group_heading_row">
+<th colspan="7" class="gt_group_heading" scope="colgroup" id="Aug/Sep - 201">Aug/Sep - 201</th>
+    </tr>
+<tr class="gt_row_group_first">
+<td headers="Aug/Sep - 201  wDay" class="gt_row gt_center">Tue</td>
+<td headers="Aug/Sep - 201  mean_timing_above_250" class="gt_row gt_center">13:55:49</td>
+<td headers="Aug/Sep - 201  first_timing_above_250" class="gt_row gt_center">07:48:01</td>
+<td headers="Aug/Sep - 201  last_timing_above_250" class="gt_row gt_center">19:43:41</td>
+<td headers="Aug/Sep - 201  duration_above_250" class="gt_row gt_center">34500s (~9.58 hours)</td>
+<td headers="Aug/Sep - 201  average_MEDI" class="gt_row gt_right">23.910527</td>
+<td headers="Aug/Sep - 201  light_exposure" class="gt_row gt_right">26273.415</td>
+</tr>
+<tr>
+<td headers="Aug/Sep - 201  wDay" class="gt_row gt_center">Wed</td>
+<td headers="Aug/Sep - 201  mean_timing_above_250" class="gt_row gt_center">12:53:04</td>
+<td headers="Aug/Sep - 201  first_timing_above_250" class="gt_row gt_center">07:03:01</td>
+<td headers="Aug/Sep - 201  last_timing_above_250" class="gt_row gt_center">19:46:41</td>
+<td headers="Aug/Sep - 201  duration_above_250" class="gt_row gt_center">32780s (~9.11 hours)</td>
+<td headers="Aug/Sep - 201  average_MEDI" class="gt_row gt_right">14.897098</td>
+<td headers="Aug/Sep - 201  light_exposure" class="gt_row gt_right">18545.278</td>
+</tr>
+<tr>
+<td headers="Aug/Sep - 201  wDay" class="gt_row gt_center">Thu</td>
+<td headers="Aug/Sep - 201  mean_timing_above_250" class="gt_row gt_center">14:25:57</td>
+<td headers="Aug/Sep - 201  first_timing_above_250" class="gt_row gt_center">08:41:11</td>
+<td headers="Aug/Sep - 201  last_timing_above_250" class="gt_row gt_center">19:27:11</td>
+<td headers="Aug/Sep - 201  duration_above_250" class="gt_row gt_center">21820s (~6.06 hours)</td>
+<td headers="Aug/Sep - 201  average_MEDI" class="gt_row gt_right">6.804520</td>
+<td headers="Aug/Sep - 201  light_exposure" class="gt_row gt_right">6315.771</td>
+</tr>
+<tr>
+<td headers="Aug/Sep - 201  wDay" class="gt_row gt_center">Fri</td>
+<td headers="Aug/Sep - 201  mean_timing_above_250" class="gt_row gt_center">13:12:42</td>
+<td headers="Aug/Sep - 201  first_timing_above_250" class="gt_row gt_center">07:14:41</td>
+<td headers="Aug/Sep - 201  last_timing_above_250" class="gt_row gt_center">18:51:21</td>
+<td headers="Aug/Sep - 201  duration_above_250" class="gt_row gt_center">31670s (~8.8 hours)</td>
+<td headers="Aug/Sep - 201  average_MEDI" class="gt_row gt_right">11.143937</td>
+<td headers="Aug/Sep - 201  light_exposure" class="gt_row gt_right">19902.681</td>
+</tr>
+<tr>
+<td headers="Aug/Sep - 201  wDay" class="gt_row gt_center">Sat</td>
+<td headers="Aug/Sep - 201  mean_timing_above_250" class="gt_row gt_center">11:29:02</td>
+<td headers="Aug/Sep - 201  first_timing_above_250" class="gt_row gt_center">07:08:41</td>
+<td headers="Aug/Sep - 201  last_timing_above_250" class="gt_row gt_center">20:40:41</td>
+<td headers="Aug/Sep - 201  duration_above_250" class="gt_row gt_center">15010s (~4.17 hours)</td>
+<td headers="Aug/Sep - 201  average_MEDI" class="gt_row gt_right">6.613548</td>
+<td headers="Aug/Sep - 201  light_exposure" class="gt_row gt_right">13428.829</td>
+</tr>
+<tr>
+<td headers="Aug/Sep - 201  wDay" class="gt_row gt_center">Sun</td>
+<td headers="Aug/Sep - 201  mean_timing_above_250" class="gt_row gt_center">12:46:28</td>
+<td headers="Aug/Sep - 201  first_timing_above_250" class="gt_row gt_center">07:23:01</td>
+<td headers="Aug/Sep - 201  last_timing_above_250" class="gt_row gt_center">19:12:21</td>
+<td headers="Aug/Sep - 201  duration_above_250" class="gt_row gt_center">24400s (~6.78 hours)</td>
+<td headers="Aug/Sep - 201  average_MEDI" class="gt_row gt_right">14.730145</td>
+<td headers="Aug/Sep - 201  light_exposure" class="gt_row gt_right">4399.761</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The operation above yields a data frame with six metrics across 102
+participant days (6 days for 17 participants). The grouping for
+<code>Month</code> did not add additional groups, as each participant
+day is already solely in the <code>"Aug/Sep"</code> or
+<code>"Oct/Nov"</code> group.</p>
+<div class="section level3">
+<h3 id="summarize-metrics">Summarize metrics<a class="anchor" aria-label="anchor" href="#summarize-metrics"></a>
+</h3>
+<p>We can summarize the data different ways.</p>
+<p>Within <code>LightLogR</code>, we can use the
+<code><a href="../reference/mean_daily.html">mean_daily()</a></code> and <code><a href="../reference/summarize_numeric.html">summarize_numeric()</a></code>
+functions:</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#calculating weekday, weekend, and mean daily summaries for each group</span></span>
+<span><span class="va">metrics</span> <span class="op">|&gt;</span> </span>
+<span>   <span class="co">#calculate weekday, weekend, and mean daily summaries for each group:</span></span>
+<span>  <span class="fu"><a href="../reference/mean_daily.html">mean_daily</a></span><span class="op">(</span><span class="va">wDay</span>, prefix <span class="op">=</span> <span class="st">""</span>, filter.empty <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co">#remove empty rows</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Month</span>, <span class="va">wDay</span><span class="op">)</span> <span class="op">|&gt;</span>  <span class="co">#regroup so that we can summarize across Participants</span></span>
+<span>  <span class="fu"><a href="../reference/summarize_numeric.html">summarize_numeric</a></span><span class="op">(</span>prefix <span class="op">=</span> <span class="st">""</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_number.html" class="external-link">fmt_number</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">average_MEDI</span>, <span class="va">light_exposure</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div id="zfelhkpkbj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#zfelhkpkbj table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#zfelhkpkbj thead, #zfelhkpkbj tbody, #zfelhkpkbj tfoot, #zfelhkpkbj tr, #zfelhkpkbj td, #zfelhkpkbj th {
+  border-style: none;
+}
+
+#zfelhkpkbj p {
+  margin: 0;
+  padding: 0;
+}
+
+#zfelhkpkbj .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#zfelhkpkbj .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#zfelhkpkbj .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#zfelhkpkbj .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#zfelhkpkbj .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#zfelhkpkbj .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#zfelhkpkbj .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#zfelhkpkbj .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#zfelhkpkbj .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#zfelhkpkbj .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#zfelhkpkbj .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#zfelhkpkbj .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#zfelhkpkbj .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#zfelhkpkbj .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#zfelhkpkbj .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#zfelhkpkbj .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#zfelhkpkbj .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#zfelhkpkbj .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#zfelhkpkbj .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#zfelhkpkbj .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#zfelhkpkbj .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#zfelhkpkbj .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#zfelhkpkbj .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#zfelhkpkbj .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#zfelhkpkbj .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#zfelhkpkbj .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#zfelhkpkbj .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#zfelhkpkbj .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#zfelhkpkbj .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#zfelhkpkbj .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#zfelhkpkbj .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#zfelhkpkbj .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#zfelhkpkbj .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#zfelhkpkbj .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#zfelhkpkbj .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#zfelhkpkbj .gt_left {
+  text-align: left;
+}
+
+#zfelhkpkbj .gt_center {
+  text-align: center;
+}
+
+#zfelhkpkbj .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#zfelhkpkbj .gt_font_normal {
+  font-weight: normal;
+}
+
+#zfelhkpkbj .gt_font_bold {
+  font-weight: bold;
+}
+
+#zfelhkpkbj .gt_font_italic {
+  font-style: italic;
+}
+
+#zfelhkpkbj .gt_super {
+  font-size: 65%;
+}
+
+#zfelhkpkbj .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#zfelhkpkbj .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#zfelhkpkbj .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#zfelhkpkbj .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#zfelhkpkbj .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#zfelhkpkbj .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#zfelhkpkbj .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#zfelhkpkbj .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#zfelhkpkbj div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead><tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="wDay">wDay</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="mean_timing_above_250">mean_timing_above_250</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="first_timing_above_250">first_timing_above_250</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="last_timing_above_250">last_timing_above_250</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="duration_above_250">duration_above_250</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="average_MEDI">average_MEDI</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="light_exposure">light_exposure</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="episodes">episodes</th>
+    </tr></thead>
+<tbody class="gt_table_body">
+<tr class="gt_group_heading_row">
+<th colspan="8" class="gt_group_heading" scope="colgroup" id="Aug/Sep">Aug/Sep</th>
+    </tr>
+<tr class="gt_row_group_first">
+<td headers="Aug/Sep  wDay" class="gt_row gt_left">Mean daily</td>
+<td headers="Aug/Sep  mean_timing_above_250" class="gt_row gt_center">13:37:13</td>
+<td headers="Aug/Sep  first_timing_above_250" class="gt_row gt_center">08:46:17</td>
+<td headers="Aug/Sep  last_timing_above_250" class="gt_row gt_center">19:10:18</td>
+<td headers="Aug/Sep  duration_above_250" class="gt_row gt_center">15681s (~4.36 hours)</td>
+<td headers="Aug/Sep  average_MEDI" class="gt_row gt_right">8.67</td>
+<td headers="Aug/Sep  light_exposure" class="gt_row gt_right">12,678.75</td>
+<td headers="Aug/Sep  episodes" class="gt_row gt_right">11</td>
+</tr>
+<tr>
+<td headers="Aug/Sep  wDay" class="gt_row gt_left">Weekday</td>
+<td headers="Aug/Sep  mean_timing_above_250" class="gt_row gt_center">13:31:57</td>
+<td headers="Aug/Sep  first_timing_above_250" class="gt_row gt_center">08:34:01</td>
+<td headers="Aug/Sep  last_timing_above_250" class="gt_row gt_center">19:03:32</td>
+<td headers="Aug/Sep  duration_above_250" class="gt_row gt_center">16798s (~4.67 hours)</td>
+<td headers="Aug/Sep  average_MEDI" class="gt_row gt_right">9.04</td>
+<td headers="Aug/Sep  light_exposure" class="gt_row gt_right">12,158.59</td>
+<td headers="Aug/Sep  episodes" class="gt_row gt_right">11</td>
+</tr>
+<tr>
+<td headers="Aug/Sep  wDay" class="gt_row gt_left">Weekend</td>
+<td headers="Aug/Sep  mean_timing_above_250" class="gt_row gt_center">13:50:24</td>
+<td headers="Aug/Sep  first_timing_above_250" class="gt_row gt_center">09:16:57</td>
+<td headers="Aug/Sep  last_timing_above_250" class="gt_row gt_center">19:27:13</td>
+<td headers="Aug/Sep  duration_above_250" class="gt_row gt_center">12890s (~3.58 hours)</td>
+<td headers="Aug/Sep  average_MEDI" class="gt_row gt_right">7.75</td>
+<td headers="Aug/Sep  light_exposure" class="gt_row gt_right">13,979.15</td>
+<td headers="Aug/Sep  episodes" class="gt_row gt_right">11</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="8" class="gt_group_heading" scope="colgroup" id="Oct/Nov">Oct/Nov</th>
+    </tr>
+<tr class="gt_row_group_first">
+<td headers="Oct/Nov  wDay" class="gt_row gt_left">Mean daily</td>
+<td headers="Oct/Nov  mean_timing_above_250" class="gt_row gt_center">14:05:01</td>
+<td headers="Oct/Nov  first_timing_above_250" class="gt_row gt_center">10:14:29</td>
+<td headers="Oct/Nov  last_timing_above_250" class="gt_row gt_center">18:24:06</td>
+<td headers="Oct/Nov  duration_above_250" class="gt_row gt_center">7250s (~2.01 hours)</td>
+<td headers="Oct/Nov  average_MEDI" class="gt_row gt_right">5.49</td>
+<td headers="Oct/Nov  light_exposure" class="gt_row gt_right">5,558.11</td>
+<td headers="Oct/Nov  episodes" class="gt_row gt_right">6</td>
+</tr>
+<tr>
+<td headers="Oct/Nov  wDay" class="gt_row gt_left">Weekday</td>
+<td headers="Oct/Nov  mean_timing_above_250" class="gt_row gt_center">13:50:26</td>
+<td headers="Oct/Nov  first_timing_above_250" class="gt_row gt_center">10:02:25</td>
+<td headers="Oct/Nov  last_timing_above_250" class="gt_row gt_center">18:32:38</td>
+<td headers="Oct/Nov  duration_above_250" class="gt_row gt_center">7558s (~2.1 hours)</td>
+<td headers="Oct/Nov  average_MEDI" class="gt_row gt_right">5.28</td>
+<td headers="Oct/Nov  light_exposure" class="gt_row gt_right">5,660.88</td>
+<td headers="Oct/Nov  episodes" class="gt_row gt_right">6</td>
+</tr>
+<tr>
+<td headers="Oct/Nov  wDay" class="gt_row gt_left">Weekend</td>
+<td headers="Oct/Nov  mean_timing_above_250" class="gt_row gt_center">14:13:56</td>
+<td headers="Oct/Nov  first_timing_above_250" class="gt_row gt_center">10:30:34</td>
+<td headers="Oct/Nov  last_timing_above_250" class="gt_row gt_center">17:57:48</td>
+<td headers="Oct/Nov  duration_above_250" class="gt_row gt_center">7273s (~2.02 hours)</td>
+<td headers="Oct/Nov  average_MEDI" class="gt_row gt_right">6.07</td>
+<td headers="Oct/Nov  light_exposure" class="gt_row gt_right">5,741.14</td>
+<td headers="Oct/Nov  episodes" class="gt_row gt_right">7</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The number of episodes shows us that there were 11 values in Aug/Sep,
+and 6 in Oct/Nov - except for Weekends, which have 7. This is because
+one participant crosses Sep/Oct. Checking this participants data shows
+that only the last day is in October, which is a Sunday - thus being
+part of the weekend.</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Id</span> <span class="op">==</span> <span class="fl">214</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">Datetime</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://lubridate.tidyverse.org/reference/date.html" class="external-link">date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "2023-09-26" "2023-09-27" "2023-09-28" "2023-09-29" "2023-09-30"</span></span>
+<span><span class="co">#&gt; [6] "2023-10-01"</span></span></code></pre></div>
+<p>We can wrangle the same data differently, to get averages across all
+days</p>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#calculating weekday daily summaries for each group</span></span>
+<span><span class="va">metrics</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/summarize_numeric.html">summarize_numeric</a></span><span class="op">(</span>prefix <span class="op">=</span> <span class="st">""</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co">#summarize across participants</span></span>
+<span>  <span class="fu"><a href="../reference/summarize_numeric.html">summarize_numeric</a></span><span class="op">(</span>prefix <span class="op">=</span> <span class="st">""</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co">#summarize by month</span></span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_number.html" class="external-link">fmt_number</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">average_MEDI</span>, <span class="va">light_exposure</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div id="khrvvqeoel" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#khrvvqeoel table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#khrvvqeoel thead, #khrvvqeoel tbody, #khrvvqeoel tfoot, #khrvvqeoel tr, #khrvvqeoel td, #khrvvqeoel th {
+  border-style: none;
+}
+
+#khrvvqeoel p {
+  margin: 0;
+  padding: 0;
+}
+
+#khrvvqeoel .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#khrvvqeoel .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#khrvvqeoel .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#khrvvqeoel .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#khrvvqeoel .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#khrvvqeoel .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#khrvvqeoel .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#khrvvqeoel .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#khrvvqeoel .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#khrvvqeoel .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#khrvvqeoel .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#khrvvqeoel .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#khrvvqeoel .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#khrvvqeoel .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#khrvvqeoel .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#khrvvqeoel .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#khrvvqeoel .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#khrvvqeoel .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#khrvvqeoel .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#khrvvqeoel .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#khrvvqeoel .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#khrvvqeoel .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#khrvvqeoel .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#khrvvqeoel .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#khrvvqeoel .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#khrvvqeoel .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#khrvvqeoel .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#khrvvqeoel .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#khrvvqeoel .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#khrvvqeoel .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#khrvvqeoel .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#khrvvqeoel .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#khrvvqeoel .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#khrvvqeoel .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#khrvvqeoel .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#khrvvqeoel .gt_left {
+  text-align: left;
+}
+
+#khrvvqeoel .gt_center {
+  text-align: center;
+}
+
+#khrvvqeoel .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#khrvvqeoel .gt_font_normal {
+  font-weight: normal;
+}
+
+#khrvvqeoel .gt_font_bold {
+  font-weight: bold;
+}
+
+#khrvvqeoel .gt_font_italic {
+  font-style: italic;
+}
+
+#khrvvqeoel .gt_super {
+  font-size: 65%;
+}
+
+#khrvvqeoel .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#khrvvqeoel .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#khrvvqeoel .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#khrvvqeoel .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#khrvvqeoel .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#khrvvqeoel .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#khrvvqeoel .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#khrvvqeoel .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#khrvvqeoel div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead><tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Month">Month</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="mean_timing_above_250">mean_timing_above_250</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="first_timing_above_250">first_timing_above_250</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="last_timing_above_250">last_timing_above_250</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="duration_above_250">duration_above_250</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="average_MEDI">average_MEDI</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="light_exposure">light_exposure</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="episodes">episodes</th>
+    </tr></thead>
+<tbody class="gt_table_body">
+<tr>
+<td headers="Month" class="gt_row gt_left">Aug/Sep</td>
+<td headers="mean_timing_above_250" class="gt_row gt_center">13:38:46</td>
+<td headers="first_timing_above_250" class="gt_row gt_center">08:48:41</td>
+<td headers="last_timing_above_250" class="gt_row gt_center">19:09:20</td>
+<td headers="duration_above_250" class="gt_row gt_center">15625s (~4.34 hours)</td>
+<td headers="average_MEDI" class="gt_row gt_right">8.66</td>
+<td headers="light_exposure" class="gt_row gt_right">12,781.74</td>
+<td headers="episodes" class="gt_row gt_right">11</td>
+</tr>
+<tr>
+<td headers="Month" class="gt_row gt_left">Oct/Nov</td>
+<td headers="mean_timing_above_250" class="gt_row gt_center">13:44:46</td>
+<td headers="first_timing_above_250" class="gt_row gt_center">10:06:26</td>
+<td headers="last_timing_above_250" class="gt_row gt_center">18:14:53</td>
+<td headers="duration_above_250" class="gt_row gt_center">7888s (~2.19 hours)</td>
+<td headers="average_MEDI" class="gt_row gt_right">5.64</td>
+<td headers="light_exposure" class="gt_row gt_right">5,946.69</td>
+<td headers="episodes" class="gt_row gt_right">7</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>This shows us 11 participants for the Aug/Sep timeframe and 7 for the
+Oct/Nov timeframe. This is in line with the summary above, which showed
+us one participant crossed the timeframes. Of course, filtering the data
+at some inbetween step to ensure there are a minimum amount of data
+points in each category makes sense, which we have left out here for
+brevity.</p>
+</div>
+<div class="section level3">
+<h3 id="using-gtsummary">Using gtsummary<a class="anchor" aria-label="anchor" href="#using-gtsummary"></a>
+</h3>
+<p>This section repeats the summary, but by using the popular
+<a href="https://github.com/ddsjoberg/gtsummary" class="external-link">gtsummary</a> package.</p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">metrics</span> <span class="op">&lt;-</span> </span>
+<span>  <span class="va">metrics</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Month</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">Id</span>, <span class="op">-</span><span class="va">wDay</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#Table output</span></span>
+<span><span class="va">metrics</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html" class="external-link">tbl_summary</a></span><span class="op">(</span>by <span class="op">=</span> <span class="va">Month</span>,</span>
+<span>              statistic <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://www.danieldsjoberg.com/gtsummary/reference/select_helpers.html" class="external-link">all_continuous</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="st">"{mean} (±{sd})"</span><span class="op">)</span>,</span>
+<span>              digits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>                <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>                  <span class="va">mean_timing_above_250</span>, <span class="va">first_timing_above_250</span>, </span>
+<span>                  <span class="va">last_timing_above_250</span>, <span class="va">duration_above_250</span></span>
+<span>                  <span class="op">)</span> <span class="op">~</span> <span class="va">style_time</span><span class="op">)</span>,</span>
+<span>              label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>                mean_timing_above_250 <span class="op">=</span> </span>
+<span>                  <span class="st">"mean timing above 250 lx mel EDI (HH:MM)"</span>,</span>
+<span>                first_timing_above_250 <span class="op">=</span> </span>
+<span>                  <span class="st">"first time above 250 lx mel EDI (HH:MM)"</span>,</span>
+<span>                last_timing_above_250 <span class="op">=</span> </span>
+<span>                  <span class="st">"last time above 250 lx mel EDI (HH:MM)"</span>,</span>
+<span>                duration_above_250 <span class="op">=</span> <span class="st">"duration above 250 lx mel EDI (HH:MM)"</span>,</span>
+<span>                average_MEDI <span class="op">=</span> <span class="st">"average mel EDI (lx)"</span>,</span>
+<span>                light_exposure <span class="op">=</span> <span class="st">"light exposure (lx·h)"</span></span>
+<span>                <span class="op">)</span></span>
+<span>              <span class="op">)</span></span></code></pre></div>
+<div id="fyoqaitrxp" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#fyoqaitrxp table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#fyoqaitrxp thead, #fyoqaitrxp tbody, #fyoqaitrxp tfoot, #fyoqaitrxp tr, #fyoqaitrxp td, #fyoqaitrxp th {
+  border-style: none;
+}
+
+#fyoqaitrxp p {
+  margin: 0;
+  padding: 0;
+}
+
+#fyoqaitrxp .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#fyoqaitrxp .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#fyoqaitrxp .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#fyoqaitrxp .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#fyoqaitrxp .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#fyoqaitrxp .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#fyoqaitrxp .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#fyoqaitrxp .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#fyoqaitrxp .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#fyoqaitrxp .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#fyoqaitrxp .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#fyoqaitrxp .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#fyoqaitrxp .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#fyoqaitrxp .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#fyoqaitrxp .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#fyoqaitrxp .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#fyoqaitrxp .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#fyoqaitrxp .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#fyoqaitrxp .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#fyoqaitrxp .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#fyoqaitrxp .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#fyoqaitrxp .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#fyoqaitrxp .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#fyoqaitrxp .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#fyoqaitrxp .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#fyoqaitrxp .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#fyoqaitrxp .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#fyoqaitrxp .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#fyoqaitrxp .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#fyoqaitrxp .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#fyoqaitrxp .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#fyoqaitrxp .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#fyoqaitrxp .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#fyoqaitrxp .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#fyoqaitrxp .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#fyoqaitrxp .gt_left {
+  text-align: left;
+}
+
+#fyoqaitrxp .gt_center {
+  text-align: center;
+}
+
+#fyoqaitrxp .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#fyoqaitrxp .gt_font_normal {
+  font-weight: normal;
+}
+
+#fyoqaitrxp .gt_font_bold {
+  font-weight: bold;
+}
+
+#fyoqaitrxp .gt_font_italic {
+  font-style: italic;
+}
+
+#fyoqaitrxp .gt_super {
+  font-size: 65%;
+}
+
+#fyoqaitrxp .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#fyoqaitrxp .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#fyoqaitrxp .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#fyoqaitrxp .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#fyoqaitrxp .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#fyoqaitrxp .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#fyoqaitrxp .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#fyoqaitrxp .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#fyoqaitrxp div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead><tr class="gt_col_headings">
 <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="label"><span class="gt_from_md"><strong>Characteristic</strong></span></th>
       <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="stat_1">
 <span class="gt_from_md"><strong>Aug/Sep</strong><br>
@@ -5413,8 +8994,8 @@ N = 37</span><span class="gt_footnote_marks" style="white-space:nowrap;font-styl
 </tr>
 <tr>
 <td headers="label" class="gt_row gt_left">average mel EDI (lx)</td>
-<td headers="stat_1" class="gt_row gt_center">535 (±505)</td>
-<td headers="stat_2" class="gt_row gt_center">234 (±276)</td>
+<td headers="stat_1" class="gt_row gt_center">8.7 (±6.6)</td>
+<td headers="stat_2" class="gt_row gt_center">5.5 (±5.0)</td>
 </tr>
 <tr>
 <td headers="label" class="gt_row gt_left">light exposure (lx·h)</td>
@@ -5433,6 +9014,7 @@ N = 37</span><span class="gt_footnote_marks" style="white-space:nowrap;font-styl
 <code>LightLogR</code>. Be sure to look at the documentation for each
 function to understand the parameters and outputs and at the <a href="https://tscnlab.github.io/LightLogR/reference/index.html#metrics">reference
 section</a> to get an overview of all available metrics.</p>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
