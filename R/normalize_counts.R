@@ -15,14 +15,19 @@
 #' @param gain.ratio.table a two-column tibble containing `gain` and
 #'   `gain.ratio` information. Can be provided by the user or use the
 #'   `gain.ratio.table` dataset.
-#' @param gain.columns a `character` vector of columns in the `dataset` containing a gain setting. Columns must not repeat.
-#' @param count.columns a `character` vector of columns in the `dataset` containing raw count data. Must be of the same length as `gain.columns`, and the order must conform to the order in `gain.columns`.
+#' @param gain.columns a `character` vector of columns in the `dataset`
+#'   containing a gain setting. Columns must not repeat.
+#' @param count.columns a `character` vector of columns in the `dataset`
+#'   containing raw count data. Must be of the same length as `gain.columns`,
+#'   and the order must conform to the order in `gain.columns`.
 #'
 #' @returns an extended dataset with new columns containing normalized counts
+#' @family Spectrum
+#' 
 #' @export
 #'
 #' @examples
-#' example.table <- 
+#' example.table <-
 #' tibble::tibble(
 #' uvGain = c(4096, 1024, 2),
 #' visGain = c(4096, 4096, 4096),
@@ -30,11 +35,11 @@
 #' uvValue = c(692, 709, 658),
 #' visValue = c(128369, 129657, 128609),
 #' irValue = c(122193, 127113, 124837))
-#' 
+#'
 #' gain.columns = c("uvGain", "visGain", "irGain")
 #' count.columns = c("uvValue", "visValue", "irValue")
-#' 
-#' example.table |> 
+#'
+#' example.table |>
 #' normalize_counts(gain.columns, count.columns, gain.ratio.tables$TSL2585)
 normalize_counts <- function(dataset, 
                              gain.columns,

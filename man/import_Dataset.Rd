@@ -6,7 +6,7 @@
 \alias{import}
 \title{Import a light logger dataset or related data}
 \format{
-An object of class \code{list} of length 18.
+An object of class \code{list} of length 19.
 }
 \usage{
 import_Dataset(device, ...)
@@ -80,11 +80,12 @@ continuously as the package is maintained.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{supported_devices()
 #>  [1] "ActLumus"              "ActTrust"              "Actiwatch_Spectrum"   
-#>  [4] "Actiwatch_Spectrum_de" "Circadian_Eye"         "DeLux"                
-#>  [7] "GENEActiv_GGIR"        "Kronowise"             "LIMO"                 
-#> [10] "LYS"                   "LiDo"                  "LightWatcher"         
-#> [13] "MotionWatch8"          "OcuWEAR"               "Speccy"               
-#> [16] "SpectraWear"           "VEET"                  "nanoLambda"
+#>  [4] "Actiwatch_Spectrum_de" "Circadian_Eye"         "ClouClip"             
+#>  [7] "DeLux"                 "GENEActiv_GGIR"        "Kronowise"            
+#> [10] "LIMO"                  "LYS"                   "LiDo"                 
+#> [13] "LightWatcher"          "MotionWatch8"          "OcuWEAR"              
+#> [16] "Speccy"                "SpectraWear"           "VEET"                 
+#> [19] "nanoLambda"
 }\if{html}{\out{</div>}}
 \subsection{ActLumus}{
 
@@ -268,6 +269,15 @@ Manufacturer: Ocutune
 Implemented: September 2024
 
 OcuWEAR data contains spectral data. Due to the format of the data file, the spectrum is not directly part of the tibble, but rather a list column of tibbles within the imported data, containing a \code{Wavelength} (nm) and \code{Intensity} (mW/m^2) column.
+}
+
+\subsection{ClouClip}{
+
+Manufacturer: Clouclip
+
+Implemented: April 2025
+
+ClouClip export files have the ending \code{.xls}, but are no real Microsoft Excel files, rather they are tab-separated text files. LightLogR thus does not read them in with an excel import routine. The measurement columns \code{Lux} and \code{Dis} contain sentinel values. \code{-1} (\code{Dis} and \code{Lux}) indicates sleep mode, whereas \code{204} (only \code{Dis}) indicates an out of range measurement. These values will be set to \code{NA}, and an additional column is added that translates these status codes. The columns carry the name \verb{\{.col\}_status}.
 }
 }
 

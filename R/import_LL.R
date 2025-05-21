@@ -234,6 +234,14 @@
 #'   
 #'   OcuWEAR data contains spectral data. Due to the format of the data file, the spectrum is not directly part of the tibble, but rather a list column of tibbles within the imported data, containing a `Wavelength` (nm) and `Intensity` (mW/m^2) column.
 #'
+#'   ## ClouClip
+#'   
+#'   Manufacturer: Clouclip
+#'   
+#'   Implemented: April 2025
+#'   
+#'   ClouClip export files have the ending `.xls`, but are no real Microsoft Excel files, rather they are tab-separated text files. LightLogR thus does not read them in with an excel import routine. The measurement columns `Lux` and `Dis` contain sentinel values. `-1` (`Dis` and `Lux`) indicates sleep mode, whereas `204` (only `Dis`) indicates an out of range measurement. These values will be set to `NA`, and an additional column is added that translates these status codes. The columns carry the name `{.col}_status`.
+#'
 #' @section Examples:
 #'
 #'   ## Imports made easy
@@ -354,8 +362,8 @@ imports <- function(device,
       data <- data %>%
         dplyr::mutate(file.name = basename(file.name) %>%
                         tools::file_path_sans_ext(),
-                      !!Id.colname := factor(!!Id.colname)) %>%
-        dplyr::group_by(Id = !!Id.colname) %>%
+                      Id = factor(!!Id.colname), .before = 1) %>%
+        dplyr::group_by(Id) %>%
         dplyr::arrange(Datetime, .by_group = TRUE)
       
       #if there are Datetimes with NA value, drop them

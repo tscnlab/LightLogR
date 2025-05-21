@@ -219,3 +219,74 @@ Brown_rec <- function(state,
     .default = NA
   )
 }
+
+
+#' Create a state column that cuts light levels into sections by Brown et al.
+#' (2022)
+#'
+#' This is a convenience wrapper arount [cut()] and [dplyr::mutate()]. It
+#' creates a state column dividing a light column into recommended levels by
+#' Brown et al. (2022). Cuts can be adjusted or extended with `vector_cuts` and
+#' `vector_labels`
+#'
+#' @param dataset A light exposure dataframe
+#' @param MEDI.colname The colname containing melanopic EDI values (or, alternatively, Illuminance). Defaults to `MEDI`. Expects a symbol.
+#' @param New.state.colname Name of the new column that will contain the cut data. Expects a symbol.
+#' @param vector_cuts Numeric vector of breaks for the cuts.
+#' @param vector_labels Vecotr of labels for the cuts. Must be one entry shorter than `vector_cuts`.
+#' @param overwrite Logical. Should the `New.state.colname` overwrite a preexisting column in the dataset
+#'
+#' @return The input dataset with an additional (or overwritten) column
+#'   containing a cut light vector
+#' @export
+#'
+#' @references
+#' https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3001571
+#'
+#' @family Brown
+#' @examples
+#' sample.data.environment |> 
+#' Brown_cut() |> 
+#' dplyr::count(state)
+#' 
+Brown_cut <- function(dataset,
+                      MEDI.colname = MEDI,
+                      New.state.colname = state,
+                      vector_cuts = c(-Inf, 1, 10, 250, Inf),
+                      vector_labels = c("\U{2264}1lx", "\U{2264}10lx", NA, "\U{2265}250lx"),
+                      overwrite = TRUE
+                      ){
+  
+  stopifnot("vector_cuts need to be numeric" = 
+              is.numeric(vector_cuts),
+            "vector_labels need to be shorter by exactly one compared to vector_cuts" = 
+              (length(vector_labels) + 1) == length(vector_cuts)
+  )
+  
+  MEDI.colname.defused <- colname.defused({{ MEDI.colname }})
+  New.state.colname.defused <- colname.defused({{ New.state.colname }})
+  
+  #give an error or warning if the reference column is present
+  if(New.state.colname.defused %in% names(dataset) & !overwrite) 
+    stop("A State column with the given (or default) name is already part of the dataset. Please remove the column, choose a different name, or set `overwrite = TRUE`")
+  if(New.state.colname.defused %in% names(dataset)) 
+    warning("A State column with the given (or default) name is already part of the dataset. It is overwritten, because `overwrite = TRUE ` was set.")
+  
+  stopifnot(
+    "dataset is not a dataframe" = is.data.frame(dataset),
+    "MEDI.colname must be part of the dataset" = 
+      MEDI.colname.defused %in% names(dataset),
+    "MEDI.colname must be a numeric column" = 
+      is.numeric(dataset[[MEDI.colname.defused]]),
+    "overwrite must be a logical" = 
+      is.logical(overwrite)
+  )
+  
+  dataset |> 
+  dplyr::mutate(
+    {{ New.state.colname }} := cut({{ MEDI.colname }},
+                    breaks = vector_cuts,
+                    labels = vector_labels
+                    )
+                    )
+}

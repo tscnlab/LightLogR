@@ -24,9 +24,12 @@
 #'   `factor` make the most sense.
 #' @param colname.extension The extension that is added to the state name to
 #'   create the new column. Defaults to `".count"`.
+#' @param use.original.state Logical, whether the original state should be part
+#'   of the output column.
 #'
 #' @returns The input `dataset` with an additional column that counts the
-#'   occurrences of each state. The new column will of type `character`
+#'   occurrences of each state. The new column will of type `character` if
+#'   `use.original.state = TRUE` and `integer` otherwise.
 #' @export
 #'
 #' @examples
@@ -36,19 +39,21 @@
 #'  "night", "night", "day", "night")
 #'  )
 #' number_states(dataset, state)
+#' number_states(dataset, state, use.original.state = FALSE)
 #'
 #' #example with photoperiods, calculating the mean values for each day and night
 #' coordinates <- c(48.52, 9.06)
-#' sample.data.environment |> 
-#'   add_photoperiod(coordinates) |> 
-#'   number_states(photoperiod.state) |> 
-#'   dplyr::group_by(photoperiod.state.count, .add = TRUE) |> 
-#'   dplyr::summarize(mean_MEDI = mean(MEDI)) |> 
+#' sample.data.environment |>
+#'   add_photoperiod(coordinates) |>
+#'   number_states(photoperiod.state) |>
+#'   dplyr::group_by(photoperiod.state.count, .add = TRUE) |>
+#'   dplyr::summarize(mean_MEDI = mean(MEDI)) |>
 #'   tail(13)
-#'
+#' 
 number_states <- function(dataset,
                           state.colname,
-                          colname.extension = ".count") {
+                          colname.extension = ".count",
+                          use.original.state = TRUE) {
   
   # Initial Checks ----------------------------------------------------------
   
@@ -78,7 +83,9 @@ number_states <- function(dataset,
           temporary.counter
           ),
       !!paste0(state.colname.str, colname.extension) := 
-        paste({{state.colname}}, temporary.counter)
+        if(use.original.state)
+          paste({{state.colname}}, temporary.counter)
+        else temporary.counter
       ) |>
     dplyr::ungroup(temporary.state) |>
     dplyr::select(-temporary.state, -temporary.counter)

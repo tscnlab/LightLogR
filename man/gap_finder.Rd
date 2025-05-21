@@ -21,7 +21,8 @@ gap_finder(
 
 \item{epoch}{The epoch to use for the gapless sequence. Can be either a
 \code{lubridate::duration()} or a string. If it is a string, it needs to be
-either '"dominant.epoch"' (the default) for a guess based on the data or a valid \code{lubridate::duration()} string, e.g., \code{"1 day"} or \code{"10 sec"}.}
+either '"dominant.epoch"' (the default) for a guess based on the data or a
+valid \code{lubridate::duration()} string, e.g., \code{"1 day"} or \code{"10 sec"}.}
 
 \item{gap.data}{Logical. If \code{TRUE}, returns a \code{tibble} of the gaps in the
 dataset. Default is \code{FALSE}.}
@@ -29,7 +30,8 @@ dataset. Default is \code{FALSE}.}
 \item{silent}{Logical. If \code{TRUE}, suppresses the message with the summary of
 the gaps in the dataset. Default is \code{FALSE}. Only used for unit tests.}
 
-\item{full.days}{If \code{TRUE}, the gapless sequence will include the whole first and last day where there is data.}
+\item{full.days}{If \code{TRUE}, the gapless sequence will include the whole first
+and last day where there is data.}
 }
 \value{
 Prints message with a short summary of the gaps in the dataset. If
@@ -69,7 +71,10 @@ gap_finder(dataset, epoch = "1 day")
 \seealso{
 Other regularize: 
 \code{\link{dominant_epoch}()},
+\code{\link{extract_gaps}()},
 \code{\link{gap_handler}()},
-\code{\link{gapless_Datetimes}()}
+\code{\link{gapless_Datetimes}()},
+\code{\link{has_gaps}()},
+\code{\link{has_irregulars}()}
 }
 \concept{regularize}

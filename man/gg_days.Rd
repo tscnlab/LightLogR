@@ -17,7 +17,7 @@ gg_days(
   y.axis.breaks = c(-10^(5:0), 0, 10^(0:5)),
   y.scale = "symlog",
   y.scale.sc = FALSE,
-  x.axis.label = "Datetime",
+  x.axis.label = "Local Date/Time",
   y.axis.label = "Illuminance (lx, MEDI)",
   x.axis.limits = Datetime_limits,
   x.axis.format = "\%a \%D",
@@ -25,7 +25,7 @@ gg_days(
   subtitle = NULL,
   interactive = FALSE,
   facetting = TRUE,
-  jco_color = FALSE,
+  jco_color = TRUE,
   ...
 )
 }

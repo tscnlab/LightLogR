@@ -63,7 +63,7 @@ gg_days <- function(dataset,
                    y.axis.breaks = c(-10^(5:0), 0, 10^(0:5)),
                    y.scale = "symlog",
                    y.scale.sc = FALSE,
-                   x.axis.label = "Datetime",
+                   x.axis.label = "Local Date/Time",
                    y.axis.label = "Illuminance (lx, MEDI)",
                    x.axis.limits = Datetime_limits,
                    x.axis.format = "%a %D",
@@ -71,7 +71,7 @@ gg_days <- function(dataset,
                    subtitle = NULL,
                    interactive = FALSE,
                    facetting = TRUE,
-                   jco_color = FALSE,
+                   jco_color = TRUE,
                    ...) {
   
   # Initial Checks ----------------------------------------------------------
@@ -81,13 +81,13 @@ gg_days <- function(dataset,
   
   x <- rlang::enexpr(x.axis) 
   y <- rlang::enexpr(y.axis)
-  axis_columns <- (purrr::map_chr(c(x,y), deparse1))
+  axis_columns <- c(rlang::as_label(x), rlang::as_label(y))
   stopifnot(
     "The given dataset is not a dataframe" = is.data.frame(dataset),
     "The given column for X is not in the Dataset. If you did not specify X, you are working with data not originating from LightLogR. Please specify an appropriate Datetime column" = 
-      rlang::as_string(x) %in% names(dataset),
+      axis_columns[1] %in% names(dataset),
     "The given column for X is not a Datetime" =
-      lubridate::is.POSIXct(dataset[[rlang::as_string(x)]]),
+      lubridate::is.POSIXct(dataset[[axis_columns[1]]]),
     "The X axis label must be a string" = is.character(x.axis.label),
     "The Y axis label must be a string" = is.character(y.axis.label),
     "interactive must be a logical" = is.logical(interactive)

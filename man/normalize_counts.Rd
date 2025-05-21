@@ -9,9 +9,12 @@ normalize_counts(dataset, gain.columns, count.columns, gain.ratio.table)
 \arguments{
 \item{dataset}{a \code{data.table} containing gain and count columns.}
 
-\item{gain.columns}{a \code{character} vector of columns in the \code{dataset} containing a gain setting. Columns must not repeat.}
+\item{gain.columns}{a \code{character} vector of columns in the \code{dataset}
+containing a gain setting. Columns must not repeat.}
 
-\item{count.columns}{a \code{character} vector of columns in the \code{dataset} containing raw count data. Must be of the same length as \code{gain.columns}, and the order must conform to the order in \code{gain.columns}.}
+\item{count.columns}{a \code{character} vector of columns in the \code{dataset}
+containing raw count data. Must be of the same length as \code{gain.columns},
+and the order must conform to the order in \code{gain.columns}.}
 
 \item{gain.ratio.table}{a two-column tibble containing \code{gain} and
 \code{gain.ratio} information. Can be provided by the user or use the
@@ -32,7 +35,7 @@ their own gain ratiotable, or use a table provided for a sensor in the
 \code{gain.ratio.table} dataset from \code{LightLogR}.
 }
 \examples{
-example.table <- 
+example.table <-
 tibble::tibble(
 uvGain = c(4096, 1024, 2),
 visGain = c(4096, 4096, 4096),
@@ -44,6 +47,12 @@ irValue = c(122193, 127113, 124837))
 gain.columns = c("uvGain", "visGain", "irGain")
 count.columns = c("uvValue", "visValue", "irValue")
 
-example.table |> 
+example.table |>
 normalize_counts(gain.columns, count.columns, gain.ratio.tables$TSL2585)
 }
+\seealso{
+Other Spectrum: 
+\code{\link{spectral_integration}()},
+\code{\link{spectral_reconstruction}()}
+}
+\concept{Spectrum}

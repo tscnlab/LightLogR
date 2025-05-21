@@ -1,3 +1,78 @@
+# LightLogR 0.9.0 `Sunrise`
+
+This is a huge update for `LightLogR`, bringing many new features and twenty-two new functions
+
+## New functions & datasets
+
+### Light spectrum
+
+* `spectral_reconstruction()`:reconstruct a spectral power distribution (SPD) from sensor channels that provide (normalized) counts, and a calibration matrix. Examples for such devices include the the *ActLumus from Condor instruments*, or the *VEET from Meta Reality labs* (after normalization of counts, e.g., through `normalize_counts()`)
+
+* `alphaopic.action.spectra`: New dataset containing alphaopic action spectra (CIE S026) plus the photopic action spectrum in 1-nm wavelength steps.
+
+* `spectral_integration()`: integrate over all or just parts of the spectrum, including the option to weigh the spectrum with an action spectrum (e.g., from `alphaopic.action.spectra`)
+
+### Missing data
+
+* `remove_partial_data()`: remove groups with a below than user-specified amount of data
+
+* `extract_gaps()`: provides a start and end times, as well as durations for all gaps in the dataset. 
+
+* `has_gaps()`, `has_irregulars()`; provide a logical feedback on whether a dataset has (implicit) gaps or irregular data. 
+
+* `gap_table()` provides a comprehensive summary of available and missing data. 
+
+### Metrics and summaries
+
+* `durations()`: calculate the groupwise duration of a dataset, based on datapoints, the dominant interval, and missing data
+
+* `mean_daily()` and `mean_daily_metric()`: give a three-row summary of weekday, weekend, and mean daily (numeric) values. `mean_daily_metric()` skips the prior metric calculation for duration-based metrics, and directly calculates the mean daily value.
+
+* `extract_clusters()`, `add_clusters()`: find clusters of a user-specified condition and either summarize them or add them to a dataset.
+
+* `extract_states()`, `add_states()`: provides a summary of every state in the dataset or add them to a dataset.
+
+* `extract_metric()`: add a calculation to extracted data, such as from `extract_state()` or `extract_clusters()`.
+
+* `summarize_numeric()`/`summarise_numeric()`: calculate means across numeric values, ideal to summarize results from `extract_state()`, `extract_gaps()`, or `extract_clusters`.
+
+* `Brown_cut()`: divide light exposure variables into sections ≤1lx, ≤10lx, and ≥250lx according to Brown et al. 2022
+
+* `log_zero_inflated()` and `exp_zero_inflated(): apply or reverse a logarithmic transformation after adding a small value to a vector so as to provide zero values in logarithmic transformation, which is especially important for light exposure.
+
+### Visualizations
+
+* `gg_gaps()`: visualize gaps and shows instances of irregular data.
+
+* `gg_state()`: is an addon-function to `gg_day()` or `gg_days()`, which adds a state or cluster indicator to the plot
+
+* `gg_heatmap()`: visualize a condensed version of time series patterns, optionally as double plots.
+
+## Misc and Housekeeping
+
+* Import support for the `ClouClip` device.
+
+* `number_states()` added the option to just output a count number without the original state
+
+* `gg_days()`: `jco_color = TRUE` is now the default
+
+## Bug fixes
+
+* `import_Dataset()` no longer changes a pre-existing `Id` column (if it is not called `Id`). The function is also more informative for the daylight savings time handling in files with more than one Id.
+
+* `gg_photoperiod()` does no longer throw an error when the main plots `y.axis` is not based on a `MEDI` column.
+
+* `gapless_Datetimes()` now ignores groups with only a single measurement, instead of throwing an error. This function is the basis for all calculations regarding gaps.
+
+
+# LightLogR 0.5.4
+
+* changed the behavior of all metric functions that calculate an in-between value (such as the duration of light between 250 and 1000 lux). Up until now, the function would use inclusive bounds on both sides, i.e. the value of 250 lux and 1000 lux would be included in the calculation. This is now changed to right exclusive bounds, i.e. the value of 250 lux will still be included in the calculation, whereas 1000 lux will not. While of little practical difference in a realistic dataset (where exact values matching the threshold are likely not present), it is relevant when calculating, e.g., the time spent in various levels of light or any other variable. The sum of those times should always add up to the total time. With inclusive bounds on both sides, the sum could theoretically be larger, with right exclusive bounds it cannot.
+
+* Metrics `intradaily_variability()` and `interdaily_stability()` now use the population variance (divide by N), instead of the sample variance (divide by N-1). The legacy behavior can still be accessed by setting the argument `use.samplevar = TRUE`. #55
+
+* Metric IS now correctly uses the `overall mean` in relation to the variance, instead of the `mean of hourly averages across days`. #56
+
 # LightLogR 0.5.3
 
 * small cleanup changes for CRAN submission

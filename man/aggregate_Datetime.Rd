@@ -14,6 +14,8 @@ aggregate_Datetime(
   logical.handler = function(x) mean(x) >= 0.5,
   factor.handler = function(x) factor(names(which.max(table(x, useNA = "ifany")))),
   datetime.handler = mean,
+  duration.handler = function(x) lubridate::duration(mean(x)),
+  time.handler = function(x) hms::as_hms(mean(x)),
   ...
 )
 }
@@ -36,9 +38,9 @@ data at all.}
 \item{type}{One of \code{"round"}(the default), \code{"ceiling"} or \code{"floor"}. Setting
 chooses the relevant function from \pkg{lubridate}.}
 
-\item{numeric.handler, character.handler, logical.handler, factor.handler, datetime.handler}{functions that handle the respective data types. The default handlers
-calculate the \code{mean} for \code{numeric} and \code{POSIXct} and the \code{mode} for \code{character}, \code{factor}
-and \code{logical} types.}
+\item{numeric.handler, character.handler, logical.handler, factor.handler, datetime.handler, duration.handler, time.handler}{functions that handle the respective data types. The default handlers
+calculate the \code{mean} or \code{median} for \code{numeric}, \code{POSIXct}, \code{duration}, and
+\code{hms}, and the \code{mode} for \code{character}, \code{factor} and \code{logical} types.}
 
 \item{...}{arguments given over to \code{\link[dplyr:summarise]{dplyr::summarize()}} to handle columns
 that do not fall into one of the categories above.}
@@ -52,12 +54,21 @@ input \code{dataset}.
 \description{
 Condenses a \code{dataset} by aggregating the data to a given (shorter) interval
 \code{unit}. \code{\link[=aggregate_Datetime]{aggregate_Datetime()}} is opinionated in the sense that it sets
-default handlers for each data type of \code{numeric}, \code{character}, \code{logical}, and
-\code{factor}. These can be overwritten by the user. Columns that do not fall into
-one of these categories need to be handled individually by the user (\code{...}
-argument) or will be removed during aggregation. If no unit is specified the
-data will simply be aggregated to the most common interval
-(\code{dominant.epoch}), which is most often not an aggregation but a rounding.)
+default handlers for each data type of \code{numeric}, \code{character}, \code{logical},
+\code{factor}, \code{duration}, \code{time}, and \code{datetime}. These can be overwritten by the
+user. Columns that do not fall into one of these categories need to be
+handled individually by the user (\code{...} argument) or will be removed during
+aggregation. If no unit is specified the data will simply be aggregated to
+the most common interval (\code{dominant.epoch}), which is most often not an
+aggregation but a rounding.)
+}
+\details{
+Summary values for type \code{POSIXct} are calculated as the mean, which can be
+nonsensical at times (e.g., the mean of Day1 18:00 and Day2 18:00, is Day2
+6:00, which can be the desired result, but if the focus is on time, rather
+then on datetime, it is recommended that values are converted to times via
+\code{\link[hms:hms]{hms::as_hms()}} before applying the function (the mean of 18:00 and 18:00 is
+still 18:00, not 6:00).
 }
 \examples{
 #dominant epoch without aggregation

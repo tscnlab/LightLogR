@@ -50,6 +50,7 @@ https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3001571
 Other Brown: 
 \code{\link{Brown2reference}()},
 \code{\link{Brown_check}()},
+\code{\link{Brown_cut}()},
 \code{\link{sleep_int2Brown}()}
 }
 \concept{Brown}
