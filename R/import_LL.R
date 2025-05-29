@@ -35,9 +35,10 @@
 #' * `manual.id`: If this argument is not `NULL`, and no `Id` column is part
 #'   of the `dataset`, this `character` scalar will be used. **We discourage the
 #'   use of this arguments when importing more than one file**
-#' * `silent`: If set to `TRUE`, the function will not print a summary message 
+#' * `silent`: If set to `TRUE`, the function will not print a summary message
 #'   of the import or plot the overview. Default is `FALSE`.
 #' * `locale`: The locale controls defaults that vary from place to place.
+#' * `not.before`: Remove data prior to this date. This argument is provided to `start` of [filter_Date()]. Data will be filtered out before any of the summaries are shown.
 #' * `dst_adjustment`: If a file crosses daylight savings time, but the device does not adjust time stamps accordingly, you can set this argument to `TRUE`, to apply this shift manually. It is selective, so it will only be done in files that cross between DST and standard time. Default is `FALSE`. Uses [dst_change_handler()] to do the adjustment. Look there for more infos. It is not equipped to handle two jumps in one file (so back and forth between DST and standard time), but will work fine if jums occur in separate files.
 #' * `auto.plot`: a logical on whether to call [gg_overview()] after import. Default is `TRUE`. But is set to `FALSE` if the argument `silent` is set to `TRUE`.
 #' * `...`: supply additional arguments to the \pkg{readr} import functions, like `na`. Might also be used to supply arguments to the specific import functions, like `column_names` for `Actiwatch_Spectrum` devices. Those devices will always throw a helpful error message if you forget to supply the necessary arguments.
@@ -50,8 +51,8 @@
 #' @param ... Parameters that get handed down to the specific import functions
 #' @param device From what device do you want to import? For a few devices,
 #'   there is a sample data file that you can use to test the function (see the
-#'   examples). See [supported_devices()] for a list of supported devices and see
-#'   below for more information on devices with specific requirements.
+#'   examples). See [supported_devices()] for a list of supported devices and
+#'   see below for more information on devices with specific requirements.
 #' @importFrom rlang :=
 #' @return Tibble/Dataframe with a POSIXct column for the datetime
 #' @export
@@ -66,181 +67,194 @@
 #' supported_devices()
 #' ```
 #'
-#'   ## ActLumus 
-#'   
-#'   Manufacturer: Condor Instruments 
-#'   
-#'   Model: ActLumus 
-#'   
-#'   Implemented: Sep 2023 
-#'   
+#'   ## ActLumus
+#'
+#'   Manufacturer: Condor Instruments
+#'
+#'   Model: ActLumus
+#'
+#'   Implemented: Sep 2023
+#'
 #'   A sample file is provided with the package, it can be accessed through
 #'   `system.file("extdata/205_actlumus_Log_1020_20230904101707532.txt.zip",
 #'   package = "LightLogR")`. It does not need to be unzipped to be imported.
-#'   This sample file is a good example for a regular dataset without gaps 
-#'   
-#'   ## LYS 
-#'   
-#'   Manufacturer: LYS Technologies 
-#'   
-#'   Model: LYS Button 
-#'   
-#'   Implemented: Sep 2023 
-#'   
+#'   This sample file is a good example for a regular dataset without gaps
+#'
+#'   ## LYS
+#'
+#'   Manufacturer: LYS Technologies
+#'
+#'   Model: LYS Button
+#'
+#'   Implemented: Sep 2023
+#'
 #'   A sample file is provided with the package, it can be accessed through
 #'   `system.file("extdata/sample_data_LYS.csv", package = "LightLogR")`. This
-#'   sample file is a good example for an irregular dataset. 
-#'   
+#'   sample file is a good example for an irregular dataset.
+#'
 #'   ## Actiwatch_Spectrum & Actiwatch_Spectrum_de
-#'   
-#'   Manufacturer: Philips Respironics 
-#'   
-#'   Model: Actiwatch Spectrum 
-#'   
+#'
+#'   Manufacturer: Philips Respironics
+#'
+#'   Model: Actiwatch Spectrum
+#'
 #'   Implemented: Nov 2023 / July 2024
-#'   
+#'
 #'   **Important note:** The `Actiwatch_Spectrum` function is for an international/english formatting. The `Actiwatch_Spectrum_de` function is for a german formatting, which slightly differs in the datetime format, the column names, and the decimal separator.
-#'   
-#'   ## ActTrust 
-#'   
-#'   Manufacturer: Condor Instruments 
-#'   
-#'   Model: ActTrust1, ActTrust2 
-#'   
-#'   Implemented: Mar 2024 
-#'   
-#'   This function works for both ActTrust 1 and 2 devices 
-#'   
-#'   ## Speccy 
-#'   
-#'   Manufacturer: Monash University 
-#'   
-#'   Model: Speccy 
-#'   
-#'   Implemented: Feb 2024 
-#'   
-#'   ## DeLux 
-#'   
-#'   Manufacturer: Intelligent Automation Inc 
-#'   
-#'   Model: DeLux 
-#'   
-#'   Implemented: Dec 2023 
-#'   
+#'
+#'   ## ActTrust
+#'
+#'   Manufacturer: Condor Instruments
+#'
+#'   Model: ActTrust1, ActTrust2
+#'
+#'   Implemented: Mar 2024
+#'
+#'   This function works for both ActTrust 1 and 2 devices
+#'
+#'   ## Speccy
+#'
+#'   Manufacturer: Monash University
+#'
+#'   Model: Speccy
+#'
+#'   Implemented: Feb 2024
+#'
+#'   ## DeLux
+#'
+#'   Manufacturer: Intelligent Automation Inc
+#'
+#'   Model: DeLux
+#'
+#'   Implemented: Dec 2023
+#'
 #'   ## LiDo
-#'   
-#'   Manufacturer: University of Lucerne 
-#'   
-#'   Model: LiDo 
-#'   
-#'   Implemented: Nov 2023 
-#'   
-#'   ## SpectraWear 
-#'   
+#'
+#'   Manufacturer: University of Lucerne
+#'
+#'   Model: LiDo
+#'
+#'   Implemented: Nov 2023
+#'
+#'   ## SpectraWear
+#'
 #'   Manufacturer: University of Manchester
-#'   
-#'   Model: SpectraWear 
-#'   
-#'   Implemented: May 2024 
-#'   
-#'   ## NanoLambda 
-#'   
-#'   Manufacturer: NanoLambda 
-#'   
-#'   Model: XL-500 BLE 
-#'   
-#'   Implemented: May 2024 
-#'   
-#'   ## LightWatcher 
-#'   
-#'   Manufacturer: Object-Tracker 
-#'   
-#'   Model: LightWatcher 
-#'   
+#'
+#'   Model: SpectraWear
+#'
+#'   Implemented: May 2024
+#'
+#'   ## NanoLambda
+#'
+#'   Manufacturer: NanoLambda
+#'
+#'   Model: XL-500 BLE
+#'
+#'   Implemented: May 2024
+#'
+#'   ## LightWatcher
+#'
+#'   Manufacturer: Object-Tracker
+#'
+#'   Model: LightWatcher
+#'
 #'   Implemented: June 2024
-#'   
+#'
 #'   ## VEET
-#'   
+#'
 #'   Manufacturer: Meta Reality Labs
-#'   
+#'
 #'   Model: VEET
-#'   
+#'
 #'   Implemented: July 2024
-#'   
-#'   **Required Argument: `modality`** A character scalar describing the 
-#'   modality to be imported from. Can be one of `"ALS"` (Ambient light sensor), 
-#'   `"IMU"` (Inertial Measurement Unit), `"INF"` (Information), 
-#'   `"PHO"` (Spectral Sensor), `"TOF"` (Time of Flight)
-#'   
+#'
+#'   **Required Argument: `modality`** A character scalar describing the
+#'   modality to be imported from. Can be one of `"ALS"` (Ambient light sensor),
+#'   `"IMU"` (Inertial Measurement Unit), `"INF"` (Information), `"PHO"`
+#'   (Spectral Sensor), `"TOF"` (Time of Flight)
+#'
 #'   ## Circadian_Eye
-#'   
+#'
 #'   Manufacturer: Max-Planck-Institute for Biological Cybernetics, Tübingen
-#'   
+#'
 #'   Model: melanopiQ Circadian Eye (Prototype)
-#'   
+#'
 #'   Implemented: July 2024
-#'   
+#'
 #'   ## Kronowise
-#'   
+#'
 #'   Manufacturer: Kronohealth
-#'   
+#'
 #'   Model: Kronowise
-#'   
+#'
 #'   Implemented: July 2024
-#'   
+#'
 #'   ## GENEActiv with GGIR preprocessing
-#'   
-#'   Manufacturer: Activeinsights 
-#'   
+#'
+#'   Manufacturer: Activeinsights
+#'
 #'   Model: GENEActiv
-#'   
-#'   **Note:** This import function takes GENEActiv data that was preprocessed 
-#'   through the [GGIR]( https://cran.r-project.org/package=GGIR) package. 
-#'   By default, `GGIR` aggregates light data into intervals of 15 minutes. This
-#'   can be set by the `windowsizes` argument in GGIR, which is a three-value 
+#'
+#'   **Note:** This import function takes GENEActiv data that was preprocessed
+#'   through the [GGIR]( https://cran.r-project.org/package=GGIR) package. By
+#'   default, `GGIR` aggregates light data into intervals of 15 minutes. This
+#'   can be set by the `windowsizes` argument in GGIR, which is a three-value
 #'   vector, where the second values is set to 900 seconds by default. To import
 #'   the preprocessed data with `LightLogR`, the `filename` argument requires a
 #'   path to the parent directory of the GGIR output folders, specifically the
 #'   `meta` folder, which contains the light exposure data. Multiple `filename`s
-#'   can be specified, each of which needs to be a path to a different GGIR 
+#'   can be specified, each of which needs to be a path to a different GGIR
 #'   parent directory. GGIR exports can contain data from multiple participants,
 #'   these will always be imported fully by providing the parent directory. Use
-#'   the `pattern` argument to extract sensible `Id`s from the *.RData* 
-#'   filenames within the *meta/basic/* folder. As per the author, 
-#'   [Dr. Vincent van Hees](https://www.accelting.com), GGIR preprocessed data are 
-#'   always in local time, provided the `desiredtz`/`configtz` are properly set
-#'   in GGIR. `LightLogR` still requires a timezone to be set, but will not
-#'   timeshift the import data.
-#'   
-#'   ## MotionWatch 8
-#'   
-#'   Manufacturer: CamNtech
-#'   
-#'   Implemented: September 2024
-#'   
-#'   ## LIMO
-#'   
-#'   Manufacturer: ENTPE
-#'   
-#'   Implemented: September 2024
-#'   
-#'   LIMO exports `LIGHT` data and `IMU` (inertia measurements, also UV) in separate files. Both can be read in with this function, but not at the same time. Please decide what type of data you need and provide the respective filenames.
-#'   
-#'   ## OcuWEAR
-#'   
-#'   Manufacturer: Ocutune
-#'   
-#'   Implemented: September 2024
-#'   
-#'   OcuWEAR data contains spectral data. Due to the format of the data file, the spectrum is not directly part of the tibble, but rather a list column of tibbles within the imported data, containing a `Wavelength` (nm) and `Intensity` (mW/m^2) column.
+#'   the `pattern` argument to extract sensible `Id`s from the *.RData*
+#'   filenames within the *meta/basic/* folder. As per the author, [Dr. Vincent
+#'   van Hees](https://www.accelting.com), GGIR preprocessed data are always in
+#'   local time, provided the `desiredtz`/`configtz` are properly set in GGIR.
+#'   `LightLogR` still requires a timezone to be set, but will not timeshift the
+#'   import data.
 #'
-#'   ## ClouClip
-#'   
+#'   ## MotionWatch 8
+#'
+#'   Manufacturer: CamNtech
+#'
+#'   Implemented: September 2024
+#'
+#'   ## LIMO
+#'
+#'   Manufacturer: ENTPE
+#'
+#'   Implemented: September 2024
+#'
+#'   LIMO exports `LIGHT` data and `IMU` (inertia measurements, also UV) in
+#'   separate files. Both can be read in with this function, but not at the same
+#'   time. Please decide what type of data you need and provide the respective
+#'   filenames.
+#'
+#'   ## OcuWEAR
+#'
+#'   Manufacturer: Ocutune
+#'
+#'   Implemented: September 2024
+#'
+#'   OcuWEAR data contains spectral data. Due to the format of the data file,
+#'   the spectrum is not directly part of the tibble, but rather a list column
+#'   of tibbles within the imported data, containing a `Wavelength` (nm) and
+#'   `Intensity` (mW/m^2) column.
+#'
+#'   ## Clouclip
+#'
 #'   Manufacturer: Clouclip
-#'   
+#'
 #'   Implemented: April 2025
-#'   
-#'   ClouClip export files have the ending `.xls`, but are no real Microsoft Excel files, rather they are tab-separated text files. LightLogR thus does not read them in with an excel import routine. The measurement columns `Lux` and `Dis` contain sentinel values. `-1` (`Dis` and `Lux`) indicates sleep mode, whereas `204` (only `Dis`) indicates an out of range measurement. These values will be set to `NA`, and an additional column is added that translates these status codes. The columns carry the name `{.col}_status`.
+#'
+#'   Clouclip export files have the ending `.xls`, but are no real Microsoft
+#'   Excel files, rather they are tab-separated text files. LightLogR thus does
+#'   not read them in with an excel import routine. The measurement columns
+#'   `Lux` and `Dis` contain sentinel values. `-1` (`Dis` and `Lux`) indicates
+#'   sleep mode, whereas `204` (only `Dis`) indicates an out of range
+#'   measurement. These values will be set to `NA`, and an additional column is
+#'   added that translates these status codes. The columns carry the name
+#'   `{.col}_status`.
 #'
 #' @section Examples:
 #'
@@ -297,9 +311,10 @@ imports <- function(device,
     #function arguments
     rlang::exprs(
       filename =, 
-      path = NULL, 
       tz = "UTC",
+      path = NULL, 
       n_max = Inf,
+      not.before = "2001-01-01",
       dst_adjustment = FALSE,
       Id.colname = Id,
       auto.id = ".*",
@@ -373,6 +388,13 @@ imports <- function(device,
         data <- data %>% tidyr::drop_na(Datetime)
       }
       
+      #remove dates from not.before
+      if(min(data$Datetime) < lubridate::as_datetime(not.before)) {
+      data <- 
+        data |> 
+        filter_Date(start = not.before)
+      } else not.before <- NULL
+      
       #if there is an Id with less than two observations, give a warning
       if(any(table(data$Id) < 2)) {
         stop("Some Ids have only one observation. This causes problems with functions in LightLogR that calculate time differences. Please remove these Ids from import: ", 
@@ -410,7 +432,8 @@ imports <- function(device,
           dst_adjustment = dst_adjustment, #whether there is a dst adjustment
           filename = filename, #what the filename(s) is/are
           na.count = na.count, #how many NA values were dropped
-          print_n = print_n #how many rows to print for observation intervals
+          print_n = print_n, #how many rows to print for observation intervals
+          not.before = not.before #when the earliest import was
           )
       
       #if autoplot is TRUE & silent is FALSE, make a plot

@@ -15,6 +15,7 @@ extract_clusters(
   interruption.type = c("max", "min"),
   cluster.colname = state.count,
   return.only.clusters = TRUE,
+  drop.empty.groups = FALSE,
   handle.gaps = FALSE
 )
 
@@ -59,6 +60,8 @@ identification. Defaults to "state.count". Expects a symbol.}
 \item{return.only.clusters}{Whether to return only the identified clusters
 (TRUE) or also include non-clusters (FALSE). Defaults to TRUE.}
 
+\item{drop.empty.groups}{Logical. Should empty groups be dropped?}
+
 \item{handle.gaps}{Logical whether the data shall be treated with
 \code{\link[=gap_handler]{gap_handler()}}. Is set to \code{FALSE} by default, due to computational costs.}
 }
@@ -83,6 +86,9 @@ This deviates from simply using the time difference between the first and
 last occurance, which would be one epoch shorter (e.g., the start and end
 points for a state lasting a single point is identical, i.e., zero
 duration)
+
+Groups will not be dropped, meaning that summaries based on the clusters
+will account for groups without clusters.
 
 \strong{For correct cluster identification, there can be no gaps in the data!}
 Gaps can inadvertently be introduced to a gapless dataset through grouping.

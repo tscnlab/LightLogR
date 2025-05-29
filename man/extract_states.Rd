@@ -10,7 +10,9 @@ extract_states(
   State.expression = NULL,
   Datetime.colname = Datetime,
   handle.gaps = FALSE,
-  epoch = "dominant.epoch"
+  epoch = "dominant.epoch",
+  drop.empty.groups = TRUE,
+  group.by.state = TRUE
 )
 }
 \arguments{
@@ -36,6 +38,11 @@ Expects a symbol.}
 \code{lubridate::duration()} or a string. If it is a string, it needs to be
 either '"dominant.epoch"' (the default) for a guess based on the data or a
 valid \code{lubridate::duration()} string, e.g., \code{"1 day"} or \code{"10 sec"}.}
+
+\item{drop.empty.groups}{Logical. Should empty groups be dropped?}
+
+\item{group.by.state}{Logical. Should the output be automatically be grouped
+by the new state?}
 }
 \value{
 a dataframe with one row per state instance. Each row will consist
@@ -45,7 +52,9 @@ start and end Datetimes, as well as a duration of the state
 \description{
 Extracts a state from a dataset and provides their start and end times, as
 well as duration and epoch. The state does not have to exist in the dataset,
-but can be dynamically created
+but can be dynamically created. Extracted states can have group-dropping
+disabled, meaning that summaries based on the extracted states show empty
+groups as well.
 }
 \examples{
 #summarizing states "photoperiod"

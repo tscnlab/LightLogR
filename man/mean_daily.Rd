@@ -10,7 +10,8 @@ mean_daily(
   na.rm = TRUE,
   calculate.from.Date = NULL,
   prefix = "average_",
-  filter.empty = FALSE
+  filter.empty = FALSE,
+  sub.zero = FALSE
 )
 }
 \arguments{
@@ -18,7 +19,8 @@ mean_daily(
 
 \item{Weekend.type}{A column in the dataframe that specifies the day of the
 week as a factor, where weekstart is Monday (so weekends are 6 and 7 in
-numeric representation)}
+numeric representation). If it is a date, it will be converted to this
+factor}
 
 \item{na.rm}{Logical, whether to remove NA values when calculating means.
 Default is TRUE.}
@@ -30,6 +32,10 @@ will be generated from this column.}
 \item{prefix}{String that is the prefix on summarized values}
 
 \item{filter.empty}{Filter out empty rows. Default is FALSE}
+
+\item{sub.zero}{Logical. Should missing values be replaced by zero? Defaults
+to \code{FALSE}. Will throw an error, if it happens on a type other than
+\code{double}.}
 }
 \value{
 A dataframe with three rows representing average weekday, weekend,

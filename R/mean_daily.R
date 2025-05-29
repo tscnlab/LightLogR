@@ -17,7 +17,8 @@
 #' @param data A dataframe containing the metrics to summarize
 #' @param Weekend.type A column in the dataframe that specifies the day of the
 #'   week as a factor, where weekstart is Monday (so weekends are 6 and 7 in
-#'   numeric representation)
+#'   numeric representation). If it is a date, it will be converted to this
+#'   factor
 #' @param na.rm Logical, whether to remove NA values when calculating means.
 #'   Default is TRUE.
 #' @param calculate.from.Date Optional. A column in the dataframe containing
@@ -25,6 +26,9 @@
 #'   will be generated from this column.
 #' @param prefix String that is the prefix on summarized values
 #' @param filter.empty Filter out empty rows. Default is FALSE
+#' @param sub.zero Logical. Should missing values be replaced by zero? Defaults
+#'   to `FALSE`. Will throw an error, if it happens on a type other than
+#'   `double`.
 #'
 #' @return A dataframe with three rows representing average weekday, weekend,
 #'   and mean daily values of all numeric columns
@@ -56,7 +60,8 @@ mean_daily <- function(data,
                        na.rm = TRUE,
                        calculate.from.Date = NULL,
                        prefix = "average_",
-                       filter.empty = FALSE) {
+                       filter.empty = FALSE,
+                       sub.zero = FALSE) {
   
   # Input validation
   if (!is.data.frame(data)) {
@@ -68,6 +73,7 @@ mean_daily <- function(data,
   }
   
   Date_quo <- rlang::enexpr(calculate.from.Date)
+  Weekend_str <- colname.defused({{ Weekend.type }})
   # Date_name <- rlang::as_name(Date_quo)
   
   # Calculate Weekend.type from Date if provided
@@ -75,6 +81,15 @@ mean_daily <- function(data,
     data <-
       data |>
       dplyr::mutate({{ Weekend.type }} := lubridate::wday({{ calculate.from.Date }}, 
+                                                          label = TRUE, 
+                                                          week_start = 1))
+  }
+  
+  # Calculate Weekend.type from Date if is type date
+  if(lubridate::is.Date(data[[Weekend_str]])) {
+    data <-
+      data |>
+      dplyr::mutate({{ Weekend.type }} := lubridate::wday({{ Weekend.type }}, 
                                                           label = TRUE, 
                                                           week_start = 1))
   }
@@ -126,6 +141,17 @@ mean_daily <- function(data,
   
   if (nrow(weekday_type) == 1) {
     return(weekday_type)
+  }
+  
+  #replace na with zeros
+  if(sub.zero){
+    weekday_type <- 
+    weekday_type |> 
+      dplyr::mutate(
+        dplyr::across(dplyr::where(\(x) is.double(x) | is.numeric(x)),
+                      \(x) ifelse(is.na(x), 0, x)
+        )
+      )
   }
   
   # Calculate mean daily values

@@ -14,6 +14,9 @@
 #'   points for a state lasting a single point is identical, i.e., zero
 #'   duration)
 #'
+#'   Groups will not be dropped, meaning that summaries based on the clusters
+#'   will account for groups without clusters.
+#'
 #' **For correct cluster identification, there can be no gaps in the data!**
 #'   Gaps can inadvertently be introduced to a gapless dataset through grouping.
 #'   E.g., when grouping by photoperiod (day/night) within a participant, this
@@ -44,6 +47,7 @@
 #'   (TRUE) or also include non-clusters (FALSE). Defaults to TRUE.
 #' @param handle.gaps Logical whether the data shall be treated with
 #'   [gap_handler()]. Is set to `FALSE` by default, due to computational costs.
+#' @param drop.empty.groups Logical. Should empty groups be dropped?
 #'
 #' @return For `extract_clusters()` a dataframe containing the identified
 #'   clusters or all time periods, depending on `return.only.clusters`.
@@ -75,6 +79,7 @@ extract_clusters <- function(
     interruption.type = c("max", "min"),
     cluster.colname = state.count,
     return.only.clusters = TRUE,
+    drop.empty.groups = FALSE,
     handle.gaps = FALSE) {
   
   # Argument validation
@@ -107,11 +112,18 @@ extract_clusters <- function(
     data |> 
     dplyr::left_join(dominant.epochs, by = dplyr::group_vars(data))
   
+  #keep empty groups
+  if(!drop.empty.groups) {
+    data <-
+      data |> dplyr::group_by(!!!dplyr::groups(data), .drop = FALSE)
+  }
+  
   # Calculate lengths of times
   data1 <-
     data |>
     dplyr::mutate(
       .variable = !!Variable,
+      .variable = ifelse(is.na(.variable), FALSE, .variable),
       {{ cluster.colname }} := dplyr::consecutive_id(.variable)
     ) |>
     dplyr::group_by({{ cluster.colname }}, .add = TRUE) |>
@@ -130,9 +142,10 @@ extract_clusters <- function(
     dplyr::mutate(
       is.cluster = (!!duration.type)(duration, cluster.duration) == cluster.duration,
       type = dplyr::if_else(
-        ((!!interruption.type)(duration, interruption.duration) == interruption.duration) &
-          (!type | is.na(type)) &
-          (interruption.duration != 0),
+        ((!!interruption.type)(duration, interruption.duration) == interruption.duration) & #is within the interruption duration
+          (!type | is.na(type)) & #must be of type FALSE or NA
+          (dplyr::lead(type) & dplyr::lag(type)) & #previous and next type must be TRUE
+          (interruption.duration != 0), #interruption cannot be 0
         TRUE,
         type
       ),

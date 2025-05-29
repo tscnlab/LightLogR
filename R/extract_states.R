@@ -2,7 +2,9 @@
 #'
 #' Extracts a state from a dataset and provides their start and end times, as
 #' well as duration and epoch. The state does not have to exist in the dataset,
-#' but can be dynamically created
+#' but can be dynamically created. Extracted states can have group-dropping
+#' disabled, meaning that summaries based on the extracted states show empty
+#' groups as well.
 #'
 #' @inheritParams extract_clusters
 #' @param State.colname The variable or condition to be evaluated for state
@@ -16,6 +18,8 @@
 #'   `lubridate::duration()` or a string. If it is a string, it needs to be
 #'   either '"dominant.epoch"' (the default) for a guess based on the data or a
 #'   valid `lubridate::duration()` string, e.g., `"1 day"` or `"10 sec"`.
+#' @param group.by.state Logical. Should the output be automatically be grouped
+#'   by the new state?
 #'
 #' @returns a dataframe with one row per state instance. Each row will consist
 #'   of the original dataset grouping, the state column. A state.count column,
@@ -36,8 +40,9 @@ extract_states <- function(data,
                            State.expression = NULL,
                            Datetime.colname = Datetime,
                            handle.gaps = FALSE,
-                           epoch = "dominant.epoch"
-                           # ignore.FALSE = TRUE
+                           epoch = "dominant.epoch",
+                           drop.empty.groups = TRUE,
+                           group.by.state = TRUE
                            ) {
   # Convert variable expression to quosure
   
@@ -55,6 +60,13 @@ extract_states <- function(data,
   epochs <- epoch_list(data, Datetime.colname = {{ Datetime.colname }},
                        epoch = epoch) |> dplyr::pull(dominant.epoch)
   
+  groups <- dplyr::groups(data)
+  
+  #keep empty groups
+  if(!drop.empty.groups) {
+    data <-
+      data |> dplyr::group_by(!!!groups, .drop = FALSE)
+  }
 
   # Calculate lengths of times
   data <-
@@ -77,6 +89,7 @@ extract_states <- function(data,
   # }
   
   #summarize the instances
+  data <- 
   data |> 
     dplyr::summarize(
       epoch = dplyr::first(epoch),
@@ -89,6 +102,12 @@ extract_states <- function(data,
                                       dplyr::consecutive_id(state.count)
                                       )
                   )
+  
+  if(!group.by.state) {
+    data |> 
+    dplyr::group_by(!!!groups) |> 
+      dplyr::arrange(start, .by_group = TRUE)
+  } else data
   
 }
 
