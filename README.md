@@ -82,6 +82,8 @@ At present, these are the devices we support in LightLogR:
 
 - Circadian_Eye
 
+- Clouclip
+
 - DeLux
 
 - GENEActiv_GGIR

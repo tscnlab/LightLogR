@@ -1,3 +1,15 @@
+# LightLogR 0.9.1
+
+* `import` has the option to remove data before a specified date. Default is `not.before = 2001-01-01`. Some devices fall back to a time stamp in the year 2000 after the battery drained completely. This makes the import problematic in terms of gap searching.
+
+* `extract_states()` has the option not to group by the extracted state.
+
+* `extract_clusters()` and `extract_states()` do not drop empty groups, which is important for summaries. `extract_clusters()` does it by default, `extract_states()` does not.
+
+* `summarize_numeric()` has the option to show zero-instances of groups. Helpful to make certain groups with zero instances are not dropped, especially in a chain with `mean_daily()`
+
+* `mean_daily()`: Automatic conversion to weekdays from dates. Further it has the option to replace NA with zeros before calculating mean daily values
+
 # LightLogR 0.9.0 `Sunrise`
 
 This is a huge update for `LightLogR`, bringing many new features and twenty-two new functions
@@ -50,7 +62,7 @@ This is a huge update for `LightLogR`, bringing many new features and twenty-two
 
 ## Misc and Housekeeping
 
-* Import support for the `ClouClip` device.
+* Import support for the `Clouclip` device.
 
 * `number_states()` added the option to just output a count number without the original state
 
