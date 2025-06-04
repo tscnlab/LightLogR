@@ -227,7 +227,7 @@ epoch_list <- function(dataset = dataset,
   epochs <- dataset %>% dominant_epoch(Datetime.colname = {{ Datetime.colname }})
   
   #if the user specified an epoch, use that instead
-  if(epoch != "dominant.epoch") {
+  if(as.character(epoch) != "dominant.epoch") {
     epochs <- 
       epochs %>% dplyr::mutate(dominant.epoch = lubridate::as.duration(epoch))
   }
