@@ -24,10 +24,13 @@
 count_difftime <- function(dataset, Datetime.colname = Datetime) {
   dataset %>% 
     dplyr::mutate(
-      difftime = c(NA, diff({{Datetime.colname}}) %>% lubridate::as.duration())
+      difftime = c(NA, diff({{Datetime.colname}}) %>% lubridate::as.duration()),
     ) %>% 
-    tidyr::drop_na(difftime) %>% 
-    dplyr::count(difftime = difftime %>% lubridate::as.duration(), sort = TRUE)
+    dplyr::count(difftime = difftime %>% lubridate::as.duration(), sort = TRUE) |> 
+    dplyr::mutate(
+      group.indices = dplyr::cur_group_id()
+    ) |> 
+    tidyr::drop_na(difftime)
 }
 
 #calculate the nth Quantile of time differences per group (in a grouped dataset)
@@ -96,9 +99,9 @@ dominant_epoch <- function(dataset,
   dat <- 
     dataset %>% 
     count_difftime(Datetime.colname = {{ Datetime.colname }}) %>% 
-    dplyr::summarize(
+    dplyr::reframe(
       dominant.epoch = difftime[which.max(n)] %>% lubridate::as.duration(),
-      group.indices = dplyr::cur_group_id()
+      group.indices = dplyr::first(group.indices)
     )
   
   # Return ----------------------------------------------------------
