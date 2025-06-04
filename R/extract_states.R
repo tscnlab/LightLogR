@@ -57,9 +57,6 @@ extract_states <- function(data,
   }
   
   #get the epochs based on the data
-  epochs <- epoch_list(data, Datetime.colname = {{ Datetime.colname }},
-                       epoch = epoch) |> dplyr::pull(dominant.epoch)
-  
   groups <- dplyr::groups(data)
   
   #keep empty groups
@@ -67,6 +64,9 @@ extract_states <- function(data,
     data <-
       data |> dplyr::group_by(!!!groups, .drop = FALSE)
   }
+  
+  epochs <- epoch_list(data, Datetime.colname = {{ Datetime.colname }},
+                       epoch = epoch)
 
   # Calculate lengths of times
   data <-
@@ -74,8 +74,11 @@ extract_states <- function(data,
     dplyr::mutate(
       {{ State.colname }} := !!State.expression,
       state.count := dplyr::consecutive_id({{ State.colname }}),
-      epoch =  epochs[dplyr::cur_group_id()],
-    ) |>
+      epoch =  ifelse(
+        epochs$dominant.epoch[epochs$group.indices == dplyr::cur_group_id()] |> length() == 0,
+        NA,
+        epochs$dominant.epoch[epochs$group.indices == dplyr::cur_group_id()]
+    )) |> 
     dplyr::group_by({{ State.colname }}, state.count, .add = TRUE)
   
   #remove FALSE

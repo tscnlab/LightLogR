@@ -39,7 +39,9 @@ Expects a symbol.}
 either '"dominant.epoch"' (the default) for a guess based on the data or a
 valid \code{lubridate::duration()} string, e.g., \code{"1 day"} or \code{"10 sec"}.}
 
-\item{drop.empty.groups}{Logical. Should empty groups be dropped?}
+\item{drop.empty.groups}{Logical. Should empty groups be dropped? Only works
+if \code{.drop = FALSE} has not been used with the current grouping prior to
+calling the function}
 
 \item{group.by.state}{Logical. Should the output be automatically be grouped
 by the new state?}
