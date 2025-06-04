@@ -266,12 +266,6 @@ Brown_cut <- function(dataset,
   MEDI.colname.defused <- colname.defused({{ MEDI.colname }})
   New.state.colname.defused <- colname.defused({{ New.state.colname }})
   
-  #give an error or warning if the reference column is present
-  if(New.state.colname.defused %in% names(dataset) & !overwrite) 
-    stop("A State column with the given (or default) name is already part of the dataset. Please remove the column, choose a different name, or set `overwrite = TRUE`")
-  if(New.state.colname.defused %in% names(dataset)) 
-    warning("A State column with the given (or default) name is already part of the dataset. It is overwritten, because `overwrite = TRUE ` was set.")
-  
   stopifnot(
     "dataset is not a dataframe" = is.data.frame(dataset),
     "MEDI.colname must be part of the dataset" = 
@@ -281,6 +275,12 @@ Brown_cut <- function(dataset,
     "overwrite must be a logical" = 
       is.logical(overwrite)
   )
+  
+  #give an error or warning if the reference column is present
+  if(New.state.colname.defused %in% names(dataset) & !overwrite) 
+    stop("A State column with the given (or default) name is already part of the dataset. Please remove the column, choose a different name, or set `overwrite = TRUE`")
+  if(New.state.colname.defused %in% names(dataset)) 
+    warning("A State column with the given (or default) name is already part of the dataset. It is overwritten, because `overwrite = TRUE ` was set.")
   
   dataset |> 
   dplyr::mutate(
