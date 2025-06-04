@@ -60,7 +60,9 @@ identification. Defaults to "state.count". Expects a symbol.}
 \item{return.only.clusters}{Whether to return only the identified clusters
 (TRUE) or also include non-clusters (FALSE). Defaults to TRUE.}
 
-\item{drop.empty.groups}{Logical. Should empty groups be dropped?}
+\item{drop.empty.groups}{Logical. Should empty groups be dropped? Only works
+if \code{.drop = FALSE} has not been used with the current grouping prior to
+calling the function}
 
 \item{handle.gaps}{Logical whether the data shall be treated with
 \code{\link[=gap_handler]{gap_handler()}}. Is set to \code{FALSE} by default, due to computational costs.}

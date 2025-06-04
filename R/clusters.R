@@ -47,7 +47,9 @@
 #'   (TRUE) or also include non-clusters (FALSE). Defaults to TRUE.
 #' @param handle.gaps Logical whether the data shall be treated with
 #'   [gap_handler()]. Is set to `FALSE` by default, due to computational costs.
-#' @param drop.empty.groups Logical. Should empty groups be dropped?
+#' @param drop.empty.groups Logical. Should empty groups be dropped? Only works
+#'   if `.drop = FALSE` has not been used with the current grouping prior to
+#'   calling the function
 #'
 #' @return For `extract_clusters()` a dataframe containing the identified
 #'   clusters or all time periods, depending on `return.only.clusters`.
@@ -167,7 +169,7 @@ extract_clusters <- function(
     )
   
   if(!any(data3$is.cluster)){
-    message(paste0("No clusters of condition: ", deparse(Variable)," found"))
+    message(paste0("No clusters of condition: ", rlang::as_label({{ Variable }})," found"))
   }
   
   # Return either all data or only clusters
@@ -244,7 +246,6 @@ add_clusters <- function(
   )
   
   if(nrow(episodes) == 0) {
-  #   message(paste0("No clusters of condition: ", toString({{ Variable }})," found"))
     return(data)
   }
   
