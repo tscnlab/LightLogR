@@ -239,7 +239,8 @@ import_Statechanges <- function(filename,
                 dst_adjustment = FALSE, 
                 dst_info = FALSE, 
                 filename = filename, 
-                na.count = na.count)
+                na.count = na.count,
+                not.before = NULL)
   
   return(data)
 }
