@@ -1,5 +1,13 @@
 # LightLogR 0.9.1
 
+* Added many more unit tests - **800** and counting!
+
+* Removed a nasty bug in the internal functions that could lead to a shift in how dominant epochs are assigned to durations when groups are dropped due to singular observations
+
+* `gapless_datetimes()`: fixed a bug that prohibited the use of durations. Had downstream effects on basically all gap functions
+
+* `extract_gaps()` now warns correctly if there are implicit gaps with a non-default epoch 
+
 * `import` has the option to remove data before a specified date. Default is `not.before = 2001-01-01`. Some devices fall back to a time stamp in the year 2000 after the battery drained completely. This makes the import problematic in terms of gap searching.
 
 * `extract_states()` has the option not to group by the extracted state.
