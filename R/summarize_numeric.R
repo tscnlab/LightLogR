@@ -73,6 +73,7 @@ summarize_numeric <- function(
   data |>
     dplyr::select(-dplyr::any_of(remove)) |> 
     dplyr::summarize(
+      !!!total,
       dplyr::across(
         dplyr::where(\(x) is.double(x) | is.numeric(x)),
         \(x) if(inherits(x, "Duration")) {
@@ -86,7 +87,6 @@ summarize_numeric <- function(
         .names = "{prefix}{.col}"
       ),
       "episodes" = dplyr::n(),
-      !!!total,
       .groups = "drop_last"
     )
   
