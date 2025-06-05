@@ -185,7 +185,7 @@ remove_partial_data <- function(
   group_cols <- setdiff(colnames(groups_to_keep), excluded_cols)
   
   # return the dataset if nothing is to be removed
-  if(!any(data$marked.for.removal)) return(dataset)
+  if(!any(data$marked.for.removal)) return(dataset |> dplyr::group_by(!!!groups))
   
   # return a message, if nothing is left
   if(nrow(groups_to_keep) == 0) {
