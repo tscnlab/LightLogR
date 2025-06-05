@@ -1,15 +1,15 @@
 test_that("create a new column with time data", {
   expect_equal(
     sample.data.environment %>% 
-      create_Timedata() %>% length(), 4)
+      add_Time_col() %>% length(), 4)
   
   expect_equal(
     sample.data.environment %>% 
-      create_Timedata(Time.data = Test) %>% names() %>% .[4], "Test")
+      add_Time_col(Time = Test) %>% names() %>% .[4], "Test")
   
   expect_equal(
     sample.data.environment %>% 
-      create_Timedata() %>% 
-      dplyr::pull(Time.data) %>% 
+      add_Time_col() %>% 
+      dplyr::pull(Time) %>% 
       hms::is_hms() , TRUE)
 })

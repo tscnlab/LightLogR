@@ -364,7 +364,7 @@ We can see that our participants have slightly more time above 250 lx on weekda
 
 # Metric calculation: batch
 
-In the final section, we will add more metrics to the analysis, including ones with multiple sub-metrics. Further, we imagine we want to know how these metrics change from the first half of the experiment (August/September) to the second half (October/November). Finally, we will include a column `Time.data` in the data set, which will be used to calculate the metrics. This column format excludes the `day` information from the `Datetime` column, which avoids `date`-related issues when calculating the `mean` of the metrics. Finally, the `unnest()` call is used to flatten the table from the `dataframe` substructure that is created by `MLIT250` and `TAT250`.
+In the final section, we will add more metrics to the analysis, including ones with multiple sub-metrics. Further, we imagine we want to know how these metrics change from the first half of the experiment (August/September) to the second half (October/November). Finally, we will include a column `Time` in the data set, which will be used to calculate the metrics. This column format excludes the `day` information from the `Datetime` column, which avoids `date`-related issues when calculating the `mean` of the metrics. Finally, the `unnest()` call is used to flatten the table from the `dataframe` substructure that is created by `MLIT250` and `TAT250`.
 
 ```{r}
 data <- data |> 
@@ -372,16 +372,16 @@ data <- data |>
     Month = case_when(month(Datetime) %in% 8:9 ~ "Aug/Sep",
                       month(Datetime) %in% 10:11 ~ "Oct/Nov")
   ) |> 
-  create_Timedata()
+  add_Time_col()
 
 metrics <- 
   data |> 
   group_by(Month, Id, wDay) |> 
   summarize(
     MLIT250 = 
-      timing_above_threshold(MEDI, Time.data, threshold = 250, as.df = TRUE),
+      timing_above_threshold(MEDI, Time, threshold = 250, as.df = TRUE),
     TAT250 = 
-      duration_above_threshold(MEDI, Time.data, threshold = 250, as.df = TRUE),
+      duration_above_threshold(MEDI, Time, threshold = 250, as.df = TRUE),
     average_MEDI = 
       MEDI |> log_zero_inflated() |>  mean() |> exp_zero_inflated(), #calculate zero inflated log transformed mean
     light_exposure = 
