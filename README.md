@@ -356,9 +356,9 @@ dataset |>
   mutate(interrupt_duration = (total_duration*rel_interrupt) |> round(), #calculate interrupt
          rel_interrupt = rel_interrupt |> scales::percent_format(1)())
 #> # A tibble: 1 × 4
-#>   episodes total_duration      rel_interrupt interrupt_duration  
-#>      <int> <Duration>          <chr>         <Duration>          
-#> 1       17 4288s (~1.19 hours) 4%            172s (~2.87 minutes)
+#>   episodes total_duration        rel_interrupt interrupt_duration    
+#>      <int> <Duration>            <chr>         <Duration>            
+#> 1       17 72890s (~20.25 hours) 4%            2918s (~48.63 minutes)
 ```
 
 Thus we find that only about 4% of the long exposure periods are made up
