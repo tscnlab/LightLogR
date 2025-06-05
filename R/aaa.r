@@ -22,14 +22,6 @@ pulse_idx <- light <- time <- level <- duration <- mean_duration <- NULL
 onset <- midpoint <- offset <- mean_onset <- mean_midpoint <- NULL
 mean_offset <-  Date.data <- print_n <- remove_duplicates <-  NULL
 
-
-
-empty_function <- function() {
-  rsconnect::accountInfo()
-  pkgload::check_dep_version()
-  flextable::add_body()
-}
-
 .onLoad <- function(libname, pkgname) {
   utils::globalVariables(".")
 }
