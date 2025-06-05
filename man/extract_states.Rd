@@ -25,7 +25,7 @@ exctration. Expects a symbol. If it is not part of the data, a
 \item{State.expression}{If \code{State.colname} is not part of the \code{data}, this
 expression will be evaluated to generate the state. The result of this
 expression will be used for grouping, so it is recommended to be
-factor-like.}
+factor-like. If \code{State.colname} \strong{is} part of the \code{data}, this argument will be ignored}
 
 \item{Datetime.colname}{Column name that contains the datetime. Defaults to
 "Datetime" which is automatically correct for data imported with LightLogR.
@@ -41,7 +41,11 @@ valid \code{lubridate::duration()} string, e.g., \code{"1 day"} or \code{"10 sec
 
 \item{drop.empty.groups}{Logical. Should empty groups be dropped? Only works
 if \code{.drop = FALSE} has not been used with the current grouping prior to
-calling the function}
+calling the function. Default to \code{TRUE}. If set to \code{FALSE} can lead to an
+error if factors are present in the grouping that have more levels than
+actual data. Can, however, be useful and necessary when summarizing the
+groups further, e.g. through \code{\link[=summarize_numeric]{summarize_numeric()}} - having an empty group
+present is important when averaging numbers.}
 
 \item{group.by.state}{Logical. Should the output be automatically be grouped
 by the new state?}
@@ -63,7 +67,7 @@ groups as well.
 states <-
 sample.data.environment |>
   add_photoperiod(c(48.52, 9.06)) |>
-  extract_states(photoperiod.state)
+  extract_states(photoperiod.state, add.label = TRUE)
 states |> head(2)
 states |> tail(2)
 states |> summarize_numeric(c("state.count", "epoch"))

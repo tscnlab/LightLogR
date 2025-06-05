@@ -13,7 +13,7 @@
 #' @param State.expression If `State.colname` is not part of the `data`, this
 #'   expression will be evaluated to generate the state. The result of this
 #'   expression will be used for grouping, so it is recommended to be
-#'   factor-like.
+#'   factor-like. If `State.colname` **is** part of the `data`, this argument will be ignored
 #' @param epoch The epoch to use for the gapless sequence. Can be either a
 #'   `lubridate::duration()` or a string. If it is a string, it needs to be
 #'   either '"dominant.epoch"' (the default) for a guess based on the data or a
@@ -31,7 +31,7 @@
 #' states <-
 #' sample.data.environment |>
 #'   add_photoperiod(c(48.52, 9.06)) |>
-#'   extract_states(photoperiod.state)
+#'   extract_states(photoperiod.state, add.label = TRUE)
 #' states |> head(2)
 #' states |> tail(2)
 #' states |> summarize_numeric(c("state.count", "epoch"))
@@ -80,16 +80,6 @@ extract_states <- function(data,
         epochs$dominant.epoch[epochs$group.indices == dplyr::cur_group_id()]
     )) |> 
     dplyr::group_by({{ State.colname }}, state.count, .add = TRUE)
-  
-  #remove FALSE
-  # state_logical <-
-  #   data |> dplyr::pull({{ State.colname }}) |> is.logical()
-  # 
-  # if(ignore.FALSE & state_logical) {
-  #   data <-
-  #     data |>
-  #     dplyr::mutate({{ State.colname }} := dplyr::na_if({{ State.colname }},0))
-  # }
   
   #summarize the instances
   data <- 
@@ -154,12 +144,15 @@ extract_states <- function(data,
 #' @examples
 #' states <-
 #' sample.data.environment |>
+#'   filter_Date(length = "1 day") |> 
 #'   extract_states(Daylight, MEDI > 1000)
 #'
 #' states |> head(2)
 #' 
-#' #add states to a dataset and plot them
+#' #add states to a dataset and plot them - as we only looked for states on the
+#' # first day (see above), only the first day will show up in the plot
 #' sample.data.environment |> 
+#'  filter_Date(length = "2 day") |> 
 #'  add_states(states) |> 
 #'  gg_days() |> 
 #'  gg_state(Daylight)
