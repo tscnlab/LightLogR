@@ -107,12 +107,12 @@ extract_clusters <- function(
   cluster_label <- 
     paste0(cluster_label, 
            "|", 
-           ifelse(duration.type == "min", "d≥", "d≤"), 
+           ifelse(duration.type == "min", "d\U{2265}", "d\U{2264}"), 
            cluster.duration, 
            if (interruption.duration != 0) {
              paste0(
              "|",
-             ifelse(interruption.type == "min", "i≥", "i≤"), 
+             ifelse(interruption.type == "min", "i\U{2265}", "i\U{2264}"), 
              interruption.duration
              )
              }
