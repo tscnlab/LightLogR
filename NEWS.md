@@ -1,5 +1,9 @@
 # LightLogR 0.9.1
 
+* reworked the README file to reflect some of the features `LightLogR` has gained over time
+
+* `summarize_numeric()` now calculates `total_duration` correctly, even when the prefix is removed.
+
 * added the `sample.data.irregular` internal dataset
 
 * removed `LYS` wearable sample file, due to package size limitations
