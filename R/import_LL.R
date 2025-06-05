@@ -274,8 +274,8 @@
 #'
 #' ```{r}
 #' dataset <- import$ActLumus(filepath, auto.plot = FALSE)
-#' dataset %>% gg_days()
 #' ```
+#' 
 #' ```{r}
 #' dataset %>%
 #' dplyr::select(Datetime, TEMPERATURE, LIGHT, MEDI, Id) %>%

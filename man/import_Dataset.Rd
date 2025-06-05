@@ -335,14 +335,7 @@ Import functions can also be called directly:
 #> Observation intervals: 
 #>   Id                                          interval.time     n pct  
 #> 1 205_actlumus_Log_1020_20230904101707532.txt 10s           61015 100\%
-dataset \%>\% gg_days()
-}\if{html}{\out{</div>}}\if{html}{\out{
-<div class="figure">
-<img src="unnamed-chunk-1-1.png" alt="plot of chunk unnamed-chunk-1" width="100%" />
-<p class="caption">plot of chunk unnamed-chunk-1</p>
-</div>
-}}
-
+}\if{html}{\out{</div>}}
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{dataset \%>\%
 dplyr::select(Datetime, TEMPERATURE, LIGHT, MEDI, Id) \%>\%
