@@ -421,13 +421,11 @@ timing_light_exposure <-
   data |>
   group_by(Id, Day) |>
   summarize(
-    FLiT_50 =
       timing_above_threshold(
         MEDI, Datetime, "above", 50, na.rm = TRUE, as.df = TRUE
         ),
     .groups = "drop"
-  ) |>
-  unnest(FLiT_50)
+  )
 
 timing_light_exposure |> 
   head(4) |> 

@@ -208,7 +208,7 @@ M10 <-
   dataset |> 
   group_by(Id, Date = date(Datetime)) |> 
   summarize(
-    M10 = bright_dark_period(
+    bright_dark_period(
               Light.vector = MEDI,
               Time.vector = Datetime,
               as.df = TRUE,
@@ -218,7 +218,7 @@ M10 <-
     .groups = "drop_last"
   )
 
-M10 |> unnest(M10) |> head() |> gt() |> fmt_number()
+M10 |> head() |> gt() |> fmt_number()
 ```
 
 This provides us with a table with the brightest 10 hours of each day, but we want to add this to our dataset. This can be done with `add_states()`.
@@ -228,9 +228,10 @@ This provides us with a table with the brightest 10 hours of each day, but we wa
 dataset <-
   dataset |> 
   add_states(
-    M10 |> unnest(M10) |> mutate(M10 = TRUE),
+    M10 |> mutate(M10 = TRUE),
     start.colname = brightest_10h_onset,
-    end.colname = brightest_10h_offset, leave.out = c("brightest_10h_midpoint", "brightest_10h_mean")
+    end.colname = brightest_10h_offset, 
+    leave.out = c("brightest_10h_midpoint", "brightest_10h_mean")
   )
 ```
 
