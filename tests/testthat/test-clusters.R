@@ -52,16 +52,12 @@ test_that("Functions handle empty cases correctly", {
   ) |> dplyr::group_by(Id = 1)
   
   # Test extract_clusters
-  suppressWarnings(
   expect_message(extract_clusters(empty_data, lux > 1000), 
-                 "No clusters of condition: lux > 1000 found")
-  )
+                 "No clusters of condition: lux>1000|d≥30mins found")
   
   # Test add_clusters
-  suppressWarnings(
   expect_message(add_clusters(empty_data, lux > 1000),
-                 "No clusters of condition: lux > 1000 found")
-  )
+                 "No clusters of condition: lux>1000|d≥30mins found")
 })
 
 test_that("Grouped data handling works", {
@@ -179,11 +175,11 @@ test_that("add_clusters no clusters found", {
     Datetime = lubridate::as_datetime(0) + lubridate::hours(0:2),
     Value = c(10, 20, 15) # Condition Value > 100, will find no episodes > 0s
   )
-  # Expect message from extract_clusters, then add_clusters returns original data
   expect_warning(
+  # Expect message from extract_clusters, then add_clusters returns original data
   expect_message(
     result <- add_clusters(data_no_cluster, Value > 100, cluster.duration = "1 hour"),
-    "No clusters of condition: Value > 100 found"
+    "No clusters of condition: Value>100|d≥1hour found"
   )
   )
   expect_equal(result, data_no_cluster) # Should not have 'state' column or start/end
@@ -199,7 +195,7 @@ test_that("add_clusters no clusters found", {
   expect_warning(
   expect_message(
     result2 <- add_clusters(data_short_episodes, Value > 100, cluster.duration = "3 hours"),
-    "No clusters of condition: Value > 100 found"
+    "No clusters of condition: Value>100|d≥3hours found"
   )
   )
   expect_equal(result2, data_short_episodes)

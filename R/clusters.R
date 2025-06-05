@@ -49,7 +49,15 @@
 #'   [gap_handler()]. Is set to `FALSE` by default, due to computational costs.
 #' @param drop.empty.groups Logical. Should empty groups be dropped? Only works
 #'   if `.drop = FALSE` has not been used with the current grouping prior to
-#'   calling the function
+#'   calling the function. Default to `TRUE`. If set to `FALSE` can lead to an
+#'   error if factors are present in the grouping that have more levels than
+#'   actual data. Can, however, be useful and necessary when summarizing the
+#'   groups further, e.g. through [summarize_numeric()] - having an empty group
+#'   present is important when averaging numbers.
+#' @param add.label Logical. Option to add a label to the output containing the
+#'   condition. E.g., `MEDI>500|d≥30min|i≤5min` for clusters of melanopic EDI
+#'   larger than 500, at least 30 minutes long (`d`), allowing interruptions of
+#'   up to 5 minutes at a time (`i`).
 #'
 #' @return For `extract_clusters()` a dataframe containing the identified
 #'   clusters or all time periods, depending on `return.only.clusters`.
@@ -62,14 +70,16 @@
 #'
 #' dataset <-
 #' sample.data.environment |>
-#' dplyr::filter(Id == "Participant")
+#' dplyr::filter(Id == "Participant") |>
+#' filter_Date(length = "1 day")
 #'
 #' # Extract clusters with minimum duration of 1 hour and interruptions of up to 5 minutes
 #' dataset |>
 #'  extract_clusters(
-#'   MEDI > 1000,
+#'   MEDI > 250,
 #'   cluster.duration = "1 hour",
-#'   interruption.duration = "5 mins"
+#'   interruption.duration = "5 mins",
+#'   add.label = TRUE
 #' )
 extract_clusters <- function(
     data,
@@ -81,19 +91,36 @@ extract_clusters <- function(
     interruption.type = c("max", "min"),
     cluster.colname = state.count,
     return.only.clusters = TRUE,
-    drop.empty.groups = FALSE,
-    handle.gaps = FALSE) {
+    drop.empty.groups = TRUE,
+    handle.gaps = FALSE,
+    add.label = FALSE) {
   
   # Argument validation
   duration.type <- match.arg(duration.type)
   interruption.type <- match.arg(interruption.type)
   
+  # Convert variable expression to quosure
+  Variable <- rlang::enexpr(Variable)
+  
+  #prepare label
+  cluster_label <- rlang::as_label({{ Variable }})
+  cluster_label <- 
+    paste0(cluster_label, 
+           "|", 
+           ifelse(duration.type == "min", "d≥", "d≤"), 
+           cluster.duration, 
+           if (interruption.duration != 0) {
+             paste0(
+             "|",
+             ifelse(interruption.type == "min", "i≥", "i≤"), 
+             interruption.duration
+             )
+             }
+           ) |> stringr::str_remove_all(" ")
+    
   #convert duration inputs to durations
   cluster.duration <- cluster.duration |> lubridate::as.duration()
   interruption.duration <- interruption.duration |> lubridate::as.duration()
-  
-  # Convert variable expression to quosure
-  Variable <- rlang::enexpr(Variable)
   
   # Prepare comparison functions
   duration.type <- paste0("p", duration.type)
@@ -169,8 +196,16 @@ extract_clusters <- function(
     )
   
   if(!any(data3$is.cluster)){
-    message(paste0("No clusters of condition: ", rlang::as_label({{ Variable }})," found"))
+    message(paste0("No clusters of condition: ", cluster_label," found"))
   }
+  
+  #conditionally add label
+  if(add.label) {
+    data3 <- 
+      data3 |> 
+      dplyr::mutate(label = cluster_label, .before = state.count)
+  }
+    
   
   # Return either all data or only clusters
   if(!return.only.clusters){
@@ -215,11 +250,12 @@ extract_clusters <- function(
 #'
 #' @examples
 #' 
-#' # Add clusters to a dataset where lux values are above 1000 for at least 30 minutes
+#' # Add clusters to a dataset where lux values are above 20 for at least 30 minutes
 #' dataset_with_clusters <- 
-#' sample.data.environment %>% add_clusters(MEDI > 1000)
+#' dataset %>% add_clusters(MEDI > 20)
 #'
-#' dataset_with_clusters |> dplyr::count(state)
+#' #peak into the dataset
+#' dataset_with_clusters[4500:4505,]
 #'
 add_clusters <- function(
     data,
@@ -242,7 +278,8 @@ add_clusters <- function(
     interruption.duration = interruption.duration,
     interruption.type = interruption.type,
     cluster.colname = {{ cluster.colname }},
-    handle.gaps = handle.gaps
+    handle.gaps = handle.gaps,
+    drop.empty.groups = TRUE
   )
   
   if(nrow(episodes) == 0) {

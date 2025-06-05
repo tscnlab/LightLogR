@@ -15,8 +15,9 @@ extract_clusters(
   interruption.type = c("max", "min"),
   cluster.colname = state.count,
   return.only.clusters = TRUE,
-  drop.empty.groups = FALSE,
-  handle.gaps = FALSE
+  drop.empty.groups = TRUE,
+  handle.gaps = FALSE,
+  add.label = FALSE
 )
 
 add_clusters(
@@ -62,10 +63,19 @@ identification. Defaults to "state.count". Expects a symbol.}
 
 \item{drop.empty.groups}{Logical. Should empty groups be dropped? Only works
 if \code{.drop = FALSE} has not been used with the current grouping prior to
-calling the function}
+calling the function. Default to \code{TRUE}. If set to \code{FALSE} can lead to an
+error if factors are present in the grouping that have more levels than
+actual data. Can, however, be useful and necessary when summarizing the
+groups further, e.g. through \code{\link[=summarize_numeric]{summarize_numeric()}} - having an empty group
+present is important when averaging numbers.}
 
 \item{handle.gaps}{Logical whether the data shall be treated with
 \code{\link[=gap_handler]{gap_handler()}}. Is set to \code{FALSE} by default, due to computational costs.}
+
+\item{add.label}{Logical. Option to add a label to the output containing the
+condition. E.g., \verb{MEDI>500|d≥30min|i≤5min} for clusters of melanopic EDI
+larger than 500, at least 30 minutes long (\code{d}), allowing interruptions of
+up to 5 minutes at a time (\code{i}).}
 }
 \value{
 For \code{extract_clusters()} a dataframe containing the identified
@@ -107,21 +117,24 @@ dataset through a rolling join. This is a convenience function built on \code{\l
 
 dataset <-
 sample.data.environment |>
-dplyr::filter(Id == "Participant")
+dplyr::filter(Id == "Participant") |>
+filter_Date(length = "1 day")
 
 # Extract clusters with minimum duration of 1 hour and interruptions of up to 5 minutes
 dataset |>
  extract_clusters(
-  MEDI > 1000,
+  MEDI > 250,
   cluster.duration = "1 hour",
-  interruption.duration = "5 mins"
+  interruption.duration = "5 mins",
+  add.label = TRUE
 )
 
-# Add clusters to a dataset where lux values are above 1000 for at least 30 minutes
+# Add clusters to a dataset where lux values are above 20 for at least 30 minutes
 dataset_with_clusters <- 
-sample.data.environment \%>\% add_clusters(MEDI > 1000)
+dataset \%>\% add_clusters(MEDI > 20)
 
-dataset_with_clusters |> dplyr::count(state)
+#peak into the dataset
+dataset_with_clusters[4500:4505,]
 
 }
 \concept{Clusters}
