@@ -321,12 +321,11 @@ TAT_250_daily |>
   gt()
 ```
 
-There is a variant of `mean_daily()` called `mean_daily_metric()`, which is a convenience function to combine the calculation of a single-return-value, duration-based metric with the mean daily calculation. We can use it to calculate `TAT250` from scratch
+There is a variant of `mean_daily()` called `mean_daily_metric()`, which is a convenience function to combine the calculation of a single-return-value, duration-based metric with the mean daily calculation. We can use it to calculate `duration_above_250`(lx) from scratch
 
 ```{r}
 data |> 
   mean_daily_metric(
-    metric = "TAT250",
     Variable = MEDI,
     threshold = 250
   ) |> 
@@ -334,7 +333,7 @@ data |>
   gt()
 ```
 
-The function has limited options to change the `metric_type`. In this case, we change the function to the longest continuous period above threshold.
+The function has (very) limited options to change the `metric_type`. In this case, we change the function to the longest continuous period above threshold. Basically, metric functions that return a numeric column can be used.
 
 ```{r}
 data |> 
