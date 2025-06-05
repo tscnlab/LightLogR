@@ -52,8 +52,8 @@
 #'  aggregate_Datetime(unit = "1 day") %>%
 #'  dominant_epoch()
 aggregate_Datetime <- function(dataset,
-                               Datetime.colname = Datetime,
                                unit = "dominant.epoch",
+                               Datetime.colname = Datetime,
                                type = c("round", "floor", "ceiling"),
                                numeric.handler = 
                                  mean,
