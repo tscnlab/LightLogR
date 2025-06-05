@@ -19,6 +19,33 @@
 #' @source <https://www.tscnlab.org>
 "sample.data.environment"
 
+#' Sample of highly irregular wearable data
+#'
+#' A dataset collected with a wearable device that has a somewhat irregular
+#' recording pattern. Overall, the data are recorded every 15 seconds. Every
+#' tenth or so measurement takes 16 seconds, every hundredths 17 seconds, every
+#' thousandths 18 seconds, and so on. This makes the dataset a prime example for
+#' handling and dealing with irregular data.
+#'
+#' @format `sample.data.irregular` A tibble with 11,422 rows and 13 columns:
+#' \describe{
+#'   \item{Id}{A `character` vector indicating the participant (only `P1`).}
+#'   \item{Datetime}{POSIXct Datetime}
+#'   \item{lux}{numeric Illuminance. Unit is lux.}
+#'   \item{kelvin}{numeric correlated colour temperature (CCT). Unit is Kelvin.}
+#'   \item{rgbR}{numeric red sensor channel output. Unit is W/m2/nm.}
+#'   \item{rgbG}{numeric green sensor channel output. Unit is W/m2/nm.}
+#'   \item{rgbB}{numeric blue sensor channel output. Unit is W/m2/nm.}
+#'   \item{rgbIR}{numeric infrared sensor channel output. Unit is W/m2/nm.}
+#'   \item{movement}{numeric indicator for movement (intensity) of the device. Movement is given in discrete counts correlating to the number of instances the accelerometer records instances greater than 0.1875g per 15s sampling interval.}
+#'   \item{MEDI}{melanopic EDI measurement data. Unit is lux.}
+#'   \item{R.}{Unknown, but likely direct or derived output from the red sensor channel}
+#'   \item{G.}{Unknown, but likely direct or derived output from the green sensor channel}
+#'   \item{B.}{Unknown, but likely direct or derived output from the blue sensor channel}
+#' }
+"sample.data.irregular"
+
+
 #' Gain / Gain-ratio tables to normalize counts
 #'
 #' A list of tables containing gain and gain-ratios to normalize counts across

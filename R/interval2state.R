@@ -16,7 +16,7 @@
 #' @param Id.colname.dataset,Id.colname.interval Column names of the
 #'   participant's `Id` in both the `dataset` and the `State.interval.dataset`.
 #'   On the off-chance that there are inconsistencies, the names can be
-#'   different. If the datasets where imported and preprocessed with
+#'   different. If the datasets were imported and preprocessed with
 #'   [LightLogR], this just works. Both datasets need an `Id`, because the
 #'   states will be added based not only on the `Datetime`, but also depending
 #'   on the dataset.

@@ -227,13 +227,11 @@ mean_daily <- function(data,
 #'   and mean daily values for the specified metric
 #'
 #' @examples
-#' # Import sample data
-#' filepath <- system.file("extdata/sample_data_LYS.csv", package = "LightLogR")
-#' dataset <- import$LYS(filepath, silent = TRUE)
 #'
 #' # Calculate mean daily duration above threshold. As the data only contains
 #' # data for two days, Weekend and Mean daily will throw NA
-#' dataset |> 
+#' sample.data.irregular |> 
+#' aggregate_Datetime(unit = "1 min") |> 
 #' mean_daily_metric(
 #'   metric = "duration_above_100lux",
 #'   Variable = lux,

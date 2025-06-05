@@ -1,5 +1,9 @@
 # LightLogR 0.9.1
 
+* added the `sample.data.irregular` internal dataset
+
+* removed `LYS` wearable sample file, due to package size limitations
+
 * `add_Time_col()` replaces `create_Time_data()`
 
 * `extract_clusters()` has the option to show the cluster condition in the output with `add.label = TRUE`, e.g., `MEDI>500|d≥30min|i≤5min` for clusters of melanopic EDI larger than 500, at least 30 minutes long (`d`), allowing interruptions of up to 5 minutes at a time (`i`).

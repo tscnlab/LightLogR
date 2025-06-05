@@ -267,13 +267,12 @@
 #'   such as the intervals between measurements or the start and end dates.
 #'
 #' ```{r}
-#' filepath <- system.file("extdata/sample_data_LYS.csv", package = "LightLogR")
-#' dataset <- import_Dataset("LYS", filepath, auto.plot = FALSE)
+#' filepath <- system.file("extdata/205_actlumus_Log_1020_20230904101707532.txt.zip", package = "LightLogR")
+#' dataset <- import_Dataset("ActLumus", filepath, auto.plot = FALSE)
 #' ```
 #'   Import functions can also be called directly:
 #'
 #' ```{r}
-#' filepath <- system.file("extdata/205_actlumus_Log_1020_20230904101707532.txt.zip", package = "LightLogR")
 #' dataset <- import$ActLumus(filepath, auto.plot = FALSE)
 #' dataset %>% gg_days()
 #' ```
@@ -474,27 +473,27 @@ import <- purrr::imap(import_expr, \(x, idx) imports(idx,x))
 #' the correct time zone. It has access to all arguments defined in the
 #' description of `import_Dataset()`. The `...` argument should be passed to
 #' whatever csv reader function is used, so that it works as expected. Look at
-#' `ll_import_expr()$LYS` for a quite minimal example.
+#' `ll_import_expr()$ActLumus` for a quite minimal example.
 #'
 #' @return A list of import functions
 #' @export
 #'
 #' @examples
-#' #create a new import function for the LYS device, same as the old
+#' #create a new import function for the ActLumus device, same as the old
 #' new_import <- import_adjustment(ll_import_expr())
 #' #the new one is identical to the old one in terms of the function body
-#' identical(body(import$LYS), body(new_import$LYS))
+#' identical(body(import$ActLumus), body(new_import$ActLumus))
 #'
 #' #change the import expression for the LYS device to add a message at the top
 #' new_import_expr <- ll_import_expr()
-#' new_import_expr$LYS[[4]] <-
+#' new_import_expr$ActLumus[[4]] <-
 #' rlang::expr({ cat("**This is a new import function**\n")
 #' data
 #' })
 #' new_import <- import_adjustment(new_import_expr)
-#' filepath <- system.file("extdata/sample_data_LYS.csv", package = "LightLogR")
+#' filepath <- system.file("extdata/205_actlumus_Log_1020_20230904101707532.txt.zip", package = "LightLogR")
 #' #Now, a message is printed when the import function is called
-#' new_import <- new_import$LYS(filepath)
+#' data <- new_import$ActLumus(filepath, auto.plot = FALSE)
 
 import_adjustment <- function(import_expr) {
     purrr::imap(import_expr, \(x, idx) imports(idx,x))

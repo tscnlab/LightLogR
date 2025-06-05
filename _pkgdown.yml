@@ -151,6 +151,7 @@ reference:
       Datasets that are used in LightLogR and in examples.
     contents:
     - sample.data.environment
+    - sample.data.irregular
     - alphaopic.action.spectra
     - gain.ratio.tables
     - supported_devices

@@ -4,6 +4,7 @@
 #' @inheritParams cut_Datetime
 #' @param Time Name of the newly created column. Expects a `symbol`. The
 #'   default(`Time`) works well with other functions in [LightLogR].
+#'   Will overwrite existing columns of identical name.
 #' @param output.dataset should the output be a `data.frame` (Default `TRUE`) or
 #'   a vector with `hms` (`FALSE`) times? Expects a `logical` scalar.
 #'
