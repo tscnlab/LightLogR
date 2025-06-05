@@ -77,7 +77,7 @@ times via \code{\link[hms:hms]{hms::as_hms()}} before applying the function (the
 ensures a more sensible datetime.
 
 \code{\link[=aggregate_Date]{aggregate_Date()}} splits the \code{Datetime} column into a \code{Date.data}
-and a \code{Time.data} column. It will create subgroups for each \code{Time.data}
+and a \code{Time} column. It will create subgroups for each \code{Time}
 present in a group and aggregate each group into a single day, then remove
 the sub grouping.
 

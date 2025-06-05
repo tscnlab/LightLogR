@@ -80,7 +80,8 @@ sample.data.environment |> gg_gaps()
 bad_dataset <-
 sample.data.environment |>
   aggregate_Datetime(unit = "5 mins") |>
-  filter_Date(length = "6 days") |>
+  dplyr::filter(Id == "Participant") |> 
+  filter_Date(length = "2 days") |>
   dplyr::mutate(
    Datetime = dplyr::if_else(
      lubridate::date(Datetime) == max(lubridate::date(Datetime)),
@@ -96,15 +97,4 @@ bad_dataset |> gg_gaps()
 
 #it can also show irregular data
 bad_dataset |> gg_gaps(show.irregulars = TRUE)
-
-#if a Group has good data, it will not show up
-half_bad_dataset <-
-bad_dataset |> dplyr::filter(Id == "Participant") |>
-  rbind(sample.data.environment |> dplyr::filter(Id == "Environment"))
-
-#just to show that both are identical
-dplyr::group_keys(half_bad_dataset)
-dplyr::group_keys(bad_dataset)
-
-half_bad_dataset |> gg_gaps()
 }

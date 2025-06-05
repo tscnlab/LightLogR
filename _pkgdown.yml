@@ -48,7 +48,7 @@ reference:
     - cut_Datetime
     - aggregate_Datetime
     - aggregate_Date
-    - create_Timedata
+    - add_Time_col
     - filter_Datetime
     - filter_Datetime_multiple
     - filter_Date

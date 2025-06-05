@@ -7,7 +7,7 @@ mean_gap_duration <- mean_gap_duration_n <- missing_data <- NULL
 missing_implicit <- missing_pct <- number_gaps <- number_irregulars <- NULL
 .data <- gain.ratio <- date.grouper <- midnight.before <- NULL
 midnight.after <- temporary.state <- temporary.counter <- NULL
-date.for.photoperiod <- dawn <- dusk <- Time <- mEDI <- Time.data <- NULL
+date.for.photoperiod <- dawn <- dusk <- Time <- mEDI <- Time <- NULL
 Datetime <- timestamp <- tz <- Day.data <- `DATE/TIME` <- n <- NULL
 Datetime.rounded <- id <- sleep.colname.string <- file.name <- Interval <- NULL
 original.datapoints.fleeting <- MEDI <- State.Brown <- Reference <- NULL

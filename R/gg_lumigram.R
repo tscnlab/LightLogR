@@ -37,7 +37,7 @@ gg_lumigram <- function(dataset,
                        max_date = dplyr::first(max_date) + 1) |> 
     dplyr::mutate(date = lubridate::date({{ Datetime.colname }})) |>
     dplyr::filter(date < max_date) |>
-    create_Timedata({{ Datetime.colname }})
+    add_Time_col({{ Datetime.colname }})
   
   dat <- 
     dat |> 
@@ -52,7 +52,7 @@ gg_lumigram <- function(dataset,
   if(doubleplot != "no"){
     dat2 <- 
       dat |> dplyr::mutate(
-        Time.data = Time.data + 24*3600)
+        Time = Time + 24*3600)
     
     if(doubleplot == "next") {
       dat2 <- 
@@ -69,7 +69,7 @@ gg_lumigram <- function(dataset,
   
   plot <- 
     dat |> 
-    ggplot2::ggplot(ggplot2::aes(x = Time.data, y = (date))) +
+    ggplot2::ggplot(ggplot2::aes(x = Time, y = (date))) +
     ggplot2::geom_raster(ggplot2::aes(fill = {{ Variable.colname }}),
                          hjust = 1,...) +
     ggplot2::scale_x_time(breaks = time.breaks, 

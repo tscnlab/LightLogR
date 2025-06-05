@@ -12,7 +12,7 @@
 #' interval can be set, so that implicit missing timestamps after a set period
 #' of times can be enforced.
 #'
-#' @inheritParams create_Timedata
+#' @inheritParams add_Time_col
 #' @param Statechange.colname,Interval.colname,State.colname Column names that
 #'   do contain the name/description of the `state change` and that will contain
 #'   the `Interval` and `State` (which are also the default). Expects a `symbol`. The

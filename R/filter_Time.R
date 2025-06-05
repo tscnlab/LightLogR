@@ -17,7 +17,7 @@
 #' @examples
 #' sample.data.environment %>%
 #' filter_Time(start = "4:00:34", length = "12:00:00") %>%
-#' dplyr::pull(Time.data) %>% range() %>% hms::as_hms()
+#' dplyr::pull(Time) %>% range() %>% hms::as_hms()
 #' @family filter
 
 filter_Time <- function(dataset, 
@@ -50,7 +50,7 @@ filter_Time <- function(dataset,
   # Manipulation ----------------------------------------------------------
   
   #create a time-of-day column
-  dataset <- dataset %>% create_Timedata(!!x)
+  dataset <- dataset %>% add_Time_col(!!x)
   
   #calculate starting time if length and end are given
   if(is.null(start) & !is.null(length) & !is.null(end)) {
@@ -59,7 +59,7 @@ filter_Time <- function(dataset,
 
   #calculate starting time if NULL
   if(is.null(start)) {
-    start <- dataset$Time.data %>% min()
+    start <- dataset$Time %>% min()
   }
 
   #calculate end time if length is given
@@ -69,15 +69,15 @@ filter_Time <- function(dataset,
 
   #calculate end time if NULL
   if(is.null(end)) {
-    end <- dataset$Time.data %>% max()
+    end <- dataset$Time %>% max()
   }
 
   # filter start
   dataset <-
     dataset %>%
       dplyr::filter(
-      Time.data >= if(hms::is_hms(start)) start else hms::as_hms(start),
-      Time.data <= if(hms::is_hms(end)) end else hms::as_hms(end)
+      Time >= if(hms::is_hms(start)) start else hms::as_hms(start),
+      Time <= if(hms::is_hms(end)) end else hms::as_hms(end)
     )
   
   # Return --------------------------------------------------------------
