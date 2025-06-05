@@ -67,7 +67,7 @@ groups as well.
 states <-
 sample.data.environment |>
   add_photoperiod(c(48.52, 9.06)) |>
-  extract_states(photoperiod.state, add.label = TRUE)
+  extract_states(photoperiod.state)
 states |> head(2)
 states |> tail(2)
 states |> summarize_numeric(c("state.count", "epoch"))

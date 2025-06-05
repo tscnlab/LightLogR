@@ -304,29 +304,25 @@ To import a file, simple specify the filename (and path) and feed it to the
 The import functions provide a basic overview of the data after import,
 such as the intervals between measurements or the start and end dates.
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{filepath <- system.file("extdata/sample_data_LYS.csv", package = "LightLogR")
-dataset <- import_Dataset("LYS", filepath, auto.plot = FALSE)
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{filepath <- system.file("extdata/205_actlumus_Log_1020_20230904101707532.txt.zip", package = "LightLogR")
+dataset <- import_Dataset("ActLumus", filepath, auto.plot = FALSE)
 #> 
-#> Successfully read in 11'422 observations across 1 Ids from 1 LYS-file(s).
+#> Successfully read in 61'016 observations across 1 Ids from 1 ActLumus-file(s).
 #> Timezone set is UTC.
 #> The system timezone is Europe/Berlin. Please correct if necessary!
 #> 
-#> First Observation: 2023-06-21 00:00:12
-#> Last Observation: 2023-06-22 23:59:48
-#> Timespan: 2 days
+#> First Observation: 2023-08-28 08:47:54
+#> Last Observation: 2023-09-04 10:17:04
+#> Timespan: 7.1 days
 #> 
 #> Observation intervals: 
-#>   Id              interval.time     n pct    
-#> 1 sample_data_LYS 15s           10015 87.689\%
-#> 2 sample_data_LYS 16s            1367 11.969\%
-#> 3 sample_data_LYS 17s              23 0.201\% 
-#> 4 sample_data_LYS 18s              16 0.140\%
+#>   Id                                          interval.time     n pct  
+#> 1 205_actlumus_Log_1020_20230904101707532.txt 10s           61015 100\%
 }\if{html}{\out{</div>}}
 
 Import functions can also be called directly:
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{filepath <- system.file("extdata/205_actlumus_Log_1020_20230904101707532.txt.zip", package = "LightLogR")
-dataset <- import$ActLumus(filepath, auto.plot = FALSE)
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{dataset <- import$ActLumus(filepath, auto.plot = FALSE)
 #> 
 #> Successfully read in 61'016 observations across 1 Ids from 1 ActLumus-file(s).
 #> Timezone set is UTC.

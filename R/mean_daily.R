@@ -211,8 +211,6 @@ mean_daily <- function(data,
 #'
 #' @inheritParams mean_daily
 #' @param data A dataframe containing light logger data imported with LightLogR
-#' @param metric The name of the metric column to create in the output. Expects
-#'   a `character`
 #' @param Variable The variable column to analyze. Expects a `symbol`. Needs to
 #'   be part of the dataset.
 #' @param Weekend.type A (new) column in the dataframe that specifies the day of
@@ -233,7 +231,6 @@ mean_daily <- function(data,
 #' sample.data.irregular |> 
 #' aggregate_Datetime(unit = "1 min") |> 
 #' mean_daily_metric(
-#'   metric = "duration_above_100lux",
 #'   Variable = lux,
 #'   threshold = 100
 #' )
@@ -241,13 +238,11 @@ mean_daily <- function(data,
 #' # again with another dataset
 #' sample.data.environment |> 
 #'   mean_daily_metric(
-#'   metric = "duration_above_250lux",
 #'   Variable = MEDI,
 #'   threshold = 250)
 #'
 #' @export
 mean_daily_metric <- function(data,
-                              metric,
                               Variable,
                               Weekend.type = Day,
                               Datetime.colname = Datetime,
@@ -289,9 +284,9 @@ mean_daily_metric <- function(data,
                                       week_start = 1),
                     .add = TRUE) |>
     dplyr::summarize(
-      {{ metric }} := 
         (!!metric_type)({{ Variable }},
                         Time.vector = {{ Datetime.colname }},
+                        as.df = TRUE,
                         ...),
       .groups = "drop_last"
     )

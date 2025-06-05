@@ -51,13 +51,11 @@ values for a specific metric. Examples include \code{\link[=duration_above_thres
 (the default), or \code{\link[=durations]{durations()}}.
 }
 \examples{
-# Import sample data
-filepath <- system.file("extdata/sample_data_LYS.csv", package = "LightLogR")
-dataset <- import$LYS(filepath, silent = TRUE)
 
 # Calculate mean daily duration above threshold. As the data only contains
 # data for two days, Weekend and Mean daily will throw NA
-dataset |> 
+sample.data.irregular |> 
+aggregate_Datetime(unit = "1 min") |> 
 mean_daily_metric(
   metric = "duration_above_100lux",
   Variable = lux,

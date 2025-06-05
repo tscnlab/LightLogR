@@ -491,7 +491,9 @@ import <- purrr::imap(import_expr, \(x, idx) imports(idx,x))
 #' data
 #' })
 #' new_import <- import_adjustment(new_import_expr)
-#' filepath <- system.file("extdata/205_actlumus_Log_1020_20230904101707532.txt.zip", package = "LightLogR")
+#' filepath <- 
+#' system.file("extdata/205_actlumus_Log_1020_20230904101707532.txt.zip", 
+#'             package = "LightLogR")
 #' #Now, a message is printed when the import function is called
 #' data <- new_import$ActLumus(filepath, auto.plot = FALSE)
 

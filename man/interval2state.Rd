@@ -38,7 +38,7 @@ also set \code{overwrite = TRUE}.}
 \item{Id.colname.dataset, Id.colname.interval}{Column names of the
 participant's \code{Id} in both the \code{dataset} and the \code{State.interval.dataset}.
 On the off-chance that there are inconsistencies, the names can be
-different. If the datasets where imported and preprocessed with
+different. If the datasets were imported and preprocessed with
 \link{LightLogR}, this just works. Both datasets need an \code{Id}, because the
 states will be added based not only on the \code{Datetime}, but also depending
 on the dataset.}

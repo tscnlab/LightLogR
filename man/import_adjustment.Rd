@@ -26,22 +26,24 @@ as expected, it must lead to a data frame containing a \code{Datetime} column wi
 the correct time zone. It has access to all arguments defined in the
 description of \code{import_Dataset()}. The \code{...} argument should be passed to
 whatever csv reader function is used, so that it works as expected. Look at
-\code{ll_import_expr()$LYS} for a quite minimal example.
+\code{ll_import_expr()$ActLumus} for a quite minimal example.
 }
 \examples{
-#create a new import function for the LYS device, same as the old
+#create a new import function for the ActLumus device, same as the old
 new_import <- import_adjustment(ll_import_expr())
 #the new one is identical to the old one in terms of the function body
-identical(body(import$LYS), body(new_import$LYS))
+identical(body(import$ActLumus), body(new_import$ActLumus))
 
 #change the import expression for the LYS device to add a message at the top
 new_import_expr <- ll_import_expr()
-new_import_expr$LYS[[4]] <-
+new_import_expr$ActLumus[[4]] <-
 rlang::expr({ cat("**This is a new import function**\n")
 data
 })
 new_import <- import_adjustment(new_import_expr)
-filepath <- system.file("extdata/sample_data_LYS.csv", package = "LightLogR")
+filepath <- 
+system.file("extdata/205_actlumus_Log_1020_20230904101707532.txt.zip", 
+            package = "LightLogR")
 #Now, a message is printed when the import function is called
-new_import <- new_import$LYS(filepath)
+data <- new_import$ActLumus(filepath, auto.plot = FALSE)
 }
