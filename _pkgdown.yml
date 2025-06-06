@@ -11,10 +11,10 @@ reference:
       The family of import functions works on a variety of device-specific files 
       through `import_*()`.
     contents:
-    - import_Dataset
-    - import
-    - import_Statechanges
     - import_adjustment
+    - import
+    - import_Dataset
+    - import_Statechanges
   
   - title: Insight
     desc: >
@@ -24,16 +24,16 @@ reference:
     contents:
     - count_difftime
     - dominant_epoch
-    - durations
-    - gapless_Datetimes
-    - gap_finder
-    - gap_table
     - dst_change_summary
+    - durations
     - extract_photoperiod
     - extract_clusters
     - extract_states
     - extract_metric
     - extract_gaps
+    - gapless_Datetimes
+    - gap_finder
+    - gap_table
     - has_gaps
     - has_irregulars
 
@@ -43,36 +43,37 @@ reference:
       validate and clean data, to filter, cut or aggreagate data, or to join 
       datasets. All of these functions will return a version of the input dataset.
     contents:
-    - gap_handler
-    - remove_partial_data
-    - cut_Datetime
-    - aggregate_Datetime
-    - aggregate_Date
     - add_Time_col
+    - add_Date_col
+    - aggregate_Date
+    - aggregate_Datetime
+    - cut_Datetime
+    - dst_change_handler
     - filter_Datetime
     - filter_Datetime_multiple
     - filter_Date
     - filter_Time
+    - gap_handler
     - join_datasets
-    - dst_change_handler
+    - remove_partial_data
   
   - title: Expand
     desc: >
       Expanding light logger data through auxiliary data and/or reference data
       allows for a more comprehensive analysis.
     contents:
-    - data2reference
-    - sc2interval
-    - interval2state
     - add_photoperiod
     - add_clusters
     - add_states
-    - number_states
-    - sleep_int2Brown
-    - Brown_check
-    - Brown_rec
     - Brown2reference
+    - Brown_check
     - Brown_cut
+    - Brown_rec
+    - data2reference
+    - interval2state
+    - number_states
+    - sc2interval
+    - sleep_int2Brown
     - spectral_reconstruction
   
   - title: Visualize
@@ -80,14 +81,14 @@ reference:
       Functions to visualize light logger data, e.g., to
       plot light exposure or to plot sleep/wake data.
     contents:
-    - gg_overview
     - gg_day
     - gg_days
-    - gg_heatmap
     - gg_doubleplot
+    - gg_gaps
+    - gg_heatmap
+    - gg_overview
     - gg_photoperiod
     - gg_state
-    - gg_gaps
 
   - title: Metrics
     desc: >
@@ -97,6 +98,7 @@ reference:
     - bright_dark_period
     - centroidLE
     - disparity_index
+    - dose
     - duration_above_threshold
     - exponential_moving_average
     - frequency_crossing_threshold
@@ -111,48 +113,47 @@ reference:
     - nvRD_cumulative_response
     - period_above_threshold
     - pulses_above_threshold
+    - spectral_integration
     - threshold_for_duration
     - timing_above_threshold
-    - spectral_integration
     
   - title: Photoperiod
     desc: >
       Functions that deal with photoperiod aspects of a dataset
     contents:
-    - photoperiod
-    - extract_photoperiod
     - add_photoperiod
+    - extract_photoperiod
     - gg_photoperiod
+    - photoperiod
     - solar_noon
     
   - title: Helpers
     desc: >
       Helper functions that are used in the other sections.
     contents:
-    - mean_daily
-    - mean_daily_metric
-    - symlog_trans
-    - reverse2_trans
+    - Datetime2Time
     - Datetime_breaks
     - Datetime_limits
-    - photoperiod
-    - solar_noon
-    - spectral_reconstruction
-    - normalize_counts
+    - exp_zero_inflated
+    - log_zero_inflated
     - mean_daily
     - mean_daily_metric
+    - normalize_counts
+    - photoperiod
+    - reverse2_trans
+    - spectral_reconstruction
+    - solar_noon
     - summarize_numeric
     - summarise_numeric
-    - log_zero_inflated
-    - exp_zero_inflated
+    - symlog_trans
     
   - title: Datasets
     desc: >
       Datasets that are used in LightLogR and in examples.
     contents:
-    - sample.data.environment
-    - sample.data.irregular
     - alphaopic.action.spectra
     - gain.ratio.tables
-    - supported_devices
     - ll_import_expr
+    - sample.data.environment
+    - sample.data.irregular
+    - supported_devices
