@@ -510,6 +510,7 @@ There is also an overview article on how to use
 | Barroso | 7 |  | `barroso_lighting_metrics()` |
 | Bright-dark period | 4x2 | bright / dark | `bright_dark_period()` |
 | Centroid of light exposure | 1 |  | `centroidLE()` |
+| Dose | 1 |  | `dose()` |
 | Disparity index | 1 |  | `disparity_index()` |
 | Duration above threshold | 3 | above, below, within | `duration_above_threshold()` |
 | Exponential moving average (EMA) | 1 |  | `exponential_moving_average()` |

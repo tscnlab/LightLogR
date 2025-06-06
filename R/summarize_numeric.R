@@ -107,6 +107,8 @@ summarize_numeric <- function(
       .groups = "drop_last"
     )
   
+  if("episodes" %in% names(data)) data <-  data |> dplyr::select(-episodes)
+  
   data <- dplyr::left_join(data, data_total, by= groups)
   
   if(!is.null(complete_expr)) {

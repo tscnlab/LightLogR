@@ -1,5 +1,9 @@
 # LightLogR 0.9.1
 
+* `add_Date_col()` is a new convenience function to add a Date column to the dataset, optionally showing the weekday.
+
+* `Datetime2Time()` is a new convenience function that is used in other functions that average over datetimes, which is often more sensible over times.
+
 * reworked the README file to reflect some of the features `LightLogR` has gained over time
 
 * `summarize_numeric()` now calculates `total_duration` correctly, even when the prefix is removed.
@@ -14,7 +18,7 @@
 
 * `add_clusters()` now drops empty groups, which has led to warnings before
 
-* Added many more unit tests - **800** and counting!
+* Added many more unit tests - **888** and counting!
 
 * Removed a nasty bug in the internal functions that could lead to a shift in how dominant epochs are assigned to durations when groups are dropped due to singular observations
 
