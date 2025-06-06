@@ -52,8 +52,8 @@
 #'  aggregate_Datetime(unit = "1 day") %>%
 #'  dominant_epoch()
 aggregate_Datetime <- function(dataset,
-                               Datetime.colname = Datetime,
                                unit = "dominant.epoch",
+                               Datetime.colname = Datetime,
                                type = c("round", "floor", "ceiling"),
                                numeric.handler = 
                                  mean,
@@ -95,7 +95,9 @@ aggregate_Datetime <- function(dataset,
 
   # Function ----------------------------------------------------------
   
-  if(unit != "none") {
+  unit2 <- unit |> as.character()
+  
+  if(unit2 != "none") {
     dataset <- 
     dataset  %>% 
     cut_Datetime(

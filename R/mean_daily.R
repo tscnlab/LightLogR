@@ -17,7 +17,8 @@
 #' @param data A dataframe containing the metrics to summarize
 #' @param Weekend.type A column in the dataframe that specifies the day of the
 #'   week as a factor, where weekstart is Monday (so weekends are 6 and 7 in
-#'   numeric representation)
+#'   numeric representation). If it is a date, it will be converted to this
+#'   factor
 #' @param na.rm Logical, whether to remove NA values when calculating means.
 #'   Default is TRUE.
 #' @param calculate.from.Date Optional. A column in the dataframe containing
@@ -25,6 +26,13 @@
 #'   will be generated from this column.
 #' @param prefix String that is the prefix on summarized values
 #' @param filter.empty Filter out empty rows. Default is FALSE
+#' @param sub.zero Logical. Should missing values be replaced by zero? Defaults
+#'   to `FALSE`. Will throw an error, if it happens on a type other than
+#'   `double`.
+#' @param Datetime2Time Logical of whether POSIXct columns should be transformed
+#'   into hms(time) columns, which is usually sensible for averaging (default is
+#'   `TRUE`). Calls [Datetime2Time()] with default settings (all POSIXct are
+#'   affected).
 #'
 #' @return A dataframe with three rows representing average weekday, weekend,
 #'   and mean daily values of all numeric columns
@@ -32,7 +40,7 @@
 #' @examples
 #' # Create sample data
 #' sample_data <- data.frame(
-#'   Day = factor(c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"),
+#'   Date = factor(c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"),
 #'                levels = c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")),
 #'   lux = c(250, 300, 275, 280, 290, 350, 320),
 #'   duration = lubridate::as.duration(c(120, 130, 125, 135, 140, 180, 160))
@@ -48,15 +56,18 @@
 #'   duration = lubridate::as.duration(c(120, 130, 125, 135, 140, 180, 160))
 #' )
 #'
-#' mean_daily(sample_data_with_date, calculate.from.Date = Date)
+#' mean_daily(sample_data_with_date)
 #'
 #' @export
 mean_daily <- function(data,
-                       Weekend.type = Day,
+                       Weekend.type = Date,
                        na.rm = TRUE,
                        calculate.from.Date = NULL,
                        prefix = "average_",
-                       filter.empty = FALSE) {
+                       filter.empty = FALSE,
+                       sub.zero = FALSE,
+                       Datetime2Time = TRUE
+                       ) {
   
   # Input validation
   if (!is.data.frame(data)) {
@@ -67,14 +78,30 @@ mean_daily <- function(data,
     stop("'na.rm' must be a logical value (TRUE or FALSE)")
   }
   
+  if(Datetime2Time) {
+    data <-
+      data |>
+      Datetime2Time(silent = TRUE)
+  }
+  
   Date_quo <- rlang::enexpr(calculate.from.Date)
+  Weekend_str <- colname.defused({{ Weekend.type }})
   # Date_name <- rlang::as_name(Date_quo)
   
-  # Calculate Weekend.type from Date if provided
+  #Calculate Weekend.type from Date if provided
   if(!is.null(Date_quo)) {
     data <-
       data |>
-      dplyr::mutate({{ Weekend.type }} := lubridate::wday({{ calculate.from.Date }}, 
+      dplyr::mutate({{ Weekend.type }} := lubridate::wday({{ calculate.from.Date }},
+                                                          label = TRUE,
+                                                          week_start = 1))
+  }
+  
+  # Calculate Weekend.type from Date if is type date
+  if(lubridate::is.Date(data[[Weekend_str]])) {
+    data <-
+      data |>
+      dplyr::mutate({{ Weekend.type }} := lubridate::wday({{ Weekend.type }}, 
                                                           label = TRUE, 
                                                           week_start = 1))
   }
@@ -105,16 +132,6 @@ mean_daily <- function(data,
                                    },
                                    .names = "{prefix}{.col}"), 
                      .groups = "drop_last") 
-    # dplyr::filter(
-    #   all(
-    #     !is.na(
-    #       dplyr::pick(
-    #         !dplyr::matches(
-    #           c(dplyr::group_vars(data), colname.defused({{ Weekend.type }})))
-    #         )
-    #       )
-    #     )
-    #   )
   
   if(nrow(weekday_type) == 0) {
     stop(call. = FALSE, "No weekday or weekend information present")
@@ -126,6 +143,17 @@ mean_daily <- function(data,
   
   if (nrow(weekday_type) == 1) {
     return(weekday_type)
+  }
+  
+  #replace na with zeros
+  if(sub.zero){
+    weekday_type <- 
+    weekday_type |> 
+      dplyr::mutate(
+        dplyr::across(dplyr::where(\(x) is.double(x) | is.numeric(x)),
+                      \(x) ifelse(is.na(x), 0, x)
+        )
+      )
   }
   
   # Calculate mean daily values
@@ -153,9 +181,6 @@ mean_daily <- function(data,
     ) |>
     dplyr::select(-.weight) |>
     dplyr::mutate({{ Weekend.type }} := "Mean daily", .before = -1)
-    # dplyr::filter(
-    #   !dplyr::if_all(-{{ Weekend.type }}, is.na)
-    # )
   
   # Combine results
   weekday_type <- 
@@ -185,8 +210,6 @@ mean_daily <- function(data,
 #'
 #' @inheritParams mean_daily
 #' @param data A dataframe containing light logger data imported with LightLogR
-#' @param metric The name of the metric column to create in the output. Expects
-#'   a `character`
 #' @param Variable The variable column to analyze. Expects a `symbol`. Needs to
 #'   be part of the dataset.
 #' @param Weekend.type A (new) column in the dataframe that specifies the day of
@@ -201,15 +224,12 @@ mean_daily <- function(data,
 #'   and mean daily values for the specified metric
 #'
 #' @examples
-#' # Import sample data
-#' filepath <- system.file("extdata/sample_data_LYS.csv", package = "LightLogR")
-#' dataset <- import$LYS(filepath, silent = TRUE)
 #'
 #' # Calculate mean daily duration above threshold. As the data only contains
 #' # data for two days, Weekend and Mean daily will throw NA
-#' dataset |> 
+#' sample.data.irregular |> 
+#' aggregate_Datetime(unit = "1 min") |> 
 #' mean_daily_metric(
-#'   metric = "duration_above_100lux",
 #'   Variable = lux,
 #'   threshold = 100
 #' )
@@ -217,19 +237,25 @@ mean_daily <- function(data,
 #' # again with another dataset
 #' sample.data.environment |> 
 #'   mean_daily_metric(
-#'   metric = "duration_above_250lux",
 #'   Variable = MEDI,
+#'   threshold = 250)
+#'
+#' # by default, datetime columns are converted to time
+#' sample.data.environment |> 
+#'   mean_daily_metric(
+#'   Variable = MEDI,
+#'   metric_type = timing_above_threshold,
 #'   threshold = 250)
 #'
 #' @export
 mean_daily_metric <- function(data,
-                              metric,
                               Variable,
-                              Weekend.type = Day,
+                              Weekend.type = Date,
                               Datetime.colname = Datetime,
                               metric_type = duration_above_threshold,
                               prefix = "average_",
                               filter.empty = FALSE,
+                              Datetime2Time = TRUE,
                               ...) {
   
   # Input validation
@@ -265,9 +291,9 @@ mean_daily_metric <- function(data,
                                       week_start = 1),
                     .add = TRUE) |>
     dplyr::summarize(
-      {{ metric }} := 
         (!!metric_type)({{ Variable }},
                         Time.vector = {{ Datetime.colname }},
+                        as.df = TRUE,
                         ...),
       .groups = "drop_last"
     )
@@ -277,6 +303,7 @@ mean_daily_metric <- function(data,
     weekday,
     Weekend.type = {{ Weekend.type }},
     prefix = prefix,
-    filter.empty = filter.empty
+    filter.empty = filter.empty,
+    Datetime2Time = Datetime2Time
   )
 }

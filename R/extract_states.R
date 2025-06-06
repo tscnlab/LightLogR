@@ -2,7 +2,9 @@
 #'
 #' Extracts a state from a dataset and provides their start and end times, as
 #' well as duration and epoch. The state does not have to exist in the dataset,
-#' but can be dynamically created
+#' but can be dynamically created. Extracted states can have group-dropping
+#' disabled, meaning that summaries based on the extracted states show empty
+#' groups as well.
 #'
 #' @inheritParams extract_clusters
 #' @param State.colname The variable or condition to be evaluated for state
@@ -11,11 +13,13 @@
 #' @param State.expression If `State.colname` is not part of the `data`, this
 #'   expression will be evaluated to generate the state. The result of this
 #'   expression will be used for grouping, so it is recommended to be
-#'   factor-like.
+#'   factor-like. If `State.colname` **is** part of the `data`, this argument will be ignored
 #' @param epoch The epoch to use for the gapless sequence. Can be either a
 #'   `lubridate::duration()` or a string. If it is a string, it needs to be
 #'   either '"dominant.epoch"' (the default) for a guess based on the data or a
 #'   valid `lubridate::duration()` string, e.g., `"1 day"` or `"10 sec"`.
+#' @param group.by.state Logical. Should the output be automatically be grouped
+#'   by the new state?
 #'
 #' @returns a dataframe with one row per state instance. Each row will consist
 #'   of the original dataset grouping, the state column. A state.count column,
@@ -36,8 +40,9 @@ extract_states <- function(data,
                            State.expression = NULL,
                            Datetime.colname = Datetime,
                            handle.gaps = FALSE,
-                           epoch = "dominant.epoch"
-                           # ignore.FALSE = TRUE
+                           epoch = "dominant.epoch",
+                           drop.empty.groups = TRUE,
+                           group.by.state = TRUE
                            ) {
   # Convert variable expression to quosure
   
@@ -52,9 +57,16 @@ extract_states <- function(data,
   }
   
   #get the epochs based on the data
-  epochs <- epoch_list(data, Datetime.colname = {{ Datetime.colname }},
-                       epoch = epoch) |> dplyr::pull(dominant.epoch)
+  groups <- dplyr::groups(data)
   
+  #keep empty groups
+  if(!drop.empty.groups) {
+    data <-
+      data |> dplyr::group_by(!!!groups, .drop = FALSE)
+  }
+  
+  epochs <- epoch_list(data, Datetime.colname = {{ Datetime.colname }},
+                       epoch = epoch)
 
   # Calculate lengths of times
   data <-
@@ -62,21 +74,15 @@ extract_states <- function(data,
     dplyr::mutate(
       {{ State.colname }} := !!State.expression,
       state.count := dplyr::consecutive_id({{ State.colname }}),
-      epoch =  epochs[dplyr::cur_group_id()],
-    ) |>
+      epoch =  ifelse(
+        epochs$dominant.epoch[epochs$group.indices == dplyr::cur_group_id()] |> length() == 0,
+        NA,
+        epochs$dominant.epoch[epochs$group.indices == dplyr::cur_group_id()]
+    )) |> 
     dplyr::group_by({{ State.colname }}, state.count, .add = TRUE)
   
-  #remove FALSE
-  # state_logical <-
-  #   data |> dplyr::pull({{ State.colname }}) |> is.logical()
-  # 
-  # if(ignore.FALSE & state_logical) {
-  #   data <-
-  #     data |>
-  #     dplyr::mutate({{ State.colname }} := dplyr::na_if({{ State.colname }},0))
-  # }
-  
   #summarize the instances
+  data <- 
   data |> 
     dplyr::summarize(
       epoch = dplyr::first(epoch),
@@ -89,6 +95,12 @@ extract_states <- function(data,
                                       dplyr::consecutive_id(state.count)
                                       )
                   )
+  
+  if(!group.by.state) {
+    data |> 
+    dplyr::group_by(!!!groups) |> 
+      dplyr::arrange(start, .by_group = TRUE)
+  } else data
   
 }
 
@@ -132,12 +144,15 @@ extract_states <- function(data,
 #' @examples
 #' states <-
 #' sample.data.environment |>
+#'   filter_Date(length = "1 day") |> 
 #'   extract_states(Daylight, MEDI > 1000)
 #'
 #' states |> head(2)
 #' 
-#' #add states to a dataset and plot them
+#' #add states to a dataset and plot them - as we only looked for states on the
+#' # first day (see above), only the first day will show up in the plot
 #' sample.data.environment |> 
+#'  filter_Date(length = "2 day") |> 
 #'  add_states(states) |> 
 #'  gg_days() |> 
 #'  gg_state(Daylight)

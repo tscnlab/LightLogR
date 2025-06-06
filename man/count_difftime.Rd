@@ -24,17 +24,15 @@ group
 Counts the Time differences (epochs) per group (in a grouped dataset)
 }
 \examples{
-#get a dataset with irregular intervals
-filepath <- system.file("extdata/sample_data_LYS.csv", package = "LightLogR")
-dataset <- import$LYS(filepath)
-
 #count_difftime returns the number of occurences of each time difference
 #and is more comprehensive in terms of a summary than `gap_finder` or 
 #`dominant_epoch`
-count_difftime(dataset)
-dominant_epoch(dataset)
-gap_finder(dataset)
+count_difftime(sample.data.irregular)
+dominant_epoch(sample.data.irregular)
+gap_finder(sample.data.irregular)
 
 #irregular data can be regularized with `aggregate_Datetime`
-dataset \%>\% aggregate_Datetime(unit = "15 secs") \%>\% count_difftime()
+sample.data.irregular |> 
+ aggregate_Datetime(unit = "15 secs") |> 
+ count_difftime()
 }

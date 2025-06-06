@@ -535,8 +535,8 @@ import_expr <- list(
         Datetime = lubridate::force_tz(Datetime, tz = tz)
       )
   }),
-  #ClouClip
-  ClouClip = rlang::expr({
+  #Clouclip
+  Clouclip = rlang::expr({
     data <- 
       readr::read_tsv(filename, 
                       show_col_types = FALSE,

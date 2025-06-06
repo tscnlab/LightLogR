@@ -1,9 +1,9 @@
 #' Tabular summary of data and gaps in all groups
 #'
-#' [gap_table()] creates a [gt::gt()] with one row per group, summarizing key gap
-#' and gap-related information about the dataset. These include the available
-#' data, total duration, number of gaps, missing implicit and explicit data,
-#' and, optionally, irregular data.
+#' [gap_table()] creates a [gt::gt()] with one row per group, summarizing key
+#' gap and gap-related information about the dataset. These include the
+#' available data, total duration, number of gaps, missing implicit and explicit
+#' data, and, optionally, irregular data.
 #'
 #' @inheritParams extract_gaps
 #' @param Variable.colname Column name of the variable to check for NA values.
@@ -12,6 +12,8 @@
 #'   summary, i.e. data points that do not fall on the regular sequence.
 #' @param Variable.label Clear name of the variable. Expects a string
 #' @param title Title string for the table
+#' @param get.df Logical whether the dataframe should be returned instead of a
+#'   [gt::gt()] table
 #'
 #' @returns A gt table about data and gaps in the dataset
 #' @export
@@ -26,7 +28,8 @@ gap_table <- function(dataset,
                       epoch = "dominant.epoch",
                       full.days = TRUE,
                       include.implicit.gaps = TRUE,
-                      check.irregular = TRUE) {
+                      check.irregular = TRUE,
+                      get.df = FALSE) {
   dat1 <- 
     dataset |>
     extract_gaps({{ Variable.colname }},
@@ -59,6 +62,7 @@ gap_table <- function(dataset,
     )
   
   dat3 <- 
+    if(nrow(dat1) != 0) {
     dat2 |> 
     dplyr::left_join(dat1, by = dplyr::group_vars(dat2)) |> 
     dplyr::select(!!!dplyr::groups(dat2), 
@@ -68,6 +72,18 @@ gap_table <- function(dataset,
                   interval,
                   number_gaps = gaps,
                   mean_gap_duration)
+    } else {
+      dat2 |> 
+        dplyr::select(!!!dplyr::groups(dat2), 
+                  available_data = duration,
+                  missing_data = missing,
+                  total_duration = total,
+                  interval) |> 
+        dplyr::mutate(
+                  number_gaps = 0,
+                  mean_gap_duration = lubridate::duration(0)
+                  )
+    }
   
   dat4 <- 
     if(include.implicit.gaps) {
@@ -96,6 +112,7 @@ gap_table <- function(dataset,
         dplyr::mutate(number_irregulars = ifelse(is.na(number_irregulars), 0, number_irregulars))
     } else dat4
   
+  dat6 <- 
   dat5 |> dplyr::mutate(
     dplyr::across(
       dplyr::any_of(c("available_data", "missing_data", 
@@ -110,10 +127,9 @@ gap_table <- function(dataset,
       dplyr::any_of(c("available_data", "total_duration", "missing_data", "mean_gap_duration", "missing_implicit", "missing_explicit")),
       \(x) x/interval, .names = "{.col}_n"
     )) |> 
-    dplyr::mutate(dplyr::across(dplyr::contains("gap"), \(x) ifelse(is.na(x), 0, x))) |> 
+    dplyr::mutate(dplyr::across(dplyr::contains("gap"), \(x) ifelse(is.na(x), 0, x)))
     
-    gt_gaps(Variable = Variable.label,
-            title = title)
+    if(get.df) return(dat6) else gt_gaps(dat6, Variable = Variable.label, title = title)
 }
 
 

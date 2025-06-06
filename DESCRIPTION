@@ -1,6 +1,6 @@
 Package: LightLogR
 Title: Process Data from Wearable Light Loggers and Optical Radiation Dosimeters
-Version: 0.9.0
+Version: 0.9.1
 Authors@R: c(
     person("Johannes", "Zauner", 
       email = "johannes.zauner@tum.de", role = c("aut", "cre"),
@@ -27,7 +27,6 @@ BugReports: https://github.com/tscnlab/LightLogR/issues
 Imports: 
     cowplot,
     dplyr,
-    flextable,
     ggplot2,
     ggsci,
     ggtext,
@@ -35,12 +34,10 @@ Imports:
     janitor,
     lubridate,
     magrittr,
-    pkgload,
     plotly,
     purrr,
     readr,
     rlang,
-    rsconnect,
     scales,
     slider,
     stats,
@@ -54,12 +51,15 @@ Depends:
 LazyData: true
 Suggests: 
     covr,
+    flextable,
     gghighlight,
     gt,
     gtsummary,
     knitr,
     patchwork,
+    pkgload,
     rmarkdown,
+    rsconnect,
     testthat (>= 3.0.0),
     tidyverse
 Config/testthat/edition: 3

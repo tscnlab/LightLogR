@@ -10,7 +10,9 @@ extract_states(
   State.expression = NULL,
   Datetime.colname = Datetime,
   handle.gaps = FALSE,
-  epoch = "dominant.epoch"
+  epoch = "dominant.epoch",
+  drop.empty.groups = TRUE,
+  group.by.state = TRUE
 )
 }
 \arguments{
@@ -23,7 +25,7 @@ exctration. Expects a symbol. If it is not part of the data, a
 \item{State.expression}{If \code{State.colname} is not part of the \code{data}, this
 expression will be evaluated to generate the state. The result of this
 expression will be used for grouping, so it is recommended to be
-factor-like.}
+factor-like. If \code{State.colname} \strong{is} part of the \code{data}, this argument will be ignored}
 
 \item{Datetime.colname}{Column name that contains the datetime. Defaults to
 "Datetime" which is automatically correct for data imported with LightLogR.
@@ -36,6 +38,17 @@ Expects a symbol.}
 \code{lubridate::duration()} or a string. If it is a string, it needs to be
 either '"dominant.epoch"' (the default) for a guess based on the data or a
 valid \code{lubridate::duration()} string, e.g., \code{"1 day"} or \code{"10 sec"}.}
+
+\item{drop.empty.groups}{Logical. Should empty groups be dropped? Only works
+if \code{.drop = FALSE} has not been used with the current grouping prior to
+calling the function. Default to \code{TRUE}. If set to \code{FALSE} can lead to an
+error if factors are present in the grouping that have more levels than
+actual data. Can, however, be useful and necessary when summarizing the
+groups further, e.g. through \code{\link[=summarize_numeric]{summarize_numeric()}} - having an empty group
+present is important when averaging numbers.}
+
+\item{group.by.state}{Logical. Should the output be automatically be grouped
+by the new state?}
 }
 \value{
 a dataframe with one row per state instance. Each row will consist
@@ -45,7 +58,9 @@ start and end Datetimes, as well as a duration of the state
 \description{
 Extracts a state from a dataset and provides their start and end times, as
 well as duration and epoch. The state does not have to exist in the dataset,
-but can be dynamically created
+but can be dynamically created. Extracted states can have group-dropping
+disabled, meaning that summaries based on the extracted states show empty
+groups as well.
 }
 \examples{
 #summarizing states "photoperiod"

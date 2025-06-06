@@ -121,7 +121,7 @@ Besides plotting, the function creates two new variables from the given
 \code{Datetime}:
 \itemize{
 \item \code{Day.data} is a factor that is used for facetting with \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}}. Make sure to use this variable, if you change the faceting manually. Also, the function checks, whether this variable already exists. If it does, it will only convert it to a factor and do the faceting on that variable.
-\item \code{Time.data} is an \code{hms} created with \code{\link[hms:hms]{hms::as_hms()}} that is used for the x.axis
+\item \code{Time} is an \code{hms} created with \code{\link[hms:hms]{hms::as_hms()}} that is used for the x.axis
 }
 
 The default scaling of the y-axis is a \code{symlog} scale, which is a logarithmic

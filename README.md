@@ -39,16 +39,16 @@ insights into personal light exposure</figcaption>
 [*MeLiDos*](https://www.melidos.eu) project to address these issues. The
 package aims to provide tools for:
 
-- import from common measurement devices (see below for a list of
-  supported devices)
+- Import from common measurement devices (see below for a list of
+  [Supported devices](#supported-devices))
 
-- Validation and processing of light logging data
+- Cleaning and processing of light logging data
 
 - Visualization of light exposure data, both exploratory and publication
   ready
 
 - Calculation of common analysis parameters (see below for a list of
-  metrics)
+  [Metrics](#metrics))
 
 To come:
 
@@ -61,12 +61,386 @@ To come:
 
 ##### Please note that LightLogR is work in progress! If you are interested in the project and want to know more, you can subscribe to the [LightLogR mailing list](https://www.tscnlab.org/software). If you find a bug or would like to see new or improved features, please open an issue on the [GitHub repository](https://github.com/tscnlab/LightLogR/issues).
 
-Have a look at the **Example** section down below to get started, or
-dive into the
+Have a look at the [Example](#example) section down below to get
+started, or dive into the
 [Articles](https://tscnlab.github.io/LightLogR/articles/index.html) to
 get more in depth information about how to work with the package and
 generate images such as the one above, import data, visualization, and
 metric calculation.
+
+## Installation
+
+You can install LightLogR from
+[CRAN](https://cran.r-project.org/package=LightLogR) with:
+
+``` r
+install.packages("LightLogR")
+```
+
+You can install the latest development version of LightLogR from
+[GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("tscnlab/LightLogR")
+```
+
+## Example
+
+Here is a quick starter on how to use **LightLogR**.
+
+``` r
+library(LightLogR)
+#the following packages are needed for the examples as shown below.
+library(flextable)
+library(dplyr)
+library(ggplot2)
+```
+
+### Import
+
+You can import a light logger dataset with ease. The import functions
+give quick, helpful feedback about the dataset.
+
+``` r
+filename <- 
+  system.file("extdata/205_actlumus_Log_1020_20230904101707532.txt.zip", 
+              package = "LightLogR")
+dataset <- import$ActLumus(filename, "Europe/Berlin", manual.id = "P1")
+#> 
+#> Successfully read in 61'016 observations across 1 Ids from 1 ActLumus-file(s).
+#> Timezone set is Europe/Berlin.
+#> 
+#> First Observation: 2023-08-28 08:47:54
+#> Last Observation: 2023-09-04 10:17:04
+#> Timespan: 7.1 days
+#> 
+#> Observation intervals: 
+#>   Id    interval.time     n pct  
+#> 1 P1    10s           61015 100%
+```
+
+<img src="man/figures/README-unnamed-chunk-3-1.png" width="60%" style="display: block; margin: auto;" />
+
+For more complex data, there is the useful `gg_overview()` function to
+get an immediate grasp of your data. It was automatically called during
+import (set `auto.plot = FALSE` to suppress this), but really shines for
+datasets with multiple participants. It also indicates where data is
+missing, based on the measurement epochs found in the data.
+
+<div style="text-align:center">
+
+<figure>
+<img src="man/figures/gg_overview2.png" style="width:60.0%"
+alt="Example for gg_overview() from a large data collection effort over many months" />
+<figcaption aria-hidden="true">Example for <code>gg_overview()</code>
+from a large data collection effort over many months</figcaption>
+</figure>
+
+</div>
+
+*note:* the above example image requires a large dataset, not included
+in the package. It is available, however, in the article on [Import &
+cleaning](https://tscnlab.github.io/LightLogR/articles/Import.html).
+
+    #example code, on how to use gg_overview():
+    dataset %>% gg_overview()
+
+### Visualize
+
+Once imported, **LightLogR** has many convenient visualization options.
+
+``` r
+dataset %>% gg_days()
+```
+
+<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
+
+There is a wide range of options to the `gg_days()` function to
+customize the output. Have a look at the reference page (`?gg_days`) to
+see all options. You can also override most of the defaults, e.g., for
+different `color`, `facetting`, `theme` options. Helper functions can
+prepare the data (e.g. to aggregate it to coarser intervals), or to add
+to the plot (e.g., to add conditions, such as nighttime)
+
+``` r
+dataset |> 
+  #change the interval from 10 seconds to 15 minutes:
+  aggregate_Datetime("15 min") |> 
+  #create groups of 3-hour intervals:
+  cut_Datetime("3 hours") |> 
+  #plot creation, with a boxplot:
+  gg_days(geom = "boxplot", group = Datetime.rounded) |> 
+  #adding nighttime indicators:
+  gg_photoperiod(c(47.9,9)) + 
+  # the output is a standard ggplot, and can be manipulated that way
+  geom_line(col = "red", linewidth = 0.25) + 
+  labs(title = "Personal light exposure across a week", 
+       subtitle = "Boxplot in 3-hour bins")
+```
+
+<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
+
+### More than one dataset
+
+The built-in dataset `sample.data.environment` shows a combined dataset
+of light logger data and a second set of data - in this case
+unobstructed outdoor light measurements. Combined datasets can be easily
+visualized with `gg_day()`. The `col` parameter used on the `Id` column
+of the dataset allows for a color separation.
+
+``` r
+sample.data.environment %>% 
+  gg_day(
+    start.date = "2023-09-01",
+    aes_col = Id,
+    geom = "line") + 
+  theme(legend.position = "bottom")
+#> Only Dates will be used from start.date and end.date input. If you also want to set Datetimes or Times, consider using the `filter_Datetime()` function instead.
+```
+
+<img src="man/figures/README-unnamed-chunk-6-1.png" width="70%" style="display: block; margin: auto;" />
+`gg_day()` will show plots always facetted by day, whereas `gg_days()`
+shows a timeline of days for each group. Both functions are opinionated
+in terms of the scaling and linebreaks to only show whole days, all of
+which can be adjusted.
+
+There are many ways to enhance the plots - if, e.g., we look for periods
+of at least 1 hour above 250 lx, we can add and then visualize these
+periods easily
+
+``` r
+sample.data.environment %>% 
+  #search for these conditions:
+  add_clusters(MEDI > 250, cluster.duration = "30 min") |> 
+  #base plot + add the condition
+  gg_days() |> 
+  gg_state(state, fill = "red") + 
+  #standard ggplot:
+  geom_hline(yintercept = 250, col = "red", linetype = "dashed") + 
+  labs(title = "Periods > 250 lx mel EDI for more than 30 minutes")
+```
+
+<img src="man/figures/README-unnamed-chunk-7-1.png" width="100%" />
+
+There are more visualizations to try - the article on
+[Visualizations](https://tscnlab.github.io/LightLogR/articles/Visualizations.html)
+dives into them in-depths.
+
+``` r
+sample.data.environment |> gg_heatmap(doubleplot = "next")
+```
+
+<img src="man/figures/README-unnamed-chunk-8-1.png" width="100%" />
+
+### Metrics
+
+There are many [Metrics](#metrics) used in literature for condensing
+personalized light exposure time series to singular values. `LightLogR`
+has a rather comprehensive number of these metrics with a consistent,
+easy-to-use interface.
+
+``` r
+sample.data.environment |> # two groups: participant and environment
+  filter_Date(length = "2 days") |> #filter to three days each for better overview
+  group_by(Day = lubridate::date(Datetime), .add = TRUE) |>  #add grouping per day
+  summarize(
+    #time above 250 lx mel EDI:
+    duration_above_threshold(MEDI, Datetime, threshold = 250, as.df = TRUE),
+    #intradaily variability (IV):
+    intradaily_variability(MEDI, Datetime, as.df = TRUE),
+    #... as many more metrics as are desired
+    .groups = "drop"
+  )
+#> # A tibble: 4 × 4
+#>   Id          Day        duration_above_250    intradaily_variability
+#>   <fct>       <date>     <Duration>                             <dbl>
+#> 1 Environment 2023-08-29 48240s (~13.4 hours)                   0.248
+#> 2 Environment 2023-08-30 49350s (~13.71 hours)                  0.168
+#> 3 Participant 2023-08-29 5810s (~1.61 hours)                    1.23 
+#> 4 Participant 2023-08-30 9960s (~2.77 hours)                    0.821
+```
+
+Other types of metrics can be derived less formally by the
+`durations()`, `extract_state()` or `extract_cluster()` function.
+
+``` r
+dataset |> 
+  gap_handler(full.days = TRUE) |> #extend the viewed time until midnight of the first and last day
+  durations(MEDI, show.missing = TRUE)
+#> # A tibble: 1 × 4
+#> # Groups:   Id [1]
+#>   Id    duration              missing               total                
+#>   <fct> <Duration>            <Duration>            <Duration>           
+#> 1 P1    610160s (~1.01 weeks) 81040s (~22.51 hours) 691200s (~1.14 weeks)
+
+dataset |> 
+  group_by(TAT250 = MEDI >= 250, .add = TRUE) |> #creating a grouping column that checks for values above 250lx
+  durations(MEDI)
+#> # A tibble: 2 × 3
+#> # Groups:   Id, TAT250 [2]
+#>   Id    TAT250 duration            
+#>   <fct> <lgl>  <Duration>          
+#> 1 P1    FALSE  498530s (~5.77 days)
+#> 2 P1    TRUE   111630s (~1.29 days)
+```
+
+The second row indicates where this status is true. This will be
+identical to:
+
+``` r
+dataset |> 
+  summarize(
+    duration_above_threshold(MEDI, Datetime, threshold = 250, as.df = TRUE),
+    .groups = "drop"
+  )
+#> # A tibble: 1 × 2
+#>   Id    duration_above_250  
+#>   <fct> <Duration>          
+#> 1 P1    111630s (~1.29 days)
+```
+
+What if we are interested in how often this threshold is crossed, and
+for how long?
+
+``` r
+dataset |> 
+  extract_states(TAT250, MEDI >= 250) |> #extract a list of states
+  summarize_numeric() |> #summarize the numeric values
+  select(Id, TAT250, mean_duration, episodes, total_duration) #collect a subset
+#> # A tibble: 2 × 5
+#> # Groups:   Id [1]
+#>   Id    TAT250 mean_duration        episodes total_duration      
+#>   <fct> <lgl>  <Duration>              <int> <Duration>          
+#> 1 P1    FALSE  482s (~8.03 minutes)     1034 498530s (~5.77 days)
+#> 2 P1    TRUE   108s (~1.8 minutes)      1034 111630s (~1.29 days)
+```
+
+We see that there are roughly one thousand instances across the week
+where 250 lx was reached, but it only lasted under two minutes on
+average. How many long periods are there, say above 30 minutes? As there
+might be short interruption, that we consider irrelevant, we are
+ignoring interruptions of 1 minute. This is the area of clusters.
+
+``` r
+dataset |> 
+  extract_clusters(MEDI >= 250, #base condition
+                   cluster.duration = "30 mins", #search for at least 30 minute instances
+                   interruption.duration = "1 min", #allow 1 minute interrupts
+                   add.label = TRUE) |> #add a description of the conditions
+  group_by(label) |> #group by the label so it does not get removed next
+  summarize_numeric() |> #summarize the output
+  select(-mean_epoch) #collect a subset
+#> # A tibble: 1 × 6
+#>   label   mean_start mean_end mean_duration       total_duration        episodes
+#>   <chr>   <time>     <time>   <Duration>          <Duration>               <int>
+#> 1 MEDI>=… 13:50:47   15:02:14 4288s (~1.19 hours) 72890s (~20.25 hours)       17
+```
+
+We see there are only 17 instances across the week, lasting, on average,
+a bit above an hour (and sitting aroung 14:00 - 15:00). Directly
+relating the total duration to the 1.29 days time above 250 lx from
+above would be misleading, however. This is because here, there are
+interruptions present. How prominent are these interruptions?
+
+``` r
+dataset |> 
+  extract_clusters(MEDI >= 250, #base condition
+                   cluster.duration = "30 mins", #search for at least 30 minute instances
+                   interruption.duration = "1 min", #allow 1 minute interrupts
+                   add.label = TRUE) |>
+  #extract the metric:
+  extract_metric(dataset, rel_interrupt = sum(MEDI < 250)/n()) |> 
+  summarize_numeric(prefix = "") |> #summarize the output
+  select(episodes, total_duration, rel_interrupt) |>   #collect a subset
+  mutate(interrupt_duration = (total_duration*rel_interrupt) |> round(), #calculate interrupt
+         rel_interrupt = rel_interrupt |> scales::percent_format(1)())
+#> # A tibble: 1 × 4
+#>   episodes total_duration        rel_interrupt interrupt_duration    
+#>      <int> <Duration>            <chr>         <Duration>            
+#> 1       17 72890s (~20.25 hours) 4%            2918s (~48.63 minutes)
+```
+
+Thus we find that only about 4% of the long exposure periods are made up
+of interruptions, or just shy of 50 minutes out of over 20 hours.
+
+### Gaps and cleaning
+
+**LightLogR** provides a range of functions to get insight into your
+light logger data. Most importantly, you can search for and eliminate
+implicit gaps.
+
+``` r
+sample.data.irregular |> has_irregulars()
+#> [1] TRUE
+sample.data.irregular |> has_gaps()
+#> [1] TRUE
+```
+
+At import, we already get a sense for intervals, but can always show
+them with `count_difftime()`.
+
+``` r
+sample.data.irregular %>% count_difftime()
+#> # A tibble: 4 × 4
+#> # Groups:   Id [1]
+#>   Id    difftime       n group.indices
+#>   <chr> <Duration> <int>         <int>
+#> 1 P1    15s        10015             1
+#> 2 P1    16s         1367             1
+#> 3 P1    17s           23             1
+#> 4 P1    18s           16             1
+```
+
+We can eliminate this through the `gap_handler()` function. This
+function will automatically fill in the gaps with NA values. **The
+function will not impute or interpolate data**. As the most dominant
+interval in the dataset is now not 15 seconds anymore (because
+intermediate datapoints have been added), we need to specify the epoch
+for `gap_finder()`.
+
+``` r
+sample.data.irregular |> gap_handler() |> has_gaps(epoch = "15 secs")
+#> [1] FALSE
+```
+
+If we want to force the data to be regular, we can use the
+`aggregate_Datetime()` function. This will aggregate the data to the
+specified epoch. There are sensible defaults on how to aggregate
+numeric, categorical, and logical data. You can also specify your own
+aggregation functions.
+
+``` r
+sample.data.irregular |>  
+  aggregate_Datetime(unit = "20 sec") |> 
+  has_gaps()
+#> [1] FALSE
+```
+
+There are also convenient functions to extract (`extract_gaps()`),
+summarize (`gap_table()`) or visualize (`gg_gaps()`) gaps.
+
+``` r
+dataset |> gg_gaps()
+#> Warning: Removed 8104 rows containing missing values or values outside the scale range
+#> (`geom_line()`).
+```
+
+<img src="man/figures/README-unnamed-chunk-19-1.png" width="100%" />
+
+Finally, the `remove_partial_data()` easily gets rid of groups or days
+that do not provide enough data.
+
+``` r
+dataset |> 
+  remove_partial_data(MEDI, #variable for which to check missingness
+                      threshold.missing = "2 hours", #remove when more than 2 hours are missing
+                      by.date = TRUE, #check the condition per day, not the whole participant
+                      handle.gaps = TRUE) |>  #go beyond the available data to midnight of the first and last day
+  gg_days()
+```
+
+<img src="man/figures/README-unnamed-chunk-20-1.png" width="100%" />
 
 ## Supported devices
 
@@ -81,6 +455,8 @@ At present, these are the devices we support in LightLogR:
 - ActTrust
 
 - Circadian_Eye
+
+- Clouclip
 
 - DeLux
 
@@ -134,6 +510,7 @@ There is also an overview article on how to use
 | Barroso | 7 |  | `barroso_lighting_metrics()` |
 | Bright-dark period | 4x2 | bright / dark | `bright_dark_period()` |
 | Centroid of light exposure | 1 |  | `centroidLE()` |
+| Dose | 1 |  | `dose()` |
 | Disparity index | 1 |  | `disparity_index()` |
 | Duration above threshold | 3 | above, below, within | `duration_above_threshold()` |
 | Exponential moving average (EMA) | 1 |  | `exponential_moving_average()` |
@@ -185,233 +562,6 @@ States. Views and opinions expressed are however those of the author(s)
 only and do not necessarily reflect those of the European Union or
 EURAMET. Neither the European Union nor the granting authority can be
 held responsible for them.
-
-## Installation
-
-You can install LightLogR from [CRAN](https://CRAN.R-project.org) with:
-
-``` r
-install.packages("LightLogR")
-```
-
-You can install the latest development version of LightLogR from
-[GitHub](https://github.com/) with:
-
-``` r
-# install.packages("devtools")
-devtools::install_github("tscnlab/LightLogR")
-```
-
-## Example
-
-Here is a quick starter on how do use **LightLogR**.
-
-``` r
-library(LightLogR)
-#these packages are needed for the examples as shown below.
-library(flextable)
-library(dplyr)
-library(ggplot2)
-```
-
-### Import
-
-You can import a light logger dataset with ease. The import functions
-give quick, helpful feedback about the dataset.
-
-``` r
-filename <- system.file("extdata/sample_data_LYS.csv", package = "LightLogR")
-dataset <- import$LYS(filename, tz = "Europe/Berlin")
-#> 
-#> Successfully read in 11'422 observations across 1 Ids from 1 LYS-file(s).
-#> Timezone set is Europe/Berlin.
-#> 
-#> First Observation: 2023-06-21 02:00:12
-#> Last Observation: 2023-06-23 01:59:48
-#> Timespan: 2 days
-#> 
-#> Observation intervals: 
-#>   Id              interval.time     n pct    
-#> 1 sample_data_LYS 15s           10015 87.689%
-#> 2 sample_data_LYS 16s            1367 11.969%
-#> 3 sample_data_LYS 17s              23 0.201% 
-#> 4 sample_data_LYS 18s              16 0.140%
-```
-
-<img src="man/figures/README-unnamed-chunk-3-2.png" width="60%" style="display: block; margin: auto;" />
-
-``` r
-
-dataset %>% ungroup() %>% select(Datetime, lux, kelvin, MEDI) %>%  
-  slice(8000:8005) %>% flextable() %>% autofit()
-```
-
-<img src="man/figures/README-unnamed-chunk-3-1.png" width="60%" style="display: block; margin: auto;" />
-
-<div style="color: white">
-
-.
-
-</div>
-
-For more complex data, there is the useful `gg_overview()` function to
-get an immediate grasp of your data. It was automatically called during
-import (set `auto.plot = FALSE` to suppress this), but really shines for
-datasets with multiple participants. It also indicates where data is
-missing, based on the measurement epochs found in the data.
-
-<div style="text-align:center">
-
-<figure>
-<img src="man/figures/gg_overview2.png" style="width:60.0%"
-alt="Example for gg_overview() from a large data collection effort over many months" />
-<figcaption aria-hidden="true">Example for <code>gg_overview()</code>
-from a large data collection effort over many months</figcaption>
-</figure>
-
-</div>
-
-*note:* the above example image requires a large dataset not included in
-the package. It is available, however, in the article on [Import &
-cleaning](https://tscnlab.github.io/LightLogR/articles/Import.html).
-
-    #example code, on how to use gg_overview():
-    dataset %>% gg_overview()
-
-### Visualize
-
-Once imported, **LightLogR** allows you conveniently visualize the data.
-
-``` r
-dataset %>% gg_day()
-```
-
-<img src="man/figures/README-unnamed-chunk-4-1.png" width="60%" style="display: block; margin: auto;" />
-
-There is a wide range of options to the `gg_day()` function to customize
-the output. Have a look at the reference page (`?gg_day`) to see all
-options. You can also override most of the defaults, e.g., for different
-`color`, `facetting`, `theme` options.
-
-``` r
-dataset %>% 
-  gg_day(aes_col = MEDI < 250, size = 0.75) + 
-  theme(legend.position = "bottom")
-```
-
-<img src="man/figures/README-unnamed-chunk-5-1.png" width="70%" style="display: block; margin: auto;" />
-
-### More than one dataset
-
-The built-in dataset `sample.data.environment` shows a combined dataset
-of light logger data and a second set of data - in this case
-unobstructed outdoor light measurements. Combined datasets can be easily
-visualized with `gg_day()`. The `col` parameter used on the `Id` column
-of the dataset allows for a color separation.
-
-``` r
-sample.data.environment %>% 
-  gg_day(
-    start.date = "2023-09-01",
-    aes_col = Id,
-    scales = "fixed",
-    geom = "line") + theme(legend.position = "bottom")
-#> Only Dates will be used from start.date and end.date input. If you also want to set Datetimes or Times, consider using the `filter_Datetime()` function instead.
-```
-
-<img src="man/figures/README-unnamed-chunk-6-1.png" width="70%" style="display: block; margin: auto;" />
-
-If you want to get a feeling for the data over the course of multiple
-days, the `gg_days()` function comes in handy. It works similar to
-`gg_day()`. It is also opinionated in terms of the scaling and
-linebreaks to only show whole days, all of which can be adjusted.
-
-``` r
-sample.data.environment %>% 
-  gg_days(geom = "ribbon", alpha = 0.25, col = "black")
-```
-
-<img src="man/figures/README-unnamed-chunk-7-1.png" width="100%" />
-
-With the `cut_Datetime()` function, the data can further be broken up
-into arbitrary time intervals. This can be used to easily compare
-different datasets. Just put the function in between the dataset and
-`gg_day()`. This makes a new variable available for plotting:
-`Datetime.rounded`. Just make sure, that the `geom` parameter is set to
-*boxplot* and the `group` parameter uses both the info from the rounded
-time interval (`Datetime.rounded`) and the different datasets
-(`Source`). The `base::interaction()` function can easily combine them.
-The default interval for `cut_Datetime()` is 3 hours.
-
-``` r
-sample.data.environment %>% 
-  cut_Datetime() %>% 
-  gg_day(
-    end.date = "2023-08-29",
-    aes_col = Id,
-    scales = "fixed",
-    geom = "boxplot",
-    group = interaction(Id, Datetime.rounded)) + 
-  theme(legend.position = "bottom")
-#> Only Dates will be used from start.date and end.date input. If you also want to set Datetimes or Times, consider using the `filter_Datetime()` function instead.
-```
-
-<img src="man/figures/README-unnamed-chunk-8-1.png" width="60%" style="display: block; margin: auto;" />
-
-### Insights, Validation, and Processing
-
-**LightLogR** provides a range of functions to get insight into your
-light logger data. Most importantly, you can search for and eliminate
-implicit gaps.
-
-``` r
-dataset %>% gap_finder()
-#> Found 10758 gaps. 761 Datetimes fall into the regular sequence.
-```
-
-The huge amount of gaps comes from the fact that the measurement
-intervals are somewhat irregular between 15 and 18 seconds in this case.
-This leaves very little intervals to start regularly. We got this
-information after import, but can still get to this info through
-`count_difftime()`.
-
-``` r
-dataset %>% ungroup() %>% count_difftime()
-#> # A tibble: 4 × 2
-#>   difftime       n
-#>   <Duration> <int>
-#> 1 15s        10015
-#> 2 16s         1367
-#> 3 17s           23
-#> 4 18s           16
-```
-
-We can eliminate this through the `gap_handler()` function. This
-function will automatically fill in the gaps with NA values. As the most
-dominant interval in the dataset is now not 15 seconds anymore (because
-intermediate datapoints have been added), we need to specify the epoch
-for `gap_finder()`.
-
-``` r
-dataset %>% gap_handler() %>% gap_finder(epoch = "15 sec")
-#> No gaps found
-```
-
-If we want to force the data to be regular, we can use the
-`aggregate_Datetime()` function. This will aggregate the data to the
-specified epoch. There are sensible defaults on how to aggregate
-numeric, categorical, and logical data. You can also specify your own
-aggregation functions.
-
-``` r
-dataset %>% aggregate_Datetime(unit = "15 sec") %>% gap_finder()
-#> Found 97 gaps. 11422 Datetimes fall into the regular sequence.
-```
-
-Now, very few gaps are left (every time the the lagged epochs lead to a
-completely skipped regular epoch). The function can also be used to
-conveniently change the interval to arbitrary values, e.g., `"5 mins"`,
-or `"1 hour"`.
 
 # I Want To Contribute
 

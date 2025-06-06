@@ -7,7 +7,8 @@ import.info <- function(data,
                         dst_info = TRUE,
                         filename,
                         na.count,
-                        print_n = 10) {
+                        print_n = 10,
+                        not.before) {
   #give info about the file
   min.time <- min(data$Datetime)
   max.time <- max(data$Datetime)
@@ -62,6 +63,12 @@ import.info <- function(data,
     na.count <- paste0(na.count, " observations were dropped due to a missing or non-parseable Datetime value (e.g., non-valid timestamps during DST jumps). \n")
   }
   
+  #prepare not.before
+  cutoff <- NULL
+  if(!is.null(not.before)){
+    cutoff <- paste0("Data from before ", not.before, " were not imported. Adjust with `not.before` if needed. \n")
+  }
+  
   #print all infos
     cat(
     "\n",
@@ -76,6 +83,7 @@ import.info <- function(data,
     dst_info, na.count, "\n",
     "First Observation: ", format(min.time), "\n",
     "Last Observation: ", format(max.time), "\n",
+    cutoff,
     "Timespan: " , diff(c(min.time, max.time)) %>% format(digits = 2), "\n\n",
     "Observation intervals: \n",
     sep = "")

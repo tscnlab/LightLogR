@@ -1,4 +1,5 @@
-.weight <- .date <- max_date <- is.irregular <- NULL
+#create bindings
+.metric <- .weight <- .date <- max_date <- is.irregular <- NULL
 marked.for.removal <- wavelength <- total_duration_n <- Group <- is.cluster <- NULL
 gap <- episodes <- total_duration <- total <- interval <- gaps <- NULL
 state <- epoch <- state.count <- .variable <- dominant.epoch <- type <- NULL
@@ -7,7 +8,7 @@ mean_gap_duration <- mean_gap_duration_n <- missing_data <- NULL
 missing_implicit <- missing_pct <- number_gaps <- number_irregulars <- NULL
 .data <- gain.ratio <- date.grouper <- midnight.before <- NULL
 midnight.after <- temporary.state <- temporary.counter <- NULL
-date.for.photoperiod <- dawn <- dusk <- Time <- mEDI <- Time.data <- NULL
+date.for.photoperiod <- dawn <- dusk <- Time <- mEDI <- Time <- NULL
 Datetime <- timestamp <- tz <- Day.data <- `DATE/TIME` <- n <- NULL
 Datetime.rounded <- id <- sleep.colname.string <- file.name <- Interval <- NULL
 original.datapoints.fleeting <- MEDI <- State.Brown <- Reference <- NULL
@@ -22,15 +23,7 @@ pulse_idx <- light <- time <- level <- duration <- mean_duration <- NULL
 onset <- midpoint <- offset <- mean_onset <- mean_midpoint <- NULL
 mean_offset <-  Date.data <- print_n <- remove_duplicates <-  NULL
 
-
-
-empty_function <- function() {
-  rsconnect::accountInfo()
-  pkgload::check_dep_version()
-  flextable::add_body()
-}
-
 .onLoad <- function(libname, pkgname) {
-  utils::globalVariables(".")
+  utils::globalVariables(c(".", "Date", "Value"))
 }
 

@@ -50,6 +50,7 @@ Quantification metrics. \emph{Lighting Research & Technology}.
 Other metrics: 
 \code{\link{bright_dark_period}()},
 \code{\link{centroidLE}()},
+\code{\link{dose}()},
 \code{\link{duration_above_threshold}()},
 \code{\link{exponential_moving_average}()},
 \code{\link{frequency_crossing_threshold}()},

@@ -7,27 +7,28 @@
 #' @export
 #'
 #' @examples
-#' #get a dataset with irregular intervals
-#' filepath <- system.file("extdata/sample_data_LYS.csv", package = "LightLogR")
-#' dataset <- import$LYS(filepath)
-#' 
 #' #count_difftime returns the number of occurences of each time difference
 #' #and is more comprehensive in terms of a summary than `gap_finder` or 
 #' #`dominant_epoch`
-#' count_difftime(dataset)
-#' dominant_epoch(dataset)
-#' gap_finder(dataset)
+#' count_difftime(sample.data.irregular)
+#' dominant_epoch(sample.data.irregular)
+#' gap_finder(sample.data.irregular)
 #' 
 #' #irregular data can be regularized with `aggregate_Datetime`
-#' dataset %>% aggregate_Datetime(unit = "15 secs") %>% count_difftime()
+#' sample.data.irregular |> 
+#'  aggregate_Datetime(unit = "15 secs") |> 
+#'  count_difftime()
 
 count_difftime <- function(dataset, Datetime.colname = Datetime) {
   dataset %>% 
     dplyr::mutate(
-      difftime = c(NA, diff({{Datetime.colname}}) %>% lubridate::as.duration())
+      difftime = c(NA, diff({{Datetime.colname}}) %>% lubridate::as.duration()),
     ) %>% 
-    tidyr::drop_na(difftime) %>% 
-    dplyr::count(difftime = difftime %>% lubridate::as.duration(), sort = TRUE)
+    dplyr::count(difftime = difftime %>% lubridate::as.duration(), sort = TRUE) |> 
+    dplyr::mutate(
+      group.indices = dplyr::cur_group_id()
+    ) |> 
+    tidyr::drop_na(difftime)
 }
 
 #calculate the nth Quantile of time differences per group (in a grouped dataset)
@@ -96,9 +97,9 @@ dominant_epoch <- function(dataset,
   dat <- 
     dataset %>% 
     count_difftime(Datetime.colname = {{ Datetime.colname }}) %>% 
-    dplyr::summarize(
+    dplyr::reframe(
       dominant.epoch = difftime[which.max(n)] %>% lubridate::as.duration(),
-      group.indices = dplyr::cur_group_id()
+      group.indices = dplyr::first(group.indices)
     )
   
   # Return ----------------------------------------------------------

@@ -20,8 +20,8 @@ test_that("repeat_date and next date works", {
   expect_equal(repeat_date(dates) %>% length(), 2)
   expect_equal(repeat_date(dates) %>% dplyr::group_vars(), "Date.data")
   expect_true(repeat_date(dates) %>% 
-                 create_Timedata() %>% 
-                 dplyr::pull(Time.data) %>% {all(.[1:4] == .[5:8])})
+                 add_Time_col() %>% 
+                 dplyr::pull(Time) %>% {all(.[1:4] == .[5:8])})
   
   #next_date works
   next_dates <- next_date(repeat_date(dates) %>% dplyr::ungroup())

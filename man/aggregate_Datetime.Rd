@@ -6,8 +6,8 @@
 \usage{
 aggregate_Datetime(
   dataset,
-  Datetime.colname = Datetime,
   unit = "dominant.epoch",
+  Datetime.colname = Datetime,
   type = c("round", "floor", "ceiling"),
   numeric.handler = mean,
   character.handler = function(x) names(which.max(table(x, useNA = "ifany"))),
@@ -24,16 +24,16 @@ aggregate_Datetime(
 by \link{LightLogR}, take care to choose a sensible variable for the
 \code{Datetime.colname}.}
 
-\item{Datetime.colname}{column name that contains the datetime. Defaults to
-\code{"Datetime"} which is automatically correct for data imported with
-\link{LightLogR}. Expects a \code{symbol}. Needs to be part of the \code{dataset}. Must
-be of type \code{POSIXct}.}
-
 \item{unit}{Unit of binning. See \code{\link[lubridate:round_date]{lubridate::round_date()}} for examples. The
 default is \code{"dominant.epoch"}, which means everything will be aggregated to
 the most common interval. This is especially useful for slightly irregular
 data, but can be computationally expensive. \code{"none"} will not aggregate the
 data at all.}
+
+\item{Datetime.colname}{column name that contains the datetime. Defaults to
+\code{"Datetime"} which is automatically correct for data imported with
+\link{LightLogR}. Expects a \code{symbol}. Needs to be part of the \code{dataset}. Must
+be of type \code{POSIXct}.}
 
 \item{type}{One of \code{"round"}(the default), \code{"ceiling"} or \code{"floor"}. Setting
 chooses the relevant function from \pkg{lubridate}.}

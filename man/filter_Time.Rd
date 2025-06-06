@@ -43,7 +43,7 @@ Filter Times in a dataset.
 \examples{
 sample.data.environment \%>\%
 filter_Time(start = "4:00:34", length = "12:00:00") \%>\%
-dplyr::pull(Time.data) \%>\% range() \%>\% hms::as_hms()
+dplyr::pull(Time) \%>\% range() \%>\% hms::as_hms()
 }
 \seealso{
 Other filter: 

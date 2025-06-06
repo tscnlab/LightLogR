@@ -49,10 +49,6 @@ gapless_Datetimes <- function(dataset,
   
   # Function ----------------------------------------------------------
   
-  #get the epochs based on the data
-  epochs <- epoch_list(dataset, Datetime.colname = {{ Datetime.colname }},
-                     epoch = epoch)
-  
   #looking for n=1
   dataset2 <- 
   dataset |> dplyr::filter(dplyr::n() == 1)
@@ -66,6 +62,10 @@ gapless_Datetimes <- function(dataset,
     # )
     dataset <- dataset |> dplyr::filter(dplyr::n() != 1)
   }
+  
+  #get the epochs based on the data
+  epochs <- epoch_list(dataset, Datetime.colname = {{ Datetime.colname }},
+                       epoch = epoch)
   
   #create an expression for a sequence from the minimum datetime to the maximum
   #or, if full.days is TRUE, to the end of the day of the maximum datetime
@@ -104,6 +104,7 @@ gapless_Datetimes <- function(dataset,
   )
   
   #create the gapless sequence
+  if(nrow(dataset) == 0) return(dataset) else {
   dat <- 
     dataset %>% 
     dplyr::reframe(Id2 = dplyr::cur_group_id(),
@@ -116,6 +117,7 @@ gapless_Datetimes <- function(dataset,
         dplyr::group_vars(dataset)
         )
       )
+  }
   
   # Return ----------------------------------------------------------
   dat 
@@ -213,6 +215,8 @@ gap_handler <- function(dataset,
   #collect the grouping variables and the Datetime column (needed for silent joining)
   by_vars <- 
     c(dplyr::group_vars(dataset), colname.defused({{ Datetime.colname }}))
+  
+  if(nrow(gapless) == 0) return(dataset)
   
   #join the datasets
   dat <- 
@@ -569,12 +573,16 @@ extract_gaps <-   function(dataset,
   
   #get the epochs based on the data
   epochs <- epoch_list(dataset, Datetime.colname = {{ Datetime.colname }},
-                       epoch = epoch) |> dplyr::pull(dominant.epoch)
+                       epoch = epoch)
   
   #add epoch data
   dat |> 
     dplyr::mutate(
-      epoch =  epochs[dplyr::cur_group_id()],
+      epoch = ifelse(
+        epochs$dominant.epoch[epochs$group.indices == dplyr::cur_group_id()] |> length() == 0,
+        NA,
+        epochs$dominant.epoch[epochs$group.indices == dplyr::cur_group_id()]
+      )
     ) |> 
     dplyr::group_by(gap.id, .add = TRUE) |> 
     dplyr::summarize(
@@ -591,7 +599,7 @@ extract_gaps <-   function(dataset,
                       epoch = epoch,
                       Datetime.colname = {{ Datetime.colname }})
       } else {
-        if(has_gaps(dataset)) warning("There are implicit gaps in the dataset that will not be part of the extracted summary, due to `include.implicit.gaps = FALSE`.", call. = FALSE)
+        if(has_gaps(dataset, epoch = epoch)) warning("There are implicit gaps in the dataset that will not be part of the extracted summary, due to `include.implicit.gaps = FALSE`.", call. = FALSE)
         dataset
       }
     

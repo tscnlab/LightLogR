@@ -1,7 +1,7 @@
 test_that("mean_daily works with basic numeric data", {
   # Create sample data
   sample_data <- data.frame(
-    Day = factor(c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"), 
+    Date = factor(c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"), 
                  levels = c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")),
     lux = c(250, 300, 275, 280, 290, 350, 320),
     duration = c(120, 130, 125, 135, 140, 180, 160)
@@ -10,7 +10,7 @@ test_that("mean_daily works with basic numeric data", {
   result <- mean_daily(sample_data)
   
   expect_equal(nrow(result), 3)
-  expect_equal(result$Day, c("Mean daily", "Weekday", "Weekend"))
+  expect_equal(result$Date, c("Mean daily", "Weekday", "Weekend"))
   
   # Check calculations
   expect_equal(result$`average_lux`[2], mean(sample_data$lux[1:5]))
@@ -20,7 +20,7 @@ test_that("mean_daily works with basic numeric data", {
 
 test_that("mean_daily handles NA values correctly", {
   sample_data <- data.frame(
-    Day = factor(c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"), 
+    Date = factor(c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"), 
                  levels = c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")),
     lux = c(250, NA, 275, 280, 290, 350, NA)
   )
@@ -39,7 +39,7 @@ test_that("mean_daily handles NA values correctly", {
 test_that("mean_daily handles Duration objects", {
   
   sample_data <- data.frame(
-    Day = factor(c("Mon", "Tue"), levels = c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")),
+    Date = factor(c("Mon", "Tue"), levels = c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")),
     duration = c(lubridate::duration(120, "seconds"), lubridate::duration(180, "seconds"))
   )
   
@@ -64,7 +64,7 @@ test_that("mean_daily calculates from Date column", {
 test_that("mean_daily handles grouped data", {
   sample_data <- data.frame(
     Group = rep(c("A", "B"), each = 7),
-    Day = factor(rep(c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"), 2), 
+    Date = factor(rep(c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"), 2), 
                  levels = c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")),
     lux = c(250, 300, 275, 280, 290, 350, 320, 200, 220, 210, 230, 240, 300, 290)
   )
@@ -92,7 +92,7 @@ test_that("mean_daily provides informative error for invalid inputs", {
 test_that("mean_daily works with only one day type", {
   # Only weekdays
   weekday_data <- data.frame(
-    Day = factor(c("Mon", "Tue", "Wed"), levels = c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")),
+    Date = factor(c("Mon", "Tue", "Wed"), levels = c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")),
     lux = c(250, 300, 275)
   )
   
@@ -102,7 +102,7 @@ test_that("mean_daily works with only one day type", {
   
   # Only weekend
   weekend_data <- data.frame(
-    Day = factor(c("Sat", "Sun"), levels = c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")),
+    Date = factor(c("Sat", "Sun"), levels = c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")),
     lux = c(350, 320)
   )
   
@@ -115,7 +115,7 @@ test_that("mean_daily_metric calculates metrics correctly", {
   
   # Mock a simple duration_above_threshold function for testing
   mock_duration_above_threshold <- function(Light.vector, Time.vector, threshold = 100, ...) {
-    sum(Light.vector > threshold)
+    tibble::tibble(mock = sum(Light.vector > threshold))
   }
   
   # Create sample data
@@ -127,25 +127,24 @@ test_that("mean_daily_metric calculates metrics correctly", {
   
   result <- mean_daily_metric(
     data = sample_data,
-    metric = "above_100",
     Variable = lux,
     metric_type = mock_duration_above_threshold,
     threshold = 100
   )
   
   expect_equal(nrow(result), 3)
-  expect_setequal(result$Day, c("Weekday", "Weekend", "Mean daily"))
-  expect_true("average_above_100" %in% colnames(result))
+  expect_setequal(result$Date, c("Weekday", "Weekend", "Mean daily"))
+  expect_true("average_mock" %in% colnames(result))
 })
 
 test_that("mean_daily_metric provides informative error for invalid inputs", {
   # Not a dataframe
-  expect_error(mean_daily_metric(c(1, 2, 3), metric = "test", Variable = lux), 
+  expect_error(mean_daily_metric(c(1, 2, 3), Variable = lux), 
                "must be a dataframe")
   
   # Missing Datetime column
   sample_data <- data.frame(lux = c(250, 300))
-  expect_error(mean_daily_metric(sample_data, metric = "test", Variable = lux), 
+  expect_error(mean_daily_metric(sample_data, Variable = lux), 
                "not found in the input data")
   
   # metric_type not a function
@@ -153,7 +152,7 @@ test_that("mean_daily_metric provides informative error for invalid inputs", {
     Datetime = seq(as.POSIXct("2023-05-01"), as.POSIXct("2023-05-02"), by = "day"),
     lux = c(250, 300)
   )
-  expect_error(mean_daily_metric(sample_data, metric = "test", Variable = lux, 
+  expect_error(mean_daily_metric(sample_data, Variable = lux, 
                                  metric_type = "not_a_function"), 
                "must be a function")
 })
@@ -161,7 +160,7 @@ test_that("mean_daily_metric provides informative error for invalid inputs", {
 test_that("mean_daily_metric works with different metric types", {
   # Mock a different metric function
   mock_metric_function <- function(Light.vector, Time.vector, ...) {
-    mean(Light.vector)
+    tibble::tibble(mock = mean(Light.vector))
   }
   
   # Create sample data
@@ -173,19 +172,18 @@ test_that("mean_daily_metric works with different metric types", {
   
   result <- mean_daily_metric(
     data = sample_data,
-    metric = "average_lux",
     Variable = lux,
     metric_type = mock_metric_function
   )
   
   expect_equal(nrow(result), 3)
-  expect_true("average_average_lux" %in% colnames(result))
+  expect_true("average_mock" %in% colnames(result))
 })
 
 test_that("mean_daily_metric handles grouped data", {
   # Mock a simple metric function
   mock_metric_function <- function(Light.vector, Time.vector, ...) {
-    mean(Light.vector)
+    tibble::tibble(mock = mean(Light.vector))
   }
   
   # Create sample data with groups
@@ -199,7 +197,6 @@ test_that("mean_daily_metric handles grouped data", {
   grouped_data <- dplyr::group_by(sample_data, Group)
   result <- mean_daily_metric(
     data = grouped_data,
-    metric = "average_lux",
     Variable = lux,
     metric_type = mock_metric_function
   )
@@ -211,7 +208,7 @@ test_that("mean_daily_metric handles grouped data", {
 test_that("mean_daily_metric passes additional arguments to metric function", {
   # Mock a metric function that uses additional arguments
   mock_metric_with_args <- function(Light.vector, Time.vector, threshold = 0, multiplier = 1, ...) {
-    sum(Light.vector > threshold) * multiplier
+    tibble::tibble(mock = sum(Light.vector > threshold) * multiplier)
   }
   
   # Create sample data
@@ -223,7 +220,6 @@ test_that("mean_daily_metric passes additional arguments to metric function", {
   
   result1 <- mean_daily_metric(
     data = sample_data,
-    metric = "count",
     Variable = lux,
     metric_type = mock_metric_with_args,
     threshold = 300,
@@ -232,7 +228,6 @@ test_that("mean_daily_metric passes additional arguments to metric function", {
   
   result2 <- mean_daily_metric(
     data = sample_data,
-    metric = "count",
     Variable = lux,
     metric_type = mock_metric_with_args,
     threshold = 300,
@@ -240,5 +235,5 @@ test_that("mean_daily_metric passes additional arguments to metric function", {
   )
   
   # Result2 should be double result1 due to the multiplier
-  expect_equal(result2$average_count[1], result1$average_count[1] * 2)
+  expect_equal(result2$average_mock[1], result1$average_mock[1] * 2)
 })

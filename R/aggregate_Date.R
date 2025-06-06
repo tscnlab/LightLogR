@@ -34,7 +34,7 @@
 #'   columns will be the same as in the input `dataset`.
 #'
 #' @details [aggregate_Date()] splits the `Datetime` column into a `Date.data`
-#'   and a `Time.data` column. It will create subgroups for each `Time.data`
+#'   and a `Time` column. It will create subgroups for each `Time`
 #'   present in a group and aggregate each group into a single day, then remove
 #'   the sub grouping.
 #'
@@ -135,14 +135,14 @@ aggregate_Date <- function(dataset,
 
   dataset <- 
     dataset %>% 
-    create_Timedata(Datetime.colname = !!Datetime.colname.defused) %>% 
+    add_Time_col(Datetime.colname = !!Datetime.colname.defused) %>% 
     dplyr::mutate(Date.data = lubridate::date(!!Datetime.colname.defused),
                   Date.data = (!!date.handler)(Date.data)) #set the date according to the date handler
   
-  #group by Time.data
+  #group by Time
   dataset <- 
     dataset %>% 
-    dplyr::group_by(Time.data, .add = TRUE)
+    dplyr::group_by(Time, .add = TRUE)
   
   #aggregate the data by group
   numeric.handler <- rlang::enexpr(numeric.handler)
@@ -165,15 +165,15 @@ aggregate_Date <- function(dataset,
       dplyr::across(dplyr::where(hms::is_hms), !!time.handler), #default: choose the mean date
       #allow for additional functions
       .groups = "keep") %>% 
-    dplyr::ungroup(Time.data) #remove the rounded Datetime group
+    dplyr::ungroup(Time) #remove the rounded Datetime group
     
   #bringing Date and Time together for the final output
   dataset <- 
     dataset %>% 
-    dplyr::mutate(!!Datetime.colname.str := paste(Date.data, Time.data) %>% 
+    dplyr::mutate(!!Datetime.colname.str := paste(Date.data, Time) %>% 
                     lubridate::as_datetime(tz = timezone),
                   .after = Date.data) %>% 
-    dplyr::select(-Date.data, -Time.data)
+    dplyr::select(-Date.data, -Time)
   
   # Return ----------------------------------------------------------
   

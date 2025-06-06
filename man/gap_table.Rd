@@ -13,7 +13,8 @@ gap_table(
   epoch = "dominant.epoch",
   full.days = TRUE,
   include.implicit.gaps = TRUE,
-  check.irregular = TRUE
+  check.irregular = TRUE,
+  get.df = FALSE
 )
 }
 \arguments{
@@ -45,15 +46,18 @@ missing explicit gaps flanking implicit gaps!}}
 
 \item{check.irregular}{Logical on whether to include irregular data in the
 summary, i.e. data points that do not fall on the regular sequence.}
+
+\item{get.df}{Logical whether the dataframe should be returned instead of a
+\code{\link[gt:gt]{gt::gt()}} table}
 }
 \value{
 A gt table about data and gaps in the dataset
 }
 \description{
-\code{\link[=gap_table]{gap_table()}} creates a \code{\link[gt:gt]{gt::gt()}} with one row per group, summarizing key gap
-and gap-related information about the dataset. These include the available
-data, total duration, number of gaps, missing implicit and explicit data,
-and, optionally, irregular data.
+\code{\link[=gap_table]{gap_table()}} creates a \code{\link[gt:gt]{gt::gt()}} with one row per group, summarizing key
+gap and gap-related information about the dataset. These include the
+available data, total duration, number of gaps, missing implicit and explicit
+data, and, optionally, irregular data.
 }
 \examples{
 sample.data.environment |> dplyr::filter(MEDI <= 50000) |> gap_table()

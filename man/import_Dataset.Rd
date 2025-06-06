@@ -16,8 +16,8 @@ import
 \arguments{
 \item{device}{From what device do you want to import? For a few devices,
 there is a sample data file that you can use to test the function (see the
-examples). See \code{\link[=supported_devices]{supported_devices()}} for a list of supported devices and see
-below for more information on devices with specific requirements.}
+examples). See \code{\link[=supported_devices]{supported_devices()}} for a list of supported devices and
+see below for more information on devices with specific requirements.}
 
 \item{...}{Parameters that get handed down to the specific import functions}
 }
@@ -60,6 +60,7 @@ use of this arguments when importing more than one file}
 \item \code{silent}: If set to \code{TRUE}, the function will not print a summary message
 of the import or plot the overview. Default is \code{FALSE}.
 \item \code{locale}: The locale controls defaults that vary from place to place.
+\item \code{not.before}: Remove data prior to this date. This argument is provided to \code{start} of \code{\link[=filter_Date]{filter_Date()}}. Data will be filtered out before any of the summaries are shown.
 \item \code{dst_adjustment}: If a file crosses daylight savings time, but the device does not adjust time stamps accordingly, you can set this argument to \code{TRUE}, to apply this shift manually. It is selective, so it will only be done in files that cross between DST and standard time. Default is \code{FALSE}. Uses \code{\link[=dst_change_handler]{dst_change_handler()}} to do the adjustment. Look there for more infos. It is not equipped to handle two jumps in one file (so back and forth between DST and standard time), but will work fine if jums occur in separate files.
 \item \code{auto.plot}: a logical on whether to call \code{\link[=gg_overview]{gg_overview()}} after import. Default is \code{TRUE}. But is set to \code{FALSE} if the argument \code{silent} is set to \code{TRUE}.
 \item \code{...}: supply additional arguments to the \pkg{readr} import functions, like \code{na}. Might also be used to supply arguments to the specific import functions, like \code{column_names} for \code{Actiwatch_Spectrum} devices. Those devices will always throw a helpful error message if you forget to supply the necessary arguments.
@@ -80,7 +81,7 @@ continuously as the package is maintained.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{supported_devices()
 #>  [1] "ActLumus"              "ActTrust"              "Actiwatch_Spectrum"   
-#>  [4] "Actiwatch_Spectrum_de" "Circadian_Eye"         "ClouClip"             
+#>  [4] "Actiwatch_Spectrum_de" "Circadian_Eye"         "Clouclip"             
 #>  [7] "DeLux"                 "GENEActiv_GGIR"        "Kronowise"            
 #> [10] "LIMO"                  "LYS"                   "LiDo"                 
 #> [13] "LightWatcher"          "MotionWatch8"          "OcuWEAR"              
@@ -199,8 +200,8 @@ Implemented: July 2024
 
 \strong{Required Argument: \code{modality}} A character scalar describing the
 modality to be imported from. Can be one of \code{"ALS"} (Ambient light sensor),
-\code{"IMU"} (Inertial Measurement Unit), \code{"INF"} (Information),
-\code{"PHO"} (Spectral Sensor), \code{"TOF"} (Time of Flight)
+\code{"IMU"} (Inertial Measurement Unit), \code{"INF"} (Information), \code{"PHO"}
+(Spectral Sensor), \code{"TOF"} (Time of Flight)
 }
 
 \subsection{Circadian_Eye}{
@@ -228,8 +229,8 @@ Manufacturer: Activeinsights
 Model: GENEActiv
 
 \strong{Note:} This import function takes GENEActiv data that was preprocessed
-through the \href{https://cran.r-project.org/package=GGIR}{GGIR} package.
-By default, \code{GGIR} aggregates light data into intervals of 15 minutes. This
+through the \href{https://cran.r-project.org/package=GGIR}{GGIR} package. By
+default, \code{GGIR} aggregates light data into intervals of 15 minutes. This
 can be set by the \code{windowsizes} argument in GGIR, which is a three-value
 vector, where the second values is set to 900 seconds by default. To import
 the preprocessed data with \code{LightLogR}, the \code{filename} argument requires a
@@ -239,11 +240,10 @@ can be specified, each of which needs to be a path to a different GGIR
 parent directory. GGIR exports can contain data from multiple participants,
 these will always be imported fully by providing the parent directory. Use
 the \code{pattern} argument to extract sensible \code{Id}s from the \emph{.RData}
-filenames within the \emph{meta/basic/} folder. As per the author,
-\href{https://www.accelting.com}{Dr. Vincent van Hees}, GGIR preprocessed data are
-always in local time, provided the \code{desiredtz}/\code{configtz} are properly set
-in GGIR. \code{LightLogR} still requires a timezone to be set, but will not
-timeshift the import data.
+filenames within the \emph{meta/basic/} folder. As per the author, \href{https://www.accelting.com}{Dr. Vincent van Hees}, GGIR preprocessed data are always in
+local time, provided the \code{desiredtz}/\code{configtz} are properly set in GGIR.
+\code{LightLogR} still requires a timezone to be set, but will not timeshift the
+import data.
 }
 
 \subsection{MotionWatch 8}{
@@ -259,7 +259,10 @@ Manufacturer: ENTPE
 
 Implemented: September 2024
 
-LIMO exports \code{LIGHT} data and \code{IMU} (inertia measurements, also UV) in separate files. Both can be read in with this function, but not at the same time. Please decide what type of data you need and provide the respective filenames.
+LIMO exports \code{LIGHT} data and \code{IMU} (inertia measurements, also UV) in
+separate files. Both can be read in with this function, but not at the same
+time. Please decide what type of data you need and provide the respective
+filenames.
 }
 
 \subsection{OcuWEAR}{
@@ -268,16 +271,26 @@ Manufacturer: Ocutune
 
 Implemented: September 2024
 
-OcuWEAR data contains spectral data. Due to the format of the data file, the spectrum is not directly part of the tibble, but rather a list column of tibbles within the imported data, containing a \code{Wavelength} (nm) and \code{Intensity} (mW/m^2) column.
+OcuWEAR data contains spectral data. Due to the format of the data file,
+the spectrum is not directly part of the tibble, but rather a list column
+of tibbles within the imported data, containing a \code{Wavelength} (nm) and
+\code{Intensity} (mW/m^2) column.
 }
 
-\subsection{ClouClip}{
+\subsection{Clouclip}{
 
 Manufacturer: Clouclip
 
 Implemented: April 2025
 
-ClouClip export files have the ending \code{.xls}, but are no real Microsoft Excel files, rather they are tab-separated text files. LightLogR thus does not read them in with an excel import routine. The measurement columns \code{Lux} and \code{Dis} contain sentinel values. \code{-1} (\code{Dis} and \code{Lux}) indicates sleep mode, whereas \code{204} (only \code{Dis}) indicates an out of range measurement. These values will be set to \code{NA}, and an additional column is added that translates these status codes. The columns carry the name \verb{\{.col\}_status}.
+Clouclip export files have the ending \code{.xls}, but are no real Microsoft
+Excel files, rather they are tab-separated text files. LightLogR thus does
+not read them in with an excel import routine. The measurement columns
+\code{Lux} and \code{Dis} contain sentinel values. \code{-1} (\code{Dis} and \code{Lux}) indicates
+sleep mode, whereas \code{204} (only \code{Dis}) indicates an out of range
+measurement. These values will be set to \code{NA}, and an additional column is
+added that translates these status codes. The columns carry the name
+\verb{\{.col\}_status}.
 }
 }
 
@@ -291,33 +304,12 @@ To import a file, simple specify the filename (and path) and feed it to the
 The import functions provide a basic overview of the data after import,
 such as the intervals between measurements or the start and end dates.
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{filepath <- system.file("extdata/sample_data_LYS.csv", package = "LightLogR")
-dataset <- import_Dataset("LYS", filepath, auto.plot = FALSE)
-#> 
-#> Successfully read in 11'422 observations across 1 Ids from 1 LYS-file(s).
-#> Timezone set is UTC.
-#> The system timezone is Europe/Madrid. Please correct if necessary!
-#> 
-#> First Observation: 2023-06-21 00:00:12
-#> Last Observation: 2023-06-22 23:59:48
-#> Timespan: 2 days
-#> 
-#> Observation intervals: 
-#>   Id              interval.time     n pct    
-#> 1 sample_data_LYS 15s           10015 87.689\%
-#> 2 sample_data_LYS 16s            1367 11.969\%
-#> 3 sample_data_LYS 17s              23 0.201\% 
-#> 4 sample_data_LYS 18s              16 0.140\%
-}\if{html}{\out{</div>}}
-
-Import functions can also be called directly:
-
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{filepath <- system.file("extdata/205_actlumus_Log_1020_20230904101707532.txt.zip", package = "LightLogR")
-dataset <- import$ActLumus(filepath, auto.plot = FALSE)
+dataset <- import_Dataset("ActLumus", filepath, auto.plot = FALSE)
 #> 
 #> Successfully read in 61'016 observations across 1 Ids from 1 ActLumus-file(s).
 #> Timezone set is UTC.
-#> The system timezone is Europe/Madrid. Please correct if necessary!
+#> The system timezone is Europe/Berlin. Please correct if necessary!
 #> 
 #> First Observation: 2023-08-28 08:47:54
 #> Last Observation: 2023-09-04 10:17:04
@@ -326,10 +318,24 @@ dataset <- import$ActLumus(filepath, auto.plot = FALSE)
 #> Observation intervals: 
 #>   Id                                          interval.time     n pct  
 #> 1 205_actlumus_Log_1020_20230904101707532.txt 10s           61015 100\%
-dataset \%>\% gg_days()
 }\if{html}{\out{</div>}}
 
-\figure{unnamed-chunk-1-1.png}
+Import functions can also be called directly:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{dataset <- import$ActLumus(filepath, auto.plot = FALSE)
+#> 
+#> Successfully read in 61'016 observations across 1 Ids from 1 ActLumus-file(s).
+#> Timezone set is UTC.
+#> The system timezone is Europe/Berlin. Please correct if necessary!
+#> 
+#> First Observation: 2023-08-28 08:47:54
+#> Last Observation: 2023-09-04 10:17:04
+#> Timespan: 7.1 days
+#> 
+#> Observation intervals: 
+#>   Id                                          interval.time     n pct  
+#> 1 205_actlumus_Log_1020_20230904101707532.txt 10s           61015 100\%
+}\if{html}{\out{</div>}}
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{dataset \%>\%
 dplyr::select(Datetime, TEMPERATURE, LIGHT, MEDI, Id) \%>\%

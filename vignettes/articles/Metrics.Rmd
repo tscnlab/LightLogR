@@ -187,9 +187,10 @@ The `dplyr::summarize()` function is used to calculate metrics for each group of
 ```{r}
 data |> 
   summarize(
-    IS = interdaily_stability(
+    interdaily_stability(
       Light.vector = MEDI,
-      Datetime.vector = Datetime
+      Datetime.vector = Datetime,
+      as.df = TRUE
     )
   ) |> 
   head() |> 
@@ -203,10 +204,11 @@ By default, data imported with `LightLogR` is grouped by `Id`, which represents 
 ```{r}
 data |> 
   summarize(
-    TAT_250 = duration_above_threshold(
+    duration_above_threshold(
       Light.vector = MEDI,
       Time.vector = Datetime,
-      threshold = 250
+      threshold = 250,
+      as.df = TRUE
     )
   ) |> 
   head() |> 
@@ -224,10 +226,11 @@ TAT_250 <-
 data |> 
   group_by(wDay, .add = TRUE) |> 
   summarize(
-    TAT_250 = duration_above_threshold(
+    duration_above_threshold(
       Light.vector = MEDI,
       Time.vector = Datetime,
-      threshold = 250
+      threshold = 250,
+      as.df = TRUE
     ), .groups = "drop_last"
   )
 
@@ -295,9 +298,9 @@ style_time <- function(x, format = "%H:%M"){
 #Table output
 TAT_250 |> 
   tbl_summary(by = Id, include = -wDay, 
-              statistic = list(TAT_250 ~ "{mean} ({sd})"), 
-              digits = list(TAT_250 ~ style_time),
-              label = list(TAT_250 = "Time above 250 lx mel EDI")
+              statistic = list(duration_above_250 ~ "{mean} ({sd})"), 
+              digits = list(duration_above_250 ~ style_time),
+              label = list(duration_above_250 = "Time above 250 lx mel EDI")
               )
 ```
 
@@ -318,12 +321,11 @@ TAT_250_daily |>
   gt()
 ```
 
-There is a variant of `mean_daily()` called `mean_daily_metric()`, which is a convenience function to combine the calculation of a single-return-value, duration-based metric with the mean daily calculation. We can use it to calculate `TAT250` from scratch
+There is a variant of `mean_daily()` called `mean_daily_metric()`, which is a convenience function to combine the calculation of a single-return-value, duration-based metric with the mean daily calculation. We can use it to calculate `duration_above_250`(lx) from scratch
 
 ```{r}
 data |> 
   mean_daily_metric(
-    metric = "TAT250",
     Variable = MEDI,
     threshold = 250
   ) |> 
@@ -331,12 +333,11 @@ data |>
   gt()
 ```
 
-The function has limited options to change the `metric_type`. In this case, we change the function to the longest continuous period above threshold.
+The function has (very) limited options to change the `metric_type`. In this case, we change the function to the longest continuous period above threshold. Basically, metric functions that return a numeric column can be used.
 
 ```{r}
 data |> 
   mean_daily_metric(
-    metric = "PAT250",
     Variable = MEDI,
     metric_type = period_above_threshold,
     threshold = 250
@@ -356,7 +357,7 @@ TAT_250_daily |>
   summarize_numeric(
   ) |> 
   gt() |> 
-  fmt_duration(mean_average_TAT_250, 
+  fmt_duration(mean_average_duration_above_250, 
                input_units = "seconds", duration_style = "colon-sep")
 ```
 
@@ -364,31 +365,26 @@ We can see that our participants have slightly more time above 250 lx on weekda
 
 # Metric calculation: batch
 
-In the final section, we will add more metrics to the analysis, including ones with multiple sub-metrics. Further, we imagine we want to know how these metrics change from the first half of the experiment (August/September) to the second half (October/November). Finally, we will include a column `Time.data` in the data set, which will be used to calculate the metrics. This column format excludes the `day` information from the `Datetime` column, which avoids `date`-related issues when calculating the `mean` of the metrics. Finally, the `unnest()` call is used to flatten the table from the `dataframe` substructure that is created by `MLIT250` and `TAT250`.
+In the final section, we will add more metrics to the analysis, including ones with multiple sub-metrics. Further, we imagine we want to know how these metrics change from the first half of the experiment (August/September) to the second half (October/November).
 
 ```{r}
 data <- data |> 
   mutate(
     Month = case_when(month(Datetime) %in% 8:9 ~ "Aug/Sep",
                       month(Datetime) %in% 10:11 ~ "Oct/Nov")
-  ) |> 
-  create_Timedata()
+  )
 
 metrics <- 
   data |> 
   group_by(Month, Id, wDay) |> 
   summarize(
-    MLIT250 = 
-      timing_above_threshold(MEDI, Time.data, threshold = 250, as.df = TRUE),
-    TAT250 = 
-      duration_above_threshold(MEDI, Time.data, threshold = 250, as.df = TRUE),
-    average_MEDI = 
+    timing_above_threshold(MEDI, Datetime, threshold = 250, as.df = TRUE),
+    duration_above_threshold(MEDI, Datetime, threshold = 250, as.df = TRUE),
+    average_medi = 
       MEDI |> log_zero_inflated() |>  mean() |> exp_zero_inflated(), #calculate zero inflated log transformed mean
-    light_exposure = 
-      sum(MEDI)/360, # 10 second epochs means 360 epochs in one hour. dividing by 360 gives the light exposure in lx·h
+    dose(MEDI, Datetime, as.df = TRUE),
     .groups = "drop_last"
-    ) |> 
-  unnest(-Id)
+    )
 
 #first 6 rows
 metrics |> 
@@ -403,7 +399,7 @@ The operation above yields a data frame with six metrics across 102 participant 
 
 We can summarize the data different ways.
 
-Within `LightLogR`, we can use the `mean_daily()` and `summarize_numeric()` functions:
+Within `LightLogR`, we can use the `mean_daily()` and `summarize_numeric()` functions. Both will by default automatically transform `datetime` columns (type `POSIXct`) to `time` columns (type `hms`), which is much more sensible in most cases to calculate averages
 
 ```{r}
 #calculating weekday, weekend, and mean daily summaries for each group
@@ -413,7 +409,7 @@ metrics |>
   group_by(Month, wDay) |>  #regroup so that we can summarize across Participants
   summarize_numeric(prefix = "") |> 
   gt() |> 
-  fmt_number(c(average_MEDI, light_exposure))
+  fmt_number(c(average_medi, dose))
 ```
 
 The number of episodes shows us that there were 11 values in Aug/Sep, and 6 in Oct/Nov - except for Weekends, which have 7. This is because one participant crosses Sep/Oct. Checking this participants data shows that only the last day is in October, which is a Sunday - thus being part of the weekend.
@@ -434,7 +430,7 @@ metrics |>
   summarize_numeric(prefix = "") |> #summarize across participants
   summarize_numeric(prefix = "") |> #summarize by month
   gt() |> 
-  fmt_number(c(average_MEDI, light_exposure))
+  fmt_number(c(average_medi, dose))
 ```
 
 This shows us 11 participants for the Aug/Sep timeframe and 7 for the Oct/Nov timeframe. This is in line with the summary above, which showed us one participant crossed the timeframes. Of course, filtering the data at some inbetween step to ensure there are a minimum amount of data points in each category makes sense, which we have left out here for brevity.
@@ -466,8 +462,8 @@ metrics |>
                 last_timing_above_250 = 
                   "last time above 250 lx mel EDI (HH:MM)",
                 duration_above_250 = "duration above 250 lx mel EDI (HH:MM)",
-                average_MEDI = "average mel EDI (lx)",
-                light_exposure = "light exposure (lx·h)"
+                average_medi = "average mel EDI (lx)",
+                dose = "light exposure (lx·h)"
                 )
               )
 ```

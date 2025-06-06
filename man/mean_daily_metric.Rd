@@ -6,21 +6,18 @@
 \usage{
 mean_daily_metric(
   data,
-  metric,
   Variable,
-  Weekend.type = Day,
+  Weekend.type = Date,
   Datetime.colname = Datetime,
   metric_type = duration_above_threshold,
   prefix = "average_",
   filter.empty = FALSE,
+  Datetime2Time = TRUE,
   ...
 )
 }
 \arguments{
 \item{data}{A dataframe containing light logger data imported with LightLogR}
-
-\item{metric}{The name of the metric column to create in the output. Expects
-a \code{character}}
 
 \item{Variable}{The variable column to analyze. Expects a \code{symbol}. Needs to
 be part of the dataset.}
@@ -38,6 +35,11 @@ the week as a factor}
 
 \item{filter.empty}{Filter out empty rows. Default is FALSE}
 
+\item{Datetime2Time}{Logical of whether POSIXct columns should be transformed
+into hms(time) columns, which is usually sensible for averaging (default is
+\code{TRUE}). Calls \code{\link[=Datetime2Time]{Datetime2Time()}} with default settings (all POSIXct are
+affected).}
+
 \item{...}{Additional arguments passed to the metric function}
 }
 \value{
@@ -51,15 +53,12 @@ values for a specific metric. Examples include \code{\link[=duration_above_thres
 (the default), or \code{\link[=durations]{durations()}}.
 }
 \examples{
-# Import sample data
-filepath <- system.file("extdata/sample_data_LYS.csv", package = "LightLogR")
-dataset <- import$LYS(filepath, silent = TRUE)
 
 # Calculate mean daily duration above threshold. As the data only contains
 # data for two days, Weekend and Mean daily will throw NA
-dataset |> 
+sample.data.irregular |> 
+aggregate_Datetime(unit = "1 min") |> 
 mean_daily_metric(
-  metric = "duration_above_100lux",
   Variable = lux,
   threshold = 100
 )
@@ -67,8 +66,14 @@ mean_daily_metric(
 # again with another dataset
 sample.data.environment |> 
   mean_daily_metric(
-  metric = "duration_above_250lux",
   Variable = MEDI,
+  threshold = 250)
+
+# by default, datetime columns are converted to time
+sample.data.environment |> 
+  mean_daily_metric(
+  Variable = MEDI,
+  metric_type = timing_above_threshold,
   threshold = 250)
 
 }

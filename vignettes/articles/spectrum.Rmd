@@ -151,7 +151,7 @@ data_1_day <-
 data_aggregated |> 
   filter_Date(length = "1 day") |> 
   filter(Id == "201") |> 
-  create_Timedata()
+  add_Time_col()
 
 data_1_day |> 
   unnest(Spectrum) |> #unnest the list column
@@ -242,7 +242,7 @@ data_aggregated |>
 
 data_aggregated |> 
   select(Id, Datetime, LIGHT, MEDI, illuminance, melEDI) |> 
-  create_Timedata() |> 
+  add_Time_col() |> 
   ggplot(aes(x=MEDI, y = melEDI)) +
   geom_point(aes(col = abs(1- MEDI/melEDI))) + 
   geom_abline(slope = 1, intercept = 0, col = "red", linetype = 2) + 
@@ -262,7 +262,7 @@ data_aggregated |>
 
 data_aggregated |> 
   select(Id, Datetime, LIGHT, MEDI, illuminance, melEDI) |> 
-  create_Timedata() |> 
+  add_Time_col() |> 
   ggplot(aes(x=LIGHT, y = illuminance)) +
   geom_point(aes(col = abs(1- LIGHT/illuminance))) + 
   geom_abline(slope = 1, intercept = 0, col = "red", linetype = 2) + 

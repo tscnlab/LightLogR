@@ -8,7 +8,7 @@
 #' Besides plotting, the function creates two new variables from the given
 #' `Datetime`:
 #' * `Day.data` is a factor that is used for facetting with [ggplot2::facet_wrap()]. Make sure to use this variable, if you change the faceting manually. Also, the function checks, whether this variable already exists. If it does, it will only convert it to a factor and do the faceting on that variable.
-#' * `Time.data` is an `hms` created with [hms::as_hms()] that is used for the x.axis
+#' * `Time` is an `hms` created with [hms::as_hms()] that is used for the x.axis
 #'
 #' The default scaling of the y-axis is a `symlog` scale, which is a logarithmic
 #' scale that only starts scaling after a given threshold (default = 0). This
@@ -202,7 +202,7 @@ gg_day <- function(dataset,
           !!x %>% format(format = format.day))
   }
   
-  dataset <- dataset %>% create_Timedata(Datetime.colname = !!x)
+  dataset <- dataset %>% add_Time_col(Datetime.colname = !!x)
   
   dataset <-
     dataset %>%
@@ -232,7 +232,7 @@ gg_day <- function(dataset,
   Plot <- 
     dataset %>% 
     #basic setup
-    ggplot2::ggplot(ggplot2::aes(x=Time.data, y = !!y)) +
+    ggplot2::ggplot(ggplot2::aes(x=Time, y = !!y)) +
     eval(geom_function_expr) +
     ribbon +
     # Scales --------------------------------------------------------------

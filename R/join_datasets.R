@@ -17,8 +17,8 @@
 #' package = "LightLogR")
 #' file.LL <- "205_actlumus_Log_1020_20230904101707532.txt.zip"
 #' file.env <- "cyepiamb_CW35_Log_1431_20230904081953614.txt.zip"
-#' dataset.LL <- import$ActLumus(file.LL, path, auto.id = "^(\\d{3})")
-#' dataset.env <- import$ActLumus(file.env, path, manual.id = "CW35")
+#' dataset.LL <- import$ActLumus(file.LL, path = path, auto.id = "^(\\d{3})")
+#' dataset.env <- import$ActLumus(file.env, path = path, manual.id = "CW35")
 #' 
 #' #join the datasets
 #' joined <- join_datasets(dataset.LL, dataset.env)

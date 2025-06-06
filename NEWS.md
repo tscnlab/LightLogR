@@ -1,3 +1,41 @@
+# LightLogR 0.9.1
+
+* `add_Date_col()` is a new convenience function to add a Date column to the dataset, optionally showing the weekday.
+
+* `Datetime2Time()` is a new convenience function that is used in other functions that average over datetimes, which is often more sensible over times.
+
+* reworked the README file to reflect some of the features `LightLogR` has gained over time
+
+* `summarize_numeric()` now calculates `total_duration` correctly, even when the prefix is removed.
+
+* added the `sample.data.irregular` internal dataset
+
+* removed `LYS` wearable sample file, due to package size limitations
+
+* `add_Time_col()` replaces `create_Time_data()`
+
+* `extract_clusters()` has the option to show the cluster condition in the output with `add.label = TRUE`, e.g., `MEDI>500|d≥30min|i≤5min` for clusters of melanopic EDI larger than 500, at least 30 minutes long (`d`), allowing interruptions of up to 5 minutes at a time (`i`).
+
+* `add_clusters()` now drops empty groups, which has led to warnings before
+
+* Added many more unit tests - **888** and counting!
+
+* Removed a nasty bug in the internal functions that could lead to a shift in how dominant epochs are assigned to durations when groups are dropped due to singular observations
+
+* `gapless_datetimes()`: fixed a bug that prohibited the use of durations. Had downstream effects on basically all gap functions
+
+* `extract_gaps()` now warns correctly if there are implicit gaps with a non-default epoch 
+
+* `import` has the option to remove data before a specified date. Default is `not.before = 2001-01-01`. Some devices fall back to a time stamp in the year 2000 after the battery drained completely. This makes the import problematic in terms of gap searching.
+
+* `extract_states()` has the option not to group by the extracted state.
+
+* `extract_clusters()` and `extract_states()` do not drop empty groups, which is important for summaries. `extract_clusters()` does it by default, `extract_states()` does not.
+
+* `summarize_numeric()` has the option to show zero-instances of groups. Helpful to make certain groups with zero instances are not dropped, especially in a chain with `mean_daily()`
+
+* `mean_daily()`: Automatic conversion to weekdays from dates. Further it has the option to replace NA with zeros before calculating mean daily values
+
 # LightLogR 0.9.0 `Sunrise`
 
 This is a huge update for `LightLogR`, bringing many new features and twenty-two new functions
@@ -50,7 +88,7 @@ This is a huge update for `LightLogR`, bringing many new features and twenty-two
 
 ## Misc and Housekeeping
 
-* Import support for the `ClouClip` device.
+* Import support for the `Clouclip` device.
 
 * `number_states()` added the option to just output a count number without the original state
 

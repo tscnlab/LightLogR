@@ -46,16 +46,18 @@ it will be computationally faster if it does.
 \examples{
 # Extract clusters and add mean MEDI value
 sample.data.environment |>
+filter_Date(length = "2 days") |> 
 extract_clusters(MEDI > 1000) |>
 extract_metric(
   sample.data.environment,
-  "mean_lux" = mean(MEDI, na.rm = TRUE)
+  "mean_medi" = mean(MEDI, na.rm = TRUE)
 ) |>
-dplyr::select(Id, state.count, duration, mean_lux)
+dplyr::select(Id, state.count, duration, mean_medi)
 
 # Extract states and add mean MEDI value
 dataset <-
 sample.data.environment |>
+filter_Date(length = "2 days") |> 
  add_photoperiod(c(48.5, 9))
 
 dataset |>

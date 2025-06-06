@@ -58,12 +58,15 @@ Beware if columns in the \code{dataset} and \code{States.dataset} have the same 
 \examples{
 states <-
 sample.data.environment |>
+  filter_Date(length = "1 day") |> 
   extract_states(Daylight, MEDI > 1000)
 
 states |> head(2)
 
-#add states to a dataset and plot them
+#add states to a dataset and plot them - as we only looked for states on the
+# first day (see above), only the first day will show up in the plot
 sample.data.environment |> 
+ filter_Date(length = "2 day") |> 
  add_states(states) |> 
  gg_days() |> 
  gg_state(Daylight)
