@@ -7,11 +7,12 @@
 mean_daily_metric(
   data,
   Variable,
-  Weekend.type = Day,
+  Weekend.type = Date,
   Datetime.colname = Datetime,
   metric_type = duration_above_threshold,
   prefix = "average_",
   filter.empty = FALSE,
+  Datetime2Time = TRUE,
   ...
 )
 }
@@ -33,6 +34,11 @@ the week as a factor}
 \item{prefix}{String that is the prefix on summarized values}
 
 \item{filter.empty}{Filter out empty rows. Default is FALSE}
+
+\item{Datetime2Time}{Logical of whether POSIXct columns should be transformed
+into hms(time) columns, which is usually sensible for averaging (default is
+\code{TRUE}). Calls \code{\link[=Datetime2Time]{Datetime2Time()}} with default settings (all POSIXct are
+affected).}
 
 \item{...}{Additional arguments passed to the metric function}
 }
@@ -61,6 +67,13 @@ mean_daily_metric(
 sample.data.environment |> 
   mean_daily_metric(
   Variable = MEDI,
+  threshold = 250)
+
+# by default, datetime columns are converted to time
+sample.data.environment |> 
+  mean_daily_metric(
+  Variable = MEDI,
+  metric_type = timing_above_threshold,
   threshold = 250)
 
 }

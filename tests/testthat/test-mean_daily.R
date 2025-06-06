@@ -1,7 +1,7 @@
 test_that("mean_daily works with basic numeric data", {
   # Create sample data
   sample_data <- data.frame(
-    Day = factor(c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"), 
+    Date = factor(c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"), 
                  levels = c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")),
     lux = c(250, 300, 275, 280, 290, 350, 320),
     duration = c(120, 130, 125, 135, 140, 180, 160)
@@ -10,7 +10,7 @@ test_that("mean_daily works with basic numeric data", {
   result <- mean_daily(sample_data)
   
   expect_equal(nrow(result), 3)
-  expect_equal(result$Day, c("Mean daily", "Weekday", "Weekend"))
+  expect_equal(result$Date, c("Mean daily", "Weekday", "Weekend"))
   
   # Check calculations
   expect_equal(result$`average_lux`[2], mean(sample_data$lux[1:5]))
@@ -20,7 +20,7 @@ test_that("mean_daily works with basic numeric data", {
 
 test_that("mean_daily handles NA values correctly", {
   sample_data <- data.frame(
-    Day = factor(c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"), 
+    Date = factor(c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"), 
                  levels = c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")),
     lux = c(250, NA, 275, 280, 290, 350, NA)
   )
@@ -39,7 +39,7 @@ test_that("mean_daily handles NA values correctly", {
 test_that("mean_daily handles Duration objects", {
   
   sample_data <- data.frame(
-    Day = factor(c("Mon", "Tue"), levels = c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")),
+    Date = factor(c("Mon", "Tue"), levels = c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")),
     duration = c(lubridate::duration(120, "seconds"), lubridate::duration(180, "seconds"))
   )
   
@@ -64,7 +64,7 @@ test_that("mean_daily calculates from Date column", {
 test_that("mean_daily handles grouped data", {
   sample_data <- data.frame(
     Group = rep(c("A", "B"), each = 7),
-    Day = factor(rep(c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"), 2), 
+    Date = factor(rep(c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"), 2), 
                  levels = c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")),
     lux = c(250, 300, 275, 280, 290, 350, 320, 200, 220, 210, 230, 240, 300, 290)
   )
@@ -92,7 +92,7 @@ test_that("mean_daily provides informative error for invalid inputs", {
 test_that("mean_daily works with only one day type", {
   # Only weekdays
   weekday_data <- data.frame(
-    Day = factor(c("Mon", "Tue", "Wed"), levels = c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")),
+    Date = factor(c("Mon", "Tue", "Wed"), levels = c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")),
     lux = c(250, 300, 275)
   )
   
@@ -102,7 +102,7 @@ test_that("mean_daily works with only one day type", {
   
   # Only weekend
   weekend_data <- data.frame(
-    Day = factor(c("Sat", "Sun"), levels = c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")),
+    Date = factor(c("Sat", "Sun"), levels = c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")),
     lux = c(350, 320)
   )
   
@@ -133,7 +133,7 @@ test_that("mean_daily_metric calculates metrics correctly", {
   )
   
   expect_equal(nrow(result), 3)
-  expect_setequal(result$Day, c("Weekday", "Weekend", "Mean daily"))
+  expect_setequal(result$Date, c("Weekday", "Weekend", "Mean daily"))
   expect_true("average_mock" %in% colnames(result))
 })
 

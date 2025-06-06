@@ -8,6 +8,7 @@
 #'   Despite its name, the function actually summarizes all double columns,
 #'   which is more inclusive compared to just numeric columns.
 #'
+#' @inheritParams mean_daily
 #' @param data A dataframe containing numeric data, typically from
 #'   [extract_clusters()] or [extract_gaps()].
 #' @param remove Character vector of columns removed from the summary.
@@ -40,7 +41,7 @@
 #' extract_clusters(MEDI > 1000)
 #'
 #' #input to summarize_numeric
-#' dataset
+#' dataset |> utils::head()
 #' #output of summarize_numeric (removing state.count and epoch from the summary)
 #' dataset |> summarize_numeric(c("state.count", "epoch"))
 summarize_numeric <- function(
@@ -50,7 +51,8 @@ summarize_numeric <- function(
     na.rm = TRUE,
     complete.groups.on = NULL,
     add.total.duration = TRUE,
-    durations.dec = 0) {
+    durations.dec = 0,
+    Datetime2Time = TRUE) {
   
   total <- list(NULL)
   if(add.total.duration & "duration" %in% names(data)) {
@@ -62,6 +64,12 @@ summarize_numeric <- function(
   
   complete_expr <- rlang::enexpr(complete.groups.on)
   
+  if(Datetime2Time) {
+    data <-
+      data |>
+      Datetime2Time(silent = TRUE)
+  }
+  
   if(!is.null(complete_expr)) {
     groups <- dplyr::groups(data)
     data <- 
@@ -69,11 +77,21 @@ summarize_numeric <- function(
       dplyr::group_by({{ complete.groups.on }}, .add = TRUE)
   }
   
+  groups <- dplyr::group_vars(data)
+  
+  data_total <- 
+    data |>
+    dplyr::select(-dplyr::any_of(remove)) |> 
+    dplyr::summarize(
+      !!!total,
+      "episodes" = dplyr::n(),
+      .groups = "drop_last"
+    )
+  
   data <- 
   data |>
     dplyr::select(-dplyr::any_of(remove)) |> 
     dplyr::summarize(
-      !!!total,
       dplyr::across(
         dplyr::where(\(x) is.double(x) | is.numeric(x)),
         \(x) if(inherits(x, "Duration")) {
@@ -86,18 +104,10 @@ summarize_numeric <- function(
         },
         .names = "{prefix}{.col}"
       ),
-      "episodes" = dplyr::n(),
       .groups = "drop_last"
     )
   
-  # potential_duration <- rlang::expr(!!rlang::sym(paste0(prefix, "duration")))
-  # 
-  # if(add.total.duration & (paste0(prefix, "duration") %in% names(data))) {
-  #   data |>
-  #     dplyr::mutate(
-  #       total_duration = {{ potential_duration }}*episodes
-  #     )
-  # } else data
+  data <- dplyr::left_join(data, data_total, by= groups)
   
   if(!is.null(complete_expr)) {
       data |> 

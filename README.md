@@ -330,18 +330,18 @@ dataset |>
                    add.label = TRUE) |> #add a description of the conditions
   group_by(label) |> #group by the label so it does not get removed next
   summarize_numeric() |> #summarize the output
-  select(label, mean_duration, episodes, total_duration) #collect a subset
-#> # A tibble: 1 × 4
-#>   label                     mean_duration       episodes total_duration       
-#>   <chr>                     <Duration>             <int> <Duration>           
-#> 1 MEDI>=250|d≥30mins|i≤1min 4288s (~1.19 hours)       17 72890s (~20.25 hours)
+  select(-mean_epoch) #collect a subset
+#> # A tibble: 1 × 6
+#>   label   mean_start mean_end mean_duration       total_duration        episodes
+#>   <chr>   <time>     <time>   <Duration>          <Duration>               <int>
+#> 1 MEDI>=… 13:50:47   15:02:14 4288s (~1.19 hours) 72890s (~20.25 hours)       17
 ```
 
 We see there are only 17 instances across the week, lasting, on average,
-a bit above an hour. Setting the total duration in relation to the 1.29
-days time above 250 lx from above would be misleading, however. This is
-because here, there are interruptions present. How prominent are these
-interruptions?
+a bit above an hour (and sitting aroung 14:00 - 15:00). Directly
+relating the total duration to the 1.29 days time above 250 lx from
+above would be misleading, however. This is because here, there are
+interruptions present. How prominent are these interruptions?
 
 ``` r
 dataset |> 

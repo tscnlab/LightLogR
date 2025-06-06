@@ -12,7 +12,8 @@ summarize_numeric(
   na.rm = TRUE,
   complete.groups.on = NULL,
   add.total.duration = TRUE,
-  durations.dec = 0
+  durations.dec = 0,
+  Datetime2Time = TRUE
 )
 
 summarise_numeric(
@@ -22,7 +23,8 @@ summarise_numeric(
   na.rm = TRUE,
   complete.groups.on = NULL,
   add.total.duration = TRUE,
-  durations.dec = 0
+  durations.dec = 0,
+  Datetime2Time = TRUE
 )
 }
 \arguments{
@@ -51,6 +53,11 @@ the input data.}
 
 \item{durations.dec}{Numeric of number of decimals for the mean calculation
 of durations and times. Defaults to 0.}
+
+\item{Datetime2Time}{Logical of whether POSIXct columns should be transformed
+into hms(time) columns, which is usually sensible for averaging (default is
+\code{TRUE}). Calls \code{\link[=Datetime2Time]{Datetime2Time()}} with default settings (all POSIXct are
+affected).}
 }
 \value{
 A dataframe containing the summarized metrics.
@@ -72,7 +79,7 @@ aggregate_Datetime(unit = "15 mins") |>
 extract_clusters(MEDI > 1000)
 
 #input to summarize_numeric
-dataset
+dataset |> utils::head()
 #output of summarize_numeric (removing state.count and epoch from the summary)
 dataset |> summarize_numeric(c("state.count", "epoch"))
 }

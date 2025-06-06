@@ -6,12 +6,13 @@
 \usage{
 mean_daily(
   data,
-  Weekend.type = Day,
+  Weekend.type = Date,
   na.rm = TRUE,
   calculate.from.Date = NULL,
   prefix = "average_",
   filter.empty = FALSE,
-  sub.zero = FALSE
+  sub.zero = FALSE,
+  Datetime2Time = TRUE
 )
 }
 \arguments{
@@ -36,6 +37,11 @@ will be generated from this column.}
 \item{sub.zero}{Logical. Should missing values be replaced by zero? Defaults
 to \code{FALSE}. Will throw an error, if it happens on a type other than
 \code{double}.}
+
+\item{Datetime2Time}{Logical of whether POSIXct columns should be transformed
+into hms(time) columns, which is usually sensible for averaging (default is
+\code{TRUE}). Calls \code{\link[=Datetime2Time]{Datetime2Time()}} with default settings (all POSIXct are
+affected).}
 }
 \value{
 A dataframe with three rows representing average weekday, weekend,
@@ -60,7 +66,7 @@ still 18:00, not 6:00).
 \examples{
 # Create sample data
 sample_data <- data.frame(
-  Day = factor(c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"),
+  Date = factor(c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"),
                levels = c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")),
   lux = c(250, 300, 275, 280, 290, 350, 320),
   duration = lubridate::as.duration(c(120, 130, 125, 135, 140, 180, 160))
@@ -76,6 +82,6 @@ sample_data_with_date <- data.frame(
   duration = lubridate::as.duration(c(120, 130, 125, 135, 140, 180, 160))
 )
 
-mean_daily(sample_data_with_date, calculate.from.Date = Date)
+mean_daily(sample_data_with_date)
 
 }

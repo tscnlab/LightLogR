@@ -23,7 +23,7 @@ The article will be divided into the following sections:
 - [Adding states](#adding-states): How to add states to the data
 - [Clusters](#clusters): Working with clusters
 
-```{r setup}
+```{r setup, message = FALSE}
 library(LightLogR)
 library(tidyverse)
 library(gt)
