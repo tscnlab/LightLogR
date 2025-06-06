@@ -62,6 +62,7 @@ gap_table <- function(dataset,
     )
   
   dat3 <- 
+    if(nrow(dat1) != 0) {
     dat2 |> 
     dplyr::left_join(dat1, by = dplyr::group_vars(dat2)) |> 
     dplyr::select(!!!dplyr::groups(dat2), 
@@ -71,6 +72,18 @@ gap_table <- function(dataset,
                   interval,
                   number_gaps = gaps,
                   mean_gap_duration)
+    } else {
+      dat2 |> 
+        dplyr::select(!!!dplyr::groups(dat2), 
+                  available_data = duration,
+                  missing_data = missing,
+                  total_duration = total,
+                  interval) |> 
+        dplyr::mutate(
+                  number_gaps = 0,
+                  mean_gap_duration = lubridate::duration(0)
+                  )
+    }
   
   dat4 <- 
     if(include.implicit.gaps) {

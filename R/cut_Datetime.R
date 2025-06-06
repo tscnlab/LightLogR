@@ -67,11 +67,18 @@ cut_Datetime <- function(dataset,
   
   # Manipulation ----------------------------------------------------------
   
+  
+  
   #create the epochs list
-  if(unit == "dominant.epoch") {
+  if(lubridate::is.duration(unit)){
+    unit <- dataset %>% 
+      dplyr::summarize(
+        dominant.epoch = unit %>% lubridate::as.period(),
+        group.indices = dplyr::cur_group_id()
+      )
+  } else if (unit == "dominant.epoch") {
   unit <- epoch_list(dataset, Datetime.colname = {{ Datetime.colname }})
-  }
-  else {
+  } else {
     unit <- dataset %>% 
       dplyr::summarize(
         dominant.epoch = unit %>% lubridate::as.period(),

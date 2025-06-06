@@ -95,7 +95,9 @@ aggregate_Datetime <- function(dataset,
 
   # Function ----------------------------------------------------------
   
-  if(unit != "none") {
+  unit2 <- unit |> as.character()
+  
+  if(unit2 != "none") {
     dataset <- 
     dataset  %>% 
     cut_Datetime(

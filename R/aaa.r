@@ -1,3 +1,4 @@
+#create bindings
 .metric <- .weight <- .date <- max_date <- is.irregular <- NULL
 marked.for.removal <- wavelength <- total_duration_n <- Group <- is.cluster <- NULL
 gap <- episodes <- total_duration <- total <- interval <- gaps <- NULL
@@ -23,6 +24,6 @@ onset <- midpoint <- offset <- mean_onset <- mean_midpoint <- NULL
 mean_offset <-  Date.data <- print_n <- remove_duplicates <-  NULL
 
 .onLoad <- function(libname, pkgname) {
-  utils::globalVariables(".")
+  utils::globalVariables(c(".", "Date"))
 }
 

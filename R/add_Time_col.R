@@ -2,7 +2,7 @@
 #' Create a Time-of-Day column in the dataset
 #'
 #' @inheritParams cut_Datetime
-#' @param Time Name of the newly created column. Expects a `symbol`. The
+#' @param Time.colname Name of the newly created column. Expects a `symbol`. The
 #'   default(`Time`) works well with other functions in [LightLogR].
 #'   Will overwrite existing columns of identical name.
 #' @param output.dataset should the output be a `data.frame` (Default `TRUE`) or
@@ -17,7 +17,7 @@
 #' 
 add_Time_col <- function(dataset, 
                              Datetime.colname = Datetime,
-                             Time = Time,
+                             Time.colname = Time,
                              output.dataset = TRUE) {
   
   # Initial Checks ----------------------------------------------------------
@@ -36,10 +36,10 @@ add_Time_col <- function(dataset,
   dataset <-
     dataset %>%
     dplyr::mutate(
-      {{ Time }} := {{ Datetime.colname }} %>% hms::as_hms()
+      {{ Time.colname }} := {{ Datetime.colname }} %>% hms::as_hms()
     )  
   
   # Return ----------------------------------------------------------
-  if(output.dataset) dataset else dataset[[colname.defused({{ Time }})]]
+  if(output.dataset) dataset else dataset[[colname.defused({{ Time.colname }})]]
 
 }

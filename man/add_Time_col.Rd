@@ -7,7 +7,7 @@
 add_Time_col(
   dataset,
   Datetime.colname = Datetime,
-  Time = Time,
+  Time.colname = Time,
   output.dataset = TRUE
 )
 }
@@ -21,7 +21,7 @@ by \link{LightLogR}, take care to choose a sensible variable for the
 \link{LightLogR}. Expects a \code{symbol}. Needs to be part of the \code{dataset}. Must
 be of type \code{POSIXct}.}
 
-\item{Time}{Name of the newly created column. Expects a \code{symbol}. The
+\item{Time.colname}{Name of the newly created column. Expects a \code{symbol}. The
 default(\code{Time}) works well with other functions in \link{LightLogR}.
 Will overwrite existing columns of identical name.}
 
