@@ -24,6 +24,6 @@ onset <- midpoint <- offset <- mean_onset <- mean_midpoint <- NULL
 mean_offset <-  Date.data <- print_n <- remove_duplicates <-  NULL
 
 .onLoad <- function(libname, pkgname) {
-  utils::globalVariables(c(".", "Date"))
+  utils::globalVariables(c(".", "Date", "Value"))
 }
 
