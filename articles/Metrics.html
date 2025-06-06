@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,7 +70,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Metrics</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/v0.9.0/vignettes/articles/Metrics.Rmd" class="external-link"><code>vignettes/articles/Metrics.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/main/vignettes/articles/Metrics.Rmd" class="external-link"><code>vignettes/articles/Metrics.Rmd</code></a></small>
       <div class="d-none name"><code>Metrics.Rmd</code></div>
     </div>
 
@@ -1737,9 +1737,10 @@ the full 6 days of data compared to their average, ranging between 0
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span></span>
-<span>    IS <span class="op">=</span> <span class="fu"><a href="../reference/interdaily_stability.html">interdaily_stability</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/interdaily_stability.html">interdaily_stability</a></span><span class="op">(</span></span>
 <span>      Light.vector <span class="op">=</span> <span class="va">MEDI</span>,</span>
-<span>      Datetime.vector <span class="op">=</span> <span class="va">Datetime</span></span>
+<span>      Datetime.vector <span class="op">=</span> <span class="va">Datetime</span>,</span>
+<span>      as.df <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -2196,32 +2197,32 @@ the full 6 days of data compared to their average, ranging between 0
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead><tr class="gt_col_headings">
 <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="Id">Id</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="IS">IS</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="interdaily_stability">interdaily_stability</th>
     </tr></thead>
 <tbody class="gt_table_body">
 <tr>
 <td headers="Id" class="gt_row gt_center">201</td>
-<td headers="IS" class="gt_row gt_right">0.5079676</td>
+<td headers="interdaily_stability" class="gt_row gt_right">0.5079676</td>
 </tr>
 <tr>
 <td headers="Id" class="gt_row gt_center">202</td>
-<td headers="IS" class="gt_row gt_right">0.1986105</td>
+<td headers="interdaily_stability" class="gt_row gt_right">0.1986105</td>
 </tr>
 <tr>
 <td headers="Id" class="gt_row gt_center">204</td>
-<td headers="IS" class="gt_row gt_right">0.2663354</td>
+<td headers="interdaily_stability" class="gt_row gt_right">0.2663354</td>
 </tr>
 <tr>
 <td headers="Id" class="gt_row gt_center">205</td>
-<td headers="IS" class="gt_row gt_right">0.3215539</td>
+<td headers="interdaily_stability" class="gt_row gt_right">0.3215539</td>
 </tr>
 <tr>
 <td headers="Id" class="gt_row gt_center">206</td>
-<td headers="IS" class="gt_row gt_right">0.2367288</td>
+<td headers="interdaily_stability" class="gt_row gt_right">0.2367288</td>
 </tr>
 <tr>
 <td headers="Id" class="gt_row gt_center">208</td>
-<td headers="IS" class="gt_row gt_right">0.1937092</td>
+<td headers="interdaily_stability" class="gt_row gt_right">0.1937092</td>
 </tr>
 </tbody>
 </table>
@@ -2241,10 +2242,11 @@ not be the most informative parametrization of the metric.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span></span>
-<span>    TAT_250 <span class="op">=</span> <span class="fu"><a href="../reference/duration_above_threshold.html">duration_above_threshold</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/duration_above_threshold.html">duration_above_threshold</a></span><span class="op">(</span></span>
 <span>      Light.vector <span class="op">=</span> <span class="va">MEDI</span>,</span>
 <span>      Time.vector <span class="op">=</span> <span class="va">Datetime</span>,</span>
-<span>      threshold <span class="op">=</span> <span class="fl">250</span></span>
+<span>      threshold <span class="op">=</span> <span class="fl">250</span>,</span>
+<span>      as.df <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -2701,32 +2703,32 @@ not be the most informative parametrization of the metric.</p>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead><tr class="gt_col_headings">
 <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="Id">Id</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="TAT_250">TAT_250</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="duration_above_250">duration_above_250</th>
     </tr></thead>
 <tbody class="gt_table_body">
 <tr>
 <td headers="Id" class="gt_row gt_center">201</td>
-<td headers="TAT_250" class="gt_row gt_center">160180s (~1.85 days)</td>
+<td headers="duration_above_250" class="gt_row gt_center">160180s (~1.85 days)</td>
 </tr>
 <tr>
 <td headers="Id" class="gt_row gt_center">202</td>
-<td headers="TAT_250" class="gt_row gt_center">29970s (~8.32 hours)</td>
+<td headers="duration_above_250" class="gt_row gt_center">29970s (~8.32 hours)</td>
 </tr>
 <tr>
 <td headers="Id" class="gt_row gt_center">204</td>
-<td headers="TAT_250" class="gt_row gt_center">147340s (~1.71 days)</td>
+<td headers="duration_above_250" class="gt_row gt_center">147340s (~1.71 days)</td>
 </tr>
 <tr>
 <td headers="Id" class="gt_row gt_center">205</td>
-<td headers="TAT_250" class="gt_row gt_center">98520s (~1.14 days)</td>
+<td headers="duration_above_250" class="gt_row gt_center">98520s (~1.14 days)</td>
 </tr>
 <tr>
 <td headers="Id" class="gt_row gt_center">206</td>
-<td headers="TAT_250" class="gt_row gt_center">6320s (~1.76 hours)</td>
+<td headers="duration_above_250" class="gt_row gt_center">6320s (~1.76 hours)</td>
 </tr>
 <tr>
 <td headers="Id" class="gt_row gt_center">208</td>
-<td headers="TAT_250" class="gt_row gt_center">47140s (~13.09 hours)</td>
+<td headers="duration_above_250" class="gt_row gt_center">47140s (~13.09 hours)</td>
 </tr>
 </tbody>
 </table>
@@ -2744,10 +2746,11 @@ first two Ids.</p>
 <span><span class="va">data</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">wDay</span>, .add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span></span>
-<span>    TAT_250 <span class="op">=</span> <span class="fu"><a href="../reference/duration_above_threshold.html">duration_above_threshold</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/duration_above_threshold.html">duration_above_threshold</a></span><span class="op">(</span></span>
 <span>      Light.vector <span class="op">=</span> <span class="va">MEDI</span>,</span>
 <span>      Time.vector <span class="op">=</span> <span class="va">Datetime</span>,</span>
-<span>      threshold <span class="op">=</span> <span class="fl">250</span></span>
+<span>      threshold <span class="op">=</span> <span class="fl">250</span>,</span>
+<span>      as.df <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span>    <span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop_last"</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
@@ -3206,7 +3209,7 @@ first two Ids.</p>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead><tr class="gt_col_headings">
 <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="wDay">wDay</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="TAT_250">TAT_250</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="duration_above_250">duration_above_250</th>
     </tr></thead>
 <tbody class="gt_table_body">
 <tr class="gt_group_heading_row">
@@ -3214,54 +3217,54 @@ first two Ids.</p>
     </tr>
 <tr class="gt_row_group_first">
 <td headers="201  wDay" class="gt_row gt_center">Tue</td>
-<td headers="201  TAT_250" class="gt_row gt_center">34500s (~9.58 hours)</td>
+<td headers="201  duration_above_250" class="gt_row gt_center">34500s (~9.58 hours)</td>
 </tr>
 <tr>
 <td headers="201  wDay" class="gt_row gt_center">Wed</td>
-<td headers="201  TAT_250" class="gt_row gt_center">32780s (~9.11 hours)</td>
+<td headers="201  duration_above_250" class="gt_row gt_center">32780s (~9.11 hours)</td>
 </tr>
 <tr>
 <td headers="201  wDay" class="gt_row gt_center">Thu</td>
-<td headers="201  TAT_250" class="gt_row gt_center">21820s (~6.06 hours)</td>
+<td headers="201  duration_above_250" class="gt_row gt_center">21820s (~6.06 hours)</td>
 </tr>
 <tr>
 <td headers="201  wDay" class="gt_row gt_center">Fri</td>
-<td headers="201  TAT_250" class="gt_row gt_center">31670s (~8.8 hours)</td>
+<td headers="201  duration_above_250" class="gt_row gt_center">31670s (~8.8 hours)</td>
 </tr>
 <tr>
 <td headers="201  wDay" class="gt_row gt_center">Sat</td>
-<td headers="201  TAT_250" class="gt_row gt_center">15010s (~4.17 hours)</td>
+<td headers="201  duration_above_250" class="gt_row gt_center">15010s (~4.17 hours)</td>
 </tr>
 <tr>
 <td headers="201  wDay" class="gt_row gt_center">Sun</td>
-<td headers="201  TAT_250" class="gt_row gt_center">24400s (~6.78 hours)</td>
+<td headers="201  duration_above_250" class="gt_row gt_center">24400s (~6.78 hours)</td>
 </tr>
 <tr class="gt_group_heading_row">
 <th colspan="2" class="gt_group_heading" scope="colgroup" id="202">202</th>
     </tr>
 <tr class="gt_row_group_first">
 <td headers="202  wDay" class="gt_row gt_center">Tue</td>
-<td headers="202  TAT_250" class="gt_row gt_center">18760s (~5.21 hours)</td>
+<td headers="202  duration_above_250" class="gt_row gt_center">18760s (~5.21 hours)</td>
 </tr>
 <tr>
 <td headers="202  wDay" class="gt_row gt_center">Wed</td>
-<td headers="202  TAT_250" class="gt_row gt_center">6930s (~1.93 hours)</td>
+<td headers="202  duration_above_250" class="gt_row gt_center">6930s (~1.93 hours)</td>
 </tr>
 <tr>
 <td headers="202  wDay" class="gt_row gt_center">Thu</td>
-<td headers="202  TAT_250" class="gt_row gt_center">200s (~3.33 minutes)</td>
+<td headers="202  duration_above_250" class="gt_row gt_center">200s (~3.33 minutes)</td>
 </tr>
 <tr>
 <td headers="202  wDay" class="gt_row gt_center">Fri</td>
-<td headers="202  TAT_250" class="gt_row gt_center">200s (~3.33 minutes)</td>
+<td headers="202  duration_above_250" class="gt_row gt_center">200s (~3.33 minutes)</td>
 </tr>
 <tr>
 <td headers="202  wDay" class="gt_row gt_center">Sat</td>
-<td headers="202  TAT_250" class="gt_row gt_center">3130s (~52.17 minutes)</td>
+<td headers="202  duration_above_250" class="gt_row gt_center">3130s (~52.17 minutes)</td>
 </tr>
 <tr>
 <td headers="202  wDay" class="gt_row gt_center">Sun</td>
-<td headers="202  TAT_250" class="gt_row gt_center">750s (~12.5 minutes)</td>
+<td headers="202  duration_above_250" class="gt_row gt_center">750s (~12.5 minutes)</td>
 </tr>
 </tbody>
 </table>
@@ -4291,9 +4294,9 @@ through a styling function.</p>
 <span><span class="co">#Table output</span></span>
 <span><span class="va">TAT_250</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html" class="external-link">tbl_summary</a></span><span class="op">(</span>by <span class="op">=</span> <span class="va">Id</span>, include <span class="op">=</span> <span class="op">-</span><span class="va">wDay</span>, </span>
-<span>              statistic <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">TAT_250</span> <span class="op">~</span> <span class="st">"{mean} ({sd})"</span><span class="op">)</span>, </span>
-<span>              digits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">TAT_250</span> <span class="op">~</span> <span class="va">style_time</span><span class="op">)</span>,</span>
-<span>              label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>TAT_250 <span class="op">=</span> <span class="st">"Time above 250 lx mel EDI"</span><span class="op">)</span></span>
+<span>              statistic <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">duration_above_250</span> <span class="op">~</span> <span class="st">"{mean} ({sd})"</span><span class="op">)</span>, </span>
+<span>              digits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">duration_above_250</span> <span class="op">~</span> <span class="va">style_time</span><span class="op">)</span>,</span>
+<span>              label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>duration_above_250 <span class="op">=</span> <span class="st">"Time above 250 lx mel EDI"</span><span class="op">)</span></span>
 <span>              <span class="op">)</span></span></code></pre></div>
 <div id="vijbfglzvn" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#vijbfglzvn table {
@@ -5314,7 +5317,7 @@ weekends, and, the mean day (based on <em>(5 x weekdays + 2 x weekends)
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead><tr class="gt_col_headings">
 <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="wDay">wDay</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="average_TAT_250">average_TAT_250</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="average_duration_above_250">average_duration_above_250</th>
     </tr></thead>
 <tbody class="gt_table_body">
 <tr class="gt_group_heading_row">
@@ -5322,30 +5325,30 @@ weekends, and, the mean day (based on <em>(5 x weekdays + 2 x weekends)
     </tr>
 <tr class="gt_row_group_first">
 <td headers="201  wDay" class="gt_row gt_left">Mean daily</td>
-<td headers="201  average_TAT_250" class="gt_row gt_center">27196s (~7.55 hours)</td>
+<td headers="201  average_duration_above_250" class="gt_row gt_center">27196s (~7.55 hours)</td>
 </tr>
 <tr>
 <td headers="201  wDay" class="gt_row gt_left">Weekday</td>
-<td headers="201  average_TAT_250" class="gt_row gt_center">30192s (~8.39 hours)</td>
+<td headers="201  average_duration_above_250" class="gt_row gt_center">30192s (~8.39 hours)</td>
 </tr>
 <tr>
 <td headers="201  wDay" class="gt_row gt_left">Weekend</td>
-<td headers="201  average_TAT_250" class="gt_row gt_center">19705s (~5.47 hours)</td>
+<td headers="201  average_duration_above_250" class="gt_row gt_center">19705s (~5.47 hours)</td>
 </tr>
 <tr class="gt_group_heading_row">
 <th colspan="2" class="gt_group_heading" scope="colgroup" id="202">202</th>
     </tr>
 <tr class="gt_row_group_first">
 <td headers="202  wDay" class="gt_row gt_left">Mean daily</td>
-<td headers="202  average_TAT_250" class="gt_row gt_center">5213s (~1.45 hours)</td>
+<td headers="202  average_duration_above_250" class="gt_row gt_center">5213s (~1.45 hours)</td>
 </tr>
 <tr>
 <td headers="202  wDay" class="gt_row gt_left">Weekday</td>
-<td headers="202  average_TAT_250" class="gt_row gt_center">6522s (~1.81 hours)</td>
+<td headers="202  average_duration_above_250" class="gt_row gt_center">6522s (~1.81 hours)</td>
 </tr>
 <tr>
 <td headers="202  wDay" class="gt_row gt_left">Weekend</td>
-<td headers="202  average_TAT_250" class="gt_row gt_center">1940s (~32.33 minutes)</td>
+<td headers="202  average_duration_above_250" class="gt_row gt_center">1940s (~32.33 minutes)</td>
 </tr>
 </tbody>
 </table>
@@ -5354,11 +5357,10 @@ weekends, and, the mean day (based on <em>(5 x weekdays + 2 x weekends)
 <code><a href="../reference/mean_daily_metric.html">mean_daily_metric()</a></code>, which is a convenience function to
 combine the calculation of a single-return-value, duration-based metric
 with the mean daily calculation. We can use it to calculate
-<code>TAT250</code> from scratch</p>
+<code>duration_above_250</code>(lx) from scratch</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/mean_daily_metric.html">mean_daily_metric</a></span><span class="op">(</span></span>
-<span>    metric <span class="op">=</span> <span class="st">"TAT250"</span>,</span>
 <span>    Variable <span class="op">=</span> <span class="va">MEDI</span>,</span>
 <span>    threshold <span class="op">=</span> <span class="fl">250</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -5815,50 +5817,50 @@ with the mean daily calculation. We can use it to calculate
 </style>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead><tr class="gt_col_headings">
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Day">Day</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="average_TAT250">average_TAT250</th>
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Date">Date</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="average_duration_above_250">average_duration_above_250</th>
     </tr></thead>
 <tbody class="gt_table_body">
 <tr class="gt_group_heading_row">
 <th colspan="2" class="gt_group_heading" scope="colgroup" id="201">201</th>
     </tr>
 <tr class="gt_row_group_first">
-<td headers="201  Day" class="gt_row gt_left">Mean daily</td>
-<td headers="201  average_TAT250" class="gt_row gt_center">27196s (~7.55 hours)</td>
+<td headers="201  Date" class="gt_row gt_left">Mean daily</td>
+<td headers="201  average_duration_above_250" class="gt_row gt_center">27196s (~7.55 hours)</td>
 </tr>
 <tr>
-<td headers="201  Day" class="gt_row gt_left">Weekday</td>
-<td headers="201  average_TAT250" class="gt_row gt_center">30192s (~8.39 hours)</td>
+<td headers="201  Date" class="gt_row gt_left">Weekday</td>
+<td headers="201  average_duration_above_250" class="gt_row gt_center">30192s (~8.39 hours)</td>
 </tr>
 <tr>
-<td headers="201  Day" class="gt_row gt_left">Weekend</td>
-<td headers="201  average_TAT250" class="gt_row gt_center">19705s (~5.47 hours)</td>
+<td headers="201  Date" class="gt_row gt_left">Weekend</td>
+<td headers="201  average_duration_above_250" class="gt_row gt_center">19705s (~5.47 hours)</td>
 </tr>
 <tr class="gt_group_heading_row">
 <th colspan="2" class="gt_group_heading" scope="colgroup" id="202">202</th>
     </tr>
 <tr class="gt_row_group_first">
-<td headers="202  Day" class="gt_row gt_left">Mean daily</td>
-<td headers="202  average_TAT250" class="gt_row gt_center">5213s (~1.45 hours)</td>
+<td headers="202  Date" class="gt_row gt_left">Mean daily</td>
+<td headers="202  average_duration_above_250" class="gt_row gt_center">5213s (~1.45 hours)</td>
 </tr>
 <tr>
-<td headers="202  Day" class="gt_row gt_left">Weekday</td>
-<td headers="202  average_TAT250" class="gt_row gt_center">6522s (~1.81 hours)</td>
+<td headers="202  Date" class="gt_row gt_left">Weekday</td>
+<td headers="202  average_duration_above_250" class="gt_row gt_center">6522s (~1.81 hours)</td>
 </tr>
 <tr>
-<td headers="202  Day" class="gt_row gt_left">Weekend</td>
-<td headers="202  average_TAT250" class="gt_row gt_center">1940s (~32.33 minutes)</td>
+<td headers="202  Date" class="gt_row gt_left">Weekend</td>
+<td headers="202  average_duration_above_250" class="gt_row gt_center">1940s (~32.33 minutes)</td>
 </tr>
 </tbody>
 </table>
 </div>
-<p>The function has limited options to change the
+<p>The function has (very) limited options to change the
 <code>metric_type</code>. In this case, we change the function to the
-longest continuous period above threshold.</p>
+longest continuous period above threshold. Basically, metric functions
+that return a numeric column can be used.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/mean_daily_metric.html">mean_daily_metric</a></span><span class="op">(</span></span>
-<span>    metric <span class="op">=</span> <span class="st">"PAT250"</span>,</span>
 <span>    Variable <span class="op">=</span> <span class="va">MEDI</span>,</span>
 <span>    metric_type <span class="op">=</span> <span class="va">period_above_threshold</span>,</span>
 <span>    threshold <span class="op">=</span> <span class="fl">250</span></span>
@@ -6316,39 +6318,39 @@ longest continuous period above threshold.</p>
 </style>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead><tr class="gt_col_headings">
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Day">Day</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="average_PAT250">average_PAT250</th>
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Date">Date</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="average_period_above_250">average_period_above_250</th>
     </tr></thead>
 <tbody class="gt_table_body">
 <tr class="gt_group_heading_row">
 <th colspan="2" class="gt_group_heading" scope="colgroup" id="201">201</th>
     </tr>
 <tr class="gt_row_group_first">
-<td headers="201  Day" class="gt_row gt_left">Mean daily</td>
-<td headers="201  average_PAT250" class="gt_row gt_center">6313s (~1.75 hours)</td>
+<td headers="201  Date" class="gt_row gt_left">Mean daily</td>
+<td headers="201  average_period_above_250" class="gt_row gt_center">6313s (~1.75 hours)</td>
 </tr>
 <tr>
-<td headers="201  Day" class="gt_row gt_left">Weekday</td>
-<td headers="201  average_PAT250" class="gt_row gt_center">6898s (~1.92 hours)</td>
+<td headers="201  Date" class="gt_row gt_left">Weekday</td>
+<td headers="201  average_period_above_250" class="gt_row gt_center">6898s (~1.92 hours)</td>
 </tr>
 <tr>
-<td headers="201  Day" class="gt_row gt_left">Weekend</td>
-<td headers="201  average_PAT250" class="gt_row gt_center">4850s (~1.35 hours)</td>
+<td headers="201  Date" class="gt_row gt_left">Weekend</td>
+<td headers="201  average_period_above_250" class="gt_row gt_center">4850s (~1.35 hours)</td>
 </tr>
 <tr class="gt_group_heading_row">
 <th colspan="2" class="gt_group_heading" scope="colgroup" id="202">202</th>
     </tr>
 <tr class="gt_row_group_first">
-<td headers="202  Day" class="gt_row gt_left">Mean daily</td>
-<td headers="202  average_PAT250" class="gt_row gt_center">1224s (~20.4 minutes)</td>
+<td headers="202  Date" class="gt_row gt_left">Mean daily</td>
+<td headers="202  average_period_above_250" class="gt_row gt_center">1224s (~20.4 minutes)</td>
 </tr>
 <tr>
-<td headers="202  Day" class="gt_row gt_left">Weekday</td>
-<td headers="202  average_PAT250" class="gt_row gt_center">1440s (~24 minutes)</td>
+<td headers="202  Date" class="gt_row gt_left">Weekday</td>
+<td headers="202  average_period_above_250" class="gt_row gt_center">1440s (~24 minutes)</td>
 </tr>
 <tr>
-<td headers="202  Day" class="gt_row gt_left">Weekend</td>
-<td headers="202  average_PAT250" class="gt_row gt_center">685s (~11.42 minutes)</td>
+<td headers="202  Date" class="gt_row gt_left">Weekend</td>
+<td headers="202  average_period_above_250" class="gt_row gt_center">685s (~11.42 minutes)</td>
 </tr>
 </tbody>
 </table>
@@ -6370,7 +6372,7 @@ usefull insights.</p>
 <span>  <span class="fu"><a href="../reference/summarize_numeric.html">summarize_numeric</a></span><span class="op">(</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_duration.html" class="external-link">fmt_duration</a></span><span class="op">(</span><span class="va">mean_average_TAT_250</span>, </span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_duration.html" class="external-link">fmt_duration</a></span><span class="op">(</span><span class="va">mean_average_duration_above_250</span>, </span>
 <span>               input_units <span class="op">=</span> <span class="st">"seconds"</span>, duration_style <span class="op">=</span> <span class="st">"colon-sep"</span><span class="op">)</span></span></code></pre></div>
 <div id="lwmttdsuvu" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#lwmttdsuvu table {
@@ -6824,23 +6826,23 @@ usefull insights.</p>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead><tr class="gt_col_headings">
 <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="wDay">wDay</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="mean_average_TAT_250">mean_average_TAT_250</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="mean_average_duration_above_250">mean_average_duration_above_250</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="episodes">episodes</th>
     </tr></thead>
 <tbody class="gt_table_body">
 <tr>
 <td headers="wDay" class="gt_row gt_left">Mean daily</td>
-<td headers="mean_average_TAT_250" class="gt_row gt_center">03:32:10</td>
+<td headers="mean_average_duration_above_250" class="gt_row gt_center">03:32:10</td>
 <td headers="episodes" class="gt_row gt_right">17</td>
 </tr>
 <tr>
 <td headers="wDay" class="gt_row gt_left">Weekday</td>
-<td headers="mean_average_TAT_250" class="gt_row gt_center">03:45:37</td>
+<td headers="mean_average_duration_above_250" class="gt_row gt_center">03:45:37</td>
 <td headers="episodes" class="gt_row gt_right">17</td>
 </tr>
 <tr>
 <td headers="wDay" class="gt_row gt_left">Weekend</td>
-<td headers="mean_average_TAT_250" class="gt_row gt_center">02:58:35</td>
+<td headers="mean_average_duration_above_250" class="gt_row gt_center">02:58:35</td>
 <td headers="episodes" class="gt_row gt_right">17</td>
 </tr>
 </tbody>
@@ -6857,38 +6859,25 @@ on weekdays, compared to weekends (03:45 vs. 02:58, respectively)</p>
 <p>In the final section, we will add more metrics to the analysis,
 including ones with multiple sub-metrics. Further, we imagine we want to
 know how these metrics change from the first half of the experiment
-(August/September) to the second half (October/November). Finally, we
-will include a column <code>Time.data</code> in the data set, which will
-be used to calculate the metrics. This column format excludes the
-<code>day</code> information from the <code>Datetime</code> column,
-which avoids <code>date</code>-related issues when calculating the
-<code>mean</code> of the metrics. Finally, the <code><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest()</a></code>
-call is used to flatten the table from the <code>dataframe</code>
-substructure that is created by <code>MLIT250</code> and
-<code>TAT250</code>.</p>
+(August/September) to the second half (October/November).</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    Month <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/month.html" class="external-link">month</a></span><span class="op">(</span><span class="va">Datetime</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fl">8</span><span class="op">:</span><span class="fl">9</span> <span class="op">~</span> <span class="st">"Aug/Sep"</span>,</span>
 <span>                      <span class="fu"><a href="https://lubridate.tidyverse.org/reference/month.html" class="external-link">month</a></span><span class="op">(</span><span class="va">Datetime</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fl">10</span><span class="op">:</span><span class="fl">11</span> <span class="op">~</span> <span class="st">"Oct/Nov"</span><span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="../reference/create_Timedata.html">create_Timedata</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="va">metrics</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="va">data</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Month</span>, <span class="va">Id</span>, <span class="va">wDay</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span></span>
-<span>    MLIT250 <span class="op">=</span> </span>
-<span>      <span class="fu"><a href="../reference/timing_above_threshold.html">timing_above_threshold</a></span><span class="op">(</span><span class="va">MEDI</span>, <span class="va">Time.data</span>, threshold <span class="op">=</span> <span class="fl">250</span>, as.df <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
-<span>    TAT250 <span class="op">=</span> </span>
-<span>      <span class="fu"><a href="../reference/duration_above_threshold.html">duration_above_threshold</a></span><span class="op">(</span><span class="va">MEDI</span>, <span class="va">Time.data</span>, threshold <span class="op">=</span> <span class="fl">250</span>, as.df <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
-<span>    average_MEDI <span class="op">=</span> </span>
+<span>    <span class="fu"><a href="../reference/timing_above_threshold.html">timing_above_threshold</a></span><span class="op">(</span><span class="va">MEDI</span>, <span class="va">Datetime</span>, threshold <span class="op">=</span> <span class="fl">250</span>, as.df <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="../reference/duration_above_threshold.html">duration_above_threshold</a></span><span class="op">(</span><span class="va">MEDI</span>, <span class="va">Datetime</span>, threshold <span class="op">=</span> <span class="fl">250</span>, as.df <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    average_medi <span class="op">=</span> </span>
 <span>      <span class="va">MEDI</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/log_zero_inflated.html">log_zero_inflated</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span>  <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/log_zero_inflated.html">exp_zero_inflated</a></span><span class="op">(</span><span class="op">)</span>, <span class="co">#calculate zero inflated log transformed mean</span></span>
-<span>    light_exposure <span class="op">=</span> </span>
-<span>      <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">MEDI</span><span class="op">)</span><span class="op">/</span><span class="fl">360</span>, <span class="co"># 10 second epochs means 360 epochs in one hour. dividing by 360 gives the light exposure in lx·h</span></span>
+<span>    <span class="fu"><a href="../reference/dose.html">dose</a></span><span class="op">(</span><span class="va">MEDI</span>, <span class="va">Datetime</span>, as.df <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>    .groups <span class="op">=</span> <span class="st">"drop_last"</span></span>
-<span>    <span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="op">-</span><span class="va">Id</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
 <span></span>
 <span><span class="co">#first 6 rows</span></span>
 <span><span class="va">metrics</span> <span class="op">|&gt;</span> </span>
@@ -7346,12 +7335,12 @@ substructure that is created by <code>MLIT250</code> and
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead><tr class="gt_col_headings">
 <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="wDay">wDay</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="mean_timing_above_250">mean_timing_above_250</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="first_timing_above_250">first_timing_above_250</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="last_timing_above_250">last_timing_above_250</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="mean_timing_above_250">mean_timing_above_250</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="first_timing_above_250">first_timing_above_250</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="last_timing_above_250">last_timing_above_250</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="duration_above_250">duration_above_250</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="average_MEDI">average_MEDI</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="light_exposure">light_exposure</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="average_medi">average_medi</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="dose">dose</th>
     </tr></thead>
 <tbody class="gt_table_body">
 <tr class="gt_group_heading_row">
@@ -7359,57 +7348,57 @@ substructure that is created by <code>MLIT250</code> and
     </tr>
 <tr class="gt_row_group_first">
 <td headers="Aug/Sep - 201  wDay" class="gt_row gt_center">Tue</td>
-<td headers="Aug/Sep - 201  mean_timing_above_250" class="gt_row gt_center">13:55:49</td>
-<td headers="Aug/Sep - 201  first_timing_above_250" class="gt_row gt_center">07:48:01</td>
-<td headers="Aug/Sep - 201  last_timing_above_250" class="gt_row gt_center">19:43:41</td>
+<td headers="Aug/Sep - 201  mean_timing_above_250" class="gt_row gt_right">2023-08-15 13:55:49</td>
+<td headers="Aug/Sep - 201  first_timing_above_250" class="gt_row gt_right">2023-08-15 07:48:01</td>
+<td headers="Aug/Sep - 201  last_timing_above_250" class="gt_row gt_right">2023-08-15 19:43:41</td>
 <td headers="Aug/Sep - 201  duration_above_250" class="gt_row gt_center">34500s (~9.58 hours)</td>
-<td headers="Aug/Sep - 201  average_MEDI" class="gt_row gt_right">23.910527</td>
-<td headers="Aug/Sep - 201  light_exposure" class="gt_row gt_right">26273.415</td>
+<td headers="Aug/Sep - 201  average_medi" class="gt_row gt_right">23.910527</td>
+<td headers="Aug/Sep - 201  dose" class="gt_row gt_right">26273.415</td>
 </tr>
 <tr>
 <td headers="Aug/Sep - 201  wDay" class="gt_row gt_center">Wed</td>
-<td headers="Aug/Sep - 201  mean_timing_above_250" class="gt_row gt_center">12:53:04</td>
-<td headers="Aug/Sep - 201  first_timing_above_250" class="gt_row gt_center">07:03:01</td>
-<td headers="Aug/Sep - 201  last_timing_above_250" class="gt_row gt_center">19:46:41</td>
+<td headers="Aug/Sep - 201  mean_timing_above_250" class="gt_row gt_right">2023-08-16 12:53:04</td>
+<td headers="Aug/Sep - 201  first_timing_above_250" class="gt_row gt_right">2023-08-16 07:03:01</td>
+<td headers="Aug/Sep - 201  last_timing_above_250" class="gt_row gt_right">2023-08-16 19:46:41</td>
 <td headers="Aug/Sep - 201  duration_above_250" class="gt_row gt_center">32780s (~9.11 hours)</td>
-<td headers="Aug/Sep - 201  average_MEDI" class="gt_row gt_right">14.897098</td>
-<td headers="Aug/Sep - 201  light_exposure" class="gt_row gt_right">18545.278</td>
+<td headers="Aug/Sep - 201  average_medi" class="gt_row gt_right">14.897098</td>
+<td headers="Aug/Sep - 201  dose" class="gt_row gt_right">18545.278</td>
 </tr>
 <tr>
 <td headers="Aug/Sep - 201  wDay" class="gt_row gt_center">Thu</td>
-<td headers="Aug/Sep - 201  mean_timing_above_250" class="gt_row gt_center">14:25:57</td>
-<td headers="Aug/Sep - 201  first_timing_above_250" class="gt_row gt_center">08:41:11</td>
-<td headers="Aug/Sep - 201  last_timing_above_250" class="gt_row gt_center">19:27:11</td>
+<td headers="Aug/Sep - 201  mean_timing_above_250" class="gt_row gt_right">2023-08-17 14:25:57</td>
+<td headers="Aug/Sep - 201  first_timing_above_250" class="gt_row gt_right">2023-08-17 08:41:11</td>
+<td headers="Aug/Sep - 201  last_timing_above_250" class="gt_row gt_right">2023-08-17 19:27:11</td>
 <td headers="Aug/Sep - 201  duration_above_250" class="gt_row gt_center">21820s (~6.06 hours)</td>
-<td headers="Aug/Sep - 201  average_MEDI" class="gt_row gt_right">6.804520</td>
-<td headers="Aug/Sep - 201  light_exposure" class="gt_row gt_right">6315.771</td>
+<td headers="Aug/Sep - 201  average_medi" class="gt_row gt_right">6.804520</td>
+<td headers="Aug/Sep - 201  dose" class="gt_row gt_right">6315.771</td>
 </tr>
 <tr>
 <td headers="Aug/Sep - 201  wDay" class="gt_row gt_center">Fri</td>
-<td headers="Aug/Sep - 201  mean_timing_above_250" class="gt_row gt_center">13:12:42</td>
-<td headers="Aug/Sep - 201  first_timing_above_250" class="gt_row gt_center">07:14:41</td>
-<td headers="Aug/Sep - 201  last_timing_above_250" class="gt_row gt_center">18:51:21</td>
+<td headers="Aug/Sep - 201  mean_timing_above_250" class="gt_row gt_right">2023-08-18 13:12:42</td>
+<td headers="Aug/Sep - 201  first_timing_above_250" class="gt_row gt_right">2023-08-18 07:14:41</td>
+<td headers="Aug/Sep - 201  last_timing_above_250" class="gt_row gt_right">2023-08-18 18:51:21</td>
 <td headers="Aug/Sep - 201  duration_above_250" class="gt_row gt_center">31670s (~8.8 hours)</td>
-<td headers="Aug/Sep - 201  average_MEDI" class="gt_row gt_right">11.143937</td>
-<td headers="Aug/Sep - 201  light_exposure" class="gt_row gt_right">19902.681</td>
+<td headers="Aug/Sep - 201  average_medi" class="gt_row gt_right">11.143937</td>
+<td headers="Aug/Sep - 201  dose" class="gt_row gt_right">19902.681</td>
 </tr>
 <tr>
 <td headers="Aug/Sep - 201  wDay" class="gt_row gt_center">Sat</td>
-<td headers="Aug/Sep - 201  mean_timing_above_250" class="gt_row gt_center">11:29:02</td>
-<td headers="Aug/Sep - 201  first_timing_above_250" class="gt_row gt_center">07:08:41</td>
-<td headers="Aug/Sep - 201  last_timing_above_250" class="gt_row gt_center">20:40:41</td>
+<td headers="Aug/Sep - 201  mean_timing_above_250" class="gt_row gt_right">2023-08-19 11:29:02</td>
+<td headers="Aug/Sep - 201  first_timing_above_250" class="gt_row gt_right">2023-08-19 07:08:41</td>
+<td headers="Aug/Sep - 201  last_timing_above_250" class="gt_row gt_right">2023-08-19 20:40:41</td>
 <td headers="Aug/Sep - 201  duration_above_250" class="gt_row gt_center">15010s (~4.17 hours)</td>
-<td headers="Aug/Sep - 201  average_MEDI" class="gt_row gt_right">6.613548</td>
-<td headers="Aug/Sep - 201  light_exposure" class="gt_row gt_right">13428.829</td>
+<td headers="Aug/Sep - 201  average_medi" class="gt_row gt_right">6.613548</td>
+<td headers="Aug/Sep - 201  dose" class="gt_row gt_right">13428.829</td>
 </tr>
 <tr>
 <td headers="Aug/Sep - 201  wDay" class="gt_row gt_center">Sun</td>
-<td headers="Aug/Sep - 201  mean_timing_above_250" class="gt_row gt_center">12:46:28</td>
-<td headers="Aug/Sep - 201  first_timing_above_250" class="gt_row gt_center">07:23:01</td>
-<td headers="Aug/Sep - 201  last_timing_above_250" class="gt_row gt_center">19:12:21</td>
+<td headers="Aug/Sep - 201  mean_timing_above_250" class="gt_row gt_right">2023-08-20 12:46:28</td>
+<td headers="Aug/Sep - 201  first_timing_above_250" class="gt_row gt_right">2023-08-20 07:23:01</td>
+<td headers="Aug/Sep - 201  last_timing_above_250" class="gt_row gt_right">2023-08-20 19:12:21</td>
 <td headers="Aug/Sep - 201  duration_above_250" class="gt_row gt_center">24400s (~6.78 hours)</td>
-<td headers="Aug/Sep - 201  average_MEDI" class="gt_row gt_right">14.730145</td>
-<td headers="Aug/Sep - 201  light_exposure" class="gt_row gt_right">4399.761</td>
+<td headers="Aug/Sep - 201  average_medi" class="gt_row gt_right">14.730145</td>
+<td headers="Aug/Sep - 201  dose" class="gt_row gt_right">4399.761</td>
 </tr>
 </tbody>
 </table>
@@ -7425,7 +7414,10 @@ day is already solely in the <code>"Aug/Sep"</code> or
 <p>We can summarize the data different ways.</p>
 <p>Within <code>LightLogR</code>, we can use the
 <code><a href="../reference/mean_daily.html">mean_daily()</a></code> and <code><a href="../reference/summarize_numeric.html">summarize_numeric()</a></code>
-functions:</p>
+functions. Both will by default automatically transform
+<code>datetime</code> columns (type <code>POSIXct</code>) to
+<code>time</code> columns (type <code>hms</code>), which is much more
+sensible in most cases to calculate averages</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#calculating weekday, weekend, and mean daily summaries for each group</span></span>
 <span><span class="va">metrics</span> <span class="op">|&gt;</span> </span>
@@ -7434,7 +7426,7 @@ functions:</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Month</span>, <span class="va">wDay</span><span class="op">)</span> <span class="op">|&gt;</span>  <span class="co">#regroup so that we can summarize across Participants</span></span>
 <span>  <span class="fu"><a href="../reference/summarize_numeric.html">summarize_numeric</a></span><span class="op">(</span>prefix <span class="op">=</span> <span class="st">""</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_number.html" class="external-link">fmt_number</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">average_MEDI</span>, <span class="va">light_exposure</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_number.html" class="external-link">fmt_number</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">average_medi</span>, <span class="va">dose</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div id="zfelhkpkbj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#zfelhkpkbj table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -7891,8 +7883,8 @@ functions:</p>
       <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="first_timing_above_250">first_timing_above_250</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="last_timing_above_250">last_timing_above_250</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="duration_above_250">duration_above_250</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="average_MEDI">average_MEDI</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="light_exposure">light_exposure</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="average_medi">average_medi</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="dose">dose</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="episodes">episodes</th>
     </tr></thead>
 <tbody class="gt_table_body">
@@ -7905,8 +7897,8 @@ functions:</p>
 <td headers="Aug/Sep  first_timing_above_250" class="gt_row gt_center">08:46:17</td>
 <td headers="Aug/Sep  last_timing_above_250" class="gt_row gt_center">19:10:18</td>
 <td headers="Aug/Sep  duration_above_250" class="gt_row gt_center">15681s (~4.36 hours)</td>
-<td headers="Aug/Sep  average_MEDI" class="gt_row gt_right">8.67</td>
-<td headers="Aug/Sep  light_exposure" class="gt_row gt_right">12,678.75</td>
+<td headers="Aug/Sep  average_medi" class="gt_row gt_right">8.67</td>
+<td headers="Aug/Sep  dose" class="gt_row gt_right">12,678.75</td>
 <td headers="Aug/Sep  episodes" class="gt_row gt_right">11</td>
 </tr>
 <tr>
@@ -7915,8 +7907,8 @@ functions:</p>
 <td headers="Aug/Sep  first_timing_above_250" class="gt_row gt_center">08:34:01</td>
 <td headers="Aug/Sep  last_timing_above_250" class="gt_row gt_center">19:03:32</td>
 <td headers="Aug/Sep  duration_above_250" class="gt_row gt_center">16798s (~4.67 hours)</td>
-<td headers="Aug/Sep  average_MEDI" class="gt_row gt_right">9.04</td>
-<td headers="Aug/Sep  light_exposure" class="gt_row gt_right">12,158.59</td>
+<td headers="Aug/Sep  average_medi" class="gt_row gt_right">9.04</td>
+<td headers="Aug/Sep  dose" class="gt_row gt_right">12,158.59</td>
 <td headers="Aug/Sep  episodes" class="gt_row gt_right">11</td>
 </tr>
 <tr>
@@ -7925,8 +7917,8 @@ functions:</p>
 <td headers="Aug/Sep  first_timing_above_250" class="gt_row gt_center">09:16:57</td>
 <td headers="Aug/Sep  last_timing_above_250" class="gt_row gt_center">19:27:13</td>
 <td headers="Aug/Sep  duration_above_250" class="gt_row gt_center">12890s (~3.58 hours)</td>
-<td headers="Aug/Sep  average_MEDI" class="gt_row gt_right">7.75</td>
-<td headers="Aug/Sep  light_exposure" class="gt_row gt_right">13,979.15</td>
+<td headers="Aug/Sep  average_medi" class="gt_row gt_right">7.75</td>
+<td headers="Aug/Sep  dose" class="gt_row gt_right">13,979.15</td>
 <td headers="Aug/Sep  episodes" class="gt_row gt_right">11</td>
 </tr>
 <tr class="gt_group_heading_row">
@@ -7934,12 +7926,12 @@ functions:</p>
     </tr>
 <tr class="gt_row_group_first">
 <td headers="Oct/Nov  wDay" class="gt_row gt_left">Mean daily</td>
-<td headers="Oct/Nov  mean_timing_above_250" class="gt_row gt_center">14:05:01</td>
+<td headers="Oct/Nov  mean_timing_above_250" class="gt_row gt_center">14:04:54</td>
 <td headers="Oct/Nov  first_timing_above_250" class="gt_row gt_center">10:14:29</td>
 <td headers="Oct/Nov  last_timing_above_250" class="gt_row gt_center">18:24:06</td>
 <td headers="Oct/Nov  duration_above_250" class="gt_row gt_center">7250s (~2.01 hours)</td>
-<td headers="Oct/Nov  average_MEDI" class="gt_row gt_right">5.49</td>
-<td headers="Oct/Nov  light_exposure" class="gt_row gt_right">5,558.11</td>
+<td headers="Oct/Nov  average_medi" class="gt_row gt_right">5.49</td>
+<td headers="Oct/Nov  dose" class="gt_row gt_right">5,558.11</td>
 <td headers="Oct/Nov  episodes" class="gt_row gt_right">6</td>
 </tr>
 <tr>
@@ -7948,18 +7940,18 @@ functions:</p>
 <td headers="Oct/Nov  first_timing_above_250" class="gt_row gt_center">10:02:25</td>
 <td headers="Oct/Nov  last_timing_above_250" class="gt_row gt_center">18:32:38</td>
 <td headers="Oct/Nov  duration_above_250" class="gt_row gt_center">7558s (~2.1 hours)</td>
-<td headers="Oct/Nov  average_MEDI" class="gt_row gt_right">5.28</td>
-<td headers="Oct/Nov  light_exposure" class="gt_row gt_right">5,660.88</td>
+<td headers="Oct/Nov  average_medi" class="gt_row gt_right">5.28</td>
+<td headers="Oct/Nov  dose" class="gt_row gt_right">5,660.88</td>
 <td headers="Oct/Nov  episodes" class="gt_row gt_right">6</td>
 </tr>
 <tr>
 <td headers="Oct/Nov  wDay" class="gt_row gt_left">Weekend</td>
-<td headers="Oct/Nov  mean_timing_above_250" class="gt_row gt_center">14:13:56</td>
+<td headers="Oct/Nov  mean_timing_above_250" class="gt_row gt_center">14:13:34</td>
 <td headers="Oct/Nov  first_timing_above_250" class="gt_row gt_center">10:30:34</td>
 <td headers="Oct/Nov  last_timing_above_250" class="gt_row gt_center">17:57:48</td>
 <td headers="Oct/Nov  duration_above_250" class="gt_row gt_center">7273s (~2.02 hours)</td>
-<td headers="Oct/Nov  average_MEDI" class="gt_row gt_right">6.07</td>
-<td headers="Oct/Nov  light_exposure" class="gt_row gt_right">5,741.14</td>
+<td headers="Oct/Nov  average_medi" class="gt_row gt_right">6.07</td>
+<td headers="Oct/Nov  dose" class="gt_row gt_right">5,741.14</td>
 <td headers="Oct/Nov  episodes" class="gt_row gt_right">7</td>
 </tr>
 </tbody>
@@ -7986,7 +7978,7 @@ days</p>
 <span>  <span class="fu"><a href="../reference/summarize_numeric.html">summarize_numeric</a></span><span class="op">(</span>prefix <span class="op">=</span> <span class="st">""</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co">#summarize across participants</span></span>
 <span>  <span class="fu"><a href="../reference/summarize_numeric.html">summarize_numeric</a></span><span class="op">(</span>prefix <span class="op">=</span> <span class="st">""</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co">#summarize by month</span></span>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_number.html" class="external-link">fmt_number</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">average_MEDI</span>, <span class="va">light_exposure</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_number.html" class="external-link">fmt_number</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">average_medi</span>, <span class="va">dose</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div id="khrvvqeoel" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#khrvvqeoel table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -8443,8 +8435,8 @@ days</p>
       <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="first_timing_above_250">first_timing_above_250</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="last_timing_above_250">last_timing_above_250</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="duration_above_250">duration_above_250</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="average_MEDI">average_MEDI</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="light_exposure">light_exposure</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="average_medi">average_medi</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="dose">dose</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="episodes">episodes</th>
     </tr></thead>
 <tbody class="gt_table_body">
@@ -8454,18 +8446,18 @@ days</p>
 <td headers="first_timing_above_250" class="gt_row gt_center">08:48:41</td>
 <td headers="last_timing_above_250" class="gt_row gt_center">19:09:20</td>
 <td headers="duration_above_250" class="gt_row gt_center">15625s (~4.34 hours)</td>
-<td headers="average_MEDI" class="gt_row gt_right">8.66</td>
-<td headers="light_exposure" class="gt_row gt_right">12,781.74</td>
+<td headers="average_medi" class="gt_row gt_right">8.66</td>
+<td headers="dose" class="gt_row gt_right">12,781.74</td>
 <td headers="episodes" class="gt_row gt_right">11</td>
 </tr>
 <tr>
 <td headers="Month" class="gt_row gt_left">Oct/Nov</td>
-<td headers="mean_timing_above_250" class="gt_row gt_center">13:44:46</td>
+<td headers="mean_timing_above_250" class="gt_row gt_center">13:44:39</td>
 <td headers="first_timing_above_250" class="gt_row gt_center">10:06:26</td>
 <td headers="last_timing_above_250" class="gt_row gt_center">18:14:53</td>
 <td headers="duration_above_250" class="gt_row gt_center">7888s (~2.19 hours)</td>
-<td headers="average_MEDI" class="gt_row gt_right">5.64</td>
-<td headers="light_exposure" class="gt_row gt_right">5,946.69</td>
+<td headers="average_medi" class="gt_row gt_right">5.64</td>
+<td headers="dose" class="gt_row gt_right">5,946.69</td>
 <td headers="episodes" class="gt_row gt_right">7</td>
 </tr>
 </tbody>
@@ -8506,8 +8498,8 @@ brevity.</p>
 <span>                last_timing_above_250 <span class="op">=</span> </span>
 <span>                  <span class="st">"last time above 250 lx mel EDI (HH:MM)"</span>,</span>
 <span>                duration_above_250 <span class="op">=</span> <span class="st">"duration above 250 lx mel EDI (HH:MM)"</span>,</span>
-<span>                average_MEDI <span class="op">=</span> <span class="st">"average mel EDI (lx)"</span>,</span>
-<span>                light_exposure <span class="op">=</span> <span class="st">"light exposure (lx·h)"</span></span>
+<span>                average_medi <span class="op">=</span> <span class="st">"average mel EDI (lx)"</span>,</span>
+<span>                dose <span class="op">=</span> <span class="st">"light exposure (lx·h)"</span></span>
 <span>                <span class="op">)</span></span>
 <span>              <span class="op">)</span></span></code></pre></div>
 <div id="fyoqaitrxp" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -8974,18 +8966,18 @@ N = 37</span><span class="gt_footnote_marks" style="white-space:nowrap;font-styl
 <tbody class="gt_table_body">
 <tr>
 <td headers="label" class="gt_row gt_left">mean timing above 250 lx mel EDI (HH:MM)</td>
-<td headers="stat_1" class="gt_row gt_center">13:39 (±01:43)</td>
-<td headers="stat_2" class="gt_row gt_center">14:03 (±01:41)</td>
+<td headers="stat_1" class="gt_row gt_center">17:55 (±15:36)</td>
+<td headers="stat_2" class="gt_row gt_center">05:37 (±06:37)</td>
 </tr>
 <tr>
 <td headers="label" class="gt_row gt_left">first time above 250 lx mel EDI (HH:MM)</td>
-<td headers="stat_1" class="gt_row gt_center">08:48 (±02:26)</td>
-<td headers="stat_2" class="gt_row gt_center">10:14 (±02:20)</td>
+<td headers="stat_1" class="gt_row gt_center">13:05 (±15:53)</td>
+<td headers="stat_2" class="gt_row gt_center">01:47 (±06:45)</td>
 </tr>
 <tr>
 <td headers="label" class="gt_row gt_left">last time above 250 lx mel EDI (HH:MM)</td>
-<td headers="stat_1" class="gt_row gt_center">19:09 (±02:20)</td>
-<td headers="stat_2" class="gt_row gt_center">18:21 (±02:26)</td>
+<td headers="stat_1" class="gt_row gt_center">23:26 (±15:30)</td>
+<td headers="stat_2" class="gt_row gt_center">09:55 (±06:33)</td>
 </tr>
 <tr>
 <td headers="label" class="gt_row gt_left">duration above 250 lx mel EDI (HH:MM)</td>
@@ -9027,7 +9019,7 @@ section</a> to get an overview of all available metrics.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer>

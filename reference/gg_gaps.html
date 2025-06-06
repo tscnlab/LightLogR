@@ -17,7 +17,7 @@ regular interval."><meta property="og:image" content="https://tscnlab.github.io/
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,7 +49,7 @@ regular interval."><meta property="og:image" content="https://tscnlab.github.io/
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Visualize gaps and irregular data</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/v0.9.0/R/gg_gaps.R" class="external-link"><code>R/gg_gaps.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/main/R/gg_gaps.R" class="external-link"><code>R/gg_gaps.R</code></a></small>
       <div class="d-none name"><code>gg_gaps.Rd</code></div>
     </div>
 
@@ -166,7 +166,8 @@ clarity. Null if no groups remain</p>
 <span class="r-in"><span><span class="va">bad_dataset</span> <span class="op">&lt;-</span></span></span>
 <span class="r-in"><span><span class="va">sample.data.environment</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="aggregate_Datetime.html">aggregate_Datetime</a></span><span class="op">(</span>unit <span class="op">=</span> <span class="st">"5 mins"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="filter_Datetime.html">filter_Date</a></span><span class="op">(</span>length <span class="op">=</span> <span class="st">"6 days"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Id</span> <span class="op">==</span> <span class="st">"Participant"</span><span class="op">)</span> <span class="op">|&gt;</span> </span></span>
+<span class="r-in"><span>  <span class="fu"><a href="filter_Datetime.html">filter_Date</a></span><span class="op">(</span>length <span class="op">=</span> <span class="st">"2 days"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>   Datetime <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html" class="external-link">if_else</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>     <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/date.html" class="external-link">date</a></span><span class="op">(</span><span class="va">Datetime</span><span class="op">)</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/date.html" class="external-link">date</a></span><span class="op">(</span><span class="va">Datetime</span><span class="op">)</span><span class="op">)</span>,</span></span>
@@ -190,30 +191,6 @@ clarity. Null if no groups remain</p>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 1 row containing missing values or values outside the scale range</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> (`geom_line()`).</span>
 <span class="r-plt img"><img src="gg_gaps-2.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">#if a Group has good data, it will not show up</span></span></span>
-<span class="r-in"><span><span class="va">half_bad_dataset</span> <span class="op">&lt;-</span></span></span>
-<span class="r-in"><span><span class="va">bad_dataset</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Id</span> <span class="op">==</span> <span class="st">"Participant"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">sample.data.environment</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Id</span> <span class="op">==</span> <span class="st">"Environment"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">#just to show that both are identical</span></span></span>
-<span class="r-in"><span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_data.html" class="external-link">group_keys</a></span><span class="op">(</span><span class="va">half_bad_dataset</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 × 1</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Id         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Environment</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> Participant</span>
-<span class="r-in"><span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_data.html" class="external-link">group_keys</a></span><span class="op">(</span><span class="va">bad_dataset</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 × 1</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Id         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Environment</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> Participant</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">half_bad_dataset</span> <span class="op">|&gt;</span> <span class="fu">gg_gaps</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 1 row containing missing values or values outside the scale range</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> (`geom_line()`).</span>
-<span class="r-plt img"><img src="gg_gaps-3.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -225,7 +202,7 @@ clarity. Null if no groups remain</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>

@@ -11,7 +11,7 @@ refine styling or guides."><meta property="og:image" content="https://tscnlab.gi
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,7 +43,7 @@ refine styling or guides."><meta property="og:image" content="https://tscnlab.gi
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Create a simple Time-of-Day plot of light logger data, faceted by Date</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/v0.9.0/R/gg_day.r" class="external-link"><code>R/gg_day.r</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/main/R/gg_day.r" class="external-link"><code>R/gg_day.r</code></a></small>
       <div class="d-none name"><code>gg_day.Rd</code></div>
     </div>
 
@@ -203,7 +203,7 @@ used to adjust to adjust size, linewidth, or linetype.</p></dd>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Besides plotting, the function creates two new variables from the given
 <code>Datetime</code>:</p><ul><li><p><code>Day.data</code> is a factor that is used for facetting with <code><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">ggplot2::facet_wrap()</a></code>. Make sure to use this variable, if you change the faceting manually. Also, the function checks, whether this variable already exists. If it does, it will only convert it to a factor and do the faceting on that variable.</p></li>
-<li><p><code>Time.data</code> is an <code>hms</code> created with <code><a href="https://hms.tidyverse.org/reference/hms.html" class="external-link">hms::as_hms()</a></code> that is used for the x.axis</p></li>
+<li><p><code>Time</code> is an <code>hms</code> created with <code><a href="https://hms.tidyverse.org/reference/hms.html" class="external-link">hms::as_hms()</a></code> that is used for the x.axis</p></li>
 </ul><p>The default scaling of the y-axis is a <code>symlog</code> scale, which is a logarithmic
 scale that only starts scaling after a given threshold (default = 0). This
 enables values of 0 in the plot, which are common in light logger data, and
@@ -253,7 +253,7 @@ this).</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>

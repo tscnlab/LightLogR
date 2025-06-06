@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,7 +70,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Import &amp; cleaning</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/v0.9.0/vignettes/articles/Import.Rmd" class="external-link"><code>vignettes/articles/Import.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/main/vignettes/articles/Import.Rmd" class="external-link"><code>vignettes/articles/Import.Rmd</code></a></small>
       <div class="d-none name"><code>Import.Rmd</code></div>
     </div>
 
@@ -98,7 +98,7 @@ devices are supported:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/supported_devices.html">supported_devices</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  [1] "Actiwatch_Spectrum"    "Actiwatch_Spectrum_de" "ActLumus"             </span></span>
-<span><span class="co">#&gt;  [4] "ActTrust"              "Circadian_Eye"         "ClouClip"             </span></span>
+<span><span class="co">#&gt;  [4] "ActTrust"              "Circadian_Eye"         "Clouclip"             </span></span>
 <span><span class="co">#&gt;  [7] "DeLux"                 "GENEActiv_GGIR"        "Kronowise"            </span></span>
 <span><span class="co">#&gt; [10] "LiDo"                  "LightWatcher"          "LIMO"                 </span></span>
 <span><span class="co">#&gt; [13] "LYS"                   "MotionWatch8"          "nanoLambda"           </span></span>
@@ -1228,14 +1228,14 @@ sample and extract the gaps they have.</p>
 <span>  <span class="fu"><a href="../reference/extract_gaps.html">extract_gaps</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 6</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Groups:   Id [3]</span></span></span>
-<span><span class="co">#&gt;   Id    gap.id epoch      start               end                </span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;Duration&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>             </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 208        1 10s        2023-09-04 <span style="color: #949494;">00:00:04</span> 2023-09-04 <span style="color: #949494;">11:01:44</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 208        2 10s        2023-09-11 <span style="color: #949494;">09:17:24</span> 2023-09-12 <span style="color: #949494;">00:00:04</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 209        1 10s        2023-09-03 <span style="color: #949494;">23:59:57</span> 2023-09-04 <span style="color: #949494;">11:03:17</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 209        2 10s        2023-09-11 <span style="color: #949494;">09:57:27</span> 2023-09-11 <span style="color: #949494;">23:59:57</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 210        1 10s        2023-09-04 <span style="color: #949494;">00:00:00</span> 2023-09-04 <span style="color: #949494;">11:07:00</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> 210        2 10s        2023-09-11 <span style="color: #949494;">11:44:00</span> 2023-09-12 <span style="color: #949494;">00:00:00</span></span></span>
+<span><span class="co">#&gt;   Id    gap.id epoch start               end                </span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>             </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 208        1    10 2023-09-04 <span style="color: #949494;">00:00:04</span> 2023-09-04 <span style="color: #949494;">11:01:44</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 208        2    10 2023-09-11 <span style="color: #949494;">09:17:24</span> 2023-09-12 <span style="color: #949494;">00:00:04</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 209        1    10 2023-09-03 <span style="color: #949494;">23:59:57</span> 2023-09-04 <span style="color: #949494;">11:03:17</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 209        2    10 2023-09-11 <span style="color: #949494;">09:57:27</span> 2023-09-11 <span style="color: #949494;">23:59:57</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 210        1    10 2023-09-04 <span style="color: #949494;">00:00:00</span> 2023-09-04 <span style="color: #949494;">11:07:00</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> 210        2    10 2023-09-11 <span style="color: #949494;">11:44:00</span> 2023-09-12 <span style="color: #949494;">00:00:00</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1 more variable: duration &lt;Duration&gt;</span></span></span></code></pre></div>
 <p>We can remove these partial days via
 <code><a href="../reference/remove_partial_data.html">remove_partial_data()</a></code>. We want to make sure to apply this
@@ -1403,7 +1403,7 @@ summary and plotting function silent</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer>

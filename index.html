@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,10 +81,10 @@ Light logger data can powerfully convey insights into personal light exposure
 </div>
 <p><strong>LightLogR</strong> is a package under development as part of the <a href="https://www.melidos.eu" class="external-link"><em>MeLiDos</em></a> project to address these issues. The package aims to provide tools for:</p>
 <ul>
-<li><p>import from common measurement devices (see below for a list of supported devices)</p></li>
-<li><p>Validation and processing of light logging data</p></li>
+<li><p>Import from common measurement devices (see below for a list of <a href="#supported-devices">Supported devices</a>)</p></li>
+<li><p>Cleaning and processing of light logging data</p></li>
 <li><p>Visualization of light exposure data, both exploratory and publication ready</p></li>
-<li><p>Calculation of common analysis parameters (see below for a list of metrics)</p></li>
+<li><p>Calculation of common analysis parameters (see below for a list of <a href="#metrics">Metrics</a>)</p></li>
 </ul>
 <p>To come:</p>
 <ul>
@@ -95,7 +95,259 @@ Light logger data can powerfully convey insights into personal light exposure
 <div class="section level5">
 <h5 id="please-note-that-lightlogr-is-work-in-progress-if-you-are-interested-in-the-project-and-want-to-know-more-you-can-subscribe-to-the-lightlogr-mailing-list-if-you-find-a-bug-or-would-like-to-see-new-or-improved-features-please-open-an-issue-on-the-github-repository">Please note that LightLogR is work in progress! If you are interested in the project and want to know more, you can subscribe to the <a href="https://www.tscnlab.org/software" class="external-link">LightLogR mailing list</a>. If you find a bug or would like to see new or improved features, please open an issue on the <a href="https://github.com/tscnlab/LightLogR/issues" class="external-link">GitHub repository</a>.<a class="anchor" aria-label="anchor" href="#please-note-that-lightlogr-is-work-in-progress-if-you-are-interested-in-the-project-and-want-to-know-more-you-can-subscribe-to-the-lightlogr-mailing-list-if-you-find-a-bug-or-would-like-to-see-new-or-improved-features-please-open-an-issue-on-the-github-repository"></a>
 </h5>
-<p>Have a look at the <strong>Example</strong> section down below to get started, or dive into the <a href="https://tscnlab.github.io/LightLogR/articles/index.html">Articles</a> to get more in depth information about how to work with the package and generate images such as the one above, import data, visualization, and metric calculation.</p>
+<p>Have a look at the <a href="#example">Example</a> section down below to get started, or dive into the <a href="https://tscnlab.github.io/LightLogR/articles/index.html">Articles</a> to get more in depth information about how to work with the package and generate images such as the one above, import data, visualization, and metric calculation.</p>
+</div>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p>You can install LightLogR from <a href="https://cran.r-project.org/package=LightLogR" class="external-link">CRAN</a> with:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"LightLogR"</span><span class="op">)</span></span></code></pre></div>
+<p>You can install the latest development version of LightLogR from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"tscnlab/LightLogR"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+</h2>
+<p>Here is a quick starter on how to use <strong>LightLogR</strong>.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tscnlab/LightLogR" class="external-link">LightLogR</a></span><span class="op">)</span></span>
+<span><span class="co">#the following packages are needed for the examples as shown below.</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ardata-fr.github.io/flextable-book/" class="external-link">flextable</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="import">Import<a class="anchor" aria-label="anchor" href="#import"></a>
+</h3>
+<p>You can import a light logger dataset with ease. The import functions give quick, helpful feedback about the dataset.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">filename</span> <span class="op">&lt;-</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/205_actlumus_Log_1020_20230904101707532.txt.zip"</span>, </span>
+<span>              package <span class="op">=</span> <span class="st">"LightLogR"</span><span class="op">)</span></span>
+<span><span class="va">dataset</span> <span class="op">&lt;-</span> <span class="va">import</span><span class="op">$</span><span class="fu">ActLumus</span><span class="op">(</span><span class="va">filename</span>, <span class="st">"Europe/Berlin"</span>, manual.id <span class="op">=</span> <span class="st">"P1"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Successfully read in 61'016 observations across 1 Ids from 1 ActLumus-file(s).</span></span>
+<span><span class="co">#&gt; Timezone set is Europe/Berlin.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; First Observation: 2023-08-28 08:47:54</span></span>
+<span><span class="co">#&gt; Last Observation: 2023-09-04 10:17:04</span></span>
+<span><span class="co">#&gt; Timespan: 7.1 days</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Observation intervals: </span></span>
+<span><span class="co">#&gt;   Id    interval.time     n pct  </span></span>
+<span><span class="co">#&gt; 1 P1    10s           61015 100%</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-3-1.png" width="60%" style="display: block; margin: auto;"></p>
+<p>For more complex data, there is the useful <code><a href="reference/gg_overview.html">gg_overview()</a></code> function to get an immediate grasp of your data. It was automatically called during import (set <code>auto.plot = FALSE</code> to suppress this), but really shines for datasets with multiple participants. It also indicates where data is missing, based on the measurement epochs found in the data.</p>
+<div style="text-align:center">
+<figure><img src="reference/figures/gg_overview2.png" style="width:60.0%" alt="Example for gg_overview() from a large data collection effort over many months"><figcaption aria-hidden="true">
+Example for <code><a href="reference/gg_overview.html">gg_overview()</a></code> from a large data collection effort over many months
+</figcaption></figure>
+</div>
+<p><em>note:</em> the above example image requires a large dataset, not included in the package. It is available, however, in the article on <a href="https://tscnlab.github.io/LightLogR/articles/Import.html">Import &amp; cleaning</a>.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co">#example code, on how to use gg_overview():</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>dataset <span class="sc">%&gt;%</span> <span class="fu">gg_overview</span>()</span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="visualize">Visualize<a class="anchor" aria-label="anchor" href="#visualize"></a>
+</h3>
+<p>Once imported, <strong>LightLogR</strong> has many convenient visualization options.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dataset</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="reference/gg_days.html">gg_days</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-4-1.png" width="100%"></p>
+<p>There is a wide range of options to the <code><a href="reference/gg_days.html">gg_days()</a></code> function to customize the output. Have a look at the reference page (<code><a href="reference/gg_days.html">?gg_days</a></code>) to see all options. You can also override most of the defaults, e.g., for different <code>color</code>, <code>facetting</code>, <code>theme</code> options. Helper functions can prepare the data (e.g. to aggregate it to coarser intervals), or to add to the plot (e.g., to add conditions, such as nighttime)</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dataset</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="co">#change the interval from 10 seconds to 15 minutes:</span></span>
+<span>  <span class="fu"><a href="reference/aggregate_Datetime.html">aggregate_Datetime</a></span><span class="op">(</span><span class="st">"15 min"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="co">#create groups of 3-hour intervals:</span></span>
+<span>  <span class="fu"><a href="reference/cut_Datetime.html">cut_Datetime</a></span><span class="op">(</span><span class="st">"3 hours"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="co">#plot creation, with a boxplot:</span></span>
+<span>  <span class="fu"><a href="reference/gg_days.html">gg_days</a></span><span class="op">(</span>geom <span class="op">=</span> <span class="st">"boxplot"</span>, group <span class="op">=</span> <span class="va">Datetime.rounded</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="co">#adding nighttime indicators:</span></span>
+<span>  <span class="fu"><a href="reference/gg_photoperiod.html">gg_photoperiod</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">47.9</span>,<span class="fl">9</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="co"># the output is a standard ggplot, and can be manipulated that way</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"red"</span>, linewidth <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Personal light exposure across a week"</span>, </span>
+<span>       subtitle <span class="op">=</span> <span class="st">"Boxplot in 3-hour bins"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-5-1.png" width="100%"></p>
+</div>
+<div class="section level3">
+<h3 id="more-than-one-dataset">More than one dataset<a class="anchor" aria-label="anchor" href="#more-than-one-dataset"></a>
+</h3>
+<p>The built-in dataset <code>sample.data.environment</code> shows a combined dataset of light logger data and a second set of data - in this case unobstructed outdoor light measurements. Combined datasets can be easily visualized with <code><a href="reference/gg_day.html">gg_day()</a></code>. The <code>col</code> parameter used on the <code>Id</code> column of the dataset allows for a color separation.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sample.data.environment</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="reference/gg_day.html">gg_day</a></span><span class="op">(</span></span>
+<span>    start.date <span class="op">=</span> <span class="st">"2023-09-01"</span>,</span>
+<span>    aes_col <span class="op">=</span> <span class="va">Id</span>,</span>
+<span>    geom <span class="op">=</span> <span class="st">"line"</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Only Dates will be used from start.date and end.date input. If you also want to set Datetimes or Times, consider using the `filter_Datetime()` function instead.</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-6-1.png" width="70%" style="display: block; margin: auto;"><code><a href="reference/gg_day.html">gg_day()</a></code> will show plots always facetted by day, whereas <code><a href="reference/gg_days.html">gg_days()</a></code> shows a timeline of days for each group. Both functions are opinionated in terms of the scaling and linebreaks to only show whole days, all of which can be adjusted.</p>
+<p>There are many ways to enhance the plots - if, e.g., we look for periods of at least 1 hour above 250 lx, we can add and then visualize these periods easily</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sample.data.environment</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="co">#search for these conditions:</span></span>
+<span>  <span class="fu"><a href="reference/extract_clusters.html">add_clusters</a></span><span class="op">(</span><span class="va">MEDI</span> <span class="op">&gt;</span> <span class="fl">250</span>, cluster.duration <span class="op">=</span> <span class="st">"30 min"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="co">#base plot + add the condition</span></span>
+<span>  <span class="fu"><a href="reference/gg_days.html">gg_days</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="reference/gg_state.html">gg_state</a></span><span class="op">(</span><span class="va">state</span>, fill <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="co">#standard ggplot:</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">250</span>, col <span class="op">=</span> <span class="st">"red"</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Periods &gt; 250 lx mel EDI for more than 30 minutes"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-7-1.png" width="100%"></p>
+<p>There are more visualizations to try - the article on <a href="https://tscnlab.github.io/LightLogR/articles/Visualizations.html">Visualizations</a> dives into them in-depths.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sample.data.environment</span> <span class="op">|&gt;</span> <span class="fu"><a href="reference/gg_heatmap.html">gg_heatmap</a></span><span class="op">(</span>doubleplot <span class="op">=</span> <span class="st">"next"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-8-1.png" width="100%"></p>
+</div>
+<div class="section level3">
+<h3 id="metrics">Metrics<a class="anchor" aria-label="anchor" href="#metrics"></a>
+</h3>
+<p>There are many <a href="#metrics">Metrics</a> used in literature for condensing personalized light exposure time series to singular values. <code>LightLogR</code> has a rather comprehensive number of these metrics with a consistent, easy-to-use interface.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sample.data.environment</span> <span class="op">|&gt;</span> <span class="co"># two groups: participant and environment</span></span>
+<span>  <span class="fu"><a href="reference/filter_Datetime.html">filter_Date</a></span><span class="op">(</span>length <span class="op">=</span> <span class="st">"2 days"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co">#filter to three days each for better overview</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span>Day <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/date.html" class="external-link">date</a></span><span class="op">(</span><span class="va">Datetime</span><span class="op">)</span>, .add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span>  <span class="co">#add grouping per day</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span></span>
+<span>    <span class="co">#time above 250 lx mel EDI:</span></span>
+<span>    <span class="fu"><a href="reference/duration_above_threshold.html">duration_above_threshold</a></span><span class="op">(</span><span class="va">MEDI</span>, <span class="va">Datetime</span>, threshold <span class="op">=</span> <span class="fl">250</span>, as.df <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    <span class="co">#intradaily variability (IV):</span></span>
+<span>    <span class="fu"><a href="reference/intradaily_variability.html">intradaily_variability</a></span><span class="op">(</span><span class="va">MEDI</span>, <span class="va">Datetime</span>, as.df <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    <span class="co">#... as many more metrics as are desired</span></span>
+<span>    .groups <span class="op">=</span> <span class="st">"drop"</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 4 × 4</span></span>
+<span><span class="co">#&gt;   Id          Day        duration_above_250    intradaily_variability</span></span>
+<span><span class="co">#&gt;   &lt;fct&gt;       &lt;date&gt;     &lt;Duration&gt;                             &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 Environment 2023-08-29 48240s (~13.4 hours)                   0.248</span></span>
+<span><span class="co">#&gt; 2 Environment 2023-08-30 49350s (~13.71 hours)                  0.168</span></span>
+<span><span class="co">#&gt; 3 Participant 2023-08-29 5810s (~1.61 hours)                    1.23 </span></span>
+<span><span class="co">#&gt; 4 Participant 2023-08-30 9960s (~2.77 hours)                    0.821</span></span></code></pre></div>
+<p>Other types of metrics can be derived less formally by the <code><a href="reference/durations.html">durations()</a></code>, <code>extract_state()</code> or <code>extract_cluster()</code> function.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dataset</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="reference/gap_handler.html">gap_handler</a></span><span class="op">(</span>full.days <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co">#extend the viewed time until midnight of the first and last day</span></span>
+<span>  <span class="fu"><a href="reference/durations.html">durations</a></span><span class="op">(</span><span class="va">MEDI</span>, show.missing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 1 × 4</span></span>
+<span><span class="co">#&gt; # Groups:   Id [1]</span></span>
+<span><span class="co">#&gt;   Id    duration              missing               total                </span></span>
+<span><span class="co">#&gt;   &lt;fct&gt; &lt;Duration&gt;            &lt;Duration&gt;            &lt;Duration&gt;           </span></span>
+<span><span class="co">#&gt; 1 P1    610160s (~1.01 weeks) 81040s (~22.51 hours) 691200s (~1.14 weeks)</span></span>
+<span></span>
+<span><span class="va">dataset</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span>TAT250 <span class="op">=</span> <span class="va">MEDI</span> <span class="op">&gt;=</span> <span class="fl">250</span>, .add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co">#creating a grouping column that checks for values above 250lx</span></span>
+<span>  <span class="fu"><a href="reference/durations.html">durations</a></span><span class="op">(</span><span class="va">MEDI</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 2 × 3</span></span>
+<span><span class="co">#&gt; # Groups:   Id, TAT250 [2]</span></span>
+<span><span class="co">#&gt;   Id    TAT250 duration            </span></span>
+<span><span class="co">#&gt;   &lt;fct&gt; &lt;lgl&gt;  &lt;Duration&gt;          </span></span>
+<span><span class="co">#&gt; 1 P1    FALSE  498530s (~5.77 days)</span></span>
+<span><span class="co">#&gt; 2 P1    TRUE   111630s (~1.29 days)</span></span></code></pre></div>
+<p>The second row indicates where this status is true. This will be identical to:</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dataset</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="reference/duration_above_threshold.html">duration_above_threshold</a></span><span class="op">(</span><span class="va">MEDI</span>, <span class="va">Datetime</span>, threshold <span class="op">=</span> <span class="fl">250</span>, as.df <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    .groups <span class="op">=</span> <span class="st">"drop"</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 1 × 2</span></span>
+<span><span class="co">#&gt;   Id    duration_above_250  </span></span>
+<span><span class="co">#&gt;   &lt;fct&gt; &lt;Duration&gt;          </span></span>
+<span><span class="co">#&gt; 1 P1    111630s (~1.29 days)</span></span></code></pre></div>
+<p>What if we are interested in how often this threshold is crossed, and for how long?</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dataset</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="reference/extract_states.html">extract_states</a></span><span class="op">(</span><span class="va">TAT250</span>, <span class="va">MEDI</span> <span class="op">&gt;=</span> <span class="fl">250</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co">#extract a list of states</span></span>
+<span>  <span class="fu"><a href="reference/summarize_numeric.html">summarize_numeric</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co">#summarize the numeric values</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">Id</span>, <span class="va">TAT250</span>, <span class="va">mean_duration</span>, <span class="va">episodes</span>, <span class="va">total_duration</span><span class="op">)</span> <span class="co">#collect a subset</span></span>
+<span><span class="co">#&gt; # A tibble: 2 × 5</span></span>
+<span><span class="co">#&gt; # Groups:   Id [1]</span></span>
+<span><span class="co">#&gt;   Id    TAT250 mean_duration        episodes total_duration      </span></span>
+<span><span class="co">#&gt;   &lt;fct&gt; &lt;lgl&gt;  &lt;Duration&gt;              &lt;int&gt; &lt;Duration&gt;          </span></span>
+<span><span class="co">#&gt; 1 P1    FALSE  482s (~8.03 minutes)     1034 498530s (~5.77 days)</span></span>
+<span><span class="co">#&gt; 2 P1    TRUE   108s (~1.8 minutes)      1034 111630s (~1.29 days)</span></span></code></pre></div>
+<p>We see that there are roughly one thousand instances across the week where 250 lx was reached, but it only lasted under two minutes on average. How many long periods are there, say above 30 minutes? As there might be short interruption, that we consider irrelevant, we are ignoring interruptions of 1 minute. This is the area of clusters.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dataset</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="reference/extract_clusters.html">extract_clusters</a></span><span class="op">(</span><span class="va">MEDI</span> <span class="op">&gt;=</span> <span class="fl">250</span>, <span class="co">#base condition</span></span>
+<span>                   cluster.duration <span class="op">=</span> <span class="st">"30 mins"</span>, <span class="co">#search for at least 30 minute instances</span></span>
+<span>                   interruption.duration <span class="op">=</span> <span class="st">"1 min"</span>, <span class="co">#allow 1 minute interrupts</span></span>
+<span>                   add.label <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co">#add a description of the conditions</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">label</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co">#group by the label so it does not get removed next</span></span>
+<span>  <span class="fu"><a href="reference/summarize_numeric.html">summarize_numeric</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co">#summarize the output</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">mean_epoch</span><span class="op">)</span> <span class="co">#collect a subset</span></span>
+<span><span class="co">#&gt; # A tibble: 1 × 6</span></span>
+<span><span class="co">#&gt;   label   mean_start mean_end mean_duration       total_duration        episodes</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;   &lt;time&gt;     &lt;time&gt;   &lt;Duration&gt;          &lt;Duration&gt;               &lt;int&gt;</span></span>
+<span><span class="co">#&gt; 1 MEDI&gt;=… 13:50:47   15:02:14 4288s (~1.19 hours) 72890s (~20.25 hours)       17</span></span></code></pre></div>
+<p>We see there are only 17 instances across the week, lasting, on average, a bit above an hour (and sitting aroung 14:00 - 15:00). Directly relating the total duration to the 1.29 days time above 250 lx from above would be misleading, however. This is because here, there are interruptions present. How prominent are these interruptions?</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dataset</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="reference/extract_clusters.html">extract_clusters</a></span><span class="op">(</span><span class="va">MEDI</span> <span class="op">&gt;=</span> <span class="fl">250</span>, <span class="co">#base condition</span></span>
+<span>                   cluster.duration <span class="op">=</span> <span class="st">"30 mins"</span>, <span class="co">#search for at least 30 minute instances</span></span>
+<span>                   interruption.duration <span class="op">=</span> <span class="st">"1 min"</span>, <span class="co">#allow 1 minute interrupts</span></span>
+<span>                   add.label <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="co">#extract the metric:</span></span>
+<span>  <span class="fu"><a href="reference/extract_metric.html">extract_metric</a></span><span class="op">(</span><span class="va">dataset</span>, rel_interrupt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">MEDI</span> <span class="op">&lt;</span> <span class="fl">250</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="reference/summarize_numeric.html">summarize_numeric</a></span><span class="op">(</span>prefix <span class="op">=</span> <span class="st">""</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co">#summarize the output</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">episodes</span>, <span class="va">total_duration</span>, <span class="va">rel_interrupt</span><span class="op">)</span> <span class="op">|&gt;</span>   <span class="co">#collect a subset</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>interrupt_duration <span class="op">=</span> <span class="op">(</span><span class="va">total_duration</span><span class="op">*</span><span class="va">rel_interrupt</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="op">)</span>, <span class="co">#calculate interrupt</span></span>
+<span>         rel_interrupt <span class="op">=</span> <span class="va">rel_interrupt</span> <span class="op">|&gt;</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/percent_format.html" class="external-link">percent_format</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 1 × 4</span></span>
+<span><span class="co">#&gt;   episodes total_duration        rel_interrupt interrupt_duration    </span></span>
+<span><span class="co">#&gt;      &lt;int&gt; &lt;Duration&gt;            &lt;chr&gt;         &lt;Duration&gt;            </span></span>
+<span><span class="co">#&gt; 1       17 72890s (~20.25 hours) 4%            2918s (~48.63 minutes)</span></span></code></pre></div>
+<p>Thus we find that only about 4% of the long exposure periods are made up of interruptions, or just shy of 50 minutes out of over 20 hours.</p>
+</div>
+<div class="section level3">
+<h3 id="gaps-and-cleaning">Gaps and cleaning<a class="anchor" aria-label="anchor" href="#gaps-and-cleaning"></a>
+</h3>
+<p><strong>LightLogR</strong> provides a range of functions to get insight into your light logger data. Most importantly, you can search for and eliminate implicit gaps.</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sample.data.irregular</span> <span class="op">|&gt;</span> <span class="fu"><a href="reference/has_irregulars.html">has_irregulars</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span>
+<span><span class="va">sample.data.irregular</span> <span class="op">|&gt;</span> <span class="fu"><a href="reference/has_gaps.html">has_gaps</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
+<p>At import, we already get a sense for intervals, but can always show them with <code><a href="reference/count_difftime.html">count_difftime()</a></code>.</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sample.data.irregular</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="reference/count_difftime.html">count_difftime</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 4 × 4</span></span>
+<span><span class="co">#&gt; # Groups:   Id [1]</span></span>
+<span><span class="co">#&gt;   Id    difftime       n group.indices</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt; &lt;Duration&gt; &lt;int&gt;         &lt;int&gt;</span></span>
+<span><span class="co">#&gt; 1 P1    15s        10015             1</span></span>
+<span><span class="co">#&gt; 2 P1    16s         1367             1</span></span>
+<span><span class="co">#&gt; 3 P1    17s           23             1</span></span>
+<span><span class="co">#&gt; 4 P1    18s           16             1</span></span></code></pre></div>
+<p>We can eliminate this through the <code><a href="reference/gap_handler.html">gap_handler()</a></code> function. This function will automatically fill in the gaps with NA values. <strong>The function will not impute or interpolate data</strong>. As the most dominant interval in the dataset is now not 15 seconds anymore (because intermediate datapoints have been added), we need to specify the epoch for <code><a href="reference/gap_finder.html">gap_finder()</a></code>.</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sample.data.irregular</span> <span class="op">|&gt;</span> <span class="fu"><a href="reference/gap_handler.html">gap_handler</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="reference/has_gaps.html">has_gaps</a></span><span class="op">(</span>epoch <span class="op">=</span> <span class="st">"15 secs"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] FALSE</span></span></code></pre></div>
+<p>If we want to force the data to be regular, we can use the <code><a href="reference/aggregate_Datetime.html">aggregate_Datetime()</a></code> function. This will aggregate the data to the specified epoch. There are sensible defaults on how to aggregate numeric, categorical, and logical data. You can also specify your own aggregation functions.</p>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sample.data.irregular</span> <span class="op">|&gt;</span>  </span>
+<span>  <span class="fu"><a href="reference/aggregate_Datetime.html">aggregate_Datetime</a></span><span class="op">(</span>unit <span class="op">=</span> <span class="st">"20 sec"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="reference/has_gaps.html">has_gaps</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] FALSE</span></span></code></pre></div>
+<p>There are also convenient functions to extract (<code><a href="reference/extract_gaps.html">extract_gaps()</a></code>), summarize (<code><a href="reference/gap_table.html">gap_table()</a></code>) or visualize (<code><a href="reference/gg_gaps.html">gg_gaps()</a></code>) gaps.</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dataset</span> <span class="op">|&gt;</span> <span class="fu"><a href="reference/gg_gaps.html">gg_gaps</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: Removed 8104 rows containing missing values or values outside the scale range</span></span>
+<span><span class="co">#&gt; (`geom_line()`).</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-19-1.png" width="100%"></p>
+<p>Finally, the <code><a href="reference/remove_partial_data.html">remove_partial_data()</a></code> easily gets rid of groups or days that do not provide enough data.</p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dataset</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="reference/remove_partial_data.html">remove_partial_data</a></span><span class="op">(</span><span class="va">MEDI</span>, <span class="co">#variable for which to check missingness</span></span>
+<span>                      threshold.missing <span class="op">=</span> <span class="st">"2 hours"</span>, <span class="co">#remove when more than 2 hours are missing</span></span>
+<span>                      by.date <span class="op">=</span> <span class="cn">TRUE</span>, <span class="co">#check the condition per day, not the whole participant</span></span>
+<span>                      handle.gaps <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span>  <span class="co">#go beyond the available data to midnight of the first and last day</span></span>
+<span>  <span class="fu"><a href="reference/gg_days.html">gg_days</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-20-1.png" width="100%"></p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="supported-devices">Supported devices<a class="anchor" aria-label="anchor" href="#supported-devices"></a>
@@ -107,6 +359,7 @@ Light logger data can powerfully convey insights into personal light exposure
 <li><p>ActLumus</p></li>
 <li><p>ActTrust</p></li>
 <li><p>Circadian_Eye</p></li>
+<li><p>Clouclip</p></li>
 <li><p>DeLux</p></li>
 <li><p>GENEActiv_GGIR</p></li>
 <li><p>Kronowise</p></li>
@@ -125,7 +378,7 @@ Light logger data can powerfully convey insights into personal light exposure
 <p>If you are using a device that is currently not supported, please contact the developers. We are always looking to expand the range of supported devices. The easiest and most trackable way to get in contact is by opening a new issue on our <a href="https://github.com/tscnlab/LightLogR/issues" class="external-link">Github repository</a>. Please also provide a sample file of your data, so we can test the import function.</p>
 </div>
 <div class="section level2">
-<h2 id="metrics">Metrics<a class="anchor" aria-label="anchor" href="#metrics"></a>
+<h2 id="metrics-1">Metrics<a class="anchor" aria-label="anchor" href="#metrics-1"></a>
 </h2>
 <p>LightLogR supports a wide range of metrics across different metric families. You can find the full documentation of metrics functions in the <a href="https://tscnlab.github.io/LightLogR/reference/index.html#metrics">reference section</a>. There is also an overview article on how to use <a href="https://tscnlab.github.io/LightLogR/articles/Metrics.html">Metrics</a>.</p>
 <table class="table">
@@ -161,48 +414,54 @@ Light logger data can powerfully convey insights into personal light exposure
 <td><code><a href="reference/centroidLE.html">centroidLE()</a></code></td>
 </tr>
 <tr class="even">
+<td>Dose</td>
+<td>1</td>
+<td></td>
+<td><code><a href="reference/dose.html">dose()</a></code></td>
+</tr>
+<tr class="odd">
 <td>Disparity index</td>
 <td>1</td>
 <td></td>
 <td><code><a href="reference/disparity_index.html">disparity_index()</a></code></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Duration above threshold</td>
 <td>3</td>
 <td>above, below, within</td>
 <td><code><a href="reference/duration_above_threshold.html">duration_above_threshold()</a></code></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>Exponential moving average (EMA)</td>
 <td>1</td>
 <td></td>
 <td><code><a href="reference/exponential_moving_average.html">exponential_moving_average()</a></code></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Frequency crossing threshold</td>
 <td>1</td>
 <td></td>
 <td><code><a href="reference/frequency_crossing_threshold.html">frequency_crossing_threshold()</a></code></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>Intradaily Variance (IV)</td>
 <td>1</td>
 <td></td>
 <td><code><a href="reference/intradaily_variability.html">intradaily_variability()</a></code></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Interdaily Stability (IS)</td>
 <td>1</td>
 <td></td>
 <td><code><a href="reference/interdaily_stability.html">interdaily_stability()</a></code></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>Midpoint CE (Cumulative Exposure)</td>
 <td>1</td>
 <td></td>
 <td><code><a href="reference/midpointCE.html">midpointCE()</a></code></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>nvRC (Non-visual circadian response)</td>
 <td>4</td>
 <td></td>
@@ -210,7 +469,7 @@ Light logger data can powerfully convey insights into personal light exposure
 <code><a href="reference/nvRC.html">nvRC()</a></code>, <code><a href="reference/nvRC_metrics.html">nvRC_circadianDisturbance()</a></code>, <code><a href="reference/nvRC_metrics.html">nvRC_circadianBias()</a></code>, <code><a href="reference/nvRC_metrics.html">nvRC_relativeAmplitudeError()</a></code>
 </td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>nvRD (Non-visual direct response)</td>
 <td>2</td>
 <td></td>
@@ -218,37 +477,37 @@ Light logger data can powerfully convey insights into personal light exposure
 <code><a href="reference/nvRD.html">nvRD()</a></code>, <code><a href="reference/nvRD_cumulative_response.html">nvRD_cumulative_response()</a></code>
 </td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Period above threshold</td>
 <td>3</td>
 <td>above, below, within</td>
 <td><code><a href="reference/period_above_threshold.html">period_above_threshold()</a></code></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>Pulses above threshold</td>
 <td>7x3</td>
 <td>above, below, within</td>
 <td><code><a href="reference/pulses_above_threshold.html">pulses_above_threshold()</a></code></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Threshold for duration</td>
 <td>2</td>
 <td>above, below</td>
 <td><code><a href="reference/threshold_for_duration.html">threshold_for_duration()</a></code></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>Timing above threshold</td>
 <td>3</td>
 <td>above, below, within</td>
 <td><code><a href="reference/timing_above_threshold.html">timing_above_threshold()</a></code></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><strong>Total:</strong></td>
 <td></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><strong>17 families</strong></td>
 <td><strong>61 metrics</strong></td>
 <td></td>
@@ -265,141 +524,6 @@ Light logger data can powerfully convey insights into personal light exposure
 <p><a href="https://www.melidos.eu" class="external-link"><em>MeLiDos</em></a> is a joint, <a href="https://www.euramet.org" class="external-link">EURAMET</a>-funded project involving sixteen partners across Europe, aimed at developing a metrology and a standard workflow for wearable light logger data and optical radiation dosimeters. Its primary contributions towards fostering FAIR data include the development of a common file format, robust metadata descriptors, and an accompanying open-source software ecosystem.</p>
 <p><a href="https://www.euramet.org" class="external-link"><img src="reference/figures/Metrology_Partnership_LOGO.jpg" width="282"></a> <img src="reference/figures/Co-Funded-By-the-EU.png" width="288"></p>
 <p>The project (22NRM05 MeLiDos) has received funding from the European Partnership on Metrology, co-financed from the European Union’s Horizon Europe Research and Innovation Programme and by the Participating States. Views and opinions expressed are however those of the author(s) only and do not necessarily reflect those of the European Union or EURAMET. Neither the European Union nor the granting authority can be held responsible for them.</p>
-</div>
-<div class="section level2">
-<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
-</h2>
-<p>You can install LightLogR from <a href="https://CRAN.R-project.org" class="external-link">CRAN</a> with:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"LightLogR"</span><span class="op">)</span></span></code></pre></div>
-<p>You can install the latest development version of LightLogR from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"tscnlab/LightLogR"</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
-</h2>
-<p>Here is a quick starter on how do use <strong>LightLogR</strong>.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tscnlab/LightLogR" class="external-link">LightLogR</a></span><span class="op">)</span></span>
-<span><span class="co">#these packages are needed for the examples as shown below.</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ardata-fr.github.io/flextable-book/" class="external-link">flextable</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></code></pre></div>
-<div class="section level3">
-<h3 id="import">Import<a class="anchor" aria-label="anchor" href="#import"></a>
-</h3>
-<p>You can import a light logger dataset with ease. The import functions give quick, helpful feedback about the dataset.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">filename</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/sample_data_LYS.csv"</span>, package <span class="op">=</span> <span class="st">"LightLogR"</span><span class="op">)</span></span>
-<span><span class="va">dataset</span> <span class="op">&lt;-</span> <span class="va">import</span><span class="op">$</span><span class="fu">LYS</span><span class="op">(</span><span class="va">filename</span>, tz <span class="op">=</span> <span class="st">"Europe/Berlin"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Successfully read in 11'422 observations across 1 Ids from 1 LYS-file(s).</span></span>
-<span><span class="co">#&gt; Timezone set is Europe/Berlin.</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; First Observation: 2023-06-21 02:00:12</span></span>
-<span><span class="co">#&gt; Last Observation: 2023-06-23 01:59:48</span></span>
-<span><span class="co">#&gt; Timespan: 2 days</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Observation intervals: </span></span>
-<span><span class="co">#&gt;   Id              interval.time     n pct    </span></span>
-<span><span class="co">#&gt; 1 sample_data_LYS 15s           10015 87.689%</span></span>
-<span><span class="co">#&gt; 2 sample_data_LYS 16s            1367 11.969%</span></span>
-<span><span class="co">#&gt; 3 sample_data_LYS 17s              23 0.201% </span></span>
-<span><span class="co">#&gt; 4 sample_data_LYS 18s              16 0.140%</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-3-2.png" width="60%" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="va">dataset</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">Datetime</span>, <span class="va">lux</span>, <span class="va">kelvin</span>, <span class="va">MEDI</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>  </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="fl">8000</span><span class="op">:</span><span class="fl">8005</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://davidgohel.github.io/flextable/reference/flextable.html" class="external-link">flextable</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://davidgohel.github.io/flextable/reference/autofit.html" class="external-link">autofit</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-3-1.png" width="60%" style="display: block; margin: auto;"></p>
-<div style="color: white">
-<p>.</p>
-</div>
-<p>For more complex data, there is the useful <code><a href="reference/gg_overview.html">gg_overview()</a></code> function to get an immediate grasp of your data. It was automatically called during import (set <code>auto.plot = FALSE</code> to suppress this), but really shines for datasets with multiple participants. It also indicates where data is missing, based on the measurement epochs found in the data.</p>
-<div style="text-align:center">
-<figure><img src="reference/figures/gg_overview2.png" style="width:60.0%" alt="Example for gg_overview() from a large data collection effort over many months"><figcaption aria-hidden="true">
-Example for <code><a href="reference/gg_overview.html">gg_overview()</a></code> from a large data collection effort over many months
-</figcaption></figure>
-</div>
-<p><em>note:</em> the above example image requires a large dataset not included in the package. It is available, however, in the article on <a href="https://tscnlab.github.io/LightLogR/articles/Import.html">Import &amp; cleaning</a>.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co">#example code, on how to use gg_overview():</span></span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>dataset <span class="sc">%&gt;%</span> <span class="fu">gg_overview</span>()</span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="visualize">Visualize<a class="anchor" aria-label="anchor" href="#visualize"></a>
-</h3>
-<p>Once imported, <strong>LightLogR</strong> allows you conveniently visualize the data.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dataset</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="reference/gg_day.html">gg_day</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-4-1.png" width="60%" style="display: block; margin: auto;"></p>
-<p>There is a wide range of options to the <code><a href="reference/gg_day.html">gg_day()</a></code> function to customize the output. Have a look at the reference page (<code><a href="reference/gg_day.html">?gg_day</a></code>) to see all options. You can also override most of the defaults, e.g., for different <code>color</code>, <code>facetting</code>, <code>theme</code> options.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dataset</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="reference/gg_day.html">gg_day</a></span><span class="op">(</span>aes_col <span class="op">=</span> <span class="va">MEDI</span> <span class="op">&lt;</span> <span class="fl">250</span>, size <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-5-1.png" width="70%" style="display: block; margin: auto;"></p>
-</div>
-<div class="section level3">
-<h3 id="more-than-one-dataset">More than one dataset<a class="anchor" aria-label="anchor" href="#more-than-one-dataset"></a>
-</h3>
-<p>The built-in dataset <code>sample.data.environment</code> shows a combined dataset of light logger data and a second set of data - in this case unobstructed outdoor light measurements. Combined datasets can be easily visualized with <code><a href="reference/gg_day.html">gg_day()</a></code>. The <code>col</code> parameter used on the <code>Id</code> column of the dataset allows for a color separation.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sample.data.environment</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="reference/gg_day.html">gg_day</a></span><span class="op">(</span></span>
-<span>    start.date <span class="op">=</span> <span class="st">"2023-09-01"</span>,</span>
-<span>    aes_col <span class="op">=</span> <span class="va">Id</span>,</span>
-<span>    scales <span class="op">=</span> <span class="st">"fixed"</span>,</span>
-<span>    geom <span class="op">=</span> <span class="st">"line"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Only Dates will be used from start.date and end.date input. If you also want to set Datetimes or Times, consider using the `filter_Datetime()` function instead.</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-6-1.png" width="70%" style="display: block; margin: auto;"></p>
-<p>If you want to get a feeling for the data over the course of multiple days, the <code><a href="reference/gg_days.html">gg_days()</a></code> function comes in handy. It works similar to <code><a href="reference/gg_day.html">gg_day()</a></code>. It is also opinionated in terms of the scaling and linebreaks to only show whole days, all of which can be adjusted.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sample.data.environment</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="reference/gg_days.html">gg_days</a></span><span class="op">(</span>geom <span class="op">=</span> <span class="st">"ribbon"</span>, alpha <span class="op">=</span> <span class="fl">0.25</span>, col <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-7-1.png" width="100%"></p>
-<p>With the <code><a href="reference/cut_Datetime.html">cut_Datetime()</a></code> function, the data can further be broken up into arbitrary time intervals. This can be used to easily compare different datasets. Just put the function in between the dataset and <code><a href="reference/gg_day.html">gg_day()</a></code>. This makes a new variable available for plotting: <code>Datetime.rounded</code>. Just make sure, that the <code>geom</code> parameter is set to <em>boxplot</em> and the <code>group</code> parameter uses both the info from the rounded time interval (<code>Datetime.rounded</code>) and the different datasets (<code>Source</code>). The <code><a href="https://rdrr.io/r/base/interaction.html" class="external-link">base::interaction()</a></code> function can easily combine them. The default interval for <code><a href="reference/cut_Datetime.html">cut_Datetime()</a></code> is 3 hours.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sample.data.environment</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="reference/cut_Datetime.html">cut_Datetime</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="reference/gg_day.html">gg_day</a></span><span class="op">(</span></span>
-<span>    end.date <span class="op">=</span> <span class="st">"2023-08-29"</span>,</span>
-<span>    aes_col <span class="op">=</span> <span class="va">Id</span>,</span>
-<span>    scales <span class="op">=</span> <span class="st">"fixed"</span>,</span>
-<span>    geom <span class="op">=</span> <span class="st">"boxplot"</span>,</span>
-<span>    group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/interaction.html" class="external-link">interaction</a></span><span class="op">(</span><span class="va">Id</span>, <span class="va">Datetime.rounded</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Only Dates will be used from start.date and end.date input. If you also want to set Datetimes or Times, consider using the `filter_Datetime()` function instead.</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-8-1.png" width="60%" style="display: block; margin: auto;"></p>
-</div>
-<div class="section level3">
-<h3 id="insights-validation-and-processing">Insights, Validation, and Processing<a class="anchor" aria-label="anchor" href="#insights-validation-and-processing"></a>
-</h3>
-<p><strong>LightLogR</strong> provides a range of functions to get insight into your light logger data. Most importantly, you can search for and eliminate implicit gaps.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dataset</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="reference/gap_finder.html">gap_finder</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Found 10758 gaps. 761 Datetimes fall into the regular sequence.</span></span></code></pre></div>
-<p>The huge amount of gaps comes from the fact that the measurement intervals are somewhat irregular between 15 and 18 seconds in this case. This leaves very little intervals to start regularly. We got this information after import, but can still get to this info through <code><a href="reference/count_difftime.html">count_difftime()</a></code>.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dataset</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="reference/count_difftime.html">count_difftime</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 4 × 2</span></span>
-<span><span class="co">#&gt;   difftime       n</span></span>
-<span><span class="co">#&gt;   &lt;Duration&gt; &lt;int&gt;</span></span>
-<span><span class="co">#&gt; 1 15s        10015</span></span>
-<span><span class="co">#&gt; 2 16s         1367</span></span>
-<span><span class="co">#&gt; 3 17s           23</span></span>
-<span><span class="co">#&gt; 4 18s           16</span></span></code></pre></div>
-<p>We can eliminate this through the <code><a href="reference/gap_handler.html">gap_handler()</a></code> function. This function will automatically fill in the gaps with NA values. As the most dominant interval in the dataset is now not 15 seconds anymore (because intermediate datapoints have been added), we need to specify the epoch for <code><a href="reference/gap_finder.html">gap_finder()</a></code>.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dataset</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="reference/gap_handler.html">gap_handler</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="reference/gap_finder.html">gap_finder</a></span><span class="op">(</span>epoch <span class="op">=</span> <span class="st">"15 sec"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; No gaps found</span></span></code></pre></div>
-<p>If we want to force the data to be regular, we can use the <code><a href="reference/aggregate_Datetime.html">aggregate_Datetime()</a></code> function. This will aggregate the data to the specified epoch. There are sensible defaults on how to aggregate numeric, categorical, and logical data. You can also specify your own aggregation functions.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dataset</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="reference/aggregate_Datetime.html">aggregate_Datetime</a></span><span class="op">(</span>unit <span class="op">=</span> <span class="st">"15 sec"</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="reference/gap_finder.html">gap_finder</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Found 97 gaps. 11422 Datetimes fall into the regular sequence.</span></span></code></pre></div>
-<p>Now, very few gaps are left (every time the the lagged epochs lead to a completely skipped regular epoch). The function can also be used to conveniently change the interval to arbitrary values, e.g., <code>"5 mins"</code>, or <code>"1 hour"</code>.</p>
-</div>
 </div>
 </div>
 <div class="section level1">
@@ -472,7 +596,7 @@ Example for <code><a href="reference/gg_overview.html">gg_overview()</a></code> 
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer>

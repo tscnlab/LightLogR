@@ -15,7 +15,7 @@ and consider to set force.tz = TRUE."><meta property="og:image" content="https:/
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,7 +47,7 @@ and consider to set force.tz = TRUE."><meta property="og:image" content="https:/
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Add states to a dataset based on groups and start/end times</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/v0.9.0/R/extract_states.R" class="external-link"><code>R/extract_states.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/main/R/extract_states.R" class="external-link"><code>R/extract_states.R</code></a></small>
       <div class="d-none name"><code>add_states.Rd</code></div>
     </div>
 
@@ -128,19 +128,22 @@ removed.</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">states</span> <span class="op">&lt;-</span></span></span>
 <span class="r-in"><span><span class="va">sample.data.environment</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="filter_Datetime.html">filter_Date</a></span><span class="op">(</span>length <span class="op">=</span> <span class="st">"1 day"</span><span class="op">)</span> <span class="op">|&gt;</span> </span></span>
 <span class="r-in"><span>  <span class="fu"><a href="extract_states.html">extract_states</a></span><span class="op">(</span><span class="va">Daylight</span>, <span class="va">MEDI</span> <span class="op">&gt;</span> <span class="fl">1000</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">states</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 × 7</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Groups:   Id, Daylight [1]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Id          Daylight state.count epoch start               end                </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;Dur&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Environment FALSE    FALSE 1     30s   2023-08-28 <span style="color: #949494;">23:59:53</span> 2023-08-29 <span style="color: #949494;">06:57:53</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> Environment FALSE    FALSE 2     30s   2023-08-29 <span style="color: #949494;">19:45:23</span> 2023-08-30 <span style="color: #949494;">06:51:53</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Environment FALSE    FALSE 1        30 2023-08-28 <span style="color: #949494;">23:59:53</span> 2023-08-29 <span style="color: #949494;">06:57:53</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> Environment FALSE    FALSE 2        30 2023-08-29 <span style="color: #949494;">19:45:23</span> 2023-08-29 <span style="color: #949494;">23:59:53</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 1 more variable: duration &lt;Duration&gt;</span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">#add states to a dataset and plot them</span></span></span>
+<span class="r-in"><span><span class="co">#add states to a dataset and plot them - as we only looked for states on the</span></span></span>
+<span class="r-in"><span><span class="co"># first day (see above), only the first day will show up in the plot</span></span></span>
 <span class="r-in"><span><span class="va">sample.data.environment</span> <span class="op">|&gt;</span> </span></span>
+<span class="r-in"><span> <span class="fu"><a href="filter_Datetime.html">filter_Date</a></span><span class="op">(</span>length <span class="op">=</span> <span class="st">"2 day"</span><span class="op">)</span> <span class="op">|&gt;</span> </span></span>
 <span class="r-in"><span> <span class="fu">add_states</span><span class="op">(</span><span class="va">states</span><span class="op">)</span> <span class="op">|&gt;</span> </span></span>
 <span class="r-in"><span> <span class="fu"><a href="gg_days.html">gg_days</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span></span>
 <span class="r-in"><span> <span class="fu"><a href="gg_state.html">gg_state</a></span><span class="op">(</span><span class="va">Daylight</span><span class="op">)</span></span></span>
@@ -156,7 +159,7 @@ removed.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>

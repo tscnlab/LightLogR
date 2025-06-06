@@ -13,7 +13,7 @@ values for a specific metric. Examples include duration_above_threshold()
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,7 +45,7 @@ values for a specific metric. Examples include duration_above_threshold()
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Calculate mean daily metrics from Time Series</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/v0.9.0/R/mean_daily.R" class="external-link"><code>R/mean_daily.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/main/R/mean_daily.R" class="external-link"><code>R/mean_daily.R</code></a></small>
       <div class="d-none name"><code>mean_daily_metric.Rd</code></div>
     </div>
 
@@ -60,13 +60,13 @@ values for a specific metric. Examples include <code><a href="duration_above_thr
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mean_daily_metric</span><span class="op">(</span></span>
 <span>  <span class="va">data</span>,</span>
-<span>  <span class="va">metric</span>,</span>
 <span>  <span class="va">Variable</span>,</span>
-<span>  Weekend.type <span class="op">=</span> <span class="va">Day</span>,</span>
+<span>  Weekend.type <span class="op">=</span> <span class="va">Date</span>,</span>
 <span>  Datetime.colname <span class="op">=</span> <span class="va">Datetime</span>,</span>
 <span>  metric_type <span class="op">=</span> <span class="va">duration_above_threshold</span>,</span>
 <span>  prefix <span class="op">=</span> <span class="st">"average_"</span>,</span>
 <span>  filter.empty <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  Datetime2Time <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -77,11 +77,6 @@ values for a specific metric. Examples include <code><a href="duration_above_thr
 
 <dl><dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
 <dd><p>A dataframe containing light logger data imported with LightLogR</p></dd>
-
-
-<dt id="arg-metric">metric<a class="anchor" aria-label="anchor" href="#arg-metric"></a></dt>
-<dd><p>The name of the metric column to create in the output. Expects
-a <code>character</code></p></dd>
 
 
 <dt id="arg-variable">Variable<a class="anchor" aria-label="anchor" href="#arg-variable"></a></dt>
@@ -112,6 +107,13 @@ the week as a factor</p></dd>
 <dd><p>Filter out empty rows. Default is FALSE</p></dd>
 
 
+<dt id="arg-datetime-time">Datetime2Time<a class="anchor" aria-label="anchor" href="#arg-datetime-time"></a></dt>
+<dd><p>Logical of whether POSIXct columns should be transformed
+into hms(time) columns, which is usually sensible for averaging (default is
+<code>TRUE</code>). Calls <code><a href="Datetime2Time.html">Datetime2Time()</a></code> with default settings (all POSIXct are
+affected).</p></dd>
+
+
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Additional arguments passed to the metric function</p></dd>
 
@@ -124,42 +126,57 @@ and mean daily values for the specified metric</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Import sample data</span></span></span>
-<span class="r-in"><span><span class="va">filepath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/sample_data_LYS.csv"</span>, package <span class="op">=</span> <span class="st">"LightLogR"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">dataset</span> <span class="op">&lt;-</span> <span class="va">import</span><span class="op">$</span><span class="fu">LYS</span><span class="op">(</span><span class="va">filepath</span>, silent <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Calculate mean daily duration above threshold. As the data only contains</span></span></span>
 <span class="r-in"><span><span class="co"># data for two days, Weekend and Mean daily will throw NA</span></span></span>
-<span class="r-in"><span><span class="va">dataset</span> <span class="op">|&gt;</span> </span></span>
+<span class="r-in"><span><span class="va">sample.data.irregular</span> <span class="op">|&gt;</span> </span></span>
+<span class="r-in"><span><span class="fu"><a href="aggregate_Datetime.html">aggregate_Datetime</a></span><span class="op">(</span>unit <span class="op">=</span> <span class="st">"1 min"</span><span class="op">)</span> <span class="op">|&gt;</span> </span></span>
 <span class="r-in"><span><span class="fu">mean_daily_metric</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  metric <span class="op">=</span> <span class="st">"duration_above_100lux"</span>,</span></span>
 <span class="r-in"><span>  Variable <span class="op">=</span> <span class="va">lux</span>,</span></span>
 <span class="r-in"><span>  threshold <span class="op">=</span> <span class="fl">100</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Groups:   Id [1]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Id              Day        average_duration_above_100lux</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;Duration&gt;</span>                   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> sample_data_LYS Mean daily <span style="color: #BB0000;">NA</span>                           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> sample_data_LYS Weekday    16935s (~4.7 hours)          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> sample_data_LYS Weekend    <span style="color: #BB0000;">NA</span>                           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Id    Date       average_duration_above_100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;Duration&gt;</span>                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> P1    Mean daily <span style="color: #BB0000;">NA</span>                        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> P1    Weekday    17220s (~4.78 hours)      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> P1    Weekend    <span style="color: #BB0000;">NA</span>                        </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># again with another dataset</span></span></span>
 <span class="r-in"><span><span class="va">sample.data.environment</span> <span class="op">|&gt;</span> </span></span>
 <span class="r-in"><span>  <span class="fu">mean_daily_metric</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  metric <span class="op">=</span> <span class="st">"duration_above_250lux"</span>,</span></span>
 <span class="r-in"><span>  Variable <span class="op">=</span> <span class="va">MEDI</span>,</span></span>
 <span class="r-in"><span>  threshold <span class="op">=</span> <span class="fl">250</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Groups:   Id [2]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Id          Day        average_duration_above_250lux</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;Duration&gt;</span>                   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Environment Mean daily 48710s (~13.53 hours)        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> Environment Weekday    48712s (~13.53 hours)        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> Environment Weekend    48705s (~13.53 hours)        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> Participant Mean daily 15716s (~4.37 hours)         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> Participant Weekday    11495s (~3.19 hours)         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> Participant Weekend    26270s (~7.3 hours)          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Id          Date       average_duration_above_250</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;Duration&gt;</span>                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Environment Mean daily 48710s (~13.53 hours)     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> Environment Weekday    48712s (~13.53 hours)     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> Environment Weekend    48705s (~13.53 hours)     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> Participant Mean daily 15716s (~4.37 hours)      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> Participant Weekday    11495s (~3.19 hours)      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> Participant Weekend    26270s (~7.3 hours)       </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># by default, datetime columns are converted to time</span></span></span>
+<span class="r-in"><span><span class="va">sample.data.environment</span> <span class="op">|&gt;</span> </span></span>
+<span class="r-in"><span>  <span class="fu">mean_daily_metric</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  Variable <span class="op">=</span> <span class="va">MEDI</span>,</span></span>
+<span class="r-in"><span>  metric_type <span class="op">=</span> <span class="va">timing_above_threshold</span>,</span></span>
+<span class="r-in"><span>  threshold <span class="op">=</span> <span class="fl">250</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Groups:   Id [2]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Id          Date       average_mean_timing_above_250 average_first_timing_ab…¹</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;time&gt;</span>                        <span style="color: #949494; font-style: italic;">&lt;time&gt;</span>                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Environment Mean daily 13<span style="color: #949494;">:</span>24<span style="color: #949494;">:</span>00                      06<span style="color: #949494;">:</span>38<span style="color: #949494;">:</span>19                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> Environment Weekday    13<span style="color: #949494;">:</span>24<span style="color: #949494;">:</span>12                      06<span style="color: #949494;">:</span>38<span style="color: #949494;">:</span>30                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> Environment Weekend    13<span style="color: #949494;">:</span>23<span style="color: #949494;">:</span>30                      06<span style="color: #949494;">:</span>37<span style="color: #949494;">:</span>53                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> Participant Mean daily 15<span style="color: #949494;">:</span>15<span style="color: #949494;">:</span>33                      09<span style="color: #949494;">:</span>58<span style="color: #949494;">:</span>06                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> Participant Weekday    15<span style="color: #949494;">:</span>11<span style="color: #949494;">:</span>08                      09<span style="color: #949494;">:</span>58<span style="color: #949494;">:</span>09                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> Participant Weekend    15<span style="color: #949494;">:</span>26<span style="color: #949494;">:</span>37                      09<span style="color: #949494;">:</span>57<span style="color: #949494;">:</span>59                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ abbreviated name: ¹​average_first_timing_above_250</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 1 more variable: average_last_timing_above_250 &lt;time&gt;</span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -172,7 +189,7 @@ and mean daily values for the specified metric</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>

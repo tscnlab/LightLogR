@@ -17,7 +17,7 @@ full list of arguments."><meta property="og:image" content="https://tscnlab.gith
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,7 +49,7 @@ full list of arguments."><meta property="og:image" content="https://tscnlab.gith
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Import a light logger dataset or related data</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/v0.9.0/R/import_LL.R" class="external-link"><code>R/import_LL.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/main/R/import_LL.R" class="external-link"><code>R/import_LL.R</code></a></small>
       <div class="d-none name"><code>import_Dataset.Rd</code></div>
     </div>
 
@@ -80,8 +80,8 @@ full list of arguments.</p>
 <dl><dt id="arg-device">device<a class="anchor" aria-label="anchor" href="#arg-device"></a></dt>
 <dd><p>From what device do you want to import? For a few devices,
 there is a sample data file that you can use to test the function (see the
-examples). See <code><a href="supported_devices.html">supported_devices()</a></code> for a list of supported devices and see
-below for more information on devices with specific requirements.</p></dd>
+examples). See <code><a href="supported_devices.html">supported_devices()</a></code> for a list of supported devices and
+see below for more information on devices with specific requirements.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -119,6 +119,7 @@ use of this arguments when importing more than one file</strong></p></li>
 <li><p><code>silent</code>: If set to <code>TRUE</code>, the function will not print a summary message
 of the import or plot the overview. Default is <code>FALSE</code>.</p></li>
 <li><p><code>locale</code>: The locale controls defaults that vary from place to place.</p></li>
+<li><p><code>not.before</code>: Remove data prior to this date. This argument is provided to <code>start</code> of <code><a href="filter_Datetime.html">filter_Date()</a></code>. Data will be filtered out before any of the summaries are shown.</p></li>
 <li><p><code>dst_adjustment</code>: If a file crosses daylight savings time, but the device does not adjust time stamps accordingly, you can set this argument to <code>TRUE</code>, to apply this shift manually. It is selective, so it will only be done in files that cross between DST and standard time. Default is <code>FALSE</code>. Uses <code><a href="dst_change_handler.html">dst_change_handler()</a></code> to do the adjustment. Look there for more infos. It is not equipped to handle two jumps in one file (so back and forth between DST and standard time), but will work fine if jums occur in separate files.</p></li>
 <li><p><code>auto.plot</code>: a logical on whether to call <code><a href="gg_overview.html">gg_overview()</a></code> after import. Default is <code>TRUE</code>. But is set to <code>FALSE</code> if the argument <code>silent</code> is set to <code>TRUE</code>.</p></li>
 <li><p><code>...</code>: supply additional arguments to the <span class="pkg">readr</span> import functions, like <code>na</code>. Might also be used to supply arguments to the specific import functions, like <code>column_names</code> for <code>Actiwatch_Spectrum</code> devices. Those devices will always throw a helpful error message if you forget to supply the necessary arguments.
@@ -138,7 +139,7 @@ simply call the <code><a href="supported_devices.html">supported_devices()</a></
 continuously as the package is maintained.</p>
 <p></p><div class="sourceCode r"><pre><code><span><span class="fu"><a href="../reference/supported_devices.html">supported_devices</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  [1] "ActLumus"              "ActTrust"              "Actiwatch_Spectrum"</span></span>
-<span><span class="co">#&gt;  [4] "Actiwatch_Spectrum_de" "Circadian_Eye"         "ClouClip"</span></span>
+<span><span class="co">#&gt;  [4] "Actiwatch_Spectrum_de" "Circadian_Eye"         "Clouclip"</span></span>
 <span><span class="co">#&gt;  [7] "DeLux"                 "GENEActiv_GGIR"        "Kronowise"</span></span>
 <span><span class="co">#&gt; [10] "LIMO"                  "LYS"                   "LiDo"</span></span>
 <span><span class="co">#&gt; [13] "LightWatcher"          "MotionWatch8"          "OcuWEAR"</span></span>
@@ -250,8 +251,8 @@ sample file is a good example for an irregular dataset.</p>
 <p>Implemented: July 2024</p>
 <p><strong>Required Argument: <code>modality</code></strong> A character scalar describing the
 modality to be imported from. Can be one of <code>"ALS"</code> (Ambient light sensor),
-<code>"IMU"</code> (Inertial Measurement Unit), <code>"INF"</code> (Information),
-<code>"PHO"</code> (Spectral Sensor), <code>"TOF"</code> (Time of Flight)</p>
+<code>"IMU"</code> (Inertial Measurement Unit), <code>"INF"</code> (Information), <code>"PHO"</code>
+(Spectral Sensor), <code>"TOF"</code> (Time of Flight)</p>
 </div>
 
 <div class="section">
@@ -279,8 +280,8 @@ modality to be imported from. Can be one of <code>"ALS"</code> (Ambient light se
 <p>Manufacturer: Activeinsights</p>
 <p>Model: GENEActiv</p>
 <p><strong>Note:</strong> This import function takes GENEActiv data that was preprocessed
-through the <a href="https://cran.r-project.org/package=GGIR" class="external-link">GGIR</a> package.
-By default, <code>GGIR</code> aggregates light data into intervals of 15 minutes. This
+through the <a href="https://cran.r-project.org/package=GGIR" class="external-link">GGIR</a> package. By
+default, <code>GGIR</code> aggregates light data into intervals of 15 minutes. This
 can be set by the <code>windowsizes</code> argument in GGIR, which is a three-value
 vector, where the second values is set to 900 seconds by default. To import
 the preprocessed data with <code>LightLogR</code>, the <code>filename</code> argument requires a
@@ -290,11 +291,10 @@ can be specified, each of which needs to be a path to a different GGIR
 parent directory. GGIR exports can contain data from multiple participants,
 these will always be imported fully by providing the parent directory. Use
 the <code>pattern</code> argument to extract sensible <code>Id</code>s from the <em>.RData</em>
-filenames within the <em>meta/basic/</em> folder. As per the author,
-<a href="https://www.accelting.com" class="external-link">Dr. Vincent van Hees</a>, GGIR preprocessed data are
-always in local time, provided the <code>desiredtz</code>/<code>configtz</code> are properly set
-in GGIR. <code>LightLogR</code> still requires a timezone to be set, but will not
-timeshift the import data.</p>
+filenames within the <em>meta/basic/</em> folder. As per the author, <a href="https://www.accelting.com" class="external-link">Dr. Vincent van Hees</a>, GGIR preprocessed data are always in
+local time, provided the <code>desiredtz</code>/<code>configtz</code> are properly set in GGIR.
+<code>LightLogR</code> still requires a timezone to be set, but will not timeshift the
+import data.</p>
 </div>
 
 <div class="section">
@@ -311,7 +311,10 @@ timeshift the import data.</p>
 
 <p>Manufacturer: ENTPE</p>
 <p>Implemented: September 2024</p>
-<p>LIMO exports <code>LIGHT</code> data and <code>IMU</code> (inertia measurements, also UV) in separate files. Both can be read in with this function, but not at the same time. Please decide what type of data you need and provide the respective filenames.</p>
+<p>LIMO exports <code>LIGHT</code> data and <code>IMU</code> (inertia measurements, also UV) in
+separate files. Both can be read in with this function, but not at the same
+time. Please decide what type of data you need and provide the respective
+filenames.</p>
 </div>
 
 <div class="section">
@@ -320,16 +323,26 @@ timeshift the import data.</p>
 
 <p>Manufacturer: Ocutune</p>
 <p>Implemented: September 2024</p>
-<p>OcuWEAR data contains spectral data. Due to the format of the data file, the spectrum is not directly part of the tibble, but rather a list column of tibbles within the imported data, containing a <code>Wavelength</code> (nm) and <code>Intensity</code> (mW/m^2) column.</p>
+<p>OcuWEAR data contains spectral data. Due to the format of the data file,
+the spectrum is not directly part of the tibble, but rather a list column
+of tibbles within the imported data, containing a <code>Wavelength</code> (nm) and
+<code>Intensity</code> (mW/m^2) column.</p>
 </div>
 
 <div class="section">
-<h3 id="clouclip">ClouClip<a class="anchor" aria-label="anchor" href="#clouclip"></a></h3>
+<h3 id="clouclip">Clouclip<a class="anchor" aria-label="anchor" href="#clouclip"></a></h3>
 
 
 <p>Manufacturer: Clouclip</p>
 <p>Implemented: April 2025</p>
-<p>ClouClip export files have the ending <code>.xls</code>, but are no real Microsoft Excel files, rather they are tab-separated text files. LightLogR thus does not read them in with an excel import routine. The measurement columns <code>Lux</code> and <code>Dis</code> contain sentinel values. <code>-1</code> (<code>Dis</code> and <code>Lux</code>) indicates sleep mode, whereas <code>204</code> (only <code>Dis</code>) indicates an out of range measurement. These values will be set to <code>NA</code>, and an additional column is added that translates these status codes. The columns carry the name <code>{.col}_status</code>.</p>
+<p>Clouclip export files have the ending <code>.xls</code>, but are no real Microsoft
+Excel files, rather they are tab-separated text files. LightLogR thus does
+not read them in with an excel import routine. The measurement columns
+<code>Lux</code> and <code>Dis</code> contain sentinel values. <code>-1</code> (<code>Dis</code> and <code>Lux</code>) indicates
+sleep mode, whereas <code>204</code> (only <code>Dis</code>) indicates an out of range
+measurement. These values will be set to <code>NA</code>, and an additional column is
+added that translates these status codes. The columns carry the name
+<code>{.col}_status</code>.</p>
 </div>
 
     </div>
@@ -345,30 +358,12 @@ timeshift the import data.</p>
 <code>import_Dataset</code> function. There are sample datasets for all devices.</p>
 <p>The import functions provide a basic overview of the data after import,
 such as the intervals between measurements or the start and end dates.</p>
-<p></p><div class="sourceCode r"><pre><code><span><span class="va">filepath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/sample_data_LYS.csv"</span>, package <span class="op">=</span> <span class="st">"LightLogR"</span><span class="op">)</span></span>
-<span><span class="va">dataset</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/import_Dataset.html">import_Dataset</a></span><span class="op">(</span><span class="st">"LYS"</span>, <span class="va">filepath</span>, auto.plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt;</span></span>
-<span><span class="co">#&gt; Successfully read in 11'422 observations across 1 Ids from 1 LYS-file(s).</span></span>
-<span><span class="co">#&gt; Timezone set is UTC.</span></span>
-<span><span class="co">#&gt; The system timezone is Europe/Madrid. Please correct if necessary!</span></span>
-<span><span class="co">#&gt;</span></span>
-<span><span class="co">#&gt; First Observation: 2023-06-21 00:00:12</span></span>
-<span><span class="co">#&gt; Last Observation: 2023-06-22 23:59:48</span></span>
-<span><span class="co">#&gt; Timespan: 2 days</span></span>
-<span><span class="co">#&gt;</span></span>
-<span><span class="co">#&gt; Observation intervals:</span></span>
-<span><span class="co">#&gt;   Id              interval.time     n pct</span></span>
-<span><span class="co">#&gt; 1 sample_data_LYS 15s           10015 87.689%</span></span>
-<span><span class="co">#&gt; 2 sample_data_LYS 16s            1367 11.969%</span></span>
-<span><span class="co">#&gt; 3 sample_data_LYS 17s              23 0.201%</span></span>
-<span><span class="co">#&gt; 4 sample_data_LYS 18s              16 0.140%</span></span></code></pre><p></p></div>
-<p>Import functions can also be called directly:</p>
 <p></p><div class="sourceCode r"><pre><code><span><span class="va">filepath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/205_actlumus_Log_1020_20230904101707532.txt.zip"</span>, package <span class="op">=</span> <span class="st">"LightLogR"</span><span class="op">)</span></span>
-<span><span class="va">dataset</span> <span class="op">&lt;-</span> <span class="va">import</span><span class="op">$</span><span class="fu">ActLumus</span><span class="op">(</span><span class="va">filepath</span>, auto.plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">dataset</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/import_Dataset.html">import_Dataset</a></span><span class="op">(</span><span class="st">"ActLumus"</span>, <span class="va">filepath</span>, auto.plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt;</span></span>
 <span><span class="co">#&gt; Successfully read in 61'016 observations across 1 Ids from 1 ActLumus-file(s).</span></span>
 <span><span class="co">#&gt; Timezone set is UTC.</span></span>
-<span><span class="co">#&gt; The system timezone is Europe/Madrid. Please correct if necessary!</span></span>
+<span><span class="co">#&gt; The system timezone is Europe/Berlin. Please correct if necessary!</span></span>
 <span><span class="co">#&gt;</span></span>
 <span><span class="co">#&gt; First Observation: 2023-08-28 08:47:54</span></span>
 <span><span class="co">#&gt; Last Observation: 2023-09-04 10:17:04</span></span>
@@ -376,9 +371,21 @@ such as the intervals between measurements or the start and end dates.</p>
 <span><span class="co">#&gt;</span></span>
 <span><span class="co">#&gt; Observation intervals:</span></span>
 <span><span class="co">#&gt;   Id                                          interval.time     n pct</span></span>
-<span><span class="co">#&gt; 1 205_actlumus_Log_1020_20230904101707532.txt 10s           61015 100%</span></span>
-<span><span class="va">dataset</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/gg_days.html">gg_days</a></span><span class="op">(</span><span class="op">)</span></span></code></pre><p></p></div>
-<p><img src="figures/unnamed-chunk-1-1.png" alt=""></p>
+<span><span class="co">#&gt; 1 205_actlumus_Log_1020_20230904101707532.txt 10s           61015 100%</span></span></code></pre><p></p></div>
+<p>Import functions can also be called directly:</p>
+<p></p><div class="sourceCode r"><pre><code><span><span class="va">dataset</span> <span class="op">&lt;-</span> <span class="va">import</span><span class="op">$</span><span class="fu">ActLumus</span><span class="op">(</span><span class="va">filepath</span>, auto.plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="co">#&gt;</span></span>
+<span><span class="co">#&gt; Successfully read in 61'016 observations across 1 Ids from 1 ActLumus-file(s).</span></span>
+<span><span class="co">#&gt; Timezone set is UTC.</span></span>
+<span><span class="co">#&gt; The system timezone is Europe/Berlin. Please correct if necessary!</span></span>
+<span><span class="co">#&gt;</span></span>
+<span><span class="co">#&gt; First Observation: 2023-08-28 08:47:54</span></span>
+<span><span class="co">#&gt; Last Observation: 2023-09-04 10:17:04</span></span>
+<span><span class="co">#&gt; Timespan: 7.1 days</span></span>
+<span><span class="co">#&gt;</span></span>
+<span><span class="co">#&gt; Observation intervals:</span></span>
+<span><span class="co">#&gt;   Id                                          interval.time     n pct</span></span>
+<span><span class="co">#&gt; 1 205_actlumus_Log_1020_20230904101707532.txt 10s           61015 100%</span></span></code></pre><p></p></div>
 <p></p><div class="sourceCode r"><pre><code><span><span class="va">dataset</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">Datetime</span>, <span class="va">TEMPERATURE</span>, <span class="va">LIGHT</span>, <span class="va">MEDI</span>, <span class="va">Id</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="fl">1500</span><span class="op">:</span><span class="fl">1505</span><span class="op">)</span></span>
@@ -409,7 +416,7 @@ such as the intervals between measurements or the start and end dates.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>

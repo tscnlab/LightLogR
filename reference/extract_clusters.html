@@ -11,6 +11,8 @@ This deviates from simply using the time difference between the first and
 last occurance, which would be one epoch shorter (e.g., the start and end
 points for a state lasting a single point is identical, i.e., zero
 duration)
+Groups will not be dropped, meaning that summaries based on the clusters
+will account for groups without clusters.
 For correct cluster identification, there can be no gaps in the data!
 Gaps can inadvertently be introduced to a gapless dataset through grouping.
 E.g., when grouping by photoperiod (day/night) within a participant, this
@@ -31,6 +33,8 @@ This deviates from simply using the time difference between the first and
 last occurance, which would be one epoch shorter (e.g., the start and end
 points for a state lasting a single point is identical, i.e., zero
 duration)
+Groups will not be dropped, meaning that summaries based on the clusters
+will account for groups without clusters.
 For correct cluster identification, there can be no gaps in the data!
 Gaps can inadvertently be introduced to a gapless dataset through grouping.
 E.g., when grouping by photoperiod (day/night) within a participant, this
@@ -47,7 +51,7 @@ dataset through a rolling join. This is a convenience function built on extract_
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -79,7 +83,7 @@ dataset through a rolling join. This is a convenience function built on extract_
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Find and extract clusters from a dataset</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/v0.9.0/R/clusters.R" class="external-link"><code>R/clusters.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/main/R/clusters.R" class="external-link"><code>R/clusters.R</code></a></small>
       <div class="d-none name"><code>extract_clusters.Rd</code></div>
     </div>
 
@@ -96,6 +100,8 @@ This deviates from simply using the time difference between the first and
 last occurance, which would be one epoch shorter (e.g., the start and end
 points for a state lasting a single point is identical, i.e., zero
 duration)</p>
+<p>Groups will not be dropped, meaning that summaries based on the clusters
+will account for groups without clusters.</p>
 <p><strong>For correct cluster identification, there can be no gaps in the data!</strong>
 Gaps can inadvertently be introduced to a gapless dataset through grouping.
 E.g., when grouping by photoperiod (day/night) within a participant, this
@@ -119,7 +125,9 @@ dataset through a rolling join. This is a convenience function built on <code>ex
 <span>  interruption.type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"max"</span>, <span class="st">"min"</span><span class="op">)</span>,</span>
 <span>  cluster.colname <span class="op">=</span> <span class="va">state.count</span>,</span>
 <span>  return.only.clusters <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  handle.gaps <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  drop.empty.groups <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  handle.gaps <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  add.label <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">add_clusters</span><span class="op">(</span></span>
@@ -185,9 +193,26 @@ identification. Defaults to "state.count". Expects a symbol.</p></dd>
 (TRUE) or also include non-clusters (FALSE). Defaults to TRUE.</p></dd>
 
 
+<dt id="arg-drop-empty-groups">drop.empty.groups<a class="anchor" aria-label="anchor" href="#arg-drop-empty-groups"></a></dt>
+<dd><p>Logical. Should empty groups be dropped? Only works
+if <code>.drop = FALSE</code> has not been used with the current grouping prior to
+calling the function. Default to <code>TRUE</code>. If set to <code>FALSE</code> can lead to an
+error if factors are present in the grouping that have more levels than
+actual data. Can, however, be useful and necessary when summarizing the
+groups further, e.g. through <code><a href="summarize_numeric.html">summarize_numeric()</a></code> - having an empty group
+present is important when averaging numbers.</p></dd>
+
+
 <dt id="arg-handle-gaps">handle.gaps<a class="anchor" aria-label="anchor" href="#arg-handle-gaps"></a></dt>
 <dd><p>Logical whether the data shall be treated with
 <code><a href="gap_handler.html">gap_handler()</a></code>. Is set to <code>FALSE</code> by default, due to computational costs.</p></dd>
+
+
+<dt id="arg-add-label">add.label<a class="anchor" aria-label="anchor" href="#arg-add-label"></a></dt>
+<dd><p>Logical. Option to add a label to the output containing the
+condition. E.g., <code>MEDI&gt;500|d≥30min|i≤5min</code> for clusters of melanopic EDI
+larger than 500, at least 30 minutes long (<code>d</code>), allowing interruptions of
+up to 5 minutes at a time (<code>i</code>).</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -203,50 +228,40 @@ for cluster identification.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">dataset</span> <span class="op">&lt;-</span></span></span>
 <span class="r-in"><span><span class="va">sample.data.environment</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Id</span> <span class="op">==</span> <span class="st">"Participant"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Id</span> <span class="op">==</span> <span class="st">"Participant"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="filter_Datetime.html">filter_Date</a></span><span class="op">(</span>length <span class="op">=</span> <span class="st">"1 day"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Extract clusters with minimum duration of 1 hour and interruptions of up to 5 minutes</span></span></span>
 <span class="r-in"><span><span class="va">dataset</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span> <span class="fu">extract_clusters</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">MEDI</span> <span class="op">&gt;</span> <span class="fl">1000</span>,</span></span>
+<span class="r-in"><span>  <span class="va">MEDI</span> <span class="op">&gt;</span> <span class="fl">250</span>,</span></span>
 <span class="r-in"><span>  cluster.duration <span class="op">=</span> <span class="st">"1 hour"</span>,</span></span>
-<span class="r-in"><span>  interruption.duration <span class="op">=</span> <span class="st">"5 mins"</span></span></span>
+<span class="r-in"><span>  interruption.duration <span class="op">=</span> <span class="st">"5 mins"</span>,</span></span>
+<span class="r-in"><span>  add.label <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 8 × 6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 7</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Groups:   Id [1]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Id          state.count start               end                 epoch     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;Duration&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Participant 1           2023-08-31 <span style="color: #949494;">10:22:59</span> 2023-08-31 <span style="color: #949494;">11:26:39</span> 10s       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> Participant 2           2023-09-01 <span style="color: #949494;">16:09:29</span> 2023-09-01 <span style="color: #949494;">18:47:19</span> 10s       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> Participant 3           2023-09-02 <span style="color: #949494;">12:32:39</span> 2023-09-02 <span style="color: #949494;">13:56:09</span> 10s       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> Participant 4           2023-09-02 <span style="color: #949494;">14:06:59</span> 2023-09-02 <span style="color: #949494;">15:48:49</span> 10s       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> Participant 5           2023-09-02 <span style="color: #949494;">16:55:19</span> 2023-09-02 <span style="color: #949494;">19:26:39</span> 10s       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> Participant 6           2023-09-03 <span style="color: #949494;">12:41:29</span> 2023-09-03 <span style="color: #949494;">13:55:59</span> 10s       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> Participant 7           2023-09-03 <span style="color: #949494;">15:07:59</span> 2023-09-03 <span style="color: #949494;">16:18:19</span> 10s       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">8</span> Participant 8           2023-09-03 <span style="color: #949494;">16:52:29</span> 2023-09-03 <span style="color: #949494;">18:44:59</span> 10s       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Id          label    state.count start               end                 epoch</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;Dur&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Participant MEDI&gt;25… 1           2023-08-29 <span style="color: #949494;">16:34:49</span> 2023-08-29 <span style="color: #949494;">17:38:09</span> 10s  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 1 more variable: duration &lt;Duration&gt;</span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Add clusters to a dataset where lux values are above 1000 for at least 30 minutes</span></span></span>
+<span class="r-in"><span><span class="co"># Add clusters to a dataset where lux values are above 20 for at least 30 minutes</span></span></span>
 <span class="r-in"><span><span class="va">dataset_with_clusters</span> <span class="op">&lt;-</span> </span></span>
-<span class="r-in"><span><span class="va">sample.data.environment</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu">add_clusters</span><span class="op">(</span><span class="va">MEDI</span> <span class="op">&gt;</span> <span class="fl">1000</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dataset</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu">add_clusters</span><span class="op">(</span><span class="va">MEDI</span> <span class="op">&gt;</span> <span class="fl">20</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">dataset_with_clusters</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">state</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 12 × 3</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Groups:   Id [2]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Id          state     n</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> Environment 1      <span style="text-decoration: underline;">1</span>535</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> Environment 2      <span style="text-decoration: underline;">1</span>579</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> Environment 3      <span style="text-decoration: underline;">1</span>541</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> Environment 4      <span style="text-decoration: underline;">1</span>544</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> Environment 5      <span style="text-decoration: underline;">1</span>577</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> Environment 6      <span style="text-decoration: underline;">1</span>550</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> Environment <span style="color: #BB0000;">NA</span>     <span style="text-decoration: underline;">7</span>954</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> Participant 1       429</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> Participant 2       211</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> Participant 3       189</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span> Participant 4       185</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span> Participant <span style="color: #BB0000;">NA</span>    <span style="text-decoration: underline;">50</span>826</span>
+<span class="r-in"><span><span class="co">#peak into the dataset</span></span></span>
+<span class="r-in"><span><span class="va">dataset_with_clusters</span><span class="op">[</span><span class="fl">4500</span><span class="op">:</span><span class="fl">4505</span>,<span class="op">]</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Groups:   Id [1]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Id          Datetime             MEDI state</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Participant 2023-08-29 <span style="color: #949494;">12:29:54</span>  40.6 2    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> Participant 2023-08-29 <span style="color: #949494;">12:30:04</span>  48.3 2    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> Participant 2023-08-29 <span style="color: #949494;">12:30:14</span>  46.5 2    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> Participant 2023-08-29 <span style="color: #949494;">12:30:24</span>  48.5 2    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> Participant 2023-08-29 <span style="color: #949494;">12:30:34</span>  42.3 2    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> Participant 2023-08-29 <span style="color: #949494;">12:30:44</span>  44.6 2    </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -259,7 +274,7 @@ for cluster identification.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>

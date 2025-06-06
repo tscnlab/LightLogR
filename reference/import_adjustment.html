@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,7 +39,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Adjust device imports or make your own</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/v0.9.0/R/import_LL.R" class="external-link"><code>R/import_LL.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/main/R/import_LL.R" class="external-link"><code>R/import_LL.R</code></a></small>
       <div class="d-none name"><code>import_adjustment.Rd</code></div>
     </div>
 
@@ -76,43 +76,41 @@ as expected, it must lead to a data frame containing a <code>Datetime</code> col
 the correct time zone. It has access to all arguments defined in the
 description of <code><a href="import_Dataset.html">import_Dataset()</a></code>. The <code>...</code> argument should be passed to
 whatever csv reader function is used, so that it works as expected. Look at
-<code>ll_import_expr()$LYS</code> for a quite minimal example.</p>
+<code>ll_import_expr()$ActLumus</code> for a quite minimal example.</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">#create a new import function for the LYS device, same as the old</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">#create a new import function for the ActLumus device, same as the old</span></span></span>
 <span class="r-in"><span><span class="va">new_import</span> <span class="op">&lt;-</span> <span class="fu">import_adjustment</span><span class="op">(</span><span class="fu"><a href="ll_import_expr.html">ll_import_expr</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co">#the new one is identical to the old one in terms of the function body</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/body.html" class="external-link">body</a></span><span class="op">(</span><span class="va">import</span><span class="op">$</span><span class="va">LYS</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/body.html" class="external-link">body</a></span><span class="op">(</span><span class="va">new_import</span><span class="op">$</span><span class="va">LYS</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/body.html" class="external-link">body</a></span><span class="op">(</span><span class="va">import</span><span class="op">$</span><span class="va">ActLumus</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/body.html" class="external-link">body</a></span><span class="op">(</span><span class="va">new_import</span><span class="op">$</span><span class="va">ActLumus</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#change the import expression for the LYS device to add a message at the top</span></span></span>
 <span class="r-in"><span><span class="va">new_import_expr</span> <span class="op">&lt;-</span> <span class="fu"><a href="ll_import_expr.html">ll_import_expr</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">new_import_expr</span><span class="op">$</span><span class="va">LYS</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span><span class="va">new_import_expr</span><span class="op">$</span><span class="va">ActLumus</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span></span></span>
 <span class="r-in"><span><span class="fu">rlang</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/expr.html" class="external-link">expr</a></span><span class="op">(</span><span class="op">{</span> <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"**This is a new import function**\n"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">data</span></span></span>
 <span class="r-in"><span><span class="op">}</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">new_import</span> <span class="op">&lt;-</span> <span class="fu">import_adjustment</span><span class="op">(</span><span class="va">new_import_expr</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">filepath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/sample_data_LYS.csv"</span>, package <span class="op">=</span> <span class="st">"LightLogR"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">filepath</span> <span class="op">&lt;-</span> </span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/205_actlumus_Log_1020_20230904101707532.txt.zip"</span>, </span></span>
+<span class="r-in"><span>            package <span class="op">=</span> <span class="st">"LightLogR"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co">#Now, a message is printed when the import function is called</span></span></span>
-<span class="r-in"><span><span class="va">new_import</span> <span class="op">&lt;-</span> <span class="va">new_import</span><span class="op">$</span><span class="fu">LYS</span><span class="op">(</span><span class="va">filepath</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">new_import</span><span class="op">$</span><span class="fu">ActLumus</span><span class="op">(</span><span class="va">filepath</span>, auto.plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> **This is a new import function**</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Successfully read in 11'422 observations across 1 Ids from 1 LYS-file(s).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Successfully read in 61'016 observations across 1 Ids from 1 ActLumus-file(s).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Timezone set is UTC.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> First Observation: 2023-06-21 00:00:12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Last Observation: 2023-06-22 23:59:48</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Timespan: 2 days</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> First Observation: 2023-08-28 08:47:54</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Last Observation: 2023-09-04 10:17:04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Timespan: 7.1 days</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Observation intervals: </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Id              interval.time     n pct    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> sample_data_LYS 15s           <span style="text-decoration: underline;">10</span>015 87.689%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> sample_data_LYS 16s            <span style="text-decoration: underline;">1</span>367 11.969%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> sample_data_LYS 17s              23 0.201% </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> sample_data_LYS 18s              16 0.140% </span>
-<span class="r-plt img"><img src="import_adjustment-1.png" alt="" width="700" height="433"></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Id                                          interval.time     n pct  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 205_actlumus_Log_1020_20230904101707532.txt 10s           <span style="text-decoration: underline;">61</span>015 100% </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -124,7 +122,7 @@ whatever csv reader function is used, so that it works as expected. Look at
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,6 +54,12 @@
 
       <dl><dt>
 
+          <code><a href="import_adjustment.html">import_adjustment()</a></code>
+
+        </dt>
+        <dd>Adjust device imports or make your own</dd>
+      </dl><dl><dt>
+
           <code><a href="import_Dataset.html">import_Dataset()</a></code> <code><a href="import_Dataset.html">import</a></code>
 
         </dt>
@@ -64,12 +70,6 @@
 
         </dt>
         <dd>Import data that contain <code>Datetimes</code> of <code>Statechanges</code></dd>
-      </dl><dl><dt>
-
-          <code><a href="import_adjustment.html">import_adjustment()</a></code>
-
-        </dt>
-        <dd>Adjust device imports or make your own</dd>
       </dl></div><div class="section level2">
       <h2 id="insight">Insight<a class="anchor" aria-label="anchor" href="#insight"></a></h2>
 
@@ -95,34 +95,16 @@
         <dd>Determine the dominant epoch/interval of a dataset</dd>
       </dl><dl><dt>
 
-          <code><a href="durations.html">durations()</a></code>
-
-        </dt>
-        <dd>Calculate duration of data in each group</dd>
-      </dl><dl><dt>
-
-          <code><a href="gapless_Datetimes.html">gapless_Datetimes()</a></code>
-
-        </dt>
-        <dd>Create a gapless sequence of Datetimes</dd>
-      </dl><dl><dt>
-
-          <code><a href="gap_finder.html">gap_finder()</a></code>
-
-        </dt>
-        <dd>Check for and output gaps in a dataset</dd>
-      </dl><dl><dt>
-
-          <code><a href="gap_table.html">gap_table()</a></code>
-
-        </dt>
-        <dd>Tabular summary of data and gaps in all groups</dd>
-      </dl><dl><dt>
-
           <code><a href="dst_change_summary.html">dst_change_summary()</a></code>
 
         </dt>
         <dd>Get a summary of groups where a daylight saving time change occurs.</dd>
+      </dl><dl><dt>
+
+          <code><a href="durations.html">durations()</a></code>
+
+        </dt>
+        <dd>Calculate duration of data in each group</dd>
       </dl><dl><dt>
 
           <code><a href="photoperiod.html">photoperiod()</a></code> <code><a href="photoperiod.html">extract_photoperiod()</a></code> <code><a href="photoperiod.html">add_photoperiod()</a></code> <code><a href="photoperiod.html">solar_noon()</a></code>
@@ -155,6 +137,24 @@
         <dd>Extract gap episodes from the data</dd>
       </dl><dl><dt>
 
+          <code><a href="gapless_Datetimes.html">gapless_Datetimes()</a></code>
+
+        </dt>
+        <dd>Create a gapless sequence of Datetimes</dd>
+      </dl><dl><dt>
+
+          <code><a href="gap_finder.html">gap_finder()</a></code>
+
+        </dt>
+        <dd>Check for and output gaps in a dataset</dd>
+      </dl><dl><dt>
+
+          <code><a href="gap_table.html">gap_table()</a></code>
+
+        </dt>
+        <dd>Tabular summary of data and gaps in all groups</dd>
+      </dl><dl><dt>
+
           <code><a href="has_gaps.html">has_gaps()</a></code>
 
         </dt>
@@ -178,28 +178,16 @@
 
       <dl><dt>
 
-          <code><a href="gap_handler.html">gap_handler()</a></code>
+          <code><a href="add_Time_col.html">add_Time_col()</a></code>
 
         </dt>
-        <dd>Fill implicit gaps in a light logger dataset</dd>
+        <dd>Create a Time-of-Day column in the dataset</dd>
       </dl><dl><dt>
 
-          <code><a href="remove_partial_data.html">remove_partial_data()</a></code>
+          <code><a href="add_Date_col.html">add_Date_col()</a></code>
 
         </dt>
-        <dd>Remove groups that have too few data points</dd>
-      </dl><dl><dt>
-
-          <code><a href="cut_Datetime.html">cut_Datetime()</a></code>
-
-        </dt>
-        <dd>Create Datetime bins for visualization and calculation</dd>
-      </dl><dl><dt>
-
-          <code><a href="aggregate_Datetime.html">aggregate_Datetime()</a></code>
-
-        </dt>
-        <dd>Aggregate Datetime data</dd>
+        <dd>Create a Date column in the dataset</dd>
       </dl><dl><dt>
 
           <code><a href="aggregate_Date.html">aggregate_Date()</a></code>
@@ -208,10 +196,22 @@
         <dd>Aggregate dates to a single day</dd>
       </dl><dl><dt>
 
-          <code><a href="create_Timedata.html">create_Timedata()</a></code>
+          <code><a href="aggregate_Datetime.html">aggregate_Datetime()</a></code>
 
         </dt>
-        <dd>Create a Time-of-Day column in the dataset</dd>
+        <dd>Aggregate Datetime data</dd>
+      </dl><dl><dt>
+
+          <code><a href="cut_Datetime.html">cut_Datetime()</a></code>
+
+        </dt>
+        <dd>Create Datetime bins for visualization and calculation</dd>
+      </dl><dl><dt>
+
+          <code><a href="dst_change_handler.html">dst_change_handler()</a></code>
+
+        </dt>
+        <dd>Handle jumps in Daylight Savings (DST) that are missing in the data</dd>
       </dl><dl><dt>
 
           <code><a href="filter_Datetime.html">filter_Datetime()</a></code> <code><a href="filter_Datetime.html">filter_Date()</a></code>
@@ -232,16 +232,22 @@
         <dd>Filter Times in a dataset.</dd>
       </dl><dl><dt>
 
+          <code><a href="gap_handler.html">gap_handler()</a></code>
+
+        </dt>
+        <dd>Fill implicit gaps in a light logger dataset</dd>
+      </dl><dl><dt>
+
           <code><a href="join_datasets.html">join_datasets()</a></code>
 
         </dt>
         <dd>Join similar Datasets</dd>
       </dl><dl><dt>
 
-          <code><a href="dst_change_handler.html">dst_change_handler()</a></code>
+          <code><a href="remove_partial_data.html">remove_partial_data()</a></code>
 
         </dt>
-        <dd>Handle jumps in Daylight Savings (DST) that are missing in the data</dd>
+        <dd>Remove groups that have too few data points</dd>
       </dl></div><div class="section level2">
       <h2 id="expand">Expand<a class="anchor" aria-label="anchor" href="#expand"></a></h2>
 
@@ -254,24 +260,6 @@
 
 
       <dl><dt>
-
-          <code><a href="data2reference.html">data2reference()</a></code>
-
-        </dt>
-        <dd>Create reference data from other data</dd>
-      </dl><dl><dt>
-
-          <code><a href="sc2interval.html">sc2interval()</a></code>
-
-        </dt>
-        <dd>Statechange (sc) Timestamps to Intervals</dd>
-      </dl><dl><dt>
-
-          <code><a href="interval2state.html">interval2state()</a></code>
-
-        </dt>
-        <dd>Adds a state column to a dataset from interval data</dd>
-      </dl><dl><dt>
 
           <code><a href="photoperiod.html">photoperiod()</a></code> <code><a href="photoperiod.html">extract_photoperiod()</a></code> <code><a href="photoperiod.html">add_photoperiod()</a></code> <code><a href="photoperiod.html">solar_noon()</a></code>
 
@@ -291,16 +279,10 @@
         <dd>Add states to a dataset based on groups and start/end times</dd>
       </dl><dl><dt>
 
-          <code><a href="number_states.html">number_states()</a></code>
+          <code><a href="Brown2reference.html">Brown2reference()</a></code>
 
         </dt>
-        <dd>Number non-consecutive state occurrences</dd>
-      </dl><dl><dt>
-
-          <code><a href="sleep_int2Brown.html">sleep_int2Brown()</a></code>
-
-        </dt>
-        <dd>Recode Sleep/Wake intervals to Brown state intervals</dd>
+        <dd>Add Brown et al. (2022) reference illuminance to a dataset</dd>
       </dl><dl><dt>
 
           <code><a href="Brown_check.html">Brown_check()</a></code>
@@ -309,22 +291,46 @@
         <dd>Check whether a value is within the recommended illuminance/MEDI levels by Brown et al. (2022)</dd>
       </dl><dl><dt>
 
+          <code><a href="Brown_cut.html">Brown_cut()</a></code>
+
+        </dt>
+        <dd>Create a state column that cuts light levels into sections by Brown et al. (2022)</dd>
+      </dl><dl><dt>
+
           <code><a href="Brown_rec.html">Brown_rec()</a></code>
 
         </dt>
         <dd>Set the recommended illuminance/MEDI levels by Brown et al. (2022)</dd>
       </dl><dl><dt>
 
-          <code><a href="Brown2reference.html">Brown2reference()</a></code>
+          <code><a href="data2reference.html">data2reference()</a></code>
 
         </dt>
-        <dd>Add Brown et al. (2022) reference illuminance to a dataset</dd>
+        <dd>Create reference data from other data</dd>
       </dl><dl><dt>
 
-          <code><a href="Brown_cut.html">Brown_cut()</a></code>
+          <code><a href="interval2state.html">interval2state()</a></code>
 
         </dt>
-        <dd>Create a state column that cuts light levels into sections by Brown et al. (2022)</dd>
+        <dd>Adds a state column to a dataset from interval data</dd>
+      </dl><dl><dt>
+
+          <code><a href="number_states.html">number_states()</a></code>
+
+        </dt>
+        <dd>Number non-consecutive state occurrences</dd>
+      </dl><dl><dt>
+
+          <code><a href="sc2interval.html">sc2interval()</a></code>
+
+        </dt>
+        <dd>Statechange (sc) Timestamps to Intervals</dd>
+      </dl><dl><dt>
+
+          <code><a href="sleep_int2Brown.html">sleep_int2Brown()</a></code>
+
+        </dt>
+        <dd>Recode Sleep/Wake intervals to Brown state intervals</dd>
       </dl><dl><dt>
 
           <code><a href="spectral_reconstruction.html">spectral_reconstruction()</a></code>
@@ -344,12 +350,6 @@
 
       <dl><dt>
 
-          <code><a href="gg_overview.html">gg_overview()</a></code>
-
-        </dt>
-        <dd>Plot an overview of dataset intervals with implicit missing data</dd>
-      </dl><dl><dt>
-
           <code><a href="gg_day.html">gg_day()</a></code>
 
         </dt>
@@ -362,16 +362,28 @@
         <dd>Create a simple datetime plot of light logger data, faceted by group</dd>
       </dl><dl><dt>
 
+          <code><a href="gg_doubleplot.html">gg_doubleplot()</a></code>
+
+        </dt>
+        <dd>Double Plots</dd>
+      </dl><dl><dt>
+
+          <code><a href="gg_gaps.html">gg_gaps()</a></code>
+
+        </dt>
+        <dd>Visualize gaps and irregular data</dd>
+      </dl><dl><dt>
+
           <code><a href="gg_heatmap.html">gg_heatmap()</a></code>
 
         </dt>
         <dd>Plot a heatmap across days and times of day</dd>
       </dl><dl><dt>
 
-          <code><a href="gg_doubleplot.html">gg_doubleplot()</a></code>
+          <code><a href="gg_overview.html">gg_overview()</a></code>
 
         </dt>
-        <dd>Double Plots</dd>
+        <dd>Plot an overview of dataset intervals with implicit missing data</dd>
       </dl><dl><dt>
 
           <code><a href="gg_photoperiod.html">gg_photoperiod()</a></code>
@@ -384,12 +396,6 @@
 
         </dt>
         <dd>Add states to gg_day() or gg_days() plots</dd>
-      </dl><dl><dt>
-
-          <code><a href="gg_gaps.html">gg_gaps()</a></code>
-
-        </dt>
-        <dd>Visualize gaps and irregular data</dd>
       </dl></div><div class="section level2">
       <h2 id="metrics">Metrics<a class="anchor" aria-label="anchor" href="#metrics"></a></h2>
 
@@ -425,6 +431,12 @@
 
         </dt>
         <dd>Disparity index</dd>
+      </dl><dl><dt>
+
+          <code><a href="dose.html">dose()</a></code>
+
+        </dt>
+        <dd>Calculate the dose (value·hours)</dd>
       </dl><dl><dt>
 
           <code><a href="duration_above_threshold.html">duration_above_threshold()</a></code>
@@ -499,6 +511,12 @@
         <dd>Pulses above threshold</dd>
       </dl><dl><dt>
 
+          <code><a href="spectral_integration.html">spectral_integration()</a></code>
+
+        </dt>
+        <dd>Integrate spectral irradiance with optional weighting</dd>
+      </dl><dl><dt>
+
           <code><a href="threshold_for_duration.html">threshold_for_duration()</a></code>
 
         </dt>
@@ -509,12 +527,6 @@
 
         </dt>
         <dd>Mean/first/last timing above/below threshold.</dd>
-      </dl><dl><dt>
-
-          <code><a href="spectral_integration.html">spectral_integration()</a></code>
-
-        </dt>
-        <dd>Integrate spectral irradiance with optional weighting</dd>
       </dl></div><div class="section level2">
       <h2 id="photoperiod">Photoperiod<a class="anchor" aria-label="anchor" href="#photoperiod"></a></h2>
 
@@ -551,28 +563,10 @@
 
       <dl><dt>
 
-          <code><a href="mean_daily.html">mean_daily()</a></code>
+          <code><a href="Datetime2Time.html">Datetime2Time()</a></code>
 
         </dt>
-        <dd>Calculate mean daily metrics from daily summary</dd>
-      </dl><dl><dt>
-
-          <code><a href="mean_daily_metric.html">mean_daily_metric()</a></code>
-
-        </dt>
-        <dd>Calculate mean daily metrics from Time Series</dd>
-      </dl><dl><dt>
-
-          <code><a href="symlog_trans.html">symlog_trans()</a></code>
-
-        </dt>
-        <dd>Scale positive and negative values on a log scale</dd>
-      </dl><dl><dt>
-
-          <code><a href="reverse2_trans.html">reverse2_trans()</a></code>
-
-        </dt>
-        <dd>Create a reverse transformation function specifically for date scales</dd>
+        <dd>Convert Datetime columns to Time columns</dd>
       </dl><dl><dt>
 
           <code><a href="Datetime_breaks.html">Datetime_breaks()</a></code>
@@ -587,16 +581,22 @@
         <dd>Find or set sensible limits for Datetime axis</dd>
       </dl><dl><dt>
 
-          <code><a href="photoperiod.html">photoperiod()</a></code> <code><a href="photoperiod.html">extract_photoperiod()</a></code> <code><a href="photoperiod.html">add_photoperiod()</a></code> <code><a href="photoperiod.html">solar_noon()</a></code>
+          <code><a href="log_zero_inflated.html">log_zero_inflated()</a></code> <code><a href="log_zero_inflated.html">exp_zero_inflated()</a></code>
 
         </dt>
-        <dd>Calculate photoperiod and boundary times</dd>
+        <dd>Add a defined number to a numeric and log transform it</dd>
       </dl><dl><dt>
 
-          <code><a href="spectral_reconstruction.html">spectral_reconstruction()</a></code>
+          <code><a href="mean_daily.html">mean_daily()</a></code>
 
         </dt>
-        <dd>Reconstruct spectral irradiance from sensor counts</dd>
+        <dd>Calculate mean daily metrics from daily summary</dd>
+      </dl><dl><dt>
+
+          <code><a href="mean_daily_metric.html">mean_daily_metric()</a></code>
+
+        </dt>
+        <dd>Calculate mean daily metrics from Time Series</dd>
       </dl><dl><dt>
 
           <code><a href="normalize_counts.html">normalize_counts()</a></code>
@@ -605,16 +605,34 @@
         <dd>Normalize counts between sensor outputs</dd>
       </dl><dl><dt>
 
+          <code><a href="photoperiod.html">photoperiod()</a></code> <code><a href="photoperiod.html">extract_photoperiod()</a></code> <code><a href="photoperiod.html">add_photoperiod()</a></code> <code><a href="photoperiod.html">solar_noon()</a></code>
+
+        </dt>
+        <dd>Calculate photoperiod and boundary times</dd>
+      </dl><dl><dt>
+
+          <code><a href="reverse2_trans.html">reverse2_trans()</a></code>
+
+        </dt>
+        <dd>Create a reverse transformation function specifically for date scales</dd>
+      </dl><dl><dt>
+
+          <code><a href="spectral_reconstruction.html">spectral_reconstruction()</a></code>
+
+        </dt>
+        <dd>Reconstruct spectral irradiance from sensor counts</dd>
+      </dl><dl><dt>
+
           <code><a href="summarize_numeric.html">summarize_numeric()</a></code> <code><a href="summarize_numeric.html">summarise_numeric()</a></code>
 
         </dt>
         <dd>Summarize numeric columns in dataframes to means</dd>
       </dl><dl><dt>
 
-          <code><a href="log_zero_inflated.html">log_zero_inflated()</a></code> <code><a href="log_zero_inflated.html">exp_zero_inflated()</a></code>
+          <code><a href="symlog_trans.html">symlog_trans()</a></code>
 
         </dt>
-        <dd>Add a defined number to a numeric and log transform it</dd>
+        <dd>Scale positive and negative values on a log scale</dd>
       </dl></div><div class="section level2">
       <h2 id="datasets">Datasets<a class="anchor" aria-label="anchor" href="#datasets"></a></h2>
 
@@ -628,12 +646,6 @@
 
       <dl><dt>
 
-          <code><a href="sample.data.environment.html">sample.data.environment</a></code>
-
-        </dt>
-        <dd>Sample of wearable data combined with environmental data</dd>
-      </dl><dl><dt>
-
           <code><a href="alphaopic.action.spectra.html">alphaopic.action.spectra</a></code>
 
         </dt>
@@ -646,16 +658,28 @@
         <dd>Gain / Gain-ratio tables to normalize counts</dd>
       </dl><dl><dt>
 
-          <code><a href="supported_devices.html">supported_devices()</a></code>
-
-        </dt>
-        <dd>Get all the supported devices in LightLogR</dd>
-      </dl><dl><dt>
-
           <code><a href="ll_import_expr.html">ll_import_expr()</a></code>
 
         </dt>
         <dd>Get the import expression for a device</dd>
+      </dl><dl><dt>
+
+          <code><a href="sample.data.environment.html">sample.data.environment</a></code>
+
+        </dt>
+        <dd>Sample of wearable data combined with environmental data</dd>
+      </dl><dl><dt>
+
+          <code><a href="sample.data.irregular.html">sample.data.irregular</a></code>
+
+        </dt>
+        <dd>Sample of highly irregular wearable data</dd>
+      </dl><dl><dt>
+
+          <code><a href="supported_devices.html">supported_devices()</a></code>
+
+        </dt>
+        <dd>Get all the supported devices in LightLogR</dd>
       </dl></div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
@@ -666,7 +690,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>

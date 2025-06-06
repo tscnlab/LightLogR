@@ -13,7 +13,7 @@ must be specified by the user using the ... argument."><meta property="og:image"
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,7 +45,7 @@ must be specified by the user using the ... argument."><meta property="og:image"
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Add metrics to extracted sSummary</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/v0.9.0/R/extract_metric.R" class="external-link"><code>R/extract_metric.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/main/R/extract_metric.R" class="external-link"><code>R/extract_metric.R</code></a></small>
       <div class="d-none name"><code>extract_metric.Rd</code></div>
     </div>
 
@@ -112,30 +112,24 @@ it will be computationally faster if it does.</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Extract clusters and add mean MEDI value</span></span></span>
 <span class="r-in"><span><span class="va">sample.data.environment</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="filter_Datetime.html">filter_Date</a></span><span class="op">(</span>length <span class="op">=</span> <span class="st">"2 days"</span><span class="op">)</span> <span class="op">|&gt;</span> </span></span>
 <span class="r-in"><span><span class="fu"><a href="extract_clusters.html">extract_clusters</a></span><span class="op">(</span><span class="va">MEDI</span> <span class="op">&gt;</span> <span class="fl">1000</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span><span class="fu">extract_metric</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">sample.data.environment</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"mean_lux"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">MEDI</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="st">"mean_medi"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">MEDI</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">Id</span>, <span class="va">state.count</span>, <span class="va">duration</span>, <span class="va">mean_lux</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 10 × 4</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Groups:   Id [2]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Id          state.count duration               mean_lux</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;Duration&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> Environment 1           46050s (~12.79 hours)    <span style="text-decoration: underline;">11</span>906.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> Environment 2           47370s (~13.16 hours)    <span style="text-decoration: underline;">25</span>446.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> Environment 3           46230s (~12.84 hours)    <span style="text-decoration: underline;">32</span>700.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> Environment 4           46320s (~12.87 hours)    <span style="text-decoration: underline;">32</span>010.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> Environment 5           47310s (~13.14 hours)    <span style="text-decoration: underline;">43</span>566.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> Environment 6           46500s (~12.92 hours)    <span style="text-decoration: underline;">33</span>579.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> Participant 1           4290s (~1.19 hours)       <span style="text-decoration: underline;">5</span>045.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> Participant 2           2110s (~35.17 minutes)   <span style="text-decoration: underline;">13</span>440.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> Participant 3           1890s (~31.5 minutes)     <span style="text-decoration: underline;">7</span>359.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> Participant 4           1850s (~30.83 minutes)    <span style="text-decoration: underline;">8</span>562.</span>
+<span class="r-in"><span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">Id</span>, <span class="va">state.count</span>, <span class="va">duration</span>, <span class="va">mean_medi</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 × 4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Groups:   Id [1]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Id          state.count duration              mean_medi</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;Duration&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Environment 1           46050s (~12.79 hours)    <span style="text-decoration: underline;">11</span>906.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> Environment 2           47370s (~13.16 hours)    <span style="text-decoration: underline;">25</span>446.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Extract states and add mean MEDI value</span></span></span>
 <span class="r-in"><span><span class="va">dataset</span> <span class="op">&lt;-</span></span></span>
 <span class="r-in"><span><span class="va">sample.data.environment</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="filter_Datetime.html">filter_Date</a></span><span class="op">(</span>length <span class="op">=</span> <span class="st">"2 days"</span><span class="op">)</span> <span class="op">|&gt;</span> </span></span>
 <span class="r-in"><span> <span class="fu"><a href="photoperiod.html">add_photoperiod</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">48.5</span>, <span class="fl">9</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">dataset</span> <span class="op">|&gt;</span></span></span>
@@ -143,21 +137,20 @@ it will be computationally faster if it does.</p>
 <span class="r-in"><span>  <span class="fu">extract_metric</span><span class="op">(</span><span class="va">dataset</span>, mean_lux <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">MEDI</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">state.count</span>, <span class="va">duration</span>, <span class="va">mean_lux</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding missing grouping variables: `Id`, `photoperiod.state`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 26 × 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 10 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Groups:   Id, photoperiod.state [4]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Id          photoperiod.state state.count duration                mean_lux</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;Duration&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> Environment day               day 1       52920s (~14.7 hours)  <span style="text-decoration: underline;">10</span>388.    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> Environment day               day 2       52710s (~14.64 hours) <span style="text-decoration: underline;">22</span>893.    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> Environment day               day 3       52500s (~14.58 hours) <span style="text-decoration: underline;">28</span>821.    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> Environment day               day 4       52260s (~14.52 hours) <span style="text-decoration: underline;">28</span>403.    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> Environment day               day 5       52050s (~14.46 hours) <span style="text-decoration: underline;">39</span>621.    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> Environment day               day 6       51840s (~14.4 hours)  <span style="text-decoration: underline;">30</span>144.    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> Environment night             night 1     21810s (~6.06 hours)      0     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> Environment night             night 2     33570s (~9.32 hours)      0.014<span style="text-decoration: underline;">2</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> Environment night             night 3     33780s (~9.38 hours)      0.021<span style="text-decoration: underline;">6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> Environment night             night 4     33990s (~9.44 hours)      0.022<span style="text-decoration: underline;">0</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 16 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> Environment night             night 1     21810s (~6.06 hours)      0     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> Environment night             night 2     33570s (~9.32 hours)      0.014<span style="text-decoration: underline;">2</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> Environment night             night 3     11790s (~3.28 hours)      0.043<span style="text-decoration: underline;">3</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> Participant day               day 1       52910s (~14.7 hours)    145.    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> Participant day               day 2       52690s (~14.64 hours)   145.    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> Participant night             night 1     21820s (~6.06 hours)      0     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> Participant night             night 2     33580s (~9.33 hours)      6.29  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> Participant night             night 3     11800s (~3.28 hours)     38.6   </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -169,7 +162,7 @@ it will be computationally faster if it does.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>
