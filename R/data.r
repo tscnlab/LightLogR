@@ -88,7 +88,7 @@
 #'   <https://www.cie.co.at/publications/cie-system-metrology-optical-radiation-iprgc-influenced-responses-light-0>
 #' @source
 #'   <https://cie.co.at/datatable/cie-spectral-luminous-efficiency-photopic-vision>
-#' @source <http://files.cie.co.at/S026_Table2_Data.xlsx>
+#' @source <https://files.cie.co.at/CIE S 026 alpha-opic Toolbox.xlsx>
 #' @references CIE (2019). ISO/CIE 11664-1:2019(E). Colorimetry — Part 1: CIE
 #'   standard colorimetric observers. Vienna, CIE
 #' @references CIE (2018). CIE S 026/E:2018. CIE system for metrology of optical

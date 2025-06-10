@@ -21,7 +21,7 @@
 
 \url{https://cie.co.at/datatable/cie-spectral-luminous-efficiency-photopic-vision}
 
-\url{http://files.cie.co.at/S026_Table2_Data.xlsx}
+<https://files.cie.co.at/CIE S 026 alpha-opic Toolbox.xlsx>
 }
 \usage{
 alphaopic.action.spectra

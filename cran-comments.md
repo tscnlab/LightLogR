@@ -1,3 +1,12 @@
+## Submission Version 0.9.2
+
+### R CMD check results
+
+0 errors ✔ | 0 warnings ✔ | 1 note ✖
+
+* Note 1: unable to verify current time. 
+  Time server seems to be unavailable
+
 ## Resubmission #1 (Version 0.5.3)
 
 This is a resubmission. In this version I put some examples for gg_doubleplot and gg_photoperiod in /dontrun to avoid long runtime. I further rebuilt the package with the latest R-devel to correct the discrepancies with Authors@R and Author field.

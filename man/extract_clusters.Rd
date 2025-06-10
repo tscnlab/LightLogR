@@ -73,7 +73,7 @@ present is important when averaging numbers.}
 \code{\link[=gap_handler]{gap_handler()}}. Is set to \code{FALSE} by default, due to computational costs.}
 
 \item{add.label}{Logical. Option to add a label to the output containing the
-condition. E.g., \verb{MEDI>500|d≥30min|i≤5min} for clusters of melanopic EDI
+condition. E.g., \verb{MEDI>500|d>=30min|i<=5min} for clusters of melanopic EDI
 larger than 500, at least 30 minutes long (\code{d}), allowing interruptions of
 up to 5 minutes at a time (\code{i}).}
 }
@@ -125,8 +125,7 @@ dataset |>
  extract_clusters(
   MEDI > 250,
   cluster.duration = "1 hour",
-  interruption.duration = "5 mins",
-  add.label = TRUE
+  interruption.duration = "5 mins"
 )
 
 # Add clusters to a dataset where lux values are above 20 for at least 30 minutes

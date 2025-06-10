@@ -47,6 +47,7 @@ reference:
     - add_Date_col
     - aggregate_Date
     - aggregate_Datetime
+    - create_Timedata
     - cut_Datetime
     - dst_change_handler
     - filter_Datetime
