@@ -43,3 +43,20 @@ add_Time_col <- function(dataset,
   if(output.dataset) dataset else dataset[[colname.defused({{ Time.colname }})]]
 
 }
+
+
+#' create_Timedata
+#'
+#' @param ... Input arguments to [add_Time_col()]
+#'
+#' @returns a `data.frame` object identical to `dataset` but with the added
+#'   column of Time-of-Day data, or a `vector` with the Time-of-Day-data
+#' @export
+#'
+#' @examples
+#' sample.data.environment %>% create_Timedata()
+#' 
+create_Timedata <- function(...) {
+  .Deprecated("add_Time_col", msg = "`create_Timedata()` is deprecated as of LightLogR 0.9.2. Please use `add_Time_col()` instead. ")
+  add_Time_col(...)
+}
