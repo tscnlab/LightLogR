@@ -139,7 +139,7 @@ gg_gaps <- function(dataset,
     dataset |> 
       gg_days(y.axis = {{ Variable.colname }}, x.axis = {{ Datetime.colname }},...) +
       ggplot2::geom_point(data = irregulars, col = col.irregular) +
-      ggplot2::labs(title = paste0("Irregular data (", col.irregular ,")"))
+      ggplot2::labs(title = paste0("Irregular data (", col.irregular ," dots)"))
     
     return(plot)
   }
@@ -150,7 +150,7 @@ gg_gaps <- function(dataset,
     data_regular |> 
       gg_days(y.axis = {{ Variable.colname }}, x.axis = {{ Datetime.colname }},...) |> 
       gg_state(gaps, fill = fill.gaps, alpha = alpha) +
-      ggplot2::labs(title = paste0("Gaps in the data (", fill.gaps ,")"))
+      ggplot2::labs(title = paste0("Gaps in the data (", fill.gaps ," areas)"))
     
     return(plot)
   }
@@ -159,6 +159,6 @@ gg_gaps <- function(dataset,
     gg_days(y.axis = {{ Variable.colname }}, x.axis = {{ Datetime.colname }},...) |> 
     gg_state(gaps, fill = fill.gaps, alpha = alpha) +
     ggplot2::geom_point(data = irregulars, col = col.irregular) +
-    ggplot2::labs(title = paste0("Gaps (", fill.gaps ,") and irregular (", col.irregular ,") data"))
+    ggplot2::labs(title = paste0("Gaps (", fill.gaps ," areas) and irregular (", col.irregular ," dots) data"))
 
 }
