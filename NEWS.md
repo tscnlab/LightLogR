@@ -1,3 +1,5 @@
+# LightLogR 0.9.2
+
 # LightLogR 0.9.1
 
 * `add_Date_col()` is a new convenience function to add a Date column to the dataset, optionally showing the weekday.
