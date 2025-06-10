@@ -57,6 +57,6 @@ add_Time_col <- function(dataset,
 #' sample.data.environment %>% create_Timedata()
 #' 
 create_Timedata <- function(...) {
-  .Deprecated("add_Time_col", msg = "`create_Timedata()` is deprecated as of LightLogR 0.9.2. Please use `add_Time_col()` instead. ")
+  .Deprecated("add_Time_col", msg = "`create_Timedata()` is deprecated as of LightLogR 0.9.1. Please use `add_Time_col()` instead. ")
   add_Time_col(...)
 }
