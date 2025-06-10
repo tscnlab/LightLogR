@@ -1,4 +1,10 @@
+# LightLogR 0.9.3
+
+* `extract_metric()` throws no error, if the original data is already grouped by the `identifying.colname`
+
 # LightLogR 0.9.2
+
+* minor tweaks without end-user relevance for CRAN release.
 
 # LightLogR 0.9.1
 
