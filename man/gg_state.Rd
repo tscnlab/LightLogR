@@ -61,11 +61,8 @@ sense. The time series must be based on a column called \code{Datetime}.
 #(+aggregating Data to 5 minute intervals & reducing it to three days)
 state_data <-
   sample.data.environment |>
-   dplyr::mutate(state = MEDI > 250,
-                 state2 = cut(MEDI,
-                              breaks = c(-1,1,10,250, Inf),
-                              labels = c("≤1lx", "≤10lx", NA, "≥250lx"))
-                              ) |>
+   dplyr::mutate(state = MEDI > 250) |>
+   Brown_cut(MEDI, state2) |> 
    aggregate_Datetime(unit = "5 mins") |>
    filter_Datetime(length = "3 days")
 

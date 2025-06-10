@@ -9,7 +9,7 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.11562600.svg)](https://doi.org/10.5281/zenodo.11562600)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/LightLogR)](https://CRAN.R-project.org/package=LightLogR)
-[![status](https://joss.theoj.org/papers/3a1057dccd315b7eb8683c1b969402e2/status.svg)](https://joss.theoj.org/papers/3a1057dccd315b7eb8683c1b969402e2)
+[![status](https://joss.theoj.org/papers/10.21105/joss.07601/status.svg)](https://joss.theoj.org/papers/10.21105/joss.07601)
 
 <!-- badges: end -->
 

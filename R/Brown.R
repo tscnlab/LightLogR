@@ -230,11 +230,16 @@ Brown_rec <- function(state,
 #' `vector_labels`
 #'
 #' @param dataset A light exposure dataframe
-#' @param MEDI.colname The colname containing melanopic EDI values (or, alternatively, Illuminance). Defaults to `MEDI`. Expects a symbol.
-#' @param New.state.colname Name of the new column that will contain the cut data. Expects a symbol.
+#' @param MEDI.colname The colname containing melanopic EDI values (or,
+#'   alternatively, Illuminance). Defaults to `MEDI`. Expects a symbol.
+#' @param New.state.colname Name of the new column that will contain the cut
+#'   data. Expects a symbol.
 #' @param vector_cuts Numeric vector of breaks for the cuts.
-#' @param vector_labels Vecotr of labels for the cuts. Must be one entry shorter than `vector_cuts`.
-#' @param overwrite Logical. Should the `New.state.colname` overwrite a preexisting column in the dataset
+#' @param vector_labels Vector of labels for the cuts. Must be one entry shorter
+#'   than `vector_cuts`. `"default"` will produce nice labels for the default
+#'   setting of `vector_cuts` (and throw an error otherwise).
+#' @param overwrite Logical. Should the `New.state.colname` overwrite a
+#'   preexisting column in the dataset
 #'
 #' @return The input dataset with an additional (or overwritten) column
 #'   containing a cut light vector
@@ -245,17 +250,21 @@ Brown_rec <- function(state,
 #'
 #' @family Brown
 #' @examples
-#' sample.data.environment |> 
-#' Brown_cut() |> 
+#' sample.data.environment |>
+#' Brown_cut(vector_labels = c("0-1lx", "1-10lx", "10-250lx", "250lx-Inf")) |>
 #' dplyr::count(state)
 #' 
 Brown_cut <- function(dataset,
                       MEDI.colname = MEDI,
                       New.state.colname = state,
                       vector_cuts = c(-Inf, 1, 10, 250, Inf),
-                      vector_labels = c("\U{2264}1lx", "\U{2264}10lx", NA, "\U{2265}250lx"),
+                      vector_labels = "default",
                       overwrite = TRUE
                       ){
+  
+  if(all(vector_labels == "default", c(-Inf, 1, 10, 250, Inf) %in% vector_cuts)) {
+    vector_labels <- c("\U{2264}1lx", "\U{2264}10lx", NA, "\U{2265}250lx")
+  }
   
   stopifnot("vector_cuts need to be numeric" = 
               is.numeric(vector_cuts),
