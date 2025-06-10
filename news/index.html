@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,6 +43,9 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.9.2" id="lightlogr-092">LightLogR 0.9.2<a class="anchor" aria-label="anchor" href="#lightlogr-092"></a></h2><p class="text-muted">CRAN release: 2025-06-10</p>
+</div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.9.1" id="lightlogr-091">LightLogR 0.9.1<a class="anchor" aria-label="anchor" href="#lightlogr-091"></a></h2>
 <ul><li><p><code><a href="../reference/add_Date_col.html">add_Date_col()</a></code> is a new convenience function to add a Date column to the dataset, optionally showing the weekday.</p></li>
 <li><p><code><a href="../reference/Datetime2Time.html">Datetime2Time()</a></code> is a new convenience function that is used in other functions that average over datetimes, which is often more sensible over times.</p></li>
@@ -50,7 +53,7 @@
 <li><p><code><a href="../reference/summarize_numeric.html">summarize_numeric()</a></code> now calculates <code>total_duration</code> correctly, even when the prefix is removed.</p></li>
 <li><p>added the <code>sample.data.irregular</code> internal dataset</p></li>
 <li><p>removed <code>LYS</code> wearable sample file, due to package size limitations</p></li>
-<li><p><code><a href="../reference/add_Time_col.html">add_Time_col()</a></code> replaces <code>create_Time_data()</code></p></li>
+<li><p><code><a href="../reference/add_Time_col.html">add_Time_col()</a></code> replaces <code>create_Time_data()</code>, also, the new column is called <code>Time</code> by default instead of <code>Time.data</code></p></li>
 <li><p><code><a href="../reference/extract_clusters.html">extract_clusters()</a></code> has the option to show the cluster condition in the output with <code>add.label = TRUE</code>, e.g., <code>MEDI&gt;500|d≥30min|i≤5min</code> for clusters of melanopic EDI larger than 500, at least 30 minutes long (<code>d</code>), allowing interruptions of up to 5 minutes at a time (<code>i</code>).</p></li>
 <li><p><code><a href="../reference/extract_clusters.html">add_clusters()</a></code> now drops empty groups, which has led to warnings before</p></li>
 <li><p>Added many more unit tests - <strong>888</strong> and counting!</p></li>
@@ -241,7 +244,7 @@
 <li><p>To <code><a href="../reference/filter_Datetime.html">filter_Datetime()</a></code> and <code><a href="../reference/filter_Datetime.html">filter_Date()</a></code> added the option to filter for group specific dates.</p></li>
 <li><p>Added the family of functions around <code>States</code> and <code>Reference</code> to import, process, and add states to light logger data, like sleep/wake times, wear times, or other data. This family includes <code><a href="../reference/import_Statechanges.html">import_Statechanges()</a></code>, <code><a href="../reference/sc2interval.html">sc2interval()</a></code>, <code>ìnterval2state()</code>, <code><a href="../reference/data2reference.html">data2reference()</a></code>, <code><a href="../reference/sleep_int2Brown.html">sleep_int2Brown()</a></code>, <code><a href="../reference/Brown_check.html">Brown_check()</a></code>, <code><a href="../reference/Brown_rec.html">Brown_rec()</a></code>, and <code><a href="../reference/Brown2reference.html">Brown2reference()</a></code>.</p></li>
 <li><p>Added the Article/Vignette “What´s in a Day” to demonstrate the LightLogR workflow.</p></li>
-<li><p>Added the convenience function <code>create_Timedata()</code> to create a Time-of-Day column in datasets.</p></li>
+<li><p>Added the convenience function <code><a href="../reference/create_Timedata.html">create_Timedata()</a></code> to create a Time-of-Day column in datasets.</p></li>
 <li><p>Added the family of <code><a href="../reference/filter_Datetime.html">filter_Datetime()</a></code>, <code><a href="../reference/filter_Datetime.html">filter_Date()</a></code> and <code><a href="../reference/filter_Time.html">filter_Time()</a></code> functions to easily filter datasets.</p></li>
 <li><p>Added unit tests for the first functions.</p></li>
 <li><p>Added several helper functions to work with states like sleep or wear times.</p></li>

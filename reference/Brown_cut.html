@@ -13,7 +13,7 @@ vector_labels"><meta property="og:image" content="https://tscnlab.github.io/Ligh
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,7 +63,7 @@ Brown et al. (2022). Cuts can be adjusted or extended with <code>vector_cuts</co
 <span>  MEDI.colname <span class="op">=</span> <span class="va">MEDI</span>,</span>
 <span>  New.state.colname <span class="op">=</span> <span class="va">state</span>,</span>
 <span>  vector_cuts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="fl">1</span>, <span class="fl">10</span>, <span class="fl">250</span>, <span class="cn">Inf</span><span class="op">)</span>,</span>
-<span>  vector_labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"≤1lx"</span>, <span class="st">"≤10lx"</span>, <span class="cn">NA</span>, <span class="st">"≥250lx"</span><span class="op">)</span>,</span>
+<span>  vector_labels <span class="op">=</span> <span class="st">"default"</span>,</span>
 <span>  overwrite <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -77,11 +77,13 @@ Brown et al. (2022). Cuts can be adjusted or extended with <code>vector_cuts</co
 
 
 <dt id="arg-medi-colname">MEDI.colname<a class="anchor" aria-label="anchor" href="#arg-medi-colname"></a></dt>
-<dd><p>The colname containing melanopic EDI values (or, alternatively, Illuminance). Defaults to <code>MEDI</code>. Expects a symbol.</p></dd>
+<dd><p>The colname containing melanopic EDI values (or,
+alternatively, Illuminance). Defaults to <code>MEDI</code>. Expects a symbol.</p></dd>
 
 
 <dt id="arg-new-state-colname">New.state.colname<a class="anchor" aria-label="anchor" href="#arg-new-state-colname"></a></dt>
-<dd><p>Name of the new column that will contain the cut data. Expects a symbol.</p></dd>
+<dd><p>Name of the new column that will contain the cut
+data. Expects a symbol.</p></dd>
 
 
 <dt id="arg-vector-cuts">vector_cuts<a class="anchor" aria-label="anchor" href="#arg-vector-cuts"></a></dt>
@@ -89,11 +91,14 @@ Brown et al. (2022). Cuts can be adjusted or extended with <code>vector_cuts</co
 
 
 <dt id="arg-vector-labels">vector_labels<a class="anchor" aria-label="anchor" href="#arg-vector-labels"></a></dt>
-<dd><p>Vecotr of labels for the cuts. Must be one entry shorter than <code>vector_cuts</code>.</p></dd>
+<dd><p>Vector of labels for the cuts. Must be one entry shorter
+than <code>vector_cuts</code>. <code>"default"</code> will produce nice labels for the default
+setting of <code>vector_cuts</code> (and throw an error otherwise).</p></dd>
 
 
 <dt id="arg-overwrite">overwrite<a class="anchor" aria-label="anchor" href="#arg-overwrite"></a></dt>
-<dd><p>Logical. Should the <code>New.state.colname</code> overwrite a preexisting column in the dataset</p></dd>
+<dd><p>Logical. Should the <code>New.state.colname</code> overwrite a
+preexisting column in the dataset</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -116,21 +121,21 @@ containing a cut light vector</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">sample.data.environment</span> <span class="op">|&gt;</span> </span></span>
-<span class="r-in"><span><span class="fu">Brown_cut</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">sample.data.environment</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span><span class="fu">Brown_cut</span><span class="op">(</span>vector_labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"0-1lx"</span>, <span class="st">"1-10lx"</span>, <span class="st">"10-250lx"</span>, <span class="st">"250lx-Inf"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">state</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 8 × 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Groups:   Id [2]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Id          state      n</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Environment ≤1lx    <span style="text-decoration: underline;">6</span>768</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> Environment ≤10lx    247</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> Environment <span style="color: #BB0000;">NA</span>       523</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> Environment ≥250lx  <span style="text-decoration: underline;">9</span>742</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> Participant ≤1lx   <span style="text-decoration: underline;">20</span>315</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> Participant ≤10lx   <span style="text-decoration: underline;">5</span>781</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> Participant <span style="color: #BB0000;">NA</span>     <span style="text-decoration: underline;">15</span>892</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">8</span> Participant ≥250lx  <span style="text-decoration: underline;">9</span>852</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Id          state         n</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Environment 0-1lx      <span style="text-decoration: underline;">6</span>768</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> Environment 1-10lx      247</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> Environment 10-250lx    523</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> Environment 250lx-Inf  <span style="text-decoration: underline;">9</span>742</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> Participant 0-1lx     <span style="text-decoration: underline;">20</span>315</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> Participant 1-10lx     <span style="text-decoration: underline;">5</span>781</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> Participant 10-250lx  <span style="text-decoration: underline;">15</span>892</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">8</span> Participant 250lx-Inf  <span style="text-decoration: underline;">9</span>852</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
