@@ -10,7 +10,7 @@
 #'
 #' @param extracted_data A dataframe containing cluster or state summaries,
 #'   typically from `extract_clusters()` or `extract_states()`.
-#' @param data The original dataset that produced `extracted_data`
+#' @param data The original dataset that produced `extracted_data`.
 #' @param identifying.colname Name of the column in `extracted_data` that
 #'   uniquely identifies each row (in addition to the groups. Expects a symbol.
 #'   Defaults to `state.count`
