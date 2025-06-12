@@ -1,17 +1,25 @@
 citHeader("To cite LightLogR in publications use:")
 
 bibentry(
-  bibtype  = "Misc",
-  title    = "LightLogR: Working With Wearable Light Logger Data",
-  author   = "Zauner, Johannes, Hartmeyer, Steffen L., and Spitschan, Manuel",
-  journal  = "",
-  year     = "2023",
-  volume   = "",
-  number   = "",
-  pages    = "",
-  url      = "https://github.com/tscnlab/LightLogR",
-  doi      = "10.5281/zenodo.11562600",
+  bibtype  = "Article",
+  title    = "LightLogR: Reproducible analysis of personal light exposure data",
+  author   = c(
+    person("Johannes", "Zauner", comment = c(ORCID = "0000-0003-2171-4566")),
+    person("Steffen", "Hartmeyer", comment = c(ORCID = "0000-0002-2813-2668")),
+    person("Manuel", "Spitschan", comment = c(ORCID = "0000-0002-8572-9268"))
+  ),
+  journal  = "Journal of Open Source Software",
+  year     = "2025",
+  volume   = "10",
+  number   = "107",
+  pages    = "7601",
+  doi      = "10.21105/joss.07601",
+  url      = "https://doi.org/10.21105/joss.07601",
   textVersion = paste(
-  "Zauner, J.; Hartmeyer, S.L.; Spitschan, M. (2023): LightLogR: Working With Wearable Light Logger Data. R Package, Available on https://github.com/tscnlab/LightLogR, doi:10.5281/zenodo.11562600, RRID:SCR_025408"
+    "Zauner, J., Hartmeyer, S., & Spitschan, M. (2025).",
+    "LightLogR: Reproducible analysis of personal light exposure data.",
+    "Journal of Open Source Software, 10(107), 7601.",
+    "https://doi.org/10.21105/joss.07601.",
+    "RRID:SCR_025408"
   )
 )
