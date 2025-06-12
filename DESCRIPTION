@@ -11,7 +11,7 @@ Authors@R: c(
     person("Steffen", "Hartmeyer", 
       email = "steffen.hartmeyer@epfl.ch", role = "aut",
       comment = c(ORCID = "0000-0002-2813-2668")),
-    person("European Partnership on Metrology", role = "fnd", comment = "The project (22NRM05 MeLiDos) has received funding from the European Partnership on Metrology, co-financed by the European Union's Horizon Europe Research and Innovation Programme, EURAMET, and the Participating States. Views and opinions expressed are those of the authors and do not necessarily reflect those of the European Union or EURAMET. ".")
+    person("European Partnership on Metrology", role = "fnd", comment = "The project (22NRM05 MeLiDos) has received funding from the European Partnership on Metrology, co-financed by the European Union's Horizon Europe Research and Innovation Programme, EURAMET, and the Participating States. Views and opinions expressed are those of the authors and do not necessarily reflect those of the European Union or EURAMET.")
     person("Translational Sensory and Circadian Neuroscience Unit (MPS/TUM/TUMCREATE)", comment = c(URL = "www.tscnlab.org"), role = "cph"))
 Description: Import, processing, validation, and visualization of personal light exposure measurement data from wearable devices. The package implements features such as the import of data and metadata files, conversion of common file formats, validation of light logging data, verification of crucial metadata, calculation of common parameters, and semi-automated analysis and visualization.
 License: MIT + file LICENSE
