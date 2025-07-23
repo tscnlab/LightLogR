@@ -331,8 +331,7 @@ data_205 |>
   group_by(State.Brown, .add = TRUE) |>
   gg_day(geom = "line") |> 
   gg_state(Reference.check, aes_fill = State.Brown) +
-  labs(fill = "Following\nrecommendations\nduring the")
-
+  labs(fill = "Following\nrecommendations\nduring the") 
 ```
 
 We can check how well the recommendations were followed by using `durations()`.

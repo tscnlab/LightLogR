@@ -2,6 +2,16 @@ url: https://tscnlab.github.io/LightLogR/
 template:
   bootstrap: 5
 
+navbar:
+  structure:
+    left:  [intro, reference, articles, newsletter, tutorials, news]
+  components:
+    newsletter:
+      text: Newsletter
+      menu:
+      - text: July 2025
+        href: Edition01.html
+
 reference:
   - title: Import
     desc: >

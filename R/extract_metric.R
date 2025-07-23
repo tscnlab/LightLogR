@@ -10,7 +10,7 @@
 #'
 #' @param extracted_data A dataframe containing cluster or state summaries,
 #'   typically from `extract_clusters()` or `extract_states()`.
-#' @param data The original dataset that produced `extracted_data`
+#' @param data The original dataset that produced `extracted_data`.
 #' @param identifying.colname Name of the column in `extracted_data` that
 #'   uniquely identifies each row (in addition to the groups. Expects a symbol.
 #'   Defaults to `state.count`
@@ -77,24 +77,19 @@ extract_metric <- function(
       dplyr::select(-start, -end)
   }
   
+  original_data <- 
+    data |>
+    dplyr::filter(!is.na({{ identifying.colname }})) |>
+    dplyr::group_by({{ identifying.colname }}, .add = TRUE)
+  
   extracted_data |> 
     dplyr::left_join(
-      data |>
-        dplyr::filter(!is.na({{ identifying.colname }})) |>
-        dplyr::group_by({{ identifying.colname }}, .add = TRUE) |>
+      original_data |>
         dplyr::summarize(
           ...,
           .groups = "drop_last"
         ), 
-      by = c(dplyr::group_vars(data), cc.name)
+      by = dplyr::group_vars(original_data)
     )
   
-  # data |>
-  #   dplyr::filter(!is.na({{ identifying.colname }})) |>
-  #   dplyr::group_by({{ identifying.colname }}, .add = TRUE) |>
-  #   dplyr::summarize(
-  #     ...,
-  #     .groups = "drop_last"
-  #   ) |>
-  #   dplyr::right_join(extracted_data, by =  c(dplyr::group_vars(data), cc.name))
 }

@@ -16,7 +16,7 @@ extract_metric(
 \item{extracted_data}{A dataframe containing cluster or state summaries,
 typically from \code{extract_clusters()} or \code{extract_states()}.}
 
-\item{data}{The original dataset that produced \code{extracted_data}}
+\item{data}{The original dataset that produced \code{extracted_data}.}
 
 \item{identifying.colname}{Name of the column in \code{extracted_data} that
 uniquely identifies each row (in addition to the groups. Expects a symbol.

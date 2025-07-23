@@ -1,6 +1,20 @@
+# LightLogR 0.9.3
+
+* added a Newsletter section to the package page
+
+* added a test-coverage workflow and badge
+
+* `extract_metric()` throws no error if the original data is already grouped by the `identifying.colname`
+
+* `gap_table()` no longer throws an error if the package `gt` is not installed. `gt` is now added as a dependency.
+
 # LightLogR 0.9.2
 
+* minor tweaks without end-user relevance for CRAN release.
+
 # LightLogR 0.9.1
+
+* `dose()` is a new metric function to calculate light dose (or any other kind of dosage)
 
 * `add_Date_col()` is a new convenience function to add a Date column to the dataset, optionally showing the weekday.
 
@@ -78,7 +92,7 @@ This is a huge update for `LightLogR`, bringing many new features and twenty-two
 
 * `Brown_cut()`: divide light exposure variables into sections ≤1lx, ≤10lx, and ≥250lx according to Brown et al. 2022
 
-* `log_zero_inflated()` and `exp_zero_inflated(): apply or reverse a logarithmic transformation after adding a small value to a vector so as to provide zero values in logarithmic transformation, which is especially important for light exposure.
+* `log_zero_inflated()` and `exp_zero_inflated()`: apply or reverse a logarithmic transformation after adding a small value to a vector so as to provide zero values in logarithmic transformation, which is especially important for light exposure.
 
 ### Visualizations
 
