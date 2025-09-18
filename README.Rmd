@@ -19,7 +19,8 @@ knitr::opts_chunk$set(
 
 [![R-CMD-check](https://github.com/tscnlab/LightLogR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/tscnlab/LightLogR/actions/workflows/R-CMD-check.yaml) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.11562600.svg)](https://doi.org/10.5281/zenodo.11562600) [![CRAN status](https://www.r-pkg.org/badges/version/LightLogR)](https://CRAN.R-project.org/package=LightLogR)
 [![status](https://joss.theoj.org/papers/10.21105/joss.07601/status.svg)](https://joss.theoj.org/papers/10.21105/joss.07601)
-[![Codecov test coverage](https://codecov.io/gh/tscnlab/LightLogR/graph/badge.svg)](https://app.codecov.io/gh/tscnlab/LightLogR)
+<!-- [![Codecov test coverage](https://codecov.io/gh/tscnlab/LightLogR/graph/badge.svg)](https://app.codecov.io/gh/tscnlab/LightLogR) -->
+[![HiRSE Code Promo Badge](https://img.shields.io/badge/Promo-8db427?label=HiRSE&labelColor=005aa0&link=https%3A%2F%2Fgo.fzj.de%2FCodePromo)](https://go.fzj.de/CodePromo)
 <!-- badges: end -->
 
 Personalized luminous exposure data is progressively gaining importance in various sectors, including research, occupational affairs, and fitness tracking. Data are collected through a proliferating selection of wearable loggers and dosimeters, varying in size, shape, functionality, and output format. Despite or maybe because of numerous use cases, the field lacks a unified framework for collecting, validating, and analyzing the accumulated data. This issue increases the time and expertise necessary to handle such data and also compromises the FAIRness (Findability, Accessibility, Interoperability, Reusability) of the results, especially in meta-analyses.

@@ -10,8 +10,9 @@
 [![CRAN
 status](https://www.r-pkg.org/badges/version/LightLogR)](https://CRAN.R-project.org/package=LightLogR)
 [![status](https://joss.theoj.org/papers/10.21105/joss.07601/status.svg)](https://joss.theoj.org/papers/10.21105/joss.07601)
-[![Codecov test
-coverage](https://codecov.io/gh/tscnlab/LightLogR/graph/badge.svg)](https://app.codecov.io/gh/tscnlab/LightLogR)
+<!-- [![Codecov test coverage](https://codecov.io/gh/tscnlab/LightLogR/graph/badge.svg)](https://app.codecov.io/gh/tscnlab/LightLogR) -->
+[![HiRSE Code Promo
+Badge](https://img.shields.io/badge/Promo-8db427?label=HiRSE&labelColor=005aa0&link=https%3A%2F%2Fgo.fzj.de%2FCodePromo)](https://go.fzj.de/CodePromo)
 <!-- badges: end -->
 
 Personalized luminous exposure data is progressively gaining importance

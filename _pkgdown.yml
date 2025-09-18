@@ -4,13 +4,19 @@ template:
 
 navbar:
   structure:
-    left:  [intro, reference, articles, newsletter, tutorials, news]
+    left:  [intro, reference, articles, newsletter, resources, news]
   components:
     newsletter:
       text: Newsletter
       menu:
       - text: July 2025
         href: Edition01.html
+    resources:
+      text: Resources
+      menu:
+      - text: Online course series 2025/26
+        href: pdf/Online_course_series_2025-26.pdf
+        target: "_blank"
 
 reference:
   - title: Import
