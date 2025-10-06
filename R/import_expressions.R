@@ -566,6 +566,21 @@ import_expr <- list(
                       .default = Lux
                     ),
                     )
+  }),
+  #MiEye
+  MiEye = rlang::expr({
+    data <-suppressMessages( 
+      readr::read_csv(filename,
+                      n_max = n_max,
+                      id = "file.name",
+                      locale = locale,
+                      name_repair = "universal",
+                      ...
+      ))
+    data <- data %>%
+      dplyr::rename(Datetime = Date) |> 
+      dplyr::mutate(Datetime =
+                      Datetime |> lubridate::dmy_hms(tz = tz))
   })
 )
 

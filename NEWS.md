@@ -1,3 +1,5 @@
+* New device import: `MiEye` from Circadian Health Innovations
+
 # LightLogR 0.9.3
 
 * added a Newsletter section to the package page

@@ -256,6 +256,12 @@
 #'   added that translates these status codes. The columns carry the name
 #'   `{.col}_status`.
 #'
+#'   ## MiEye
+#'
+#'   Manufacturer: CHI. Circadian Health Innovations
+#'
+#'   Implemented: October 2025
+#'   
 #' @section Examples:
 #'
 #'   ## Imports made easy
