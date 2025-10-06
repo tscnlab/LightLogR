@@ -14,8 +14,11 @@ navbar:
     resources:
       text: Resources
       menu:
-      - text: Online course series 2025/26
+      - text: Online course series 2025/26 (Flyer)
         href: pdf/Online_course_series_2025-26.pdf
+        target: "_blank"
+      - text: Perspectives on personal light exposure (Talk)
+        href: https://www.youtube.com/watch?v=fCHINJolDxQ&list=PLzoZGn0-37Xomt9ujgE_GVpx2htaFzJKf&index=9
         target: "_blank"
 
 reference:

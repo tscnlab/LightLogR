@@ -324,7 +324,7 @@ LightLogR supports a wide range of metrics across different metric families. You
 | Threshold for duration               | 2                 | above, below         | `threshold_for_duration()`                                                                        |
 | Timing above threshold               | 3                 | above, below, within | `timing_above_threshold()`                                                                        |
 | **Total:**                           |                   |                      |                                                                                                   |
-| **17 families**                      | **61 metrics**    |                      |                                                                                                   |
+| **17 families**                      | **62 metrics**    |                      |                                                                                                   |
 
 If you would like to use a metric you don't find represented in LightLogR, please contact the developers. The easiest and most trackable way to get in contact is by opening a new issue on our [Github repository](https://github.com/tscnlab/LightLogR/issues).
 
@@ -337,6 +337,11 @@ If you would like to use a metric you don't find represented in LightLogR, pleas
 [![](man/figures/Metrology_Partnership_LOGO.jpg){width="282"}](https://www.euramet.org) ![](man/figures/Co-Funded-By-the-EU.png){width="288"}
 
 The project (22NRM05 MeLiDos) has received funding from the European Partnership on Metrology, co-financed from the European Union's Horizon Europe Research and Innovation Programme and by the Participating States. Views and opinions expressed are however those of the author(s) only and do not necessarily reflect those of the European Union or EURAMET. Neither the European Union nor the granting authority can be held responsible for them.
+
+**LightLogR** is further supported throught the [Wellcome trust](www.wellcome.org) and the [GLEE project](www.visualdiet.org) (Global Light exposure engine).
+
+![](pkgdown/assets/Wellcome_Trust_logo.svg.png){height="80px"}
+![](pkgdown/assets/logo_glee-2.png){height="80px"}
 
 # I Want To Contribute
 
