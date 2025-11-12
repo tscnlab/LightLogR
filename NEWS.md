@@ -2,11 +2,17 @@
 
 ## General improvements and new functions
 
+* `filter_Datetime()` & `filter_Date()`:
+  - When only `length` is provided, but not `start` nor `end`, the functions now respect grouping, i.e., the length will be taken from the first record (or last in the case of `from_start = FALSE`) within each group.
+  - the order of arguments now makes more sense in a typical use case, with `length` being the first argument taken, then `start` and `end`
+
 ## Visualizations
 
 ## Metrics
 
 ## Bug fixes and small stuff
+
+* `gg_day()` and `gg_days()` now have the `y.axis` variable and the `geom` as first two arguments, putting the most often used arguments to the front.
 
 * New device import: `MiEye` from Circadian Health Innovations. There are two known datetime formats for the device: `ymd HMS`, and `dmy HMS`. Both are parsed.
 
