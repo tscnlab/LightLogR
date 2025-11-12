@@ -102,14 +102,14 @@
 #' plot + ggplot2::facet_wrap(~Day.data + Id)
 
 gg_day <- function(dataset,
+                   y.axis = MEDI,
+                   geom = "point",
                    start.date = NULL,
                    end.date = NULL,
                    x.axis = Datetime,
-                   y.axis = MEDI,
                    aes_col = NULL,
                    aes_fill = NULL,
                    group = Id,
-                   geom = "point",
                    scales = c("fixed", "free_x", "free_y", "free"),
                    x.axis.breaks = hms::hms(hours = seq(0, 24, by = 3)),
                    y.axis.breaks = c(-10^(5:0), 0, 10^(0:5)),

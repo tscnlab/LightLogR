@@ -52,12 +52,13 @@
 #' x.axis.limits = \(x) Datetime_limits(x, length = lubridate::ddays(3))
 #' )
 gg_days <- function(dataset,
-                   x.axis = Datetime,
                    y.axis = MEDI,
+                   geom = "line",
+                   x.axis = Datetime,
+                   facetting_var = Id,
                    aes_col = NULL,
                    aes_fill = NULL,
                    group = NULL,
-                   geom = "line",
                    scales = c("free_x", "free_y", "fixed", "free"),
                    x.axis.breaks = Datetime_breaks,
                    y.axis.breaks = c(-10^(5:0), 0, 10^(0:5)),
