@@ -6,7 +6,7 @@
 \alias{import}
 \title{Import a light logger dataset or related data}
 \format{
-An object of class \code{list} of length 19.
+An object of class \code{list} of length 20.
 }
 \usage{
 import_Dataset(device, ...)
@@ -84,9 +84,9 @@ continuously as the package is maintained.
 #>  [4] "Actiwatch_Spectrum_de" "Circadian_Eye"         "Clouclip"             
 #>  [7] "DeLux"                 "GENEActiv_GGIR"        "Kronowise"            
 #> [10] "LIMO"                  "LYS"                   "LiDo"                 
-#> [13] "LightWatcher"          "MotionWatch8"          "OcuWEAR"              
-#> [16] "Speccy"                "SpectraWear"           "VEET"                 
-#> [19] "nanoLambda"
+#> [13] "LightWatcher"          "MiEye"                 "MotionWatch8"         
+#> [16] "OcuWEAR"               "Speccy"                "SpectraWear"          
+#> [19] "VEET"                  "nanoLambda"
 }\if{html}{\out{</div>}}
 \subsection{ActLumus}{
 
@@ -292,6 +292,13 @@ measurement. These values will be set to \code{NA}, and an additional column is
 added that translates these status codes. The columns carry the name
 \verb{\{.col\}_status}.
 }
+
+\subsection{MiEye}{
+
+Manufacturer: CHI. Circadian Health Innovations
+
+Implemented: October 2025
+}
 }
 
 \section{Examples}{
@@ -306,6 +313,7 @@ such as the intervals between measurements or the start and end dates.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{filepath <- system.file("extdata/205_actlumus_Log_1020_20230904101707532.txt.zip", package = "LightLogR")
 dataset <- import_Dataset("ActLumus", filepath, auto.plot = FALSE)
+#> Multiple files in zip: reading '205_actlumus_Log_1020_20230904101707532.txt'
 #> 
 #> Successfully read in 61'016 observations across 1 Ids from 1 ActLumus-file(s).
 #> Timezone set is UTC.
@@ -323,6 +331,7 @@ dataset <- import_Dataset("ActLumus", filepath, auto.plot = FALSE)
 Import functions can also be called directly:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{dataset <- import$ActLumus(filepath, auto.plot = FALSE)
+#> Multiple files in zip: reading '205_actlumus_Log_1020_20230904101707532.txt'
 #> 
 #> Successfully read in 61'016 observations across 1 Ids from 1 ActLumus-file(s).
 #> Timezone set is UTC.
