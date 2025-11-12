@@ -1,4 +1,16 @@
-* New device import: `MiEye` from Circadian Health Innovations
+# LightLogR 0.10.0
+
+## General improvements and new functions
+
+## Visualizations
+
+## Metrics
+
+## Bug fixes and small stuff
+
+* New device import: `MiEye` from Circadian Health Innovations. There are two known datetime formats for the device: `ymd HMS`, and `dmy HMS`. Both are parsed.
+
+* More flexible import for `ActLumus` devices: Data can start at any line. For computational efficiency, it will determine the correct starting row in the first file provided (`filenames[1]`) and use it for all files provided for import.
 
 # LightLogR 0.9.3
 
