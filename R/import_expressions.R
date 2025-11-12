@@ -146,13 +146,18 @@ import_expr <- list(
   }),
   #ActLumus
   ActLumus = rlang::expr({
+    first_file <- filename[1]
+    rows_to_skip <- detect_starting_row(first_file, 
+                                        locale = locale, 
+                                        column_names = "DATE/TIME",
+                                        n_max = 250)
     data <- suppressMessages( 
       readr::read_delim(
         filename,
-        skip = 32,
+        skip = rows_to_skip,
         delim = ";",
         n_max = n_max,
-        col_types = paste0("c", paste0(rep("d", 32), collapse = "")),
+        # col_types = paste0("c", paste0(rep("d", 32), collapse = "")),
         id = "file.name",
         locale = locale,
         name_repair = "universal",
@@ -580,7 +585,10 @@ import_expr <- list(
     data <- data %>%
       dplyr::rename(Datetime = Date) |> 
       dplyr::mutate(Datetime =
-                      Datetime |> lubridate::dmy_hms(tz = tz))
+                      Datetime |> 
+                      lubridate::parse_date_time(orders = c("dmy HMS", "ymd HMS"),
+                                                 tz = tz)
+                    )
   })
 )
 
