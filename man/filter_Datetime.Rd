@@ -7,15 +7,15 @@
 \usage{
 filter_Datetime(
   dataset,
-  Datetime.colname = Datetime,
+  length = NULL,
   start = NULL,
   end = NULL,
-  length = NULL,
   length_from_start = TRUE,
   full.day = FALSE,
-  tz = NULL,
   only_Id = NULL,
-  filter.expr = NULL
+  filter.expr = NULL,
+  Datetime.colname = Datetime,
+  tz = NULL
 )
 
 filter_Date(..., start = NULL, end = NULL)
@@ -25,23 +25,6 @@ filter_Date(..., start = NULL, end = NULL)
 by \link{LightLogR}, take care to choose a sensible variable for the
 \code{Datetime.colname}.}
 
-\item{Datetime.colname}{column name that contains the datetime. Defaults to
-\code{"Datetime"} which is automatically correct for data imported with
-\link{LightLogR}. Expects a \code{symbol}. Needs to be part of the \code{dataset}. Must
-be of type \code{POSIXct}.}
-
-\item{start, end}{For \code{\link[=filter_Datetime]{filter_Datetime()}} a \code{POSIXct} or \code{character} scalar in
-the form of \code{"yyyy-mm-dd hh-mm-ss"} giving the respective start and end
-time positions for the filtered dataframe. If you only want to provide
-\code{dates} in the form of \code{"yyyy-mm-dd"}, use the wrapper function
-\code{\link[=filter_Date]{filter_Date()}}.
-\itemize{
-\item If one or both of start/end are not provided, the times will be taken from the respective extreme values of the \code{dataset}.
-\item If \code{length} is provided and one of start/end is not, the other will be calculated based on the given value.
-\item If \code{length} is provided and both of start/end are NULL, the time from the
-respective start is taken.
-}}
-
 \item{length}{Either a Period or Duration from \pkg{lubridate}. E.g., \code{days(2) + hours(12)} will give a period of 2.5 days, whereas \code{ddays(2) + dhours(12)}
 will give a duration. For the difference between periods and durations look
 at the documentation from \pkg{lubridate}. Basically, periods model clocktimes,
@@ -49,6 +32,18 @@ whereas durations model physical processes. This matters on several
 occasions, like leap years, or daylight savings. You can also provide a
 \code{character} scalar in the form of e.g. "1 day", which will be converted
 into a period.}
+
+\item{start, end}{For \code{\link[=filter_Datetime]{filter_Datetime()}} a \code{POSIXct} or \code{character} scalar in
+the form of \code{"yyyy-mm-dd hh-mm-ss"} giving the respective start and end
+time positions for the filtered dataframe. If you only want to provide
+\code{dates} in the form of \code{"yyyy-mm-dd"}, use the wrapper function
+\code{\link[=filter_Date]{filter_Date()}}.
+\itemize{
+\item If one of start/end are not provided, the times will be taken from the respective extreme values of the \code{dataset}.
+\item If \code{length} is provided and one of start/end is not, the other will be calculated based on the given value.
+\item If \code{length} is provided and both of start/end are NULL, the time from the
+respective start (within each group) is taken.
+}}
 
 \item{length_from_start}{A \code{logical} indicating whether the \code{length} argument
 should be applied to the start (default, TRUE) or the end of the data
@@ -61,9 +56,6 @@ is FALSE). This is useful, e.g., when the first observation in the dataset
 is slightly after midnight. If TRUE, it will count the length from midnight
 on to avoid empty days in plotting with \code{\link[=gg_day]{gg_day()}}.}
 
-\item{tz}{Timezone of the start/end times. If \code{NULL} (the default), it will
-take the timezone from the \code{Datetime.colname} column.}
-
 \item{only_Id}{An expression of \code{ids} where the filtering should be applied
 to. If \code{NULL} (the default), the filtering will be applied to all \code{ids}.
 Based on the this expression, the dataset will be split in two and only
@@ -74,6 +66,14 @@ place. Afterwards both sets are recombined and sorted by \code{Datetime}.}
 given an \code{expression}, this is used to \code{\link[dplyr:filter]{dplyr::filter()}} the results. This
 can be useful to filter, e.g. for group-specific conditions, like starting
 after the first two days of measurement (see examples).}
+
+\item{Datetime.colname}{column name that contains the datetime. Defaults to
+\code{"Datetime"} which is automatically correct for data imported with
+\link{LightLogR}. Expects a \code{symbol}. Needs to be part of the \code{dataset}. Must
+be of type \code{POSIXct}.}
+
+\item{tz}{Timezone of the start/end times. If \code{NULL} (the default), it will
+take the timezone from the \code{Datetime.colname} column.}
 
 \item{...}{Parameter handed over to \code{\link[lubridate:round_date]{lubridate::round_date()}} and siblings}
 }

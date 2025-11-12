@@ -14,10 +14,10 @@
 #'   time positions for the filtered dataframe. If you only want to provide
 #'   `dates` in the form of `"yyyy-mm-dd"`, use the wrapper function
 #'   [filter_Date()].
-#' * If one or both of start/end are not provided, the times will be taken from the respective extreme values of the `dataset`.
+#' * If one of start/end are not provided, the times will be taken from the respective extreme values of the `dataset`.
 #' * If `length` is provided and one of start/end is not, the other will be calculated based on the given value.
 #' * If `length` is provided and both of start/end are NULL, the time from the
-#'   respective start is taken.
+#'   respective start (within each group) is taken.
 #' @param length Either a Period or Duration from \pkg{lubridate}. E.g., `days(2) +
 #'   hours(12)` will give a period of 2.5 days, whereas `ddays(2) + dhours(12)`
 #'   will give a duration. For the difference between periods and durations look
@@ -93,15 +93,15 @@
 
 
 filter_Datetime <- function(dataset, 
-                            Datetime.colname = Datetime, 
+                            length = NULL,
                             start = NULL, 
                             end = NULL, 
-                            length = NULL,
                             length_from_start = TRUE,
                             full.day = FALSE,
-                            tz = NULL,
                             only_Id = NULL,
-                            filter.expr = NULL) {
+                            filter.expr = NULL,
+                            Datetime.colname = Datetime, 
+                            tz = NULL) {
   
   # Initial Checks ----------------------------------------------------------
   
@@ -150,6 +150,12 @@ filter_Datetime <- function(dataset,
   if(is.character(length)) {
     length <- lubridate::as.period(length)
   }
+  
+  #was only a length provided?
+  only_length <- all(is.null(start), is.null(end), !is.null(length))
+  if(only_length) {
+    only_length <- if(length_from_start) "start" else "end"
+  }
 
   #calculate starting time if length and end are given
   if(is.null(start) & !is.null(length) & !is.null(end)) {
@@ -185,12 +191,23 @@ filter_Datetime <- function(dataset,
   }
   
   # filter start
+  if(only_length %in% c("start", "end")) {
+    dataset <-
+      dataset %>% 
+      dplyr::filter(
+        switch(only_length,
+        "start" = {{ Datetime.colname }} < (min({{ Datetime.colname }}) + length),
+        "end" = {{ Datetime.colname }} >= (max({{ Datetime.colname }}) - length)
+        )
+      )
+  } else {
     dataset <-
       dataset %>% 
       dplyr::filter(
         {{ Datetime.colname }} >= lubridate::as_datetime(start, tz = tz),
         {{ Datetime.colname }} < lubridate::as_datetime(end, tz = tz),
         )
+  }
     #possible extra filter step
     if(!is.null(filter.expr)) {
       dataset <- dataset %>% dplyr::filter(!!filter.expr)
