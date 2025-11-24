@@ -12,6 +12,12 @@
   - allows for `start` and `end` variables to be of class `Interval` - this makes the function ready to work with output from `sc2interal()` or `sleep_int2Brown()`.
   - works as expected when `force.tz = TRUE`, i.e., the timestamp in the states dataset is forced to the timezone of the receiving time-series dataset. That is useful, e.g., when you know that the timestamp is correct, but was imported ad `UTC` by default.
 
+* `gg_states()` now
+  - allows for an individual height of the state indicators through `ymin` and `ymax` arguments
+  - allows to calculate arbitrary metrics from the dataset to be used in the plot through the `extract.metrics` argument.
+  - combining the two above allows for powerful visualizations, where, e.g., the height of a status indicator is determined by a summary metric, like the median
+  - allows for a non-standard `Datetime` column through the `Datetime.colname` argument.
+
 ## Visualizations
 
 ## Metrics
