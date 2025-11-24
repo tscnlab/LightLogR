@@ -37,6 +37,8 @@
 #' @param fill.remove Logical. Should the fill scale be removed? Handy when the
 #'   fill scale is to be replaced by another scale without the console messages
 #'   warning about existing scale
+#' @param facetting Should an automated facet per group be applied? Default is
+#'   `TRUE`. The default grouping in `LightLogR` uses the `Id` variable.
 #'
 #' @returns A ggplot object
 #' @export
@@ -72,6 +74,7 @@ gg_heatmap <- function(dataset,
                        fill.breaks = c(-10^(5:0), 0, 10^(0:5)),
                        fill.limits = c(0, 10^5),
                        fill.remove = FALSE,
+                       facetting = TRUE,
                        ...
                        ){
   
@@ -140,7 +143,6 @@ gg_heatmap <- function(dataset,
                           labels = scales::label_time(format = time.labels),
                           expand = c(0,0),
                           limits = limits) +
-    ggplot2::facet_wrap(dplyr::group_vars(dat), strip.position = "left", scales = "free_y") + 
     scale_fill +
     ggplot2::scale_y_continuous(
     transform = c("date", "reverse2"),
@@ -171,7 +173,10 @@ gg_heatmap <- function(dataset,
       # panel.ontop = TRUE,
       panel.grid.major.y = ggplot2::element_blank(),
       # panel.grid.major.x = ggplot2::element_line(colour = "black", linewidth = 0.5, linetype = "dashed")
-    )
+    ) +
+    if(facetting) {
+    ggplot2::facet_wrap(dplyr::group_vars(dat), strip.position = "left", scales = "free_y")
+    }
   
   plot
 }

@@ -22,6 +22,7 @@ gg_heatmap(
   fill.breaks = c(-10^(5:0), 0, 10^(0:5)),
   fill.limits = c(0, 10^5),
   fill.remove = FALSE,
+  facetting = TRUE,
   ...
 )
 }
@@ -68,6 +69,9 @@ based on the data.}
 \item{fill.remove}{Logical. Should the fill scale be removed? Handy when the
 fill scale is to be replaced by another scale without the console messages
 warning about existing scale}
+
+\item{facetting}{Should an automated facet per group be applied? Default is
+\code{TRUE}. The default grouping in \code{LightLogR} uses the \code{Id} variable.}
 
 \item{...}{Other arguments to provide to the underlying
 \code{\link[ggplot2:geom_tile]{ggplot2::geom_raster()}}}

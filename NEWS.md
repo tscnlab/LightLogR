@@ -26,6 +26,8 @@
 
 * `Brown_check()` now also takes factor vectors for `state`. This affects the `Brown` upstream functions that use `Brown_check()`.
 
+* `gg_heatmap()` has gained a `facetting` variable to remove facetting altogether. Default is `TRUE`.
+
 # LightLogR 0.9.3
 
 * added a Newsletter section to the package page
