@@ -14,13 +14,60 @@ navbar:
     resources:
       text: Resources
       menu:
-      - text: Online course series 2025/26 (Flyer)
+      - text: Interactive online course
+        icon: globe
+      - text: Course website
+        href: https://tscnlab.github.io/LightLogR_webinar/
+        target: "_blank"
+      - text: Flyer (2025/26)
         href: pdf/Online_course_series_2025-26.pdf
         target: "_blank"
+      - text: ---
+      - text: Talks
+        icon: comment-dots
       - text: Perspectives on personal light exposure (Talk)
         href: https://www.youtube.com/watch?v=fCHINJolDxQ&list=PLzoZGn0-37Xomt9ujgE_GVpx2htaFzJKf&index=9
         target: "_blank"
-
+      - text: ---
+      - text: Published papers
+        icon: file-lines
+      - text: Package
+        href: https://joss.theoj.org/papers/10.21105/joss.07601
+        target: "_blank"
+      - text: Modelling and distributions
+        href: https://doi.org/10.1177/07487304251336624
+        target: "_blank"
+    articles:
+      text: Tutorials
+      menu:
+        - text: 'Get started'
+        - text: Interactive course
+          href: https://tscnlab.github.io/LightLogR_webinar/
+          target: "_blank"
+        - text: The whole game
+          href: articles/Day.html
+        - text: Visual experience
+          href: https://tscnlab.github.io/ZaunerEtAl_JVis_2025/
+          target: "_blank"
+        - text: '---'
+        - text: 'General Workflow'
+        - text: Import
+          href: articles/Import.html
+        - text: Metrics
+          href: articles/Metrics.html
+        - text: Visualizations
+          href: articles/Visualizations.html
+        - text: States, Durations, Clusters
+          href: articles/states.html
+        - text: '---'
+        - text: 'Special topics'
+        - text: Photoperiod
+          href: articles/photoperiod.html
+        - text: Log transformation
+          href: articles/log.html
+        - text: Light spectrum
+          href: articles/spectrum.html
+        
 reference:
   - title: Import
     desc: >

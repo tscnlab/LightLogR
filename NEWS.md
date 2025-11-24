@@ -6,6 +6,8 @@
   - When only `length` is provided, but not `start` nor `end`, the functions now respect grouping, i.e., the length will be taken from the first record (or last in the case of `from_start = FALSE`) within each group.
   - the order of arguments now makes more sense in a typical use case, with `length` being the first argument taken, then `start` and `end`
 
+* Added many new resources to the documentation webpage (accessible through the nav menu), including an interactive online course for `LightLogR`.
+
 ## Visualizations
 
 ## Metrics
@@ -22,7 +24,7 @@
 
 * More flexible import for `ActLumus` devices: Data can start at any line. For computational efficiency, it will determine the correct starting row in the first file provided (`filenames[1]`) and use it for all files provided for import.
 
-* Updated citation/reference for `log_zero_inflated()` and `exp_zero_inflated()`
+* `log_zero_inflated()` and `exp_zero_inflated()` have an updated reference.
 
 * `Brown_check()` now also takes factor vectors for `state`. This affects the `Brown` upstream functions that use `Brown_check()`.
 
