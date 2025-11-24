@@ -19,7 +19,7 @@ gg_day(
   y.axis.breaks = c(-10^(5:0), 0, 10^(0:5)),
   y.scale = "symlog",
   y.scale.sc = FALSE,
-  x.axis.label = "Time of Day",
+  x.axis.label = "Local Time (HH:MM)",
   y.axis.label = "Melanopic EDI (lx)",
   format.day = "\%d/\%m",
   title = NULL,
