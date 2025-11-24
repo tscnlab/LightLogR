@@ -21,7 +21,7 @@ Brown_check(
 be numeric, can be a vector.}
 
 \item{state}{The state from Brown et al. (2022). Needs to be a character
-vector with the same length as \code{value}.}
+vector (or factor vector) with the same length as \code{value}.}
 
 \item{Brown.day, Brown.evening, Brown.night}{The names of the states from Brown
 et al. (2022). These are the default values (\code{"day"}, \code{"evening"},

@@ -22,6 +22,10 @@
 
 * More flexible import for `ActLumus` devices: Data can start at any line. For computational efficiency, it will determine the correct starting row in the first file provided (`filenames[1]`) and use it for all files provided for import.
 
+* Updated citation/reference for `log_zero_inflated()` and `exp_zero_inflated()`
+
+* `Brown_check()` now also takes factor vectors for `state`. This affects the `Brown` upstream functions that use `Brown_check()`.
+
 # LightLogR 0.9.3
 
 * added a Newsletter section to the package page
