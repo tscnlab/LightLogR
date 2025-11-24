@@ -8,6 +8,10 @@
 
 * Added many new resources to the documentation webpage (accessible through the nav menu), including an interactive online course for `LightLogR`.
 
+* `add_states()` now 
+  - allows for `start` and `end` variables to be of class `Interval` - this makes the function ready to work with output from `sc2interal()` or `sleep_int2Brown()`.
+  - works as expected when `force.tz = TRUE`, i.e., the timestamp in the states dataset is forced to the timezone of the receiving time-series dataset. That is useful, e.g., when you know that the timestamp is correct, but was imported ad `UTC` by default.
+
 ## Visualizations
 
 ## Metrics
@@ -15,8 +19,6 @@
 ## Bug fixes and small stuff
 
 * `gg_states()` replaced the function `gg_state()` for more consistent naming with other `states` functions.
-
-* `add_states()` now works as expected when `force.tz = TRUE`, i.e., the timestamp in the states dataset is forced to the timezone of the receiving time-series dataset. That is useful, e.g., when you know that the timestamp is correct, but was imported ad `UTC` by default.
 
 * `gg_day()` and `gg_days()` now have the `y.axis` variable and the `geom` as first two arguments, putting the most often used arguments to the front.
 
