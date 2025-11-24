@@ -75,12 +75,12 @@ of times can be enforced.
 library(tibble)
 library(lubridate)
 library(dplyr)
-sample <- tibble::tibble(Datetime = c("2023-08-15 6:00:00",
-                                      "2023-08-15 23:00:00",
-                                      "2023-08-16 6:00:00",
-                                      "2023-08-16 22:00:00",
-                                      "2023-08-17 6:30:00",
-                                      "2023-08-18 1:00:00"),
+sample <- tibble::tibble(Datetime = c("2023-08-29 6:00:00",
+                                      "2023-08-29 23:00:00",
+                                      "2023-08-30 6:00:00",
+                                      "2023-08-30 22:00:00",
+                                      "2023-08-31 6:30:00",
+                                      "2023-09-01 1:00:00"),
                          State = rep(c("wake", "sleep"), 3),
                          Id = "Participant")
 #intervals from sample
