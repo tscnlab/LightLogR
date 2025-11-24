@@ -9,7 +9,6 @@ gg_days(
   y.axis = MEDI,
   geom = "line",
   x.axis = Datetime,
-  facetting_var = Id,
   aes_col = NULL,
   aes_fill = NULL,
   group = NULL,

@@ -14,6 +14,7 @@
 #' even enables negative values, which might be sensible for non-light data. See
 #' [symlog_trans()] for details on tweaking this scale. The scale can also be
 #' changed to a normal or logarithmic scale - see the y.scale argument for more.
+#' 
 #' @inheritParams gg_day
 #' @param aes_col,aes_fill optional input that defines separate sets and colors
 #'   or fills them. Expects anything that works with the layer data
@@ -55,7 +56,6 @@ gg_days <- function(dataset,
                    y.axis = MEDI,
                    geom = "line",
                    x.axis = Datetime,
-                   facetting_var = Id,
                    aes_col = NULL,
                    aes_fill = NULL,
                    group = NULL,
