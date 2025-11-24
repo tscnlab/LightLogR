@@ -2,7 +2,7 @@
 #'
 #' This function plots a heatmap of binned values across the day over all days
 #' in a group. It also allows doubleplot functionality. **[gg_heatmap()] does
-#' not work with the additive functions [gg_photoperiod()] and [gg_state()].
+#' not work with the additive functions [gg_photoperiod()] and [gg_states()].
 #'
 #' The function uses [ggplot2::scale_fill_viridis_c()] for the fill scale. The
 #' scale can be substituted by any other scale via the standard `+` command of

@@ -118,6 +118,13 @@ extract_states <- function(data,
 #' [dplyr::left_join()] will mark the columns in the `dataset` with a suffix
 #' `.x`, and in the `States.dataset` with a suffix `.y`.
 #'
+#' Also be careful if grouping variables have the same name, but a different
+#' class - usually, this will result in an error that can be fixed by making
+#' sure the classes are identical. This is especially an issue with labelled
+#' variables (e.g., a labelled `Id` factor-variable in the main dataset, and a
+#' factor variable `Id` in the state dataset) - in those cases, either the
+#' unlabelled variable has to be labelled as well, or the other one unlabelled.
+#'
 #'
 #' @param dataset A light logger dataset. Needs to be a dataframe.
 #' @param States.dataset A light logger dataset. Needs to be a dataframe. This
@@ -144,18 +151,18 @@ extract_states <- function(data,
 #' @examples
 #' states <-
 #' sample.data.environment |>
-#'   filter_Date(length = "1 day") |> 
+#'   filter_Date(length = "1 day") |>
 #'   extract_states(Daylight, MEDI > 1000)
 #'
 #' states |> head(2)
-#' 
+#'
 #' #add states to a dataset and plot them - as we only looked for states on the
 #' # first day (see above), only the first day will show up in the plot
-#' sample.data.environment |> 
-#'  filter_Date(length = "2 day") |> 
-#'  add_states(states) |> 
-#'  gg_days() |> 
-#'  gg_state(Daylight)
+#' sample.data.environment |>
+#'  filter_Date(length = "2 day") |>
+#'  add_states(states) |>
+#'  gg_days() |>
+#'  gg_states(Daylight)
 
 add_states <- function(dataset,
                        States.dataset,
@@ -232,8 +239,8 @@ add_states <- function(dataset,
     dataset.tz <- lubridate::tz(dataset[[Datetime.colname.defused]])
     States.dataset <- States.dataset |>
       dplyr::mutate(
-        {{ start.colname }} := lubridate::with_tz({{ start.colname }}, tzone = dataset.tz),
-        {{ end.colname }} := lubridate::with_tz({{ end.colname }}, tzone = dataset.tz)
+        {{ start.colname }} := lubridate::force_tz({{ start.colname }}, tzone = dataset.tz),
+        {{ end.colname }} := lubridate::force_tz({{ end.colname }}, tzone = dataset.tz)
       )
   }
   

@@ -54,20 +54,27 @@ Beware if columns in the \code{dataset} and \code{States.dataset} have the same 
 (other then grouping variables). The underlying function,
 \code{\link[dplyr:mutate-joins]{dplyr::left_join()}} will mark the columns in the \code{dataset} with a suffix
 \code{.x}, and in the \code{States.dataset} with a suffix \code{.y}.
+
+Also be careful if grouping variables have the same name, but a different
+class - usually, this will result in an error that can be fixed by making
+sure the classes are identical. This is especially an issue with labelled
+variables (e.g., a labelled \code{Id} factor-variable in the main dataset, and a
+factor variable \code{Id} in the state dataset) - in those cases, either the
+unlabelled variable has to be labelled as well, or the other one unlabelled.
 }
 \examples{
 states <-
 sample.data.environment |>
-  filter_Date(length = "1 day") |> 
+  filter_Date(length = "1 day") |>
   extract_states(Daylight, MEDI > 1000)
 
 states |> head(2)
 
 #add states to a dataset and plot them - as we only looked for states on the
 # first day (see above), only the first day will show up in the plot
-sample.data.environment |> 
- filter_Date(length = "2 day") |> 
- add_states(states) |> 
- gg_days() |> 
- gg_state(Daylight)
+sample.data.environment |>
+ filter_Date(length = "2 day") |>
+ add_states(states) |>
+ gg_days() |>
+ gg_states(Daylight)
 }

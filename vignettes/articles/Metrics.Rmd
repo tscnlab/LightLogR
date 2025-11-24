@@ -141,7 +141,7 @@ data_Id201 |>
       Datetime <= M10_wrong$darkest_10h_offset, "M10", NA
   )) |>
   gg_day() |> 
-  gg_state(State, aes_fill = State) +
+  gg_states(State, aes_fill = State) +
   guides(fill = "none")
 ```
 
@@ -170,7 +170,7 @@ data_Id201 |>
       Datetime <= M10$darkest_10h_offset, "M10", NA
   )) |>
   gg_day() |> 
-  gg_state(State, aes_fill = State) +
+  gg_states(State, aes_fill = State) +
   guides(fill = "none")
 ```
 

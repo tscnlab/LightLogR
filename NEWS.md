@@ -12,6 +12,10 @@
 
 ## Bug fixes and small stuff
 
+* `gg_states()` replaced the function `gg_state()` for more consistent naming with other `states` functions.
+
+* `add_states()` now works as expected when `force.tz = TRUE`, i.e., the timestamp in the states dataset is forced to the timezone of the receiving time-series dataset. That is useful, e.g., when you know that the timestamp is correct, but was imported ad `UTC` by default.
+
 * `gg_day()` and `gg_days()` now have the `y.axis` variable and the `geom` as first two arguments, putting the most often used arguments to the front.
 
 * New device import: `MiEye` from Circadian Health Innovations. There are two known datetime formats for the device: `ymd HMS`, and `dmy HMS`. Both are parsed.
@@ -118,7 +122,7 @@ This is a huge update for `LightLogR`, bringing many new features and twenty-two
 
 * `gg_gaps()`: visualize gaps and shows instances of irregular data.
 
-* `gg_state()`: is an addon-function to `gg_day()` or `gg_days()`, which adds a state or cluster indicator to the plot
+* `gg_states()`: is an addon-function to `gg_day()` or `gg_days()`, which adds a state or cluster indicator to the plot
 
 * `gg_heatmap()`: visualize a condensed version of time series patterns, optionally as double plots.
 

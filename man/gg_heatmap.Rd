@@ -78,7 +78,7 @@ A ggplot object
 \description{
 This function plots a heatmap of binned values across the day over all days
 in a group. It also allows doubleplot functionality. **\code{\link[=gg_heatmap]{gg_heatmap()}} does
-not work with the additive functions \code{\link[=gg_photoperiod]{gg_photoperiod()}} and \code{\link[=gg_state]{gg_state()}}.
+not work with the additive functions \code{\link[=gg_photoperiod]{gg_photoperiod()}} and \code{\link[=gg_states]{gg_states()}}.
 }
 \details{
 The function uses \code{\link[ggplot2:scale_viridis]{ggplot2::scale_fill_viridis_c()}} for the fill scale. The

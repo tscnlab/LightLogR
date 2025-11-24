@@ -1,6 +1,6 @@
 #' Add states to gg_day() or gg_days() plots
 #'
-#' [gg_state()] is a helper function to add state information to plots generated
+#' [gg_states()] is a helper function to add state information to plots generated
 #' with [gg_day()], [gg_days()], or [gg_doubleplot()]. The function can draw on
 #' any column in the dataset, but factor-like or logical columns make the most
 #' sense. The time series must be based on a column called `Datetime`.
@@ -45,12 +45,12 @@
 #'
 #' state_data |>
 #'  gg_days() |>
-#'  gg_state(state)
+#'  gg_states(state)
 #'
 #' #state 2 has more than one valid state, thus we need to assign a fill aesthetic
 #' state_data |>
 #'  gg_days() |>
-#'  gg_state(state2, aes_fill = state2) +
+#'  gg_states(state2, aes_fill = state2) +
 #'  ggplot2::scale_fill_manual(values=c("#868686FF", "#EFC000FF", "#0073C2FF"))
 #'  #this line is simply for sensible colors
 #'
@@ -58,21 +58,21 @@
 #' state_data |>
 #'  dplyr::filter(Id == "Participant") |>
 #'  gg_day(geom = "line") |>
-#'  gg_state(state, fill = "red")
+#'  gg_states(state, fill = "red")
 #'
 #'  #more complex state
 #'  state_data |>
 #'  dplyr::filter(Id == "Participant") |>
 #'  gg_day(geom = "line") |>
-#'  gg_state(state2, aes_fill = state2)
+#'  gg_states(state2, aes_fill = state2)
 #'
 #'  #with gg_doubleplot
 #'  state_data |>
 #'  dplyr::filter(Id == "Participant") |>
 #'  gg_doubleplot() |>
-#'  gg_state(state2, aes_fill = state2)
+#'  gg_states(state2, aes_fill = state2)
 #' 
-gg_state <- function(ggplot_obj, 
+gg_states <- function(ggplot_obj, 
                       State.colname,
                       aes_fill = NULL,
                       aes_col = NULL,
@@ -182,4 +182,26 @@ gg_state <- function(ggplot_obj,
   #return
   new_plot_obj
   
+}
+
+
+#' Add states to gg_day() or gg_days() plots
+#'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#' `gg_state()` has been deprecated. Use `gg_states()` instead
+#'
+#' @param ... arguments given to [gg_states()]
+#'
+#' @returns a ggplot object
+#' @export
+#'
+#' @examples
+#' sample.data.irregular|> 
+#' dplyr::mutate(movement = dplyr::na_if(movement, 0)) |>  
+#' gg_days() |> gg_state(movement)
+
+gg_state <- function(...) {
+  lifecycle::deprecate_soft("0.10.0", "gg_state()", "gg_states()")
+  gg_states(...)
 }

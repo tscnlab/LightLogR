@@ -217,7 +217,7 @@ sample.data.environment %>%
   add_clusters(MEDI > 250, cluster.duration = "30 min") |> 
   #base plot + add the condition
   gg_days() |> 
-  gg_state(state, fill = "red") + 
+  gg_states(state, fill = "red") + 
   #standard ggplot:
   geom_hline(yintercept = 250, col = "red", linetype = "dashed") + 
   labs(title = "Periods > 250 lx mel EDI for more than 30 minutes")

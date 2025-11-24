@@ -33,6 +33,7 @@ Imports:
     gt,
     hms,
     janitor,
+    lifecycle,
     lubridate,
     magrittr,
     plotly,
