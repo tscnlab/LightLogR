@@ -16,7 +16,7 @@ gg_heatmap(
   time.title = "Local time (HH:MM)",
   time.breaks = hms::hms(hours = seq(0, 48, by = 6)),
   time.labels = "\%H:\%M",
-  fill.title = "Illuminance\\n(lx, mel EDI)",
+  fill.title = "Melanopic EDI (lx)",
   fill.scale = "symlog",
   fill.labels = function(x) format(x, scientific = FALSE, big.mark = " "),
   fill.breaks = c(-10^(5:0), 0, 10^(0:5)),

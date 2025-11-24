@@ -30,6 +30,8 @@
 
 * `gg_heatmap()` has gained a `facetting` variable to remove facetting altogether. Default is `TRUE`.
 
+* Standard `y.axis.label` of visualization functions is now `Melanopic EDI (lx)`. Affects `gg_day()`, `gg_days()`, and `gg_heatmap()`.
+
 # LightLogR 0.9.3
 
 * added a Newsletter section to the package page

@@ -20,7 +20,7 @@ gg_day(
   y.scale = "symlog",
   y.scale.sc = FALSE,
   x.axis.label = "Time of Day",
-  y.axis.label = "Illuminance (lx, MEDI)",
+  y.axis.label = "Melanopic EDI (lx)",
   format.day = "\%d/\%m",
   title = NULL,
   subtitle = NULL,

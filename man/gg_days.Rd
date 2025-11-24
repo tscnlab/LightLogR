@@ -18,7 +18,7 @@ gg_days(
   y.scale = "symlog",
   y.scale.sc = FALSE,
   x.axis.label = "Local Date/Time",
-  y.axis.label = "Illuminance (lx, MEDI)",
+  y.axis.label = "Melanopic EDI (lx)",
   x.axis.limits = Datetime_limits,
   x.axis.format = "\%a \%D",
   title = NULL,
