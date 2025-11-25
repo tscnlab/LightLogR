@@ -380,8 +380,7 @@ solar_noon <- function(coordinates, dates, tz) {
 #' [gg_photoperiod()] is a helper function to add photoperiod information to
 #' plots generated with [gg_day()] or [gg_days()]. The function can either draw
 #' on the `dawn` and `dusk` columns of the dataset or use the `coordinates` and
-#' `solarDep` arguments to calculate the photoperiods. The time series must be
-#' based on a column called `Datetime`.
+#' `solarDep` arguments to calculate the photoperiods.
 #'
 #' If used in combination with [gg_doubleplot()], with that function in the
 #' `type = "repeat"` setting (either manually set, or because there is only one
@@ -394,8 +393,7 @@ solar_noon <- function(coordinates, dates, tz) {
 #'
 #' @inheritParams photoperiod
 #' @param ggplot_obj A `ggplot` object generated with [gg_day()] or [gg_days()]
-#'   (or [gg_doubleplot()]. The dataset used to create these **must** have a
-#'   `Datetime` column.
+#'   (or [gg_doubleplot()].
 #' @param coordinates A two element numeric vector representing the latitude and
 #'   longitude of the location. If `NULL`, the default, the function will look
 #'   for the `dawn` and `dusk` columns in the dataset. If those are not present,
@@ -409,6 +407,19 @@ solar_noon <- function(coordinates, dates, tz) {
 #' @param on.top Logical scalar. If `TRUE`, the photoperiods will be plotted on
 #'   top of the existing plot. If `FALSE`, the photoperiods will be plotted
 #'   underneath the existing plot. Default is `FALSE`.
+#' @param ymin,ymax customize the height of the photoperiod rectangle. By
+#'   default it will cover the whole vertical range (-Inf, Inf), but can be set
+#'   to any value. If it is important to set the height conditionally, using
+#'   [gg_states()] is recommended.
+#' @param by.group Logical that indicates whether the photoperiod to display is
+#'   calculated within the groups of the dataset. By default this is`TRUE` for a
+#'   `POSIXct` axis ([gg_days()]) and `FALSE` for a `hms` axis ([gg_day()]). If
+#'   provided as a length-2 vector, the first logical will be used for `POSIXct`
+#'   and the second for `hms`. If a scalar is provided, it will be used for both
+#'   conditions.
+#' @param Datetime.column Column name in the underlying dataset that contains
+#'   the datetime. Defaults to `Datetime`. Is used to calculate photoperiod (if
+#'   missing), and for grouping (only `POSIXct` axes).
 #'
 #' @returns a modified `ggplot` object with the photoperiods added.
 #' @export
@@ -462,9 +473,13 @@ solar_noon <- function(coordinates, dates, tz) {
 
 gg_photoperiod <- function(ggplot_obj, 
                            coordinates = NULL, 
+                           ymin = -Inf,
+                           ymax = Inf,
                            alpha = 0.2,
                            solarDep = 6,
                            on.top = FALSE,
+                           Datetime.colname = Datetime,
+                           by.group = c(TRUE, FALSE),
                            ...) {
   
   # Initial Checks ----------------------------------------------------------
@@ -493,6 +508,11 @@ gg_photoperiod <- function(ggplot_obj,
     "solarDep must be a scalar" = is.all.scalar(solarDep)
   )
   
+  #by.group must be logical
+  stopifnot(
+    "by.group must be a length 1 or 2 logical" = is.logical(by.group) & (length(by.group) %in% 1:2)
+  )
+  
   #if coordinates is NULL, the ggplot data must have dawn and dusk columns
   if(is.null(coordinates)) {
     stopifnot(
@@ -511,6 +531,11 @@ gg_photoperiod <- function(ggplot_obj,
   x_axis_type <- 
     get_ggplot_axis_type(ggplot_obj, "x")
   
+  #if by.group is a scalar, make a length-2-vector out of it
+  if(is_scalar_logical(by.group)){
+    by.group[2] <- by.group
+  }
+  
   # Function ----------------------------------------------------------
   
   #add photoperiods to the data if coordinates are provided
@@ -518,7 +543,10 @@ gg_photoperiod <- function(ggplot_obj,
     #calculate the photoperiods
     ggplot_obj$data <- 
       ggplot_obj$data |> 
-      add_photoperiod(coordinates, solarDep = solarDep, overwrite = TRUE)
+      add_photoperiod(coordinates, 
+                      solarDep = solarDep, 
+                      overwrite = TRUE,
+                      Datetime.colname = {{ Datetime.colname }})
   }
   
   #if the y_axis_type is time
@@ -526,7 +554,8 @@ gg_photoperiod <- function(ggplot_obj,
     #create a table of photoperiods, by date
     photoperiod_data <-
       ggplot_obj$data |>
-      dplyr::group_by(date.grouper = lubridate::date(Datetime), .add = TRUE) |>
+      dplyr::group_by(date.grouper = lubridate::date({{ Datetime.colname }}), 
+                      .add = by.group[1]) |>
       dplyr::summarize(dawn = mean(dawn, na.rm = TRUE),
                        dusk = mean(dusk, na.rm = TRUE))
 
@@ -562,7 +591,7 @@ gg_photoperiod <- function(ggplot_obj,
     
     photoperiod_data <- 
       ggplot_obj$data |> 
-      dplyr::group_by(Day.data) |>
+      dplyr::group_by(Day.data, .add = by.group[2]) |>
       dplyr::summarize(dawn = mean(dawn, na.rm = TRUE),
                        dusk = mean(dusk, na.rm = TRUE),
                        midnight.before = lubridate::floor_date(dawn, "day"),
@@ -588,8 +617,8 @@ gg_photoperiod <- function(ggplot_obj,
         ggplot2::aes(
           xmin = midnight.before,
           xmax = dawn,
-          ymin = -Inf,
-          ymax = Inf, 
+          ymin = {{ ymin }},
+          ymax = {{ ymax }}, 
         ),
         alpha = alpha,
         ...
@@ -600,8 +629,8 @@ gg_photoperiod <- function(ggplot_obj,
         ggplot2::aes(
           xmin = dusk,
           xmax = midnight.after,
-          ymin = -Inf,
-          ymax = Inf,
+          ymin = {{ ymin }},
+          ymax = {{ ymax }},
         ),
         alpha = alpha,
         ...
