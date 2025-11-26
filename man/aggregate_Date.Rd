@@ -49,7 +49,12 @@ calculate the \code{mean} or \code{median} for \code{numeric}, \code{POSIXct}, \
 \code{hms}, and the \code{mode} for \code{character}, \code{factor} and \code{logical} types.}
 
 \item{...}{arguments given over to \code{\link[dplyr:summarise]{dplyr::summarize()}} to handle columns
-that do not fall into one of the categories above.}
+that do not fall into one of the categories above. Be careful with partial
+matching of argument names. E.g., creating a new column \code{n}, without having
+changed the default for \code{numeric.handler} will match \code{n} to that argument.
+You can avoid this be either explicitly supplying the \code{numeric.handler}
+argument (using the default again), or you change the variable name, e.g,
+to \code{n.}, which avoids the partial matching.}
 }
 \value{
 A \code{tibble} with aggregated \code{Datetime} data, at maximum one day per

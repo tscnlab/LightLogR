@@ -46,6 +46,8 @@
 
 * `gg_day()`: standard `x.axis.label` is `Local time (HH:MM)`.
 
+* `aggregate_Date()` and `aggregate_Datetime()` now contain a warning for `...` about partial matching of argument names.
+
 # LightLogR 0.9.3
 
 * added a Newsletter section to the package page
