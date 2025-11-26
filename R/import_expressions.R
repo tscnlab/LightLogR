@@ -224,56 +224,18 @@ import_expr <- list(
                     Datetime = paste(Date, Time) %>% 
                       lubridate::ymd_hms(tz = tz, quiet = TRUE),.before = Nr)
   }),
-  #Actiwatch Spectrum - German file format
-  Actiwatch_Spectrum_de = rlang::expr({
-    column_names <- c("Zeile", "Datum", "Zeit", "Status")
-    data <- 
-      purrr::map(
-        filename,
-        \(x) {
-          rows_to_skip <- detect_starting_row(x, 
-                                              locale = locale, 
-                                              column_names = column_names,
-                                              n_max = 1000)
-          df <- suppressMessages(
-            readr::read_csv(
-              x, 
-              skip = rows_to_skip,
-              locale=locale,
-              id = "file.name",
-              show_col_types = FALSE,
-              col_types = c("iDtfdfccccfdf"),
-              name_repair = "universal",
-              ...
-            )
-          )
-          
-          df %>% 
-            dplyr::select(!dplyr::starts_with("..."))
-          
-        }) %>% purrr::list_rbind()
-    data <- data %>%
-      tidyr::unite(col = "Datetime",
-                   3:4,
-                   remove = FALSE
-      ) %>% 
-      dplyr::mutate(
-        Datetime = 
-          lubridate::parse_date_time(
-            Datetime, orders = c("mdyHMS", "ymdHMS"), tz = tz),
-        dplyr::across(
-          dplyr::where(is.character) &
-            dplyr::where(~ any(stringr::str_detect(.x, ","), na.rm = TRUE)),
-          ~ stringr::str_replace(.x, ",", ".") %>%
-            as.numeric()
-        )
-      )
-  }),
-  #Actiwatch Spectrum - English file format
+  #Actiwatch Spectrum 
   Actiwatch_Spectrum = rlang::expr({
+    version <- version_checker(version, "Actiwatch_Spectrum")
+    if(version == "initial") {
     column_names <- c("Line","Date","Time","Off Wrist","Activity","Marker",
                       "White Light", "Red Light","Green Light","Blue Light",
                       "Sleep Wake","Interval Status")
+    col_types = c("ictfdfddddff")
+    } else if(version == "de") {
+    column_names <- c("Zeile", "Datum", "Zeit", "Status")
+    col_types = c("iDtfdfccccfdf")
+    }
     data <- 
       purrr::map(
         filename,
@@ -289,7 +251,7 @@ import_expr <- list(
               locale=locale,
               id = "file.name",
               show_col_types = FALSE,
-              col_types = c("ictfdfddddff"),
+              col_types = col_types,
               name_repair = "universal",
               ...
             )
@@ -297,8 +259,8 @@ import_expr <- list(
           
           df %>% 
             dplyr::select(!dplyr::starts_with("..."))
-          
         }) %>% purrr::list_rbind()
+    
     data <- data %>%
       tidyr::unite(col = "Datetime",
                    3:4,
@@ -363,6 +325,7 @@ import_expr <- list(
         }) %>% purrr::list_rbind()
   }),
   VEET = rlang::expr({
+    version <- version_checker(version, "VEET")
     #separate the dots list in the column_names and the rest
     dots <- rlang::list2(...)
     modality <- dots$modality
@@ -390,8 +353,8 @@ import_expr <- list(
               Unit_ALS_Flicker = FALSE),
       PHO = c(time_stamp = TRUE, modality = FALSE, integration_time = TRUE, 
               Gain = TRUE, s415 = TRUE, s445 = TRUE, s480 = TRUE, s515 = TRUE, 
-              s555 = TRUE, s590 = TRUE, s630 = TRUE, s680 = TRUE, s940 = TRUE, 
-              Dark = TRUE, ClearL = TRUE, ClearR = TRUE),
+              s555 = TRUE, s590 = TRUE, s630 = TRUE, s680 = TRUE, s910 = TRUE, 
+              Dark = TRUE, Clear = TRUE),
       TOF = stats::setNames(
         c(TRUE, FALSE, rep(TRUE, 4 * 64)), 
           c("time_stamp", "modality", 
@@ -401,6 +364,14 @@ import_expr <- list(
             paste0("dist2_", 0:63))
         )
     )
+    if(version == "initial") {
+      veet_names[["PHO"]] <- 
+              c(time_stamp = TRUE, modality = FALSE, integration_time = TRUE, 
+                Gain = TRUE, s415 = TRUE, s445 = TRUE, s480 = TRUE, s515 = TRUE, 
+                s555 = TRUE, s590 = TRUE, s630 = TRUE, s680 = TRUE, s940 = TRUE, 
+                Dark = TRUE, ClearL = TRUE, ClearR = TRUE)
+    }
+    
     data <- 
       purrr::map(filename, \(filename) {
         pattern <- paste0("^(?:[^,]*,){1}\\b", modality, "\\b")

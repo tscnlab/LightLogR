@@ -225,3 +225,4 @@ reference:
     - sample.data.environment
     - sample.data.irregular
     - supported_devices
+    - supported_version

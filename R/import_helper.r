@@ -138,4 +138,17 @@ detect_starting_row <-
     return(which_lines-1)
   }
   
+  }
+
+#This internal helper checks whether a data format version exists or what the default is
+version_checker <- function(version, device) {
+  versions <- supported_versions(device) |> dplyr::pull(Version)
+  default_version <- 
+    supported_versions(device) |> 
+    dplyr::filter(Default) |> 
+    dplyr::pull(Version)
+  version <- switch(version,
+                    default = default_version,
+                    match.arg(version, versions))
+  version
 }
