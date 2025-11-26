@@ -411,7 +411,7 @@ import_expr <- list(
                   tibble::as_tibble() |> 
                   tidyr::separate_wider_delim(value, 
                                               ",", 
-                                              names = names(veet_names[["TOF"]])
+                                              names = names(veet_names[[modality]])
                                               )
         data <- data %>% 
           dplyr::mutate(file.name = filename, .before = 1)
