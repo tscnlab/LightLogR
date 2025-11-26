@@ -48,6 +48,8 @@
 
 * `aggregate_Date()` and `aggregate_Datetime()` now contain a warning for `...` about partial matching of argument names.
 
+* `sleep_int2Brown()` will sensibly fill in values for columns in the `evening`, should the state dataset contain more than `Interval` and `Sleep` columns.
+
 # LightLogR 0.9.3
 
 * added a Newsletter section to the package page
