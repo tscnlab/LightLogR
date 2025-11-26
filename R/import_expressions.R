@@ -367,7 +367,9 @@ import_expr <- list(
     dots <- rlang::list2(...)
     modality <- dots$modality
     dots$modality <- NULL
-    stopifnot(modality %in% c("ALS", "IMU", "INF", "PHO", "TOF"))
+    stopifnot("Provide a `modality` argument for VEET devices" = !is.null(modality),
+                "modality must be one of ALS, IMU, INF, PHO, or TOF" = 
+                modality %in% c("ALS", "IMU", "INF", "PHO", "TOF"))
     veet_names <- list(
       ALS = c(time_stamp = TRUE, modality = FALSE, integration_time = TRUE, 
               uvGain = TRUE, visGain = TRUE, irGain = TRUE, uvValue = TRUE, 
@@ -405,9 +407,12 @@ import_expr <- list(
         data <- 
           readr::read_lines(file = filename, locale = locale, n_max = n_max)
         data <- data[data %>% stringr::str_detect(pattern)]
-        data <- stringr::str_split(data, ",") %>% 
-          purrr::list_transpose() %>% list2DF()
-        names(data) <- names(veet_names[[modality]])
+        data <- data |> 
+                  tibble::as_tibble() |> 
+                  tidyr::separate_wider_delim(value, 
+                                              ",", 
+                                              names = names(veet_names[["TOF"]])
+                                              )
         data <- data %>% 
           dplyr::mutate(file.name = filename, .before = 1)
         data

@@ -30,6 +30,8 @@
 
 ## Bug fixes and small stuff
 
+* `VEET` devices import much faster now, thanks to an efficient way to construct the data table. Thanks to @ThomasKraft for raising this issue! #66
+
 * `gg_states()` replaced the function `gg_state()` for more consistent naming with other `states` functions.
 
 * `gg_day()` and `gg_days()` now have the `y.axis` variable and the `geom` as first two arguments, putting the most often used arguments to the front.
