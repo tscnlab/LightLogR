@@ -12,6 +12,8 @@
   - allows for `start` and `end` variables to be of class `Interval` - this makes the function ready to work with output from `sc2interal()` or `sleep_int2Brown()`.
   - works as expected when `force.tz = TRUE`, i.e., the timestamp in the states dataset is forced to the timezone of the receiving time-series dataset. That is useful, e.g., when you know that the timestamp is correct, but was imported ad `UTC` by default.
 
+* `remove_partial_data()` allows to specify a minimum duration of available data. Simply supply a negative duration to the `threshold.missing` argument. E.g., `"-20 hours"` will only keep groups with at least 20 hours of data. While this was easy before in case of groups of known total duration, 24 hours (e.g., simply set the threshold to 4 hours to get to 20 hours of data), it was not possible for groups of unknown total duration.
+
 ## Visualizations
 
 * `gg_states()` now
