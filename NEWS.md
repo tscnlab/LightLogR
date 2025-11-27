@@ -34,6 +34,8 @@
 
 ## Bug fixes and small stuff
 
+* The `plotly` package was moved to suggested dependency, as it only covers an edge case.
+
 * The `janitor` package is no longer a dependency, as a simpler version to find duplicates during import was implemented.
 
 * `VEET` devices import much faster now, thanks to an efficient way to construct the data table. Thanks to @ThomasKraft for raising this issue! #66
