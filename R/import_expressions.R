@@ -333,6 +333,8 @@ import_expr <- list(
     stopifnot("Provide a `modality` argument for VEET devices" = !is.null(modality),
                 "modality must be one of ALS, IMU, INF, PHO, or TOF" = 
                 modality %in% c("ALS", "IMU", "INF", "PHO", "TOF"))
+    
+    #in the following list, TRUE refers to whether is is treated as a numeric column
     veet_names <- list(
       ALS = c(time_stamp = TRUE, modality = FALSE, integration_time = TRUE, 
               uvGain = TRUE, visGain = TRUE, irGain = TRUE, uvValue = TRUE, 
@@ -343,14 +345,7 @@ import_expr <- list(
               serial_number = FALSE, fw_version = FALSE, Researcher_ID = FALSE, 
               Participant_ID = FALSE, Time_Zone_offset = TRUE, IMU_interval = TRUE, 
               PHO_interval = TRUE, TOF_interval = TRUE, ALS_interval = TRUE, 
-              Temple_Config = FALSE, TOF_Iterations = TRUE, 
-              IMU_Cal_Table = TRUE, PHO_Cal_Table = TRUE, 
-              ToF_Cal_Table = TRUE, ALS_Cal_Table = TRUE, 
-              Unit_Timestamp = FALSE, Unit_Batt_Voltage = FALSE, 
-              Unit_Sensor_Interval = FALSE, Unit_IMU_Accel = FALSE, 
-              Unit_IMU_Gyro = FALSE, Unit_Pho_Cts = FALSE, Unit_Pho_Gain = FALSE, 
-              Unit_ToF = FALSE, Unit_ALS_Cts = FALSE, Unit_ALS_Gain = FALSE, 
-              Unit_ALS_Flicker = FALSE),
+              Temple_Config = FALSE),
       PHO = c(time_stamp = TRUE, modality = FALSE, integration_time = TRUE, 
               Gain = TRUE, s415 = TRUE, s445 = TRUE, s480 = TRUE, s515 = TRUE, 
               s555 = TRUE, s590 = TRUE, s630 = TRUE, s680 = TRUE, s910 = TRUE, 
@@ -370,6 +365,19 @@ import_expr <- list(
                 Gain = TRUE, s415 = TRUE, s445 = TRUE, s480 = TRUE, s515 = TRUE, 
                 s555 = TRUE, s590 = TRUE, s630 = TRUE, s680 = TRUE, s940 = TRUE, 
                 Dark = TRUE, ClearL = TRUE, ClearR = TRUE)
+      veet_names[["INF"]] <- 
+        c(time_stamp = TRUE, modality = FALSE, product_name = FALSE, 
+                serial_number = FALSE, fw_version = FALSE, Researcher_ID = FALSE, 
+                Participant_ID = FALSE, Time_Zone_offset = TRUE, IMU_interval = TRUE, 
+                PHO_interval = TRUE, TOF_interval = TRUE, ALS_interval = TRUE, 
+                Temple_Config = FALSE, TOF_Iterations = TRUE, 
+                IMU_Cal_Table = TRUE, PHO_Cal_Table = TRUE, 
+                ToF_Cal_Table = TRUE, ALS_Cal_Table = TRUE, 
+                Unit_Timestamp = FALSE, Unit_Batt_Voltage = FALSE, 
+                Unit_Sensor_Interval = FALSE, Unit_IMU_Accel = FALSE, 
+                Unit_IMU_Gyro = FALSE, Unit_Pho_Cts = FALSE, Unit_Pho_Gain = FALSE, 
+                Unit_ToF = FALSE, Unit_ALS_Cts = FALSE, Unit_ALS_Gain = FALSE, 
+                Unit_ALS_Flicker = FALSE)
     }
     
     data <- 
