@@ -10,6 +10,8 @@
 
 * `supported_versions()` is a **new function** that provides an overview which device versions are supported.
 
+* `add_Date_col()` gained the `as.count` argument. If set to true, it will output the number of days since start. The basis are calendar days.
+
 * `add_states()` now 
   - allows for `start` and `end` variables to be of class `Interval` - this makes the function ready to work with output from `sc2interal()` or `sleep_int2Brown()`.
   - works as expected when `force.tz = TRUE`, i.e., the timestamp in the states dataset is forced to the timezone of the receiving time-series dataset. That is useful, e.g., when you know that the timestamp is correct, but was imported ad `UTC` by default.
