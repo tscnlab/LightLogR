@@ -2,15 +2,7 @@
 
 ## General improvements and new functions
 
-* `filter_Datetime()` & `filter_Date()`:
-  - When only `length` is provided, but not `start` nor `end`, the functions now respect grouping, i.e., the length will be taken from the first record (or last in the case of `from_start = FALSE`) within each group.
-  - the order of arguments now makes more sense in a typical use case, with `length` being the first argument taken, then `start` and `end`
-
-* Added many new resources to the documentation webpage (accessible through the nav menu), including an interactive online course for `LightLogR`.
-
-* `add_states()` now 
-  - allows for `start` and `end` variables to be of class `Interval` - this makes the function ready to work with output from `sc2interal()` or `sleep_int2Brown()`.
-  - works as expected when `force.tz = TRUE`, i.e., the timestamp in the states dataset is forced to the timezone of the receiving time-series dataset. That is useful, e.g., when you know that the timestamp is correct, but was imported ad `UTC` by default.
+* `sample_groups()` is a new function that makes it easy to reduce the number of groups either by random sampling, flexible ordering, or based on a condition.
 
 * `remove_partial_data()` allows to specify a minimum duration of available data. Simply supply a negative duration to the `threshold.missing` argument. E.g., `"-20 hours"` will only keep groups with at least 20 hours of data. While this was easy before in case of groups of known total duration, 24 hours (e.g., simply set the threshold to 4 hours to get to 20 hours of data), it was not possible for groups of unknown total duration.
 
@@ -18,7 +10,15 @@
 
 * `supported_versions()` provides an overview which device versions are supported.
 
-## Visualizations
+* `add_states()` now 
+  - allows for `start` and `end` variables to be of class `Interval` - this makes the function ready to work with output from `sc2interal()` or `sleep_int2Brown()`.
+  - works as expected when `force.tz = TRUE`, i.e., the timestamp in the states dataset is forced to the timezone of the receiving time-series dataset. That is useful, e.g., when you know that the timestamp is correct, but was imported ad `UTC` by default.
+
+* Added many new resources to the documentation webpage (accessible through the nav menu), including an interactive online course for `LightLogR`.
+
+* `filter_Datetime()` & `filter_Date()`:
+  - When only `length` is provided, but not `start` nor `end`, the functions now respect grouping, i.e., the length will be taken from the first record (or last in the case of `from_start = FALSE`) within each group.
+  - the order of arguments now makes more sense in a typical use case, with `length` being the first argument taken, then `start` and `end`
 
 * `gg_states()` now
   - allows for an individual height of the state indicators through `ymin` and `ymax` arguments
@@ -29,8 +29,6 @@
 * `gg_photoperiod()` now 
   - allows for an individual height of the state indicators through `ymin` and `ymax` arguments
   - allows for a non-standard `Datetime` column through the `Datetime.colname` argument.
-
-## Metrics
 
 ## Bug fixes and small stuff
 

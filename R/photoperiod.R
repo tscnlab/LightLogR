@@ -484,6 +484,9 @@ gg_photoperiod <- function(ggplot_obj,
   
   # Initial Checks ----------------------------------------------------------
   
+  Datetime.colname <-
+    rlang::enexpr(Datetime.colname)
+  
   #ggplot must be a ggplot object
   stopifnot(
     "ggplot_obj must be a ggplot object" = inherits(ggplot_obj, "gg")
@@ -532,7 +535,7 @@ gg_photoperiod <- function(ggplot_obj,
     get_ggplot_axis_type(ggplot_obj, "x")
   
   #if by.group is a scalar, make a length-2-vector out of it
-  if(is_scalar_logical(by.group)){
+  if(rlang::is_scalar_logical(by.group)){
     by.group[2] <- by.group
   }
   
@@ -546,7 +549,7 @@ gg_photoperiod <- function(ggplot_obj,
       add_photoperiod(coordinates, 
                       solarDep = solarDep, 
                       overwrite = TRUE,
-                      Datetime.colname = {{ Datetime.colname }})
+                      Datetime.colname = !!Datetime.colname)
   }
   
   #if the y_axis_type is time
@@ -554,7 +557,7 @@ gg_photoperiod <- function(ggplot_obj,
     #create a table of photoperiods, by date
     photoperiod_data <-
       ggplot_obj$data |>
-      dplyr::group_by(date.grouper = lubridate::date({{ Datetime.colname }}), 
+      dplyr::group_by(date.grouper = lubridate::date(!!Datetime.colname), 
                       .add = by.group[1]) |>
       dplyr::summarize(dawn = mean(dawn, na.rm = TRUE),
                        dusk = mean(dusk, na.rm = TRUE))

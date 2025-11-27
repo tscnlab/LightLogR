@@ -7,13 +7,13 @@
 #'
 #' @param dataset A grouped dataset. Expects a data frame grouped with
 #'   [dplyr::group_by()].
-#' @param n Number of groups to return. Defaults to 1. Ignored when
-#'   `condition` is supplied and `n` is `NULL`.
-#' @param sample Sampling strategy. Must be one of `"random"`, `"top"`, or
-#'   `"bottom"`. Alternatively, a numeric vector can be provided to select group
-#'   positions (using bottom ordering); when numeric, `n` is ignored. When
-#'   `condition` is provided, the `sample` value is ignored and conditional
-#'   filtering is applied instead.
+#' @param n Number of groups to return. Defaults to 1. Ignored when `condition`
+#'   is supplied and `n` is `NULL`.
+#' @param sample Sampling strategy. Must be one of `"random"`, `"top"` (the
+#'   default), or `"bottom"`. Alternatively, a numeric vector can be provided to
+#'   select group positions (using bottom ordering); when numeric, `n` is
+#'   ignored. When `condition` is provided, the `sample` value is ignored and
+#'   conditional filtering is applied instead.
 #' @param order.by Expression used to order groups when `sample` is set to
 #'   `"top"` or `"bottom"`. Evaluated in a one-row summary for each group.
 #'   Defaults to [dplyr::cur_group_id()], i.e., the group number.
@@ -25,24 +25,60 @@
 #' @export
 #'
 #' @examples
+#' #gives one last group (highest group id)
 #' sample.data.environment |>
-#'   dplyr::group_by(Id) |>
-#'   sample_groups()
+#'   sample_groups() |>
+#'   dplyr::group_keys()
 #'
+#' #gives one random group (highest group id)
 #' sample.data.environment |>
-#'   dplyr::group_by(Id) |>
-#'   sample_groups(sample = "top", order.by = mean(MEDI))
+#'   sample_groups(sample = "random") |>
+#'   dplyr::group_keys()
 #'
+#' #gives the group with the highest average melanopic EDI
 #' sample.data.environment |>
-#'   dplyr::group_by(Id) |>
-#'   sample_groups(condition = mean(MEDI, na.rm = TRUE) > 100)
+#'   sample_groups(order.by = mean(MEDI)) |>
+#'   dplyr::group_keys()
 #'
+#' #gives the group with the lowest average melanopic EDI
 #' sample.data.environment |>
-#'   dplyr::group_by(Id) |>
-#'   sample_groups(sample = 2:3)
+#'   sample_groups(sample = "bottom", order.by = mean(MEDI)) |>
+#'   dplyr::group_keys()
+#'
+#' # give only groups that have a median melanopic EDI > 1000 lx
+#' sample.data.environment |>
+#'   sample_groups(condition = median(MEDI, na.rm = TRUE) > 1000) |>
+#'   dplyr::group_keys()
+#'
+#' # return only days with time above 250 lx mel EDI > 7 hours
+#' sample.data.environment |>
+#'   add_Date_col(group.by = TRUE) |>
+#'   sample_groups(order.by = duration_above_threshold(MEDI, Datetime, threshold = 250),
+#'                 condition = .order_value > 7*60*60) |>
+#'   dplyr::group_keys()
+#'   
+#' # return the 5 days with the highest time above 250 lx mel EDI
+#' sample.data.environment |>
+#'   add_Date_col(group.by = TRUE) |>
+#'   sample_groups(
+#'     n = 5,
+#'     order.by = duration_above_threshold(MEDI, Datetime, threshold = 250),
+#'     ) |>
+#'   dplyr::group_keys()
+#'
+#' # gives the first group
+#' sample.data.environment |>
+#'   sample_groups(sample = 1) |>
+#'   dplyr::group_keys()
+#'
+#' # gives the second group
+#' sample.data.environment |>
+#'   sample_groups(sample = 2) |>
+#'   dplyr::group_keys()
+#'   
 sample_groups <- function(dataset,
                           n = 1,
-                          sample = c("random", "top", "bottom"),
+                          sample = c("top", "bottom", "random"),
                           order.by = dplyr::cur_group_id(),
                           condition = NULL) {
   order.by <- rlang::enquo(order.by)
@@ -100,24 +136,18 @@ sample_groups <- function(dataset,
     sample_choice,
     "random" = group_summary |>
       dplyr::slice_sample(n = n),
-    "top" = group_summary |>
-      dplyr::arrange(dplyr::desc(.order_value)) |>
+    "top" = group_summary |> 
+      dplyr::arrange(dplyr::desc(.order_value)) |> 
       dplyr::slice_head(n = n),
     "bottom" = group_summary |>
-      dplyr::arrange(.order_value) |>
-      dplyr::slice_head(n = n),
+      dplyr::arrange(dplyr::desc(.order_value)) |> 
+      dplyr::slice_tail(n = n),
     "numeric" = group_summary |>
-      dplyr::arrange(.order_value) |>
+      dplyr::arrange(.order_value) |> 
       dplyr::slice(numeric_sample),
-    "condition" = {
-      conditioned <- group_summary |>
+    "condition" = group_summary |>
+      dplyr::arrange(dplyr::desc(.order_value)) |> 
         dplyr::filter(.condition_value)
-
-      if (is.null(n)) {
-        conditioned
-      } else conditioned |>
-        dplyr::slice_head(n = n)
-    }
   )
 
   selected <- selected |>
