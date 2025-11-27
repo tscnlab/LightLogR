@@ -264,3 +264,33 @@ reverse2_trans <- function() {
     function(x) -1 * as.numeric(x)
   )
 }
+
+
+#' Style (date)times as times
+#'
+#' This function takes a numeric input vector, converts them to an `hms` (using
+#' [hms::as_hms()]), then to a `POSIXlt` (using [base::as.POSIXlt()]), and then
+#' formats is according to the `format` argument.
+#'
+#' @param x a `numeric` vector to be styled
+#' @param format output format. Defaults to "%H:%M", which results in, e.g., "03:45". Look to [base::strptime()] for formatting options.
+#'
+#' @returns a `character` vector of length(x)
+#' @export
+#'
+#' @examples
+#' #collect some time info
+#' time <- 
+#' sample.data.irregular |> 
+#' dplyr::slice(300:305) |> 
+#' dplyr::pull(Datetime)
+#' 
+#' #Output is of type POSIXct
+#' time
+#' 
+#' time |> style_time()
+style_time <- function(x, format = "%H:%M") {
+  stopifnot("x needs to be numeric, hms, difftime, POSIXct, or POSIXt" =
+              inherits(x, c("numeric", "hms", "difftime", "POSIXct", "POSIXt")))
+  x %>% hms::as_hms() %>% as.POSIXlt() %>% format(format)
+}
