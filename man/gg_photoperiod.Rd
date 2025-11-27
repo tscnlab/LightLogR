@@ -46,10 +46,9 @@ columns will always be named \code{dawn} and \code{dusk}, regardless of the
 top of the existing plot. If \code{FALSE}, the photoperiods will be plotted
 underneath the existing plot. Default is \code{FALSE}.}
 
-\item{Datetime.colname}{column name that contains the datetime. Defaults to
-\code{"Datetime"} which is automatically correct for data imported with
-\link{LightLogR}. Expects a \code{symbol}. Needs to be part of the \code{dataset}. Must
-be of type \code{POSIXct}.}
+\item{Datetime.colname}{Column name in the underlying dataset that contains
+the datetime. Defaults to \code{Datetime}. Is used to calculate photoperiod (if
+missing), and for grouping (only \code{POSIXct} axes).}
 
 \item{by.group}{Logical that indicates whether the photoperiod to display is
 calculated within the groups of the dataset. By default this is\code{TRUE} for a
@@ -61,10 +60,6 @@ conditions.}
 \item{...}{Additional arguments given to the \code{\link[ggplot2:geom_tile]{ggplot2::geom_rect()}} used to
 construct the photoperiod shading. Can be used to change the fill color or
 other aesthetic properties.}
-
-\item{Datetime.column}{Column name in the underlying dataset that contains
-the datetime. Defaults to \code{Datetime}. Is used to calculate photoperiod (if
-missing), and for grouping (only \code{POSIXct} axes).}
 }
 \value{
 a modified \code{ggplot} object with the photoperiods added.

@@ -1,5 +1,6 @@
 #create bindings
-.metric <- .weight <- .date <- max_date <- is.irregular <- NULL
+dupes <- .end <- .order_value <- .start <- Default <- Version <- NULL
+.condition_value <- .metric <- .weight <- .date <- max_date <- is.irregular <- NULL
 marked.for.removal <- wavelength <- total_duration_n <- Group <- is.cluster <- NULL
 gap <- episodes <- total_duration <- total <- interval <- gaps <- NULL
 state <- epoch <- state.count <- .variable <- dominant.epoch <- type <- NULL

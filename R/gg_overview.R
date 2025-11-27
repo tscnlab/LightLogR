@@ -125,6 +125,9 @@ gg_overview <- function(dataset,
   
   # Return ----------------------------------------------------------
   if(interactive) {
+    if (!requireNamespace("plotly", quietly = TRUE)) {
+      stop("Package 'plotly' is required for interactive use. Please install it.", call. = FALSE)
+    }
     Plot %>% plotly::ggplotly()
   } else Plot
   

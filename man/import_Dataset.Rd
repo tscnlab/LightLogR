@@ -73,7 +73,10 @@ If the \code{Id} column is already part of the \code{dataset} it will just use t
 column. If the column is not present it will add this column and fill it
 with the filename of the importfile (see param \code{auto.id}).
 \item \code{print_n} can be used if you want to see more rows from the observation intervals
-\item \code{remove_duplicates} can be used if identical observations are present within or across multiple files. The default is \code{FALSE}. The function keeps only unique observations (=rows) if set to' TRUE'. This is a convenience implementation of \code{\link[dplyr:distinct]{dplyr::distinct()}}.
+\item \code{remove_duplicates} can be used if identical observations are present
+within or across multiple files. The default is \code{FALSE}. The function keeps
+only unique observations (=rows) if set to' TRUE'. This is a convenience
+implementation of \code{\link[dplyr:distinct]{dplyr::distinct()}}.
 }
 }
 \section{Devices}{

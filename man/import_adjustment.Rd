@@ -34,9 +34,9 @@ new_import <- import_adjustment(ll_import_expr())
 #the new one is identical to the old one in terms of the function body
 identical(body(import$ActLumus), body(new_import$ActLumus))
 
-#change the import expression for the LYS device to add a message at the top
+#change the import expression for the ActLumus device to add a message at the top
 new_import_expr <- ll_import_expr()
-new_import_expr$ActLumus[[4]] <-
+new_import_expr$ActLumus[[6]] <-
 rlang::expr({ cat("**This is a new import function**\n")
 data
 })

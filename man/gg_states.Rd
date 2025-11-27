@@ -15,7 +15,7 @@ gg_states(
   alpha = 0.2,
   on.top = FALSE,
   ignore.FALSE = TRUE,
-  extract.metrics = NULL,
+  extract.metric = NULL,
   return.state.data = FALSE,
   ...
 )
@@ -53,7 +53,7 @@ column, so that only \code{TRUE} values are recognized as a state. Is only
 relevant for logical state columns and will be ignored otherwise. Default
 is \code{TRUE}.}
 
-\item{extract.metrics}{Expression to be used in \code{\link[=extract_metrics]{extract_metrics()}}. Can be
+\item{extract.metric}{Expression to be used in \code{\link[=extract_metric]{extract_metric()}}. Can be
 used to extract additional information that is then available for
 \code{aes_fill}, \code{aes_col}, \code{ymin}, and \code{ymax}. Requires a list containing
 variable names and formulas to be converted into calls. E.g., calculating
@@ -129,6 +129,6 @@ state_data |>
  dplyr::filter(Id == "Participant") |>
  gg_day(geom = "line") |>
  gg_states(state2, aes_fill = state2, ymin= -Inf, ymax = median, alpha = 0.75,
-           extract.metrics = list(median = ~median(MEDI))) +
+           extract.metric = list(median = ~median(MEDI))) +
  ggplot2::scale_fill_manual(values=c("#868686FF", "#EFC000FF", "#0073C2FF"))
 }

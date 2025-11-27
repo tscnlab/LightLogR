@@ -417,7 +417,7 @@ solar_noon <- function(coordinates, dates, tz) {
 #'   provided as a length-2 vector, the first logical will be used for `POSIXct`
 #'   and the second for `hms`. If a scalar is provided, it will be used for both
 #'   conditions.
-#' @param Datetime.column Column name in the underlying dataset that contains
+#' @param Datetime.colname Column name in the underlying dataset that contains
 #'   the datetime. Defaults to `Datetime`. Is used to calculate photoperiod (if
 #'   missing), and for grouping (only `POSIXct` axes).
 #'

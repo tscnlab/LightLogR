@@ -139,7 +139,7 @@ add_states <- function(dataset,
                     )
     if(colname.defused({{ start.colname }}) != colname.defused({{ end.colname }})) {
       States.dataset <-
-        States.dataset |> select(- {{ start.colname }})
+        States.dataset |> dplyr::select(- {{ start.colname }})
     }
     start.colname <- rlang::expr(.start)
   }
@@ -148,7 +148,7 @@ add_states <- function(dataset,
       States.dataset |> 
       dplyr::mutate(.end = lubridate::int_end({{ end.colname }})
                     ) |> 
-      select(-{{ end.colname }})
+      dplyr::select(-{{ end.colname }})
     end.colname <- rlang::expr(.end)
   }
   

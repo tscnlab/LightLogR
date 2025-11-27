@@ -34,6 +34,8 @@
 
 ## Bug fixes and small stuff
 
+* The `janitor` package is no longer a dependency, as a simpler version to find duplicates during import was implemented.
+
 * `VEET` devices import much faster now, thanks to an efficient way to construct the data table. Thanks to @ThomasKraft for raising this issue! #66
 
 * `gg_states()` replaced the function `gg_state()` for more consistent naming with other `states` functions.
