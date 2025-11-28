@@ -1,4 +1,4 @@
-# LightLogR 0.10.0
+# LightLogR 0.10.0 **High noon**
 
 ## General improvements and new functions
 
