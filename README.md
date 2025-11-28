@@ -451,6 +451,8 @@ At present, these are the devices we support in LightLogR:
 
 - Actiwatch_Spectrum
 
+- Actiwatch_Spectrum_de
+
 - ActLumus
 
 - ActTrust
@@ -567,7 +569,7 @@ EURAMET. Neither the European Union nor the granting authority can be
 held responsible for them.
 
 **LightLogR** is further supported throught the [Wellcome
-trust](https://www.wellcome.org) and the [GLEE
+trust](https://wellcome.org) and the [GLEE
 project](https://www.visualdiet.org) (Global Light exposure engine).
 
 <img src="pkgdown/assets/Wellcome_Trust_logo.svg.png" height="80" />
