@@ -195,26 +195,32 @@ summary_table <- function(dataset,
     table_data |>
     dplyr::mutate(symbol = dplyr::recode(name, !!!labels_vec))
 
+  row_selection <- format_row_selection(table_data, complete_day_label)
+
   table_summary <-
     table_data |>
     dplyr::group_by(type) |>
     gt::gt(rowname_col = "name") |>
-    gt::fmt_integer(rows = c(1, 2, 3, 6)) |>
-    gt::fmt_percent(rows = 4) |>
+    gt::fmt_integer(rows = name %in% row_selection$counts) |>
+    gt::fmt_percent(rows = name %in% row_selection$percent) |>
     gt::fmt_duration(
-      rows = 5,
+      rows = name %in% row_selection$photoperiod,
       input_units = "hours",
       duration_style = "narrow",
       max_output_units = 2
     ) |>
-    gt::fmt_duration(rows = c(7:11), input_units = "seconds", max_output_units = 2) |>
+    gt::fmt_duration(
+      rows = name %in% row_selection$durations,
+      input_units = "seconds",
+      max_output_units = 2
+    ) |>
     gt::fmt(
       columns = 3:6,
-      rows = c(12:16),
+      rows = name %in% row_selection$time_of_day,
       fns = style_time
     ) |>
-    gt::fmt_number(rows = 19:20, decimals = 3) |>
-    gt::fmt_number(rows = c(17, 18), decimals = 1) |>
+    gt::fmt_number(rows = name %in% row_selection$stability, decimals = 3) |>
+    gt::fmt_number(rows = name %in% row_selection$brightness, decimals = 1) |>
     gt::fmt_markdown(columns = symbol) |>
     gt::cols_merge(
       columns = 3:6,
@@ -278,7 +284,7 @@ summary_table <- function(dataset,
       gt::cols_add(footnote = " ") |>
       gt::tab_footnote(
         "Histogram limits are set from 00:00 to 24:00",
-        locations = gt::cells_body(footnote, rows = c(5, 12, 13, 14, 15, 16)),
+        locations = gt::cells_body(footnote, rows = name %in% row_selection$histograms),
         placement = "left"
       )
   }
@@ -507,6 +513,34 @@ order_table_rows <- function(table_data) {
     ) |>
     dplyr::arrange(type, name, .by_group = FALSE) |>
     dplyr::mutate(name = as.character(name), type = as.character(type))
+}
+
+format_row_selection <- function(table_data, complete_day_label) {
+  count_rows <- c("Participants", "Participant-days", complete_day_label, "dose")
+  percent_rows <- "Missing/Irregular"
+  photoperiod_rows <- "Photoperiod"
+  duration_rows <- c(
+    "dur_above250", "dur_1_10", "dur_below1", "period_above250", "dur_above1000"
+  )
+  time_rows <- c(
+    "first_timing_above_250", "mean_timing_above_250", "last_timing_above_250",
+    "brightest_10h_midpoint", "darkest_5h_midpoint"
+  )
+  brightness_rows <- c("brightest_10h_mean", "darkest_5h_mean")
+  stability_rows <- c("IS", "IV")
+
+  present_rows <- table_data$name
+
+  list(
+    counts = intersect(count_rows, present_rows),
+    percent = intersect(percent_rows, present_rows),
+    photoperiod = intersect(photoperiod_rows, present_rows),
+    durations = intersect(duration_rows, present_rows),
+    time_of_day = intersect(time_rows, present_rows),
+    brightness = intersect(brightness_rows, present_rows),
+    stability = intersect(stability_rows, present_rows),
+    histograms = intersect(c(photoperiod_rows, time_rows), present_rows)
+  )
 }
 
 location_string <- function(dataset, coordinates, location, site, Datetime.colname) {

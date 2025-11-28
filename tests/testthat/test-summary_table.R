@@ -39,3 +39,17 @@ test_that("summary_table builds a gt table", {
   expect_true(stringr::str_detect(tbl$`_heading`$subtitle, "TZ:"))
 })
 
+test_that("summary_table formats rows by name when photoperiod is missing", {
+  tbl <- summary_table(sample.data.irregular, histograms = FALSE)
+
+  expect_false("Photoperiod" %in% tbl$`_data`$name)
+
+  selection <- LightLogR:::format_row_selection(
+    tbl$`_data`,
+    complete_day_label = glue::glue("Days ≥{round((1 - 0.2) * 100)}% complete")
+  )
+
+  expect_false("dose" %in% selection$durations)
+  expect_true(all(c("dur_above250", "dur_1_10", "dur_below1", "period_above250", "dur_above1000") %in% selection$durations))
+})
+
