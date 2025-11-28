@@ -4,6 +4,9 @@
 #' @param cols The column names to convert. Expects a `symbol`. The default will
 #'   convert all POSIXct columns. If uncertain whether columns exist in the
 #'   dataset, use [dplyr::any_of()].
+#' @param circular Logical on whether the columns should be converted to a
+#'   circular time instead of a time stamps. Uses [lubridate::cyclic_encoding()]
+#'   with `periods = "day"`. Default is `FALSE`.
 #' @param silent Logical on whether no message shall be shown if input and
 #'   output are identical. Defaults to `FALSE` (i.e., a message is shown).
 #'
@@ -28,15 +31,24 @@
 
 Datetime2Time <- function(dataset, 
                           cols = dplyr::where(lubridate::is.POSIXct),
+                          circular = FALSE,
                           silent = FALSE) {
-  stopifnot("dataset neets to be a data.frame" = is.data.frame(dataset))
+  stopifnot("dataset needs to be a data.frame" = is.data.frame(dataset),
+            "circular needs to be a logical" = is.logical(circular),
+            "silent needs to be a logical" = is.logical(silent))
   
-  data <- 
+  data <- if(!circular) {
   dataset |> 
     dplyr::mutate(
       dplyr::across({{ cols }}, hms::as_hms)
-      )
-    
+    ) 
+    } else {
+    dataset |> 
+      dplyr::mutate(
+        dplyr::across({{ cols }}, \(x) lubridate::cyclic_encoding(x, "day"))
+      ) 
+      } 
+  
   if(identical(data, dataset) & !silent){
     message("No columns were affected")
   }
