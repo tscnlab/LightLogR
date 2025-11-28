@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,16 +36,23 @@
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="active nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/Day.html">The whole game</a></li>
-    <li><a class="dropdown-item" href="../articles/Import.html">Import &amp; cleaning</a></li>
-    <li><a class="dropdown-item" href="../articles/log.html">Log transformation</a></li>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-tutorials" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Tutorials</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-tutorials">
+<li><h6 class="dropdown-header" data-toc-skip>Get started</h6></li>
+    <li><a class="dropdown-item" href="https://tscnlab.github.io/LightLogR_webinar/" target="_blank">Interactive course</a></li>
+    <li><a class="dropdown-item" href="../articles/Day.html">The whole game</a></li>
+    <li><a class="external-link dropdown-item" href="https://tscnlab.github.io/ZaunerEtAl_JVis_2025/" target="_blank">Visual experience</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>General Workflow</h6></li>
+    <li><a class="dropdown-item" href="../articles/Import.html">Import</a></li>
     <li><a class="dropdown-item" href="../articles/Metrics.html">Metrics</a></li>
-    <li><a class="dropdown-item" href="../articles/photoperiod.html">Photoperiod</a></li>
-    <li><a class="dropdown-item" href="../articles/spectrum.html">Light Spectrum</a></li>
-    <li><a class="dropdown-item" href="../articles/states.html">Durations, States and Clusters</a></li>
     <li><a class="dropdown-item" href="../articles/Visualizations.html">Visualizations</a></li>
+    <li><a class="dropdown-item" href="../articles/states.html">States, Durations, Clusters</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Special topics</h6></li>
+    <li><a class="dropdown-item" href="../articles/photoperiod.html">Photoperiod</a></li>
+    <li><a class="dropdown-item" href="../articles/log.html">Log transformation</a></li>
+    <li><a class="dropdown-item" href="../articles/spectrum.html">Light spectrum</a></li>
   </ul>
 </li>
 <li class="nav-item dropdown">
@@ -57,7 +64,19 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-resources" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Resources</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-resources">
-<li><a class="dropdown-item" href="../pdf/Online_course_series_2025-26.pdf" target="_blank">Online course series 2025/26</a></li>
+<li><h6 class="dropdown-header" data-toc-skip>
+<span class="globe"></span> Interactive online course</h6></li>
+    <li><a class="dropdown-item" href="https://tscnlab.github.io/LightLogR_webinar/" target="_blank">Course website</a></li>
+    <li><a class="dropdown-item" href="../pdf/Online_course_series_2025-26.pdf" target="_blank">Flyer (2025/26)</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>
+<span class="comment comment-dots"></span> Talks</h6></li>
+    <li><a class="external-link dropdown-item" href="https://www.youtube.com/watch?v=fCHINJolDxQ&amp;list=PLzoZGn0-37Xomt9ujgE_GVpx2htaFzJKf&amp;index=9" target="_blank">Perspectives on personal light exposure (Talk)</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>
+<span class="file file-lines"></span> Published papers</h6></li>
+    <li><a class="external-link dropdown-item" href="https://joss.theoj.org/papers/10.21105/joss.07601" target="_blank">Package</a></li>
+    <li><a class="external-link dropdown-item" href="https://doi.org/10.1177/07487304251336624" target="_blank">Modelling and distributions</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -612,7 +631,7 @@ contains 17 ids with one weeks worth of data each, and one to three
 participants per week.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/gg_overview.html">gg_overview</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="photoperiod_files/figure-html/overview-1.png" width="700"></p>
+<p><img src="photoperiod_files/figure-html/overview-1.png" class="r-plt" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="adding-photoperiod-information">Adding photoperiod information<a class="anchor" aria-label="anchor" href="#adding-photoperiod-information"></a>
@@ -3200,7 +3219,7 @@ from three participants. This is easy with the
 <span>  <span class="fu"><a href="../reference/filter_Datetime.html">filter_Date</a></span><span class="op">(</span>start <span class="op">=</span> <span class="st">"2023-08-15"</span>, length <span class="op">=</span> <span class="st">"5 days"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">data_partial</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/gg_overview.html">gg_overview</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="photoperiod_files/figure-html/partial%20data-1.png" width="700"></p>
+<p><img src="photoperiod_files/figure-html/partial%20data-1.png" class="r-plt" width="700"></p>
 <div class="section level3">
 <h3 id="integration-with-gg_day">Integration with gg_day()<a class="anchor" aria-label="anchor" href="#integration-with-gg_day"></a>
 </h3>
@@ -3208,7 +3227,7 @@ from three participants. This is easy with the
 <code class="sourceCode R"><span><span class="va">data_partial</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/gg_day.html">gg_day</a></span><span class="op">(</span>aes_col <span class="op">=</span> <span class="va">Id</span>, geom <span class="op">=</span> <span class="st">"line"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/gg_photoperiod.html">gg_photoperiod</a></span><span class="op">(</span><span class="va">coordinates</span><span class="op">)</span></span></code></pre></div>
-<p><img src="photoperiod_files/figure-html/gg_day-1.png" width="700"></p>
+<p><img src="photoperiod_files/figure-html/gg_day-1.png" class="r-plt" width="700"></p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#this is identical to:</span></span>
 <span><span class="co"># data_partial |&gt; </span></span>
@@ -3223,7 +3242,7 @@ from three participants. This is easy with the
 <code class="sourceCode R"><span><span class="va">data_partial</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/gg_days.html">gg_days</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/gg_photoperiod.html">gg_photoperiod</a></span><span class="op">(</span><span class="va">coordinates</span><span class="op">)</span></span></code></pre></div>
-<p><img src="photoperiod_files/figure-html/gg_days-1.png" width="720"></p>
+<p><img src="photoperiod_files/figure-html/gg_days-1.png" class="r-plt" width="720"></p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#this is identical to:</span></span>
 <span><span class="co"># data_partial |&gt; </span></span>
@@ -3241,7 +3260,7 @@ used for the main <code>geom</code>:</p>
 <span>    jco_color <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"State of the photoperiod"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="photoperiod_files/figure-html/gg_days%202-1.png" width="720"></p>
+<p><img src="photoperiod_files/figure-html/gg_days%202-1.png" class="r-plt" width="720"></p>
 </div>
 <div class="section level3">
 <h3 id="integration-with-gg_doubleplot">Integration with gg_doubleplot()<a class="anchor" aria-label="anchor" href="#integration-with-gg_doubleplot"></a>
@@ -3261,7 +3280,7 @@ easily avoided.</p>
 <span>  <span class="fu"><a href="../reference/photoperiod.html">add_photoperiod</a></span><span class="op">(</span><span class="va">coordinates</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/gg_doubleplot.html">gg_doubleplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/gg_photoperiod.html">gg_photoperiod</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="photoperiod_files/figure-html/gg_doubleplot-1.png" width="700"></p>
+<p><img src="photoperiod_files/figure-html/gg_doubleplot-1.png" class="r-plt" width="700"></p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#NOT the same as:</span></span>
 <span><span class="co"># data_partial |&gt; </span></span>
@@ -3293,7 +3312,7 @@ based on the aggregated datetimes.</p>
 <span>  <span class="fu"><a href="../reference/photoperiod.html">add_photoperiod</a></span><span class="op">(</span><span class="va">coordinates</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/gg_doubleplot.html">gg_doubleplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/gg_photoperiod.html">gg_photoperiod</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.9</span><span class="op">)</span></span></code></pre></div>
-<p><img src="photoperiod_files/figure-html/aggregate_Date-1.png" width="700"></p>
+<p><img src="photoperiod_files/figure-html/aggregate_Date-1.png" class="r-plt" width="700"></p>
 </div>
 <div class="section level3">
 <h3 id="differences-in-solar-depression-angle">Differences in solar depression angle<a class="anchor" aria-label="anchor" href="#differences-in-solar-depression-angle"></a>
@@ -3307,7 +3326,7 @@ values:</p>
 <code class="sourceCode R"><span><span class="va">sample.data.environment</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/gg_days.html">gg_days</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/gg_photoperiod.html">gg_photoperiod</a></span><span class="op">(</span><span class="va">coordinates</span><span class="op">)</span> </span></code></pre></div>
-<p><img src="photoperiod_files/figure-html/sample%20data%20environment-1.png" width="864"></p>
+<p><img src="photoperiod_files/figure-html/sample%20data%20environment-1.png" class="r-plt" width="864"></p>
 <p>We use the <code>Environment</code> data from
 <code>Sat 09/02/23</code> to showcase this.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
@@ -3332,7 +3351,7 @@ values:</p>
 <span>  <span class="fu"><a href="../reference/gg_photoperiod.html">gg_photoperiod</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">solarDep</span>, ncol <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Differences in photoperiod\ndepending on solar depression angle"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="photoperiod_files/figure-html/vis%20solar%20depression-1.png" width="700"></p>
+<p><img src="photoperiod_files/figure-html/vis%20solar%20depression-1.png" class="r-plt" width="700"></p>
 <p>The influence of solar depression angle can also be displayed in a
 single plot:</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
@@ -3341,7 +3360,7 @@ single plot:</p>
 <span>  <span class="fu"><a href="../reference/gg_doubleplot.html">gg_doubleplot</a></span><span class="op">(</span>facetting <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/gg_photoperiod.html">gg_photoperiod</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Differences in photoperiod\ndepending on solar depression angle"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="photoperiod_files/figure-html/vis%20solar%20depression%202-1.png" width="700"></p>
+<p><img src="photoperiod_files/figure-html/vis%20solar%20depression%202-1.png" class="r-plt" width="700"></p>
 </div>
 </div>
 <div class="section level2">
@@ -3835,7 +3854,7 @@ N = 17</span><span class="gt_footnote_marks" style="white-space:nowrap;font-styl
 <td headers="stat_1" class="gt_row gt_center">707 (317, 1,035)</td>
 <td headers="stat_2" class="gt_row gt_center">6 (5, 8)</td>
 </tr></tbody>
-<tfoot class="gt_footnotes"><tr>
+<tfoot><tr class="gt_footnotes">
 <td class="gt_footnote" colspan="3">
 <span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span> <span class="gt_from_md">Median (Q1, Q3)</span>
 </td>
@@ -3870,7 +3889,7 @@ group by week.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"week"</span>, y <span class="op">=</span> <span class="st">"mean mel EDI (lx)"</span>, fill <span class="op">=</span> <span class="st">"Photoperiod"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#FDFBD3"</span>, <span class="st">"#003153AA"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="photoperiod_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
+<p><img src="photoperiod_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" width="700"></p>
 <p>If one were to group by day (calender day), one disadvantage is that
 the <code>night</code> portion of each day is split into two. From
 midnight to dawn is part of the same bin as from dusk to midnight, when
@@ -4407,7 +4426,7 @@ N = 17</span><span class="gt_footnote_marks" style="white-space:nowrap;font-styl
 <td headers="stat_2" class="gt_row gt_center">11 (8, 15)</td>
 </tr>
 </tbody>
-<tfoot class="gt_footnotes"><tr>
+<tfoot><tr class="gt_footnotes">
 <td class="gt_footnote" colspan="3">
 <span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span> <span class="gt_from_md">Median (Q1, Q3)</span>
 </td>
@@ -4427,7 +4446,7 @@ N = 17</span><span class="gt_footnote_marks" style="white-space:nowrap;font-styl
 <span><span class="co">#&gt; infinite values.</span></span>
 <span><span class="co">#&gt; Warning: Removed 7 rows containing non-finite outside the scale range</span></span>
 <span><span class="co">#&gt; (`stat_boxplot()`).</span></span></code></pre></div>
-<p><img src="photoperiod_files/figure-html/grouping%202-1.png" width="700"></p>
+<p><img src="photoperiod_files/figure-html/grouping%202-1.png" class="r-plt" width="700"></p>
 <p>This approach has the further benefit that it works regardless of
 <em>when</em> data collection started. It will always bin the first,
 second, and so forth daytime periods of all participants together, same
@@ -6509,7 +6528,7 @@ N = 49</span><span class="gt_footnote_marks" style="white-space:nowrap;font-styl
 <td headers="stat_1" class="gt_row gt_center">538 (232, 1,140)</td>
 <td headers="stat_2" class="gt_row gt_center">20 (12, 31)</td>
 </tr></tbody>
-<tfoot class="gt_footnotes"><tr>
+<tfoot><tr class="gt_footnotes">
 <td class="gt_footnote" colspan="3">
 <span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span> <span class="gt_from_md">Median (Q1, Q3)</span>
 </td>
@@ -6535,11 +6554,11 @@ Github</a>.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Johannes Zauner, Manuel Spitschan, Steffen Hartmeyer, European Partnership on Metrology.</p>
+  <p>Developed by Johannes Zauner, Manuel Spitschan, Steffen Hartmeyer, European Partnership on Metrology, Wellcome Trust, Reality Labs Research.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

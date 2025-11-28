@@ -23,7 +23,7 @@ of times can be enforced.'><meta property="og:image" content="https://tscnlab.gi
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,15 +33,22 @@ of times can be enforced.'><meta property="og:image" content="https://tscnlab.gi
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Day.html">The whole game</a></li>
-    <li><a class="dropdown-item" href="../articles/Import.html">Import &amp; cleaning</a></li>
-    <li><a class="dropdown-item" href="../articles/log.html">Log transformation</a></li>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-tutorials" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Tutorials</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-tutorials"><li><h6 class="dropdown-header" data-toc-skip>Get started</h6></li>
+    <li><a class="dropdown-item" href="https://tscnlab.github.io/LightLogR_webinar/" target="_blank">Interactive course</a></li>
+    <li><a class="dropdown-item" href="../articles/Day.html">The whole game</a></li>
+    <li><a class="external-link dropdown-item" href="https://tscnlab.github.io/ZaunerEtAl_JVis_2025/" target="_blank">Visual experience</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>General Workflow</h6></li>
+    <li><a class="dropdown-item" href="../articles/Import.html">Import</a></li>
     <li><a class="dropdown-item" href="../articles/Metrics.html">Metrics</a></li>
-    <li><a class="dropdown-item" href="../articles/photoperiod.html">Photoperiod</a></li>
-    <li><a class="dropdown-item" href="../articles/spectrum.html">Light Spectrum</a></li>
-    <li><a class="dropdown-item" href="../articles/states.html">Durations, States and Clusters</a></li>
     <li><a class="dropdown-item" href="../articles/Visualizations.html">Visualizations</a></li>
+    <li><a class="dropdown-item" href="../articles/states.html">States, Durations, Clusters</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Special topics</h6></li>
+    <li><a class="dropdown-item" href="../articles/photoperiod.html">Photoperiod</a></li>
+    <li><a class="dropdown-item" href="../articles/log.html">Log transformation</a></li>
+    <li><a class="dropdown-item" href="../articles/spectrum.html">Light spectrum</a></li>
   </ul></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-newsletter" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Newsletter</button>
@@ -49,7 +56,16 @@ of times can be enforced.'><meta property="og:image" content="https://tscnlab.gi
   </ul></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-resources" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Resources</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-resources"><li><a class="dropdown-item" href="../pdf/Online_course_series_2025-26.pdf" target="_blank">Online course series 2025/26</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-resources"><li><h6 class="dropdown-header" data-toc-skip><span class="globe"></span> Interactive online course</h6></li>
+    <li><a class="dropdown-item" href="https://tscnlab.github.io/LightLogR_webinar/" target="_blank">Course website</a></li>
+    <li><a class="dropdown-item" href="../pdf/Online_course_series_2025-26.pdf" target="_blank">Flyer (2025/26)</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip><span class="comment comment-dots"></span> Talks</h6></li>
+    <li><a class="external-link dropdown-item" href="https://www.youtube.com/watch?v=fCHINJolDxQ&amp;list=PLzoZGn0-37Xomt9ujgE_GVpx2htaFzJKf&amp;index=9" target="_blank">Perspectives on personal light exposure (Talk)</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip><span class="file file-lines"></span> Published papers</h6></li>
+    <li><a class="external-link dropdown-item" href="https://joss.theoj.org/papers/10.21105/joss.07601" target="_blank">Package</a></li>
+    <li><a class="external-link dropdown-item" href="https://doi.org/10.1177/07487304251336624" target="_blank">Modelling and distributions</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -159,12 +175,12 @@ remove the interval.</p></dd>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org" class="external-link">lubridate</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">sample</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span>Datetime <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2023-08-15 6:00:00"</span>,</span></span>
-<span class="r-in"><span>                                      <span class="st">"2023-08-15 23:00:00"</span>,</span></span>
-<span class="r-in"><span>                                      <span class="st">"2023-08-16 6:00:00"</span>,</span></span>
-<span class="r-in"><span>                                      <span class="st">"2023-08-16 22:00:00"</span>,</span></span>
-<span class="r-in"><span>                                      <span class="st">"2023-08-17 6:30:00"</span>,</span></span>
-<span class="r-in"><span>                                      <span class="st">"2023-08-18 1:00:00"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span><span class="va">sample</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span>Datetime <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2023-08-29 6:00:00"</span>,</span></span>
+<span class="r-in"><span>                                      <span class="st">"2023-08-29 23:00:00"</span>,</span></span>
+<span class="r-in"><span>                                      <span class="st">"2023-08-30 6:00:00"</span>,</span></span>
+<span class="r-in"><span>                                      <span class="st">"2023-08-30 22:00:00"</span>,</span></span>
+<span class="r-in"><span>                                      <span class="st">"2023-08-31 6:30:00"</span>,</span></span>
+<span class="r-in"><span>                                      <span class="st">"2023-09-01 1:00:00"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                         State <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"wake"</span>, <span class="st">"sleep"</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                         Id <span class="op">=</span> <span class="st">"Participant"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co">#intervals from sample</span></span></span>
@@ -172,13 +188,13 @@ remove the interval.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 7 × 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   State Id          Interval                                        </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;Interval&gt;</span>                                      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>          2023-08-15 00:00:00 UTC--2023-08-15 06:00:00 UTC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> wake  Participant 2023-08-15 06:00:00 UTC--2023-08-15 23:00:00 UTC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> sleep Participant 2023-08-15 23:00:00 UTC--2023-08-16 06:00:00 UTC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> wake  Participant 2023-08-16 06:00:00 UTC--2023-08-16 22:00:00 UTC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> sleep Participant 2023-08-16 22:00:00 UTC--2023-08-17 06:30:00 UTC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> wake  Participant 2023-08-17 06:30:00 UTC--2023-08-18 01:00:00 UTC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> sleep Participant 2023-08-18 01:00:00 UTC--2023-08-19 00:00:00 UTC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>          2023-08-29 00:00:00 UTC--2023-08-29 06:00:00 UTC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> wake  Participant 2023-08-29 06:00:00 UTC--2023-08-29 23:00:00 UTC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> sleep Participant 2023-08-29 23:00:00 UTC--2023-08-30 06:00:00 UTC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> wake  Participant 2023-08-30 06:00:00 UTC--2023-08-30 22:00:00 UTC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> sleep Participant 2023-08-30 22:00:00 UTC--2023-08-31 06:30:00 UTC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> wake  Participant 2023-08-31 06:30:00 UTC--2023-09-01 01:00:00 UTC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> sleep Participant 2023-09-01 01:00:00 UTC--2023-09-02 00:00:00 UTC</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#compare sample (y) and intervals (x)</span></span></span>
 <span class="r-in"><span><span class="fu">sc2interval</span><span class="op">(</span><span class="va">sample</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
@@ -189,12 +205,12 @@ remove the interval.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   State Id          Interval                                        </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;Interval&gt;</span>                                      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>          2023-08-15 00:00:00 UTC--2023-08-15 06:00:00 UTC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> wake  Participant 2023-08-15 06:00:00 UTC--2023-08-15 23:00:00 UTC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> wake  Participant 2023-08-15 06:00:00 UTC--2023-08-15 23:00:00 UTC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> wake  Participant 2023-08-15 06:00:00 UTC--2023-08-15 23:00:00 UTC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> sleep Participant 2023-08-15 23:00:00 UTC--2023-08-16 06:00:00 UTC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> sleep Participant 2023-08-15 23:00:00 UTC--2023-08-16 06:00:00 UTC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>          2023-08-29 00:00:00 UTC--2023-08-29 06:00:00 UTC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> wake  Participant 2023-08-29 06:00:00 UTC--2023-08-29 23:00:00 UTC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> wake  Participant 2023-08-29 06:00:00 UTC--2023-08-29 23:00:00 UTC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> wake  Participant 2023-08-29 06:00:00 UTC--2023-08-29 23:00:00 UTC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> sleep Participant 2023-08-29 23:00:00 UTC--2023-08-30 06:00:00 UTC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> sleep Participant 2023-08-29 23:00:00 UTC--2023-08-30 06:00:00 UTC</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 2 more variables: Datetime.x &lt;dttm&gt;, Datetime.y &lt;chr&gt;</span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
@@ -204,11 +220,11 @@ remove the interval.</p></dd>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Johannes Zauner, Manuel Spitschan, Steffen Hartmeyer, European Partnership on Metrology.</p>
+  <p>Developed by Johannes Zauner, Manuel Spitschan, Steffen Hartmeyer, European Partnership on Metrology, Wellcome Trust, Reality Labs Research.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

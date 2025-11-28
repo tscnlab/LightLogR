@@ -17,7 +17,7 @@ full list of arguments."><meta property="og:image" content="https://tscnlab.gith
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,15 +27,22 @@ full list of arguments."><meta property="og:image" content="https://tscnlab.gith
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Day.html">The whole game</a></li>
-    <li><a class="dropdown-item" href="../articles/Import.html">Import &amp; cleaning</a></li>
-    <li><a class="dropdown-item" href="../articles/log.html">Log transformation</a></li>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-tutorials" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Tutorials</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-tutorials"><li><h6 class="dropdown-header" data-toc-skip>Get started</h6></li>
+    <li><a class="dropdown-item" href="https://tscnlab.github.io/LightLogR_webinar/" target="_blank">Interactive course</a></li>
+    <li><a class="dropdown-item" href="../articles/Day.html">The whole game</a></li>
+    <li><a class="external-link dropdown-item" href="https://tscnlab.github.io/ZaunerEtAl_JVis_2025/" target="_blank">Visual experience</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>General Workflow</h6></li>
+    <li><a class="dropdown-item" href="../articles/Import.html">Import</a></li>
     <li><a class="dropdown-item" href="../articles/Metrics.html">Metrics</a></li>
-    <li><a class="dropdown-item" href="../articles/photoperiod.html">Photoperiod</a></li>
-    <li><a class="dropdown-item" href="../articles/spectrum.html">Light Spectrum</a></li>
-    <li><a class="dropdown-item" href="../articles/states.html">Durations, States and Clusters</a></li>
     <li><a class="dropdown-item" href="../articles/Visualizations.html">Visualizations</a></li>
+    <li><a class="dropdown-item" href="../articles/states.html">States, Durations, Clusters</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Special topics</h6></li>
+    <li><a class="dropdown-item" href="../articles/photoperiod.html">Photoperiod</a></li>
+    <li><a class="dropdown-item" href="../articles/log.html">Log transformation</a></li>
+    <li><a class="dropdown-item" href="../articles/spectrum.html">Light spectrum</a></li>
   </ul></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-newsletter" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Newsletter</button>
@@ -43,7 +50,16 @@ full list of arguments."><meta property="og:image" content="https://tscnlab.gith
   </ul></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-resources" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Resources</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-resources"><li><a class="dropdown-item" href="../pdf/Online_course_series_2025-26.pdf" target="_blank">Online course series 2025/26</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-resources"><li><h6 class="dropdown-header" data-toc-skip><span class="globe"></span> Interactive online course</h6></li>
+    <li><a class="dropdown-item" href="https://tscnlab.github.io/LightLogR_webinar/" target="_blank">Course website</a></li>
+    <li><a class="dropdown-item" href="../pdf/Online_course_series_2025-26.pdf" target="_blank">Flyer (2025/26)</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip><span class="comment comment-dots"></span> Talks</h6></li>
+    <li><a class="external-link dropdown-item" href="https://www.youtube.com/watch?v=fCHINJolDxQ&amp;list=PLzoZGn0-37Xomt9ujgE_GVpx2htaFzJKf&amp;index=9" target="_blank">Perspectives on personal light exposure (Talk)</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip><span class="file file-lines"></span> Published papers</h6></li>
+    <li><a class="external-link dropdown-item" href="https://joss.theoj.org/papers/10.21105/joss.07601" target="_blank">Package</a></li>
+    <li><a class="external-link dropdown-item" href="https://doi.org/10.1177/07487304251336624" target="_blank">Modelling and distributions</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -114,6 +130,11 @@ a <code>character</code>.</p></li>
 <li><p><code>n_max</code>: maximum number of lines to read. Default is <code>Inf</code>.</p></li>
 <li><p><code>tz</code>: Timezone of the data. <code>"UTC"</code> is the default. Expects a
 <code>character</code>. You can look up the supported timezones with <code><a href="https://rdrr.io/r/base/timezones.html" class="external-link">OlsonNames()</a></code>.</p></li>
+<li><p><code>version</code>: Data formats can change, e.g. with software updates. This
+argument allows switching between known data formats of the same device
+model. Expects a <code>character</code> scalar. The default is <code>"default"</code>, which will
+always use the latest version. To find out which software versions are
+contained, call <code><a href="supported_versions.html">supported_versions()</a></code>.</p></li>
 <li><p><code>Id.colname</code>: Lets you specify a column for the id of a dataset. Expects a
 symbol (Default is <code>Id</code>). This column will be used for grouping
 (<code><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">dplyr::group_by()</a></code>).</p></li>
@@ -135,7 +156,10 @@ If the <code>Id</code> column is already part of the <code>dataset</code> it wil
 column. If the column is not present it will add this column and fill it
 with the filename of the importfile (see param <code>auto.id</code>).</p></li>
 <li><p><code>print_n</code> can be used if you want to see more rows from the observation intervals</p></li>
-<li><p><code>remove_duplicates</code> can be used if identical observations are present within or across multiple files. The default is <code>FALSE</code>. The function keeps only unique observations (=rows) if set to' TRUE'. This is a convenience implementation of <code><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">dplyr::distinct()</a></code>.</p></li>
+<li><p><code>remove_duplicates</code> can be used if identical observations are present
+within or across multiple files. The default is <code>FALSE</code>. The function keeps
+only unique observations (=rows) if set to' TRUE'. This is a convenience
+implementation of <code><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">dplyr::distinct()</a></code>.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="devices">Devices<a class="anchor" aria-label="anchor" href="#devices"></a></h2>
@@ -144,14 +168,16 @@ import light logger data that is then perfectly formatted to add metadata,
 make visualizations and analyses. There are a number of devices supported,
 where import should just work out of the box. To get an overview, you can
 simply call the <code><a href="supported_devices.html">supported_devices()</a></code> dataset. The list will grow
-continuously as the package is maintained.</p>
+continuously as the package is maintained. More than one data formats may
+be available for a given device. Check with <code><a href="supported_versions.html">supported_versions()</a></code> if you
+run into problems with imports, despite a correct device setting.</p>
 <p></p><div class="sourceCode r"><pre><code><span><span class="fu"><a href="../reference/supported_devices.html">supported_devices</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [1] "ActLumus"              "ActTrust"              "Actiwatch_Spectrum"</span></span>
-<span><span class="co">#&gt;  [4] "Actiwatch_Spectrum_de" "Circadian_Eye"         "Clouclip"</span></span>
-<span><span class="co">#&gt;  [7] "DeLux"                 "GENEActiv_GGIR"        "Kronowise"</span></span>
-<span><span class="co">#&gt; [10] "LIMO"                  "LYS"                   "LiDo"</span></span>
-<span><span class="co">#&gt; [13] "LightWatcher"          "MotionWatch8"          "OcuWEAR"</span></span>
-<span><span class="co">#&gt; [16] "Speccy"                "SpectraWear"           "VEET"</span></span>
+<span><span class="co">#&gt;  [1] "ActLumus"           "ActTrust"           "Actiwatch_Spectrum"</span></span>
+<span><span class="co">#&gt;  [4] "Circadian_Eye"      "Clouclip"           "DeLux"</span></span>
+<span><span class="co">#&gt;  [7] "GENEActiv_GGIR"     "Kronowise"          "LIMO"</span></span>
+<span><span class="co">#&gt; [10] "LYS"                "LiDo"               "LightWatcher"</span></span>
+<span><span class="co">#&gt; [13] "MiEye"              "MotionWatch8"       "OcuWEAR"</span></span>
+<span><span class="co">#&gt; [16] "Speccy"             "SpectraWear"        "VEET"</span></span>
 <span><span class="co">#&gt; [19] "nanoLambda"</span></span></code></pre><p></p></div><div class="section">
 <h3 id="actlumus">ActLumus<a class="anchor" aria-label="anchor" href="#actlumus"></a></h3>
 
@@ -161,7 +187,7 @@ continuously as the package is maintained.</p>
 <p>Implemented: Sep 2023</p>
 <p>A sample file is provided with the package, it can be accessed through
 <code>system.file("extdata/205_actlumus_Log_1020_20230904101707532.txt.zip", package = "LightLogR")</code>. It does not need to be unzipped to be imported.
-This sample file is a good example for a regular dataset without gaps</p>
+This sample file is a good example for a regular dataset without gaps.</p>
 </div>
 
 <div class="section">
@@ -172,7 +198,7 @@ This sample file is a good example for a regular dataset without gaps</p>
 <p>Model: LYS Button</p>
 <p>Implemented: Sep 2023</p>
 <p>A sample file is provided with the package, it can be accessed through
-<code>system.file("extdata/sample_data_LYS.csv", package = "LightLogR")</code>. This
+<code>sample.data.irregular</code>. This
 sample file is a good example for an irregular dataset.</p>
 </div>
 
@@ -183,7 +209,6 @@ sample file is a good example for an irregular dataset.</p>
 <p>Manufacturer: Philips Respironics</p>
 <p>Model: Actiwatch Spectrum</p>
 <p>Implemented: Nov 2023 / July 2024</p>
-<p><strong>Important note:</strong> The <code>Actiwatch_Spectrum</code> function is for an international/english formatting. The <code>Actiwatch_Spectrum_de</code> function is for a german formatting, which slightly differs in the datetime format, the column names, and the decimal separator.</p>
 </div>
 
 <div class="section">
@@ -353,6 +378,14 @@ added that translates these status codes. The columns carry the name
 <code>{.col}_status</code>.</p>
 </div>
 
+<div class="section">
+<h3 id="mieye">MiEye<a class="anchor" aria-label="anchor" href="#mieye"></a></h3>
+
+
+<p>Manufacturer: CHI. Circadian Health Innovations</p>
+<p>Implemented: October 2025</p>
+</div>
+
     </div>
     <div class="section level2">
     <h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a></h2>
@@ -368,6 +401,7 @@ added that translates these status codes. The columns carry the name
 such as the intervals between measurements or the start and end dates.</p>
 <p></p><div class="sourceCode r"><pre><code><span><span class="va">filepath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/205_actlumus_Log_1020_20230904101707532.txt.zip"</span>, package <span class="op">=</span> <span class="st">"LightLogR"</span><span class="op">)</span></span>
 <span><span class="va">dataset</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/import_Dataset.html">import_Dataset</a></span><span class="op">(</span><span class="st">"ActLumus"</span>, <span class="va">filepath</span>, auto.plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Multiple files in zip: reading '205_actlumus_Log_1020_20230904101707532.txt'</span></span>
 <span><span class="co">#&gt;</span></span>
 <span><span class="co">#&gt; Successfully read in 61'016 observations across 1 Ids from 1 ActLumus-file(s).</span></span>
 <span><span class="co">#&gt; Timezone set is UTC.</span></span>
@@ -382,6 +416,7 @@ such as the intervals between measurements or the start and end dates.</p>
 <span><span class="co">#&gt; 1 205_actlumus_Log_1020_20230904101707532.txt 10s           61015 100%</span></span></code></pre><p></p></div>
 <p>Import functions can also be called directly:</p>
 <p></p><div class="sourceCode r"><pre><code><span><span class="va">dataset</span> <span class="op">&lt;-</span> <span class="va">import</span><span class="op">$</span><span class="fu">ActLumus</span><span class="op">(</span><span class="va">filepath</span>, auto.plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Multiple files in zip: reading '205_actlumus_Log_1020_20230904101707532.txt'</span></span>
 <span><span class="co">#&gt;</span></span>
 <span><span class="co">#&gt; Successfully read in 61'016 observations across 1 Ids from 1 ActLumus-file(s).</span></span>
 <span><span class="co">#&gt; Timezone set is UTC.</span></span>
@@ -420,11 +455,11 @@ such as the intervals between measurements or the start and end dates.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Johannes Zauner, Manuel Spitschan, Steffen Hartmeyer, European Partnership on Metrology.</p>
+  <p>Developed by Johannes Zauner, Manuel Spitschan, Steffen Hartmeyer, European Partnership on Metrology, Wellcome Trust, Reality Labs Research.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

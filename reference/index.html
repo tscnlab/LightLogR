@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -17,15 +17,22 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Day.html">The whole game</a></li>
-    <li><a class="dropdown-item" href="../articles/Import.html">Import &amp; cleaning</a></li>
-    <li><a class="dropdown-item" href="../articles/log.html">Log transformation</a></li>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-tutorials" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Tutorials</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-tutorials"><li><h6 class="dropdown-header" data-toc-skip>Get started</h6></li>
+    <li><a class="dropdown-item" href="https://tscnlab.github.io/LightLogR_webinar/" target="_blank">Interactive course</a></li>
+    <li><a class="dropdown-item" href="../articles/Day.html">The whole game</a></li>
+    <li><a class="external-link dropdown-item" href="https://tscnlab.github.io/ZaunerEtAl_JVis_2025/" target="_blank">Visual experience</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>General Workflow</h6></li>
+    <li><a class="dropdown-item" href="../articles/Import.html">Import</a></li>
     <li><a class="dropdown-item" href="../articles/Metrics.html">Metrics</a></li>
-    <li><a class="dropdown-item" href="../articles/photoperiod.html">Photoperiod</a></li>
-    <li><a class="dropdown-item" href="../articles/spectrum.html">Light Spectrum</a></li>
-    <li><a class="dropdown-item" href="../articles/states.html">Durations, States and Clusters</a></li>
     <li><a class="dropdown-item" href="../articles/Visualizations.html">Visualizations</a></li>
+    <li><a class="dropdown-item" href="../articles/states.html">States, Durations, Clusters</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Special topics</h6></li>
+    <li><a class="dropdown-item" href="../articles/photoperiod.html">Photoperiod</a></li>
+    <li><a class="dropdown-item" href="../articles/log.html">Log transformation</a></li>
+    <li><a class="dropdown-item" href="../articles/spectrum.html">Light spectrum</a></li>
   </ul></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-newsletter" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Newsletter</button>
@@ -33,7 +40,16 @@
   </ul></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-resources" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Resources</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-resources"><li><a class="dropdown-item" href="../pdf/Online_course_series_2025-26.pdf" target="_blank">Online course series 2025/26</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-resources"><li><h6 class="dropdown-header" data-toc-skip><span class="globe"></span> Interactive online course</h6></li>
+    <li><a class="dropdown-item" href="https://tscnlab.github.io/LightLogR_webinar/" target="_blank">Course website</a></li>
+    <li><a class="dropdown-item" href="../pdf/Online_course_series_2025-26.pdf" target="_blank">Flyer (2025/26)</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip><span class="comment comment-dots"></span> Talks</h6></li>
+    <li><a class="external-link dropdown-item" href="https://www.youtube.com/watch?v=fCHINJolDxQ&amp;list=PLzoZGn0-37Xomt9ujgE_GVpx2htaFzJKf&amp;index=9" target="_blank">Perspectives on personal light exposure (Talk)</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip><span class="file file-lines"></span> Published papers</h6></li>
+    <li><a class="external-link dropdown-item" href="https://joss.theoj.org/papers/10.21105/joss.07601" target="_blank">Package</a></li>
+    <li><a class="external-link dropdown-item" href="https://doi.org/10.1177/07487304251336624" target="_blank">Modelling and distributions</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -54,8 +70,7 @@
 
       <div class="section-desc"><p>Wearable light logger data can be imported from a variety of sources, i.e., exports from measurement devices or online databases. This section also includes functions to import auxiliary data, such as sleep/wake data. The family of import functions works on a variety of device-specific files through <code>import_*()</code>.</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -66,13 +81,15 @@
 
         </dt>
         <dd>Adjust device imports or make your own</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="import_Dataset.html">import_Dataset()</a></code> <code><a href="import_Dataset.html">import</a></code>
 
         </dt>
         <dd>Import a light logger dataset or related data</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="import_Statechanges.html">import_Statechanges()</a></code>
 
@@ -83,8 +100,7 @@
 
       <div class="section-desc"><p>Functions to gain more insight into the data. Functions in this section will not return a version of the input dataset, but rather information based on it.</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -95,91 +111,110 @@
 
         </dt>
         <dd>Counts the Time differences (epochs) per group (in a grouped dataset)</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="dominant_epoch.html">dominant_epoch()</a></code>
 
         </dt>
         <dd>Determine the dominant epoch/interval of a dataset</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="dst_change_summary.html">dst_change_summary()</a></code>
 
         </dt>
         <dd>Get a summary of groups where a daylight saving time change occurs.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="durations.html">durations()</a></code>
 
         </dt>
         <dd>Calculate duration of data in each group</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="photoperiod.html">photoperiod()</a></code> <code><a href="photoperiod.html">extract_photoperiod()</a></code> <code><a href="photoperiod.html">add_photoperiod()</a></code> <code><a href="photoperiod.html">solar_noon()</a></code>
 
         </dt>
         <dd>Calculate photoperiod and boundary times</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="extract_clusters.html">extract_clusters()</a></code> <code><a href="extract_clusters.html">add_clusters()</a></code>
 
         </dt>
         <dd>Find and extract clusters from a dataset</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="extract_states.html">extract_states()</a></code>
 
         </dt>
         <dd>Extract summaries of states</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="extract_metric.html">extract_metric()</a></code>
 
         </dt>
         <dd>Add metrics to extracted sSummary</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="extract_gaps.html">extract_gaps()</a></code>
 
         </dt>
         <dd>Extract gap episodes from the data</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="gapless_Datetimes.html">gapless_Datetimes()</a></code>
 
         </dt>
         <dd>Create a gapless sequence of Datetimes</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="gap_finder.html">gap_finder()</a></code>
 
         </dt>
         <dd>Check for and output gaps in a dataset</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="gap_table.html">gap_table()</a></code>
 
         </dt>
         <dd>Tabular summary of data and gaps in all groups</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="has_gaps.html">has_gaps()</a></code>
 
         </dt>
         <dd>Does a dataset have implicit gaps</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="has_irregulars.html">has_irregulars()</a></code>
 
         </dt>
         <dd>Does a dataset have irregular data</dd>
+
+        <dt>
+
+          <code><a href="summary_table.html">summary_overview()</a></code> <code><a href="summary_table.html">summary_metrics()</a></code> <code><a href="summary_table.html">summary_table()</a></code>
+
+        </dt>
+        <dd>Light exposure summary table helpers</dd>
       </dl></div><div class="section level2">
       <h2 id="process">Process<a class="anchor" aria-label="anchor" href="#process"></a></h2>
 
       <div class="section-desc"><p>Functions to process light logger data, e.g., to validate and clean data, to filter, cut or aggreagate data, or to join datasets. All of these functions will return a version of the input dataset.</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -190,73 +225,85 @@
 
         </dt>
         <dd>Create a Time-of-Day column in the dataset</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="add_Date_col.html">add_Date_col()</a></code>
 
         </dt>
         <dd>Create a Date column in the dataset</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="aggregate_Date.html">aggregate_Date()</a></code>
 
         </dt>
         <dd>Aggregate dates to a single day</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="aggregate_Datetime.html">aggregate_Datetime()</a></code>
 
         </dt>
         <dd>Aggregate Datetime data</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="create_Timedata.html">create_Timedata()</a></code>
 
         </dt>
         <dd>create_Timedata</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="cut_Datetime.html">cut_Datetime()</a></code>
 
         </dt>
         <dd>Create Datetime bins for visualization and calculation</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="dst_change_handler.html">dst_change_handler()</a></code>
 
         </dt>
         <dd>Handle jumps in Daylight Savings (DST) that are missing in the data</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="filter_Datetime.html">filter_Datetime()</a></code> <code><a href="filter_Datetime.html">filter_Date()</a></code>
 
         </dt>
         <dd>Filter Datetimes in a dataset.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="filter_Datetime_multiple.html">filter_Datetime_multiple()</a></code>
 
         </dt>
         <dd>Filter multiple times based on a list of arguments.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="filter_Time.html">filter_Time()</a></code>
 
         </dt>
         <dd>Filter Times in a dataset.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="gap_handler.html">gap_handler()</a></code>
 
         </dt>
         <dd>Fill implicit gaps in a light logger dataset</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="join_datasets.html">join_datasets()</a></code>
 
         </dt>
         <dd>Join similar Datasets</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="remove_partial_data.html">remove_partial_data()</a></code>
 
@@ -267,8 +314,7 @@
 
       <div class="section-desc"><p>Expanding light logger data through auxiliary data and/or reference data allows for a more comprehensive analysis.</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -279,73 +325,85 @@
 
         </dt>
         <dd>Calculate photoperiod and boundary times</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="extract_clusters.html">extract_clusters()</a></code> <code><a href="extract_clusters.html">add_clusters()</a></code>
 
         </dt>
         <dd>Find and extract clusters from a dataset</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="add_states.html">add_states()</a></code>
 
         </dt>
         <dd>Add states to a dataset based on groups and start/end times</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="Brown2reference.html">Brown2reference()</a></code>
 
         </dt>
         <dd>Add Brown et al. (2022) reference illuminance to a dataset</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="Brown_check.html">Brown_check()</a></code>
 
         </dt>
         <dd>Check whether a value is within the recommended illuminance/MEDI levels by Brown et al. (2022)</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="Brown_cut.html">Brown_cut()</a></code>
 
         </dt>
         <dd>Create a state column that cuts light levels into sections by Brown et al. (2022)</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="Brown_rec.html">Brown_rec()</a></code>
 
         </dt>
         <dd>Set the recommended illuminance/MEDI levels by Brown et al. (2022)</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="data2reference.html">data2reference()</a></code>
 
         </dt>
         <dd>Create reference data from other data</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="interval2state.html">interval2state()</a></code>
 
         </dt>
         <dd>Adds a state column to a dataset from interval data</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="number_states.html">number_states()</a></code>
 
         </dt>
         <dd>Number non-consecutive state occurrences</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="sc2interval.html">sc2interval()</a></code>
 
         </dt>
         <dd>Statechange (sc) Timestamps to Intervals</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="sleep_int2Brown.html">sleep_int2Brown()</a></code>
 
         </dt>
         <dd>Recode Sleep/Wake intervals to Brown state intervals</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="spectral_reconstruction.html">spectral_reconstruction()</a></code>
 
@@ -356,8 +414,7 @@
 
       <div class="section-desc"><p>Functions to visualize light logger data, e.g., to plot light exposure or to plot sleep/wake data.</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -368,45 +425,59 @@
 
         </dt>
         <dd>Create a simple Time-of-Day plot of light logger data, faceted by Date</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="gg_days.html">gg_days()</a></code>
 
         </dt>
         <dd>Create a simple datetime plot of light logger data, faceted by group</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="gg_doubleplot.html">gg_doubleplot()</a></code>
 
         </dt>
         <dd>Double Plots</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="gg_gaps.html">gg_gaps()</a></code>
 
         </dt>
         <dd>Visualize gaps and irregular data</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="gg_heatmap.html">gg_heatmap()</a></code>
 
         </dt>
         <dd>Plot a heatmap across days and times of day</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="gg_overview.html">gg_overview()</a></code>
 
         </dt>
         <dd>Plot an overview of dataset intervals with implicit missing data</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="gg_photoperiod.html">gg_photoperiod()</a></code>
 
         </dt>
         <dd>Add photoperiods to gg_day() or gg_days() plots</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="gg_state.html">gg_state()</a></code>
+          <span class="badge lifecycle lifecycle-deprecated">deprecated</span>
+        </dt>
+        <dd>Add states to gg_day() or gg_days() plots</dd>
+
+        <dt>
+
+          <code><a href="gg_states.html">gg_states()</a></code>
 
         </dt>
         <dd>Add states to gg_day() or gg_days() plots</dd>
@@ -415,8 +486,7 @@
 
       <div class="section-desc"><p>Functions to calculate light exposure metrics.</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -427,115 +497,134 @@
 
         </dt>
         <dd>Circadian lighting metrics from Barroso et al. (2014)</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="bright_dark_period.html">bright_dark_period()</a></code>
 
         </dt>
         <dd>Brightest or darkest continuous period</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="centroidLE.html">centroidLE()</a></code>
 
         </dt>
         <dd>Centroid of light exposure</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="disparity_index.html">disparity_index()</a></code>
 
         </dt>
         <dd>Disparity index</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="dose.html">dose()</a></code>
 
         </dt>
         <dd>Calculate the dose (value·hours)</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="duration_above_threshold.html">duration_above_threshold()</a></code>
 
         </dt>
         <dd>Duration above/below threshold or within threshold range</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="exponential_moving_average.html">exponential_moving_average()</a></code>
 
         </dt>
         <dd>Exponential moving average filter (EMA)</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="frequency_crossing_threshold.html">frequency_crossing_threshold()</a></code>
 
         </dt>
         <dd>Frequency of crossing light threshold</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="intradaily_variability.html">intradaily_variability()</a></code>
 
         </dt>
         <dd>Intradaily variability (IV)</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="interdaily_stability.html">interdaily_stability()</a></code>
 
         </dt>
         <dd>Interdaily stability (IS)</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="midpointCE.html">midpointCE()</a></code>
 
         </dt>
         <dd>Midpoint of cumulative light exposure.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="nvRC.html">nvRC()</a></code>
 
         </dt>
         <dd>Non-visual circadian response</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="nvRC_metrics.html">nvRC_circadianDisturbance()</a></code> <code><a href="nvRC_metrics.html">nvRC_circadianBias()</a></code> <code><a href="nvRC_metrics.html">nvRC_relativeAmplitudeError()</a></code>
 
         </dt>
         <dd>Performance metrics for circadian response</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="nvRD.html">nvRD()</a></code>
 
         </dt>
         <dd>Non-visual direct response</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="nvRD_cumulative_response.html">nvRD_cumulative_response()</a></code>
 
         </dt>
         <dd>Cumulative non-visual direct response</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="period_above_threshold.html">period_above_threshold()</a></code>
 
         </dt>
         <dd>Length of longest continuous period above/below threshold</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="pulses_above_threshold.html">pulses_above_threshold()</a></code>
 
         </dt>
         <dd>Pulses above threshold</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="spectral_integration.html">spectral_integration()</a></code>
 
         </dt>
         <dd>Integrate spectral irradiance with optional weighting</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="threshold_for_duration.html">threshold_for_duration()</a></code>
 
         </dt>
         <dd>Find threshold for given duration</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="timing_above_threshold.html">timing_above_threshold()</a></code>
 
@@ -546,8 +635,7 @@
 
       <div class="section-desc"><p>Functions that deal with photoperiod aspects of a dataset</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -558,7 +646,8 @@
 
         </dt>
         <dd>Calculate photoperiod and boundary times</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="gg_photoperiod.html">gg_photoperiod()</a></code>
 
@@ -569,79 +658,117 @@
 
       <div class="section-desc"><p>Helper functions that are used in the other sections.</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
 
       <dl><dt>
 
+          <code><a href="Circular2Time.html">Circular2Time()</a></code>
+
+        </dt>
+        <dd>Convert circular time columns to hms</dd>
+
+        <dt>
+
           <code><a href="Datetime2Time.html">Datetime2Time()</a></code>
 
         </dt>
         <dd>Convert Datetime columns to Time columns</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="Datetime_breaks.html">Datetime_breaks()</a></code>
 
         </dt>
         <dd>Create a (shifted) sequence of Datetimes for axis breaks</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="Datetime_limits.html">Datetime_limits()</a></code>
 
         </dt>
         <dd>Find or set sensible limits for Datetime axis</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="log_zero_inflated.html">log_zero_inflated()</a></code> <code><a href="log_zero_inflated.html">exp_zero_inflated()</a></code>
 
         </dt>
         <dd>Add a defined number to a numeric and log transform it</dd>
-      </dl><dl><dt>
+
+        <dt>
+
+          <code><a href="format_coordinates.html">format_coordinates()</a></code>
+
+        </dt>
+        <dd>Format coordinates as a readable string</dd>
+
+        <dt>
 
           <code><a href="mean_daily.html">mean_daily()</a></code>
 
         </dt>
         <dd>Calculate mean daily metrics from daily summary</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="mean_daily_metric.html">mean_daily_metric()</a></code>
 
         </dt>
         <dd>Calculate mean daily metrics from Time Series</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="normalize_counts.html">normalize_counts()</a></code>
 
         </dt>
         <dd>Normalize counts between sensor outputs</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="photoperiod.html">photoperiod()</a></code> <code><a href="photoperiod.html">extract_photoperiod()</a></code> <code><a href="photoperiod.html">add_photoperiod()</a></code> <code><a href="photoperiod.html">solar_noon()</a></code>
 
         </dt>
         <dd>Calculate photoperiod and boundary times</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="reverse2_trans.html">reverse2_trans()</a></code>
 
         </dt>
         <dd>Create a reverse transformation function specifically for date scales</dd>
-      </dl><dl><dt>
+
+        <dt>
+
+          <code><a href="sample_groups.html">sample_groups()</a></code>
+
+        </dt>
+        <dd>Sample groups from a grouped dataset</dd>
+
+        <dt>
 
           <code><a href="spectral_reconstruction.html">spectral_reconstruction()</a></code>
 
         </dt>
         <dd>Reconstruct spectral irradiance from sensor counts</dd>
-      </dl><dl><dt>
+
+        <dt>
+
+          <code><a href="style_time.html">style_time()</a></code>
+
+        </dt>
+        <dd>Style (date)times as times</dd>
+
+        <dt>
 
           <code><a href="summarize_numeric.html">summarize_numeric()</a></code> <code><a href="summarize_numeric.html">summarise_numeric()</a></code>
 
         </dt>
         <dd>Summarize numeric columns in dataframes to means</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="symlog_trans.html">symlog_trans()</a></code>
 
@@ -652,8 +779,7 @@
 
       <div class="section-desc"><p>Datasets that are used in LightLogR and in examples.</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -664,47 +790,59 @@
 
         </dt>
         <dd>Alphaopic (+ photopic) action spectra</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="gain.ratio.tables.html">gain.ratio.tables</a></code>
 
         </dt>
         <dd>Gain / Gain-ratio tables to normalize counts</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="ll_import_expr.html">ll_import_expr()</a></code>
 
         </dt>
         <dd>Get the import expression for a device</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="sample.data.environment.html">sample.data.environment</a></code>
 
         </dt>
         <dd>Sample of wearable data combined with environmental data</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="sample.data.irregular.html">sample.data.irregular</a></code>
 
         </dt>
         <dd>Sample of highly irregular wearable data</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="supported_devices.html">supported_devices()</a></code>
 
         </dt>
         <dd>Get all the supported devices in LightLogR</dd>
+
+        <dt>
+
+          <code><a href="supported_versions.html">supported_versions()</a></code>
+
+        </dt>
+        <dd>Get all the supported device-formats in LightLogR</dd>
       </dl></div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Johannes Zauner, Manuel Spitschan, Steffen Hartmeyer, European Partnership on Metrology.</p>
+  <p>Developed by Johannes Zauner, Manuel Spitschan, Steffen Hartmeyer, European Partnership on Metrology, Wellcome Trust, Reality Labs Research.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

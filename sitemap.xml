@@ -21,6 +21,7 @@
 <url><loc>https://tscnlab.github.io/LightLogR/reference/Brown_check.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/Brown_cut.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/Brown_rec.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/Circular2Time.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/Datetime2Time.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/Datetime_breaks.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/Datetime_limits.html</loc></url>
@@ -53,6 +54,7 @@
 <url><loc>https://tscnlab.github.io/LightLogR/reference/filter_Datetime.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/filter_Datetime_multiple.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/filter_Time.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/format_coordinates.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/frequency_crossing_threshold.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/gain.ratio.tables.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/gap_finder.html</loc></url>
@@ -67,6 +69,7 @@
 <url><loc>https://tscnlab.github.io/LightLogR/reference/gg_overview.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/gg_photoperiod.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/gg_state.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/gg_states.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/has_gaps.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/has_irregulars.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/import_Dataset.html</loc></url>
@@ -96,12 +99,16 @@
 <url><loc>https://tscnlab.github.io/LightLogR/reference/reverse2_trans.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/sample.data.environment.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/sample.data.irregular.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/sample_groups.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/sc2interval.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/sleep_int2Brown.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/spectral_integration.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/spectral_reconstruction.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/style_time.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/summarize_numeric.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/summary_table.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/supported_devices.html</loc></url>
+<url><loc>https://tscnlab.github.io/LightLogR/reference/supported_versions.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/symlog_trans.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/threshold_for_duration.html</loc></url>
 <url><loc>https://tscnlab.github.io/LightLogR/reference/timing_above_threshold.html</loc></url>
