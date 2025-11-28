@@ -21,7 +21,9 @@ test_that("summary_metrics aggregates daily and participant metrics", {
 
   expect_s3_class(metrics, "tbl_df")
   expect_true(all(metrics$type == "Metrics"))
-  expect_true(all(c("dose", "dur_above250", "IS", "IV") %in% metrics$name))
+  expect_true(all(
+    c("dose", "duration_above_250", "interdaily_stability", "intradaily_variability") %in% metrics$name
+  ))
   expect_false(any(is.na(metrics$mean)))
 })
 
@@ -50,6 +52,24 @@ test_that("summary_table formats rows by name when photoperiod is missing", {
   )
 
   expect_false("dose" %in% selection$durations)
-  expect_true(all(c("dur_above250", "dur_1_10", "dur_below1", "period_above250", "dur_above1000") %in% selection$durations))
+  expect_true(all(
+    c(
+      "duration_above_250", "duration_within_1-10", "duration_below_1",
+      "period_above_250", "duration_above_1000"
+    ) %in% selection$durations
+  ))
+})
+
+test_that("summary_table adds ggplot histograms without gtExtras", {
+  tbl <- summary_table(sample.data.environment, histograms = TRUE)
+
+  histogram_rows <- LightLogR:::format_row_selection(
+    tbl$`_data`,
+    complete_day_label = glue::glue("Days ≥{round((1 - 0.2) * 100)}% complete")
+  )$histograms
+
+  plots <- tbl$`_data`$plot[tbl$`_data`$name %in% histogram_rows]
+
+  expect_true(all(purrr::map_lgl(plots, \(x) inherits(x, "ggplot"))))
 })
 

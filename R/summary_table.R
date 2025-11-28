@@ -245,6 +245,24 @@ summary_table <- function(dataset,
 
   row_selection <- format_row_selection(table_data, complete_day_label)
 
+  if (histograms) {
+    table_data <-
+      table_data |>
+      dplyr::mutate(
+        plot = purrr::map2(
+          name,
+          plot,
+          \(nm, values) {
+            if (!nm %in% row_selection$histograms) {
+              return(NA_character_)
+            }
+
+            histogram_plot(values, nm, color)
+          }
+        )
+      )
+  }
+
   table_summary <-
     table_data |>
     dplyr::group_by(type) |>
@@ -328,7 +346,18 @@ summary_table <- function(dataset,
   if (histograms) {
     table_summary <-
       table_summary |>
-      gtExtras::gt_plt_dist(plot, type = "histogram", fill_color = color, line_color = NA, bw = 0.1) |>
+      gt::text_transform(
+        locations = gt::cells_body(columns = plot, rows = name %in% row_selection$histograms),
+        fn = \(plots) {
+          purrr::map(plots, \(plt) {
+            if (inherits(plt, "ggplot")) {
+              return(gt::ggplot_image(plt, height = gt::px(30), aspect_ratio = 4))
+            }
+
+            ""
+          })
+        }
+      ) |>
       gt::cols_add(footnote = " ") |>
       gt::tab_footnote(
         "Histogram limits are set from 00:00 to 24:00",
@@ -599,6 +628,39 @@ format_row_selection <- function(table_data, complete_day_label) {
     stability = intersect(stability_rows, present_rows),
     histograms = intersect(c(photoperiod_rows, time_rows), present_rows)
   )
+}
+
+histogram_plot <- function(values, name, color) {
+  values <- values |> purrr::flatten_dbl()
+
+  if (length(values) == 0 || all(is.na(values))) {
+    return(ggplot2::ggplot())
+  }
+
+  if (name %in% c(
+    "Photoperiod",
+    "first_timing_above_250", "mean_timing_above_250", "last_timing_above_250",
+    "brightest_10h_midpoint", "darkest_5h_midpoint"
+  )) {
+    values <- values * 24
+    limits <- c(0, 24)
+  } else {
+    limits <- NULL
+  }
+
+  plot_data <- tibble::tibble(value = values)
+
+  histogram <-
+    ggplot2::ggplot(plot_data, ggplot2::aes(x = value)) +
+    ggplot2::geom_histogram(fill = color, color = NA, bins = 20) +
+    ggplot2::theme_void() +
+    ggplot2::theme(plot.margin = grid::unit(rep(0, 4), "pt"))
+
+  if (!is.null(limits)) {
+    histogram <- histogram + ggplot2::coord_cartesian(xlim = limits)
+  }
+
+  histogram
 }
 
 location_string <- function(dataset, coordinates, location, site, Datetime.colname) {
