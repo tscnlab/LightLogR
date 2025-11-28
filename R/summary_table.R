@@ -113,7 +113,7 @@ summary_overview <- function(dataset,
     name = c(
       "Participants",
       "Participant-days",
-      glue::glue("Days \u2265{round((1 - threshold.missing) * 100)}% complete")
+      paste0("Days \u2265", round((1 - threshold.missing) * 100), "% complete")
     ),
     mean = c(n_participants, total_participant_days, n_participant_days),
     SD = NA_real_,
@@ -216,7 +216,11 @@ summary_table <- function(dataset,
                                threshold.missing = threshold.missing,
                                programmatic.use = TRUE)
 
-  complete_day_label <- glue::glue("Days \u2265{round((1 - threshold.missing) * 100)}% complete")
+  complete_day_label <- paste0(
+    "Days \u2265",
+    round((1 - threshold.missing) * 100),
+    "% complete"
+  )
   participant_day_n <- overview$mean[overview$name == complete_day_label]
   participant_n <- overview$mean[overview$name == "Participants"]
 
@@ -329,9 +333,12 @@ summary_table <- function(dataset,
         gt::cells_body(columns = 3)
       )
     ) |>
-    gt::tab_footnote(gt::md(glue::glue(
-      "values show: **mean** \u00B1sd (min - max) and are all based on measurements of {Variable.label}"
-    ))) |>
+    gt::tab_footnote(gt::md(
+      paste0(
+        "values show: **mean** \u00B1sd (min - max) and are all based on measurements of ",
+        Variable.label
+      )
+    )) |>
     gt::tab_footnote(
       gt::md(
         "Values were log 10 transformed prior to averaging, with an offset of 0.1, and backtransformed afterwards"
@@ -339,8 +346,13 @@ summary_table <- function(dataset,
       locations = gt::cells_stub(rows = c(17, 18))
     ) |>
     gt::tab_footnote(
-      glue::glue("Metrics are calculated on a by-participant-day basis (n={participant_day_n}) with the exception of IV and IS,",
-                 "\nwhich are calculated on a by-participant basis (n={participant_n})."),
+      paste0(
+        "Metrics are calculated on a by-participant-day basis (n=",
+        participant_day_n,
+        ") with the exception of IV and IS,\nwhich are calculated on a by-participant basis (n=",
+        participant_n,
+        ")."
+      ),
       locations = gt::cells_row_groups("Metrics")
     ) |>
     gt::cols_move_to_start(symbol) |>
@@ -697,9 +709,9 @@ location_string <- function(dataset, coordinates, location, site, Datetime.colna
   if (is.null(tzone) || tzone == "") {
     combined
   } else if (combined == "") {
-    glue::glue("TZ: {tzone}")
+    paste0("TZ: ", tzone)
   } else {
-    glue::glue("{combined}, TZ: {tzone}")
+    paste0(combined, ", TZ: ", tzone)
   }
 }
 
