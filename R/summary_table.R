@@ -1,36 +1,306 @@
-#this script creates a four-panel overview plot
-# library(gtExtras)
+#' Light exposure summary table helpers
+#'
+#' These helpers create a publication-ready summary table for light logger
+#' datasets. Users can either calculate the metrics, generate overview counts,
+#' or render the complete [gt][gt::gt()] table.
+#'
+#' @name summary_table
+NULL
 
-light_summary_table <- function(
-    dataset, #light exposure dataset
-    coordinates, #latitude, longitude
-    location, #city, location, etc. (string)
-    site, #country code
-    color = "grey", #country color for histograms
-    Variable.colname = MEDI, #column in dataset containing the light value
-    Datetime.colname = Datetime, #column in dataset containing the datetime value
-    Id.colname = Id,  #column in dataset containing the Participant Id
-    threshold.missing = 0.2, #threshold for missing data
-    Variable.label = "melanopic EDI (lx)", #label of the light variable
-    histograms = TRUE #display histograms
-) {
-  
-  #number of participants
-  n_part <-
-    dataset|>
-    group_by({{ Id.colname }}) |>
-    n_groups()
-  
-  # percent missingness/irregular
-  p_missing <-
+#' Calculate overview statistics for light logger datasets
+#' 
+#' @param dataset A data frame containing light logger data.
+#' @param coordinates Optional numeric vector of length two containing latitude
+#'   and longitude (in that order). If supplied, photoperiod information is
+#'   calculated when the dataset does not already contain a `photoperiod`
+#'   column.
+#' @param location Optional location description (e.g. city name).
+#' @param site Optional site description (e.g. country or study site).
+#' @param Variable.colname Column containing light exposure values. Expects a
+#'   symbol; defaults to `MEDI` for compatibility with the built-in datasets.
+#' @param Datetime.colname Column containing the timestamp information. Expects
+#'   a symbol; defaults to `Datetime`.
+#' @param Id.colname Column containing the participant identifier. Expects a
+#'   symbol; defaults to `Id`.
+#' @param threshold.missing Proportion of missing data (per participant-day)
+#'   tolerated before a day is considered incomplete.
+#'
+#' @return A tibble with overview metrics (`type`, `name`, `mean`, `sd`, `min`,
+#'   `max`, `plot`). A `location_string` attribute is attached to the result for
+#'   use in [summary_table()].
+#' 
+#' @rdname summary_table
+#' @export
+summary_overview <- function(dataset,
+                             coordinates = NULL,
+                             location = NULL,
+                             site = NULL,
+                             Variable.colname = MEDI,
+                             Datetime.colname = Datetime,
+                             Id.colname = Id,
+                             threshold.missing = 0.2) {
+
+  stopifnot(
+    "dataset is not a dataframe" = is.data.frame(dataset),
+    "threshold.missing has to be numeric" = is.numeric(threshold.missing)
+  )
+
+  # Participant and day counts ------------------------------------------------
+  daily_data <-
     dataset |>
+    dplyr::group_by({{ Id.colname }}) |>
+    add_Date_col(.Date, group.by = TRUE)
+
+  complete_daily_data <-
+    daily_data |>
+    remove_partial_data({{ Variable.colname }},
+                        threshold.missing = threshold.missing,
+                        handle.gaps = TRUE)
+
+  participant_days <- daily_data |> dplyr::ungroup() |> dplyr::distinct({{ Id.colname }}, .Date)
+  complete_participant_days <- complete_daily_data |> dplyr::ungroup() |> dplyr::distinct({{ Id.colname }}, .Date)
+
+  n_participants <- participant_days |> dplyr::distinct({{ Id.colname }}) |> nrow()
+  n_participant_days <- complete_participant_days |> nrow()
+  total_participant_days <- participant_days |> nrow()
+
+  # Missingness ---------------------------------------------------------------
+  missingness_row <- missingness_summary(dataset, {{ Variable.colname }})
+
+  # Photoperiod ---------------------------------------------------------------
+  photoperiod_row <- photoperiod_summary(daily_data, coordinates, {{ Datetime.colname }}, {{ Id.colname }})
+
+  overview <- tibble::tibble(
+    type = "Overview",
+    name = c(
+      "Participants",
+      "Participant-days",
+      glue::glue("Days ≥{round((1 - threshold.missing) * 100)}% complete")
+    ),
+    mean = c(n_participants, total_participant_days, n_participant_days),
+    sd = NA_real_,
+    min = NA_real_,
+    max = NA_real_,
+    plot = list(NA, NA, NA)
+  ) |>
+    dplyr::bind_rows(missingness_row) |>
+    dplyr::bind_rows(photoperiod_row)
+
+  attr(overview, "location_string") <- location_string(dataset, coordinates, location, site, {{ Datetime.colname }})
+  overview
+}
+
+#' Calculate daily and participant-level light metrics
+#' 
+#' @inheritParams summary_overview
+#' 
+#' @return A tibble with summarized metrics across participant-days and
+#'   participant-level stability measures. Columns are compatible with
+#'   [summary_table()].
+#' 
+#' @rdname summary_table
+#' @export
+summary_metrics <- function(dataset,
+                            Variable.colname = MEDI,
+                            Datetime.colname = Datetime,
+                            Id.colname = Id,
+                            threshold.missing = 0.2) {
+
+  stopifnot(
+    "dataset is not a dataframe" = is.data.frame(dataset)
+  )
+
+  daily_data <-
+    dataset |>
+    dplyr::group_by({{ Id.colname }}) |>
+    add_Date_col(.Date, group.by = TRUE) |>
+    remove_partial_data({{ Variable.colname }},
+                        threshold.missing = threshold.missing,
+                        handle.gaps = TRUE)
+
+  daily_metrics <- summarise_daily_metrics(daily_data, {{ Variable.colname }}, {{ Datetime.colname }})
+  participant_metrics <- summarise_participant_metrics(daily_data, {{ Variable.colname }}, {{ Datetime.colname }}, {{ Id.colname }})
+
+  dplyr::bind_rows(daily_metrics, participant_metrics)
+}
+
+#' Create a GT summary table for light logger datasets
+#' 
+#' @inheritParams summary_overview
+#' @param color Color used for histogram accents in the metrics section.
+#' @param Variable.label Label used in the table footnote to describe the light
+#'   variable.
+#' @param histograms Logical indicating whether histogram spark lines should be
+#'   added for metrics where applicable.
+#' 
+#' @return A [gt][gt::gt()] table.
+#' 
+#' @rdname summary_table
+#' @export
+summary_table <- function(dataset,
+                          coordinates = NULL,
+                          location = NULL,
+                          site = NULL,
+                          color = "grey",
+                          Variable.colname = MEDI,
+                          Datetime.colname = Datetime,
+                          Id.colname = Id,
+                          threshold.missing = 0.2,
+                          Variable.label = "melanopic EDI (lx)",
+                          histograms = TRUE) {
+
+  overview <- summary_overview(dataset,
+                               coordinates = coordinates,
+                               location = location,
+                               site = site,
+                               Variable.colname = {{ Variable.colname }},
+                               Datetime.colname = {{ Datetime.colname }},
+                               Id.colname = {{ Id.colname }},
+                               threshold.missing = threshold.missing)
+
+  complete_day_label <- glue::glue("Days ≥{round((1 - threshold.missing) * 100)}% complete")
+  participant_day_n <- overview$mean[overview$name == complete_day_label]
+  participant_n <- overview$mean[overview$name == "Participants"]
+
+  metrics <- summary_metrics(dataset,
+                             Variable.colname = {{ Variable.colname }},
+                             Datetime.colname = {{ Datetime.colname }},
+                             Id.colname = {{ Id.colname }},
+                             threshold.missing = threshold.missing)
+
+  table_data <-
+    overview |>
+    dplyr::bind_rows(metrics) |>
+    order_table_rows()
+
+  labels_vec <- c(
+    dose = gt::md("D (lx·h)"),
+    dur_above250 = gt::md("TAT<sub>250</sub>"),
+    dur_1_10 = gt::md("TWT<sub>1–10</sub>"),
+    dur_below1 = gt::md("TBT<sub>1</sub>"),
+    period_above250 = gt::md("PAT<sub>250</sub>"),
+    dur_above1000 = gt::md("TAT<sub>1000</sub>"),
+    first_timing_above_250 = gt::md("FLiT<sub>250</sub>"),
+    mean_timing_above_250 = gt::md("MLiT<sub>250</sub>"),
+    last_timing_above_250 = gt::md("LLiT<sub>250</sub>"),
+    brightest_10h_midpoint = gt::md("M10<sub>midpoint</sub>"),
+    darkest_5h_midpoint = gt::md("L5<sub>midpoint</sub>"),
+    brightest_10h_mean = gt::md("M10<sub>mean</sub> (lx)"),
+    darkest_5h_mean = gt::md("L5<sub>mean</sub> (lx)"),
+    IS = gt::md("IS"),
+    IV = gt::md("IV")
+  )
+
+  table_data <-
+    table_data |>
+    dplyr::mutate(symbol = dplyr::recode(name, !!!labels_vec))
+
+  row_selection <- format_row_selection(table_data, complete_day_label)
+
+  table_summary <-
+    table_data |>
+    dplyr::group_by(type) |>
+    gt::gt(rowname_col = "name") |>
+    gt::fmt_integer(rows = name %in% row_selection$counts) |>
+    gt::fmt_percent(rows = name %in% row_selection$percent) |>
+    gt::fmt_duration(
+      rows = name %in% row_selection$photoperiod,
+      input_units = "hours",
+      duration_style = "narrow",
+      max_output_units = 2
+    ) |>
+    gt::fmt_duration(
+      rows = name %in% row_selection$durations,
+      input_units = "seconds",
+      max_output_units = 2
+    ) |>
+    gt::fmt(
+      columns = 3:6,
+      rows = name %in% row_selection$time_of_day,
+      fns = style_time
+    ) |>
+    gt::fmt_number(rows = name %in% row_selection$stability, decimals = 3) |>
+    gt::fmt_number(rows = name %in% row_selection$brightness, decimals = 1) |>
+    gt::fmt_markdown(columns = symbol) |>
+    gt::cols_merge(
+      columns = 3:6,
+      pattern = "<strong>{1}</strong><< ±{2}>> <<({3} - {4})>>"
+    ) |>
+    gt::sub_missing(columns = "symbol", missing_text = "") |>
+    gt::cols_label(mean = "", symbol = "", plot = "") |>
+    gt::fmt(columns = name, fns = \(x) {
+      x |>
+        stringr::str_to_sentence() |>
+        stringr::str_replace_all("_", " ") |>
+        stringr::str_replace("0$", "0 lx") |>
+        stringr::str_replace("1$", "1 lx")
+    }) |>
+    gt::tab_header(
+      "Summary table",
+      subtitle = attr(overview, "location_string")
+    ) |>
+    gt::tab_style(
+      style = gt::cell_text(weight = "bold"),
+      locations = list(
+        gt::cells_column_labels(columns = gt::everything()),
+        gt::cells_row_groups()
+      )
+    ) |>
+    gt::tab_style(
+      style = gt::cell_text(align = "left"),
+      locations = list(
+        gt::cells_body(columns = 3)
+      )
+    ) |>
+    gt::tab_footnote(gt::md(glue::glue(
+      "values show: **mean** ±sd (min - max) and are all based on measurements of {Variable.label}"
+    ))) |>
+    gt::tab_footnote(
+      gt::md(
+        "Values were log 10 transformed prior to averaging, with an offset of 0.1, and backtransformed afterwards"
+      ),
+      locations = gt::cells_stub(rows = c(17, 18))
+    ) |>
+    gt::tab_footnote(
+      glue::glue("Metrics are calculated on a by-participant-day basis (n={participant_day_n}) with the exception of IV and IS,",
+                 "\nwhich are calculated on a by-participant basis (n={participant_n})."),
+      locations = gt::cells_row_groups("Metrics")
+    ) |>
+    gt::cols_move_to_start(symbol) |>
+    gt::tab_options(
+      column_labels.hidden = TRUE
+    ) |>
+    gt::tab_style(
+      style = gt::cell_text(align = "right"),
+      locations = list(
+        gt::cells_body(columns = symbol)
+      )
+    )
+
+  if (histograms) {
+    table_summary <-
+      table_summary |>
+      gtExtras::gt_plt_dist(plot, type = "histogram", fill_color = color, line_color = NA, bw = 0.1) |>
+      gt::cols_add(footnote = " ") |>
+      gt::tab_footnote(
+        "Histogram limits are set from 00:00 to 24:00",
+        locations = gt::cells_body(footnote, rows = name %in% row_selection$histograms),
+        placement = "left"
+      )
+  }
+
+  table_summary
+}
+
+# Helpers --------------------------------------------------------------------
+
+missingness_summary <- function(dataset, Variable.colname) {
+  dataset |>
     gap_handler(full.days = TRUE) |>
     durations({{ Variable.colname }}, show.missing = TRUE) |>
-    ungroup() |>
-    mutate(
-      missingness = missing / total
-    ) |>
-    summarize(
+    dplyr::ungroup() |>
+    dplyr::mutate(missingness = missing / total) |>
+    dplyr::summarize(
       type = "Overview",
       name = "Missing/Irregular",
       missing = sum(missing, na.rm = TRUE),
@@ -38,72 +308,39 @@ light_summary_table <- function(
       min = min(missingness, na.rm = TRUE),
       max = max(missingness, na.rm = TRUE),
       mean = missing / total,
-      sd = NA,
+      sd = NA_real_,
       plot = list(missingness)
     ) |>
-    select(type, name, mean, sd, min, max, plot)
-  
-  # number of participant-days
-  data_part_days <- 
-    dataset |>
-    group_by({{ Id.colname }}) |>
-    add_Date_col(.Date, group.by = TRUE)
-  
-  n_part_days <-
-    data_part_days |>
-    n_groups()
-  
-  # number of participant-days with a coverage of at least 80%
-  
-  data_part_days_suff <-
-    data_part_days |>
-    remove_partial_data({{ Variable.colname }}, 
-                        threshold.missing = threshold.missing, 
-                        handle.gaps = TRUE)
-  
-  n_part_days_suff <-
-    data_part_days_suff |>
-    n_groups()
-  
-  # location and time zone
-  
-  tzone <- dataset |> pull(Datetime) |> tz()
-  
-  coordinate_string <- format_coordinates(coordinates)
-  
-  location_string <-
-    paste0(location, ", ", site, " (", coordinates_string, "), TZ: ", tzone)
-  
-  # average photoperiod
-  
-  photoperiods <- if("photoperiod" %in% names(dataset)) {
-    data_part_days|>
-      ungroup()
-  } else {
-    data_part_days |>
-      add_photoperiod(coordinates)|>
-      ungroup()
+    dplyr::select(type, name, mean, sd, min, max, plot)
+}
+
+photoperiod_summary <- function(daily_data, coordinates, Datetime.colname, Id.colname) {
+  if (!"photoperiod" %in% names(daily_data)) {
+    if (is.null(coordinates)) {
+      return(tibble::tibble())
+    }
+
+    daily_data <- add_photoperiod(daily_data, coordinates, Datetime.colname = {{ Datetime.colname }})
   }
-  
-  photoperiod_data <-
-    photoperiods |> 
-    distinct({{ Id.colname }}, .Date, .keep_all = TRUE) |> 
-    summarize(
+
+  daily_data |>
+    dplyr::ungroup() |>
+    dplyr::distinct({{ Id.colname }}, .Date, .keep_all = TRUE) |>
+    dplyr::summarize(
       type = "Overview",
       name = "Photoperiod",
       mean = mean(photoperiod, na.rm = TRUE),
-      sd = NA,
+      sd = NA_real_,
       min = min(photoperiod, na.rm = TRUE),
       max = max(photoperiod, na.rm = TRUE),
-      plot = list(photoperiod/24)
+      plot = list(photoperiod / 24)
     ) |>
-    mutate(across(c(mean, min, max, sd), as.numeric))
-  
-  # metrics
-  
-  metrics_daily_all <-
-    data_part_days_suff |>
-    summarize(
+    dplyr::mutate(dplyr::across(c(mean, min, max, sd), as.numeric))
+}
+
+summarise_daily_metrics <- function(dataset, Variable.colname, Datetime.colname) {
+  dataset |>
+    dplyr::summarize(
       dose({{ Variable.colname }}, {{ Datetime.colname }}, na.rm = TRUE, as.df = TRUE),
       duration_above_threshold(
         {{ Variable.colname }}, {{ Datetime.colname }},
@@ -165,266 +402,173 @@ light_summary_table <- function(
       ),
       .groups = "drop"
     ) |>
-    select(matches("dose|duration|period|timing|mean|midpoint")) |>
+    dplyr::select(dplyr::matches("dose|duration|period|timing|mean|midpoint")) |>
     Datetime2Time() |>
-    mutate(across(c(brightest_10h_mean, darkest_5h_mean), exp_zero_inflated))
-  
-  metrics_daily <-
-    metrics_daily_all |>
-    mutate(across(everything(), as.numeric)) |>
-    pivot_longer(everything()) |>
-    group_by(name) |>
-    summarize(
+    dplyr::mutate(dplyr::across(c(brightest_10h_mean, darkest_5h_mean), exp_zero_inflated)) |>
+    tidyr::pivot_longer(dplyr::everything()) |>
+    dplyr::group_by(name) |>
+    dplyr::summarize(
       type = "Metrics",
-      across(
+      dplyr::across(
         value,
         list(
           mean = \(x) mean(x, na.rm = TRUE),
-          sd = \(x) sd(x, na.rm = TRUE),
+          sd = \(x) stats::sd(x, na.rm = TRUE),
           min = \(x) min(x, na.rm = TRUE),
           max = \(x) max(x, na.rm = TRUE),
-          plot = \(x) switch(unique(name),
-                             first_timing_above_250 = list(x/(24*60*60)),
-                             mean_timing_above_250 = ,
-                             last_timing_above_250 = ,
-                             brightest_10h_midpoint = ,
-                             darkest_5h_midpoint = ,
-                             list(x/max(x, na.rm = TRUE))
-                             
-          ) 
+          plot = \(x) metric_plot_values(unique(name), x)
         ),
         .names = "{.fn}"
       )
     )
-  
-  metrics_overall <-
-    data_part_days_suff |>
-    group_by({{ Id.colname }}) |>
-    summarize(
+}
+
+summarise_participant_metrics <- function(dataset, Variable.colname, Datetime.colname, Id.colname) {
+  dataset |>
+    dplyr::group_by({{ Id.colname }}) |>
+    dplyr::summarize(
       interdaily_stability({{ Variable.colname }}, {{ Datetime.colname }},
                            na.rm = TRUE, as.df = TRUE),
       intradaily_variability({{ Variable.colname }}, {{ Datetime.colname }},
                              na.rm = TRUE, as.df = TRUE),
       .groups = "drop"
     ) |>
-    select(-{{ Id.colname}} ) |>
-    pivot_longer(everything()) |>
-    group_by(name) |>
-    summarize(
+    dplyr::select(-{{ Id.colname }}) |>
+    tidyr::pivot_longer(dplyr::everything()) |>
+    dplyr::group_by(name) |>
+    dplyr::summarize(
       type = "Metrics",
-      across(
+      dplyr::across(
         value,
         list(
           mean = \(x) mean(x, na.rm = TRUE),
-          sd = \(x) sd(x, na.rm = TRUE),
+          sd = \(x) stats::sd(x, na.rm = TRUE),
           min = \(x) min(x, na.rm = TRUE),
           max = \(x) max(x, na.rm = TRUE),
-          plot =  \(x) switch(unique(name),
-                              intradaily_variability = list(x/max(x, na.rm = TRUE)),
-                              list(x)
-          ) 
+          plot =  \(x) metric_plot_values(unique(name), x)
         ),
         .names = "{.fn}"
       )
     )
-  
-  # combining all the data
-  
-  labels_vec <- c(
-    NA,
-    NA,
-    NA,
-    NA,
-    NA,
-    dose = md("D (lx·h)"),
-    dur_above250 = md("TAT<sub>250</sub>"),
-    dur_1_10 = md("TWT<sub>1–10</sub>"),
-    dur_below1 = md("TBT<sub>1</sub>"),
-    period_above250 = md("PAT<sub>250</sub>"),
-    dur_above1000 = md("TAT<sub>1000</sub>"),
-    first_above250 = md("FLiT<sub>250</sub>"),
-    mean_above250 = md("MLiT<sub>250</sub>"),
-    last_above250 = md("LLiT<sub>250</sub>"),
-    bright10_mid = md("M10<sub>midpoint</sub>"),
-    dark5_mid = md("L5<sub>midpoint</sub>"),
-    bright10_mean = md("M10<sub>mean</sub> (lx)"),
-    dark5_mean = md("L5<sub>mean</sub> (lx)"),
-    IS = md("IS"),
-    IV = md("IV")
-  )
-  
-  table_summary_overall <-
-    tibble(
-      type = "Overview",
-      name = c(
-        "Participants",
-        "Participant-days",
-        glue("Days ≥{round((1-threshold.missing)*100)}% complete")
-      ),
-      mean = c(n_part, n_part_days, n_part_days_suff),
-      sd = NA,
-      min = NA,
-      max = NA,
-      plot = NA
-    ) |>
-    add_row(
-      p_missing
-    ) |>
-    add_row(
-      photoperiod_data
-    )
-  
-  table_summary_data <-
-    table_summary_overall |>
-    add_row(
-      metrics_daily
-    ) |>
-    add_row(
-      metrics_overall
-    ) |>
-    add_column(
-      row = c(
-        1,
-        2,
-        3,
-        4,
-        5,
-        17,
-        15,
-        18,
-        16,
-        6,
-        11,
-        7,
-        9,
-        8,
-        12,
-        14,
-        13,
-        10,
-        19,
-        20
-      )
-    ) |>
-    group_by(type) |>
-    arrange(row) |>
-    select(-row) |>
-    add_column(
-      symbol = labels_vec
-    )
-  
-  table_summary <-
-    table_summary_data |>
-    gt(rowname_col = "name") |>
-    fmt_integer(rows = c(1, 2, 3, 6)) |>
-    fmt_percent(rows = 4) |>
-    fmt_duration(
-      rows = 5,
-      input_units = "hours",
-      duration_style = "narrow",
-      max_output_units = 2
-    ) |>
-    fmt_duration(rows = c(7:11), input_units = "seconds", max_output_units = 2) |>
-    fmt(
-      columns = 3:6,
-      rows = c(12:16),
-      fns = style_time
-    ) |>
-    fmt_number(rows = 19:20, decimals = 3) |>
-    fmt_number(rows = c(17, 18), decimals = 1) |>
-    fmt_markdown(columns = symbol) |>
-    cols_merge(
-      columns = 3:6,
-      pattern = "<strong>{1}</strong><< ±{2}>> <<({3} - {4})>>"
-    ) |>
-    sub_missing(columns = "symbol", missing_text = "") |>
-    cols_label(mean = "", symbol = "", plot = "") |>
-    fmt(columns = name, fns = \(x) {
-      x |>
-        str_to_sentence() |>
-        str_replace_all("_", " ") |>
-        str_replace("0$", "0 lx") |>
-        str_replace("1$", "1 lx")
-    }) |>
-    tab_header(
-      "Summary table",
-      subtitle = location_string
-    ) |>
-    tab_style(
-      style = cell_text(weight = "bold"),
-      locations = list(
-        cells_column_labels(columns = everything()),
-        cells_row_groups()
-      )
-    ) |>
-    tab_style(
-      style = cell_text(align = "left"),
-      locations = list(
-        cells_body(columns = 3)
-      )
-    ) |>
-    tab_footnote(md(glue(
-      "values show: **mean** ±sd (min - max) and are all based on measurements of {Variable.label}" 
-    ))) |>
-    tab_footnote(
-      md(
-        "Values were log 10 transformed prior to averaging, with an offset of 0.1, and backtransformed afterwards"
-      ),
-      locations = cells_stub(rows = c(17, 18))
-    ) |>
-    tab_footnote(
-      glue("Metrics are calculated on a by-participant-day basis (n={table_summary_data[3,3]}) with the exception of IV and IS, which are calculated on a by-participant basis (n={table_summary_data[1,3]})."),
-      locations = cells_row_groups("Metrics")
-    ) |> 
-    cols_move_to_start(symbol) |> 
-    tab_options(
-      column_labels.hidden = TRUE
-    ) |> 
-    tab_style(
-      style = cell_text(align = "right"),
-      locations = list(
-        cells_body(columns = symbol)
-      )
-    )
-  
-  if(histograms) {
-    table_summary <-
-      table_summary |> 
-      gt_plt_dist(plot, type = "histogram", fill_color = color, line_color = NA, bw = 0.1) |>
-      cols_add(footnote = " ") |> 
-      tab_footnote(
-        "Histogram limits are set from 00:00 to 24:00",
-        locations = cells_body(footnote, rows = c(5, 12, 13, 14, 15, 16)),
-        placement = "left"
-      ) 
-    
-  }
-  # text_transform(
-  #   locations = cells_body(columns = plot),
-  #   fn = function(list_of_num_vectors) {
-  #     # list_of_num_vectors is your list-column (each element is a numeric vector)
-  #     map(
-  #       table_summary_data$plot,
-  #       ~ if(all(.x != "", all(!is.na(.x)), !is.null(.x))){
-  #         # browser()
-  #         gt::ggplot_image(
-  #           ggplot(data.frame(x = .x), aes(x)) +
-  #             geom_hline(yintercept = 0, linewidth = 1, color = alpha(color, 0.5)) +
-  #             geom_histogram(binwidth = 0.1, fill = color) +
-  #             coord_cartesian(xlim = c(0,1), expand = FALSE) +
-  #             theme_void() +
-  #             theme(
-  #               plot.margin = margin(2, 2, 2, 2),
-  #               panel.background = element_rect(fill = "white", colour = NA)
-  #             ),
-  #           height = px(30),        # cell height
-  #           aspect_ratio = 3        # width:height
-  #         )
-  #       } else ""
-  #     )
-  #   }
-  # )
-  
-  table_summary
-  
 }
+
+metric_plot_values <- function(name, values) {
+  values <- as.numeric(values)
+
+  if (all(is.na(values))) {
+    return(list(NA_real_))
+  }
+
+  scale_denominator <- max(values, na.rm = TRUE)
+  if (is.infinite(scale_denominator) || is.nan(scale_denominator) || scale_denominator == 0) {
+    scale_denominator <- 1
+  }
+
+  switch(
+    name,
+    first_timing_above_250 = list(values / (24 * 60 * 60)),
+    mean_timing_above_250 = list(values / (24 * 60 * 60)),
+    last_timing_above_250 = list(values / (24 * 60 * 60)),
+    brightest_10h_midpoint = list(values / (24 * 60 * 60)),
+    darkest_5h_midpoint = list(values / (24 * 60 * 60)),
+    intradaily_variability = list(values / scale_denominator),
+    list(values / scale_denominator)
+  )
+}
+
+order_table_rows <- function(table_data) {
+  metric_order <- c(
+    "dose",
+    "dur_above250",
+    "dur_1_10",
+    "dur_below1",
+    "period_above250",
+    "dur_above1000",
+    "first_timing_above_250",
+    "mean_timing_above_250",
+    "last_timing_above_250",
+    "brightest_10h_midpoint",
+    "darkest_5h_midpoint",
+    "brightest_10h_mean",
+    "darkest_5h_mean",
+    "IS",
+    "IV"
+  )
+
+  overview_order <- c(
+    "Participants",
+    "Participant-days",
+    table_data$name[table_data$type == "Overview"] |> setdiff(c("Participants", "Participant-days", "Missing/Irregular", "Photoperiod")) |> sort(),
+    "Missing/Irregular",
+    "Photoperiod"
+  )
+
+  table_data |>
+    dplyr::mutate(
+      type = factor(type, levels = c("Overview", "Metrics")),
+      name = dplyr::case_when(
+        type == "Metrics" ~ factor(name, levels = metric_order),
+        TRUE ~ factor(name, levels = overview_order)
+      )
+    ) |>
+    dplyr::arrange(type, name, .by_group = FALSE) |>
+    dplyr::mutate(name = as.character(name), type = as.character(type))
+}
+
+format_row_selection <- function(table_data, complete_day_label) {
+  count_rows <- c("Participants", "Participant-days", complete_day_label, "dose")
+  percent_rows <- "Missing/Irregular"
+  photoperiod_rows <- "Photoperiod"
+  duration_rows <- c(
+    "dur_above250", "dur_1_10", "dur_below1", "period_above250", "dur_above1000"
+  )
+  time_rows <- c(
+    "first_timing_above_250", "mean_timing_above_250", "last_timing_above_250",
+    "brightest_10h_midpoint", "darkest_5h_midpoint"
+  )
+  brightness_rows <- c("brightest_10h_mean", "darkest_5h_mean")
+  stability_rows <- c("IS", "IV")
+
+  present_rows <- table_data$name
+
+  list(
+    counts = intersect(count_rows, present_rows),
+    percent = intersect(percent_rows, present_rows),
+    photoperiod = intersect(photoperiod_rows, present_rows),
+    durations = intersect(duration_rows, present_rows),
+    time_of_day = intersect(time_rows, present_rows),
+    brightness = intersect(brightness_rows, present_rows),
+    stability = intersect(stability_rows, present_rows),
+    histograms = intersect(c(photoperiod_rows, time_rows), present_rows)
+  )
+}
+
+location_string <- function(dataset, coordinates, location, site, Datetime.colname) {
+  tzone <- dataset |>
+    dplyr::pull({{ Datetime.colname }}) |>
+    lubridate::tz()
+
+  coordinate_string <-
+    if (!is.null(coordinates)) {
+      format_coordinates(coordinates)
+    } else {
+      NULL
+    }
+
+  location_bits <- c(location, site)
+  location_bits <- location_bits[!purrr::map_lgl(location_bits, is.null)]
+  location_bits <- location_bits[location_bits != ""]
+
+  location_part <- paste(location_bits, collapse = ", ")
+  combined <- paste(c(location_part, coordinate_string), collapse = ", ") |>
+    stringr::str_replace_all("^, |, $", "")
+
+  if (is.null(tzone) || tzone == "") {
+    combined
+  } else if (combined == "") {
+    glue::glue("TZ: {tzone}")
+  } else {
+    glue::glue("{combined}, TZ: {tzone}")
+  }
+}
+
