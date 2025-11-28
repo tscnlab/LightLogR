@@ -102,6 +102,9 @@ reference:
     - gap_table
     - has_gaps
     - has_irregulars
+    - summary_metrics
+    - summary_overview
+    - summary_table
 
   - title: Process
     desc: >
@@ -199,18 +202,22 @@ reference:
     desc: >
       Helper functions that are used in the other sections.
     contents:
+    - Circular2Time
     - Datetime2Time
     - Datetime_breaks
     - Datetime_limits
     - exp_zero_inflated
+    - format_coordinates
     - log_zero_inflated
     - mean_daily
     - mean_daily_metric
     - normalize_counts
     - photoperiod
     - reverse2_trans
+    - sample_groups
     - spectral_reconstruction
     - solar_noon
+    - style_time
     - summarize_numeric
     - summarise_numeric
     - symlog_trans
@@ -225,4 +232,4 @@ reference:
     - sample.data.environment
     - sample.data.irregular
     - supported_devices
-    - supported_version
+    - supported_versions

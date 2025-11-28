@@ -36,9 +36,9 @@ NULL
 #' @param handle.gaps Whether gaps in the data should be handled. Sets the
 #'   argument in [remove_partial_data()]. Default is `TRUE`.
 #'
-#' @return A tibble with overview metrics (`type`, `name`, `mean`, `sd`, `min`,
+#' @return A tibble with overview metrics (`type`, `name`, `mean`, `SD`, `min`,
 #'   `max`, `plot`). A `location_string` attribute is attached to the result for
-#'   use in [summary_table()]. If `programmatic.use = FALSE`, `type`, `sd` and
+#'   use in [summary_table()]. If `programmatic.use = FALSE`, `type`, `SD` and
 #'   `plot` are removed.
 #'
 #' @rdname summary_table
@@ -113,10 +113,10 @@ summary_overview <- function(dataset,
     name = c(
       "Participants",
       "Participant-days",
-      glue::glue("Days ≥{round((1 - threshold.missing) * 100)}% complete")
+      glue::glue("Days \u2265{round((1 - threshold.missing) * 100)}% complete")
     ),
     mean = c(n_participants, total_participant_days, n_participant_days),
-    sd = NA_real_,
+    SD = NA_real_,
     min = c(NA_real_, total_participant_days_range[1], n_participant_days_range[1]),
     max = c(NA_real_, total_participant_days_range[2], n_participant_days_range[2]),
     plot = list(NA, NA, NA)
@@ -127,7 +127,7 @@ summary_overview <- function(dataset,
   attr(overview, "location_string") <- location_string(dataset, coordinates, location, site, {{ Datetime.colname }})
   if(programmatic.use){
     overview
-  } else overview |> dplyr::select(-sd, -plot, -type)
+  } else overview |> dplyr::select(-SD, -plot, -type)
 }
 
 #' Calculate daily and participant-level light metrics
@@ -174,7 +174,7 @@ summary_metrics <- function(dataset,
   if(programmatic.use){
     dplyr::bind_rows(daily_metrics, participant_metrics)
   } else dplyr::bind_rows(daily_metrics, participant_metrics) |> 
-          dplyr::select(-sd, -plot, -type)
+          dplyr::select(-SD, -plot, -type)
   
 }
 
@@ -192,9 +192,7 @@ summary_metrics <- function(dataset,
 #' @export
 #' @examples
 #'
-#' \donttest{
-#' sample.data.environment |> summary_table(coordinates = c(47,9))
-#'   }
+#' #sample.data.environment |> summary_table(coordinates = c(47,9))
 
 summary_table <- function(dataset,
                           coordinates = NULL,
@@ -218,7 +216,7 @@ summary_table <- function(dataset,
                                threshold.missing = threshold.missing,
                                programmatic.use = TRUE)
 
-  complete_day_label <- glue::glue("Days ≥{round((1 - threshold.missing) * 100)}% complete")
+  complete_day_label <- glue::glue("Days \u2265{round((1 - threshold.missing) * 100)}% complete")
   participant_day_n <- overview$mean[overview$name == complete_day_label]
   participant_n <- overview$mean[overview$name == "Participants"]
 
@@ -235,9 +233,9 @@ summary_table <- function(dataset,
     order_table_rows()
 
   labels_vec <- c(
-    dose = gt::md("D (lx·h)"),
+    dose = gt::md("D (lx\u00B7h)"),
     duration_above_250 = gt::md("TAT<sub>250</sub>"),
-    `duration_within_1-10` = gt::md("TWT<sub>1–10</sub>"),
+    `duration_within_1-10` = gt::md("TWT<sub>1-10</sub>"),
     duration_below_1 = gt::md("TBT<sub>1</sub>"),
     period_above_250 = gt::md("PAT<sub>250</sub>"),
     duration_above_1000 = gt::md("TAT<sub>1000</sub>"),
@@ -303,7 +301,7 @@ summary_table <- function(dataset,
     gt::fmt_markdown(columns = symbol) |>
     gt::cols_merge(
       columns = 3:6,
-      pattern = "<strong>{1}</strong><< ±{2}>> <<({3} - {4})>>"
+      pattern = "<strong>{1}</strong><< \u00B1{2}>> <<({3} - {4})>>"
     ) |>
     gt::sub_missing(columns = "symbol", missing_text = "") |>
     gt::cols_label(mean = "", symbol = "", plot = "") |>
@@ -332,7 +330,7 @@ summary_table <- function(dataset,
       )
     ) |>
     gt::tab_footnote(gt::md(glue::glue(
-      "values show: **mean** ±sd (min - max) and are all based on measurements of {Variable.label}"
+      "values show: **mean** \u00B1sd (min - max) and are all based on measurements of {Variable.label}"
     ))) |>
     gt::tab_footnote(
       gt::md(
@@ -398,10 +396,10 @@ missingness_summary <- function(dataset, Variable.colname) {
       min = min(missingness, na.rm = TRUE),
       max = max(missingness, na.rm = TRUE),
       mean = missing / total,
-      sd = NA_real_,
+      SD = NA_real_,
       plot = list(missingness)
     ) |>
-    dplyr::select(type, name, mean, sd, min, max, plot) |> 
+    dplyr::select(type, name, mean, SD, min, max, plot) |> 
     dplyr::mutate(dplyr::across(dplyr::where(is.numeric), \(x) round(x, 2)))
 }
 
@@ -428,12 +426,12 @@ photoperiod_summary <- function(daily_data, coordinates, Datetime.colname, Id.co
       type = "Overview",
       name = "Photoperiod",
       mean = mean(photoperiod, na.rm = TRUE),
-      sd = NA_real_,
+      SD = NA_real_,
       min = min(photoperiod, na.rm = TRUE),
       max = max(photoperiod, na.rm = TRUE),
       plot = list(photoperiod / 24)
     ) |>
-    dplyr::mutate(dplyr::across(c(mean, min, max, sd), as.numeric))
+    dplyr::mutate(dplyr::across(c(mean, min, max, SD), as.numeric))
 }
 
 summarise_daily_metrics <- function(dataset, Variable.colname, Datetime.colname) {
@@ -512,7 +510,7 @@ summarise_daily_metrics <- function(dataset, Variable.colname, Datetime.colname)
         value,
         list(
           mean = \(x) mean(x, na.rm = TRUE),
-          sd = \(x) if(dplyr::n() <= 2) NA else stats::sd(x, na.rm = TRUE),
+          SD = \(x) if(dplyr::n() <= 2) NA else stats::sd(x, na.rm = TRUE),
           min = \(x) min(x, na.rm = TRUE),
           max = \(x) max(x, na.rm = TRUE),
           plot = \(x) metric_plot_values(unique(name), x)
@@ -541,7 +539,7 @@ summarise_participant_metrics <- function(dataset, Variable.colname, Datetime.co
         value,
         list(
           mean = \(x) mean(x, na.rm = TRUE),
-          sd = \(x) if(dplyr::n() <= 2) NA else stats::sd(x, na.rm = TRUE),
+          SD = \(x) if(dplyr::n() <= 2) NA else stats::sd(x, na.rm = TRUE),
           min = \(x) min(x, na.rm = TRUE),
           max = \(x) max(x, na.rm = TRUE),
           plot =  \(x) metric_plot_values(unique(name), x)

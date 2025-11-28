@@ -39,13 +39,15 @@ Circular2Time(circular_times)
 selected_times <- 
 sample.data.environment |> 
 sample_groups() |> 
-slice(c(40:43, 51838:51840))
+dplyr::slice(c(40:43, 51838:51840))
 selected_times
 
-#a simple averaging will lead to a nonsensical value, e.g. if this should calculate average sleep timing: ~10:00 in the morning
+#a simple averaging will lead to a nonsensical value, e.g. if this should 
+#calculate average sleep timing: ~10:00 in the morning
 selected_times |> summarize_numeric()
 
-#by converting it to a circular beforehand, averaging works as expected: ~3 minutes after midnight
+#by converting it to a circular beforehand, averaging works as expected: 
+#~3 minutes after midnight
 selected_times |> 
 summarize_numeric(Datetime2Time.circular = TRUE) |> 
 Circular2Time()

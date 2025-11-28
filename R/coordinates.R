@@ -1,7 +1,7 @@
 #' Format coordinates as a readable string
 #'
-#' Create a concise latitude/longitude label (e.g., "48.5°N, 9.1°E") from a
-#' two element coordinate vector.
+#' Create a concise latitude/longitude label (e.g., \eqn{48.5^\circ N, 9.1^\circ
+#' E}) from a two element coordinate vector.
 #'
 #' @param coordinates A numeric vector of length two with latitude as the first
 #'   element and longitude as the second element.
@@ -12,9 +12,9 @@
 #' @export
 #'
 #' @examples
-#' # Coordinates for Tübingen, Germany
+#' # Coordinates for Tuebingen, Germany
 #' format_coordinates(c(48.5216, 9.0576))
-#'
+#' 
 format_coordinates <- function(coordinates, digits = 1) {
 
   stopifnot(
@@ -30,14 +30,14 @@ format_coordinates <- function(coordinates, digits = 1) {
   lat_string <-
     paste0(
       coordinates[1] |> round(digits) |> abs(),
-      "°",
+      "\u00B0",
       dplyr::if_else(coordinates[1] >= 0, "N", "S")
     )
 
   lon_string <-
     paste0(
       coordinates[2] |> round(digits) |> abs(),
-      "°",
+      "\u00B0",
       dplyr::if_else(coordinates[2] >= 0, "E", "W")
     )
 

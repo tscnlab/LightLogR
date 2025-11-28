@@ -82,9 +82,9 @@ variable.}
 added for metrics where applicable.}
 }
 \value{
-A tibble with overview metrics (\code{type}, \code{name}, \code{mean}, \code{sd}, \code{min},
+A tibble with overview metrics (\code{type}, \code{name}, \code{mean}, \code{SD}, \code{min},
 \code{max}, \code{plot}). A \code{location_string} attribute is attached to the result for
-use in \code{\link[=summary_table]{summary_table()}}. If \code{programmatic.use = FALSE}, \code{type}, \code{sd} and
+use in \code{\link[=summary_table]{summary_table()}}. If \code{programmatic.use = FALSE}, \code{type}, \code{SD} and
 \code{plot} are removed.
 
 A tibble with summarized metrics across participant-days and
@@ -115,7 +115,5 @@ filter_Date(length = "3 days") |>
 summary_metrics()
   }
 
-\donttest{
-sample.data.environment |> summary_table(coordinates = c(47,9))
-  }
+#sample.data.environment |> summary_table(coordinates = c(47,9))
 }
