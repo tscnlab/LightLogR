@@ -654,7 +654,12 @@ format_row_selection <- function(table_data, complete_day_label) {
 }
 
 histogram_plot <- function(values, name, color) {
-  values <- values |> purrr::flatten_dbl()
+  # Ensure values can be flattened whether they arrive as a vector or list
+  values <- values |>
+    (
+      \(x) if (is.list(x)) x else list(x)
+    )() |>
+    purrr::flatten_dbl()
 
   if (length(values) == 0 || all(is.na(values))) {
     return(ggplot2::ggplot())
