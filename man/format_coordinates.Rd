@@ -17,10 +17,11 @@ for rounding. Defaults to one decimal place.}
 A character scalar with the formatted coordinate string.
 }
 \description{
-Create a concise latitude/longitude label (e.g., \code{"48.5\u00b0N, 9.1\u00b0E"}) from a
- two element coordinate vector.
+Create a concise latitude/longitude label (e.g., "48.5°N, 9.1°E") from a
+two element coordinate vector.
 }
 \examples{
 # Coordinates for Tübingen, Germany
 format_coordinates(c(48.5216, 9.0576))
+
 }

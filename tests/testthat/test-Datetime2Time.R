@@ -55,8 +55,8 @@ test_that("Datetime2Time handles specified non-existent column with dplyr::any_o
 })
 
 test_that("Datetime2Time throws error for non-data.frame input", {
-  expect_error(Datetime2Time(list(a = 1)), "dataset neets to be a data.frame")
-  expect_error(Datetime2Time(c(1, 2, 3)), "dataset neets to be a data.frame")
+  expect_error(Datetime2Time(list(a = 1)), "dataset needs to be a data.frame")
+  expect_error(Datetime2Time(c(1, 2, 3)), "dataset needs to be a data.frame")
 })
 
 test_that("Datetime2Time converts POSIXct columns to circular time", {

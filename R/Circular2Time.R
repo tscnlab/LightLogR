@@ -14,8 +14,26 @@
 #'
 #' @examples
 #' times <- lubridate::as_datetime("2023-01-01 10:00:00") + lubridate::hours(0:2)
+#' times
 #' circular_times <- Datetime2Time(tibble::tibble(Timestamp = times), circular = TRUE)
+#' circular_times
 #' Circular2Time(circular_times)
+#' 
+#' #if times are not circular, then an averaging can be problematic across midnight:
+#' selected_times <- 
+#' sample.data.environment |> 
+#' sample_groups() |> 
+#' slice(c(40:43, 51838:51840))
+#' selected_times
+#' 
+#' #a simple averaging will lead to a nonsensical value, e.g. if this should calculate average sleep timing: ~10:00 in the morning
+#' selected_times |> summarize_numeric()
+#' 
+#' #by converting it to a circular beforehand, averaging works as expected: ~3 minutes after midnight
+#' selected_times |> 
+#' summarize_numeric(Datetime2Time.circular = TRUE) |> 
+#' Circular2Time()
+
 Circular2Time <- function(dataset,
                           cols = dplyr::where(circular::is.circular),
                           silent = FALSE) {

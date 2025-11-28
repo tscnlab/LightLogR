@@ -132,15 +132,15 @@ summary_overview <- function(dataset,
 
 #' Calculate daily and participant-level light metrics
 #' 
-#' @inheritParams summary_overview
-#' 
 #' @return A tibble with summarized metrics across participant-days and
 #'   participant-level stability measures. Columns are compatible with
 #'   [summary_table()].
 #' 
 #' @rdname summary_table
 #' @export
-#' #' \donttest{
+#' 
+#' @examples
+#' \donttest{
 #' sample.data.environment |> 
 #' filter_Date(length = "3 days") |> 
 #' summary_metrics()
@@ -180,7 +180,6 @@ summary_metrics <- function(dataset,
 
 #' Create a GT summary table for light logger datasets
 #' 
-#' @inheritParams summary_overview
 #' @param color Color used for histogram accents in the metrics section.
 #' @param Variable.label Label used in the table footnote to describe the light
 #'   variable.
@@ -520,7 +519,7 @@ summarise_daily_metrics <- function(dataset, Variable.colname, Datetime.colname)
         ),
         .names = "{.fn}"
       )
-    )
+    ) 
 }
 
 summarise_participant_metrics <- function(dataset, Variable.colname, Datetime.colname, Id.colname) {

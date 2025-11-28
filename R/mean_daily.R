@@ -33,6 +33,8 @@
 #'   into hms(time) columns, which is usually sensible for averaging (default is
 #'   `TRUE`). Calls [Datetime2Time()] with default settings (all POSIXct are
 #'   affected).
+#' @param Datetime2Time.circular Logical of whether Time should be circular.
+#'   Will be ignored if `Datetime2Time = FALSE`. Default is `FALSE`.
 #'
 #' @return A dataframe with three rows representing average weekday, weekend,
 #'   and mean daily values of all numeric columns
@@ -66,7 +68,8 @@ mean_daily <- function(data,
                        prefix = "average_",
                        filter.empty = FALSE,
                        sub.zero = FALSE,
-                       Datetime2Time = TRUE
+                       Datetime2Time = TRUE,
+                       Datetime2Time.circular = FALSE
                        ) {
   
   # Input validation
@@ -81,7 +84,7 @@ mean_daily <- function(data,
   if(Datetime2Time) {
     data <-
       data |>
-      Datetime2Time(silent = TRUE)
+      Datetime2Time(silent = TRUE, circular = Datetime2Time.circular)
   }
   
   Date_quo <- rlang::enexpr(calculate.from.Date)

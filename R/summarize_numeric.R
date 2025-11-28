@@ -28,6 +28,7 @@
 #'   there are zero instances, one could extract the complete set of clusters
 #'   and non-clusters, and then set `is.cluster` in this argument, which would
 #'   then show zero clusters for those days.
+#'  
 #'
 #' @return A dataframe containing the summarized metrics.
 #'
@@ -52,7 +53,8 @@ summarize_numeric <- function(
     complete.groups.on = NULL,
     add.total.duration = TRUE,
     durations.dec = 0,
-    Datetime2Time = TRUE) {
+    Datetime2Time = TRUE,
+    Datetime2Time.circular = FALSE) {
   
   total <- list(NULL)
   if(add.total.duration & "duration" %in% names(data)) {
@@ -67,7 +69,7 @@ summarize_numeric <- function(
   if(Datetime2Time) {
     data <-
       data |>
-      Datetime2Time(silent = TRUE)
+      Datetime2Time(silent = TRUE, circular = Datetime2Time.circular)
   }
   
   if(!is.null(complete_expr)) {

@@ -12,6 +12,8 @@
 
 * `Datetime2Time()` now allows for `circular` time through a sine-conversion of time of day - this is especially useful for averaging of times that (can) cross midnight, such as bed-times.
 
+* `Circular2Time()` is a **new function** that back-converts `circular` time columns to `hms` time. See the package `{circular}` for details on how `circular` columns work.
+
 * `remove_partial_data()` allows to specify a minimum duration of available data. Simply supply a negative duration to the `threshold.missing` argument. E.g., `"-20 hours"` will only keep groups with at least 20 hours of data. While this was easy before in case of groups of known total duration, 24 hours (e.g., simply set the threshold to 4 hours to get to 20 hours of data), it was not possible for groups of unknown total duration.
 
 * `import` functions now support a `version` argument. If there are multiple known formats for one supported device, the version can be changed. As of now, this is the case with the `VEET` device, which changed its format slightly with `v2.1.17`. This argument is also used for the `Actiwatch Spectrum`, which requires several adjustments for a German locale (beyond simple adjustment of locale settings). #65
