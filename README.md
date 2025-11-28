@@ -567,8 +567,8 @@ EURAMET. Neither the European Union nor the granting authority can be
 held responsible for them.
 
 **LightLogR** is further supported throught the [Wellcome
-trust](www.wellcome.org) and the [GLEE project](www.visualdiet.org)
-(Global Light exposure engine).
+trust](https://www.wellcome.org) and the [GLEE
+project](https://www.visualdiet.org) (Global Light exposure engine).
 
 <img src="pkgdown/assets/Wellcome_Trust_logo.svg.png" height="80" />
 <img src="pkgdown/assets/logo_glee-2.png" height="80" />
