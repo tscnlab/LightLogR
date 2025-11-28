@@ -620,8 +620,7 @@ format_row_selection <- function(table_data, complete_day_label) {
     time_of_day = intersect(time_rows, present_rows),
     brightness = intersect(brightness_rows, present_rows),
     stability = intersect(stability_rows, present_rows),
-    histograms = intersect(c(photoperiod_rows, duration_rows, "dose",
-                             brightness_rows, stability_rows, time_rows), 
+    histograms = intersect(c(photoperiod_rows, time_rows), 
                            present_rows)
   )
 }
