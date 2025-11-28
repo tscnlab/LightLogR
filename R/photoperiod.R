@@ -150,7 +150,7 @@ extract_photoperiod <- function(dataset,
   # Initial Checks ----------------------------------------------------------
   
   Datetime.colname.defused <-
-    rlang::enexpr(Datetime.colname) |>  rlang::as_string()
+   colname.defused({{ Datetime.colname }})
 
   stopifnot(
     "dataset is not a dataframe" = is.data.frame(dataset),

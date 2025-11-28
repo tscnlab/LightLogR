@@ -30,6 +30,7 @@ Imports:
     ggplot2,
     ggsci,
     ggtext,
+    glue,
     gt,
     hms,
     lifecycle,
