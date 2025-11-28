@@ -2,11 +2,15 @@
 
 ## General improvements and new functions
 
+* `summary_table()`, `summary_overview()`, and `summary_metrics()` are a great set of **new functions** that give quick summaries across the whole dataset. Care has to be taken with these functions, as they are high level and will not perform well with a higly fragmented/irregular dataset.
+
 * `sample_groups()` is a **new function** that makes it easy to reduce the number of groups either by random sampling, flexible ordering, or based on a condition.
 
 * `style_time()` is a **new convenience function** that takes datetimes, times, or numeric input and outputs a clean time format (e.g., "03:45"). This is primarily used to style times in tables or plots.
 
 * `format_coordinates()` is a **new convenience function** that takes a coordinates and formats them nicely for plots and tables.
+
+* `Datetime2Time()` now allows for `circular` time through a sine-conversion of time of day - this is especially useful for averaging of times that (can) cross midnight, such as bed-times.
 
 * `remove_partial_data()` allows to specify a minimum duration of available data. Simply supply a negative duration to the `threshold.missing` argument. E.g., `"-20 hours"` will only keep groups with at least 20 hours of data. While this was easy before in case of groups of known total duration, 24 hours (e.g., simply set the threshold to 4 hours to get to 20 hours of data), it was not possible for groups of unknown total duration.
 

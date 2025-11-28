@@ -71,11 +71,13 @@ summary_overview <- function(dataset,
     dplyr::group_by({{ Id.colname }}) |>
     add_Date_col(.Date, group.by = TRUE)
 
+  suppressMessages(
   complete_daily_data <-
     daily_data |>
     remove_partial_data({{ Variable.colname }},
                         threshold.missing = threshold.missing,
                         handle.gaps = handle.gaps)
+  )
 
   participant_days <- daily_data |> dplyr::ungroup() |> dplyr::distinct({{ Id.colname }}, .Date)
   complete_participant_days <- complete_daily_data |> dplyr::ungroup() |> dplyr::distinct({{ Id.colname }}, .Date)
@@ -83,11 +85,15 @@ summary_overview <- function(dataset,
   n_participants <- participant_days |> dplyr::distinct({{ Id.colname }}) |> nrow()
   n_participant_days <- complete_participant_days |> nrow()
   n_participant_days_range <- 
+    if(nrow(complete_participant_days) == 0) {
+      c(0,0)
+    } else {
     complete_participant_days |> 
     dplyr::group_by({{ Id.colname }}) |> 
     dplyr::count() |> 
     dplyr::pull(n) |> 
     range()
+    }
   total_participant_days <- participant_days |> nrow()
   total_participant_days_range <- 
     participant_days |> 
@@ -121,7 +127,7 @@ summary_overview <- function(dataset,
   attr(overview, "location_string") <- location_string(dataset, coordinates, location, site, {{ Datetime.colname }})
   if(programmatic.use){
     overview
-  } else overview |> select(-sd, -plot, -type)
+  } else overview |> dplyr::select(-sd, -plot, -type)
 }
 
 #' Calculate daily and participant-level light metrics
@@ -134,10 +140,11 @@ summary_overview <- function(dataset,
 #' 
 #' @rdname summary_table
 #' @export
-#' 
+#' #' \donttest{
 #' sample.data.environment |> 
 #' filter_Date(length = "3 days") |> 
 #' summary_metrics()
+#'   }
 summary_metrics <- function(dataset,
                             Variable.colname = MEDI,
                             Datetime.colname = Datetime,
@@ -149,7 +156,7 @@ summary_metrics <- function(dataset,
   stopifnot(
     "dataset is not a dataframe" = is.data.frame(dataset)
   )
-
+  suppressMessages(
   daily_data <-
     dataset |>
     dplyr::group_by({{ Id.colname }}) |>
@@ -157,7 +164,9 @@ summary_metrics <- function(dataset,
     remove_partial_data({{ Variable.colname }},
                         threshold.missing = threshold.missing,
                         handle.gaps = handle.gaps)
+  )
 
+  if(nrow(daily_data) == 0){stop("No data is left with below `threshold.missing`")} 
   daily_metrics <- summarise_daily_metrics(daily_data, {{ Variable.colname }}, {{ Datetime.colname }})
   participant_metrics <- summarise_participant_metrics(daily_data, {{ Variable.colname }}, {{ Datetime.colname }}, {{ Id.colname }})
   dplyr::bind_rows(daily_metrics, participant_metrics)
@@ -165,7 +174,7 @@ summary_metrics <- function(dataset,
   if(programmatic.use){
     dplyr::bind_rows(daily_metrics, participant_metrics)
   } else dplyr::bind_rows(daily_metrics, participant_metrics) |> 
-          select(-sd, -plot, -type)
+          dplyr::select(-sd, -plot, -type)
   
 }
 
@@ -182,7 +191,12 @@ summary_metrics <- function(dataset,
 #' 
 #' @rdname summary_table
 #' @export
+#' @examples
 #'
+#' \donttest{
+#' sample.data.environment |> summary_table(coordinates = c(47,9))
+#'   }
+
 summary_table <- function(dataset,
                           coordinates = NULL,
                           location = NULL,

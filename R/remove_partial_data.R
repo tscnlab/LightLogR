@@ -212,7 +212,7 @@ remove_partial_data <- function(
   # return a message, if nothing is left
   if(nrow(groups_to_keep) == 0) {
     message("No groups are left after removing insufficient groups")
-    return(data)
+    return(dataset |> dplyr::filter(FALSE))
   }
   
   # Filter the original dataset to keep only the groups not marked for removal

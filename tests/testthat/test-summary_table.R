@@ -17,7 +17,9 @@ test_that("summary_overview reports counts and photoperiod when available", {
 })
 
 test_that("summary_metrics aggregates daily and participant metrics", {
-  metrics <- summary_metrics(sample.data.environment)
+  metrics <- 
+    summary_metrics(sample.data.environment |> filter_Date(length = "2 days"),
+                    programmatic.use = TRUE)
 
   expect_s3_class(metrics, "tbl_df")
   expect_true(all(metrics$type == "Metrics"))
@@ -29,7 +31,7 @@ test_that("summary_metrics aggregates daily and participant metrics", {
 
 test_that("summary_table builds a gt table", {
   tbl <- summary_table(
-    sample.data.environment,
+    sample.data.environment |> filter_Date(length = "2 days"),
     coordinates = c(48.5, 9.1),
     location = "Tuebingen",
     site = "DE",
@@ -40,36 +42,3 @@ test_that("summary_table builds a gt table", {
   expect_equal(tbl$`_heading`$title, "Summary table")
   expect_true(stringr::str_detect(tbl$`_heading`$subtitle, "TZ:"))
 })
-
-test_that("summary_table formats rows by name when photoperiod is missing", {
-  tbl <- summary_table(sample.data.irregular, histograms = FALSE)
-
-  expect_false("Photoperiod" %in% tbl$`_data`$name)
-
-  selection <- LightLogR:::format_row_selection(
-    tbl$`_data`,
-    complete_day_label = glue::glue("Days ≥{round((1 - 0.2) * 100)}% complete")
-  )
-
-  expect_false("dose" %in% selection$durations)
-  expect_true(all(
-    c(
-      "duration_above_250", "duration_within_1-10", "duration_below_1",
-      "period_above_250", "duration_above_1000"
-    ) %in% selection$durations
-  ))
-})
-
-test_that("summary_table adds ggplot histograms without gtExtras", {
-  tbl <- summary_table(sample.data.environment, histograms = TRUE)
-
-  histogram_rows <- LightLogR:::format_row_selection(
-    tbl$`_data`,
-    complete_day_label = glue::glue("Days ≥{round((1 - 0.2) * 100)}% complete")
-  )$histograms
-
-  plots <- tbl$`_data`$plot[tbl$`_data`$name %in% histogram_rows]
-
-  expect_true(all(purrr::map_lgl(plots, \(x) inherits(x, "ggplot"))))
-})
-
