@@ -14,10 +14,60 @@ navbar:
     resources:
       text: Resources
       menu:
-      - text: Online course series 2025/26
+      - text: Interactive online course
+        icon: globe
+      - text: Course website
+        href: https://tscnlab.github.io/LightLogR_webinar/
+        target: "_blank"
+      - text: Flyer (2025/26)
         href: pdf/Online_course_series_2025-26.pdf
         target: "_blank"
-
+      - text: ---
+      - text: Talks
+        icon: comment-dots
+      - text: Perspectives on personal light exposure (Talk)
+        href: https://www.youtube.com/watch?v=fCHINJolDxQ&list=PLzoZGn0-37Xomt9ujgE_GVpx2htaFzJKf&index=9
+        target: "_blank"
+      - text: ---
+      - text: Published papers
+        icon: file-lines
+      - text: Package
+        href: https://joss.theoj.org/papers/10.21105/joss.07601
+        target: "_blank"
+      - text: Modelling and distributions
+        href: https://doi.org/10.1177/07487304251336624
+        target: "_blank"
+    articles:
+      text: Tutorials
+      menu:
+        - text: 'Get started'
+        - text: Interactive course
+          href: https://tscnlab.github.io/LightLogR_webinar/
+          target: "_blank"
+        - text: The whole game
+          href: articles/Day.html
+        - text: Visual experience
+          href: https://tscnlab.github.io/ZaunerEtAl_JVis_2025/
+          target: "_blank"
+        - text: '---'
+        - text: 'General Workflow'
+        - text: Import
+          href: articles/Import.html
+        - text: Metrics
+          href: articles/Metrics.html
+        - text: Visualizations
+          href: articles/Visualizations.html
+        - text: States, Durations, Clusters
+          href: articles/states.html
+        - text: '---'
+        - text: 'Special topics'
+        - text: Photoperiod
+          href: articles/photoperiod.html
+        - text: Log transformation
+          href: articles/log.html
+        - text: Light spectrum
+          href: articles/spectrum.html
+        
 reference:
   - title: Import
     desc: >
@@ -52,6 +102,9 @@ reference:
     - gap_table
     - has_gaps
     - has_irregulars
+    - summary_metrics
+    - summary_overview
+    - summary_table
 
   - title: Process
     desc: >
@@ -106,6 +159,7 @@ reference:
     - gg_overview
     - gg_photoperiod
     - gg_state
+    - gg_states
 
   - title: Metrics
     desc: >
@@ -148,18 +202,22 @@ reference:
     desc: >
       Helper functions that are used in the other sections.
     contents:
+    - Circular2Time
     - Datetime2Time
     - Datetime_breaks
     - Datetime_limits
     - exp_zero_inflated
+    - format_coordinates
     - log_zero_inflated
     - mean_daily
     - mean_daily_metric
     - normalize_counts
     - photoperiod
     - reverse2_trans
+    - sample_groups
     - spectral_reconstruction
     - solar_noon
+    - style_time
     - summarize_numeric
     - summarise_numeric
     - symlog_trans
@@ -174,3 +232,4 @@ reference:
     - sample.data.environment
     - sample.data.irregular
     - supported_devices
+    - supported_versions

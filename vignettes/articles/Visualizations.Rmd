@@ -314,9 +314,9 @@ sample.data.environment |>
 
 More information on dealing with photoperiods can be found in the article [Photoperiod](https://tscnlab.github.io/LightLogR/articles/photoperiod.html).
 
-# gg_state()
+# gg_states()
 
-`gg_state()` is another great add on plotting function that works similarly to `gg_photoperiod()` in that it is called on top of an existing plot. Let us start by filtering the larger dataset down to that participant.
+`gg_states()` is another great add on plotting function that works similarly to `gg_photoperiod()` in that it is called on top of an existing plot. Let us start by filtering the larger dataset down to that participant.
 
 ## Preparation
 
@@ -362,7 +362,7 @@ data_205 <-
 Adding the sleep-wake information to a base plot.
 
 ```{r, fig.width = 9}
-data_205 |> gg_days() |> gg_state(State, aes_fill = State)
+data_205 |> gg_days() |> gg_states(State, aes_fill = State)
 ```
 
 We can also only highlight sleep phases, either by setting `wake` instances to `NA`, or, by converting it to a logical column. Notice that a conditional fill is no longer necessary.
@@ -371,41 +371,41 @@ We can also only highlight sleep phases, either by setting `wake` instances to `
 data_205 |> 
   mutate(State = ifelse(State == "sleep", TRUE, FALSE)) |> 
   gg_days() |> 
-  gg_state(State)
+  gg_states(State)
 ```
 
 ## With gg_day()
 
-`gg_state()` automatically detects whether it is called from `gg_day()` or `gg_days()`, so it just works out of the box.
+`gg_states()` automatically detects whether it is called from `gg_day()` or `gg_days()`, so it just works out of the box.
 
 ```{r, fig.height = 8}
 data_205 |> 
   gg_day(geom = "line") |> 
-  gg_state(State.Brown, aes_fill = State.Brown) +
+  gg_states(State.Brown, aes_fill = State.Brown) +
   labs(fill = "Brown states")
 ```
 
-We can even go a step beyond, and show at which times the participant complied with these recommendations. We will employ the helper function `Brown2reference()` that creates additional columns, including one that tests whether a light exposure level is within the required range (`Reference.check`). When we select this column for `gg_state()`, we can color by the `State.Brown` same as above, but get the selection of when this recommendation was actually met. 
+We can even go a step beyond, and show at which times the participant complied with these recommendations. We will employ the helper function `Brown2reference()` that creates additional columns, including one that tests whether a light exposure level is within the required range (`Reference.check`). When we select this column for `gg_states()`, we can color by the `State.Brown` same as above, but get the selection of when this recommendation was actually met. 
 
 ```{r, fig.height = 8}
 data_205 |> 
   Brown2reference() |>
   group_by(State.Brown, .add = TRUE) |> 
   gg_day(geom = "line") |> 
-  gg_state(Reference.check, aes_fill = State.Brown) +
+  gg_states(Reference.check, aes_fill = State.Brown) +
   labs(fill = "Brown states")
   
 ```
 
 ## With gg_doubleplot()
  
-`gg_state()` should mostly work fine with `gg_doubleplot()` out of the gate
+`gg_states()` should mostly work fine with `gg_doubleplot()` out of the gate
 
 ```{r, fig.height = 8}
 data_205 |> 
   mutate(State = ifelse(State == "sleep", TRUE, FALSE)) |> 
   gg_doubleplot() |> 
-  gg_state(State)
+  gg_states(State)
 ```
 
 ## Combination with other add-on functionality
@@ -416,7 +416,7 @@ State plotting can be combined with other add-on plotting functions, like other 
 data_205 |> 
   mutate(State = ifelse(State == "sleep", TRUE, FALSE)) |> 
   gg_doubleplot() |> 
-  gg_state(State, aes_fil = State, aes_col =State, alpha = 0.1) |> 
+  gg_states(State, aes_fil = State, aes_col =State, alpha = 0.1) |> 
   gg_photoperiod(c(48.5,9)) +
   labs(colour ="Sleep", fill = "Sleep")
 ```
@@ -430,7 +430,7 @@ data_205 |>
   mutate(State = ifelse(State == "sleep", TRUE, FALSE)) |> 
   add_photoperiod(c(48.5,9)) |> 
   gg_doubleplot(aes_fill = photoperiod.state, group = consecutive_id(photoperiod.state)) |> 
-  gg_state(State) +
+  gg_states(State) +
   labs(fill = "Photoperiod")
 ```
 

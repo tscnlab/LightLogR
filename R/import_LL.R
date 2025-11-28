@@ -25,6 +25,11 @@
 #' * `n_max`: maximum number of lines to read. Default is `Inf`.
 #' * `tz`: Timezone of the data. `"UTC"` is the default. Expects a
 #'   `character`. You can look up the supported timezones with [OlsonNames()].
+#' * `version`: Data formats can change, e.g. with software updates. This 
+#'    argument allows switching between known data formats of the same device 
+#'    model. Expects a `character` scalar. The default is `"default"`, which will
+#'    always use the latest version. To find out which software versions are
+#'    contained, call [supported_versions()].
 #' * `Id.colname`: Lets you specify a column for the id of a dataset. Expects a
 #'   symbol (Default is `Id`). This column will be used for grouping
 #'   ([dplyr::group_by()]).
@@ -46,7 +51,10 @@
 #'   column. If the column is not present it will add this column and fill it
 #'   with the filename of the importfile (see param `auto.id`).
 #' * `print_n` can be used if you want to see more rows from the observation intervals
-#' * `remove_duplicates` can be used if identical observations are present within or across multiple files. The default is `FALSE`. The function keeps only unique observations (=rows) if set to' TRUE'. This is a convenience implementation of [dplyr::distinct()].
+#' * `remove_duplicates` can be used if identical observations are present 
+#'   within or across multiple files. The default is `FALSE`. The function keeps 
+#'   only unique observations (=rows) if set to' TRUE'. This is a convenience 
+#'   implementation of [dplyr::distinct()].
 #'
 #' @param ... Parameters that get handed down to the specific import functions
 #' @param device From what device do you want to import? For a few devices,
@@ -62,7 +70,9 @@
 #'   make visualizations and analyses. There are a number of devices supported,
 #'   where import should just work out of the box. To get an overview, you can
 #'   simply call the `supported_devices()` dataset. The list will grow
-#'   continuously as the package is maintained.
+#'   continuously as the package is maintained. More than one data formats may 
+#'   be available for a given device. Check with `supported_versions()` if you
+#'   run into problems with imports, despite a correct device setting.
 #' ```{r}
 #' supported_devices()
 #' ```
@@ -78,7 +88,7 @@
 #'   A sample file is provided with the package, it can be accessed through
 #'   `system.file("extdata/205_actlumus_Log_1020_20230904101707532.txt.zip",
 #'   package = "LightLogR")`. It does not need to be unzipped to be imported.
-#'   This sample file is a good example for a regular dataset without gaps
+#'   This sample file is a good example for a regular dataset without gaps.
 #'
 #'   ## LYS
 #'
@@ -89,7 +99,7 @@
 #'   Implemented: Sep 2023
 #'
 #'   A sample file is provided with the package, it can be accessed through
-#'   `system.file("extdata/sample_data_LYS.csv", package = "LightLogR")`. This
+#'   `sample.data.irregular`. This
 #'   sample file is a good example for an irregular dataset.
 #'
 #'   ## Actiwatch_Spectrum & Actiwatch_Spectrum_de
@@ -99,9 +109,7 @@
 #'   Model: Actiwatch Spectrum
 #'
 #'   Implemented: Nov 2023 / July 2024
-#'
-#'   **Important note:** The `Actiwatch_Spectrum` function is for an international/english formatting. The `Actiwatch_Spectrum_de` function is for a german formatting, which slightly differs in the datetime format, the column names, and the decimal separator.
-#'
+#'   
 #'   ## ActTrust
 #'
 #'   Manufacturer: Condor Instruments
@@ -256,6 +264,12 @@
 #'   added that translates these status codes. The columns carry the name
 #'   `{.col}_status`.
 #'
+#'   ## MiEye
+#'
+#'   Manufacturer: CHI. Circadian Health Innovations
+#'
+#'   Implemented: October 2025
+#'   
 #' @section Examples:
 #'
 #'   ## Imports made easy
@@ -311,7 +325,8 @@ imports <- function(device,
     rlang::exprs(
       filename =, 
       tz = "UTC",
-      path = NULL, 
+      path = NULL,
+      version = "default",
       n_max = Inf,
       not.before = "2001-01-01",
       dst_adjustment = FALSE,
@@ -341,7 +356,8 @@ imports <- function(device,
         "tz needs to be a valid time zone, see `OlsonNames()`" = tz %in% OlsonNames(),
         "auto.id needs to be a string" = is.character(auto.id),
         "dst_adjustment needs to be a logical" = is.logical(dst_adjustment),
-        "n_max needs to be a positive numeric" = is.numeric(n_max)
+        "n_max needs to be a positive numeric" = is.numeric(n_max),
+        "version needs to be a character" = is.character(version)
       )
       #import the file
       data <- rlang::eval_tidy(!!import.expr)
@@ -400,9 +416,18 @@ imports <- function(device,
              which(table(data$Id) < 2) %>% names()
         )
       }
-      
+      # browser()
       #if there are duplicate rows, remove them and print an info message
-      duplicates <- suppressMessages(janitor::get_dupes(data, -file.name) %>% nrow())
+      var_names <- names(data) |> setdiff("file.name")
+      duplicate.table <- 
+        data |>  
+        dplyr::add_count(dplyr::pick(dplyr::all_of(var_names)), name = "dupes") |> 
+        dplyr::filter(dupes > 1) |> 
+        dplyr::arrange(dplyr::desc(dupes))
+      duplicates <- 
+        duplicate.table |> 
+        nrow()
+      
       orig_rows <- data %>% nrow()
       
       if(duplicates > 0 & remove_duplicates) {
@@ -412,9 +437,9 @@ imports <- function(device,
       
       #if there are untreated duplicate rows, give a warning
       if(duplicates > 0 & !remove_duplicates) {
-        messages <- paste0(format(duplicates, big.mark = "'"), " rows in your dataset(s) are identical to at least one other row. This causes problems during analysis. Please set `remove_duplicates = TRUE` during import. Import will be stopped now and a dataframe with the duplicate rows returned \nIf you want to find out which entries are duplicates. Use `{replace_with_data_object} %>% janitor::get_dupes(-file.name) on your imported dataset.\n")
+        messages <- paste0(format(duplicates, big.mark = "'"), " rows in your dataset(s) are identical to at least one other row. This causes problems during analysis. Please set `remove_duplicates = TRUE` during import. Import will be stopped now and a dataframe with the duplicate rows returned.\n")
         warning(messages)
-        return(janitor::get_dupes(data, -file.name))
+        return(duplicate.table)
       }
       
       #if dst_adjustment is TRUE, adjust the datetime column
@@ -484,9 +509,9 @@ import <- purrr::imap(import_expr, \(x, idx) imports(idx,x))
 #' #the new one is identical to the old one in terms of the function body
 #' identical(body(import$ActLumus), body(new_import$ActLumus))
 #'
-#' #change the import expression for the LYS device to add a message at the top
+#' #change the import expression for the ActLumus device to add a message at the top
 #' new_import_expr <- ll_import_expr()
-#' new_import_expr$ActLumus[[4]] <-
+#' new_import_expr$ActLumus[[6]] <-
 #' rlang::expr({ cat("**This is a new import function**\n")
 #' data
 #' })

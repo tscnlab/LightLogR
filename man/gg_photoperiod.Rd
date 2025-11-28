@@ -7,22 +7,30 @@
 gg_photoperiod(
   ggplot_obj,
   coordinates = NULL,
+  ymin = -Inf,
+  ymax = Inf,
   alpha = 0.2,
   solarDep = 6,
   on.top = FALSE,
+  Datetime.colname = Datetime,
+  by.group = c(TRUE, FALSE),
   ...
 )
 }
 \arguments{
 \item{ggplot_obj}{A \code{ggplot} object generated with \code{\link[=gg_day]{gg_day()}} or \code{\link[=gg_days]{gg_days()}}
-(or \code{\link[=gg_doubleplot]{gg_doubleplot()}}. The dataset used to create these \strong{must} have a
-\code{Datetime} column.}
+(or \code{\link[=gg_doubleplot]{gg_doubleplot()}}.}
 
 \item{coordinates}{A two element numeric vector representing the latitude and
 longitude of the location. If \code{NULL}, the default, the function will look
 for the \code{dawn} and \code{dusk} columns in the dataset. If those are not present,
 (and in the \code{POSIXct} format), the function will stop with an error.
 Further, if \code{NULL}, the \code{solarDep} argument will be ignored.}
+
+\item{ymin, ymax}{customize the height of the photoperiod rectangle. By
+default it will cover the whole vertical range (-Inf, Inf), but can be set
+to any value. If it is important to set the height conditionally, using
+\code{\link[=gg_states]{gg_states()}} is recommended.}
 
 \item{alpha}{A numerical value between 0 and 1 representing the transparency
 of the photoperiods. Default is 0.2.}
@@ -38,6 +46,17 @@ columns will always be named \code{dawn} and \code{dusk}, regardless of the
 top of the existing plot. If \code{FALSE}, the photoperiods will be plotted
 underneath the existing plot. Default is \code{FALSE}.}
 
+\item{Datetime.colname}{Column name in the underlying dataset that contains
+the datetime. Defaults to \code{Datetime}. Is used to calculate photoperiod (if
+missing), and for grouping (only \code{POSIXct} axes).}
+
+\item{by.group}{Logical that indicates whether the photoperiod to display is
+calculated within the groups of the dataset. By default this is\code{TRUE} for a
+\code{POSIXct} axis (\code{\link[=gg_days]{gg_days()}}) and \code{FALSE} for a \code{hms} axis (\code{\link[=gg_day]{gg_day()}}). If
+provided as a length-2 vector, the first logical will be used for \code{POSIXct}
+and the second for \code{hms}. If a scalar is provided, it will be used for both
+conditions.}
+
 \item{...}{Additional arguments given to the \code{\link[ggplot2:geom_tile]{ggplot2::geom_rect()}} used to
 construct the photoperiod shading. Can be used to change the fill color or
 other aesthetic properties.}
@@ -49,8 +68,7 @@ a modified \code{ggplot} object with the photoperiods added.
 \code{\link[=gg_photoperiod]{gg_photoperiod()}} is a helper function to add photoperiod information to
 plots generated with \code{\link[=gg_day]{gg_day()}} or \code{\link[=gg_days]{gg_days()}}. The function can either draw
 on the \code{dawn} and \code{dusk} columns of the dataset or use the \code{coordinates} and
-\code{solarDep} arguments to calculate the photoperiods. The time series must be
-based on a column called \code{Datetime}.
+\code{solarDep} arguments to calculate the photoperiods.
 }
 \details{
 If used in combination with \code{\link[=gg_doubleplot]{gg_doubleplot()}}, with that function in the

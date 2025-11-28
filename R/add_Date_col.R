@@ -7,7 +7,10 @@
 #'   overwrite existing columns of identical name.
 #' @param as.wday Logical of whether the added column should calculate day of
 #'   the week instead of date. If `TRUE` will create a factor with weekday
-#'   abbreviations, where the week starts with `Mon`.
+#'   abbreviations, where the week starts with `Mon`. Will be ignored if
+#'   `as.count = TRUE`.
+#' @param as.count Logical of whether the added column should give a day
+#'   count from the starting day of the group.
 #' @param group.by Logical whether the output should be (additionally) grouped
 #'   by the new column
 #'
@@ -27,6 +30,7 @@ add_Date_col <- function(dataset,
                          Date.colname = Date,
                          group.by = FALSE,
                          as.wday = FALSE,
+                         as.count = FALSE,
                          Datetime.colname = Datetime) {
   
   # Initial Checks ----------------------------------------------------------
@@ -40,16 +44,20 @@ add_Date_col <- function(dataset,
       lubridate::is.POSIXct(dataset[[Datetime.colname.defused]]),
     "as.wday has to be a logical" = 
       is.logical(as.wday),
-    "group.by has to be a logical" = is.logical(group.by)
+    "group.by has to be a logical" = is.logical(group.by),
+    "as.count has to be a logical" = is.logical(as.count)
   )
   
+  if(as.wday & as.count){ warning("as.wday will be ignored because as.count = TRUE")}
+  
   # Manipulation ----------------------------------------------------------
-  if(!as.wday)
+  if(!as.wday | as.count) {
     dataset <-
       dataset |> 
        dplyr::mutate(
          {{ Date.colname }} := {{ Datetime.colname }} %>% lubridate::as_date()
-    )  else{
+    ) 
+    } else{
       dataset <-
         dataset |> 
         dplyr::mutate(
@@ -57,6 +65,14 @@ add_Date_col <- function(dataset,
             lubridate::wday(label = TRUE, week_start = 1)
         )
     }
+  
+  if(as.count) {
+    dataset <-
+      dataset |> 
+      dplyr::mutate(
+        {{ Date.colname }} := 
+          {{ Date.colname }} - min({{ Date.colname }}))
+  }
     
   if(group.by){
     dataset <- 

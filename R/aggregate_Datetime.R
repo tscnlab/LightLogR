@@ -19,17 +19,22 @@
 #'
 #' @inheritParams cut_Datetime
 #' @param
-#'   numeric.handler,character.handler,logical.handler,factor.handler,datetime.handler,duration.handler,time.handler
-#'   functions that handle the respective data types. The default handlers
-#'   calculate the `mean` or `median` for `numeric`, `POSIXct`, `duration`, and
-#'   `hms`, and the `mode` for `character`, `factor` and `logical` types.
+#' numeric.handler,character.handler,logical.handler,factor.handler,datetime.handler,duration.handler,time.handler
+#' functions that handle the respective data types. The default handlers
+#' calculate the `mean` or `median` for `numeric`, `POSIXct`, `duration`, and
+#' `hms`, and the `mode` for `character`, `factor` and `logical` types.
 #' @param unit Unit of binning. See [lubridate::round_date()] for examples. The
 #'   default is `"dominant.epoch"`, which means everything will be aggregated to
 #'   the most common interval. This is especially useful for slightly irregular
 #'   data, but can be computationally expensive. `"none"` will not aggregate the
 #'   data at all.
 #' @param ... arguments given over to [dplyr::summarize()] to handle columns
-#'   that do not fall into one of the categories above.
+#'   that do not fall into one of the categories above. Be careful with partial
+#'   matching of argument names. E.g., creating a new column `n`, without having
+#'   changed the default for `numeric.handler` will match `n` to that argument.
+#'   You can avoid this be either explicitly supplying the `numeric.handler`
+#'   argument (using the default again), or you change the variable name, e.g,
+#'   to `n.`, which avoids the partial matching.
 #'
 #' @return A `tibble` with aggregated `Datetime` data. Usually the number of
 #'   rows will be smaller than the input `dataset`. If the handler arguments

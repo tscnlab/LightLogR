@@ -13,7 +13,8 @@ summarize_numeric(
   complete.groups.on = NULL,
   add.total.duration = TRUE,
   durations.dec = 0,
-  Datetime2Time = TRUE
+  Datetime2Time = TRUE,
+  Datetime2Time.circular = FALSE
 )
 
 summarise_numeric(
@@ -24,7 +25,8 @@ summarise_numeric(
   complete.groups.on = NULL,
   add.total.duration = TRUE,
   durations.dec = 0,
-  Datetime2Time = TRUE
+  Datetime2Time = TRUE,
+  Datetime2Time.circular = FALSE
 )
 }
 \arguments{
@@ -58,6 +60,9 @@ of durations and times. Defaults to 0.}
 into hms(time) columns, which is usually sensible for averaging (default is
 \code{TRUE}). Calls \code{\link[=Datetime2Time]{Datetime2Time()}} with default settings (all POSIXct are
 affected).}
+
+\item{Datetime2Time.circular}{Logical of whether Time should be circular.
+Will be ignored if \code{Datetime2Time = FALSE}. Default is \code{FALSE}.}
 }
 \value{
 A dataframe containing the summarized metrics.

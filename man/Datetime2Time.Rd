@@ -7,6 +7,7 @@
 Datetime2Time(
   dataset,
   cols = dplyr::where(lubridate::is.POSIXct),
+  circular = FALSE,
   silent = FALSE
 )
 }
@@ -16,6 +17,11 @@ Datetime2Time(
 \item{cols}{The column names to convert. Expects a \code{symbol}. The default will
 convert all POSIXct columns. If uncertain whether columns exist in the
 dataset, use \code{\link[dplyr:reexports]{dplyr::any_of()}}.}
+
+\item{circular}{Logical on whether the columns should be converted to a
+circular time instead of time stamps. Uses the \code{\link[circular:circular]{circular::circular()}}
+class with a \code{clock24} template for a clean round-trip with
+\code{\link[=Circular2Time]{Circular2Time()}}. Default is \code{FALSE}.}
 
 \item{silent}{Logical on whether no message shall be shown if input and
 output are identical. Defaults to \code{FALSE} (i.e., a message is shown).}

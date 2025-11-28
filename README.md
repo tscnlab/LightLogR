@@ -109,6 +109,7 @@ filename <-
   system.file("extdata/205_actlumus_Log_1020_20230904101707532.txt.zip", 
               package = "LightLogR")
 dataset <- import$ActLumus(filename, "Europe/Berlin", manual.id = "P1")
+#> Multiple files in zip: reading '205_actlumus_Log_1020_20230904101707532.txt'
 #> 
 #> Successfully read in 61'016 observations across 1 Ids from 1 ActLumus-file(s).
 #> Timezone set is Europe/Berlin.
@@ -217,7 +218,7 @@ sample.data.environment %>%
   add_clusters(MEDI > 250, cluster.duration = "30 min") |> 
   #base plot + add the condition
   gg_days() |> 
-  gg_state(state, fill = "red") + 
+  gg_states(state, fill = "red") + 
   #standard ggplot:
   geom_hline(yintercept = 250, col = "red", linetype = "dashed") + 
   labs(title = "Periods > 250 lx mel EDI for more than 30 minutes")
@@ -474,6 +475,8 @@ At present, these are the devices we support in LightLogR:
 
 - LYS
 
+- MiEye
+
 - MotionWatch8
 
 - nanoLambda
@@ -527,7 +530,7 @@ There is also an overview article on how to use
 | Threshold for duration | 2 | above, below | `threshold_for_duration()` |
 | Timing above threshold | 3 | above, below, within | `timing_above_threshold()` |
 | **Total:** |  |  |  |
-| **17 families** | **61 metrics** |  |  |
+| **17 families** | **62 metrics** |  |  |
 
 If you would like to use a metric you don’t find represented in
 LightLogR, please contact the developers. The easiest and most trackable
@@ -564,6 +567,13 @@ States. Views and opinions expressed are however those of the author(s)
 only and do not necessarily reflect those of the European Union or
 EURAMET. Neither the European Union nor the granting authority can be
 held responsible for them.
+
+**LightLogR** is further supported throught the [Wellcome
+trust](https://wellcome.org) and the [GLEE
+project](https://www.visualdiet.org) (Global Light exposure engine).
+
+<img src="pkgdown/assets/Wellcome_Trust_logo.svg.png" height="80" />
+<img src="pkgdown/assets/logo_glee-2.png" height="80" />
 
 # I Want To Contribute
 

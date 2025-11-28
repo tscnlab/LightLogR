@@ -102,21 +102,21 @@
 #' plot + ggplot2::facet_wrap(~Day.data + Id)
 
 gg_day <- function(dataset,
+                   y.axis = MEDI,
+                   geom = "point",
                    start.date = NULL,
                    end.date = NULL,
                    x.axis = Datetime,
-                   y.axis = MEDI,
                    aes_col = NULL,
                    aes_fill = NULL,
                    group = Id,
-                   geom = "point",
                    scales = c("fixed", "free_x", "free_y", "free"),
                    x.axis.breaks = hms::hms(hours = seq(0, 24, by = 3)),
                    y.axis.breaks = c(-10^(5:0), 0, 10^(0:5)),
                    y.scale = "symlog",
                    y.scale.sc = FALSE,
-                   x.axis.label = "Time of Day",
-                   y.axis.label = "Illuminance (lx, MEDI)",
+                   x.axis.label = "Local time (HH:MM)",
+                   y.axis.label = "Melanopic EDI (lx)",
                    format.day = "%d/%m",
                    title = NULL,
                    subtitle = NULL,
@@ -276,6 +276,9 @@ gg_day <- function(dataset,
   
   # Return --------------------------------------------------------------
   if(interactive) {
+    if (!requireNamespace("plotly", quietly = TRUE)) {
+      stop("Package 'plotly' is required for interactive use. Please install it.", call. = FALSE)
+    }
     Plot %>% plotly::ggplotly()
   }
   else Plot

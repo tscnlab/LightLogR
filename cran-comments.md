@@ -1,3 +1,9 @@
+## Submission Version 0.10.0
+
+### R CMD check results
+
+0 errors ✔ | 0 warnings ✔ | 0 notes ✔
+
 ## Submission Version 0.9.2
 
 ### R CMD check results

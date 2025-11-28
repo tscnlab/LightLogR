@@ -1,5 +1,5 @@
 ---
-title: "Durations, States and Clusters"
+title: "Durations, states and clusters"
 ---
 
 ```{r, include = FALSE}
@@ -103,7 +103,7 @@ extract |>
   fmt_number(c(MEDI, TAT))
 ```
 
-This answers our first question, but what about **when** these states appear? For a visual representation, we can use `gg_state()`, and add-on to `gg_day()` and `gg_days()`. As `Brown_cut()` created a factor variable with `NA` as a factor level, it makes sense to convert `NA` levels to real `NA` values. This can be done with `forcats::fct_na_level_to_value()`.
+This answers our first question, but what about **when** these states appear? For a visual representation, we can use `gg_states()`, and add-on to `gg_day()` and `gg_days()`. As `Brown_cut()` created a factor variable with `NA` as a factor level, it makes sense to convert `NA` levels to real `NA` values. This can be done with `forcats::fct_na_level_to_value()`.
 
 ```{r, fig.width = 10, message=FALSE}
 #helper for colors
@@ -116,7 +116,7 @@ dataset |>
   mutate(state = fct_na_level_to_value(state)) |> 
   filter_Date(length = "3 days") |> 
   gg_days() |> 
-  gg_state(state, aes_fill = state) +
+  gg_states(state, aes_fill = state) +
   color
 ```
 
@@ -241,7 +241,7 @@ This added the column `M10` to the dataset, which is a logical variable indicati
 dataset |>
   ungroup(Date) |> 
   gg_days() |> 
-  gg_state(M10, fill = "yellow2")
+  gg_states(M10, fill = "yellow2")
 ```
 
 ## Example sleep/wake data
@@ -294,7 +294,7 @@ Adding the sleep-wake information to a base plot.
 data_205 |> 
   aggregate_Datetime(unit = "5 mins") |> 
   gg_days() |> 
-  gg_state(State, aes_fill = State)
+  gg_states(State, aes_fill = State)
 ```
 
 What if we want to know the duration of sleep-wake states? We can number the states with the function `number_states()`. As long as there are no singular missing instances (like a sleep instance in the middle), this will yield a good result.
@@ -319,18 +319,18 @@ data_205 |>
 ```{r, fig.height = 8}
 data_205 |> 
   gg_day(geom = "line") |> 
-  gg_state(State.Brown, aes_fill = State.Brown) +
+  gg_states(State.Brown, aes_fill = State.Brown) +
   labs(fill = "Brown states")
 ```
 
-We can even go a step beyond, and show at which times the participant complied with these recommendations. We will employ the helper function `Brown2reference()` that creates additional columns, including one that tests whether a light exposure level is within the required range (`Reference.check`). When we select this column for `gg_state()`, we can color by the `State.Brown` same as above, but get the selection of when this recommendation was actually met. 
+We can even go a step beyond, and show at which times the participant complied with these recommendations. We will employ the helper function `Brown2reference()` that creates additional columns, including one that tests whether a light exposure level is within the required range (`Reference.check`). When we select this column for `gg_states()`, we can color by the `State.Brown` same as above, but get the selection of when this recommendation was actually met. 
 
 ```{r, fig.height = 8}
 data_205 |> 
   Brown2reference() |>
   group_by(State.Brown, .add = TRUE) |>
   gg_day(geom = "line") |> 
-  gg_state(Reference.check, aes_fill = State.Brown) +
+  gg_states(Reference.check, aes_fill = State.Brown) +
   labs(fill = "Following\nrecommendations\nduring the") 
 ```
 
@@ -386,7 +386,7 @@ data_205 |>
 
 data_205 |> 
   gg_days() |> 
-  gg_state(above_250, fill = "skyblue4") +
+  gg_states(above_250, fill = "skyblue4") +
   labs(title = "Episodes above 250 lx")
 ```
 
@@ -441,14 +441,14 @@ data_205 <-
   )
 ```
 
-The state can now be used in the same way as any other state. For example, we can plot the data with `gg_state()`.
+The state can now be used in the same way as any other state. For example, we can plot the data with `gg_states()`.
 
 ```{r}
 data_205 |> 
   filter_Date(length = "4 days") |> 
   aggregate_Datetime(unit = "3 mins", type = "floor") |>
   gg_days() |> 
-  gg_state(above_250_cluster, fill = "skyblue4") +
+  gg_states(above_250_cluster, fill = "skyblue4") +
   labs(title = "Clusters above 250 lx")
 ```
 

@@ -16,12 +16,13 @@ gg_heatmap(
   time.title = "Local time (HH:MM)",
   time.breaks = hms::hms(hours = seq(0, 48, by = 6)),
   time.labels = "\%H:\%M",
-  fill.title = "Illuminance\\n(lx, mel EDI)",
+  fill.title = "Melanopic EDI (lx)",
   fill.scale = "symlog",
   fill.labels = function(x) format(x, scientific = FALSE, big.mark = " "),
   fill.breaks = c(-10^(5:0), 0, 10^(0:5)),
   fill.limits = c(0, 10^5),
   fill.remove = FALSE,
+  facetting = TRUE,
   ...
 )
 }
@@ -69,6 +70,9 @@ based on the data.}
 fill scale is to be replaced by another scale without the console messages
 warning about existing scale}
 
+\item{facetting}{Should an automated facet per group be applied? Default is
+\code{TRUE}. The default grouping in \code{LightLogR} uses the \code{Id} variable.}
+
 \item{...}{Other arguments to provide to the underlying
 \code{\link[ggplot2:geom_tile]{ggplot2::geom_raster()}}}
 }
@@ -78,7 +82,7 @@ A ggplot object
 \description{
 This function plots a heatmap of binned values across the day over all days
 in a group. It also allows doubleplot functionality. **\code{\link[=gg_heatmap]{gg_heatmap()}} does
-not work with the additive functions \code{\link[=gg_photoperiod]{gg_photoperiod()}} and \code{\link[=gg_state]{gg_state()}}.
+not work with the additive functions \code{\link[=gg_photoperiod]{gg_photoperiod()}} and \code{\link[=gg_states]{gg_states()}}.
 }
 \details{
 The function uses \code{\link[ggplot2:scale_viridis]{ggplot2::scale_fill_viridis_c()}} for the fill scale. The

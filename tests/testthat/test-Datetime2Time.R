@@ -55,6 +55,16 @@ test_that("Datetime2Time handles specified non-existent column with dplyr::any_o
 })
 
 test_that("Datetime2Time throws error for non-data.frame input", {
-  expect_error(Datetime2Time(list(a = 1)), "dataset neets to be a data.frame")
-  expect_error(Datetime2Time(c(1, 2, 3)), "dataset neets to be a data.frame")
+  expect_error(Datetime2Time(list(a = 1)), "dataset needs to be a data.frame")
+  expect_error(Datetime2Time(c(1, 2, 3)), "dataset needs to be a data.frame")
+})
+
+test_that("Datetime2Time converts POSIXct columns to circular time", {
+  test_data <- tibble::tibble(
+    ID = 1:3,
+    Timestamp = lubridate::as_datetime("2023-01-01 23:00:00") + lubridate::hours(0:2)
+  )
+  result <- Datetime2Time(test_data, circular = TRUE)
+  expect_true(circular::is.circular(result$Timestamp))
+  expect_equal(as.numeric(result$Timestamp[1]), 23 / 24 * 2 * pi)
 })

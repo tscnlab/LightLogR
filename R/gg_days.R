@@ -14,6 +14,7 @@
 #' even enables negative values, which might be sensible for non-light data. See
 #' [symlog_trans()] for details on tweaking this scale. The scale can also be
 #' changed to a normal or logarithmic scale - see the y.scale argument for more.
+#' 
 #' @inheritParams gg_day
 #' @param aes_col,aes_fill optional input that defines separate sets and colors
 #'   or fills them. Expects anything that works with the layer data
@@ -52,19 +53,19 @@
 #' x.axis.limits = \(x) Datetime_limits(x, length = lubridate::ddays(3))
 #' )
 gg_days <- function(dataset,
-                   x.axis = Datetime,
                    y.axis = MEDI,
+                   geom = "line",
+                   x.axis = Datetime,
                    aes_col = NULL,
                    aes_fill = NULL,
                    group = NULL,
-                   geom = "line",
                    scales = c("free_x", "free_y", "fixed", "free"),
                    x.axis.breaks = Datetime_breaks,
                    y.axis.breaks = c(-10^(5:0), 0, 10^(0:5)),
                    y.scale = "symlog",
                    y.scale.sc = FALSE,
-                   x.axis.label = "Local Date/Time",
-                   y.axis.label = "Illuminance (lx, MEDI)",
+                   x.axis.label = "Local date/time",
+                   y.axis.label = "Melanopic EDI (lx)",
                    x.axis.limits = Datetime_limits,
                    x.axis.format = "%a %D",
                    title = NULL,
@@ -195,6 +196,9 @@ gg_days <- function(dataset,
   
   # Return --------------------------------------------------------------
   if(interactive) {
+    if (!requireNamespace("plotly", quietly = TRUE)) {
+      stop("Package 'plotly' is required for interactive use. Please install it.", call. = FALSE)
+    }
     Plot %>% plotly::ggplotly()
   }
   else Plot

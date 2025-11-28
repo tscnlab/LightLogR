@@ -12,7 +12,8 @@ mean_daily(
   prefix = "average_",
   filter.empty = FALSE,
   sub.zero = FALSE,
-  Datetime2Time = TRUE
+  Datetime2Time = TRUE,
+  Datetime2Time.circular = FALSE
 )
 }
 \arguments{
@@ -42,6 +43,9 @@ to \code{FALSE}. Will throw an error, if it happens on a type other than
 into hms(time) columns, which is usually sensible for averaging (default is
 \code{TRUE}). Calls \code{\link[=Datetime2Time]{Datetime2Time()}} with default settings (all POSIXct are
 affected).}
+
+\item{Datetime2Time.circular}{Logical of whether Time should be circular.
+Will be ignored if \code{Datetime2Time = FALSE}. Default is \code{FALSE}.}
 }
 \value{
 A dataframe with three rows representing average weekday, weekend,

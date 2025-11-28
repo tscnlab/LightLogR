@@ -52,7 +52,6 @@ extract_metric <- function(
     data,
     identifying.colname = state.count,
     Datetime.colname = Datetime,
-    
     ...) {
   
   cc.quo <- rlang::enexpr(identifying.colname)

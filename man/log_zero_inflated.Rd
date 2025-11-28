@@ -30,12 +30,12 @@ avoids losing those observations. Must be applied with care and reported.
 c(0, 1, 10, 100, 1000, 10000) |> log_zero_inflated()
 
 #For use in a function
-sample.data.environment |> 
-  dplyr::filter(Id == "Participant") |> 
-  dplyr::group_by(Date = lubridate::wday(Datetime, label = TRUE, week_start = 1)) |> 
+sample.data.environment |>
+  dplyr::filter(Id == "Participant") |>
+  dplyr::group_by(Date = lubridate::wday(Datetime, label = TRUE, week_start = 1)) |>
   dplyr::summarize(
-  TAT250 = duration_above_threshold(log_zero_inflated(MEDI), 
-                                    Datetime, 
+  TAT250 = duration_above_threshold(log_zero_inflated(MEDI),
+                                    Datetime,
                                     threshold = log_zero_inflated(250)
                                     )
                    )
@@ -45,5 +45,8 @@ sample.data.environment |>
 c(0, 1, 10, 100, 1000, 10000) |> log_zero_inflated() |> exp_zero_inflated()
 }
 \references{
-Johannes Zauner, Carolina Guidolin, Manuel Spitschan (2025) How to deal with darkness: Modelling and visualization of zero-inflated personal light exposure data on a logarithmic scale. bioRxiv. doi: https://doi.org/10.1101/2024.12.30.630669
+Johannes Zauner, Carolina Guidolin, Manuel Spitschan (2025) How
+to deal with darkness: Modelling and visualization of zero-inflated
+personal light exposure data on a logarithmic scale. J Biol Rhythms. 2025
+Oct;40(5):480-490. doi: https://doi.org/10.1177/07487304251336624
 }

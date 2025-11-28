@@ -117,8 +117,7 @@ test_that("remove_partial_data with show.result = FALSE (dataset filtering)", {
   "This dataset has irregular or singular data")
   )
   # Current behavior returns the summary table, not an empty dataset
-  expect_true("marked.for.removal" %in% names(res_all_removed))
-  expect_equal(nrow(res_all_removed), 2) # Summary table has 2 rows for U, V
+  expect_equal(nrow(res_all_removed), 0) # Summary table has 0 rows for U, V
   
   # handle.gaps = FALSE with messages
   data_implicit_gaps_msg <- tibble::tibble(Id = "P", Datetime = lubridate::as_datetime(0) + lubridate::hours(c(0, 2, 6)), Value = 1:3) %>% dplyr::group_by(Id)
@@ -164,8 +163,6 @@ test_that("remove_partial_data handles ungrouped data", {
   res_filt <- remove_partial_data(data_ungrouped, Value, threshold.missing = 0.8, show.result = FALSE)
   expect_message(res_filt_msg <- remove_partial_data(data_ungrouped, Value, threshold.missing = 0.5, show.result = FALSE),
                  "No groups are left after removing insufficient groups")
-  expect_true("marked.for.removal" %in% names(res_filt_msg)) # Returns summary
-  
   res_kept <- remove_partial_data(data_ungrouped, Value, threshold.missing = 0.9, show.result = FALSE)
   expect_equal(nrow(res_kept), 10) # Kept as 0.8 < 0.9
 })
@@ -213,8 +210,6 @@ test_that("remove_partial_data handles explicit NAs in Variable.colname correctl
   expect_equal(res_show_true$total, lubridate::duration(24, "hours"))
   
   expect_message(res_show_false <- remove_partial_data(dataset, Light, threshold.missing = 0.5, handle.gaps = TRUE, show.result = FALSE))
-  # Returns summary table
-  expect_true("marked.for.removal" %in% names(res_show_false))
   
   # If threshold.missing = 0.9, Bird1 should be kept.
   res_kept <- remove_partial_data(dataset, Light, threshold.missing = 0.9, handle.gaps = TRUE, show.result = FALSE)

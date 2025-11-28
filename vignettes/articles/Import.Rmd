@@ -182,6 +182,7 @@ data <-
       handle.gaps = TRUE, MEDI, by.date = TRUE, threshold.missing = "2 hours"
       )
 ```
+
 34 days were removed. As we have 17 participants, that equals the first and last day of data collection, which are correctly identified as only partly available.
 
 ```{r}
@@ -240,7 +241,7 @@ Here we will create a variation of the old routine, that just adds a short messa
 ```{r}
 new_import_expr <- ll_import_expr()
 new_import_expr$ActLumus_new <- new_import_expr$ActLumus
-new_import_expr$ActLumus_new[[4]] <- 
+new_import_expr$ActLumus_new[[6]] <- 
   rlang::expr({ cat("**Congratulation, you made a new import function**\n")
   data
   })
@@ -259,6 +260,5 @@ Let us now import a file of the previous dataset, setting the main summary and p
 ```{r}
 data <- import$ActLumus_new(files[1], tz = tz, auto.id = pattern, 
                          auto.plot = FALSE, silent = TRUE)
-
 ```
 

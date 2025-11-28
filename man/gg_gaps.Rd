@@ -65,7 +65,7 @@ Groups that do not have any gaps nor irregular data will be removed for
 clarity. Null if no groups remain
 }
 \description{
-\code{\link[=gg_gaps]{gg_gaps()}} is built upon \code{\link[=gg_days]{gg_days()}}, \code{\link[=gap_finder]{gap_finder()}}, and \code{\link[=gg_state]{gg_state()}} to
+\code{\link[=gg_gaps]{gg_gaps()}} is built upon \code{\link[=gg_days]{gg_days()}}, \code{\link[=gap_finder]{gap_finder()}}, and \code{\link[=gg_states]{gg_states()}} to
 visualize where gaps and irregular data in a dataset are. The function does
 not differentiate between \verb{implicit gaps}, which are missing timestamps of
 the regular interval, \verb{explicit gaps}, which are \code{NA} values. Optionally, the

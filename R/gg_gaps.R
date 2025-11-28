@@ -1,6 +1,6 @@
 #' Visualize gaps and irregular data
 #'
-#' [gg_gaps()] is built upon [gg_days()], [gap_finder()], and [gg_state()] to
+#' [gg_gaps()] is built upon [gg_days()], [gap_finder()], and [gg_states()] to
 #' visualize where gaps and irregular data in a dataset are. The function does
 #' not differentiate between `implicit gaps`, which are missing timestamps of
 #' the regular interval, `explicit gaps`, which are `NA` values. Optionally, the
@@ -149,7 +149,7 @@ gg_gaps <- function(dataset,
     plot <- 
     data_regular |> 
       gg_days(y.axis = {{ Variable.colname }}, x.axis = {{ Datetime.colname }},...) |> 
-      gg_state(gaps, fill = fill.gaps, alpha = alpha) +
+      gg_states(gaps, fill = fill.gaps, alpha = alpha) +
       ggplot2::labs(title = paste0("Gaps in the data (", fill.gaps ," areas)"))
     
     return(plot)
@@ -157,7 +157,7 @@ gg_gaps <- function(dataset,
   
   data_regular |> 
     gg_days(y.axis = {{ Variable.colname }}, x.axis = {{ Datetime.colname }},...) |> 
-    gg_state(gaps, fill = fill.gaps, alpha = alpha) +
+    gg_states(gaps, fill = fill.gaps, alpha = alpha) +
     ggplot2::geom_point(data = irregulars, col = col.irregular) +
     ggplot2::labs(title = paste0("Gaps (", fill.gaps ," areas) and irregular (", col.irregular ," dots) data"))
 

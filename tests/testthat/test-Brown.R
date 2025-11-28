@@ -31,7 +31,7 @@ test_that("Brown_check works as expected", {
 test_that("Brown_check throws errors as expected", {
   expect_error(Brown_check(100, "day", Brown.day.th = "250"), "Thresholds need to be numeric")
   expect_error(Brown_check(100, "day", Brown.day = c("day", "evening", "night")), "States need to be scalars")
-  expect_error(Brown_check(100, c("day", "evening", "night")), "state needs to be a character vector with the same length as value")
+  expect_error(Brown_check(100, c("day", "evening", "night")), "state needs to be a character or factor vector with the same length as value")
 }
 )
 

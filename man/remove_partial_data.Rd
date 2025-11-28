@@ -27,7 +27,7 @@ single data point groups that need to be removed.}
 \item{threshold.missing}{either
 \itemize{
 \item percentage of missing data, before that group gets removed. Expects a numeric scalar.
-\item duration of missing data, before that group gets removed. Expects either a \code{\link[lubridate:duration]{lubridate::duration()}} or a character that can be converted to one, e.g., "30 mins".
+\item duration of missing data, before that group gets removed. Expects either a \code{\link[lubridate:duration]{lubridate::duration()}} or a character that can be converted to one, e.g., "30 mins". If negative duration is specified (e.g., "-20 hours"), this will be taken as a minimum duration of available data.
 }}
 
 \item{by.date}{Logical. Should the data be (additionally) grouped by day?
@@ -53,6 +53,13 @@ groups that did not have sufficient data
 This function removes groups from a dataframe that do not have sufficient
 data points. Groups of one data point will automatically be removed. Single
 data points are common after using \code{\link[=aggregate_Datetime]{aggregate_Datetime()}}.
+}
+\details{
+If instead of missing data, the goal is to only leave a minimum length, use a
+\code{-}(dash) when specifying duration (e.g., \code{"-20 hours"}) or supply a negative
+duration (e.g. \code{lubridate::dhours(-20)}). That will only leave groups with at
+least 20 hours of data. This is useful if the total duration per group is not
+fixed (e.g., by date).
 }
 \examples{
 #create sample data with gaps

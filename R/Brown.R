@@ -118,7 +118,7 @@ Brown2reference <- function(dataset,
 #' @param value Illuminance value to check against the recommendation. needs to
 #'   be numeric, can be a vector.
 #' @param state The state from Brown et al. (2022). Needs to be a character
-#'   vector with the same length as `value`.
+#'   vector (or factor vector) with the same length as `value`.
 #' @param Brown.day,Brown.evening,Brown.night The names of the states from Brown
 #'   et al. (2022). These are the default values (`"day"`, `"evening"`,
 #'   `"night"`), but can be changed if the names in `state` are different. Needs
@@ -158,8 +158,8 @@ Brown_check <- function(value,
   
   #check whether state has the same length as value, give an error if not
   stopifnot(
-    "state needs to be a character vector with the same length as value" = 
-              is.character(state) & length(state) == length(value)
+    "state needs to be a character or factor vector with the same length as value" = 
+              (is.character(state) | is.factor(state)) & length(state) == length(value)
   )
   
   dplyr::case_when(

@@ -1,3 +1,77 @@
+# LightLogR 0.10.0 **High noon**
+
+## General improvements and new functions
+
+* `summary_table()`, `summary_overview()`, and `summary_metrics()` are a great set of **new functions** that give quick summaries across the whole dataset. Care has to be taken with these functions, as they are high level and will not perform well with a higly fragmented/irregular dataset.
+
+* `sample_groups()` is a **new function** that makes it easy to reduce the number of groups either by random sampling, flexible ordering, or based on a condition.
+
+* `style_time()` is a **new convenience function** that takes datetimes, times, or numeric input and outputs a clean time format (e.g., "03:45"). This is primarily used to style times in tables or plots.
+
+* `format_coordinates()` is a **new convenience function** that takes a coordinates and formats them nicely for plots and tables.
+
+* `Datetime2Time()` now allows for `circular` time through a sine-conversion of time of day - this is especially useful for averaging of times that (can) cross midnight, such as bed-times.
+
+* `Circular2Time()` is a **new function** that back-converts `circular` time columns to `hms` time. See the package `{circular}` for details on how `circular` columns work.
+
+* `remove_partial_data()` allows to specify a minimum duration of available data. Simply supply a negative duration to the `threshold.missing` argument. E.g., `"-20 hours"` will only keep groups with at least 20 hours of data. While this was easy before in case of groups of known total duration, 24 hours (e.g., simply set the threshold to 4 hours to get to 20 hours of data), it was not possible for groups of unknown total duration.
+
+* `import` functions now support a `version` argument. If there are multiple known formats for one supported device, the version can be changed. As of now, this is the case with the `VEET` device, which changed its format slightly with `v2.1.17`. This argument is also used for the `Actiwatch Spectrum`, which requires several adjustments for a German locale (beyond simple adjustment of locale settings). #65
+
+* `supported_versions()` is a **new function** that provides an overview which device versions are supported.
+
+* `add_Date_col()` gained the `as.count` argument. If set to true, it will output the number of days since start. The basis are calendar days.
+
+* `add_states()` now 
+  - allows for `start` and `end` variables to be of class `Interval` - this makes the function ready to work with output from `sc2interal()` or `sleep_int2Brown()`.
+  - works as expected when `force.tz = TRUE`, i.e., the timestamp in the states dataset is forced to the timezone of the receiving time-series dataset. That is useful, e.g., when you know that the timestamp is correct, but was imported ad `UTC` by default.
+
+* Added many new resources to the documentation webpage (accessible through the nav menu), including an interactive online course for `LightLogR`.
+
+* `filter_Datetime()` & `filter_Date()`:
+  - When only `length` is provided, but not `start` nor `end`, the functions now respect grouping, i.e., the length will be taken from the first record (or last in the case of `from_start = FALSE`) within each group.
+  - the order of arguments now makes more sense in a typical use case, with `length` being the first argument taken, then `start` and `end`
+
+* `gg_states()` now
+  - allows for an individual height of the state indicators through `ymin` and `ymax` arguments
+  - allows to calculate arbitrary metrics from the dataset to be used in the plot through the `extract.metrics` argument.
+  - combining the two above allows for powerful visualizations, where, e.g., the height of a status indicator is determined by a summary metric, like the median
+  - allows for a non-standard `Datetime` column through the `Datetime.colname` argument.
+
+* `gg_photoperiod()` now 
+  - allows for an individual height of the state indicators through `ymin` and `ymax` arguments
+  - allows for a non-standard `Datetime` column through the `Datetime.colname` argument.
+
+## Bug fixes and small stuff
+
+* The `plotly` package was moved to suggested dependency, as it only covers an edge case.
+
+* The `janitor` package is no longer a dependency, as a simpler version to find duplicates during import was implemented.
+
+* `VEET` devices import much faster now, thanks to an efficient way to construct the data table. Thanks to @ThomasKraft for raising this issue! #66
+
+* `gg_states()` replaced the function `gg_state()` for more consistent naming with other `states` functions.
+
+* `gg_day()` and `gg_days()` now have the `y.axis` variable and the `geom` as first two arguments, putting the most often used arguments to the front.
+
+* New device import: `MiEye` from Circadian Health Innovations. There are two known datetime formats for the device: `ymd HMS`, and `dmy HMS`. Both are parsed.
+
+* More flexible import for `ActLumus` devices: Data can start at any line. For computational efficiency, it will determine the correct starting row in the first file provided (`filenames[1]`) and use it for all files provided for import.
+
+* `log_zero_inflated()` and `exp_zero_inflated()` have an updated reference.
+
+* `Brown_check()` now also takes factor vectors for `state`. This affects the `Brown` upstream functions that use `Brown_check()`.
+
+* `gg_heatmap()` has gained a `facetting` variable to remove facetting altogether. Default is `TRUE`.
+
+* Standard `y.axis.label` of visualization functions is now `Melanopic EDI (lx)`. Affects `gg_day()`, `gg_days()`, and `gg_heatmap()`.
+
+* `gg_day()`: standard `x.axis.label` is `Local time (HH:MM)`.
+
+* `aggregate_Date()` and `aggregate_Datetime()` now contain a warning for `...` about partial matching of argument names.
+
+* `sleep_int2Brown()` will sensibly fill in values for columns in the `evening`, should the state dataset contain more than `Interval` and `Sleep` columns.
+
 # LightLogR 0.9.3
 
 * added a Newsletter section to the package page
@@ -98,7 +172,7 @@ This is a huge update for `LightLogR`, bringing many new features and twenty-two
 
 * `gg_gaps()`: visualize gaps and shows instances of irregular data.
 
-* `gg_state()`: is an addon-function to `gg_day()` or `gg_days()`, which adds a state or cluster indicator to the plot
+* `gg_states()`: is an addon-function to `gg_day()` or `gg_days()`, which adds a state or cluster indicator to the plot
 
 * `gg_heatmap()`: visualize a condensed version of time series patterns, optionally as double plots.
 

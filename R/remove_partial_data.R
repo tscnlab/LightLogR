@@ -4,6 +4,12 @@
 #' data points. Groups of one data point will automatically be removed. Single
 #' data points are common after using [aggregate_Datetime()].
 #'
+#' If instead of missing data, the goal is to only leave a minimum length, use a
+#' `-`(dash) when specifying duration (e.g., `"-20 hours"`) or supply a negative
+#' duration (e.g. `lubridate::dhours(-20)`). That will only leave groups with at
+#' least 20 hours of data. This is useful if the total duration per group is not
+#' fixed (e.g., by date).
+#'
 #' @param dataset A light logger dataset. Expects a dataframe. If not imported
 #'   by LightLogR, take care to choose sensible variables for the
 #'   Datetime.colname and Variable.colname.
@@ -16,7 +22,7 @@
 #'   single data point groups that need to be removed.
 #' @param threshold.missing either
 #'   - percentage of missing data, before that group gets removed. Expects a numeric scalar.
-#'   - duration of missing data, before that group gets removed. Expects either a [lubridate::duration()] or a character that can be converted to one, e.g., "30 mins".
+#'   - duration of missing data, before that group gets removed. Expects either a [lubridate::duration()] or a character that can be converted to one, e.g., "30 mins". If negative duration is specified (e.g., "-20 hours"), this will be taken as a minimum duration of available data.
 #' @param handle.gaps Logical, whether the data shall be treated with
 #'   [gap_handler()]. Is set to `FALSE` by default. If `TRUE`, it will be used
 #'   with the argument `full.days = TRUE`.
@@ -92,7 +98,10 @@ remove_partial_data <- function(
     stop(paste0("Datetime.colname '", Datetime.colname_str, "' must be of type POSIXct"))
   }
   
-  if (is.numeric(threshold.missing) && (threshold.missing < 0 || threshold.missing > 1)) {
+  if (all(is.numeric(threshold.missing), 
+      (threshold.missing < 0 || threshold.missing > 1),
+      !lubridate::is.duration(threshold.missing)
+      )) {
     stop("threshold.missing as percentage must be between 0 and 1")
   }
   
@@ -130,8 +139,13 @@ remove_partial_data <- function(
   
   #convert character threshold to duration
   if(is.character(threshold.missing)) {
+    coverage <- stringr::str_detect(threshold.missing, "^-")
     threshold.missing <- lubridate::as.duration(threshold.missing)
+  } else {
+    coverage <- sign(threshold.missing) == -1
   }
+  
+  threshold.missing <- threshold.missing |> abs()
   
   #calculate missing times
   data <- 
@@ -150,11 +164,19 @@ remove_partial_data <- function(
   #set marker for removal either based on percentage missing or on duration
   if(inherits(threshold.missing, "Duration")) {
     data <- 
+      if(coverage){ #if it is not about missingness but coverage, use for duration
+        data |> 
+          dplyr::mutate(
+            marked.for.removal = duration < threshold.missing,
+            .before = 1
+          )
+      } else {
       data |> 
       dplyr::mutate(
         marked.for.removal = missing > threshold.missing,
         .before = 1
       )
+      }
   } else {
     data <- 
       data |> 
@@ -190,7 +212,7 @@ remove_partial_data <- function(
   # return a message, if nothing is left
   if(nrow(groups_to_keep) == 0) {
     message("No groups are left after removing insufficient groups")
-    return(data)
+    return(dataset |> dplyr::filter(FALSE))
   }
   
   # Filter the original dataset to keep only the groups not marked for removal

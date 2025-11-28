@@ -6,21 +6,21 @@
 \usage{
 gg_day(
   dataset,
+  y.axis = MEDI,
+  geom = "point",
   start.date = NULL,
   end.date = NULL,
   x.axis = Datetime,
-  y.axis = MEDI,
   aes_col = NULL,
   aes_fill = NULL,
   group = Id,
-  geom = "point",
   scales = c("fixed", "free_x", "free_y", "free"),
   x.axis.breaks = hms::hms(hours = seq(0, 24, by = 3)),
   y.axis.breaks = c(-10^(5:0), 0, 10^(0:5)),
   y.scale = "symlog",
   y.scale.sc = FALSE,
-  x.axis.label = "Time of Day",
-  y.axis.label = "Illuminance (lx, MEDI)",
+  x.axis.label = "Local time (HH:MM)",
+  y.axis.label = "Melanopic EDI (lx)",
   format.day = "\%d/\%m",
   title = NULL,
   subtitle = NULL,
@@ -33,6 +33,14 @@ gg_day(
 \arguments{
 \item{dataset}{A light logger dataset. Expects a \code{dataframe}. If not imported
 by \link{LightLogR}, take care to choose a sensible variable for the \code{x.axis.}.}
+
+\item{geom}{What geom should be used for visualization? Expects a \code{character}
+\itemize{
+\item \code{"point"} for \code{\link[ggplot2:geom_point]{ggplot2::geom_point()}}
+\item \code{"line"}  for \code{\link[ggplot2:geom_path]{ggplot2::geom_line()}}
+\item \code{"ribbon"} for \code{\link[ggplot2:geom_ribbon]{ggplot2::geom_ribbon()}}
+\item as the value is just input into the \code{geom_} function from \pkg{ggplot2}, other variants work as well, but are not extensively tested.
+}}
 
 \item{start.date, end.date}{Choose an optional start or end date within your
 \code{dataset}. Expects a \code{date}, which can also be a \code{character} that is
@@ -56,14 +64,6 @@ function (see examples).}
 \item{group}{Optional column name that defines separate sets. Useful for
 certain geoms like \code{boxplot}.Expects anything that works with the layer
 data \code{\link[ggplot2:aes]{ggplot2::aes()}}}
-
-\item{geom}{What geom should be used for visualization? Expects a \code{character}
-\itemize{
-\item \code{"point"} for \code{\link[ggplot2:geom_point]{ggplot2::geom_point()}}
-\item \code{"line"}  for \code{\link[ggplot2:geom_path]{ggplot2::geom_line()}}
-\item \code{"ribbon"} for \code{\link[ggplot2:geom_ribbon]{ggplot2::geom_ribbon()}}
-\item as the value is just input into the \code{geom_} function from \pkg{ggplot2}, other variants work as well, but are not extensively tested.
-}}
 
 \item{scales}{For \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}}, should scales be "fixed", "free"
 or free in one dimension ("free_y" is the default). Expects a \code{character}.}

@@ -9,6 +9,7 @@ add_Date_col(
   Date.colname = Date,
   group.by = FALSE,
   as.wday = FALSE,
+  as.count = FALSE,
   Datetime.colname = Datetime
 )
 }
@@ -26,7 +27,11 @@ by the new column}
 
 \item{as.wday}{Logical of whether the added column should calculate day of
 the week instead of date. If \code{TRUE} will create a factor with weekday
-abbreviations, where the week starts with \code{Mon}.}
+abbreviations, where the week starts with \code{Mon}. Will be ignored if
+\code{as.count = TRUE}.}
+
+\item{as.count}{Logical of whether the added column should give a day
+count from the starting day of the group.}
 
 \item{Datetime.colname}{column name that contains the datetime. Defaults to
 \code{"Datetime"} which is automatically correct for data imported with

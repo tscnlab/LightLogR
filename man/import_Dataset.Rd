@@ -47,6 +47,11 @@ a \code{character}.
 \item \code{n_max}: maximum number of lines to read. Default is \code{Inf}.
 \item \code{tz}: Timezone of the data. \code{"UTC"} is the default. Expects a
 \code{character}. You can look up the supported timezones with \code{\link[=OlsonNames]{OlsonNames()}}.
+\item \code{version}: Data formats can change, e.g. with software updates. This
+argument allows switching between known data formats of the same device
+model. Expects a \code{character} scalar. The default is \code{"default"}, which will
+always use the latest version. To find out which software versions are
+contained, call \code{\link[=supported_versions]{supported_versions()}}.
 \item \code{Id.colname}: Lets you specify a column for the id of a dataset. Expects a
 symbol (Default is \code{Id}). This column will be used for grouping
 (\code{\link[dplyr:group_by]{dplyr::group_by()}}).
@@ -68,7 +73,10 @@ If the \code{Id} column is already part of the \code{dataset} it will just use t
 column. If the column is not present it will add this column and fill it
 with the filename of the importfile (see param \code{auto.id}).
 \item \code{print_n} can be used if you want to see more rows from the observation intervals
-\item \code{remove_duplicates} can be used if identical observations are present within or across multiple files. The default is \code{FALSE}. The function keeps only unique observations (=rows) if set to' TRUE'. This is a convenience implementation of \code{\link[dplyr:distinct]{dplyr::distinct()}}.
+\item \code{remove_duplicates} can be used if identical observations are present
+within or across multiple files. The default is \code{FALSE}. The function keeps
+only unique observations (=rows) if set to' TRUE'. This is a convenience
+implementation of \code{\link[dplyr:distinct]{dplyr::distinct()}}.
 }
 }
 \section{Devices}{
@@ -77,15 +85,17 @@ import light logger data that is then perfectly formatted to add metadata,
 make visualizations and analyses. There are a number of devices supported,
 where import should just work out of the box. To get an overview, you can
 simply call the \code{supported_devices()} dataset. The list will grow
-continuously as the package is maintained.
+continuously as the package is maintained. More than one data formats may
+be available for a given device. Check with \code{supported_versions()} if you
+run into problems with imports, despite a correct device setting.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{supported_devices()
-#>  [1] "ActLumus"              "ActTrust"              "Actiwatch_Spectrum"   
-#>  [4] "Actiwatch_Spectrum_de" "Circadian_Eye"         "Clouclip"             
-#>  [7] "DeLux"                 "GENEActiv_GGIR"        "Kronowise"            
-#> [10] "LIMO"                  "LYS"                   "LiDo"                 
-#> [13] "LightWatcher"          "MotionWatch8"          "OcuWEAR"              
-#> [16] "Speccy"                "SpectraWear"           "VEET"                 
+#>  [1] "ActLumus"           "ActTrust"           "Actiwatch_Spectrum"
+#>  [4] "Circadian_Eye"      "Clouclip"           "DeLux"             
+#>  [7] "GENEActiv_GGIR"     "Kronowise"          "LIMO"              
+#> [10] "LYS"                "LiDo"               "LightWatcher"      
+#> [13] "MiEye"              "MotionWatch8"       "OcuWEAR"           
+#> [16] "Speccy"             "SpectraWear"        "VEET"              
 #> [19] "nanoLambda"
 }\if{html}{\out{</div>}}
 \subsection{ActLumus}{
@@ -98,7 +108,7 @@ Implemented: Sep 2023
 
 A sample file is provided with the package, it can be accessed through
 \code{system.file("extdata/205_actlumus_Log_1020_20230904101707532.txt.zip", package = "LightLogR")}. It does not need to be unzipped to be imported.
-This sample file is a good example for a regular dataset without gaps
+This sample file is a good example for a regular dataset without gaps.
 }
 
 \subsection{LYS}{
@@ -110,7 +120,7 @@ Model: LYS Button
 Implemented: Sep 2023
 
 A sample file is provided with the package, it can be accessed through
-\code{system.file("extdata/sample_data_LYS.csv", package = "LightLogR")}. This
+\code{sample.data.irregular}. This
 sample file is a good example for an irregular dataset.
 }
 
@@ -121,8 +131,6 @@ Manufacturer: Philips Respironics
 Model: Actiwatch Spectrum
 
 Implemented: Nov 2023 / July 2024
-
-\strong{Important note:} The \code{Actiwatch_Spectrum} function is for an international/english formatting. The \code{Actiwatch_Spectrum_de} function is for a german formatting, which slightly differs in the datetime format, the column names, and the decimal separator.
 }
 
 \subsection{ActTrust}{
@@ -292,6 +300,13 @@ measurement. These values will be set to \code{NA}, and an additional column is
 added that translates these status codes. The columns carry the name
 \verb{\{.col\}_status}.
 }
+
+\subsection{MiEye}{
+
+Manufacturer: CHI. Circadian Health Innovations
+
+Implemented: October 2025
+}
 }
 
 \section{Examples}{
@@ -306,6 +321,7 @@ such as the intervals between measurements or the start and end dates.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{filepath <- system.file("extdata/205_actlumus_Log_1020_20230904101707532.txt.zip", package = "LightLogR")
 dataset <- import_Dataset("ActLumus", filepath, auto.plot = FALSE)
+#> Multiple files in zip: reading '205_actlumus_Log_1020_20230904101707532.txt'
 #> 
 #> Successfully read in 61'016 observations across 1 Ids from 1 ActLumus-file(s).
 #> Timezone set is UTC.
@@ -323,6 +339,7 @@ dataset <- import_Dataset("ActLumus", filepath, auto.plot = FALSE)
 Import functions can also be called directly:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{dataset <- import$ActLumus(filepath, auto.plot = FALSE)
+#> Multiple files in zip: reading '205_actlumus_Log_1020_20230904101707532.txt'
 #> 
 #> Successfully read in 61'016 observations across 1 Ids from 1 ActLumus-file(s).
 #> Timezone set is UTC.

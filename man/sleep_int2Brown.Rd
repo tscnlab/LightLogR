@@ -21,22 +21,34 @@ sleep_int2Brown(
 \arguments{
 \item{dataset}{A dataset with sleep/wake intervals.}
 
-\item{Interval.colname}{The name of the column with the intervals. Defaults to \code{Interval}.}
+\item{Interval.colname}{The name of the column with the intervals. Defaults
+to \code{Interval}.}
 
-\item{Sleep.colname}{The name of the column with the sleep/wake states. Defaults to \code{State}.}
+\item{Sleep.colname}{The name of the column with the sleep/wake states.
+Defaults to \code{State}.}
 
-\item{wake.state, sleep.state}{The names of the wake and sleep states in the \code{Sleep.colname}. Default to \code{"wake"} and \code{"sleep"}. Expected to be a \code{character} scalar and must be an exact match.}
+\item{wake.state, sleep.state}{The names of the wake and sleep states in the
+\code{Sleep.colname}. Default to \code{"wake"} and \code{"sleep"}. Expected to be a
+\code{character} scalar and must be an exact match.}
 
-\item{Brown.day, Brown.evening, Brown.night}{The names of the Brown states that will be used. Defaults to \code{"day"}, \code{"evening"} and \code{"night"}.}
+\item{Brown.day, Brown.evening, Brown.night}{The names of the Brown states that
+will be used. Defaults to \code{"day"}, \code{"evening"} and \code{"night"}.}
 
-\item{evening.length}{The length of the evening interval in seconds. Can also use \pkg{lubridate} duration or period objects. Defaults to 3 hours.}
+\item{evening.length}{The length of the evening interval in seconds. Can also
+use \pkg{lubridate} duration or period objects. Defaults to 3 hours.}
 
-\item{Brown.state.colname}{The name of the column with the newly created Brown states. Works as a simple renaming of the \code{Sleep.colname}.}
+\item{Brown.state.colname}{The name of the column with the newly created
+Brown states. Works as a simple renaming of the \code{Sleep.colname}.}
 
-\item{output.dataset}{Whether to return the whole \code{dataset} or a \code{vector} with the Brown states.}
+\item{output.dataset}{Whether to return the whole \code{dataset} or a \code{vector}
+with the Brown states.}
 }
 \value{
-A dataset with the Brown states or a vector with the Brown states. The Brown states are created in a new column with the name specified in \code{Brown.state.colname}. The dataset will have more rows than the original dataset, because the \code{wake} intervals are split into \code{day} and \code{evening} intervals.
+A dataset with the Brown states or a vector with the Brown states.
+The Brown states are created in a new column with the name specified in
+\code{Brown.state.colname}. The dataset will have more rows than the original
+dataset, because the \code{wake} intervals are split into \code{day} and \code{evening}
+intervals.
 }
 \description{
 Takes a dataset with sleep/wake intervals and recodes them to Brown state
@@ -47,7 +59,16 @@ and \code{night}. The result can be used as input for \code{\link[=interval2stat
 be used subsequently with \code{\link[=Brown2reference]{Brown2reference()}}.
 }
 \details{
-The function will filter out any non-sleep intervals that are shorter than the specified \code{evening.length}. This prevents problematic behaviour when the \code{evening.length} is longer than the \code{wake} intervals or, e.g., when the first state is sleep after midnight and there is a prior \code{NA} interval from midnight till sleep. This behavior might, however, result in problematic results for specialized experimental setups with ultra short wake/sleep cycles. The \code{sleep_int2Brown()} function would not be applicable in those cases anyways.
+The function will filter out any non-sleep intervals that are shorter than
+the specified \code{evening.length}. This prevents problematic behaviour when the
+\code{evening.length} is longer than the \code{wake} intervals or, e.g., when the first
+state is sleep after midnight and there is a prior \code{NA} interval from
+midnight till sleep. This behavior might, however, result in problematic
+results for specialized experimental setups with ultra short wake/sleep
+cycles. The \code{sleep_int2Brown()} function would not be applicable in those
+cases anyways. Note that any column in the \code{dataset} outside of
+\code{Interval.colname} and \code{Sleep.colname} will be filled up from previous states
+(respecting groups).
 }
 \examples{
 #create a sample dataset
@@ -60,8 +81,8 @@ sample <- tibble::tibble(Datetime = c("2023-08-15 6:00:00",
                          State = rep(c("wake", "sleep"), 3),
                          Id = "Participant")
 #intervals from sample
-sc2interval(sample) 
-#recoded intervals                       
+sc2interval(sample)
+#recoded intervals
 sc2interval(sample) \%>\% sleep_int2Brown()
                                          
 }
