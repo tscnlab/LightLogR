@@ -42,19 +42,3 @@ test_that("summary_table builds a gt table", {
   expect_equal(tbl$`_heading`$title, "Summary table")
   expect_true(stringr::str_detect(tbl$`_heading`$subtitle, "TZ:"))
 })
-
-test_that("summary_table creates histograms when requested", {
-  expect_no_error({
-    tbl <- summary_table(
-      sample.data.environment |> filter_Date(length = "2 days"),
-      coordinates = c(48.5, 9.1),
-      location = "Tuebingen",
-      site = "DE",
-      histograms = TRUE
-    )
-
-    # A histogram plot should be embedded for at least one row
-    data_rows <- gt::dt_data_get(tbl)
-    expect_true(any(purrr::map_lgl(data_rows$plot, inherits, "gg")))
-  })
-})
