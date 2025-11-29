@@ -34,7 +34,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/tscnlab/LightLogR/blob/main/inst/CITATION)
+[`inst/CITATION`](https://github.com/tscnlab/LightLogR/blob/v0.10.0/inst/CITATION)
 
 Zauner, J., Hartmeyer, S., & Spitschan, M. (2025). LightLogR:
 Reproducible analysis of personal light exposure data. Journal of Open
