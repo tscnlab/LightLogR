@@ -1,3 +1,7 @@
+# LightLogR 0.10.1
+
+* `extract_metric()` give more helpful error messages when using a base dataset without start/end columns.
+
 # LightLogR 0.10.0 **High noon**
 
 ## General improvements and new functions
