@@ -13,7 +13,8 @@ mean_daily(
   filter.empty = FALSE,
   sub.zero = FALSE,
   Datetime2Time = TRUE,
-  Datetime2Time.circular = FALSE
+  Datetime2Time.circular = FALSE,
+  .n = FALSE
 )
 }
 \arguments{

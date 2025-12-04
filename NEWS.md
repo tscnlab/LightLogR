@@ -2,6 +2,8 @@
 
 * `extract_metric()` give more helpful error messages when using a base dataset without start/end columns.
 
+* `mean_daily()` can output the number of days that factor into the calculations by setting `.n = TRUE`.
+
 # LightLogR 0.10.0 **High noon**
 
 ## General improvements and new functions
