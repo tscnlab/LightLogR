@@ -35,6 +35,8 @@
 #'   affected).
 #' @param Datetime2Time.circular Logical of whether Time should be circular.
 #'   Will be ignored if `Datetime2Time = FALSE`. Default is `FALSE`.
+#' @param .n Logical, whether the number of days that went into each category
+#'   should be output. Default is `FALSE`.
 #'
 #' @return A dataframe with three rows representing average weekday, weekend,
 #'   and mean daily values of all numeric columns
