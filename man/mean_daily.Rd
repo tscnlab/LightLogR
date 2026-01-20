@@ -13,7 +13,8 @@ mean_daily(
   filter.empty = FALSE,
   sub.zero = FALSE,
   Datetime2Time = TRUE,
-  Datetime2Time.circular = FALSE
+  Datetime2Time.circular = FALSE,
+  .n = FALSE
 )
 }
 \arguments{
@@ -46,6 +47,9 @@ affected).}
 
 \item{Datetime2Time.circular}{Logical of whether Time should be circular.
 Will be ignored if \code{Datetime2Time = FALSE}. Default is \code{FALSE}.}
+
+\item{.n}{Logical, whether the number of days that went into each category
+should be output. Default is \code{FALSE}.}
 }
 \value{
 A dataframe with three rows representing average weekday, weekend,

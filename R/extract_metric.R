@@ -61,6 +61,9 @@ extract_metric <- function(
   
   #if identifying.colname ist not part of the dataset, it will be added from the extracted_data
   if (!cc.name %in% names(data)) {
+    if(!all(c("start", "end") %in% names(extracted_data))) {
+      stop("start and/or end columns are missing in extracted_data, please either choose and `identifying.colname` that is part of `extracted_data`, or add start and end columns.")
+    }
     data <- 
       data |>
       dplyr::left_join(

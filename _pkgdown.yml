@@ -9,6 +9,8 @@ navbar:
     newsletter:
       text: Newsletter
       menu:
+      - text: January 2026
+        href: Edition02.html
       - text: July 2025
         href: Edition01.html
     resources:
@@ -19,8 +21,8 @@ navbar:
       - text: Course website
         href: https://tscnlab.github.io/LightLogR_webinar/
         target: "_blank"
-      - text: Flyer (2025/26)
-        href: pdf/Online_course_series_2025-26.pdf
+      - text: Flyer
+        href: https://tscnlab.github.io/LightLogR_webinar/assets/Online_course_series_2025-26.pdf
         target: "_blank"
       - text: ---
       - text: Talks
@@ -47,7 +49,7 @@ navbar:
         - text: The whole game
           href: articles/Day.html
         - text: Visual experience
-          href: https://tscnlab.github.io/ZaunerEtAl_JVis_2025/
+          href: https://tscnlab.github.io/ZaunerEtAl_JVis_2026/
           target: "_blank"
         - text: '---'
         - text: 'General Workflow'

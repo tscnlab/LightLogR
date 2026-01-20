@@ -35,6 +35,8 @@
 #'   affected).
 #' @param Datetime2Time.circular Logical of whether Time should be circular.
 #'   Will be ignored if `Datetime2Time = FALSE`. Default is `FALSE`.
+#' @param .n Logical, whether the number of days that went into each category
+#'   should be output. Default is `FALSE`.
 #'
 #' @return A dataframe with three rows representing average weekday, weekend,
 #'   and mean daily values of all numeric columns
@@ -69,7 +71,8 @@ mean_daily <- function(data,
                        filter.empty = FALSE,
                        sub.zero = FALSE,
                        Datetime2Time = TRUE,
-                       Datetime2Time.circular = FALSE
+                       Datetime2Time.circular = FALSE,
+                       .n = FALSE
                        ) {
   
   # Input validation
@@ -134,6 +137,7 @@ mean_daily <- function(data,
                                      mean(x, na.rm = na.rm)
                                    },
                                    .names = "{prefix}{.col}"), 
+                     .n = dplyr::n(),
                      .groups = "drop_last") 
   
   if(nrow(weekday_type) == 0) {
@@ -172,7 +176,7 @@ mean_daily <- function(data,
       )
       )|>
     dplyr::summarize(
-      dplyr::across(-c({{ Weekend.type }}, dplyr::where(lubridate::is.Date)),
+      dplyr::across(-c({{ Weekend.type }}, .n, dplyr::where(lubridate::is.Date)),
                     \(x) if(inherits(x, "Duration")) {
                       lubridate::duration(sum(x*.weight)/7) |> round(0)
                     } else if (inherits(x, "hms")) {
@@ -180,6 +184,7 @@ mean_daily <- function(data,
                     } else {
                       sum(x*.weight)/7
                     }),
+      .n = sum(.n),
       .groups = "keep"
     ) |>
     dplyr::select(-.weight) |>
@@ -190,6 +195,10 @@ mean_daily <- function(data,
   weekday_type |> 
     dplyr::bind_rows(mean_daily) |> 
     dplyr::arrange({{ Weekend.type }}, .by_group = TRUE)
+  
+  if(!.n) {
+    weekday_type <- weekday_type |> dplyr::select(-.n)
+  }
   
   #filter out empty rows
   if(filter.empty){
