@@ -330,7 +330,7 @@ If you would like to use a metric you don't find represented in LightLogR, pleas
 
 ## About the creation and funding of LightLogR
 
-**LightLogR** is developed by the [*Translational Sensory & Circadian Neuroscience*](https://www.tscnlab.org) lab, a joint group from the [Technical University of Munich](https://www.tum.de/en/) and the [Max Planck Institute for Biological Neuroscience Unit (MPS/TUM/TUMCREATE)\*](https://www.tscnlab.org), a joint group based at the [Technical University of Munich](https://www.tum.de/en/), [TUMCREATE](https://www.tum-create.edu.sg/), the [Max Planck Institute for Biological Cybernetics](https://www.mpg.de/152075/biological-cybernetics).
+**LightLogR** is developed by the [*Translational Sensory & Circadian Neuroscience Unit (MPS/TUM/TUMCREATE*](https://www.tscnlab.org), a joint group based at the [Max Planck Institute for Biological Cybernetics](https://www.mpg.de/152075/biological-cybernetics), the [Technical University of Munich](https://www.tum.de/en/), and [TUMCREATE](https://www.tum-create.edu.sg/), .
 
 [*MeLiDos*](https://www.melidos.eu) is a joint, [EURAMET](https://www.euramet.org)-funded project involving sixteen partners across Europe, aimed at developing a metrology and a standard workflow for wearable light logger data and optical radiation dosimeters. Its primary contributions towards fostering FAIR data include the development of a common file format, robust metadata descriptors, and an accompanying open-source software ecosystem.
 

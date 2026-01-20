@@ -9,6 +9,8 @@ navbar:
     newsletter:
       text: Newsletter
       menu:
+      - text: January 2026
+        href: Edition02.html
       - text: July 2025
         href: Edition01.html
     resources:
