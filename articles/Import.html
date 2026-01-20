@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,7 +41,7 @@
 <li><h6 class="dropdown-header" data-toc-skip>Get started</h6></li>
     <li><a class="dropdown-item" href="https://tscnlab.github.io/LightLogR_webinar/" target="_blank">Interactive course</a></li>
     <li><a class="dropdown-item" href="../articles/Day.html">The whole game</a></li>
-    <li><a class="external-link dropdown-item" href="https://tscnlab.github.io/ZaunerEtAl_JVis_2025/" target="_blank">Visual experience</a></li>
+    <li><a class="external-link dropdown-item" href="https://tscnlab.github.io/ZaunerEtAl_JVis_2026/" target="_blank">Visual experience</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>General Workflow</h6></li>
     <li><a class="dropdown-item" href="../articles/Import.html">Import</a></li>
@@ -58,7 +58,8 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-newsletter" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Newsletter</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-newsletter">
-<li><a class="dropdown-item" href="../Edition01.html">July 2025</a></li>
+<li><a class="dropdown-item" href="../Edition02.html">January 2026</a></li>
+    <li><a class="dropdown-item" href="../Edition01.html">July 2025</a></li>
   </ul>
 </li>
 <li class="nav-item dropdown">
@@ -67,7 +68,7 @@
 <li><h6 class="dropdown-header" data-toc-skip>
 <span class="globe"></span> Interactive online course</h6></li>
     <li><a class="dropdown-item" href="https://tscnlab.github.io/LightLogR_webinar/" target="_blank">Course website</a></li>
-    <li><a class="dropdown-item" href="../pdf/Online_course_series_2025-26.pdf" target="_blank">Flyer (2025/26)</a></li>
+    <li><a class="dropdown-item" href="https://tscnlab.github.io/LightLogR_webinar/assets/Online_course_series_2025-26.pdf" target="_blank">Flyer</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>
 <span class="comment comment-dots"></span> Talks</h6></li>
@@ -101,7 +102,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Import &amp; cleaning</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/v0.10.0/vignettes/articles/Import.Rmd" class="external-link"><code>vignettes/articles/Import.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/main/vignettes/articles/Import.Rmd" class="external-link"><code>vignettes/articles/Import.Rmd</code></a></small>
       <div class="d-none name"><code>Import.Rmd</code></div>
     </div>
 
@@ -266,7 +267,7 @@ the <code>import</code> function.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">31</span> 221   3610s (~1 hours)           1 0%   </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">32</span> 222   10s                    <span style="text-decoration: underline;">61</span>890 100% </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">33</span> 222   3610s (~1 hours)           1 0%</span></span></code></pre></div>
-<p><img src="Import_files/figure-html/import-1.png" class="r-plt" width="700"></p>
+<p><img src="Import_files/figure-html/import-1.png" class="r-plt" alt="" width="700"></p>
 <div class="section level3">
 <h3 id="my-import-is-slow--why-is-that-and-can-i-speed-it-up">My import is slow. Why is that and can I speed it up?<a class="anchor" aria-label="anchor" href="#my-import-is-slow--why-is-that-and-can-i-speed-it-up"></a>
 </h3>
@@ -372,7 +373,7 @@ are the same for all Ids.</p>
 <code><a href="../reference/gg_overview.html">gg_overview()</a></code> function.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/gg_overview.html">gg_overview</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Import_files/figure-html/overview-1.png" class="r-plt" width="700"></p>
+<p><img src="Import_files/figure-html/overview-1.png" class="r-plt" alt="" width="700"></p>
 <p>Looks much better now. Also, because there is no longer a hint about
 gaps in the lower right corner, we can be sure that all gaps have been
 removed. The function <code><a href="../reference/has_irregulars.html">has_irregulars()</a></code> shows us, however,
@@ -1267,7 +1268,7 @@ computational cost, and also <code>group.by.days = TRUE</code>, wich
 will give us results by day.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/gg_gaps.html">gg_gaps</a></span><span class="op">(</span>include.implicit.gaps <span class="op">=</span> <span class="cn">FALSE</span>, group.by.days <span class="op">=</span> <span class="cn">TRUE</span>, show.irregulars <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Import_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" width="700"></p>
+<p><img src="Import_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" alt="" width="700"></p>
 <p>The first instances seem fine, but then right after the start all
 data appear shifted. As the first half of the day is missing anyways,
 this is likely not a day we will be using. This is also the case with
@@ -1279,7 +1280,7 @@ sample and extract the gaps they have.</p>
 <span>  <span class="fu"><a href="../reference/gg_gaps.html">gg_gaps</a></span><span class="op">(</span><span class="va">MEDI</span>, x.axis.format <span class="op">=</span> <span class="st">"%a"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning: Removed 26719 rows containing missing values or values outside the scale range</span></span>
 <span><span class="co">#&gt; (`geom_line()`).</span></span></code></pre></div>
-<p><img src="Import_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" width="700"></p>
+<p><img src="Import_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="700"></p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">data</span> <span class="op">|&gt;</span> </span>

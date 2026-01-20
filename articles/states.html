@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,7 +41,7 @@
 <li><h6 class="dropdown-header" data-toc-skip>Get started</h6></li>
     <li><a class="dropdown-item" href="https://tscnlab.github.io/LightLogR_webinar/" target="_blank">Interactive course</a></li>
     <li><a class="dropdown-item" href="../articles/Day.html">The whole game</a></li>
-    <li><a class="external-link dropdown-item" href="https://tscnlab.github.io/ZaunerEtAl_JVis_2025/" target="_blank">Visual experience</a></li>
+    <li><a class="external-link dropdown-item" href="https://tscnlab.github.io/ZaunerEtAl_JVis_2026/" target="_blank">Visual experience</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>General Workflow</h6></li>
     <li><a class="dropdown-item" href="../articles/Import.html">Import</a></li>
@@ -58,7 +58,8 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-newsletter" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Newsletter</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-newsletter">
-<li><a class="dropdown-item" href="../Edition01.html">July 2025</a></li>
+<li><a class="dropdown-item" href="../Edition02.html">January 2026</a></li>
+    <li><a class="dropdown-item" href="../Edition01.html">July 2025</a></li>
   </ul>
 </li>
 <li class="nav-item dropdown">
@@ -67,7 +68,7 @@
 <li><h6 class="dropdown-header" data-toc-skip>
 <span class="globe"></span> Interactive online course</h6></li>
     <li><a class="dropdown-item" href="https://tscnlab.github.io/LightLogR_webinar/" target="_blank">Course website</a></li>
-    <li><a class="dropdown-item" href="../pdf/Online_course_series_2025-26.pdf" target="_blank">Flyer (2025/26)</a></li>
+    <li><a class="dropdown-item" href="https://tscnlab.github.io/LightLogR_webinar/assets/Online_course_series_2025-26.pdf" target="_blank">Flyer</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>
 <span class="comment comment-dots"></span> Talks</h6></li>
@@ -101,7 +102,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Durations, states and clusters</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/v0.10.0/vignettes/articles/states.Rmd" class="external-link"><code>vignettes/articles/states.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/main/vignettes/articles/states.Rmd" class="external-link"><code>vignettes/articles/states.Rmd</code></a></small>
       <div class="d-none name"><code>states.Rmd</code></div>
     </div>
 
@@ -159,7 +160,7 @@ contains 17 ids with one weeks worth of data each, and one to three
 participants per week.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/gg_overview.html">gg_overview</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="states_files/figure-html/overview-1.png" class="r-plt" width="700"></p>
+<p><img src="states_files/figure-html/overview-1.png" class="r-plt" alt="" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="creating-states">Creating states<a class="anchor" aria-label="anchor" href="#creating-states"></a>
@@ -1755,7 +1756,7 @@ be done with <code><a href="https://forcats.tidyverse.org/reference/fct_na_value
 <span>  <span class="fu"><a href="../reference/gg_days.html">gg_days</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/gg_states.html">gg_states</a></span><span class="op">(</span><span class="va">state</span>, aes_fill <span class="op">=</span> <span class="va">state</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="va">color</span></span></code></pre></div>
-<p><img src="states_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" width="960"></p>
+<p><img src="states_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="" width="960"></p>
 <p>A numeric representation of the <strong>when</strong> can be achieved
 with <code><a href="../reference/extract_states.html">extract_states()</a></code>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
@@ -4419,7 +4420,7 @@ example to plot the data.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="va">Date</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/gg_days.html">gg_days</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/gg_states.html">gg_states</a></span><span class="op">(</span><span class="va">M10</span>, fill <span class="op">=</span> <span class="st">"yellow2"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="states_files/figure-html/unnamed-chunk-14-1.png" class="r-plt" width="960"></p>
+<p><img src="states_files/figure-html/unnamed-chunk-14-1.png" class="r-plt" alt="" width="960"></p>
 </div>
 <div class="section level3">
 <h3 id="example-sleepwake-data">Example sleep/wake data<a class="anchor" aria-label="anchor" href="#example-sleepwake-data"></a>
@@ -4497,7 +4498,7 @@ sleep/wake data.</p>
 <span>  <span class="fu"><a href="../reference/aggregate_Datetime.html">aggregate_Datetime</a></span><span class="op">(</span>unit <span class="op">=</span> <span class="st">"5 mins"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/gg_days.html">gg_days</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/gg_states.html">gg_states</a></span><span class="op">(</span><span class="va">State</span>, aes_fill <span class="op">=</span> <span class="va">State</span><span class="op">)</span></span></code></pre></div>
-<p><img src="states_files/figure-html/unnamed-chunk-18-1.png" class="r-plt" width="960"></p>
+<p><img src="states_files/figure-html/unnamed-chunk-18-1.png" class="r-plt" alt="" width="960"></p>
 <p>What if we want to know the duration of sleep-wake states? We can
 number the states with the function <code><a href="../reference/number_states.html">number_states()</a></code>. As
 long as there are no singular missing instances (like a sleep instance
@@ -5038,7 +5039,7 @@ in the middle), this will yield a good result.</p>
 <span>  <span class="fu"><a href="../reference/gg_day.html">gg_day</a></span><span class="op">(</span>geom <span class="op">=</span> <span class="st">"line"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/gg_states.html">gg_states</a></span><span class="op">(</span><span class="va">State.Brown</span>, aes_fill <span class="op">=</span> <span class="va">State.Brown</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"Brown states"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="states_files/figure-html/unnamed-chunk-20-1.png" class="r-plt" width="700"></p>
+<p><img src="states_files/figure-html/unnamed-chunk-20-1.png" class="r-plt" alt="" width="700"></p>
 <p>We can even go a step beyond, and show at which times the participant
 complied with these recommendations. We will employ the helper function
 <code><a href="../reference/Brown2reference.html">Brown2reference()</a></code> that creates additional columns,
@@ -5054,7 +5055,7 @@ this recommendation was actually met.</p>
 <span>  <span class="fu"><a href="../reference/gg_day.html">gg_day</a></span><span class="op">(</span>geom <span class="op">=</span> <span class="st">"line"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/gg_states.html">gg_states</a></span><span class="op">(</span><span class="va">Reference.check</span>, aes_fill <span class="op">=</span> <span class="va">State.Brown</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"Following\nrecommendations\nduring the"</span><span class="op">)</span> </span></code></pre></div>
-<p><img src="states_files/figure-html/unnamed-chunk-21-1.png" class="r-plt" width="700"></p>
+<p><img src="states_files/figure-html/unnamed-chunk-21-1.png" class="r-plt" alt="" width="700"></p>
 <p>We can check how well the recommendations were followed by using
 <code><a href="../reference/durations.html">durations()</a></code>.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
@@ -5568,7 +5569,7 @@ collected. There is a whole article on photoperiods, which can be found
 <span>  <span class="fu"><a href="../reference/photoperiod.html">add_photoperiod</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">48.5</span>, <span class="fl">9</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/gg_days.html">gg_days</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/gg_photoperiod.html">gg_photoperiod</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="states_files/figure-html/unnamed-chunk-23-1.png" class="r-plt" width="768"></p>
+<p><img src="states_files/figure-html/unnamed-chunk-23-1.png" class="r-plt" alt="" width="768"></p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#summarize photoperiods</span></span>
 <span><span class="va">data_205</span> <span class="op">|&gt;</span> </span>
@@ -6086,7 +6087,7 @@ participant <code>205</code>, this would look sth. like this:</p>
 <span>  <span class="fu"><a href="../reference/gg_days.html">gg_days</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/gg_states.html">gg_states</a></span><span class="op">(</span><span class="va">above_250</span>, fill <span class="op">=</span> <span class="st">"skyblue4"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Episodes above 250 lx"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="states_files/figure-html/unnamed-chunk-25-1.png" class="r-plt" width="700"></p>
+<p><img src="states_files/figure-html/unnamed-chunk-25-1.png" class="r-plt" alt="" width="700"></p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_205</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/extract_states.html">extract_states</a></span><span class="op">(</span><span class="va">above_250</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -7593,7 +7594,7 @@ example, we can plot the data with <code><a href="../reference/gg_states.html">g
 <span>  <span class="fu"><a href="../reference/gg_days.html">gg_days</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/gg_states.html">gg_states</a></span><span class="op">(</span><span class="va">above_250_cluster</span>, fill <span class="op">=</span> <span class="st">"skyblue4"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Clusters above 250 lx"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="states_files/figure-html/unnamed-chunk-30-1.png" class="r-plt" width="700"></p>
+<p><img src="states_files/figure-html/unnamed-chunk-30-1.png" class="r-plt" alt="" width="700"></p>
 <p>This concludes the article on states, clusters, and durations. We
 have seen how to create states, add them to the dataset, and extract
 useful information from them. We have also seen how to work with

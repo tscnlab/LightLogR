@@ -19,7 +19,8 @@ mean_daily(
   filter.empty = FALSE,
   sub.zero = FALSE,
   Datetime2Time = TRUE,
-  Datetime2Time.circular = FALSE
+  Datetime2Time.circular = FALSE,
+  .n = FALSE
 )
 ```
 
@@ -72,6 +73,11 @@ mean_daily(
 
   Logical of whether Time should be circular. Will be ignored if
   `Datetime2Time = FALSE`. Default is `FALSE`.
+
+- .n:
+
+  Logical, whether the number of days that went into each category
+  should be output. Default is `FALSE`.
 
 ## Value
 

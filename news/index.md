@@ -1,5 +1,15 @@
 # Changelog
 
+## LightLogR 0.10.1
+
+- [`extract_metric()`](https://tscnlab.github.io/LightLogR/reference/extract_metric.md)
+  give more helpful error messages when using a base dataset without
+  start/end columns.
+
+- [`mean_daily()`](https://tscnlab.github.io/LightLogR/reference/mean_daily.md)
+  can output the number of days that factor into the calculations by
+  setting `.n = TRUE`.
+
 ## LightLogR 0.10.0 **High noon**
 
 CRAN release: 2025-11-28
