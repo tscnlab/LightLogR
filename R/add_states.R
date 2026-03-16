@@ -36,6 +36,10 @@
 #'   will be forced to the same time zone as the `dataset` using
 #'   [lubridate::force_tz()]. If `FALSE` (default), the start and end times of
 #'   the `States.dataset` will be used as is.
+#' @param bounds How to treat the edge case, when a state start or endpoint
+#'   falls onto a data point. See [dplyr::join_by()] for details on the bounds
+#'   argument (Join types > Overlap joins > between). Basically `[` or `]`
+#'   signal an inclusive joint, whereas `(` or `)` signal exclusivity.
 #'
 #' @returns a modified `dataset` with the states added. The states are added as
 #'   new columns to the `dataset`. The columns are named after the columns in
@@ -65,6 +69,7 @@ add_states <- function(dataset,
                        start.colname = start,
                        end.colname = end,
                        force.tz = FALSE,
+                       bounds = c("[)", "[]", "(]", "()"),
                        leave.out = c("duration", "epoch")
 ){
   # Initial Checks ----------------------------------------------------------
@@ -74,6 +79,8 @@ add_states <- function(dataset,
     "dataset is not a dataframe" = is.data.frame(dataset),
     "States.dataset is not a dataframe" = is.data.frame(States.dataset)
   )
+  
+  bounds <- rlang::arg_match(bounds)
   
   # Check if Datetime.colname is part of the dataset
   Datetime.colname.defused <- colname.defused({{ Datetime.colname }})
@@ -171,8 +178,12 @@ add_states <- function(dataset,
       by =
         dplyr::join_by(
           !!!groups,
-          {{ Datetime.colname }} >= {{ start.colname}},
-          {{ Datetime.colname }} <= {{ end.colname }}
+          dplyr::between({{ Datetime.colname }},
+          {{ start.colname}},
+          {{ end.colname }},
+          bounds = !!bounds)
+          # {{ Datetime.colname }} >= {{ start.colname}},
+          # {{ Datetime.colname }} <= {{ end.colname }}
         )
     ) |>
     dplyr::select(-{{ start.colname}}, -{{ end.colname }})

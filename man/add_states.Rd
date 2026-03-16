@@ -11,6 +11,7 @@ add_states(
   start.colname = start,
   end.colname = end,
   force.tz = FALSE,
+  bounds = c("[)", "[]", "(]", "()"),
   leave.out = c("duration", "epoch")
 )
 }
@@ -34,6 +35,11 @@ extracted via \code{lubridate} functions.}
 will be forced to the same time zone as the \code{dataset} using
 \code{\link[lubridate:force_tz]{lubridate::force_tz()}}. If \code{FALSE} (default), the start and end times of
 the \code{States.dataset} will be used as is.}
+
+\item{bounds}{How to treat the edge case, when a state start or endpoint
+falls onto a data point. See \code{\link[dplyr:join_by]{dplyr::join_by()}} for details on the bounds
+argument (Join types > Overlap joins > between). Basically \code{[} or \verb{]}
+signal an inclusive joint, whereas \code{(} or \verb{)} signal exclusivity.}
 
 \item{leave.out}{A character vector of columns that should not be carried
 over to the \code{dataset}}

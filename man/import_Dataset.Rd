@@ -321,7 +321,6 @@ such as the intervals between measurements or the start and end dates.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{filepath <- system.file("extdata/205_actlumus_Log_1020_20230904101707532.txt.zip", package = "LightLogR")
 dataset <- import_Dataset("ActLumus", filepath, auto.plot = FALSE)
-#> Multiple files in zip: reading '205_actlumus_Log_1020_20230904101707532.txt'
 #> 
 #> Successfully read in 61'016 observations across 1 Ids from 1 ActLumus-file(s).
 #> Timezone set is UTC.
@@ -339,7 +338,6 @@ dataset <- import_Dataset("ActLumus", filepath, auto.plot = FALSE)
 Import functions can also be called directly:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{dataset <- import$ActLumus(filepath, auto.plot = FALSE)
-#> Multiple files in zip: reading '205_actlumus_Log_1020_20230904101707532.txt'
 #> 
 #> Successfully read in 61'016 observations across 1 Ids from 1 ActLumus-file(s).
 #> Timezone set is UTC.
