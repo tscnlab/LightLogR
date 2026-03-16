@@ -1,3 +1,7 @@
+# LightLogR 0.10.2
+
+* `add_states()` no longer creates duplicate observations at identical start/endpoints. The default behavior is now that the `start` is inclusive and `end` is exclusive. Adjust the new `bounds` argument for more options.
+
 # LightLogR 0.10.1
 
 * `extract_metric()` give more helpful error messages when using a base dataset without start/end columns.
