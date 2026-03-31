@@ -195,7 +195,7 @@ test_that("add_states basic functionality", {
     Intensity = c(5, 3)
   ) # No group needed if main has only one group that matches
   
-  result <- add_states(main_data, states_data, Datetime.colname = Timestamp)
+  result <- add_states(main_data, states_data, Datetime.colname = Timestamp, bounds = "[]")
   
   expect_s3_class(result, "tbl_df")
   expect_equal(nrow(result), 4) # Same as main_data
@@ -226,7 +226,7 @@ test_that("add_states with multiple groups and NAs for non-matching times", {
     StateInfo = c("StateA_Mid", "StateB_Start")
   ) %>% dplyr::group_by(Id) # Match grouping
   
-  result <- add_states(main_data, states_data)
+  result <- add_states(main_data, states_data, bounds = "[]")
   # For Id A: Datetime 0,1,2. State defined for 1h.
   # For Id B: Datetime 0,1,2. State defined for 0h.
   expect_equal(result$StateInfo[result$Id == "A"], c(NA, "StateA_Mid", NA))
