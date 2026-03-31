@@ -78,5 +78,5 @@ dataset1 %>%
 #> # A tibble: 1 × 1
 #>   `Disparity index`
 #>               <dbl>
-#> 1             0.675
+#> 1              1.02
 ```

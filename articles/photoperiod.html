@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -5504,7 +5504,7 @@ and dusk, we prepare our data for the final step.</p>
 <code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span></span>
 <span>  <span class="va">data</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>light.type <span class="op">=</span> </span>
-<span>           <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>           <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>             <span class="fu"><a href="https://dplyr.tidyverse.org/reference/between.html" class="external-link">between</a></span><span class="op">(</span><span class="va">Datetime</span>, <span class="va">first_timing_above_50</span>, <span class="va">dusk</span><span class="op">)</span> <span class="op">~</span> <span class="st">"daytime"</span>,</span>
 <span>             <span class="fu"><a href="https://dplyr.tidyverse.org/reference/between.html" class="external-link">between</a></span><span class="op">(</span><span class="va">Datetime</span>, <span class="va">dusk</span>, <span class="va">last_timing_above_50</span><span class="op">)</span> <span class="op">~</span> <span class="st">"evening"</span>,</span>
 <span>             .default <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span>

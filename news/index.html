@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,6 +67,11 @@
       <small>Source: <a href="https://github.com/tscnlab/LightLogR/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.10.2" id="lightlogr-0102">LightLogR 0.10.2<a class="anchor" aria-label="anchor" href="#lightlogr-0102"></a></h2>
+<ul><li>
+<code><a href="../reference/add_states.html">add_states()</a></code> no longer creates duplicate observations at identical start/endpoints. The default behavior is now that the <code>start</code> is inclusive and <code>end</code> is exclusive. Adjust the new <code>bounds</code> argument for more options.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.10.1" id="lightlogr-0101">LightLogR 0.10.1<a class="anchor" aria-label="anchor" href="#lightlogr-0101"></a></h2>
 <ul><li><p><code><a href="../reference/extract_metric.html">extract_metric()</a></code> give more helpful error messages when using a base dataset without start/end columns.</p></li>

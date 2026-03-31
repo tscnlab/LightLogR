@@ -96,5 +96,5 @@ dataset1 %>%
 #> # A tibble: 1 × 1
 #>   `cumulative nvRD`
 #>               <dbl>
-#> 1              10.7
+#> 1              8.72
 ```

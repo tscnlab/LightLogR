@@ -17,7 +17,7 @@ full list of arguments."><meta property="og:image" content="https://tscnlab.gith
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -402,7 +402,6 @@ added that translates these status codes. The columns carry the name
 such as the intervals between measurements or the start and end dates.</p>
 <p></p><div class="sourceCode r"><pre><code><span><span class="va">filepath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/205_actlumus_Log_1020_20230904101707532.txt.zip"</span>, package <span class="op">=</span> <span class="st">"LightLogR"</span><span class="op">)</span></span>
 <span><span class="va">dataset</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/import_Dataset.html">import_Dataset</a></span><span class="op">(</span><span class="st">"ActLumus"</span>, <span class="va">filepath</span>, auto.plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Multiple files in zip: reading '205_actlumus_Log_1020_20230904101707532.txt'</span></span>
 <span><span class="co">#&gt;</span></span>
 <span><span class="co">#&gt; Successfully read in 61'016 observations across 1 Ids from 1 ActLumus-file(s).</span></span>
 <span><span class="co">#&gt; Timezone set is UTC.</span></span>
@@ -417,7 +416,6 @@ such as the intervals between measurements or the start and end dates.</p>
 <span><span class="co">#&gt; 1 205_actlumus_Log_1020_20230904101707532.txt 10s           61015 100%</span></span></code></pre><p></p></div>
 <p>Import functions can also be called directly:</p>
 <p></p><div class="sourceCode r"><pre><code><span><span class="va">dataset</span> <span class="op">&lt;-</span> <span class="va">import</span><span class="op">$</span><span class="fu">ActLumus</span><span class="op">(</span><span class="va">filepath</span>, auto.plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Multiple files in zip: reading '205_actlumus_Log_1020_20230904101707532.txt'</span></span>
 <span><span class="co">#&gt;</span></span>
 <span><span class="co">#&gt; Successfully read in 61'016 observations across 1 Ids from 1 ActLumus-file(s).</span></span>
 <span><span class="co">#&gt; Timezone set is UTC.</span></span>

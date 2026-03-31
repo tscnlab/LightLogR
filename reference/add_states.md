@@ -17,6 +17,7 @@ add_states(
   start.colname = start,
   end.colname = end,
   force.tz = FALSE,
+  bounds = c("[)", "[]", "(]", "()"),
   leave.out = c("duration", "epoch")
 )
 ```
@@ -53,6 +54,15 @@ add_states(
   [`lubridate::force_tz()`](https://lubridate.tidyverse.org/reference/force_tz.html).
   If `FALSE` (default), the start and end times of the `States.dataset`
   will be used as is.
+
+- bounds:
+
+  How to treat the edge case, when a state start or endpoint falls onto
+  a data point. See
+  [`dplyr::join_by()`](https://dplyr.tidyverse.org/reference/join_by.html)
+  for details on the bounds argument (Join types \> Overlap joins \>
+  between). Basically `[` or `]` signal an inclusive joint, whereas `(`
+  or `)` signal exclusivity.
 
 - leave.out:
 

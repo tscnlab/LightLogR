@@ -102,13 +102,13 @@ dataset.reference <-
 
 # Circadian disturbance
 nvRC_circadianDisturbance(dataset1$nvRC, dataset.reference$nvRC)
-#> [1] 0.2416101
+#> [1] 0.2605862
 
 # Circadian bias
 nvRC_circadianBias(dataset1$nvRC, dataset.reference$nvRC)
-#> [1] -0.0315973
+#> [1] -0.04904808
 
 # Relative amplitude error
 nvRC_relativeAmplitudeError(dataset1$nvRC, dataset.reference$nvRC)
-#> [1] 0.2158102
+#> [1] 0.3263525
 ```

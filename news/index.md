@@ -1,5 +1,12 @@
 # Changelog
 
+## LightLogR 0.10.2
+
+- [`add_states()`](https://tscnlab.github.io/LightLogR/reference/add_states.md)
+  no longer creates duplicate observations at identical start/endpoints.
+  The default behavior is now that the `start` is inclusive and `end` is
+  exclusive. Adjust the new `bounds` argument for more options.
+
 ## LightLogR 0.10.1
 
 - [`extract_metric()`](https://tscnlab.github.io/LightLogR/reference/extract_metric.md)

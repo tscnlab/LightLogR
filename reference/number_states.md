@@ -110,8 +110,12 @@ sample.data.environment |>
   dplyr::group_by(photoperiod.state.count, .add = TRUE) |>
   dplyr::summarize(mean_MEDI = mean(MEDI)) |>
   tail(13)
-#> `summarise()` has grouped output by 'Id'. You can override using the `.groups`
-#> argument.
+#> `summarise()` has regrouped the output.
+#> ℹ Summaries were computed grouped by Id and photoperiod.state.count.
+#> ℹ Output is grouped by Id.
+#> ℹ Use `summarise(.groups = "drop_last")` to silence this message.
+#> ℹ Use `summarise(.by = c(Id, photoperiod.state.count))` for per-operation
+#>   grouping (`?dplyr::dplyr_by`) instead.
 #> # A tibble: 13 × 3
 #> # Groups:   Id [1]
 #>    Id          photoperiod.state.count mean_MEDI

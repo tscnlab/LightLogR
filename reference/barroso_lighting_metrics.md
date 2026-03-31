@@ -130,7 +130,7 @@ dataset1 %>%
 #> # A tibble: 1 × 7
 #>   bright_threshold dark_threshold bright_mean_level dark_mean_level
 #>              <dbl>          <dbl>             <dbl>           <dbl>
-#> 1              509              1              734.           0.501
+#> 1              455              1              874.           0.503
 #> # ℹ 3 more variables: bright_cluster <Duration>, dark_cluster <Duration>,
 #> #   circadian_variation <dbl>
   

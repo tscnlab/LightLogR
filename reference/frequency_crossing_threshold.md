@@ -87,12 +87,12 @@ dataset1 %>%
 #> # A tibble: 1 × 1
 #>   `Frequency crossing 250lx`
 #>                        <int>
-#> 1                         34
+#> 1                         28
 
 dataset1 %>%
   dplyr::reframe(frequency_crossing_threshold(MEDI, threshold = 250, as.df = TRUE))
 #> # A tibble: 1 × 1
 #>   frequency_crossing_250
 #>                    <int>
-#> 1                     34
+#> 1                     28
 ```

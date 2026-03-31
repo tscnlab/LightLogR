@@ -118,6 +118,10 @@ dataset_with_states <-
 sample.data.environment %>%
 interval2state(State.interval.dataset = intervals)
 #> Warning: The time zone of the dataset and the State.interval.dataset are not the same. This might lead to unexpected results or time shifts.
+#> Warning: Using `by = character()` to perform a cross join was deprecated in dplyr 1.1.0.
+#> ℹ Please use `cross_join()` instead.
+#> ℹ The deprecated feature was likely used in the LightLogR package.
+#>   Please report the issue at <https://github.com/tscnlab/LightLogR/issues>.
 
 #visualize the states - note that the states are only added to the respective ID in the dataset
 library(ggplot2)

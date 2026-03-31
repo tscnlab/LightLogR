@@ -75,7 +75,7 @@ sample.data.environment |>
 #> # A tibble: 1 × 1
 #>   Id         
 #>   <fct>      
-#> 1 Participant
+#> 1 Environment
 
 #gives the group with the highest average melanopic EDI
 sample.data.environment |>

@@ -109,7 +109,7 @@ dataset1 %>%
 #> # A tibble: 1 × 1
 #>   `Threshold above which for 30 mins`
 #>                                 <int>
-#> 1                                 276
+#> 1                                 358
 
 dataset1 %>%
   dplyr::reframe("Threshold below which for 30 mins" = 
@@ -126,5 +126,5 @@ dataset1 %>%
 #> # A tibble: 1 × 1
 #>   threshold_above_for_30_minutes
 #>                            <int>
-#> 1                            276
+#> 1                            358
 ```
