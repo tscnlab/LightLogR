@@ -21,7 +21,7 @@
 
 - **Wellcome Trust**. Funder.  
   LightLogR's development is supported by the Wellcome Trust
-  (www.wellcome.org), 226787/2/22/Z.
+  (wellcome.org), 226787/2/22/Z.
 
 - **Reality Labs Research**. Funder.  
   LightLogR's development is supported by the GLEE project (Global Light
@@ -34,7 +34,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/tscnlab/LightLogR/blob/v0.10.2/inst/CITATION)
+[`inst/CITATION`](https://github.com/tscnlab/LightLogR/blob/main/inst/CITATION)
 
 Zauner, J., Hartmeyer, S., & Spitschan, M. (2025). LightLogR:
 Reproducible analysis of personal light exposure data. Journal of Open

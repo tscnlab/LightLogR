@@ -139,24 +139,11 @@ state_data |>
 
  #this line is simply for sensible colors
 
-#same, but with gg_day()
-state_data |>
- dplyr::filter(Id == "Participant") |>
- gg_day(geom = "line") |>
- gg_states(state, fill = "red")
-
 
  #more complex state
  state_data |>
  dplyr::filter(Id == "Participant") |>
  gg_day(geom = "line") |>
- gg_states(state2, aes_fill = state2)
-
-
- #with gg_doubleplot
- state_data |>
- dplyr::filter(Id == "Participant") |>
- gg_doubleplot() |>
  gg_states(state2, aes_fill = state2)
 
 

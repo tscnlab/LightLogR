@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -148,7 +148,9 @@ Light logger data can powerfully convey insights into personal light exposure
 <span><span class="co">#the following packages are needed for the examples as shown below.</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ardata-fr.github.io/flextable-book/" class="external-link">flextable</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></code></pre></div>
+<span><span class="co">#&gt; Warning: package 'dplyr' was built under R version 4.5.2</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: package 'ggplot2' was built under R version 4.5.2</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="import">Import<a class="anchor" aria-label="anchor" href="#import"></a>
 </h3>
@@ -158,10 +160,10 @@ Light logger data can powerfully convey insights into personal light exposure
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/205_actlumus_Log_1020_20230904101707532.txt.zip"</span>, </span>
 <span>              package <span class="op">=</span> <span class="st">"LightLogR"</span><span class="op">)</span></span>
 <span><span class="va">dataset</span> <span class="op">&lt;-</span> <span class="va">import</span><span class="op">$</span><span class="fu">ActLumus</span><span class="op">(</span><span class="va">filename</span>, <span class="st">"Europe/Berlin"</span>, manual.id <span class="op">=</span> <span class="st">"P1"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Multiple files in zip: reading '205_actlumus_Log_1020_20230904101707532.txt'</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Successfully read in 61'016 observations across 1 Ids from 1 ActLumus-file(s).</span></span>
 <span><span class="co">#&gt; Timezone set is Europe/Berlin.</span></span>
+<span><span class="co">#&gt; The system timezone is Europe/Madrid. Please correct if necessary!</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; First Observation: 2023-08-28 08:47:54</span></span>
 <span><span class="co">#&gt; Last Observation: 2023-09-04 10:17:04</span></span>
@@ -202,7 +204,11 @@ Example for <code><a href="reference/gg_overview.html">gg_overview()</a></code> 
 <span>  <span class="co"># the output is a standard ggplot, and can be manipulated that way</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"red"</span>, linewidth <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Personal light exposure across a week"</span>, </span>
-<span>       subtitle <span class="op">=</span> <span class="st">"Boxplot in 3-hour bins"</span><span class="op">)</span></span></code></pre></div>
+<span>       subtitle <span class="op">=</span> <span class="st">"Boxplot in 3-hour bins"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: Orientation is not uniquely specified when both the x and y aesthetics are</span></span>
+<span><span class="co">#&gt; continuous. Picking default orientation 'x'.</span></span>
+<span><span class="co">#&gt; Orientation is not uniquely specified when both the x and y aesthetics are</span></span>
+<span><span class="co">#&gt; continuous. Picking default orientation 'x'.</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-5-1.png" width="100%"></p>
 </div>
 <div class="section level3">
@@ -387,7 +393,6 @@ Example for <code><a href="reference/gg_overview.html">gg_overview()</a></code> 
 <p>At present, these are the devices we support in LightLogR:</p>
 <ul>
 <li><p>Actiwatch_Spectrum</p></li>
-<li><p>Actiwatch_Spectrum_de</p></li>
 <li><p>ActLumus</p></li>
 <li><p>ActTrust</p></li>
 <li><p>Circadian_Eye</p></li>
@@ -553,7 +558,7 @@ Example for <code><a href="reference/gg_overview.html">gg_overview()</a></code> 
 <div class="section level2">
 <h2 id="about-the-creation-and-funding-of-lightlogr">About the creation and funding of LightLogR<a class="anchor" aria-label="anchor" href="#about-the-creation-and-funding-of-lightlogr"></a>
 </h2>
-<p><strong>LightLogR</strong> is developed by the <a href="https://www.tscnlab.org" class="external-link"><em>Translational Sensory &amp; Circadian Neuroscience</em></a> lab, a joint group from the <a href="https://www.tum.de/en/" class="external-link">Technical University of Munich</a> and the <a href="https://www.tscnlab.org" class="external-link">Max Planck Institute for Biological Neuroscience Unit (MPS/TUM/TUMCREATE)*</a>, a joint group based at the <a href="https://www.tum.de/en/" class="external-link">Technical University of Munich</a>, <a href="https://www.tum-create.edu.sg/" class="external-link">TUMCREATE</a>, the <a href="https://www.mpg.de/152075/biological-cybernetics" class="external-link">Max Planck Institute for Biological Cybernetics</a>.</p>
+<p><strong>LightLogR</strong> is developed by the <a href="https://www.tscnlab.org" class="external-link"><em>Translational Sensory &amp; Circadian Neuroscience Unit (MPS/TUM/TUMCREATE</em></a>, a joint group based at the <a href="https://www.mpg.de/152075/biological-cybernetics" class="external-link">Max Planck Institute for Biological Cybernetics</a>, the <a href="https://www.tum.de/en/" class="external-link">Technical University of Munich</a>, and <a href="https://www.tum-create.edu.sg/" class="external-link">TUMCREATE</a>, .</p>
 <p><a href="https://www.melidos.eu" class="external-link"><em>MeLiDos</em></a> is a joint, <a href="https://www.euramet.org" class="external-link">EURAMET</a>-funded project involving sixteen partners across Europe, aimed at developing a metrology and a standard workflow for wearable light logger data and optical radiation dosimeters. Its primary contributions towards fostering FAIR data include the development of a common file format, robust metadata descriptors, and an accompanying open-source software ecosystem.</p>
 <p><a href="https://www.euramet.org" class="external-link"><img src="reference/figures/Metrology_Partnership_LOGO.jpg" width="282"></a> <img src="reference/figures/Co-Funded-By-the-EU.png" width="288"></p>
 <p>The project (22NRM05 MeLiDos) has received funding from the European Partnership on Metrology, co-financed from the European Union’s Horizon Europe Research and Innovation Programme and by the Participating States. Views and opinions expressed are however those of the author(s) only and do not necessarily reflect those of the European Union or EURAMET. Neither the European Union nor the granting authority can be held responsible for them.</p>

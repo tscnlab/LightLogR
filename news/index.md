@@ -1,5 +1,10 @@
 # Changelog
 
+## LightLogR 0.10.3
+
+- `LYS` import now works with any timestamp column in raw data, as long
+  as it starts with `timestamp`
+
 ## LightLogR 0.10.2
 
 - [`add_states()`](https://tscnlab.github.io/LightLogR/reference/add_states.md)

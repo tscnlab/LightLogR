@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -102,7 +102,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Light spectrum</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/v0.10.2/vignettes/articles/spectrum.Rmd" class="external-link"><code>vignettes/articles/spectrum.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/main/vignettes/articles/spectrum.Rmd" class="external-link"><code>vignettes/articles/spectrum.Rmd</code></a></small>
       <div class="d-none name"><code>spectrum.Rmd</code></div>
     </div>
 
@@ -120,11 +120,11 @@ package to process spectral data from the Actlumus device.</p>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tscnlab/LightLogR" class="external-link">LightLogR</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; ── <span style="font-weight: bold;">Attaching core tidyverse packages</span> ──────────────────────── tidyverse 2.0.0 ──</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">dplyr    </span> 1.2.0     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">readr    </span> 2.2.0</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">dplyr    </span> 1.2.1     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">readr    </span> 2.2.0</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">forcats  </span> 1.0.1     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">stringr  </span> 1.6.0</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">ggplot2  </span> 4.0.2     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tibble   </span> 3.3.1</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">ggplot2  </span> 4.0.3     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tibble   </span> 3.3.1</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">lubridate</span> 1.9.5     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tidyr    </span> 1.3.2</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">purrr    </span> 1.2.1     </span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">purrr    </span> 1.2.2     </span></span>
 <span><span class="co">#&gt; ── <span style="font-weight: bold;">Conflicts</span> ────────────────────────────────────────── tidyverse_conflicts() ──</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">filter()</span> masks <span style="color: #0000BB;">stats</span>::filter()</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">lag()</span>    masks <span style="color: #0000BB;">stats</span>::lag()</span></span>

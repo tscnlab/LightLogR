@@ -13,7 +13,7 @@ make the most sense."><meta property="og:image" content="https://tscnlab.github.
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,7 +70,7 @@ make the most sense."><meta property="og:image" content="https://tscnlab.github.
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Add states to gg_day() or gg_days() plots</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/v0.10.2/R/gg_state.R" class="external-link"><code>R/gg_state.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/main/R/gg_state.R" class="external-link"><code>R/gg_state.R</code></a></small>
       <div class="d-none name"><code>gg_states.Rd</code></div>
     </div>
 
@@ -203,26 +203,13 @@ aesthetic properties.</p></dd>
 <span class="r-plt img"><img src="gg_states-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span> <span class="co">#this line is simply for sensible colors</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">#same, but with gg_day()</span></span></span>
-<span class="r-in"><span><span class="va">state_data</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Id</span> <span class="op">==</span> <span class="st">"Participant"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span> <span class="fu"><a href="gg_day.html">gg_day</a></span><span class="op">(</span>geom <span class="op">=</span> <span class="st">"line"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span> <span class="fu">gg_states</span><span class="op">(</span><span class="va">state</span>, fill <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="gg_states-3.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span> <span class="co">#more complex state</span></span></span>
 <span class="r-in"><span> <span class="va">state_data</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Id</span> <span class="op">==</span> <span class="st">"Participant"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span> <span class="fu"><a href="gg_day.html">gg_day</a></span><span class="op">(</span>geom <span class="op">=</span> <span class="st">"line"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span> <span class="fu">gg_states</span><span class="op">(</span><span class="va">state2</span>, aes_fill <span class="op">=</span> <span class="va">state2</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="gg_states-4.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span> <span class="co">#with gg_doubleplot</span></span></span>
-<span class="r-in"><span> <span class="va">state_data</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Id</span> <span class="op">==</span> <span class="st">"Participant"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span> <span class="fu"><a href="gg_doubleplot.html">gg_doubleplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span> <span class="fu">gg_states</span><span class="op">(</span><span class="va">state2</span>, aes_fill <span class="op">=</span> <span class="va">state2</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="gg_states-5.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="gg_states-3.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span> <span class="co">#setting the height of the bars </span></span></span>
 <span class="r-in"><span> <span class="va">state_data</span> <span class="op">|&gt;</span></span></span>
@@ -232,7 +219,7 @@ aesthetic properties.</p></dd>
 <span class="r-in"><span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></span><span class="op">(</span>values<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#868686FF"</span>, <span class="st">"#EFC000FF"</span>, <span class="st">"#0073C2FF"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Scale for <span style="color: #00BB00;">fill</span> is already present.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding another scale for <span style="color: #00BB00;">fill</span>, which will replace the existing scale.</span>
-<span class="r-plt img"><img src="gg_states-6.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="gg_states-4.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span> <span class="co">#setting the height of the bars conditionally based on the median value</span></span></span>
 <span class="r-in"><span> <span class="va">state_data</span> <span class="op">|&gt;</span></span></span>
@@ -243,7 +230,7 @@ aesthetic properties.</p></dd>
 <span class="r-in"><span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></span><span class="op">(</span>values<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#868686FF"</span>, <span class="st">"#EFC000FF"</span>, <span class="st">"#0073C2FF"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Scale for <span style="color: #00BB00;">fill</span> is already present.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding another scale for <span style="color: #00BB00;">fill</span>, which will replace the existing scale.</span>
-<span class="r-plt img"><img src="gg_states-7.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="gg_states-5.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

@@ -359,7 +359,7 @@ such as the intervals between measurements or the start and end dates.
     #>
     #> Successfully read in 61'016 observations across 1 Ids from 1 ActLumus-file(s).
     #> Timezone set is UTC.
-    #> The system timezone is Europe/Berlin. Please correct if necessary!
+    #> The system timezone is Europe/Madrid. Please correct if necessary!
     #>
     #> First Observation: 2023-08-28 08:47:54
     #> Last Observation: 2023-09-04 10:17:04
@@ -375,7 +375,7 @@ Import functions can also be called directly:
     #>
     #> Successfully read in 61'016 observations across 1 Ids from 1 ActLumus-file(s).
     #> Timezone set is UTC.
-    #> The system timezone is Europe/Berlin. Please correct if necessary!
+    #> The system timezone is Europe/Madrid. Please correct if necessary!
     #>
     #> First Observation: 2023-08-28 08:47:54
     #> Last Observation: 2023-09-04 10:17:04
