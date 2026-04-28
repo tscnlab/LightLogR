@@ -96,7 +96,9 @@ library(LightLogR)
 #the following packages are needed for the examples as shown below.
 library(flextable)
 library(dplyr)
+#> Warning: package 'dplyr' was built under R version 4.5.2
 library(ggplot2)
+#> Warning: package 'ggplot2' was built under R version 4.5.2
 ```
 
 ### Import
@@ -109,10 +111,10 @@ filename <-
   system.file("extdata/205_actlumus_Log_1020_20230904101707532.txt.zip", 
               package = "LightLogR")
 dataset <- import$ActLumus(filename, "Europe/Berlin", manual.id = "P1")
-#> Multiple files in zip: reading '205_actlumus_Log_1020_20230904101707532.txt'
 #> 
 #> Successfully read in 61'016 observations across 1 Ids from 1 ActLumus-file(s).
 #> Timezone set is Europe/Berlin.
+#> The system timezone is Europe/Madrid. Please correct if necessary!
 #> 
 #> First Observation: 2023-08-28 08:47:54
 #> Last Observation: 2023-09-04 10:17:04
@@ -180,6 +182,10 @@ dataset |>
   geom_line(col = "red", linewidth = 0.25) + 
   labs(title = "Personal light exposure across a week", 
        subtitle = "Boxplot in 3-hour bins")
+#> Warning: Orientation is not uniquely specified when both the x and y aesthetics are
+#> continuous. Picking default orientation 'x'.
+#> Orientation is not uniquely specified when both the x and y aesthetics are
+#> continuous. Picking default orientation 'x'.
 ```
 
 <img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
@@ -451,8 +457,6 @@ At present, these are the devices we support in LightLogR:
 
 - Actiwatch_Spectrum
 
-- Actiwatch_Spectrum_de
-
 - ActLumus
 
 - ActTrust
@@ -540,14 +544,11 @@ repository](https://github.com/tscnlab/LightLogR/issues).
 ## About the creation and funding of LightLogR
 
 **LightLogR** is developed by the [*Translational Sensory & Circadian
-Neuroscience*](https://www.tscnlab.org) lab, a joint group from the
-[Technical University of Munich](https://www.tum.de/en/) and the [Max
-Planck Institute for Biological Neuroscience Unit
-(MPS/TUM/TUMCREATE)\*](https://www.tscnlab.org), a joint group based at
-the [Technical University of Munich](https://www.tum.de/en/),
-[TUMCREATE](https://www.tum-create.edu.sg/), the [Max Planck Institute
-for Biological
-Cybernetics](https://www.mpg.de/152075/biological-cybernetics).
+Neuroscience Unit (MPS/TUM/TUMCREATE*](https://www.tscnlab.org), a joint
+group based at the [Max Planck Institute for Biological
+Cybernetics](https://www.mpg.de/152075/biological-cybernetics), the
+[Technical University of Munich](https://www.tum.de/en/), and
+[TUMCREATE](https://www.tum-create.edu.sg/), .
 
 [*MeLiDos*](https://www.melidos.eu) is a joint,
 [EURAMET](https://www.euramet.org)-funded project involving sixteen
