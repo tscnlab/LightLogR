@@ -1,3 +1,5 @@
+# LightLogR 0.10.3
+
 * `LYS` import now works with any timestamp column in raw data, as long as it starts with `timestamp`
 
 # LightLogR 0.10.2
