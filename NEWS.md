@@ -1,3 +1,7 @@
+# LightLogR 0.10.3
+
+* `LYS` import now works with any timestamp column in raw data, as long as it starts with `timestamp`
+
 # LightLogR 0.10.2
 
 * `add_states()` no longer creates duplicate observations at identical start/endpoints. The default behavior is now that the `start` is inclusive and `end` is exclusive. Adjust the new `bounds` argument for more options.

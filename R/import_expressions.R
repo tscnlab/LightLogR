@@ -181,7 +181,7 @@ import_expr <- list(
                       ...
       ))
     data <- data %>%
-      dplyr::rename(Datetime = timestamp,
+      dplyr::rename(Datetime = starts_with("timestamp"),
                     MEDI = mEDI) %>%
       dplyr::mutate(Datetime =
                       Datetime %>% lubridate::dmy_hms() %>% 

@@ -32,7 +32,7 @@ Authors:
 Other contributors:
 \itemize{
   \item European Partnership on Metrology (The project (22NRM05 MeLiDos) has received funding from the European Partnership on Metrology, co-financed by the European Union's Horizon Europe Research and Innovation Programme, EURAMET, and the Participating States. Views and opinions expressed are those of the authors and do not necessarily reflect those of the European Union or EURAMET.) [funder]
-  \item Wellcome Trust (LightLogR's development is supported by the Wellcome Trust (www.wellcome.org), 226787/2/22/Z.) [funder]
+  \item Wellcome Trust (LightLogR's development is supported by the Wellcome Trust (wellcome.org), 226787/2/22/Z.) [funder]
   \item Reality Labs Research (LightLogR's development is supported by the GLEE project (Global Light Exposure Engine, www.visualdiet.org) funded by Reality Labs Research.) [funder]
   \item Translational Sensory and Circadian Neuroscience Unit (MPS/TUM/TUMCREATE) (www.tscnlab.org) [copyright holder]
 }
