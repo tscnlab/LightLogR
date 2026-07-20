@@ -419,11 +419,21 @@ imports <- function(device,
       # browser()
       #if there are duplicate rows, remove them and print an info message
       var_names <- names(data) |> setdiff("file.name")
-      duplicate.table <- 
-        data |>  
-        dplyr::add_count(dplyr::pick(dplyr::all_of(var_names)), name = "dupes") |> 
-        dplyr::filter(dupes > 1) |> 
-        dplyr::arrange(dplyr::desc(dupes))
+      duplicate_prefilter <-
+        data |>
+        dplyr::select(dplyr::all_of(intersect(c("Id", "Datetime"), var_names)))
+      possible_duplicate <-
+        duplicated(duplicate_prefilter) |
+        duplicated(duplicate_prefilter, fromLast = TRUE)
+      duplicate.table <-
+        if(any(possible_duplicate)) {
+          data[possible_duplicate, , drop = FALSE] |>
+            dplyr::add_count(dplyr::pick(dplyr::all_of(var_names)), name = "dupes") |>
+            dplyr::filter(dupes > 1) |>
+            dplyr::arrange(dplyr::desc(dupes))
+        } else {
+          data[0, , drop = FALSE]
+        }
       duplicates <- 
         duplicate.table |> 
         nrow()
@@ -462,7 +472,16 @@ imports <- function(device,
       
       #if autoplot is TRUE & silent is FALSE, make a plot
       if(auto.plot & !silent) {
-        data %>% gg_overview() %>% print()
+        plot.data <- data
+        plot.gap.data <- NULL
+        if(!!device == "VEET") {
+          import.dots <- rlang::list2(...)
+          if(identical(import.dots$modality, "TOF")) {
+            plot.data <- data |> dplyr::select(Id, Datetime)
+            plot.gap.data <- tibble::tibble()
+          }
+        }
+        plot.data %>% gg_overview(gap.data = plot.gap.data) %>% print()
       }
       #return the file
       data

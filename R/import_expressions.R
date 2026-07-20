@@ -380,55 +380,70 @@ import_expr <- list(
                 Unit_ALS_Flicker = FALSE)
     }
     
-    data <- 
-      purrr::map(filename, \(filename) {
-        pattern <- paste0("^(?:[^,]*,){1}\\b", modality, "\\b")
-        
+    column_names <- names(veet_names[[modality]])
+    col_classes <- stats::setNames(
+      ifelse(veet_names[[modality]], "numeric", "character"),
+      column_names
+    )
+
+    data <- data.table::rbindlist(
+      lapply(filename, \(file_path) {
+        pattern <- paste0(
+          "^(?:[^,]*,){1}\\b",
+          modality,
+          "\\b"
+        )
+
         lines <- readr::read_lines(
-          file = filename, 
-          locale = locale, 
+          file = file_path,
+          locale = locale,
           n_max = n_max
         )
-        
-        lines <- lines[stringr::str_detect(lines, pattern)]
-        
-        if (length(lines) == 0) {
-          data <- tibble::as_tibble(
-            stats::setNames(
-              replicate(length(veet_names[[modality]]), character(), simplify = FALSE),
-              names(veet_names[[modality]])
+
+        lines <- lines[
+          stringr::str_detect(lines, pattern)
+        ]
+
+        result <-
+          if(length(lines) == 0) {
+            data.table::as.data.table(
+              stats::setNames(
+                lapply(col_classes, \(x) switch(
+                  x,
+                  "numeric" = numeric(),
+                  "character" = character()
+                )),
+                column_names
+              )
             )
-          )
-        } else {
-          data <- vroom::vroom(
-            I(paste(lines, collapse = "\n")),
-            delim = ",",
-            col_names = names(veet_names[[modality]]),
-            col_types = vroom::cols(.default = vroom::col_character()),
-            progress = FALSE,
-            altrep = FALSE
-          )
-        }
-        
-        data %>% 
-          dplyr::mutate(file.name = filename, .before = 1)
-      }) %>% 
-      purrr::list_rbind()
-    
-    data <- data %>% 
-      dplyr::mutate(
-        dplyr::across(
-          tidyselect::all_of(
-            veet_names[[modality]][veet_names[[modality]]] %>% names()
-          ), 
-          as.numeric
-        ),
-        Datetime = lubridate::with_tz(
-          lubridate::as_datetime(time_stamp, tz = "UTC"), 
-          tz
-        ), 
-        .before = 1
+          } else {
+            data.table::fread(
+              text = lines,
+              header = FALSE,
+              sep = ",",
+              col.names = column_names,
+              colClasses = unname(col_classes),
+              showProgress = FALSE
+            )
+          }
+
+        data.table::set(result, j = "file.name", value = file_path)
+        data.table::setcolorder(result, "file.name")
+
+        result
+      }),
+      use.names = TRUE
+    )
+
+    data.table::set(
+      data,
+      j = "Datetime",
+      value = lubridate::with_tz(
+        lubridate::as_datetime(data[["time_stamp"]], tz = "UTC"),
+        tz
       )
+    )
+    data.table::setcolorder(data, c("Datetime", setdiff(names(data), "Datetime")))
   }
   ),
   #GENEActiv GGIR

@@ -27,6 +27,7 @@ BugReports: https://github.com/tscnlab/LightLogR/issues
 Imports:
     circular,
     cowplot,
+    data.table,
     dplyr,
     ggplot2,
     ggsci,

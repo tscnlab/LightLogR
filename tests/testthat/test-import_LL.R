@@ -50,3 +50,54 @@ test_that("import works", {
   #check if the function extracted the correct name from the filepath and whether there is only one
   expect_equal(unique(data$Id) %>% as.character(), "205")
 })
+
+test_that("VEET imports TOF with typed columns", {
+  filename <- tempfile(fileext = ".csv")
+  writeLines(
+    c(
+      paste(c(1719835200, "TOF", seq_len(256)), collapse = ","),
+      paste(c(1719835260, "TOF", seq_len(256) + 1), collapse = ",")
+    ),
+    filename
+  )
+
+  data <- import$VEET(
+    filename,
+    modality = "TOF",
+    auto.plot = FALSE,
+    silent = TRUE
+  )
+
+  expect_equal(nrow(data), 2)
+  expect_true(is.numeric(data$time_stamp))
+  expect_true(is.numeric(data$conf1_0))
+  expect_equal(data$dist2_63, c(256, 257))
+})
+
+test_that("VEET TOF auto plot avoids expensive gap detection", {
+  filename <- tempfile(fileext = ".csv")
+  writeLines(
+    c(
+      paste(c(1719835200, "TOF", seq_len(256)), collapse = ","),
+      paste(c(1719835260, "TOF", seq_len(256) + 1), collapse = ",")
+    ),
+    filename
+  )
+
+  plot_file <- tempfile(fileext = ".pdf")
+  grDevices::pdf(plot_file)
+  on.exit(grDevices::dev.off(), add = TRUE)
+
+  data <- NULL
+  expect_output(
+    data <- import$VEET(
+      filename,
+      modality = "TOF",
+      auto.plot = TRUE,
+      silent = FALSE
+    ),
+    "Successfully read in"
+  )
+
+  expect_equal(nrow(data), 2)
+})
