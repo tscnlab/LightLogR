@@ -74,7 +74,7 @@ test_that("VEET imports TOF with typed columns", {
   expect_equal(data$dist2_63, c(256, 257))
 })
 
-test_that("VEET TOF auto plot avoids expensive gap detection", {
+test_that("VEET TOF auto plot runs without errors", {
   filename <- tempfile(fileext = ".csv")
   writeLines(
     c(
