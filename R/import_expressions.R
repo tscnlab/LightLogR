@@ -4,7 +4,7 @@
 import_expr <- list(
   #ActTrust 1 & 2
   ActTrust = rlang::expr({
-    column_names <- c("DATE/TIME", "MS", "EVENT", "TEMPERATURE")
+    column_names <- c("DATE", "MS", "EVENT", "TEMPERATURE")
     data <- 
       purrr::map(
         filename,
@@ -19,7 +19,7 @@ import_expr <- list(
               skip = rows_to_skip,
               delim = ";",
               n_max = n_max,
-              col_types = paste0("c", paste0(rep("d", 20), collapse = "")),
+              # col_types = paste0("c", paste0(rep("d", 20), collapse = "")),
               id = "file.name",
               locale = locale,
               name_repair = "universal",
@@ -27,6 +27,14 @@ import_expr <- list(
             )
           )
         }) %>% purrr::list_rbind()
+    
+    if(all(c("DATE", "TIME") %in% names(data))) {
+      data <-
+        data |> 
+        dplyr::mutate(DATE.TIME = paste(DATE, TIME), .before = DATE) |> 
+        dplyr::select(-c(DATE, TIME))
+    }
+    
     data <-
       data %>%
       dplyr::rename(Datetime = DATE.TIME) %>%

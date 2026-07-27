@@ -1,3 +1,7 @@
+* Package now states the correct Wellcome Trust number: 226787/Z/22/Z
+
+* `ActTrust` import now works with older software versions that had separate columns for date and time
+
 # LightLogR 0.10.3
 
 * `LYS` import now works with any timestamp column in raw data, as long as it starts with `timestamp`
