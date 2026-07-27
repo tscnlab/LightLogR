@@ -1,3 +1,5 @@
+# LightLogR 0.10.4
+
 * Package now states the correct Wellcome Trust number: 226787/Z/22/Z
 
 * `ActTrust` import now works with older software versions that had separate columns for date and time
