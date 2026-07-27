@@ -108,6 +108,7 @@ Other metrics:
 ## Examples
 
 ``` r
+
 N <- 60
 # Dataset with continous period of >250lx for 35min
 dataset1 <-

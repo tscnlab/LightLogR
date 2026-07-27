@@ -7,6 +7,7 @@ the `ggplot2` functions can be used to further customize the plots. The
 following packages are needed for the analysis:
 
 ``` r
+
 library(LightLogR)
 library(tidyverse)
 library(patchwork)
@@ -23,6 +24,7 @@ We will use data imported and cleaned already in the article [Import &
 Cleaning](https://tscnlab.github.io/LightLogR/articles/Import.html).
 
 ``` r
+
 #this assumes the data is in the cleaned_data folder in the working directory
 data <- readRDS("cleaned_data/ll_data.rds")
 ```
@@ -34,6 +36,7 @@ provides a glance at *when* data is available for each Id. Let’s call it
 on our dataset.
 
 ``` r
+
 data |> gg_overview()
 ```
 
@@ -47,6 +50,7 @@ them as grey bars, as well as a message in the lower right corner. Let
 us force this behavior in our dataset by removing two days.
 
 ``` r
+
 data |>
   filter(
     !(date(Datetime) %in% c("2023-08-16", "2023-08-17"))
@@ -64,6 +68,7 @@ to the `gap.data` argument. This will skip the gap calculation and speed
 up the graph generation.
 
 ``` r
+
 data |>
   filter(
     !(date(Datetime) %in% c("2023-08-16", "2023-08-17"))
@@ -89,6 +94,7 @@ call it on a subset of our data. To distinguish between different Ids,
 we can set the `aes_col` argument to `Id`.
 
 ``` r
+
 data |> 
   filter(Id %in% c(205, 206)) |> 
   gg_day(aes_col = Id, size = 0.5)
@@ -109,6 +115,7 @@ to ensure that the facets are shown correctly. We also reduce the breaks
 on the x-axis to avoid overlap at 00:00.
 
 ``` r
+
 data |> 
   filter(Id %in% c(205, 206)) |> 
   gg_day(aes_col = Id, size = 0.5, 
@@ -134,6 +141,7 @@ to provide a different color scale compared to the default one, as the
 default has only 10 colors compared to the 17 we need here.
 
 ``` r
+
 data |> 
   gg_day(aes_col = Id, size = 0.5, format.day = "%A") + 
   scale_color_viridis_d()
@@ -155,6 +163,7 @@ to connect the points. To make this more readable. Let us first recreate
 a simpler version of the above dataset by filtering and aggregating
 
 ``` r
+
 data_subset <- 
   data |> 
   filter(Id %in% c(205, 206)) |> #choosing 2 ids
@@ -170,6 +179,7 @@ data_subset |>
 Now we can use a different geom.
 
 ``` r
+
 data_subset |>
   gg_day(aes_col = Id, geom = "line")
 ```
@@ -179,6 +189,7 @@ data_subset |>
 Also a ribbon is possible.
 
 ``` r
+
 data_subset |>  
   gg_day(aes_col = Id, aes_fill = Id, geom = "ribbon", alpha = 0.5)
 ```
@@ -193,6 +204,7 @@ Instead of using individual days, it will create a timeline of days
 across all Ids.
 
 ``` r
+
 data_subset2 <- 
 data |> 
   filter(Id %in% c(205, 216, 219)) |> #choosing 3 ids
@@ -210,6 +222,7 @@ will always plot full days. Let us strip one participant of data for
 three days.
 
 ``` r
+
 data_subset3 <- 
 data_subset2 |> 
   filter(!(Id == 205 & 
@@ -229,6 +242,7 @@ is a helper function from `LightLogR` and the documentation reveals more
 about its arguments.
 
 ``` r
+
 data_subset3 |> 
   gg_days(
     x.axis.limits = 
@@ -245,6 +259,7 @@ Here we will customize the plot for a ribbon, different naming and
 breaks on the datetime axis.
 
 ``` r
+
 data_subset3 |> 
   gg_days(
     geom = "ribbon", aes_col = Id, aes_fill = Id, alpha = 0.5, jco_color = TRUE,
@@ -267,6 +282,7 @@ across groups. (For some unknown reason, it tends to produce a warning
 about uneven horizontal intervals, which can be safely ignored)
 
 ``` r
+
 data |> gg_heatmap()
 ```
 
@@ -276,6 +292,7 @@ The function does not have a ton of individualization, but there are
 some options:
 
 ``` r
+
 data |> 
   filter(Id %in% c(204, 216, 218)) |> #choosing 3 ids
   gg_heatmap(fill.limits = c(0,NA)) #sets the upper limit to the max value#
@@ -284,6 +301,7 @@ data |>
 ![](Visualizations_files/figure-html/unnamed-chunk-15-1.png)
 
 ``` r
+
 
 data |> 
   filter(Id %in% c(204, 216, 218)) |> #choosing 3 ids
@@ -297,6 +315,7 @@ Importantly, it has a handy doubleplot feature, either showing the
 repeated
 
 ``` r
+
 data |> 
   filter(Id %in% c(204, 216, 218))|> 
   gg_heatmap(doubleplot = "next", fill.limits = c(0, NA))
@@ -307,6 +326,7 @@ data |>
 Finally, we can use heatmaps to produce an Actigram-like plot.
 
 ``` r
+
 data |> 
   filter(Id %in% c(204, 216, 218))|> 
   gg_heatmap(Variable.colname = MEDI >= 50, 
@@ -342,6 +362,7 @@ second day (somewhen before noon), which is incorrect and also looks
 bad.
 
 ``` r
+
 data_subset <- 
   data_subset |> 
   gap_handler(full.days = TRUE)
@@ -354,6 +375,7 @@ present within all provided groups, or it can be set explicitly by
 `type = "repeat"`.
 
 ``` r
+
  data_subset |> 
    gg_doubleplot(aes_fill = Id, jco_color = TRUE, type = "repeat")
 ```
@@ -361,6 +383,7 @@ present within all provided groups, or it can be set explicitly by
 ![](Visualizations_files/figure-html/unnamed-chunk-19-1.png)
 
 ``` r
+
 #identical:
 # data_subset |> 
 #  group_by(Date = date(Datetime), .add = TRUE) |>
@@ -375,6 +398,7 @@ The vertical doubleplot is activated by default if any group has more
 than one day. It can be set explicitly by `type = "next"`.
 
 ``` r
+
 data_subset |> 
   gg_doubleplot(aes_fill = Id, jco_color = TRUE)
 ```
@@ -382,6 +406,7 @@ data_subset |>
 ![](Visualizations_files/figure-html/unnamed-chunk-20-1.png)
 
 ``` r
+
 #identical:
 # data_subset |> 
 #  gg_doubleplot(aes_fill = Id, jco_color = TRUE, type = "next")
@@ -398,6 +423,7 @@ plots to a single line per day, by ungrouping the data structure (makes
 only sense if the datetimes are identical):
 
 ``` r
+
 data_subset |> 
   ungroup() |> 
   gg_doubleplot(aes_fill = Id, jco_color = TRUE)
@@ -420,6 +446,7 @@ Let us first group our data by whether participants were in the first or
 last two months of the experiment.
 
 ``` r
+
 data_two_groups <- data |> 
   mutate(
     Month = case_when(month(Datetime) %in% 8:9 ~ "Aug/Sep",
@@ -436,6 +463,7 @@ two groups with a 15 minute interval. The day that is assigned by
 default is the median measurement day of the group.
 
 ``` r
+
 data_two_groups |> 
   aggregate_Date(unit = "15 mins") |> 
   gg_doubleplot(aes_fill = Month, jco_color = TRUE) +
@@ -452,6 +480,7 @@ gets rid of the strip label, that otherwise would show the (arbitrary)
 date.
 
 ``` r
+
 data_two_groups |> 
   aggregate_Date(unit = "15 mins", 
                  date.handler = \(x) as_date("2023-09-15")
@@ -483,6 +512,7 @@ or
 Here is a minimal example:
 
 ``` r
+
 #specifying coordinates (latitude/longitude)
 coordinates <- c(48.521637, 9.057645)
 
@@ -508,6 +538,7 @@ filtering the larger dataset down to that participant.
 ### Preparation
 
 ``` r
+
 #filter the dataset
 data_205 <-
   data |> filter(Id == "205") |> 
@@ -518,6 +549,7 @@ Next we are importing sleep data for a participant (Id = 205), which is
 included in `LightLogR`:
 
 ``` r
+
 #the the path to the sleep data
 path <- system.file("extdata", 
               package = "LightLogR")
@@ -561,6 +593,7 @@ also add the Brown et al. 2022 recommendations for healthy light, which
 can be extracted from sleep/wake data.
 
 ``` r
+
 data_205 <-
   data_205 |>
   interval2state(dataset.sleep |> sc2interval()) |> #add sleep/wake-data
@@ -575,6 +608,7 @@ data_205 <-
 Adding the sleep-wake information to a base plot.
 
 ``` r
+
 data_205 |> gg_days() |> gg_states(State, aes_fill = State)
 ```
 
@@ -585,6 +619,7 @@ instances to `NA`, or, by converting it to a logical column. Notice that
 a conditional fill is no longer necessary.
 
 ``` r
+
 data_205 |> 
   mutate(State = ifelse(State == "sleep", TRUE, FALSE)) |> 
   gg_days() |> 
@@ -602,6 +637,7 @@ automatically detects whether it is called from
 so it just works out of the box.
 
 ``` r
+
 data_205 |> 
   gg_day(geom = "line") |> 
   gg_states(State.Brown, aes_fill = State.Brown) +
@@ -621,6 +657,7 @@ we can color by the `State.Brown` same as above, but get the selection
 of when this recommendation was actually met.
 
 ``` r
+
 data_205 |> 
   Brown2reference() |>
   group_by(State.Brown, .add = TRUE) |> 
@@ -639,6 +676,7 @@ should mostly work fine with
 out of the gate
 
 ``` r
+
 data_205 |> 
   mutate(State = ifelse(State == "sleep", TRUE, FALSE)) |> 
   gg_doubleplot() |> 
@@ -655,6 +693,7 @@ become confusing if there are overlapping states, like sleep and
 nighttime:
 
 ``` r
+
 data_205 |> 
   mutate(State = ifelse(State == "sleep", TRUE, FALSE)) |> 
   gg_doubleplot() |> 
@@ -671,6 +710,7 @@ the state or the photoperiod.
 #### Emphasis ond photoperiod with sleep/wake
 
 ``` r
+
 data_205 |> 
   mutate(State = ifelse(State == "sleep", TRUE, FALSE)) |> 
   add_photoperiod(c(48.5,9)) |> 
@@ -684,6 +724,7 @@ data_205 |>
 #### Emphasis on sleep/wake with photoperiod
 
 ``` r
+
 data_205 |> 
   gg_doubleplot(aes_fill = State, group = consecutive_id(State)) |> 
   gg_photoperiod(c(48.5,9)) +
@@ -700,6 +741,7 @@ but can be computationally expensive, if there are lots of irregular
 data and/or gaps. Calling it on good data does produce a plot
 
 ``` r
+
 data |> gg_gaps()
 #> No gaps nor irregular values were found. Plot creation skipped
 ```
@@ -709,6 +751,7 @@ data, where all zero values are replaced with `NA`, observations above
 1000 lx are missing, and the last day has a slightly delayed sequence.
 
 ``` r
+
 bad_dataset <-
 data_205 |>
    mutate(Datetime = if_else(date(Datetime) == max(date(Datetime)),
@@ -728,6 +771,7 @@ only shows missing values. Setting `show.irregulars = TRUE` also adds
 the irregular data to the plot
 
 ``` r
+
 bad_dataset |> gg_gaps(MEDI, show.irregulars = TRUE)
 #> Warning: Removed 113 rows containing missing values or values outside the scale range
 #> (`geom_line()`).
@@ -746,6 +790,7 @@ exploring the data. The `plotly` package is used for this. They have the
 will create an interactive plot.
 
 ``` r
+
 data_subset |>  
   gg_day(aes_col = Id, geom = "line",
          interactive = TRUE
@@ -765,6 +810,7 @@ For comparison, the light data is added in the background with a lower
 alpha value.
 
 ``` r
+
 data_subset2 |>
   gg_days(y.axis = PIM, y.axis.label = "Activity (PIM)") +
   geom_line(aes(y=MEDI), color = "red", alpha = 0.2)
@@ -796,6 +842,7 @@ for differences that cross zero. We will use the single-day doubleplot
 data from above.
 
 ``` r
+
 #dataset from above
 data <- 
   data_two_groups |> 
@@ -831,6 +878,7 @@ values below 1 lux be of interest, the parameters of the transformation
 can be adjusted.
 
 ``` r
+
 data |> 
   select(Datetime, MEDI, Month) |> 
   pivot_wider(names_from = Month, values_from = MEDI) |> 

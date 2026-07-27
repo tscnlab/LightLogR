@@ -146,6 +146,7 @@ additional column for cluster identification.
 ## Examples
 
 ``` r
+
 dataset <-
 sample.data.environment |>
 dplyr::filter(Id == "Participant") |>

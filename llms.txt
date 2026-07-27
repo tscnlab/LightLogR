@@ -56,6 +56,7 @@ You can install LightLogR from
 [CRAN](https://cran.r-project.org/package=LightLogR) with:
 
 ``` r
+
 install.packages("LightLogR")
 ```
 
@@ -63,6 +64,7 @@ You can install the latest development version of LightLogR from
 [GitHub](https://github.com/) with:
 
 ``` r
+
 # install.packages("devtools")
 devtools::install_github("tscnlab/LightLogR")
 ```
@@ -72,6 +74,7 @@ devtools::install_github("tscnlab/LightLogR")
 Here is a quick starter on how to use **LightLogR**.
 
 ``` r
+
 library(LightLogR)
 #the following packages are needed for the examples as shown below.
 library(flextable)
@@ -87,6 +90,7 @@ You can import a light logger dataset with ease. The import functions
 give quick, helpful feedback about the dataset.
 
 ``` r
+
 filename <- 
   system.file("extdata/205_actlumus_Log_1020_20230904101707532.txt.zip", 
               package = "LightLogR")
@@ -136,6 +140,7 @@ dataset %>% gg_overview()
 Once imported, **LightLogR** has many convenient visualization options.
 
 ``` r
+
 dataset %>% gg_days()
 ```
 
@@ -151,6 +156,7 @@ can prepare the data (e.g. to aggregate it to coarser intervals), or to
 add to the plot (e.g., to add conditions, such as nighttime)
 
 ``` r
+
 dataset |> 
   #change the interval from 10 seconds to 15 minutes:
   aggregate_Datetime("15 min") |> 
@@ -183,6 +189,7 @@ The `col` parameter used on the `Id` column of the dataset allows for a
 color separation.
 
 ``` r
+
 sample.data.environment %>% 
   gg_day(
     start.date = "2023-09-01",
@@ -204,6 +211,7 @@ of at least 1 hour above 250 lx, we can add and then visualize these
 periods easily
 
 ``` r
+
 sample.data.environment %>% 
   #search for these conditions:
   add_clusters(MEDI > 250, cluster.duration = "30 min") |> 
@@ -222,6 +230,7 @@ There are more visualizations to try - the article on
 dives into them in-depths.
 
 ``` r
+
 sample.data.environment |> gg_heatmap(doubleplot = "next")
 ```
 
@@ -235,6 +244,7 @@ has a rather comprehensive number of these metrics with a consistent,
 easy-to-use interface.
 
 ``` r
+
 sample.data.environment |> # two groups: participant and environment
   filter_Date(length = "2 days") |> #filter to three days each for better overview
   group_by(Day = lubridate::date(Datetime), .add = TRUE) |>  #add grouping per day
@@ -260,6 +270,7 @@ Other types of metrics can be derived less formally by the
 `extract_state()` or `extract_cluster()` function.
 
 ``` r
+
 dataset |> 
   gap_handler(full.days = TRUE) |> #extend the viewed time until midnight of the first and last day
   durations(MEDI, show.missing = TRUE)
@@ -284,6 +295,7 @@ The second row indicates where this status is true. This will be
 identical to:
 
 ``` r
+
 dataset |> 
   summarize(
     duration_above_threshold(MEDI, Datetime, threshold = 250, as.df = TRUE),
@@ -299,6 +311,7 @@ What if we are interested in how often this threshold is crossed, and
 for how long?
 
 ``` r
+
 dataset |> 
   extract_states(TAT250, MEDI >= 250) |> #extract a list of states
   summarize_numeric() |> #summarize the numeric values
@@ -318,6 +331,7 @@ might be short interruption, that we consider irrelevant, we are
 ignoring interruptions of 1 minute. This is the area of clusters.
 
 ``` r
+
 dataset |> 
   extract_clusters(MEDI >= 250, #base condition
                    cluster.duration = "30 mins", #search for at least 30 minute instances
@@ -339,6 +353,7 @@ above would be misleading, however. This is because here, there are
 interruptions present. How prominent are these interruptions?
 
 ``` r
+
 dataset |> 
   extract_clusters(MEDI >= 250, #base condition
                    cluster.duration = "30 mins", #search for at least 30 minute instances
@@ -366,6 +381,7 @@ light logger data. Most importantly, you can search for and eliminate
 implicit gaps.
 
 ``` r
+
 sample.data.irregular |> has_irregulars()
 #> [1] TRUE
 sample.data.irregular |> has_gaps()
@@ -377,6 +393,7 @@ them with
 [`count_difftime()`](https://tscnlab.github.io/LightLogR/reference/count_difftime.md).
 
 ``` r
+
 sample.data.irregular %>% count_difftime()
 #> # A tibble: 4 × 4
 #> # Groups:   Id [1]
@@ -398,6 +415,7 @@ the epoch for
 [`gap_finder()`](https://tscnlab.github.io/LightLogR/reference/gap_finder.md).
 
 ``` r
+
 sample.data.irregular |> gap_handler() |> has_gaps(epoch = "15 secs")
 #> [1] FALSE
 ```
@@ -409,6 +427,7 @@ sensible defaults on how to aggregate numeric, categorical, and logical
 data. You can also specify your own aggregation functions.
 
 ``` r
+
 sample.data.irregular |>  
   aggregate_Datetime(unit = "20 sec") |> 
   has_gaps()
@@ -424,6 +443,7 @@ or visualize
 gaps.
 
 ``` r
+
 dataset |> gg_gaps()
 #> Warning: Removed 8104 rows containing missing values or values outside the scale range
 #> (`geom_line()`).
@@ -436,6 +456,7 @@ Finally, the
 easily gets rid of groups or days that do not provide enough data.
 
 ``` r
+
 dataset |> 
   remove_partial_data(MEDI, #variable for which to check missingness
                       threshold.missing = "2 hours", #remove when more than 2 hours are missing
@@ -510,27 +531,27 @@ section](https://tscnlab.github.io/LightLogR/reference/index.html#metrics).
 There is also an overview article on how to use
 [Metrics](https://tscnlab.github.io/LightLogR/articles/Metrics.html).
 
-| Metric Family                        | Submetrics     | Note                 | Documentation                                                                                                                                                                                                                                                                                                                                                |
-|--------------------------------------|----------------|----------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Barroso                              | 7              |                      | [`barroso_lighting_metrics()`](https://tscnlab.github.io/LightLogR/reference/barroso_lighting_metrics.md)                                                                                                                                                                                                                                                    |
-| Bright-dark period                   | 4x2            | bright / dark        | [`bright_dark_period()`](https://tscnlab.github.io/LightLogR/reference/bright_dark_period.md)                                                                                                                                                                                                                                                                |
-| Centroid of light exposure           | 1              |                      | [`centroidLE()`](https://tscnlab.github.io/LightLogR/reference/centroidLE.md)                                                                                                                                                                                                                                                                                |
-| Dose                                 | 1              |                      | [`dose()`](https://tscnlab.github.io/LightLogR/reference/dose.md)                                                                                                                                                                                                                                                                                            |
-| Disparity index                      | 1              |                      | [`disparity_index()`](https://tscnlab.github.io/LightLogR/reference/disparity_index.md)                                                                                                                                                                                                                                                                      |
-| Duration above threshold             | 3              | above, below, within | [`duration_above_threshold()`](https://tscnlab.github.io/LightLogR/reference/duration_above_threshold.md)                                                                                                                                                                                                                                                    |
-| Exponential moving average (EMA)     | 1              |                      | [`exponential_moving_average()`](https://tscnlab.github.io/LightLogR/reference/exponential_moving_average.md)                                                                                                                                                                                                                                                |
-| Frequency crossing threshold         | 1              |                      | [`frequency_crossing_threshold()`](https://tscnlab.github.io/LightLogR/reference/frequency_crossing_threshold.md)                                                                                                                                                                                                                                            |
-| Intradaily Variance (IV)             | 1              |                      | [`intradaily_variability()`](https://tscnlab.github.io/LightLogR/reference/intradaily_variability.md)                                                                                                                                                                                                                                                        |
-| Interdaily Stability (IS)            | 1              |                      | [`interdaily_stability()`](https://tscnlab.github.io/LightLogR/reference/interdaily_stability.md)                                                                                                                                                                                                                                                            |
-| Midpoint CE (Cumulative Exposure)    | 1              |                      | [`midpointCE()`](https://tscnlab.github.io/LightLogR/reference/midpointCE.md)                                                                                                                                                                                                                                                                                |
-| nvRC (Non-visual circadian response) | 4              |                      | [`nvRC()`](https://tscnlab.github.io/LightLogR/reference/nvRC.md), [`nvRC_circadianDisturbance()`](https://tscnlab.github.io/LightLogR/reference/nvRC_metrics.md), [`nvRC_circadianBias()`](https://tscnlab.github.io/LightLogR/reference/nvRC_metrics.md), [`nvRC_relativeAmplitudeError()`](https://tscnlab.github.io/LightLogR/reference/nvRC_metrics.md) |
-| nvRD (Non-visual direct response)    | 2              |                      | [`nvRD()`](https://tscnlab.github.io/LightLogR/reference/nvRD.md), [`nvRD_cumulative_response()`](https://tscnlab.github.io/LightLogR/reference/nvRD_cumulative_response.md)                                                                                                                                                                                 |
-| Period above threshold               | 3              | above, below, within | [`period_above_threshold()`](https://tscnlab.github.io/LightLogR/reference/period_above_threshold.md)                                                                                                                                                                                                                                                        |
-| Pulses above threshold               | 7x3            | above, below, within | [`pulses_above_threshold()`](https://tscnlab.github.io/LightLogR/reference/pulses_above_threshold.md)                                                                                                                                                                                                                                                        |
-| Threshold for duration               | 2              | above, below         | [`threshold_for_duration()`](https://tscnlab.github.io/LightLogR/reference/threshold_for_duration.md)                                                                                                                                                                                                                                                        |
-| Timing above threshold               | 3              | above, below, within | [`timing_above_threshold()`](https://tscnlab.github.io/LightLogR/reference/timing_above_threshold.md)                                                                                                                                                                                                                                                        |
-| **Total:**                           |                |                      |                                                                                                                                                                                                                                                                                                                                                              |
-| **17 families**                      | **62 metrics** |                      |                                                                                                                                                                                                                                                                                                                                                              |
+| Metric Family | Submetrics | Note | Documentation |
+|----|----|----|----|
+| Barroso | 7 |  | [`barroso_lighting_metrics()`](https://tscnlab.github.io/LightLogR/reference/barroso_lighting_metrics.md) |
+| Bright-dark period | 4x2 | bright / dark | [`bright_dark_period()`](https://tscnlab.github.io/LightLogR/reference/bright_dark_period.md) |
+| Centroid of light exposure | 1 |  | [`centroidLE()`](https://tscnlab.github.io/LightLogR/reference/centroidLE.md) |
+| Dose | 1 |  | [`dose()`](https://tscnlab.github.io/LightLogR/reference/dose.md) |
+| Disparity index | 1 |  | [`disparity_index()`](https://tscnlab.github.io/LightLogR/reference/disparity_index.md) |
+| Duration above threshold | 3 | above, below, within | [`duration_above_threshold()`](https://tscnlab.github.io/LightLogR/reference/duration_above_threshold.md) |
+| Exponential moving average (EMA) | 1 |  | [`exponential_moving_average()`](https://tscnlab.github.io/LightLogR/reference/exponential_moving_average.md) |
+| Frequency crossing threshold | 1 |  | [`frequency_crossing_threshold()`](https://tscnlab.github.io/LightLogR/reference/frequency_crossing_threshold.md) |
+| Intradaily Variance (IV) | 1 |  | [`intradaily_variability()`](https://tscnlab.github.io/LightLogR/reference/intradaily_variability.md) |
+| Interdaily Stability (IS) | 1 |  | [`interdaily_stability()`](https://tscnlab.github.io/LightLogR/reference/interdaily_stability.md) |
+| Midpoint CE (Cumulative Exposure) | 1 |  | [`midpointCE()`](https://tscnlab.github.io/LightLogR/reference/midpointCE.md) |
+| nvRC (Non-visual circadian response) | 4 |  | [`nvRC()`](https://tscnlab.github.io/LightLogR/reference/nvRC.md), [`nvRC_circadianDisturbance()`](https://tscnlab.github.io/LightLogR/reference/nvRC_metrics.md), [`nvRC_circadianBias()`](https://tscnlab.github.io/LightLogR/reference/nvRC_metrics.md), [`nvRC_relativeAmplitudeError()`](https://tscnlab.github.io/LightLogR/reference/nvRC_metrics.md) |
+| nvRD (Non-visual direct response) | 2 |  | [`nvRD()`](https://tscnlab.github.io/LightLogR/reference/nvRD.md), [`nvRD_cumulative_response()`](https://tscnlab.github.io/LightLogR/reference/nvRD_cumulative_response.md) |
+| Period above threshold | 3 | above, below, within | [`period_above_threshold()`](https://tscnlab.github.io/LightLogR/reference/period_above_threshold.md) |
+| Pulses above threshold | 7x3 | above, below, within | [`pulses_above_threshold()`](https://tscnlab.github.io/LightLogR/reference/pulses_above_threshold.md) |
+| Threshold for duration | 2 | above, below | [`threshold_for_duration()`](https://tscnlab.github.io/LightLogR/reference/threshold_for_duration.md) |
+| Timing above threshold | 3 | above, below, within | [`timing_above_threshold()`](https://tscnlab.github.io/LightLogR/reference/timing_above_threshold.md) |
+| **Total:** |  |  |  |
+| **17 families** | **62 metrics** |  |  |
 
 If you would like to use a metric you don’t find represented in
 LightLogR, please contact the developers. The easiest and most trackable

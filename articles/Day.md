@@ -40,6 +40,7 @@ this is where `patchwork` will come in. The `here` package is used to
 make sure that the paths to the data are correct.
 
 ``` r
+
 library(LightLogR)
 library(tidyverse)
 library(gt)
@@ -59,6 +60,7 @@ app for capturing sleep times). All data is anonymous, and we can access
 it through the following paths:
 
 ``` r
+
 path <- system.file("extdata", 
               package = "LightLogR")
 
@@ -88,6 +90,7 @@ would be rather cumbersome in our case, we will use a `regex` to extract
 the first three digits from the filename, which serve this purpose here.
 
 ``` r
+
 tz <- "Europe/Berlin"
 dataset.LL <- import$ActLumus(file.LL, path, auto.id = "^(\\d{3})", tz = tz)
 #> Multiple files in zip: reading '205_actlumus_Log_1020_20230904101707532.txt'
@@ -125,6 +128,7 @@ of melanopic EDI (a measure of stimulus strength for the nonvisual
 system) for every day in the dataset, you can do that:
 
 ``` r
+
 dataset.LL |> 
   group_by(Date = as_date(Datetime)) |> 
   summarize(
@@ -157,6 +161,7 @@ features a lot of flexibility, and can be adapted and extended to fit
 various needs, as we will see shortly.
 
 ``` r
+
 dataset.LL |> gg_day(size = 0.25, interactive = TRUE)
 ```
 
@@ -175,6 +180,7 @@ filename does not contain the participant´s `ID` this time, we will give
 it a manual id: `"CW35"`.
 
 ``` r
+
 dataset.env <- import$ActLumus(file.env, path, manual.id = "CW35", tz = tz)
 #> Multiple files in zip: reading 'cyepiamb_CW35_Log_1431_20230904081953614.txt'
 #> 
@@ -216,6 +222,7 @@ facilitates this, because we can provide a `vector` of column names that
 form a continuous indicator of a given state - in this case `Sleep`.
 
 ``` r
+
 dataset.sleep <- 
   import_Statechanges(file.sleep, path, 
                       Datetime.format = "dmyHM",
@@ -305,6 +312,7 @@ specify the argument `across.id = TRUE`, as we want the reference
 `Id`(“CW35”) to be applied across the `Id` from the participant (“205”).
 
 ``` r
+
 dataset.LL <- 
   dataset.LL |> 
     data2reference(Reference.data = dataset.env, across.id = TRUE)
@@ -343,6 +351,7 @@ with a dashed red reference line. Keep in mind that this visualization
 is still exploratory, so we are not investing heavily in styling.
 
 ``` r
+
 dataset.LL |> 
   gg_day(size = 0.25) + 
   geom_line(aes(y=Reference), lty = 2, col = "red")
@@ -369,8 +378,8 @@ compare to recommendations for luminous exposure.
 
 ### Recommended Light levels
 
-Brown et al.(2022)[¹](#fn1) provide guidance for healthy, daytime
-dependent light stimuli, measured in melanopic EDI:
+Brown et al.(2022)[^1] provide guidance for healthy, daytime dependent
+light stimuli, measured in melanopic EDI:
 
 > Throughout the daytime, the recommended minimum melanopic EDI is 250
 > lux at the eye measured in the vertical plane at approximately 1.2 m
@@ -415,6 +424,7 @@ state that is highly likely caused by implicit missing data or
 misentries.
 
 ``` r
+
 dataset.sleep <- 
   dataset.sleep |> 
   sc2interval()
@@ -440,6 +450,7 @@ Brown recommendations. The
 function facilitates this.
 
 ``` r
+
 Brown.intervals <- 
   dataset.sleep |> 
   sleep_int2Brown()
@@ -464,7 +475,7 @@ We can see that the function fit a 3 hour interval in-between every
 sleep and wake phase, and also recoded the states. This data can now be
 applied to our light logger dataset. This is done through the
 [`interval2state()`](https://tscnlab.github.io/LightLogR/reference/interval2state.md)
-function[²](#fn2). We already used this function unknowingly, because it
+function[^2]. We already used this function unknowingly, because it
 (alongside
 [`sc2interval()`](https://tscnlab.github.io/LightLogR/reference/sc2interval.md))
 is under the hood of
@@ -472,6 +483,7 @@ is under the hood of
 making sure that data in the reference set is spread out accordingly.
 
 ``` r
+
 dataset.LL <- 
   dataset.LL |> 
     interval2state(
@@ -503,6 +515,7 @@ values - by default these would go to `Reference`, which is already used
 for the Solar exposition, which is why we put it in `Reference.Brown`.
 
 ``` r
+
 dataset.LL <- 
   dataset.LL |> 
     Brown2reference(Brown.rec.colname = Reference.Brown)
@@ -513,15 +526,15 @@ dataset.LL |>
   gt()
 ```
 
-| Datetime            | MEDI   | Reference | State.Brown | Reference.Brown | Reference.Brown.check | Reference.Brown.difference | Reference.Brown.label |
-|---------------------|--------|-----------|-------------|-----------------|-----------------------|----------------------------|-----------------------|
-| 205                 |        |           |             |                 |                       |                            |                       |
-| 2023-09-04 10:16:14 | 321.10 | NA        | day         | 250             | TRUE                  | 71.10                      | Brown et al. (2022)   |
-| 2023-09-04 10:16:24 | 310.92 | NA        | day         | 250             | TRUE                  | 60.92                      | Brown et al. (2022)   |
-| 2023-09-04 10:16:34 | 309.07 | NA        | day         | 250             | TRUE                  | 59.07                      | Brown et al. (2022)   |
-| 2023-09-04 10:16:44 | 319.95 | NA        | day         | 250             | TRUE                  | 69.95                      | Brown et al. (2022)   |
-| 2023-09-04 10:16:54 | 326.11 | NA        | day         | 250             | TRUE                  | 76.11                      | Brown et al. (2022)   |
-| 2023-09-04 10:17:04 | 324.52 | NA        | day         | 250             | TRUE                  | 74.52                      | Brown et al. (2022)   |
+| Datetime | MEDI | Reference | State.Brown | Reference.Brown | Reference.Brown.check | Reference.Brown.difference | Reference.Brown.label |
+|----|----|----|----|----|----|----|----|
+| 205 |  |  |  |  |  |  |  |
+| 2023-09-04 10:16:14 | 321.10 | NA | day | 250 | TRUE | 71.10 | Brown et al. (2022) |
+| 2023-09-04 10:16:24 | 310.92 | NA | day | 250 | TRUE | 60.92 | Brown et al. (2022) |
+| 2023-09-04 10:16:34 | 309.07 | NA | day | 250 | TRUE | 59.07 | Brown et al. (2022) |
+| 2023-09-04 10:16:44 | 319.95 | NA | day | 250 | TRUE | 69.95 | Brown et al. (2022) |
+| 2023-09-04 10:16:54 | 326.11 | NA | day | 250 | TRUE | 76.11 | Brown et al. (2022) |
+| 2023-09-04 10:17:04 | 324.52 | NA | day | 250 | TRUE | 74.52 | Brown et al. (2022) |
 
 [`Brown2reference()`](https://tscnlab.github.io/LightLogR/reference/Brown2reference.md)
 added four columns, two of which are shown in the table above. A third
@@ -531,6 +544,7 @@ the difference between actual mel EDI and the recommendations. Now let´s
 have a quick look at the result in the plot overview
 
 ``` r
+
 dataset.LL |> #dataset
   gg_day(size = 0.25) + #base plot
   geom_line(aes(y=Reference), lty = 2, col = "red") + #solar reference
@@ -557,6 +571,7 @@ deactivate the facetting function from
 as we only have one day.
 
 ``` r
+
 dataset.LL.partial <- 
 dataset.LL |> #dataset
   filter_Date(start = "2023-09-01", length = days(1)) #use only one day
@@ -585,6 +600,7 @@ with standard plotting function.
 Firstly, though, let us slightly tweak the y-axis.
 
 ``` r
+
 scale.correction <- coord_cartesian(
   xlim = c(0, 24.5*60*60), #make sure the x axis covers 24 hours (+a bit for the label)
   expand = FALSE #set the axis limits exactly at ylim and xlim
@@ -605,6 +621,7 @@ with other geoms.
 - `geom_bin2d`
 
 ``` r
+
 dataset.LL.partial  |> 
   gg_day(
     size = 0.25, geom = "point", facetting = FALSE) + #base plot
@@ -621,6 +638,7 @@ We would not have to specify the `geom = "point"` in this case, but
 being verbose should communicate that we specify this argument.
 
 ``` r
+
 dataset.LL.partial  |> 
   gg_day(
     size = 0.25, facetting = FALSE, geom = "line") + #base plot
@@ -635,6 +653,7 @@ The line geom shows changes in luminous exposure a bit better and might
 be a better choice in this case.
 
 ``` r
+
 dataset.LL.partial  |> 
   gg_day(facetting = FALSE, geom = "ribbon", alpha = 0.25, size = 0.25,
          fill = "#EFC000", color = "#EFC000") + #base plot
@@ -648,13 +667,14 @@ dataset.LL.partial  |>
 The `geom_area` fills an area from 0 up to the given value. For some
 reason, however, this is very slow and unfortunately doesn´t work nicely
 with purely logarithmic plots (where 10^0 = 1, so it would start at
-1[³](#fn3)). We can, however, disable any geom in
+1[^3]). We can, however, disable any geom in
 [`gg_day()`](https://tscnlab.github.io/LightLogR/reference/gg_day.md)
 with `geom = "blank"` and instead add a `geom_ribbon` that can be
 force-based to zero with `ymin = 0`. Setting `geom = "ribbon"` does this
 automatically behind the scenes and is very fast.
 
 ``` r
+
 dataset.LL.partial  |> 
   cut_Datetime(unit = "30 minutes") |> #provide an interval for the boxplot
   gg_day(size = 0.25, facetting = FALSE, geom = "boxplot", group = Datetime.rounded) + #base plot
@@ -676,6 +696,7 @@ While this can be a nice representation, I don´t think it fits our goal
 for the overall figure in our specific case.
 
 ``` r
+
 dataset.LL.partial  |> 
   gg_day(
     size = 0.25, facetting = FALSE, geom = "bin2d", 
@@ -696,7 +717,7 @@ necessary to disable the default discrete color scheme of
 [`gg_day()`](https://tscnlab.github.io/LightLogR/reference/gg_day.md),
 because a continuous scale is necessary for counts or densities.
 Finally, we have to use the `aes_fill = stat(count)` argument to color
-the bins according to the number of observations in the bin[⁴](#fn4).
+the bins according to the number of observations in the bin[^4].
 
 ### 
 
@@ -716,6 +737,7 @@ numeric aggregation is fine for measurement data, it does not make sense
 for the `Brown_recommendations` column.
 
 ``` r
+
 aggregate_Datetime2 <- function(...) {
   aggregate_Datetime(...) |> #aggregate the data
   select(-Reference.Brown) |> #remove the rounded 
@@ -734,6 +756,7 @@ With the new aggregate function, let us taste some variants:
 - 1 Hour
 
 ``` r
+
 dataset.LL.partial  |> 
   gg_day(facetting = FALSE, geom = "ribbon", alpha = 0.25, size = 0.25,
          fill = "#EFC000", color = "#EFC000") + #base plot
@@ -745,6 +768,7 @@ dataset.LL.partial  |>
 ![](Day_files/figure-html/unnamed-chunk-23-1.png)
 
 ``` r
+
 dataset.LL.partial |> 
   aggregate_Datetime2(unit = "1 min")  |> 
   gg_day(facetting = FALSE, geom = "ribbon", alpha = 0.25, size = 0.25,
@@ -757,6 +781,7 @@ dataset.LL.partial |>
 ![](Day_files/figure-html/unnamed-chunk-24-1.png)
 
 ``` r
+
 dataset.LL.partial |> 
   aggregate_Datetime2(unit = "5 mins")  |> 
   gg_day(facetting = FALSE, geom = "ribbon", alpha = 0.25, size = 0.25,
@@ -769,6 +794,7 @@ dataset.LL.partial |>
 ![](Day_files/figure-html/unnamed-chunk-25-1.png)
 
 ``` r
+
 dataset.LL.partial |> 
   aggregate_Datetime2(unit = "30 mins") |> 
   gg_day(facetting = FALSE, geom = "ribbon", alpha = 0.25, size = 0.25,
@@ -781,6 +807,7 @@ dataset.LL.partial |>
 ![](Day_files/figure-html/unnamed-chunk-26-1.png)
 
 ``` r
+
 dataset.LL.partial |> 
   aggregate_Datetime2(unit = "1 hour")  |> 
   gg_day(facetting = FALSE, geom = "ribbon", alpha = 0.25, size = 0.25,
@@ -799,6 +826,7 @@ the *30 minutes* and *1 hour* steps are to rough. *5 Minutes* seem a
 good balance.
 
 ``` r
+
 Plot <- 
 dataset.LL.partial |> 
   aggregate_Datetime2(unit = "5 mins")  |> 
@@ -818,6 +846,7 @@ participant. We have several choices in how to represent this.
 - `second plot`
 
 ``` r
+
 Plot + 
   geom_line(aes(y=Reference), lty = 2, col = "red") #solar reference
 ```
@@ -828,6 +857,7 @@ This was our base representation for the solar exposure. And it is not a
 bad one at that. Let’s keep it in the run for know.
 
 ``` r
+
 Plot + 
   geom_ribbon(aes(ymin = MEDI, ymax=Reference), alpha = 0.25, fill = "#0073C2FF") #solar reference
 ```
@@ -838,6 +868,7 @@ This is a ribbon that shows the missed - and at night exceeded -
 potential due to daylight.
 
 ``` r
+
 #Note: This will become a function of its own in LightLogR at some point in the future
 
 Plot_upper <- 
@@ -887,6 +918,7 @@ variant still includes this information, but is more general, which is
 exactly what we want here.
 
 ``` r
+
 Day.end <- as_datetime("2023-09-01 23:59:59", tz = tz)
 Plot <- 
 dataset.LL.partial |> 
@@ -915,6 +947,7 @@ in the code chunk above.
 - `geom_point`
 
 ``` r
+
 Plot + 
   geom_line(aes(y=Reference.Brown), lty = 2, size = 0.4, col = "grey15") #Brown reference
 ```
@@ -926,6 +959,7 @@ Since the luminous exposure and daylight levels are very distinct in
 terms of color, however, the line could stay black.
 
 ``` r
+
 #This section will be integrated into a LightLogR function in the future
 Day.start <- as_datetime("2023-09-01 00:00:00", tz = tz)
 Day.end <- as_datetime("2023-09-01 23:59:59", tz = tz)
@@ -963,6 +997,7 @@ Plot2
 ![](Day_files/figure-html/unnamed-chunk-34-1.png)
 
 ``` r
+
 Plot2+geom_line(aes(y=Reference.Brown), lty = 2, size = 0.4, col = "grey35") 
 ```
 
@@ -971,6 +1006,7 @@ Plot2+geom_line(aes(y=Reference.Brown), lty = 2, size = 0.4, col = "grey35")
 With the `geom_area` function we can draw target areas for our values.
 
 ``` r
+
 Plot + 
   geom_point(aes(col = Reference.Brown.check), size = 0.5)+
   geom_line(aes(y=Reference.Brown), lty = 2, size = 0.4, col = "grey60") + #Brown reference
@@ -993,6 +1029,7 @@ in a designwise slim figure that only uses two colors (+grey) to get
 many points across.
 
 ``` r
+
 Plot <- 
 Plot + 
   geom_point(aes(col = Reference.Brown.check), size = 0.5)+
@@ -1013,6 +1050,7 @@ we mostly specified the coloring ourselves. Thus we disabled automatic
 guides. Instead we will solve this trough `annotations`.
 
 ``` r
+
 x <- 900
 
 Brown.times <- 
@@ -1047,6 +1085,7 @@ Plot +
 
 ``` r
 
+
 #create folder images if necessary
 if (!dir.exists("images")) dir.create("images")
 #save image
@@ -1059,34 +1098,31 @@ files to a final figure that is ready to be used in a publication.
 and also enabled us to test various decisions, like the choice of `geom`
 or `time.aggregation`.
 
-------------------------------------------------------------------------
-
-1.  Brown, T. M., Brainard, G. C., Cajochen, C., Czeisler, C. A.,
+[^1]: Brown, T. M., Brainard, G. C., Cajochen, C., Czeisler, C. A.,
     Hanifin, J. P., Lockley, S. W., Lucas, R. J., Munch, M., O’Hagan, J.
-    B., Peirson, S. N., Price, L. L. A., Roenneberg, T.,
-    Schlangen, L. J. M., Skene, D. J., Spitschan, M., Vetter, C.,
-    Zee, P. C., & Wright, K. P., Jr. (2022). Recommendations for
-    daytime, evening, and nighttime indoor light exposure to best
-    support physiology, sleep, and wakefulness in healthy adults. PLoS
-    Biol, 20(3), e3001571.
+    B., Peirson, S. N., Price, L. L. A., Roenneberg, T., Schlangen, L.
+    J. M., Skene, D. J., Spitschan, M., Vetter, C., Zee, P. C., &
+    Wright, K. P., Jr. (2022). Recommendations for daytime, evening, and
+    nighttime indoor light exposure to best support physiology, sleep,
+    and wakefulness in healthy adults. PLoS Biol, 20(3), e3001571.
     <https://doi.org/10.1371/journal.pbio.3001571>
 
-2.  Why go the extra mile to convert statechanges to intervals and those
-    intervals back to states in a dataset? It surely could be done in
-    one step? Well, it´s complicated… If there are no missing data or
+[^2]: Why go the extra mile to convert statechanges to intervals and
+    those intervals back to states in a dataset? It surely could be done
+    in one step? Well, it´s complicated… If there are no missing data or
     errors in the datasets, this would indeed be possible. But dividing
     the pipeline in two steps allows for validation steps and also
     greatly facilitates changes based on those states, as with the Brown
     recommendation
 
-3.  [`gg_day()`](https://tscnlab.github.io/LightLogR/reference/gg_day.md)
+[^3]: [`gg_day()`](https://tscnlab.github.io/LightLogR/reference/gg_day.md)
     works with `geom_area`, however, because it uses the `symlog` scale
     by default that doesn´t transform data between -1 and 1 (or between
     a given threshold, set in the
     [`symlog_trans()`](https://tscnlab.github.io/LightLogR/reference/symlog_trans.md)
     function).
 
-4.  Normally, using
+[^4]: Normally, using
     [`ggplot2::geom_bin2d()`](https://ggplot2.tidyverse.org/reference/geom_bin_2d.html)
     would automatically use the fill aesthetic for this, but
     [`gg_day()`](https://tscnlab.github.io/LightLogR/reference/gg_day.md)

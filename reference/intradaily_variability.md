@@ -85,6 +85,7 @@ Other metrics:
 ## Examples
 
 ``` r
+
 set.seed(1)
 N <- 24 * 2
 # Calculate metric for two 24 h days with two measurements per hour

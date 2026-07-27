@@ -76,6 +76,7 @@ mean daily values for the specified metric
 ## Examples
 
 ``` r
+
 # Calculate mean daily duration above threshold. As the data only contains
 # data for two days, Weekend and Mean daily will throw NA
 sample.data.irregular |> 

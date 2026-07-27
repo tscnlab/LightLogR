@@ -93,6 +93,7 @@ Other metrics:
 ## Examples
 
 ``` r
+
 dose(c(1,1,1,1), lubridate::dhours(c(1:4)), na.rm = TRUE)
 #> [1] 4
 #with gaps

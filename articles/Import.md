@@ -4,6 +4,7 @@ This article focuses on the import from multiple files and participants,
 as well as the cleaning of the data. We need these packages:
 
 ``` r
+
 library(LightLogR)
 library(tidyverse)
 library(gghighlight)
@@ -21,6 +22,7 @@ in research on personal light exposure. Currently, the following devices
 are supported:
 
 ``` r
+
 supported_devices()
 #>  [1] "Actiwatch_Spectrum" "ActLumus"           "ActTrust"          
 #>  [4] "Circadian_Eye"      "Clouclip"           "DeLux"             
@@ -83,6 +85,7 @@ GitHub
 repository](https://github.com/tscnlab/LightLogR/tree/main/vignettes/articles/data).
 
 ``` r
+
 #this assumes that you downloaded the files into a folder called "data" in the working directory
 path <- "data"
 files <- list.files(path, full.names = TRUE)
@@ -97,6 +100,7 @@ zones are valid, use the
 data was collected in the “Europe/Berlin” time zone.
 
 ``` r
+
 #first six time zones from OlsonNames()
 head(OlsonNames())
 #> [1] "Africa/Abidjan"     "Africa/Accra"       "Africa/Addis_Ababa"
@@ -112,6 +116,7 @@ defines the pattern as a *regular expression*, which will extract the
 first three digits from the file name.
 
 ``` r
+
 pattern <- "^(\\d{3})"
 ```
 
@@ -120,6 +125,7 @@ by Condor Instruments. The right way to specify this is through the
 `import` function.
 
 ``` r
+
 data <- import$ActLumus(files, tz = tz, auto.id = pattern, print_n=33)
 #> 
 #> Successfully read in 1'034'650 observations across 17 Ids from 17 ActLumus-file(s).
@@ -225,6 +231,7 @@ function to correct for this during import. We thus will re-import the
 data, but make the import silent as to not clutter the output.
 
 ``` r
+
 data <- 
   import$ActLumus(files, tz = tz, auto.id = pattern, dst_adjustment = TRUE, silent = TRUE)
 ```
@@ -241,6 +248,7 @@ arguments and only have to be specified once, as they are the same for
 all Ids.
 
 ``` r
+
 data <- 
   data |> 
   filter_Datetime_multiple(
@@ -286,6 +294,7 @@ Let’s have a look at the data again with the
 function.
 
 ``` r
+
 data |> gg_overview()
 ```
 
@@ -301,6 +310,7 @@ the function
 reveals where they are.
 
 ``` r
+
 data |> 
   has_irregulars()
 #> [1] TRUE
@@ -315,6 +325,7 @@ It is important to set `include.implicit.gaps = FALSE`, or it will be
 computationally very costly
 
 ``` r
+
 data |> 
   gap_table(include.implicit.gaps = FALSE)
 #> Warning: There are implicit gaps in the dataset that will not be part of the
@@ -333,6 +344,7 @@ computational cost, and also `group.by.days = TRUE`, wich will give us
 results by day.
 
 ``` r
+
 data |> gg_gaps(include.implicit.gaps = FALSE, group.by.days = TRUE, show.irregulars = TRUE)
 ```
 
@@ -345,6 +357,7 @@ other participants, anyways, which we can show by selecting a sample and
 extract the gaps they have.
 
 ``` r
+
 data |> 
   filter(Id %in% 208:210) |> 
   gg_gaps(MEDI, x.axis.format = "%a")
@@ -355,6 +368,7 @@ data |>
 ![](Import_files/figure-html/unnamed-chunk-4-1.png)
 
 ``` r
+
 
 data |> 
   filter(Id %in% 208:210) |> 
@@ -380,6 +394,7 @@ days. Before we remove these days we can check which days are going to
 be removed.
 
 ``` r
+
 
 data |> 
   remove_partial_data(
@@ -417,6 +432,7 @@ and last day of data collection, which are correctly identified as only
 partly available.
 
 ``` r
+
 data |> has_gaps()
 #> [1] FALSE
 data |> has_irregulars()
@@ -427,6 +443,7 @@ The data is now clean and we can proceed with the analysis. This dataset
 will be needed in other articles, so we will save it as an RDS file.
 
 ``` r
+
 # uncomment next lines to save the data
 # if (!dir.exists("cleaned_data")) dir.create("cleaned_data")
 # saveRDS(data, "cleaned_data/ll_data.rds")
@@ -492,6 +509,7 @@ This is a list of all the individual routines. Let’s have a look at the
 ActLumus routine
 
 ``` r
+
 ll_import_expr()$ActLumus
 #> {
 #>     first_file <- filename[1]
@@ -516,6 +534,7 @@ Here we will create a variation of the old routine, that just adds a
 short message:
 
 ``` r
+
 new_import_expr <- ll_import_expr()
 new_import_expr$ActLumus_new <- new_import_expr$ActLumus
 new_import_expr$ActLumus_new[[6]] <- 
@@ -543,6 +562,7 @@ We can now create a new import function with this expression. The
 function will be called `import$ActLumus_new()`.
 
 ``` r
+
 import <- import_adjustment(new_import_expr)
 ```
 
@@ -550,6 +570,7 @@ Let us now import a file of the previous dataset, setting the main
 summary and plotting function silent
 
 ``` r
+
 data <- import$ActLumus_new(files[1], tz = tz, auto.id = pattern, 
                          auto.plot = FALSE, silent = TRUE)
 #> **Congratulation, you made a new import function**

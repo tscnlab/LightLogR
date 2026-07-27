@@ -15,6 +15,7 @@ the proofing-stage, but the preprint can be found
 [here](https://www.biorxiv.org/content/10.1101/2024.12.30.630669v1.full).
 
 ``` r
+
 library(LightLogR)
 library(tidyverse)
 library(gt)
@@ -32,6 +33,7 @@ We will use data imported and cleaned already in the article [Import &
 Cleaning](https://tscnlab.github.io/LightLogR/articles/Import.html).
 
 ``` r
+
 #this assumes the data is in the cleaned_data folder in the working directory
 data <- readRDS("cleaned_data/ll_data.rds")
 ```
@@ -42,6 +44,7 @@ the dataset contains 17 ids with one weeks worth of data each, and one
 to three participants per week.
 
 ``` r
+
 data |> gg_overview()
 ```
 
@@ -84,6 +87,7 @@ is used to back-transform the data. The functions are used in the
 following way:
 
 ``` r
+
 #no transformation
 data$MEDI |> mean()
 #> [1] 425.6553
@@ -103,6 +107,7 @@ What do those values represent in the dataset? Let’s overlay them on a
 histogram
 
 ``` r
+
 #creating a histogram function
 MEDI_histogram <- function(data) {
 
@@ -133,6 +138,7 @@ data |>
 ```
 
 ``` r
+
 MEDI_histogram(data)
 ```
 
@@ -146,6 +152,7 @@ be expected. How does this look like when we only look at daytime
 values, which are expected to have fewer zero-lux values?
 
 ``` r
+
 #looking only at daytime values of light exposure
 day_data <- 
 data |> 

@@ -8,6 +8,7 @@ constitutes a family of light exposure metrics. The following packages
 are needed for the analysis:
 
 ``` r
+
 library(LightLogR)
 library(tidyverse)
 library(gt)
@@ -25,6 +26,7 @@ We will use data imported and cleaned already in the article [Import &
 Cleaning](https://tscnlab.github.io/LightLogR/articles/Import.html).
 
 ``` r
+
 #this assumes the data is in the cleaned_data folder in the working directory
 data <- readRDS("cleaned_data/ll_data.rds")
 ```
@@ -35,6 +37,7 @@ the dataset contains 17 ids with one weeks worth of data each, and one
 to three participants per week.
 
 ``` r
+
 data |> gg_overview()
 ```
 
@@ -130,6 +133,7 @@ example for a days worth of light data for one participant across two
 functions.
 
 ``` r
+
 data_Id201 <- 
   data |> 
     filter(Id == 201 & date(Datetime) == "2023-08-15")
@@ -148,6 +152,7 @@ function
 [`duration_above_threshold()`](https://tscnlab.github.io/LightLogR/reference/duration_above_threshold.md).
 
 ``` r
+
 duration_above_threshold(
   Light.vector = data_Id201$MEDI,
   Time.vector = data_Id201$Datetime,
@@ -160,6 +165,7 @@ Specifying the argument `comparison = "below"` will calculate the time
 below the threshold.
 
 ``` r
+
 duration_above_threshold(
   Light.vector = data_Id201$MEDI,
   Time.vector = data_Id201$Datetime,
@@ -173,6 +179,7 @@ And specifying two thresholds will calculate the time within the
 thresholds.
 
 ``` r
+
 duration_above_threshold(
   Light.vector = data_Id201$MEDI,
   Time.vector = data_Id201$Datetime,
@@ -192,6 +199,7 @@ calculates the brightest 10 hour period of the day. By setting
 [`gt()`](https://gt.rstudio.com/reference/gt.html) for a better output
 
 ``` r
+
 bright_dark_period(
   Light.vector = data_Id201$MEDI,
   Time.vector = data_Id201$Datetime,
@@ -200,10 +208,10 @@ bright_dark_period(
   gt() |> tab_header("M10")
 ```
 
-| M10                |                        |                     |                      |
-|--------------------|------------------------|---------------------|----------------------|
+| M10 |  |  |  |
+|----|----|----|----|
 | brightest_10h_mean | brightest_10h_midpoint | brightest_10h_onset | brightest_10h_offset |
-| 2506.202           | 2023-08-15 13:42:01    | 2023-08-15 08:42:11 | 2023-08-15 18:42:01  |
+| 2506.202 | 2023-08-15 13:42:01 | 2023-08-15 08:42:11 | 2023-08-15 18:42:01 |
 
 #### Looping
 
@@ -214,6 +222,7 @@ be very coincidental. (Note that commonly, the darkest 5-hour period is
 calculated. We deviate from this to make this point.)
 
 ``` r
+
 M10_wrong <- 
 bright_dark_period(
   Light.vector = data_Id201$MEDI,
@@ -226,15 +235,16 @@ bright_dark_period(
 M10_wrong |> gt() |> tab_header("M10 without looping")
 ```
 
-| M10 without looping |                      |                     |                     |
-|---------------------|----------------------|---------------------|---------------------|
-| darkest_10h_mean    | darkest_10h_midpoint | darkest_10h_onset   | darkest_10h_offset  |
-| 305.2523            | 2023-08-15 04:59:51  | 2023-08-15 00:00:01 | 2023-08-15 09:59:51 |
+| M10 without looping |  |  |  |
+|----|----|----|----|
+| darkest_10h_mean | darkest_10h_midpoint | darkest_10h_onset | darkest_10h_offset |
+| 305.2523 | 2023-08-15 04:59:51 | 2023-08-15 00:00:01 | 2023-08-15 09:59:51 |
 
 We also see that this makes little sense, if we visualize this portion.
 The blue color indicates the darkest 10-hour period of the day.
 
 ``` r
+
 data_Id201 |> 
   mutate(State = ifelse(
     Datetime >= M10_wrong$darkest_10h_onset & 
@@ -252,6 +262,7 @@ To solve this,
 and some other functions have the option to `loop` the day.
 
 ``` r
+
 M10 <- 
 bright_dark_period(
   Light.vector = data_Id201$MEDI,
@@ -265,13 +276,14 @@ bright_dark_period(
 M10 |> gt()
 ```
 
-| darkest_10h_mean | darkest_10h_midpoint | darkest_10h_onset   | darkest_10h_offset  |
-|------------------|----------------------|---------------------|---------------------|
-| 1.423622         | 2023-08-15 01:36:51  | 2023-08-15 20:37:01 | 2023-08-15 06:36:51 |
+| darkest_10h_mean | darkest_10h_midpoint | darkest_10h_onset | darkest_10h_offset |
+|----|----|----|----|
+| 1.423622 | 2023-08-15 01:36:51 | 2023-08-15 20:37:01 | 2023-08-15 06:36:51 |
 
 This is more plausible, and can also be visualized easily.
 
 ``` r
+
 data_Id201 |> 
   mutate(State = ifelse(
     Datetime >= M10$darkest_10h_onset | 
@@ -315,6 +327,7 @@ average, ranging between 0 (Gaussian noise) and 1 (Perfect stability).
 For brevity, only the first 6 Ids will be shown.
 
 ``` r
+
 data |> 
   summarize(
     interdaily_stability(
@@ -348,6 +361,7 @@ time above threshold for 6 days might not be the most informative
 parametrization of the metric.
 
 ``` r
+
 data |> 
   summarize(
     duration_above_threshold(
@@ -375,6 +389,7 @@ day** of data. This is more informative, as it allows us to see how the
 metric changes over time. The final output is for the first two Ids.
 
 ``` r
+
 #create a new column in the data set with the weekday
 data$wDay <- wday(data$Datetime, label = TRUE, week_start = 1)
 
@@ -420,6 +435,7 @@ into `day` and `night`. `LightLogR` contains a family of functions to
 easily deal with photoperiod. Here is a minimal example.
 
 ``` r
+
 #specifying coordinates (latitude/longitude)
 coordinates <- c(48.521637, 9.057645)
 
@@ -458,6 +474,7 @@ mean_Exposure |>
 Same as above, we can summarize the data further:
 
 ``` r
+
 mean_Exposure |> 
   group_by(photoperiod.state) |> 
   summarize_numeric(prefix = ""
@@ -487,6 +504,7 @@ the TAT 250 lx MEDI for each participant, formatted as `HH:MM` through a
 styling function.
 
 ``` r
+
 #styling formula for time
 style_time <- function(x, format = "%H:%M"){
   x |> 
@@ -517,6 +535,7 @@ of the metric for weekdays, weekends, and, the mean day (based on *(5 x
 weekdays + 2 x weekends) / 7*).
 
 ``` r
+
 #mean daily calculation
 TAT_250_daily <-
 mean_daily(
@@ -550,6 +569,7 @@ calculation. We can use it to calculate `duration_above_250`(lx) from
 scratch
 
 ``` r
+
 data |> 
   mean_daily_metric(
     Variable = MEDI,
@@ -576,6 +596,7 @@ threshold. Basically, metric functions that return a numeric column can
 be used.
 
 ``` r
+
 data |> 
   mean_daily_metric(
     Variable = MEDI,
@@ -608,6 +629,7 @@ participants, where it would just average `Weekday`, `Weekend`, and
 insights.
 
 ``` r
+
 TAT_250_daily |> 
   group_by(wDay) |> 
   summarize_numeric(
@@ -634,6 +656,7 @@ know how these metrics change from the first half of the experiment
 (August/September) to the second half (October/November).
 
 ``` r
+
 data <- data |> 
   mutate(
     Month = case_when(month(Datetime) %in% 8:9 ~ "Aug/Sep",
@@ -658,15 +681,15 @@ metrics |>
   gt()
 ```
 
-| wDay          | mean_timing_above_250 | first_timing_above_250 | last_timing_above_250 | duration_above_250   | average_medi | dose      |
-|---------------|-----------------------|------------------------|-----------------------|----------------------|--------------|-----------|
-| Aug/Sep - 201 |                       |                        |                       |                      |              |           |
-| Tue           | 2023-08-15 13:55:49   | 2023-08-15 07:48:01    | 2023-08-15 19:43:41   | 34500s (~9.58 hours) | 23.910527    | 26273.415 |
-| Wed           | 2023-08-16 12:53:04   | 2023-08-16 07:03:01    | 2023-08-16 19:46:41   | 32780s (~9.11 hours) | 14.897098    | 18545.278 |
-| Thu           | 2023-08-17 14:25:57   | 2023-08-17 08:41:11    | 2023-08-17 19:27:11   | 21820s (~6.06 hours) | 6.804520     | 6315.771  |
-| Fri           | 2023-08-18 13:12:42   | 2023-08-18 07:14:41    | 2023-08-18 18:51:21   | 31670s (~8.8 hours)  | 11.143937    | 19902.681 |
-| Sat           | 2023-08-19 11:29:02   | 2023-08-19 07:08:41    | 2023-08-19 20:40:41   | 15010s (~4.17 hours) | 6.613548     | 13428.829 |
-| Sun           | 2023-08-20 12:46:28   | 2023-08-20 07:23:01    | 2023-08-20 19:12:21   | 24400s (~6.78 hours) | 14.730145    | 4399.761  |
+| wDay | mean_timing_above_250 | first_timing_above_250 | last_timing_above_250 | duration_above_250 | average_medi | dose |
+|----|----|----|----|----|----|----|
+| Aug/Sep - 201 |  |  |  |  |  |  |
+| Tue | 2023-08-15 13:55:49 | 2023-08-15 07:48:01 | 2023-08-15 19:43:41 | 34500s (~9.58 hours) | 23.910527 | 26273.415 |
+| Wed | 2023-08-16 12:53:04 | 2023-08-16 07:03:01 | 2023-08-16 19:46:41 | 32780s (~9.11 hours) | 14.897098 | 18545.278 |
+| Thu | 2023-08-17 14:25:57 | 2023-08-17 08:41:11 | 2023-08-17 19:27:11 | 21820s (~6.06 hours) | 6.804520 | 6315.771 |
+| Fri | 2023-08-18 13:12:42 | 2023-08-18 07:14:41 | 2023-08-18 18:51:21 | 31670s (~8.8 hours) | 11.143937 | 19902.681 |
+| Sat | 2023-08-19 11:29:02 | 2023-08-19 07:08:41 | 2023-08-19 20:40:41 | 15010s (~4.17 hours) | 6.613548 | 13428.829 |
+| Sun | 2023-08-20 12:46:28 | 2023-08-20 07:23:01 | 2023-08-20 19:12:21 | 24400s (~6.78 hours) | 14.730145 | 4399.761 |
 
 The operation above yields a data frame with six metrics across 102
 participant days (6 days for 17 participants). The grouping for `Month`
@@ -686,6 +709,7 @@ columns (type `POSIXct`) to `time` columns (type `hms`), which is much
 more sensible in most cases to calculate averages
 
 ``` r
+
 #calculating weekday, weekend, and mean daily summaries for each group
 metrics |> 
    #calculate weekday, weekend, and mean daily summaries for each group:
@@ -696,16 +720,16 @@ metrics |>
   fmt_number(c(average_medi, dose))
 ```
 
-| wDay       | mean_timing_above_250 | first_timing_above_250 | last_timing_above_250 | duration_above_250   | average_medi | dose      | episodes |
-|------------|-----------------------|------------------------|-----------------------|----------------------|--------------|-----------|----------|
-| Aug/Sep    |                       |                        |                       |                      |              |           |          |
-| Mean daily | 13:37:13              | 08:46:17               | 19:10:18              | 15681s (~4.36 hours) | 8.67         | 12,678.75 | 11       |
-| Weekday    | 13:31:57              | 08:34:01               | 19:03:32              | 16798s (~4.67 hours) | 9.04         | 12,158.59 | 11       |
-| Weekend    | 13:50:24              | 09:16:57               | 19:27:13              | 12890s (~3.58 hours) | 7.75         | 13,979.15 | 11       |
-| Oct/Nov    |                       |                        |                       |                      |              |           |          |
-| Mean daily | 14:04:54              | 10:14:29               | 18:24:06              | 7250s (~2.01 hours)  | 5.49         | 5,558.11  | 6        |
-| Weekday    | 13:50:26              | 10:02:25               | 18:32:38              | 7558s (~2.1 hours)   | 5.28         | 5,660.88  | 6        |
-| Weekend    | 14:13:34              | 10:30:34               | 17:57:48              | 7273s (~2.02 hours)  | 6.07         | 5,741.14  | 7        |
+| wDay | mean_timing_above_250 | first_timing_above_250 | last_timing_above_250 | duration_above_250 | average_medi | dose | episodes |
+|----|----|----|----|----|----|----|----|
+| Aug/Sep |  |  |  |  |  |  |  |
+| Mean daily | 13:37:13 | 08:46:17 | 19:10:18 | 15681s (~4.36 hours) | 8.67 | 12,678.75 | 11 |
+| Weekday | 13:31:57 | 08:34:01 | 19:03:32 | 16798s (~4.67 hours) | 9.04 | 12,158.59 | 11 |
+| Weekend | 13:50:24 | 09:16:57 | 19:27:13 | 12890s (~3.58 hours) | 7.75 | 13,979.15 | 11 |
+| Oct/Nov |  |  |  |  |  |  |  |
+| Mean daily | 14:04:54 | 10:14:29 | 18:24:06 | 7250s (~2.01 hours) | 5.49 | 5,558.11 | 6 |
+| Weekday | 13:50:26 | 10:02:25 | 18:32:38 | 7558s (~2.1 hours) | 5.28 | 5,660.88 | 6 |
+| Weekend | 14:13:34 | 10:30:34 | 17:57:48 | 7273s (~2.02 hours) | 6.07 | 5,741.14 | 7 |
 
 The number of episodes shows us that there were 11 values in Aug/Sep,
 and 6 in Oct/Nov - except for Weekends, which have 7. This is because
@@ -714,6 +738,7 @@ that only the last day is in October, which is a Sunday - thus being
 part of the weekend.
 
 ``` r
+
 data |> 
   filter(Id == 214) |> 
   pull(Datetime) |> 
@@ -727,6 +752,7 @@ We can wrangle the same data differently, to get averages across all
 days
 
 ``` r
+
 #calculating weekday daily summaries for each group
 metrics |> 
   summarize_numeric(prefix = "") |> #summarize across participants
@@ -735,10 +761,10 @@ metrics |>
   fmt_number(c(average_medi, dose))
 ```
 
-| Month   | mean_timing_above_250 | first_timing_above_250 | last_timing_above_250 | duration_above_250   | average_medi | dose      | episodes |
-|---------|-----------------------|------------------------|-----------------------|----------------------|--------------|-----------|----------|
-| Aug/Sep | 13:38:46              | 08:48:41               | 19:09:20              | 15625s (~4.34 hours) | 8.66         | 12,781.74 | 11       |
-| Oct/Nov | 13:44:39              | 10:06:26               | 18:14:53              | 7888s (~2.19 hours)  | 5.64         | 5,946.69  | 7        |
+| Month | mean_timing_above_250 | first_timing_above_250 | last_timing_above_250 | duration_above_250 | average_medi | dose | episodes |
+|----|----|----|----|----|----|----|----|
+| Aug/Sep | 13:38:46 | 08:48:41 | 19:09:20 | 15625s (~4.34 hours) | 8.66 | 12,781.74 | 11 |
+| Oct/Nov | 13:44:39 | 10:06:26 | 18:14:53 | 7888s (~2.19 hours) | 5.64 | 5,946.69 | 7 |
 
 This shows us 11 participants for the Aug/Sep timeframe and 7 for the
 Oct/Nov timeframe. This is in line with the summary above, which showed
@@ -753,6 +779,7 @@ This section repeats the summary, but by using the popular
 [gtsummary](https://github.com/ddsjoberg/gtsummary) package.
 
 ``` r
+
 metrics <- 
   metrics |> 
   group_by(Month) |> 

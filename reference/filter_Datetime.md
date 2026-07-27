@@ -132,6 +132,7 @@ Other filter:
 ## Examples
 
 ``` r
+
 library(lubridate)
 library(dplyr)
 #baseline

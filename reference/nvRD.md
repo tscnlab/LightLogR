@@ -78,6 +78,7 @@ Other metrics:
 ## Examples
 
 ``` r
+
 # Dataset 1 with 24h measurement
 dataset1 <-
   tibble::tibble(

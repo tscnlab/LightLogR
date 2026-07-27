@@ -42,7 +42,7 @@ Other contributors:
   reflect those of the European Union or EURAMET.) \[funder\]
 
 - Wellcome Trust (LightLogR's development is supported by the Wellcome
-  Trust (wellcome.org), 226787/2/22/Z.) \[funder\]
+  Trust (wellcome.org), 226787/Z/22/Z.) \[funder\]
 
 - Reality Labs Research (LightLogR's development is supported by the
   GLEE project (Global Light Exposure Engine, www.visualdiet.org) funded

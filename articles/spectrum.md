@@ -11,6 +11,7 @@ it. This article will show how to use the `LightLogR` package to process
 spectral data from the Actlumus device.
 
 ``` r
+
 library(LightLogR)
 library(tidyverse)
 #> ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
@@ -32,6 +33,7 @@ We will use data imported and cleaned already in the article [Import &
 Cleaning](https://tscnlab.github.io/LightLogR/articles/Import.html).
 
 ``` r
+
 #this assumes the data is in the cleaned_data folder in the working directory
 data <- readRDS("cleaned_data/ll_data.rds")
 ```
@@ -42,6 +44,7 @@ the dataset contains 17 ids with one weeks worth of data each, and one
 to three participants per week.
 
 ``` r
+
 data |> gg_overview()
 ```
 
@@ -74,6 +77,7 @@ manufacturer.
 The relevant column names are `F1` to `F8`, `CLEAR`, and `IR.Light`.
 
 ``` r
+
 #Path to data in LightLogR
 path <- system.file("extdata", 
               package = "LightLogR")
@@ -116,9 +120,11 @@ calib_mtx |>
 | 680        | 0.03  | 0.00  | 0.07  | −0.01 | 0.07  | −0.03 | 0.01  | 0.08 | −0.03 | 0.01     |
 | 750        | −0.03 | −0.02 | −0.03 | 0.06  | −0.15 | 0.09  | −0.05 | 0.01 | 0.04  | −0.02    |
 
-Calibration matrix
+Calibration matrix {.table .gt_table quarto-disable-processing="false"
+quarto-bootstrap="false"}
 
 ``` r
+
 
 #convert the matrix to an actual matrix
 calib_mtx <-
@@ -147,6 +153,7 @@ We start by demonstrating how the function works with a single
 observation.
 
 ``` r
+
 data_aggregated <- 
 data|> 
   aggregate_Datetime(unit = "15 mins") #aggregate the data to 15 min intervals so as to reduce the amount of data
@@ -185,6 +192,7 @@ is useful for plotting and spectral integration metrics, while the
 “wide” form is useful for easy “access” to individual wavelength values.
 
 ``` r
+
 # demonstrating the wide form
 data_aggregated <- 
 data_aggregated |> 
@@ -209,8 +217,8 @@ data_aggregated |>
   fmt_scientific(decimals = 3)
 ```
 
-| Id  | Datetime            | 415          | 445          | 480          | 515          | 555          | 590          | 630          | 680          | 750          |
-|-----|---------------------|--------------|--------------|--------------|--------------|--------------|--------------|--------------|--------------|--------------|
+| Id | Datetime | 415 | 445 | 480 | 515 | 555 | 590 | 630 | 680 | 750 |
+|----|----|----|----|----|----|----|----|----|----|----|
 | 205 | 2023-08-31 19:00:00 | 5.104 × 10⁻³ | 6.158 × 10⁻³ | 6.615 × 10⁻³ | 7.310 × 10⁻³ | 6.475 × 10⁻³ | 6.074 × 10⁻³ | 6.710 × 10⁻³ | 5.456 × 10⁻³ | 7.032 × 10⁻³ |
 | 205 | 2023-08-31 19:15:00 | 1.508 × 10⁻³ | 1.981 × 10⁻³ | 2.026 × 10⁻³ | 2.236 × 10⁻³ | 2.177 × 10⁻³ | 2.215 × 10⁻³ | 2.317 × 10⁻³ | 1.605 × 10⁻³ | 1.942 × 10⁻³ |
 | 205 | 2023-08-31 19:30:00 | 4.106 × 10⁻⁵ | 2.942 × 10⁻⁴ | 2.586 × 10⁻⁴ | 4.301 × 10⁻⁴ | 6.234 × 10⁻⁴ | 8.531 × 10⁻⁴ | 8.365 × 10⁻⁴ | 2.173 × 10⁻⁴ | 3.659 × 10⁻⁴ |
@@ -218,6 +226,7 @@ data_aggregated |>
 We require the long form for the further tutorial
 
 ``` r
+
 # long form
 data_aggregated <- 
 data_aggregated|> 
@@ -249,6 +258,7 @@ Each list column contains the corresponding spectrum. We can plot the
 spectra for one day as an example.
 
 ``` r
+
 data_1_day <- 
 data_aggregated |> 
   filter_Date(length = "1 day") |> 
@@ -288,6 +298,7 @@ the whole spectrum can be provided without any parameters. By setting a
 range.
 
 ``` r
+
 data_aggregated <- 
 data_aggregated |> 
   mutate(
@@ -306,6 +317,7 @@ used obtain a single result per observation. What do the results look
 like?
 
 ``` r
+
 #summarize spectral data per participant
 data_aggregated |> 
   select(Id, Total_irradiance, short_wl, long_wl, short_long_ratio) |> 
@@ -315,14 +327,14 @@ data_aggregated |>
   fmt_number()
 ```
 
-| Id  | mean_Total_irradiance | mean_short_wl | mean_long_wl | mean_short_long_ratio | episodes |
-|-----|-----------------------|---------------|--------------|-----------------------|----------|
-| 201 | 2.72                  | 0.49          | 0.89         | 0.82                  | 577.00   |
-| 202 | 0.97                  | 0.18          | 0.32         | 0.06                  | 577.00   |
-| 204 | 6.52                  | 1.13          | 2.28         | 0.46                  | 577.00   |
-| 205 | 3.40                  | 0.61          | 1.16         | 0.46                  | 577.00   |
-| 206 | 0.30                  | 0.05          | 0.11         | 0.40                  | 577.00   |
-| 208 | 1.10                  | 0.17          | 0.39         | 0.61                  | 577.00   |
+| Id | mean_Total_irradiance | mean_short_wl | mean_long_wl | mean_short_long_ratio | episodes |
+|----|----|----|----|----|----|
+| 201 | 2.72 | 0.49 | 0.89 | 0.82 | 577.00 |
+| 202 | 0.97 | 0.18 | 0.32 | 0.06 | 577.00 |
+| 204 | 6.52 | 1.13 | 2.28 | 0.46 | 577.00 |
+| 205 | 3.40 | 0.61 | 1.16 | 0.46 | 577.00 |
+| 206 | 0.30 | 0.05 | 0.11 | 0.40 | 577.00 |
+| 208 | 1.10 | 0.17 | 0.39 | 0.61 | 577.00 |
 
 In the “per participant” summary, we see the total irradiance, as well
 as the portions falling in the short and long wavelength ranges
@@ -350,6 +362,7 @@ The basis for integration can be found in the dataset
 `alphaopic.action.spectra`.
 
 ``` r
+
 #show the action spectra
 alphaopic.action.spectra |> 
   pivot_longer(cols = -wavelength) |> 
@@ -370,6 +383,7 @@ export. The function will return the value in `lx` or `mel EDI`
 depending on the action spectrum provided.
 
 ``` r
+
 data_aggregated <- 
 data_aggregated |> 
   mutate(
@@ -405,6 +419,7 @@ data_aggregated |>
 ![](spectrum_files/figure-html/unnamed-chunk-10-1.png)
 
 ``` r
+
 
 data_aggregated |> 
   select(Id, Datetime, LIGHT, MEDI, illuminance, melEDI) |> 

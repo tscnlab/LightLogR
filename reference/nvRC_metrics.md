@@ -78,6 +78,7 @@ dissertation, EPFL\]. EPFL infoscience.
 ## Examples
 
 ``` r
+
 dataset1 <- 
   tibble::tibble(
     Id = rep("B", 60 * 24),

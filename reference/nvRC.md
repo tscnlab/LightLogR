@@ -93,6 +93,7 @@ Other metrics:
 ## Examples
 
 ``` r
+
 dataset1 <-
   tibble::tibble(
     Id = rep("B", 60 * 48),

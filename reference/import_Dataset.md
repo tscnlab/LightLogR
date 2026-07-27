@@ -356,10 +356,11 @@ such as the intervals between measurements or the start and end dates.
 
     filepath <- system.file("extdata/205_actlumus_Log_1020_20230904101707532.txt.zip", package = "LightLogR")
     dataset <- import_Dataset("ActLumus", filepath, auto.plot = FALSE)
+    #> Multiple files in zip: reading '205_actlumus_Log_1020_20230904101707532.txt'
     #>
     #> Successfully read in 61'016 observations across 1 Ids from 1 ActLumus-file(s).
     #> Timezone set is UTC.
-    #> The system timezone is Europe/Madrid. Please correct if necessary!
+    #> The system timezone is Europe/Berlin. Please correct if necessary!
     #>
     #> First Observation: 2023-08-28 08:47:54
     #> Last Observation: 2023-09-04 10:17:04
@@ -372,10 +373,11 @@ such as the intervals between measurements or the start and end dates.
 Import functions can also be called directly:
 
     dataset <- import$ActLumus(filepath, auto.plot = FALSE)
+    #> Multiple files in zip: reading '205_actlumus_Log_1020_20230904101707532.txt'
     #>
     #> Successfully read in 61'016 observations across 1 Ids from 1 ActLumus-file(s).
     #> Timezone set is UTC.
-    #> The system timezone is Europe/Madrid. Please correct if necessary!
+    #> The system timezone is Europe/Berlin. Please correct if necessary!
     #>
     #> First Observation: 2023-08-28 08:47:54
     #> Last Observation: 2023-09-04 10:17:04

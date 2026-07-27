@@ -16,6 +16,7 @@ We start off by loading `LightLogR` and packages needed for this
 tutorial:
 
 ``` r
+
 library(LightLogR)
 library(tidyverse)
 library(gt)
@@ -41,6 +42,7 @@ We will use data imported and cleaned already in the article [Import &
 Cleaning](https://tscnlab.github.io/LightLogR/articles/Import.html).
 
 ``` r
+
 #this assumes the data is in the `cleaned_data` folder in the working directory
 data <- readRDS("cleaned_data/ll_data.rds")
 #to save computational time, we will only use a few columns from the data
@@ -50,6 +52,7 @@ data <- data |> select(Id, Datetime, MEDI)
 Here is are the first three lines of the data
 
 ``` r
+
 data |> ungroup() |>  head(3) |> gt_tab()
 ```
 
@@ -65,6 +68,7 @@ the dataset contains 17 ids with one weeks worth of data each, and one
 to three participants per week.
 
 ``` r
+
 data |> gg_overview()
 ```
 
@@ -94,6 +98,7 @@ coordinates need to be stored in a numeric vector of length 2. **The
 order of latitude and longitude is essential.**
 
 ``` r
+
 coordinates <- c(48.521637, 9.057645)
 ```
 
@@ -118,6 +123,7 @@ information. Likely the most useful function is
 as is directly expands a dataset with all the necessary information.
 
 ``` r
+
 data |> 
   add_photoperiod(coordinates) |> 
   #from here on out is just formatting
@@ -131,12 +137,12 @@ data |>
   )
 ```
 
-| Datetime            | MEDI | dawn                | dusk                | photoperiod | photoperiod.state |
-|---------------------|------|---------------------|---------------------|-------------|-------------------|
-| 201                 |      |                     |                     |             |                   |
-| 2023-08-15 00:00:01 | 0    | 2023-08-15 05:41:59 | 2023-08-15 21:13:36 | 15h 31m 36s | night             |
-| 2023-08-15 00:00:11 | 0    | 2023-08-15 05:41:59 | 2023-08-15 21:13:36 | 15h 31m 36s | night             |
-| 2023-08-15 00:00:21 | 0    | 2023-08-15 05:41:59 | 2023-08-15 21:13:36 | 15h 31m 36s | night             |
+| Datetime | MEDI | dawn | dusk | photoperiod | photoperiod.state |
+|----|----|----|----|----|----|
+| 201 |  |  |  |  |  |
+| 2023-08-15 00:00:01 | 0 | 2023-08-15 05:41:59 | 2023-08-15 21:13:36 | 15h 31m 36s | night |
+| 2023-08-15 00:00:11 | 0 | 2023-08-15 05:41:59 | 2023-08-15 21:13:36 | 15h 31m 36s | night |
+| 2023-08-15 00:00:21 | 0 | 2023-08-15 05:41:59 | 2023-08-15 21:13:36 | 15h 31m 36s | night |
 
 The way `LightLogR` provides this information is not a singular number,
 but rather a set of values relevant for the photoperiod. `dawn` and
@@ -155,6 +161,7 @@ is the right choice. This functions works the same way as
 but returns a dataframe with relevant days:
 
 ``` r
+
 data |> 
   extract_photoperiod(coordinates) |> 
   #from here on out is just formatting
@@ -165,11 +172,11 @@ data |>
   fmt_datetime(c("dawn", "dusk"))
 ```
 
-| date       | tz            | lat   | lon  | solar.angle | dawn                | dusk                | photoperiod |
-|------------|---------------|-------|------|-------------|---------------------|---------------------|-------------|
-| 2023-08-15 | Europe/Berlin | 48.52 | 9.06 | -6          | 2023-08-15 05:41:59 | 2023-08-15 21:13:36 | 15h 31m 36s |
-| 2023-08-16 | Europe/Berlin | 48.52 | 9.06 | -6          | 2023-08-16 05:43:32 | 2023-08-16 21:11:40 | 15h 28m 8s  |
-| 2023-08-17 | Europe/Berlin | 48.52 | 9.06 | -6          | 2023-08-17 05:45:04 | 2023-08-17 21:09:42 | 15h 24m 38s |
+| date | tz | lat | lon | solar.angle | dawn | dusk | photoperiod |
+|----|----|----|----|----|----|----|----|
+| 2023-08-15 | Europe/Berlin | 48.52 | 9.06 | -6 | 2023-08-15 05:41:59 | 2023-08-15 21:13:36 | 15h 31m 36s |
+| 2023-08-16 | Europe/Berlin | 48.52 | 9.06 | -6 | 2023-08-16 05:43:32 | 2023-08-16 21:11:40 | 15h 28m 8s |
+| 2023-08-17 | Europe/Berlin | 48.52 | 9.06 | -6 | 2023-08-17 05:45:04 | 2023-08-17 21:09:42 | 15h 24m 38s |
 
 Finally, photoperiods not connected to a specific dataset might be
 required. In this case,
@@ -178,6 +185,7 @@ is a useful basic helper function. As it does not draw upon a dataset,
 dates and the timezone must be supplied separately.
 
 ``` r
+
 dates <- c("2025-06-21", "2025-12-21")
 timezone <- "Europe/Berlin"
 
@@ -189,15 +197,16 @@ photoperiod(coordinates, dates, timezone) |>
   fmt_duration("photoperiod")
 ```
 
-| date       | tz            | lat   | lon  | solar.angle | dawn                | dusk                | photoperiod |
-|------------|---------------|-------|------|-------------|---------------------|---------------------|-------------|
-| 2025-06-21 | Europe/Berlin | 48.52 | 9.06 | -6          | 2025-06-21 04:39:37 | 2025-06-21 22:11:38 | 17h 32m     |
-| 2025-12-21 | Europe/Berlin | 48.52 | 9.06 | -6          | 2025-12-21 07:36:07 | 2025-12-21 17:07:46 | 9h 31m 39s  |
+| date | tz | lat | lon | solar.angle | dawn | dusk | photoperiod |
+|----|----|----|----|----|----|----|----|
+| 2025-06-21 | Europe/Berlin | 48.52 | 9.06 | -6 | 2025-06-21 04:39:37 | 2025-06-21 22:11:38 | 17h 32m |
+| 2025-12-21 | Europe/Berlin | 48.52 | 9.06 | -6 | 2025-12-21 07:36:07 | 2025-12-21 17:07:46 | 9h 31m 39s |
 
 This provides a good opportunity to change the solar depression angle,
 showcasing the differences in photoperiod
 
 ``` r
+
 photoperiod(coordinates, dates, timezone, solarDep = 0) |> 
   #from here on out is just formatting
   gt_tab(caption = "Photoperiod information for sunrise/sunset") |> 
@@ -210,16 +219,17 @@ photoperiod(coordinates, dates, timezone, solarDep = 0) |>
   )
 ```
 
-| date       | tz            | lat   | lon  | solar.angle | dawn                | dusk                | photoperiod |
-|------------|---------------|-------|------|-------------|---------------------|---------------------|-------------|
-| 2025-06-21 | Europe/Berlin | 48.52 | 9.06 | 0           | 2025-06-21 05:28:05 | 2025-06-21 21:23:10 | 15h 55m 4s  |
-| 2025-12-21 | Europe/Berlin | 48.52 | 9.06 | 0           | 2025-12-21 08:19:20 | 2025-12-21 16:24:34 | 8h 5m 14s   |
+| date | tz | lat | lon | solar.angle | dawn | dusk | photoperiod |
+|----|----|----|----|----|----|----|----|
+| 2025-06-21 | Europe/Berlin | 48.52 | 9.06 | 0 | 2025-06-21 05:28:05 | 2025-06-21 21:23:10 | 15h 55m 4s |
+| 2025-12-21 | Europe/Berlin | 48.52 | 9.06 | 0 | 2025-12-21 08:19:20 | 2025-12-21 16:24:34 | 8h 5m 14s |
 
 To compare different settings,
 [`purrr::map()`](https://purrr.tidyverse.org/reference/map.html) is your
 friend
 
 ``` r
+
 solarDep <- c(0, 6, 12, 18)
 
 solarDep |> 
@@ -243,7 +253,8 @@ solarDep |>
 | -12         | 2025-06-21 03:40:07 | 2025-06-21 23:11:07 | 19h 31m     |
 | -18         | 2025-06-21 01:36:15 | 2025-06-22 01:14:47 | 23h 38m 31s |
 
-Comparing different solar depression values for summer solstice
+Comparing different solar depression values for summer solstice {.table
+.gt_table quarto-disable-processing="false" quarto-bootstrap="false"}
 
 ## Visualizing photoperiod
 
@@ -262,6 +273,7 @@ from three participants. This is easy with the
 function:
 
 ``` r
+
 data_partial <- 
   data |> 
   filter_Date(start = "2023-08-15", length = "5 days")
@@ -274,6 +286,7 @@ data_partial |> gg_overview()
 ### Integration with gg_day()
 
 ``` r
+
 data_partial |> 
   gg_day(aes_col = Id, geom = "line") |> 
   gg_photoperiod(coordinates)
@@ -282,6 +295,7 @@ data_partial |>
 ![](photoperiod_files/figure-html/gg_day-1.png)
 
 ``` r
+
 #this is identical to:
 # data_partial |> 
 #   add_photoperiod(coordinates) |> 
@@ -292,6 +306,7 @@ data_partial |>
 ### Integration with gg_days()
 
 ``` r
+
 data_partial |> 
   gg_days() |> 
   gg_photoperiod(coordinates)
@@ -300,6 +315,7 @@ data_partial |>
 ![](photoperiod_files/figure-html/gg_days-1.png)
 
 ``` r
+
 #this is identical to:
 # data_partial |> 
 #   add_photoperiod(coordinates) |> 
@@ -311,6 +327,7 @@ If photoperiod information is added prior to plotting, it can also be
 used for the main `geom`:
 
 ``` r
+
 data_partial |> 
   add_photoperiod(coordinates) |> 
   gg_days(
@@ -337,6 +354,7 @@ repeated day will actually draw on the consecutive calender date. While
 only a minor difference of a few minutes, this is easily avoided.
 
 ``` r
+
 data_partial |> 
   filter_Date(length = "1 day") |> 
   add_photoperiod(coordinates) |>
@@ -347,6 +365,7 @@ data_partial |>
 ![](photoperiod_files/figure-html/gg_doubleplot-1.png)
 
 ``` r
+
 #NOT the same as:
 # data_partial |> 
 #   filter_Date(length = "1 day") |> 
@@ -372,6 +391,7 @@ By applying the photoperiod information after aggregation, you can be
 sure they are based on the aggregated datetimes.
 
 ``` r
+
 data |> 
   filter(Id %in% c(201, 212, 216, 222)) |> 
   aggregate_Date(unit = "5 mins") |>
@@ -390,6 +410,7 @@ that comes with `LightLogR`. It contains ambient environmental
 illuminance values:
 
 ``` r
+
 sample.data.environment |> 
   gg_days() |> 
   gg_photoperiod(coordinates) 
@@ -400,6 +421,7 @@ sample.data.environment |>
 We use the `Environment` data from `Sat 09/02/23` to showcase this.
 
 ``` r
+
 #preparing a dataset with multiple solar depression angles:
 multiple_solarDep <-
   solarDep |>
@@ -429,6 +451,7 @@ The influence of solar depression angle can also be displayed in a
 single plot:
 
 ``` r
+
 #plotting in one facet:
 multiple_solarDep |> 
   gg_doubleplot(facetting = FALSE) |> 
@@ -446,6 +469,7 @@ intermediary. In all cases it is sensible to add the photoperiod
 information to the data:
 
 ``` r
+
 data <- 
   data |> 
   add_photoperiod(coordinates)
@@ -458,6 +482,7 @@ for daytime or nighttime sections. We will calculate a simple mean value
 and summarize the results with the help of the `gtsummary` package.
 
 ``` r
+
 data |> 
   group_by(photoperiod.state, .add = TRUE) |>  # setting .add = TRUE ensures prior grouping is kept
   summarize(mean_MEDI = mean(MEDI), .groups = "drop") |> 
@@ -473,6 +498,7 @@ photoperiod. If we are interested in the weekly values, we can further
 group by week.
 
 ``` r
+
 per_week <- 
 data |> 
   group_by(Id, week = week(Datetime), photoperiod.state) |>
@@ -512,6 +538,7 @@ function for this case. It allows to these types of counting independent
 of the 24 hour day. Let us apply the function to our dataset.
 
 ``` r
+
 data <-
   data |>
   number_states(photoperiod.state)
@@ -528,6 +555,7 @@ individual days and nights, which can be used for grouping.
 > singular sleep/wake episodes, indifferent of date.
 
 ``` r
+
 per_day <- 
 data |> 
   group_by(Id, photoperiod.state, photoperiod.state.count) |> 
@@ -547,6 +575,7 @@ per_day |>
 [TABLE]
 
 ``` r
+
 per_day  |> 
   ggplot(aes(x=count, y = mean_MEDI)) +
   geom_boxplot(aes(fill = photoperiod.state)) +
@@ -587,6 +616,7 @@ datasets start in the middle of the first day, and end in the middle of
 the last day, we will remove those days from the further analysis:
 
 ``` r
+
 data <- 
   data |> 
   mutate(Day = date(Datetime)) |>
@@ -599,6 +629,7 @@ above 50 lux **per participant and day** through the
 function.
 
 ``` r
+
 timing_light_exposure <-
   data |>
   group_by(Id, Day) |>
@@ -618,12 +649,12 @@ timing_light_exposure |>
   )
 ```
 
-| Id  | Day        | mean_timing_above_50 | first_timing_above_50 | last_timing_above_50 |
-|-----|------------|----------------------|-----------------------|----------------------|
-| 201 | 2023-08-16 | 2023-08-16 12:57:39  | 2023-08-16 07:02:51   | 2023-08-16 20:21:31  |
-| 201 | 2023-08-17 | 2023-08-17 14:24:54  | 2023-08-17 06:28:11   | 2023-08-17 20:11:31  |
-| 201 | 2023-08-18 | 2023-08-18 12:50:59  | 2023-08-18 07:01:41   | 2023-08-18 20:02:31  |
-| 201 | 2023-08-19 | 2023-08-19 13:12:59  | 2023-08-19 06:46:11   | 2023-08-19 20:43:51  |
+| Id | Day | mean_timing_above_50 | first_timing_above_50 | last_timing_above_50 |
+|----|----|----|----|----|
+| 201 | 2023-08-16 | 2023-08-16 12:57:39 | 2023-08-16 07:02:51 | 2023-08-16 20:21:31 |
+| 201 | 2023-08-17 | 2023-08-17 14:24:54 | 2023-08-17 06:28:11 | 2023-08-17 20:11:31 |
+| 201 | 2023-08-18 | 2023-08-18 12:50:59 | 2023-08-18 07:01:41 | 2023-08-18 20:02:31 |
+| 201 | 2023-08-19 | 2023-08-19 13:12:59 | 2023-08-19 06:46:11 | 2023-08-19 20:43:51 |
 
 This step provided us with the first timing of light above 50 lux, and,
 incidentally, also the last timing of light above 50 lux, which we need
@@ -631,6 +662,7 @@ for the intensity of evening light. In the next step, we will add this
 information to our dataset.
 
 ``` r
+
 data <-
   data |>
   left_join(timing_light_exposure, by = join_by(Id, Day))
@@ -663,6 +695,7 @@ within the first timing of light and dusk, we prepare our data for the
 final step.
 
 ``` r
+
 data <-
   data |> 
   mutate(light.type = 
@@ -678,6 +711,7 @@ the last step we calculate the `mean melanopic EDI` for each state, per
 **participant and day**.
 
 ``` r
+
 metric <-
   data |>
   group_by(Id, Day, light.type) |>
@@ -724,6 +758,7 @@ the daytime light condition, but only 75 participant days for the
 evening light condition.
 
 ``` r
+
 metric |> 
   tbl_summary(by = light.type, 
               include = mean_MEDI, 

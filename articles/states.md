@@ -34,6 +34,7 @@ The article will be divided into the following sections:
 - [Clusters](#clusters): Working with clusters
 
 ``` r
+
 library(LightLogR)
 library(tidyverse)
 library(gt)
@@ -45,6 +46,7 @@ We will use data imported and cleaned already in the article [Import &
 Cleaning](https://tscnlab.github.io/LightLogR/articles/Import.html).
 
 ``` r
+
 #this assumes the data is in the cleaned_data folder in the working directory
 data <- readRDS("cleaned_data/ll_data.rds")
 ```
@@ -55,6 +57,7 @@ the dataset contains 17 ids with one weeks worth of data each, and one
 to three participants per week.
 
 ``` r
+
 data |> gg_overview()
 ```
 
@@ -84,6 +87,7 @@ participants and to 1 minute intervals, which will make plots more
 manageable.
 
 ``` r
+
 dataset <- 
 data |> 
   filter(Id %in% c("201", "202")) |> 
@@ -121,6 +125,7 @@ present. This is, alongside other summary statistics useful to assess
 the quality of the data.
 
 ``` r
+
 #without grouping
 dataset |> 
   durations()
@@ -173,6 +178,7 @@ The function requires both the extract and the original dataset as
 input.
 
 ``` r
+
 #add metrics
 extract |>  
   extract_metric(
@@ -212,6 +218,7 @@ convert `NA` levels to real `NA` values. This can be done with
 [`forcats::fct_na_level_to_value()`](https://forcats.tidyverse.org/reference/fct_na_value_to_level.html).
 
 ``` r
+
 #helper for colors
 color <-   ggplot2::scale_fill_manual(
     values=c(`≤1lx` = "#868686FF", `≤10lx` = "#EFC000FF", `≥250lx` = "#0073C2FF")
@@ -232,6 +239,7 @@ A numeric representation of the **when** can be achieved with
 [`extract_states()`](https://tscnlab.github.io/LightLogR/reference/extract_states.md).
 
 ``` r
+
 #extract states
 extract <- 
 dataset |> 
@@ -242,12 +250,12 @@ dataset |>
 extract |> head(3) |> gt()
 ```
 
-| state.count | epoch | start               | end                 | duration             |
-|-------------|-------|---------------------|---------------------|----------------------|
-| 201 - ≤1lx  |       |                     |                     |                      |
-| ≤1lx 1      | 60    | 2023-08-14 23:59:30 | 2023-08-15 06:07:30 | 22080s (~6.13 hours) |
-| ≤1lx 2      | 60    | 2023-08-15 11:17:30 | 2023-08-15 11:19:30 | 120s (~2 minutes)    |
-| ≤1lx 3      | 60    | 2023-08-15 14:45:30 | 2023-08-15 14:48:30 | 180s (~3 minutes)    |
+| state.count | epoch | start | end | duration |
+|----|----|----|----|----|
+| 201 - ≤1lx |  |  |  |  |
+| ≤1lx 1 | 60 | 2023-08-14 23:59:30 | 2023-08-15 06:07:30 | 22080s (~6.13 hours) |
+| ≤1lx 2 | 60 | 2023-08-15 11:17:30 | 2023-08-15 11:19:30 | 120s (~2 minutes) |
+| ≤1lx 3 | 60 | 2023-08-15 14:45:30 | 2023-08-15 14:48:30 | 180s (~3 minutes) |
 
 This is a far more granular representation compared to the result
 derived with
@@ -258,6 +266,7 @@ with
 [`extract_metric()`](https://tscnlab.github.io/LightLogR/reference/extract_metric.md).
 
 ``` r
+
 extract <- 
 extract |> 
   extract_metric(
@@ -273,18 +282,19 @@ extract |>
   fmt_number(c(MEDI, TAT))
 ```
 
-| state.count | epoch | start               | end                 | duration             | MEDI | TAT  |
-|-------------|-------|---------------------|---------------------|----------------------|------|------|
-| 201 - ≤1lx  |       |                     |                     |                      |      |      |
-| ≤1lx 1      | 60    | 2023-08-14 23:59:30 | 2023-08-15 06:07:30 | 22080s (~6.13 hours) | 0.01 | 0.00 |
-| ≤1lx 2      | 60    | 2023-08-15 11:17:30 | 2023-08-15 11:19:30 | 120s (~2 minutes)    | 0.70 | 0.33 |
-| ≤1lx 3      | 60    | 2023-08-15 14:45:30 | 2023-08-15 14:48:30 | 180s (~3 minutes)    | 0.09 | 3.78 |
+| state.count | epoch | start | end | duration | MEDI | TAT |
+|----|----|----|----|----|----|----|
+| 201 - ≤1lx |  |  |  |  |  |  |
+| ≤1lx 1 | 60 | 2023-08-14 23:59:30 | 2023-08-15 06:07:30 | 22080s (~6.13 hours) | 0.01 | 0.00 |
+| ≤1lx 2 | 60 | 2023-08-15 11:17:30 | 2023-08-15 11:19:30 | 120s (~2 minutes) | 0.70 | 0.33 |
+| ≤1lx 3 | 60 | 2023-08-15 14:45:30 | 2023-08-15 14:48:30 | 180s (~3 minutes) | 0.09 | 3.78 |
 
 With the universal function
 [`summarize_numeric()`](https://tscnlab.github.io/LightLogR/reference/summarize_numeric.md),
 we can condense the data further.
 
 ``` r
+
 extract |> 
   summarize_numeric(remove = c("epoch")) |> 
   gt() |> 
@@ -293,18 +303,18 @@ extract |>
   fmt_duration(contains("duration"), input_units = "seconds")
 ```
 
-| state  | mean_start | mean_end | mean_duration | mean_MEDI | mean_TAT | total_duration | episodes |
-|--------|------------|----------|---------------|-----------|----------|----------------|----------|
-| 201    |            |          |               |           |          |                |          |
-| ≤1lx   | 16:24:04   | 14:09:49 | 1h 30m 45s    | 0.34      | 1.72     | 2d 24m         | 32       |
-| ≤10lx  | 15:49:01   | 15:21:21 | 16m 38s       | 5.40      | 3.73     | 18h 1m         | 65       |
-| NA     | 13:00:09   | 13:09:27 | 9m 18s        | 138.35    | 3.78     | 1d 7h 29m      | 203      |
-| ≥250lx | 12:27:33   | 12:44:31 | 16m 59s       | 1,061.19  | 4.90     | 1d 22h 7m      | 163      |
-| 202    |            |          |               |           |          |                |          |
-| ≤1lx   | 16:18:45   | 11:47:57 | 2h 41m 12s    | 0.21      | 1.65     | 2d 5h 44m      | 20       |
-| ≤10lx  | 15:19:26   | 15:20:56 | 11m 47s       | 7.43      | 2.63     | 1d 3h 30m      | 140      |
-| NA     | 14:21:15   | 14:38:26 | 17m 11s       | 66.30     | 4.69     | 2d 6h 9m       | 189      |
-| ≥250lx | 12:23:16   | 12:31:14 | 7m 58s        | 2,298.84  | 22.30    | 8h 38m         | 65       |
+| state | mean_start | mean_end | mean_duration | mean_MEDI | mean_TAT | total_duration | episodes |
+|----|----|----|----|----|----|----|----|
+| 201 |  |  |  |  |  |  |  |
+| ≤1lx | 16:24:04 | 14:09:49 | 1h 30m 45s | 0.34 | 1.72 | 2d 24m | 32 |
+| ≤10lx | 15:49:01 | 15:21:21 | 16m 38s | 5.40 | 3.73 | 18h 1m | 65 |
+| NA | 13:00:09 | 13:09:27 | 9m 18s | 138.35 | 3.78 | 1d 7h 29m | 203 |
+| ≥250lx | 12:27:33 | 12:44:31 | 16m 59s | 1,061.19 | 4.90 | 1d 22h 7m | 163 |
+| 202 |  |  |  |  |  |  |  |
+| ≤1lx | 16:18:45 | 11:47:57 | 2h 41m 12s | 0.21 | 1.65 | 2d 5h 44m | 20 |
+| ≤10lx | 15:19:26 | 15:20:56 | 11m 47s | 7.43 | 2.63 | 1d 3h 30m | 140 |
+| NA | 14:21:15 | 14:38:26 | 17m 11s | 66.30 | 4.69 | 2d 6h 9m | 189 |
+| ≥250lx | 12:23:16 | 12:31:14 | 7m 58s | 2,298.84 | 22.30 | 8h 38m | 65 |
 
 While the number of rows is identical to the extract from
 [`durations()`](https://tscnlab.github.io/LightLogR/reference/durations.md),
@@ -321,6 +331,7 @@ by regrouping to the state, which calculates averages across
 participants.
 
 ``` r
+
 extract |> 
   summarize_numeric(remove = c("epoch", "start", "end")) |> 
   group_by(state) |> 
@@ -356,6 +367,7 @@ group. These midnight cases are often problematic - in our case there
 are six full days of data, and the overhang.
 
 ``` r
+
 dataset |> 
   # group_by(Id, Date = date(Datetime)) |> 
   durations() |> 
@@ -374,6 +386,7 @@ The function will throw a message about irregular/singular groups, and
 will remove them.
 
 ``` r
+
 #removing partial data
 dataset <- 
   dataset |> 
@@ -385,6 +398,7 @@ dataset <-
 Now we can calculate the metric
 
 ``` r
+
 #calculate the brightest 10 hours
 M10 <-
   dataset |> 
@@ -403,21 +417,22 @@ M10 <-
 M10 |> head() |> gt() |> fmt_number()
 ```
 
-| Date       | brightest_10h_mean | brightest_10h_midpoint | brightest_10h_onset | brightest_10h_offset |
-|------------|--------------------|------------------------|---------------------|----------------------|
-| 201        |                    |                        |                     |                      |
-| 2023-08-15 | 2,504.83           | 2023-08-15 13:41:00    | 2023-08-15 08:42:00 | 2023-08-15 18:41:00  |
-| 2023-08-16 | 1,791.79           | 2023-08-16 12:09:00    | 2023-08-16 07:10:00 | 2023-08-16 17:09:00  |
-| 2023-08-17 | 583.90             | 2023-08-17 13:52:00    | 2023-08-17 08:53:00 | 2023-08-17 18:52:00  |
-| 2023-08-18 | 1,905.73           | 2023-08-18 13:14:00    | 2023-08-18 08:15:00 | 2023-08-18 18:14:00  |
-| 2023-08-19 | 1,312.12           | 2023-08-19 12:03:00    | 2023-08-19 07:04:00 | 2023-08-19 17:03:00  |
-| 2023-08-20 | 416.77             | 2023-08-20 12:22:00    | 2023-08-20 07:23:00 | 2023-08-20 17:22:00  |
+| Date | brightest_10h_mean | brightest_10h_midpoint | brightest_10h_onset | brightest_10h_offset |
+|----|----|----|----|----|
+| 201 |  |  |  |  |
+| 2023-08-15 | 2,504.83 | 2023-08-15 13:41:00 | 2023-08-15 08:42:00 | 2023-08-15 18:41:00 |
+| 2023-08-16 | 1,791.79 | 2023-08-16 12:09:00 | 2023-08-16 07:10:00 | 2023-08-16 17:09:00 |
+| 2023-08-17 | 583.90 | 2023-08-17 13:52:00 | 2023-08-17 08:53:00 | 2023-08-17 18:52:00 |
+| 2023-08-18 | 1,905.73 | 2023-08-18 13:14:00 | 2023-08-18 08:15:00 | 2023-08-18 18:14:00 |
+| 2023-08-19 | 1,312.12 | 2023-08-19 12:03:00 | 2023-08-19 07:04:00 | 2023-08-19 17:03:00 |
+| 2023-08-20 | 416.77 | 2023-08-20 12:22:00 | 2023-08-20 07:23:00 | 2023-08-20 17:22:00 |
 
 This provides us with a table with the brightest 10 hours of each day,
 but we want to add this to our dataset. This can be done with
 [`add_states()`](https://tscnlab.github.io/LightLogR/reference/add_states.md).
 
 ``` r
+
 #adding the brightest 10 hours to the dataset
 dataset <-
   dataset |> 
@@ -434,6 +449,7 @@ indicating whether the datapoint is part of the brightest 10 hours. We
 can now use this variable in our analysis, for example to plot the data.
 
 ``` r
+
 dataset |>
   ungroup(Date) |> 
   gg_days() |> 
@@ -451,6 +467,7 @@ will add sleep/wake data to our dataset.
 #### Preparation
 
 ``` r
+
 #filter the dataset
 data_205 <-
   data |> filter(Id == "205") 
@@ -460,6 +477,7 @@ Next we are importing sleep data for the participant `Id = 205`, which
 is included in `LightLogR`:
 
 ``` r
+
 #the the path to the sleep data
 path <- system.file("extdata", 
               package = "LightLogR")
@@ -507,6 +525,7 @@ also add the Brown et al. 2022 recommendations for healthy light, which
 can be extracted from sleep/wake data.
 
 ``` r
+
 data_205 <-
   data_205 |>
   interval2state(dataset.sleep |> sc2interval()) |> #add sleep/wake-data
@@ -521,6 +540,7 @@ data_205 <-
 Adding the sleep-wake information to a base plot.
 
 ``` r
+
 data_205 |> 
   aggregate_Datetime(unit = "5 mins") |> 
   gg_days() |> 
@@ -536,6 +556,7 @@ As long as there are no singular missing instances (like a sleep
 instance in the middle), this will yield a good result.
 
 ``` r
+
 data_205 |> 
   number_states(State, use.original.state = FALSE) |> 
   mutate(
@@ -549,20 +570,21 @@ data_205 |>
   tab_header("Sleep/Wake cycles")
 ```
 
-| Sleep/Wake cycles |       |                     |                     |                       |
-|-------------------|-------|---------------------|---------------------|-----------------------|
-| State.count       | epoch | start               | end                 | duration              |
-| SW-cycle 1        | 10    | 2023-08-28 23:59:59 | 2023-08-29 23:39:59 | 85200s (~23.67 hours) |
-| SW-cycle 2        | 10    | 2023-08-29 23:39:59 | 2023-08-30 23:14:59 | 84900s (~23.58 hours) |
-| SW-cycle 3        | 10    | 2023-08-30 23:14:59 | 2023-08-31 23:14:59 | 86400s (~1 days)      |
-| SW-cycle 4        | 10    | 2023-08-31 23:14:59 | 2023-09-01 23:09:59 | 86100s (~23.92 hours) |
-| SW-cycle 5        | 10    | 2023-09-01 23:09:59 | 2023-09-02 22:54:59 | 85500s (~23.75 hours) |
-| SW-cycle 6        | 10    | 2023-09-02 22:54:59 | 2023-09-03 21:29:59 | 81300s (~22.58 hours) |
-| SW-cycle 7        | 10    | 2023-09-03 21:29:59 | 2023-09-03 23:59:59 | 9000s (~2.5 hours)    |
+| Sleep/Wake cycles |  |  |  |  |
+|----|----|----|----|----|
+| State.count | epoch | start | end | duration |
+| SW-cycle 1 | 10 | 2023-08-28 23:59:59 | 2023-08-29 23:39:59 | 85200s (~23.67 hours) |
+| SW-cycle 2 | 10 | 2023-08-29 23:39:59 | 2023-08-30 23:14:59 | 84900s (~23.58 hours) |
+| SW-cycle 3 | 10 | 2023-08-30 23:14:59 | 2023-08-31 23:14:59 | 86400s (~1 days) |
+| SW-cycle 4 | 10 | 2023-08-31 23:14:59 | 2023-09-01 23:09:59 | 86100s (~23.92 hours) |
+| SW-cycle 5 | 10 | 2023-09-01 23:09:59 | 2023-09-02 22:54:59 | 85500s (~23.75 hours) |
+| SW-cycle 6 | 10 | 2023-09-02 22:54:59 | 2023-09-03 21:29:59 | 81300s (~22.58 hours) |
+| SW-cycle 7 | 10 | 2023-09-03 21:29:59 | 2023-09-03 23:59:59 | 9000s (~2.5 hours) |
 
 #### Brown recommendations
 
 ``` r
+
 data_205 |> 
   gg_day(geom = "line") |> 
   gg_states(State.Brown, aes_fill = State.Brown) +
@@ -582,6 +604,7 @@ we can color by the `State.Brown` same as above, but get the selection
 of when this recommendation was actually met.
 
 ``` r
+
 data_205 |> 
   Brown2reference() |>
   group_by(State.Brown, .add = TRUE) |>
@@ -596,6 +619,7 @@ We can check how well the recommendations were followed by using
 [`durations()`](https://tscnlab.github.io/LightLogR/reference/durations.md).
 
 ``` r
+
 data_205 |> 
   Brown2reference() |> 
   group_by(State.Brown, .add = TRUE) |>
@@ -607,11 +631,11 @@ data_205 |>
   gt()
 ```
 
-| Id  | State.Brown | duration             | missing               | total                | compliance |
-|-----|-------------|----------------------|-----------------------|----------------------|------------|
-| 205 | day         | 94380s (~1.09 days)  | 134400s (~1.56 days)  | 228780s (~2.65 days) | 41%        |
-| 205 | evening     | 28030s (~7.79 hours) | 36770s (~10.21 hours) | 64800s (~18 hours)   | 43%        |
-| 205 | night       | 186030s (~2.15 days) | 38790s (~10.78 hours) | 224820s (~2.6 days)  | 83%        |
+| Id | State.Brown | duration | missing | total | compliance |
+|----|----|----|----|----|----|
+| 205 | day | 94380s (~1.09 days) | 134400s (~1.56 days) | 228780s (~2.65 days) | 41% |
+| 205 | evening | 28030s (~7.79 hours) | 36770s (~10.21 hours) | 64800s (~18 hours) | 43% |
+| 205 | night | 186030s (~2.15 days) | 38790s (~10.78 hours) | 224820s (~2.6 days) | 83% |
 
 #### Photoperiods
 
@@ -621,6 +645,7 @@ There is a whole article on photoperiods, which can be found
 [here](https://tscnlab.github.io/LightLogR/articles/Photoperiods.html).
 
 ``` r
+
 #visualize photoperiods
 data_205 |> 
   aggregate_Datetime(unit = "15 mins", type = "floor") |> 
@@ -632,6 +657,7 @@ data_205 |>
 ![](states_files/figure-html/unnamed-chunk-23-1.png)
 
 ``` r
+
 #summarize photoperiods
 data_205 |> 
   add_photoperiod(c(48.5, 9)) |> 
@@ -661,6 +687,7 @@ Let us say we are interest in periods above 250 lx melanopic EDI. For
 participant `205`, this would look sth. like this:
 
 ``` r
+
 data_205 <- 
 data_205 |> 
   mutate(
@@ -675,18 +702,19 @@ data_205 |>
 ![](states_files/figure-html/unnamed-chunk-25-1.png)
 
 ``` r
+
 data_205 |> 
   extract_states(above_250) |> 
   summarize_numeric() |> 
   gt()|> tab_header("Episodes above 250 lx")
 ```
 
-| Episodes above 250 lx |            |            |          |                      |                      |          |
-|-----------------------|------------|------------|----------|----------------------|----------------------|----------|
-| above_250             | mean_epoch | mean_start | mean_end | mean_duration        | total_duration       | episodes |
-| 205                   |            |            |          |                      |                      |          |
-| FALSE                 | 10         | 15:05:31   | 15:03:46 | 447s (~7.45 minutes) | 419880s (~4.86 days) | 939      |
-| TRUE                  | 10         | 15:03:12   | 15:04:57 | 105s (~1.75 minutes) | 98520s (~1.14 days)  | 938      |
+| Episodes above 250 lx |  |  |  |  |  |  |
+|----|----|----|----|----|----|----|
+| above_250 | mean_epoch | mean_start | mean_end | mean_duration | total_duration | episodes |
+| 205 |  |  |  |  |  |  |
+| FALSE | 10 | 15:05:31 | 15:03:46 | 447s (~7.45 minutes) | 419880s (~4.86 days) | 939 |
+| TRUE | 10 | 15:03:12 | 15:04:57 | 105s (~1.75 minutes) | 98520s (~1.14 days) | 938 |
 
 This shows that, on average, the participant was 105 seconds above
 250 lx per episode, with around 940 episodes across the week in total.
@@ -696,6 +724,7 @@ more above 250 lx? This is where clusters come in. We can use
 to find those periods.
 
 ``` r
+
 data_205 |> 
   extract_clusters(
     above_250,
@@ -705,10 +734,10 @@ data_205 |>
   gt() |> tab_header("Clusters of 30 minutes or more above 250 lx")
 ```
 
-| Clusters of 30 minutes or more above 250 lx |            |          |            |                       |                      |          |
-|---------------------------------------------|------------|----------|------------|-----------------------|----------------------|----------|
-| Id                                          | mean_start | mean_end | mean_epoch | mean_duration         | total_duration       | episodes |
-| 205                                         | 15:21:02   | 16:06:07 | 10s        | 2706s (~45.1 minutes) | 32470s (~9.02 hours) | 12       |
+| Clusters of 30 minutes or more above 250 lx |  |  |  |  |  |  |
+|----|----|----|----|----|----|----|
+| Id | mean_start | mean_end | mean_epoch | mean_duration | total_duration | episodes |
+| 205 | 15:21:02 | 16:06:07 | 10s | 2706s (~45.1 minutes) | 32470s (~9.02 hours) | 12 |
 
 During the six days of measurement, this participant spent 12 episodes
 of 30 minutes or more above 250 lx, with an average duration of 45
@@ -721,6 +750,7 @@ allowing for interruptions of up to 3 minutes. How does that change our
 results?
 
 ``` r
+
 data_205 |> 
   extract_clusters(
     above_250,
@@ -733,11 +763,11 @@ data_205 |>
                     subtitle = "with interruptions of up to 3 minutes")
 ```
 
-| Clusters of 30 minutes or more above 250 lx |            |          |            |                     |                     |          |
-|---------------------------------------------|------------|----------|------------|---------------------|---------------------|----------|
-| with interruptions of up to 3 minutes       |            |          |            |                     |                     |          |
-| Id                                          | mean_start | mean_end | mean_epoch | mean_duration       | total_duration      | episodes |
-| 205                                         | 14:01:48   | 15:26:23 | 10s        | 5074s (~1.41 hours) | 96410s (~1.12 days) | 19       |
+| Clusters of 30 minutes or more above 250 lx |  |  |  |  |  |  |
+|----|----|----|----|----|----|----|
+| with interruptions of up to 3 minutes |  |  |  |  |  |  |
+| Id | mean_start | mean_end | mean_epoch | mean_duration | total_duration | episodes |
+| 205 | 14:01:48 | 15:26:23 | 10s | 5074s (~1.41 hours) | 96410s (~1.12 days) | 19 |
 
 This leads to an expected rise in the number of episodes (from 12 to
 19), and an increase in the average duration (from 45 minutes to about
@@ -753,6 +783,7 @@ which works similar to
 The only difference is that we need to provide the cluster properties.
 
 ``` r
+
 data_205 <- 
   data_205 |> 
   add_clusters(
@@ -768,6 +799,7 @@ example, we can plot the data with
 [`gg_states()`](https://tscnlab.github.io/LightLogR/reference/gg_states.md).
 
 ``` r
+
 data_205 |> 
   filter_Date(length = "4 days") |> 
   aggregate_Datetime(unit = "3 mins", type = "floor") |>
