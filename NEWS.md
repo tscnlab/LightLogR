@@ -6,6 +6,8 @@
 
 # LightLogR 0.10.3
 
+* `VEET` import is more efficient by using `data.table` for modality-specific parsing and by avoiding expensive full-width TOF scans during duplicate checks and import overview plotting (@ThomasKraft, #85).
+
 * `LYS` import now works with any timestamp column in raw data, as long as it starts with `timestamp`
 
 # LightLogR 0.10.2

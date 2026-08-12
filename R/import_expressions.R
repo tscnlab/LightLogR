@@ -388,31 +388,137 @@ import_expr <- list(
                 Unit_ALS_Flicker = FALSE)
     }
     
-    data <- 
-      purrr::map(filename, \(filename) {
-        pattern <- paste0("^(?:[^,]*,){1}\\b", modality, "\\b")
-        data <- 
-          readr::read_lines(file = filename, locale = locale, n_max = n_max)
-        data <- data[data %>% stringr::str_detect(pattern)]
-        data <- data |> 
-                  tibble::as_tibble() |> 
-                  tidyr::separate_wider_delim(value, 
-                                              ",", 
-                                              names = names(veet_names[[modality]])
-                                              )
-        data <- data %>% 
-          dplyr::mutate(file.name = filename, .before = 1)
-        data
-      }) %>% purrr::list_rbind()
-    data <- data %>% 
-      dplyr::mutate(
-        dplyr::across(
-          tidyselect::all_of(
-            veet_names[[modality]][veet_names[[modality]]] %>% names()), 
-        as.numeric),
-        Datetime = lubridate::with_tz(
-          lubridate::as_datetime(time_stamp, tz = "UTC"), tz), .before = 1
+    column_names <- names(veet_names[[modality]])
+    col_classes <- stats::setNames(
+      ifelse(veet_names[[modality]], "numeric", "character"),
+      column_names
+    )
+
+    data <- data.table::rbindlist(
+      lapply(filename, \(file_path) {
+        
+        con <- file(file_path, open = "r")
+        on.exit(close(con), add = TRUE)
+        
+        chunks <- list()
+        chunk_i <- 0L
+        n_imported <- 0L
+        
+        chunk_size <- 100000L
+        
+        repeat {
+          
+          lines <- readLines(
+            con,
+            n = chunk_size,
+            warn = FALSE
+          )
+          
+          if (!length(lines)) {
+            break
+          }
+          
+          # VEET modality is the second comma-separated field.
+          keep <- grepl(
+            paste0("^[^,]*,", modality, "(?:,|$)"),
+            lines,
+            perl = TRUE
+          )
+          
+          if (!any(keep)) {
+            next
+          }
+          
+          selected <- lines[keep]
+          
+          # Respect n_max as maximum number of records of the
+          # requested modality.
+          if (!is.infinite(n_max)) {
+            
+            remaining <- n_max - n_imported
+            
+            if (remaining <= 0L) {
+              break
+            }
+            
+            if (length(selected) > remaining) {
+              selected <- selected[seq_len(remaining)]
+            }
+          }
+          
+          chunk_i <- chunk_i + 1L
+          
+          chunks[[chunk_i]] <- data.table::fread(
+            text = selected,
+            header = FALSE,
+            sep = ",",
+            col.names = column_names,
+            colClasses = unname(col_classes),
+            showProgress = FALSE
+          )
+          
+          n_imported <- n_imported + length(selected)
+          
+          if (!is.infinite(n_max) && n_imported >= n_max) {
+            break
+          }
+        }
+        
+        close(con)
+        on.exit(NULL, add = FALSE)
+        
+        if (!length(chunks)) {
+          
+          result <- data.table::as.data.table(
+            stats::setNames(
+              lapply(
+                col_classes,
+                \(x) switch(
+                  x,
+                  "numeric" = numeric(),
+                  "character" = character()
+                )
+              ),
+              column_names
+            )
+          )
+          
+        } else {
+          
+          result <- data.table::rbindlist(
+            chunks,
+            use.names = TRUE
+          )
+        }
+        
+        data.table::set(
+          result,
+          j = "file.name",
+          value = file_path
+        )
+        
+        data.table::setcolorder(
+          result,
+          c(
+            "file.name",
+            setdiff(names(result), "file.name")
+          )
+        )
+        
+        result
+      }),
+      use.names = TRUE
+    )
+
+    data.table::set(
+      data,
+      j = "Datetime",
+      value = lubridate::with_tz(
+        lubridate::as_datetime(data[["time_stamp"]], tz = "UTC"),
+        tz
       )
+    )
+    data.table::setcolorder(data, c("Datetime", setdiff(names(data), "Datetime")))
   }
   ),
   #GENEActiv GGIR
