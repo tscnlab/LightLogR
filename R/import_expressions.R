@@ -388,48 +388,115 @@ import_expr <- list(
 
     data <- data.table::rbindlist(
       lapply(filename, \(file_path) {
-        pattern <- paste0(
-          "^(?:[^,]*,){1}\\b",
-          modality,
-          "\\b"
-        )
-
-        lines <- readr::read_lines(
-          file = file_path,
-          locale = locale,
-          n_max = n_max
-        )
-
-        lines <- lines[
-          stringr::str_detect(lines, pattern)
-        ]
-
-        result <-
-          if(length(lines) == 0) {
-            data.table::as.data.table(
-              stats::setNames(
-                lapply(col_classes, \(x) switch(
+        
+        con <- file(file_path, open = "r")
+        on.exit(close(con), add = TRUE)
+        
+        chunks <- list()
+        chunk_i <- 0L
+        n_imported <- 0L
+        
+        chunk_size <- 100000L
+        
+        repeat {
+          
+          lines <- readLines(
+            con,
+            n = chunk_size,
+            warn = FALSE
+          )
+          
+          if (!length(lines)) {
+            break
+          }
+          
+          # VEET modality is the second comma-separated field.
+          keep <- grepl(
+            paste0("^[^,]*,", modality, "(?:,|$)"),
+            lines,
+            perl = TRUE
+          )
+          
+          if (!any(keep)) {
+            next
+          }
+          
+          selected <- lines[keep]
+          
+          # Respect n_max as maximum number of records of the
+          # requested modality.
+          if (!is.infinite(n_max)) {
+            
+            remaining <- n_max - n_imported
+            
+            if (remaining <= 0L) {
+              break
+            }
+            
+            if (length(selected) > remaining) {
+              selected <- selected[seq_len(remaining)]
+            }
+          }
+          
+          chunk_i <- chunk_i + 1L
+          
+          chunks[[chunk_i]] <- data.table::fread(
+            text = selected,
+            header = FALSE,
+            sep = ",",
+            col.names = column_names,
+            colClasses = unname(col_classes),
+            showProgress = FALSE
+          )
+          
+          n_imported <- n_imported + length(selected)
+          
+          if (!is.infinite(n_max) && n_imported >= n_max) {
+            break
+          }
+        }
+        
+        close(con)
+        on.exit(NULL, add = FALSE)
+        
+        if (!length(chunks)) {
+          
+          result <- data.table::as.data.table(
+            stats::setNames(
+              lapply(
+                col_classes,
+                \(x) switch(
                   x,
                   "numeric" = numeric(),
                   "character" = character()
-                )),
-                column_names
-              )
+                )
+              ),
+              column_names
             )
-          } else {
-            data.table::fread(
-              text = lines,
-              header = FALSE,
-              sep = ",",
-              col.names = column_names,
-              colClasses = unname(col_classes),
-              showProgress = FALSE
-            )
-          }
-
-        data.table::set(result, j = "file.name", value = file_path)
-        data.table::setcolorder(result, "file.name")
-
+          )
+          
+        } else {
+          
+          result <- data.table::rbindlist(
+            chunks,
+            use.names = TRUE
+          )
+        }
+        
+        data.table::set(
+          result,
+          j = "file.name",
+          value = file_path
+        )
+        
+        data.table::setcolorder(
+          result,
+          c(
+            "file.name",
+            setdiff(names(result), "file.name")
+          )
+        )
+        
         result
       }),
       use.names = TRUE
