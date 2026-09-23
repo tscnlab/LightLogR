@@ -30,7 +30,7 @@ Imports:
     dplyr,
     ggplot2,
     ggsci,
-    ggtext,
+    ggtext (>= 0.2.0),
     gt,
     gtExtras,
     hms,
