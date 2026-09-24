@@ -1,3 +1,9 @@
+# LightLogR 0.10.5
+
+* `import$ActLumus()` now supports both ActLumus and ActLumus Plus exports. Known columns have now explicit types to preserve sparse descriptions and keep empty measurements numeric. Missing optional columns are accepted without parser warnings, and types are inferred for additional columns. Files imported together must share the first file's column layout and number of header lines.
+
+* `sleep_int2Brown()` now uses `dplyr::recode_values()` in place of the deprecated `case_match()`, preserving the existing state mappings and unmatched values. This requires dplyr 1.2.0 or later.
+
 # LightLogR 0.10.4
 
 * Package now states the correct Wellcome Trust number: 226787/Z/22/Z
@@ -413,4 +419,3 @@ This is a huge update for `LightLogR`, bringing many new features and twenty-two
 # LightLogR 0.1.0
 
 * Added a `NEWS.md` file to track changes to the package.
-

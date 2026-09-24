@@ -129,10 +129,10 @@ sleep_int2Brown <- function(dataset,
     dplyr::arrange(Start, .by_group = TRUE) %>%
     dplyr::mutate(
       {{ Sleep.colname }} := 
-        dplyr::case_match({{ Sleep.colname }},
+        dplyr::recode_values({{ Sleep.colname }},
         wake.state ~ Brown.day,
         sleep.state ~ Brown.night,
-        .default = {{ Sleep.colname }}),
+        default = {{ Sleep.colname }}),
       Start = pmax(Start, dplyr::lag(Start, default = min(Start))),
       End = dplyr::lead(Start),
       {{ Interval.colname }} := lubridate::interval(Start, End)) %>%
