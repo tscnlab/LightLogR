@@ -1,87 +1,48 @@
-## Submission Version 0.10.3
+## LightLogR 0.10.6
 
-### R CMD check results
+This update adds ActLumus Plus and LYS Button PRO support through the existing
+import functions, while preserving legacy imports. It also supports older
+ActTrust exports, replaces deprecated dplyr::case_match() with
+dplyr::recode_values(), and restores the caller's dplyr.summarise.inform option
+after pulses_above_threshold(). Minimum dependency versions are now dplyr 1.2.0
+and ggtext 0.2.0. See NEWS.md for changes since CRAN version 0.10.3.
 
-0 errors ✔ | 0 warnings ✔ | 0 notes ✔
+## Check results
 
-## Submission Version 0.10.0
+* macOS Golden Gate 27.0, arm64, R 4.6.1: R CMD check --as-cran on the source
+  archive, including examples, tests, and both PDF and HTML manuals.
+  0 errors, 0 warnings, 0 notes.
+* Ubuntu 24.04.5 LTS, x86_64, R 4.6.1: R CMD check --no-manual --as-cran in
+  GitHub Actions. 0 errors, 0 warnings, 0 notes.
+  https://github.com/tscnlab/LightLogR/actions/runs/35981139135
+* Windows Server 2022 x64, R-devel (2026-09-21 r90579 ucrt): Win-builder,
+  including examples, tests, and both PDF and HTML manuals.
+  0 errors, 0 warnings, 0 notes.
+  https://win-builder.r-project.org/F5eTQ11CgMl1/
 
-### R CMD check results
+The Linux check covered the same package code before the subsequent README
+link update. The local and Windows checks include the final README.
 
-0 errors ✔ | 0 warnings ✔ | 0 notes ✔
+The full test suite passed 1,088 assertions without failures, warnings, or
+skips. The local --as-cran run passed 1,080 assertions and skipped four snapshot
+tests under CRAN settings; those tests passed in the full suite and Linux CI.
+There are no vignettes in the source archive; the website articles are excluded
+by .Rbuildignore.
 
-## Submission Version 0.9.2
+Older R versions have not been checked for this release.
 
-### R CMD check results
+## Reverse dependencies
 
-0 errors ✔ | 0 warnings ✔ | 1 note ✖
+CRAN metadata checked on 2026-09-24 lists no strong reverse dependencies and
+one reverse suggested dependency, melidosData 1.0.6.
 
-* Note 1: unable to verify current time. 
-  Time server seems to be unavailable
+Its unit tests passed 22 assertions with both CRAN LightLogR 0.10.3 and the
+0.10.6 candidate. Both runs produced the same two existing warnings about
+text-mode file connections; there were no new failures or warnings. This was
+a comparison of unit tests, not a full reverse-dependency R CMD check.
 
-## Resubmission #1 (Version 0.5.3)
+## Documentation URL
 
-This is a resubmission. In this version I put some examples for gg_doubleplot and gg_photoperiod in /dontrun to avoid long runtime. I further rebuilt the package with the latest R-devel to correct the discrepancies with Authors@R and Author field.
-
-## Submission Version 0.5.3
-
-### R CMD check results
-
-0 errors ✔ | 0 warnings ✔ | 3 notes ✖
-
-* Note 1: Imports includes 22 non-default packages. 
-  This is correct and necessary
-
-* Note 2: unable to verify current time. 
-  Time server seems to be unavailable
-
-* Note 3: Found HTML validation problems. 
-  This note seems related to the testing environment and not the actual package.
-
-### Windevel results
-
-2 Notes
-
-* Note: Author field differs from that derived from Authors@R.
-  As far as I can tell, the only difference is that the Authors@R field has (ORCID: *Orcid URL*) behind the authors, where as the Author field has (*Orcid URL*). As this is automatically generated based on Description, I don't think I can influence that.
-
-* Note: Examples with CPU (user + system) or elapsed time > 10s
-                user system elapsed
-  gg_photoperiod 12.52   1.72   14.25
-  gg_doubleplot   9.45   1.39   10.85
-
-  These examples are expected to take a longer time, as they are plotting functions and several variants are shown in the examples.
-
-## Resubmission #3 (Version 0.3.8)
-
-This is a resubmission. In this version I corrected the error in a symlog_trans example.
-
-## Resubmission #2 (Version 0.3.8)
-
-This is a resubmission. In this version I removed the last erroneous link.
-
-## Resubmission #1 (Version 0.3.8)
-
-This is a resubmission. In this version I have:
-
-* changed the \link{} targets only referring to packages and not to functions within other packages to \pkg{}.
-
-## R CMD check results
-
-0 errors | 0 warnings | 1 note
-
-* This is a new release.
-
-## Windevel results
-
-Maintainer: 'Johannes Zauner <johannes.zauner@tum.de>'
-
-* New submission
-
-* Found the following (possibly) invalid URLs:
-    URL: https://lists.lrz.de/mailman/listinfo/lightlogr-users
-      From: README.md
-      Status: 403
-      Message: Forbidden
-    
-This URL is valid, but the server does not allow the Windevel server to access it. The URL leads to the mailing list for the package.
+The supplemental urlchecker check reports HTTP 500 for https://www.euramet.org
+in README.md. Direct HEAD and GET requests both returned HTTP 200, and the
+EURAMET homepage loads successfully. The existing link has been retained.

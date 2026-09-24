@@ -38,7 +38,7 @@ insights into personal light exposure</figcaption>
 </div>
 
 **LightLogR** is a package under development as part of the
-[*MeLiDos*](https://www.melidos.eu) project to address these issues. The
+[*MeLiDos*](https://melidosproject.github.io/.github/) project to address these issues. The
 package aims to provide tools for:
 
 - Import from common measurement devices (see below for a list of
@@ -550,7 +550,7 @@ Cybernetics](https://www.mpg.de/152075/biological-cybernetics), the
 [Technical University of Munich](https://www.tum.de/en/), and
 [TUMCREATE](https://www.tum-create.edu.sg/), .
 
-[*MeLiDos*](https://www.melidos.eu) is a joint,
+[*MeLiDos*](https://melidosproject.github.io/.github/) is a joint,
 [EURAMET](https://www.euramet.org)-funded project involving sixteen
 partners across Europe, aimed at developing a metrology and a standard
 workflow for wearable light logger data and optical radiation
