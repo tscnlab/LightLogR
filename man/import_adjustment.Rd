@@ -36,9 +36,9 @@ identical(body(import$ActLumus), body(new_import$ActLumus))
 
 #change the import expression for the ActLumus device to add a message at the top
 new_import_expr <- ll_import_expr()
-new_import_expr$ActLumus[[6]] <-
+new_import_expr$ActLumus <-
 rlang::expr({ cat("**This is a new import function**\n")
-data
+!!new_import_expr$ActLumus
 })
 new_import <- import_adjustment(new_import_expr)
 filepath <- 

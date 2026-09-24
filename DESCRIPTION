@@ -1,6 +1,6 @@
 Package: LightLogR
 Title: Process Data from Wearable Light Loggers and Optical Radiation Dosimeters
-Version: 0.10.4
+Version: 0.10.5
 Authors@R: c(
     person("Johannes", "Zauner", 
       email = "johannes.zauner@tum.de", role = c("aut", "cre"),
@@ -27,10 +27,10 @@ BugReports: https://github.com/tscnlab/LightLogR/issues
 Imports:
     circular,
     cowplot,
-    dplyr,
+    dplyr (>= 1.2.0),
     ggplot2,
     ggsci,
-    ggtext,
+    ggtext (>= 0.2.0),
     gt,
     gtExtras,
     hms,

@@ -25,35 +25,51 @@
 #' * `n_max`: maximum number of lines to read. Default is `Inf`.
 #' * `tz`: Timezone of the data. `"UTC"` is the default. Expects a
 #'   `character`. You can look up the supported timezones with [OlsonNames()].
-#' * `version`: Data formats can change, e.g. with software updates. This 
-#'    argument allows switching between known data formats of the same device 
-#'    model. Expects a `character` scalar. The default is `"default"`, which will
-#'    always use the latest version. To find out which software versions are
-#'    contained, call [supported_versions()].
+#' * `version`: Data formats can change, e.g. with software updates. This
+#'   argument allows switching between known data formats of the same device
+#'   model. Expects a `character` scalar. The default is `"default"`, which will
+#'   always use the latest version. To find out which software versions are
+#'   contained, call [supported_versions()].
 #' * `Id.colname`: Lets you specify a column for the id of a dataset. Expects a
 #'   symbol (Default is `Id`). This column will be used for grouping
 #'   ([dplyr::group_by()]).
 #' * `auto.id`: If the `Id.colname` column is not part of the `dataset`, the `Id`
 #'   can be automatically extracted from the filename. The argument expects a
-#'   regular expression [regex] and will by default just give the whole filename
-#'   without file extension.
+#'   regular expression [stringr::regex] and will by default just give the whole
+#'   filename without file extension.
 #' * `manual.id`: If this argument is not `NULL`, and no `Id` column is part
 #'   of the `dataset`, this `character` scalar will be used. **We discourage the
 #'   use of this arguments when importing more than one file**
 #' * `silent`: If set to `TRUE`, the function will not print a summary message
 #'   of the import or plot the overview. Default is `FALSE`.
 #' * `locale`: The locale controls defaults that vary from place to place.
-#' * `not.before`: Remove data prior to this date. This argument is provided to `start` of [filter_Date()]. Data will be filtered out before any of the summaries are shown.
-#' * `dst_adjustment`: If a file crosses daylight savings time, but the device does not adjust time stamps accordingly, you can set this argument to `TRUE`, to apply this shift manually. It is selective, so it will only be done in files that cross between DST and standard time. Default is `FALSE`. Uses [dst_change_handler()] to do the adjustment. Look there for more infos. It is not equipped to handle two jumps in one file (so back and forth between DST and standard time), but will work fine if jums occur in separate files.
-#' * `auto.plot`: a logical on whether to call [gg_overview()] after import. Default is `TRUE`. But is set to `FALSE` if the argument `silent` is set to `TRUE`.
-#' * `...`: supply additional arguments to the \pkg{readr} import functions, like `na`. Might also be used to supply arguments to the specific import functions, like `column_names` for `Actiwatch_Spectrum` devices. Those devices will always throw a helpful error message if you forget to supply the necessary arguments.
-#'   If the `Id` column is already part of the `dataset` it will just use this
-#'   column. If the column is not present it will add this column and fill it
-#'   with the filename of the importfile (see param `auto.id`).
-#' * `print_n` can be used if you want to see more rows from the observation intervals
-#' * `remove_duplicates` can be used if identical observations are present 
-#'   within or across multiple files. The default is `FALSE`. The function keeps 
-#'   only unique observations (=rows) if set to' TRUE'. This is a convenience 
+#' * `not.before`: Remove data prior to this date. This argument is provided to
+#'   `start` of [filter_Date()]. Data will be filtered out before any of the
+#'   summaries are shown.
+#' * `dst_adjustment`: If a file crosses daylight savings time, but the device
+#'   does not adjust time stamps accordingly, you can set this argument to
+#'   `TRUE`, to apply this shift manually. It is selective, so it will only be
+#'   done in files that cross between DST and standard time. Default is `FALSE`.
+#'   Uses [dst_change_handler()] to do the adjustment. Look there for more
+#'   infos. It is not equipped to handle two jumps in one file (so back and
+#'   forth between DST and standard time), but will work fine if jums occur in
+#'   separate files.
+#' * `auto.plot`: a logical on whether to call [gg_overview()] after import.
+#'   Default is `TRUE`. But is set to `FALSE` if the argument `silent` is set to
+#'   `TRUE`.
+#' * `...`: supply additional arguments to the \pkg{readr} import functions,
+#'   like `na`. Might also be used to supply arguments to the specific import
+#'   functions, like `column_names` for `Actiwatch_Spectrum` devices. Those
+#'   devices will always throw a helpful error message if you forget to supply
+#'   the necessary arguments. If the `Id` column is already part of the
+#'   `dataset` it will just use this column. If the column is not present it
+#'   will add this column and fill it with the filename of the importfile (see
+#'   param `auto.id`).
+#' * `print_n` can be used if you want to see more rows from the observation
+#'   intervals
+#' * `remove_duplicates` can be used if identical observations are present
+#'   within or across multiple files. The default is `FALSE`. The function keeps
+#'   only unique observations (=rows) if set to' TRUE'. This is a convenience
 #'   implementation of [dplyr::distinct()].
 #'
 #' @param ... Parameters that get handed down to the specific import functions
@@ -70,7 +86,7 @@
 #'   make visualizations and analyses. There are a number of devices supported,
 #'   where import should just work out of the box. To get an overview, you can
 #'   simply call the `supported_devices()` dataset. The list will grow
-#'   continuously as the package is maintained. More than one data formats may 
+#'   continuously as the package is maintained. More than one data formats may
 #'   be available for a given device. Check with `supported_versions()` if you
 #'   run into problems with imports, despite a correct device setting.
 #' ```{r}
@@ -81,14 +97,36 @@
 #'
 #'   Manufacturer: Condor Instruments
 #'
-#'   Model: ActLumus
+#'   Models: ActLumus and ActLumus Plus (AL0102)
 #'
-#'   Implemented: Sep 2023
+#'   Implemented: September 2023; ActLumus Plus support added September 2026
 #'
-#'   A sample file is provided with the package, it can be accessed through
+#'   Use `import$ActLumus()` or `import_Dataset(device = "ActLumus", ...)` for
+#'   either model. They share the same table structure. Plus support was tested
+#'   with log file version 1.0.8 from software WIN_2.2.7_009_PR.
+#'
+#'   A sample file for ActLumus is provided with the package, it can be accessed
+#'   through
 #'   `system.file("extdata/205_actlumus_Log_1020_20230904101707532.txt.zip",
 #'   package = "LightLogR")`. It does not need to be unzipped to be imported.
 #'   This sample file is a good example for a regular dataset without gaps.
+#'
+#'   The required columns `DATE/TIME` and `MELANOPIC EDI` become `Datetime` in
+#'   the supplied `tz` and `MEDI`, respectively. All other exported columns are
+#'   optional and are retained with syntactic names, including the additional
+#'   alpha-opic EDI, spectral, activity, and state columns. Exported values are
+#'   preserved without recalibration or filtering based on sleep or wear state.
+#'
+#'   Known timestamp, description, and model columns are read as character;
+#'   known measurement and numeric status columns are read as numeric. Types are
+#'   inferred for additional columns. Explicit types preserve sparse event
+#'   descriptions and keep empty measurement columns numeric. Only defaults for
+#'   columns present in the first file are applied, so omitted optional columns
+#'   do not cause parser warnings. Supply `col_types` through `...` to override
+#'   these defaults, including for sparse text in additional columns. The first
+#'   file determines the table start and column layout for the batch. Files
+#'   imported together must have the same column layout and number of header
+#'   lines.
 #'
 #'   ## LYS
 #'
@@ -99,8 +137,8 @@
 #'   Implemented: Sep 2023
 #'
 #'   A sample file is provided with the package, it can be accessed through
-#'   `sample.data.irregular`. This
-#'   sample file is a good example for an irregular dataset.
+#'   `sample.data.irregular`. This sample file is a good example for an
+#'   irregular dataset.
 #'
 #'   ## Actiwatch_Spectrum & Actiwatch_Spectrum_de
 #'
@@ -109,7 +147,7 @@
 #'   Model: Actiwatch Spectrum
 #'
 #'   Implemented: Nov 2023 / July 2024
-#'   
+#'
 #'   ## ActTrust
 #'
 #'   Manufacturer: Condor Instruments
@@ -269,7 +307,7 @@
 #'   Manufacturer: CHI. Circadian Health Innovations
 #'
 #'   Implemented: October 2025
-#'   
+#'
 #' @section Examples:
 #'
 #'   ## Imports made easy
@@ -289,7 +327,7 @@
 #' ```{r}
 #' dataset <- import$ActLumus(filepath, auto.plot = FALSE)
 #' ```
-#' 
+#'
 #' ```{r}
 #' dataset %>%
 #' dplyr::select(Datetime, TEMPERATURE, LIGHT, MEDI, Id) %>%
@@ -511,9 +549,9 @@ import <- purrr::imap(import_expr, \(x, idx) imports(idx,x))
 #'
 #' #change the import expression for the ActLumus device to add a message at the top
 #' new_import_expr <- ll_import_expr()
-#' new_import_expr$ActLumus[[6]] <-
+#' new_import_expr$ActLumus <-
 #' rlang::expr({ cat("**This is a new import function**\n")
-#' data
+#' !!new_import_expr$ActLumus
 #' })
 #' new_import <- import_adjustment(new_import_expr)
 #' filepath <- 
