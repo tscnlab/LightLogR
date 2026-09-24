@@ -1,5 +1,18 @@
 # Changelog
 
+## LightLogR 0.10.6
+
+- `import$LYS()` now supports both LYS Button and LYS Button PRO
+  exports. Column types are matched by name, optional columns may be
+  omitted or reordered, and both legacy and ISO timestamps are
+  supported. The PRO export’s `None` placeholder is treated as missing.
+  Timestamps are interpreted in UTC unless an explicit offset is
+  present, then converted to the requested timezone.
+
+- [`pulses_above_threshold()`](https://tscnlab.github.io/LightLogR/reference/pulses_above_threshold.md)
+  now restores the caller’s `dplyr.summarise.inform` option after
+  calculation.
+
 ## LightLogR 0.10.5
 
 - `import$ActLumus()` now supports both ActLumus and ActLumus Plus
@@ -16,6 +29,8 @@
   [`case_match()`](https://dplyr.tidyverse.org/reference/case_match.html),
   preserving the existing state mappings and unmatched values. This
   requires dplyr 1.2.0 or later.
+
+- Plotting now requires ggtext 0.2.0 or later.
 
 ## LightLogR 0.10.4
 

@@ -17,7 +17,7 @@ full list of arguments."><meta property="og:image" content="https://tscnlab.gith
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -74,7 +74,7 @@ full list of arguments."><meta property="og:image" content="https://tscnlab.gith
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Import a light logger dataset or related data</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/v0.10.5/R/import_LL.R" class="external-link"><code>R/import_LL.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tscnlab/LightLogR/blob/main/R/import_LL.R" class="external-link"><code>R/import_LL.R</code></a></small>
       <div class="d-none name"><code>import_Dataset.Rd</code></div>
     </div>
 
@@ -227,11 +227,25 @@ lines.</p>
 
 
 <p>Manufacturer: LYS Technologies</p>
-<p>Model: LYS Button</p>
-<p>Implemented: Sep 2023</p>
-<p>A sample file is provided with the package, it can be accessed through
-<code>sample.data.irregular</code>. This sample file is a good example for an
-irregular dataset.</p>
+<p>Models: LYS Button and LYS Button PRO</p>
+<p>Implemented: September 2023; LYS Button PRO support added September 2026</p>
+<p>Use <code>import$LYS()</code> or <code>import_Dataset(device = "LYS", ...)</code> for either
+model. A timestamp column whose name starts with <code>timestamp</code> (ignoring
+case) and the <code>mEDI</code> column are required. They become <code>Datetime</code> and
+<code>MEDI</code>; other columns retain their exported names after name repair.</p>
+<p>Both legacy day-month-year timestamps and ISO year-month-day timestamps are
+supported, including explicit UTC offsets. Timestamps without an offset are
+interpreted as UTC, preserving the original LYS behavior. <code>tz</code> converts
+these instants to the requested timezone.</p>
+<p>Known measurements are numeric, <code>sensor</code> remains a factor, and <code>Email</code> is
+character. Other column types are inferred. Optional columns can be omitted
+or reordered; only column types present in the first file are applied.
+Files imported together must share that column layout. The values <code>""</code>,
+<code>"NA"</code>, and <code>"None"</code> are treated as missing. Supply <code>col_types</code> or <code>na</code>
+through <code>...</code> to override these defaults.</p>
+<p>An imported sample file for the Button is provided with the package, it can
+be accessed through <code>sample.data.irregular</code>. This sample file is a good
+example for an irregular dataset.</p>
 </div>
 
 <div class="section">
