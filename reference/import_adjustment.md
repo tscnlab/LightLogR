@@ -46,9 +46,9 @@ identical(body(import$ActLumus), body(new_import$ActLumus))
 
 #change the import expression for the ActLumus device to add a message at the top
 new_import_expr <- ll_import_expr()
-new_import_expr$ActLumus[[6]] <-
+new_import_expr$ActLumus <-
 rlang::expr({ cat("**This is a new import function**\n")
-data
+!!new_import_expr$ActLumus
 })
 new_import <- import_adjustment(new_import_expr)
 filepath <- 
@@ -56,8 +56,8 @@ system.file("extdata/205_actlumus_Log_1020_20230904101707532.txt.zip",
             package = "LightLogR")
 #Now, a message is printed when the import function is called
 data <- new_import$ActLumus(filepath, auto.plot = FALSE)
-#> Multiple files in zip: reading '205_actlumus_Log_1020_20230904101707532.txt'
 #> **This is a new import function**
+#> Multiple files in zip: reading '205_actlumus_Log_1020_20230904101707532.txt'
 #> 
 #> Successfully read in 61'016 observations across 1 Ids from 1 ActLumus-file(s).
 #> Timezone set is UTC.

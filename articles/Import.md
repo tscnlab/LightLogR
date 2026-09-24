@@ -512,14 +512,8 @@ ActLumus routine
 
 ll_import_expr()$ActLumus
 #> {
-#>     first_file <- filename[1]
-#>     rows_to_skip <- detect_starting_row(first_file, locale = locale, 
-#>         column_names = "DATE/TIME", n_max = 250)
-#>     data <- suppressMessages(readr::read_delim(filename, skip = rows_to_skip, 
-#>         delim = ";", n_max = n_max, id = "file.name", locale = locale, 
-#>         name_repair = "universal", ...))
-#>     data <- data %>% dplyr::rename(Datetime = DATE.TIME, MEDI = MELANOPIC.EDI) %>% 
-#>         dplyr::mutate(Datetime = Datetime %>% lubridate::dmy_hms(tz = tz))
+#>     data <- read_actlumus(filename, tz = tz, n_max = n_max, locale = locale, 
+#>         ...)
 #> }
 ```
 
@@ -543,14 +537,11 @@ new_import_expr$ActLumus_new[[6]] <-
   })
 new_import_expr$ActLumus_new
 #> {
-#>     first_file <- filename[1]
-#>     rows_to_skip <- detect_starting_row(first_file, locale = locale, 
-#>         column_names = "DATE/TIME", n_max = 250)
-#>     data <- suppressMessages(readr::read_delim(filename, skip = rows_to_skip, 
-#>         delim = ";", n_max = n_max, id = "file.name", locale = locale, 
-#>         name_repair = "universal", ...))
-#>     data <- data %>% dplyr::rename(Datetime = DATE.TIME, MEDI = MELANOPIC.EDI) %>% 
-#>         dplyr::mutate(Datetime = Datetime %>% lubridate::dmy_hms(tz = tz))
+#>     data <- read_actlumus(filename, tz = tz, n_max = n_max, locale = locale, 
+#>         ...)
+#>     NULL
+#>     NULL
+#>     NULL
 #>     {
 #>         cat("**Congratulation, you made a new import function**\n")
 #>         data

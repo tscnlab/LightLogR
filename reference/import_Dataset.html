@@ -17,7 +17,7 @@ full list of arguments."><meta property="og:image" content="https://tscnlab.gith
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -95,10 +95,6 @@ full list of arguments.</p>
     </div>
 
     <div class="section level2">
-    <h2 id="format">Format<a class="anchor" aria-label="anchor" href="#format"></a></h2>
-    <p>An object of class <code>list</code> of length 19.</p>
-    </div>
-    <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
 
 
@@ -141,22 +137,38 @@ symbol (Default is <code>Id</code>). This column will be used for grouping
 (<code><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">dplyr::group_by()</a></code>).</p></li>
 <li><p><code>auto.id</code>: If the <code>Id.colname</code> column is not part of the <code>dataset</code>, the <code>Id</code>
 can be automatically extracted from the filename. The argument expects a
-regular expression <a href="https://rdrr.io/r/base/regex.html" class="external-link">regex</a> and will by default just give the whole filename
-without file extension.</p></li>
+regular expression <a href="https://stringr.tidyverse.org/reference/modifiers.html" class="external-link">stringr::regex</a> and will by default just give the whole
+filename without file extension.</p></li>
 <li><p><code>manual.id</code>: If this argument is not <code>NULL</code>, and no <code>Id</code> column is part
 of the <code>dataset</code>, this <code>character</code> scalar will be used. <strong>We discourage the
 use of this arguments when importing more than one file</strong></p></li>
 <li><p><code>silent</code>: If set to <code>TRUE</code>, the function will not print a summary message
 of the import or plot the overview. Default is <code>FALSE</code>.</p></li>
 <li><p><code>locale</code>: The locale controls defaults that vary from place to place.</p></li>
-<li><p><code>not.before</code>: Remove data prior to this date. This argument is provided to <code>start</code> of <code><a href="filter_Datetime.html">filter_Date()</a></code>. Data will be filtered out before any of the summaries are shown.</p></li>
-<li><p><code>dst_adjustment</code>: If a file crosses daylight savings time, but the device does not adjust time stamps accordingly, you can set this argument to <code>TRUE</code>, to apply this shift manually. It is selective, so it will only be done in files that cross between DST and standard time. Default is <code>FALSE</code>. Uses <code><a href="dst_change_handler.html">dst_change_handler()</a></code> to do the adjustment. Look there for more infos. It is not equipped to handle two jumps in one file (so back and forth between DST and standard time), but will work fine if jums occur in separate files.</p></li>
-<li><p><code>auto.plot</code>: a logical on whether to call <code><a href="gg_overview.html">gg_overview()</a></code> after import. Default is <code>TRUE</code>. But is set to <code>FALSE</code> if the argument <code>silent</code> is set to <code>TRUE</code>.</p></li>
-<li><p><code>...</code>: supply additional arguments to the <span class="pkg">readr</span> import functions, like <code>na</code>. Might also be used to supply arguments to the specific import functions, like <code>column_names</code> for <code>Actiwatch_Spectrum</code> devices. Those devices will always throw a helpful error message if you forget to supply the necessary arguments.
-If the <code>Id</code> column is already part of the <code>dataset</code> it will just use this
-column. If the column is not present it will add this column and fill it
-with the filename of the importfile (see param <code>auto.id</code>).</p></li>
-<li><p><code>print_n</code> can be used if you want to see more rows from the observation intervals</p></li>
+<li><p><code>not.before</code>: Remove data prior to this date. This argument is provided to
+<code>start</code> of <code><a href="filter_Datetime.html">filter_Date()</a></code>. Data will be filtered out before any of the
+summaries are shown.</p></li>
+<li><p><code>dst_adjustment</code>: If a file crosses daylight savings time, but the device
+does not adjust time stamps accordingly, you can set this argument to
+<code>TRUE</code>, to apply this shift manually. It is selective, so it will only be
+done in files that cross between DST and standard time. Default is <code>FALSE</code>.
+Uses <code><a href="dst_change_handler.html">dst_change_handler()</a></code> to do the adjustment. Look there for more
+infos. It is not equipped to handle two jumps in one file (so back and
+forth between DST and standard time), but will work fine if jums occur in
+separate files.</p></li>
+<li><p><code>auto.plot</code>: a logical on whether to call <code><a href="gg_overview.html">gg_overview()</a></code> after import.
+Default is <code>TRUE</code>. But is set to <code>FALSE</code> if the argument <code>silent</code> is set to
+<code>TRUE</code>.</p></li>
+<li><p><code>...</code>: supply additional arguments to the <span class="pkg">readr</span> import functions,
+like <code>na</code>. Might also be used to supply arguments to the specific import
+functions, like <code>column_names</code> for <code>Actiwatch_Spectrum</code> devices. Those
+devices will always throw a helpful error message if you forget to supply
+the necessary arguments. If the <code>Id</code> column is already part of the
+<code>dataset</code> it will just use this column. If the column is not present it
+will add this column and fill it with the filename of the importfile (see
+param <code>auto.id</code>).</p></li>
+<li><p><code>print_n</code> can be used if you want to see more rows from the observation
+intervals</p></li>
 <li><p><code>remove_duplicates</code> can be used if identical observations are present
 within or across multiple files. The default is <code>FALSE</code>. The function keeps
 only unique observations (=rows) if set to' TRUE'. This is a convenience
@@ -184,11 +196,30 @@ run into problems with imports, despite a correct device setting.</p>
 
 
 <p>Manufacturer: Condor Instruments</p>
-<p>Model: ActLumus</p>
-<p>Implemented: Sep 2023</p>
-<p>A sample file is provided with the package, it can be accessed through
+<p>Models: ActLumus and ActLumus Plus (AL0102)</p>
+<p>Implemented: September 2023; ActLumus Plus support added September 2026</p>
+<p>Use <code>import$ActLumus()</code> or <code>import_Dataset(device = "ActLumus", ...)</code> for
+either model. They share the same table structure. Plus support was tested
+with log file version 1.0.8 from software WIN_2.2.7_009_PR.</p>
+<p>A sample file for ActLumus is provided with the package, it can be accessed
+through
 <code>system.file("extdata/205_actlumus_Log_1020_20230904101707532.txt.zip", package = "LightLogR")</code>. It does not need to be unzipped to be imported.
 This sample file is a good example for a regular dataset without gaps.</p>
+<p>The required columns <code>DATE/TIME</code> and <code>MELANOPIC EDI</code> become <code>Datetime</code> in
+the supplied <code>tz</code> and <code>MEDI</code>, respectively. All other exported columns are
+optional and are retained with syntactic names, including the additional
+alpha-opic EDI, spectral, activity, and state columns. Exported values are
+preserved without recalibration or filtering based on sleep or wear state.</p>
+<p>Known timestamp, description, and model columns are read as character;
+known measurement and numeric status columns are read as numeric. Types are
+inferred for additional columns. Explicit types preserve sparse event
+descriptions and keep empty measurement columns numeric. Only defaults for
+columns present in the first file are applied, so omitted optional columns
+do not cause parser warnings. Supply <code>col_types</code> through <code>...</code> to override
+these defaults, including for sparse text in additional columns. The first
+file determines the table start and column layout for the batch. Files
+imported together must have the same column layout and number of header
+lines.</p>
 </div>
 
 <div class="section">
@@ -199,8 +230,8 @@ This sample file is a good example for a regular dataset without gaps.</p>
 <p>Model: LYS Button</p>
 <p>Implemented: Sep 2023</p>
 <p>A sample file is provided with the package, it can be accessed through
-<code>sample.data.irregular</code>. This
-sample file is a good example for an irregular dataset.</p>
+<code>sample.data.irregular</code>. This sample file is a good example for an
+irregular dataset.</p>
 </div>
 
 <div class="section">

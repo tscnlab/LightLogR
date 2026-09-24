@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,6 +67,11 @@
       <small>Source: <a href="https://github.com/tscnlab/LightLogR/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.10.5" id="lightlogr-0105">LightLogR 0.10.5<a class="anchor" aria-label="anchor" href="#lightlogr-0105"></a></h2>
+<ul><li><p><code>import$ActLumus()</code> now supports both ActLumus and ActLumus Plus exports. Known columns have now explicit types to preserve sparse descriptions and keep empty measurements numeric. Missing optional columns are accepted without parser warnings, and types are inferred for additional columns. Files imported together must share the first file’s column layout and number of header lines.</p></li>
+<li><p><code><a href="../reference/sleep_int2Brown.html">sleep_int2Brown()</a></code> now uses <code><a href="https://dplyr.tidyverse.org/reference/recode-and-replace-values.html" class="external-link">dplyr::recode_values()</a></code> in place of the deprecated <code><a href="https://dplyr.tidyverse.org/reference/case_match.html" class="external-link">case_match()</a></code>, preserving the existing state mappings and unmatched values. This requires dplyr 1.2.0 or later.</p></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.10.4" id="lightlogr-0104">LightLogR 0.10.4<a class="anchor" aria-label="anchor" href="#lightlogr-0104"></a></h2>
 <ul><li><p>Package now states the correct Wellcome Trust number: 226787/Z/22/Z</p></li>

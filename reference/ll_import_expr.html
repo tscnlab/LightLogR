@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -99,14 +99,8 @@ import function through <code><a href="import_adjustment.html">import_adjustment
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">ll_import_expr</span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ActLumus</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> {</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     first_file &lt;- filename[1]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     rows_to_skip &lt;- detect_starting_row(first_file, locale = locale, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         column_names = "DATE/TIME", n_max = 250)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     data &lt;- suppressMessages(readr::read_delim(filename, skip = rows_to_skip, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         delim = ";", n_max = n_max, id = "file.name", locale = locale, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         name_repair = "universal", ...))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     data &lt;- data %&gt;% dplyr::rename(Datetime = DATE.TIME, MEDI = MELANOPIC.EDI) %&gt;% </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         dplyr::mutate(Datetime = Datetime %&gt;% lubridate::dmy_hms(tz = tz))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     data &lt;- read_actlumus(filename, tz = tz, n_max = n_max, locale = locale, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         ...)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>

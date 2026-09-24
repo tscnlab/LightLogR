@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">LightLogR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -1404,14 +1404,8 @@ routines. Let’s have a look at the ActLumus routine</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/ll_import_expr.html">ll_import_expr</a></span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">ActLumus</span></span>
 <span><span class="co">#&gt; {</span></span>
-<span><span class="co">#&gt;     first_file &lt;- filename[1]</span></span>
-<span><span class="co">#&gt;     rows_to_skip &lt;- detect_starting_row(first_file, locale = locale, </span></span>
-<span><span class="co">#&gt;         column_names = "DATE/TIME", n_max = 250)</span></span>
-<span><span class="co">#&gt;     data &lt;- suppressMessages(readr::read_delim(filename, skip = rows_to_skip, </span></span>
-<span><span class="co">#&gt;         delim = ";", n_max = n_max, id = "file.name", locale = locale, </span></span>
-<span><span class="co">#&gt;         name_repair = "universal", ...))</span></span>
-<span><span class="co">#&gt;     data &lt;- data %&gt;% dplyr::rename(Datetime = DATE.TIME, MEDI = MELANOPIC.EDI) %&gt;% </span></span>
-<span><span class="co">#&gt;         dplyr::mutate(Datetime = Datetime %&gt;% lubridate::dmy_hms(tz = tz))</span></span>
+<span><span class="co">#&gt;     data &lt;- read_actlumus(filename, tz = tz, n_max = n_max, locale = locale, </span></span>
+<span><span class="co">#&gt;         ...)</span></span>
 <span><span class="co">#&gt; }</span></span></code></pre></div>
 <p>We can see, it is rather simple, just a few lines of code. You can
 write your own expression and create an import function with it. The
@@ -1431,14 +1425,11 @@ short message:</p>
 <span>  <span class="op">}</span><span class="op">)</span></span>
 <span><span class="va">new_import_expr</span><span class="op">$</span><span class="va">ActLumus_new</span></span>
 <span><span class="co">#&gt; {</span></span>
-<span><span class="co">#&gt;     first_file &lt;- filename[1]</span></span>
-<span><span class="co">#&gt;     rows_to_skip &lt;- detect_starting_row(first_file, locale = locale, </span></span>
-<span><span class="co">#&gt;         column_names = "DATE/TIME", n_max = 250)</span></span>
-<span><span class="co">#&gt;     data &lt;- suppressMessages(readr::read_delim(filename, skip = rows_to_skip, </span></span>
-<span><span class="co">#&gt;         delim = ";", n_max = n_max, id = "file.name", locale = locale, </span></span>
-<span><span class="co">#&gt;         name_repair = "universal", ...))</span></span>
-<span><span class="co">#&gt;     data &lt;- data %&gt;% dplyr::rename(Datetime = DATE.TIME, MEDI = MELANOPIC.EDI) %&gt;% </span></span>
-<span><span class="co">#&gt;         dplyr::mutate(Datetime = Datetime %&gt;% lubridate::dmy_hms(tz = tz))</span></span>
+<span><span class="co">#&gt;     data &lt;- read_actlumus(filename, tz = tz, n_max = n_max, locale = locale, </span></span>
+<span><span class="co">#&gt;         ...)</span></span>
+<span><span class="co">#&gt;     NULL</span></span>
+<span><span class="co">#&gt;     NULL</span></span>
+<span><span class="co">#&gt;     NULL</span></span>
 <span><span class="co">#&gt;     {</span></span>
 <span><span class="co">#&gt;         cat("**Congratulation, you made a new import function**\n")</span></span>
 <span><span class="co">#&gt;         data</span></span>

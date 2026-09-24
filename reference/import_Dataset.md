@@ -15,10 +15,6 @@ import_Dataset(device, ...)
 import
 ```
 
-## Format
-
-An object of class `list` of length 19.
-
 ## Arguments
 
 - device:
@@ -75,8 +71,9 @@ functions take the following arguments:
 - `auto.id`: If the `Id.colname` column is not part of the `dataset`,
   the `Id` can be automatically extracted from the filename. The
   argument expects a regular expression
-  [regex](https://rdrr.io/r/base/regex.html) and will by default just
-  give the whole filename without file extension.
+  [stringr::regex](https://stringr.tidyverse.org/reference/modifiers.html)
+  and will by default just give the whole filename without file
+  extension.
 
 - `manual.id`: If this argument is not `NULL`, and no `Id` column is
   part of the `dataset`, this `character` scalar will be used. **We
@@ -153,14 +150,37 @@ if you run into problems with imports, despite a correct device setting.
 
 Manufacturer: Condor Instruments
 
-Model: ActLumus
+Models: ActLumus and ActLumus Plus (AL0102)
 
-Implemented: Sep 2023
+Implemented: September 2023; ActLumus Plus support added September 2026
 
-A sample file is provided with the package, it can be accessed through
+Use `import$ActLumus()` or `import_Dataset(device = "ActLumus", ...)`
+for either model. They share the same table structure. Plus support was
+tested with log file version 1.0.8 from software WIN_2.2.7_009_PR.
+
+A sample file for ActLumus is provided with the package, it can be
+accessed through
 `system.file("extdata/205_actlumus_Log_1020_20230904101707532.txt.zip", package = "LightLogR")`.
 It does not need to be unzipped to be imported. This sample file is a
 good example for a regular dataset without gaps.
+
+The required columns `DATE/TIME` and `MELANOPIC EDI` become `Datetime`
+in the supplied `tz` and `MEDI`, respectively. All other exported
+columns are optional and are retained with syntactic names, including
+the additional alpha-opic EDI, spectral, activity, and state columns.
+Exported values are preserved without recalibration or filtering based
+on sleep or wear state.
+
+Known timestamp, description, and model columns are read as character;
+known measurement and numeric status columns are read as numeric. Types
+are inferred for additional columns. Explicit types preserve sparse
+event descriptions and keep empty measurement columns numeric. Only
+defaults for columns present in the first file are applied, so omitted
+optional columns do not cause parser warnings. Supply `col_types`
+through `...` to override these defaults, including for sparse text in
+additional columns. The first file determines the table start and column
+layout for the batch. Files imported together must have the same column
+layout and number of header lines.
 
 ### LYS
 
