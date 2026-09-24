@@ -158,23 +158,11 @@ import_expr <- list(
       filename, tz = tz, n_max = n_max, locale = locale, ...
     )
   }),
-  #LYS
+  #LYS Button and LYS Button PRO
   LYS = rlang::expr({
-    data <-suppressMessages( 
-      readr::read_csv(filename,
-                      n_max = n_max,
-                      col_types = c("cfddddddddddd"),
-                      id = "file.name",
-                      locale = locale,
-                      name_repair = "universal",
-                      ...
-      ))
-    data <- data %>%
-      dplyr::rename(Datetime = starts_with("timestamp"),
-                    MEDI = mEDI) %>%
-      dplyr::mutate(Datetime =
-                      Datetime %>% lubridate::dmy_hms() %>% 
-                      lubridate::with_tz(tzone = tz))
+    data <- read_lys(
+      filename, tz = tz, n_max = n_max, locale = locale, ...
+    )
   }),
   #LightWatcher
   LightWatcher = rlang::expr({
