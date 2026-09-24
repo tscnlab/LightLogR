@@ -148,7 +148,8 @@ pulses_above_threshold <- function(Light.vector,
   )
   
   # Summarise pulse metrics
-  options(dplyr.summarise.inform = FALSE)
+  old_options <- options(dplyr.summarise.inform = FALSE)
+  on.exit(options(old_options), add = TRUE)
   data.pulses <- 
     tibble::tibble(
       row_idx = 1:length(Light.vector), 

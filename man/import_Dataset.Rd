@@ -149,13 +149,30 @@ lines.
 
 Manufacturer: LYS Technologies
 
-Model: LYS Button
+Models: LYS Button and LYS Button PRO
 
-Implemented: Sep 2023
+Implemented: September 2023; LYS Button PRO support added September 2026
 
-A sample file is provided with the package, it can be accessed through
-\code{sample.data.irregular}. This sample file is a good example for an
-irregular dataset.
+Use \code{import$LYS()} or \code{import_Dataset(device = "LYS", ...)} for either
+model. A timestamp column whose name starts with \code{timestamp} (ignoring
+case) and the \code{mEDI} column are required. They become \code{Datetime} and
+\code{MEDI}; other columns retain their exported names after name repair.
+
+Both legacy day-month-year timestamps and ISO year-month-day timestamps are
+supported, including explicit UTC offsets. Timestamps without an offset are
+interpreted as UTC, preserving the original LYS behavior. \code{tz} converts
+these instants to the requested timezone.
+
+Known measurements are numeric, \code{sensor} remains a factor, and \code{Email} is
+character. Other column types are inferred. Optional columns can be omitted
+or reordered; only column types present in the first file are applied.
+Files imported together must share that column layout. The values \code{""},
+\code{"NA"}, and \code{"None"} are treated as missing. Supply \code{col_types} or \code{na}
+through \code{...} to override these defaults.
+
+An imported sample file for the Button is provided with the package, it can
+be accessed through \code{sample.data.irregular}. This sample file is a good
+example for an irregular dataset.
 }
 
 \subsection{Actiwatch_Spectrum & Actiwatch_Spectrum_de}{
