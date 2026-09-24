@@ -30,7 +30,7 @@ Personalized luminous exposure data is progressively gaining importance in vario
 ![Light logger data can powerfully convey insights into personal light exposure](man/figures/Day.png){width="90%"}
 :::
 
-**LightLogR** is a package under development as part of the [*MeLiDos*](https://www.melidos.eu) project to address these issues. The package aims to provide tools for:
+**LightLogR** is a package under development as part of the [*MeLiDos*](https://melidosproject.github.io/.github/) project to address these issues. The package aims to provide tools for:
 
 -   Import from common measurement devices (see below for a list of [Supported devices])
 
@@ -332,7 +332,7 @@ If you would like to use a metric you don't find represented in LightLogR, pleas
 
 **LightLogR** is developed by the [*Translational Sensory & Circadian Neuroscience Unit (MPS/TUM/TUMCREATE*](https://www.tscnlab.org), a joint group based at the [Max Planck Institute for Biological Cybernetics](https://www.mpg.de/152075/biological-cybernetics), the [Technical University of Munich](https://www.tum.de/en/), and [TUMCREATE](https://www.tum-create.edu.sg/), .
 
-[*MeLiDos*](https://www.melidos.eu) is a joint, [EURAMET](https://www.euramet.org)-funded project involving sixteen partners across Europe, aimed at developing a metrology and a standard workflow for wearable light logger data and optical radiation dosimeters. Its primary contributions towards fostering FAIR data include the development of a common file format, robust metadata descriptors, and an accompanying open-source software ecosystem.
+[*MeLiDos*](https://melidosproject.github.io/.github/) is a joint, [EURAMET](https://www.euramet.org)-funded project involving sixteen partners across Europe, aimed at developing a metrology and a standard workflow for wearable light logger data and optical radiation dosimeters. Its primary contributions towards fostering FAIR data include the development of a common file format, robust metadata descriptors, and an accompanying open-source software ecosystem.
 
 [![](man/figures/Metrology_Partnership_LOGO.jpg){width="282"}](https://www.euramet.org) ![](man/figures/Co-Funded-By-the-EU.png){width="288"}
 
