@@ -2,6 +2,8 @@
 
 ## LightLogR 0.10.6
 
+CRAN release: 2026-09-24
+
 - `import$LYS()` now supports both LYS Button and LYS Button PRO
   exports. Column types are matched by name, optional columns may be
   omitted or reordered, and both legacy and ISO timestamps are
