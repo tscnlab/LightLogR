@@ -50,7 +50,7 @@ package aims to provide tools for:
   ready
 
 - Calculation of common analysis parameters (see below for a list of
-  [Metrics](#metrics))
+  [Metrics](#metrics-1))
 
 To come:
 
