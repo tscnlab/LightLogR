@@ -104,7 +104,7 @@ data was collected in the “Europe/Berlin” time zone.
 #first six time zones from OlsonNames()
 head(OlsonNames())
 #> [1] "Africa/Abidjan"     "Africa/Accra"       "Africa/Addis_Ababa"
-#> [4] "Africa/Algiers"     "Africa/Asmara"      "Africa/Asmera"
+#> [4] "Africa/Algiers"     "Africa/Asmara"      "Africa/Bamako"
 
 #our time zone
 tz <- "Europe/Berlin"
