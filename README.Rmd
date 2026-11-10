@@ -38,7 +38,7 @@ Personalized luminous exposure data is progressively gaining importance in vario
 
 -   Visualization of light exposure data, both exploratory and publication ready
 
--   Calculation of common analysis parameters (see below for a list of [Metrics])
+-   Calculation of common analysis parameters (see below for a list of [Metrics](#metrics-1))
 
 To come:
 
